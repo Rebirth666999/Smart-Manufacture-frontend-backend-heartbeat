@@ -1,12 +1,16 @@
+## ！重要提醒
+
+**前端使用Node版本推荐16，高于17的Node会导致部分依赖无法安装，且dev server无法正常启动**
+
+**参考版本16.14.0，如果觉得切换Node版本麻烦，可以了解一下nvm工具**
+
+
+
 ## 开发
 
+请在当前目录打开cmd执行下面的命令
+
 ```bash
-# 克隆项目
-git clone https://gitee.com/KonBAI-Q/ruoyi-flowable-plus.git
-
-# 进入项目目录
-cd ruoyi-ui
-
 # 安装依赖
 npm install
 

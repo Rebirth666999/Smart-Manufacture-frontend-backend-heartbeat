@@ -7,21 +7,25 @@
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
-        <el-tooltip content="驰骋BPM" effect="dark" placement="bottom">
+        <!-- <el-tooltip content="驰骋BPM" effect="dark" placement="bottom">
           <a href="http://ccflow.org/?frm=KonBAI" target="_blank" class="right-menu-item hover-effect">驰骋BPM</a>
+        </el-tooltip> -->
+
+        <el-tooltip content="全局搜索" effect="dark" placement="bottom">
+          <search id="header-search" class="right-menu-item" />
         </el-tooltip>
 
-        <search id="header-search" class="right-menu-item" />
-
-        <el-tooltip content="源码地址" effect="dark" placement="bottom">
+        <!-- <el-tooltip content="源码地址" effect="dark" placement="bottom">
           <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />
-        </el-tooltip>
+        </el-tooltip> -->
 
-        <el-tooltip content="文档地址" effect="dark" placement="bottom">
+        <!-- <el-tooltip content="文档地址" effect="dark" placement="bottom">
           <ruo-yi-doc id="ruoyi-doc" class="right-menu-item hover-effect" />
-        </el-tooltip>
+        </el-tooltip> -->
 
-        <screenfull id="screenfull" class="right-menu-item hover-effect" />
+        <el-tooltip content="全屏" effect="dark" placement="bottom">
+          <screenfull id="screenfull" class="right-menu-item hover-effect" />
+        </el-tooltip>
 
         <el-tooltip content="布局大小" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />

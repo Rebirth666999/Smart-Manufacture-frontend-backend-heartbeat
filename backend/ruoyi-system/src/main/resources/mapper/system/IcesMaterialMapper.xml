@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.IcesMaterialMapper">
+
+    <resultMap type="com.ruoyi.system.domain.IcesMaterial" id="IcesMaterialResult">
+        <result property="maId" column="ma_id"/>
+        <result property="maName" column="ma_name"/>
+        <result property="maDelete" column="ma_delete"/>
+        <result property="maCreateTime" column="ma_create_time"/>
+        <result property="maUpdateTime" column="ma_update_time"/>
+        <result property="maDesc" column="ma_desc"/>
+    </resultMap>
+
+
+</mapper>

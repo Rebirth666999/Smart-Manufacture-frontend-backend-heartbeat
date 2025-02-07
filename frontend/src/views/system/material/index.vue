@@ -71,7 +71,7 @@
 
     <el-table v-loading="loading" :data="materialList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="原料ID" align="center" prop="maId" v-if="true"/>
+      <el-table-column label="原料ID" align="center" prop="maId" v-if="true" />
       <el-table-column label="原料名称" align="center" prop="maName" />
       <!-- <el-table-column label="已删除" align="center" prop="maDelete" /> -->
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
@@ -222,7 +222,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.maId)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
@@ -268,20 +268,34 @@ export default {
         }
       });
     },
-    /** 删除按钮操作 */
-    handleDelete(row) {
+    /** 删除按钮操作
+     * 实际操作是将"已删除"字段置1
+     */
+    async handleDelete(row) {
+      // 数据项id
       const maIds = row.maId || this.ids;
-      this.$modal.confirm('是否确认删除原料编号为"' + maIds + '"的数据项？').then(() => {
+      try {
+        await this.$modal.confirm('是否确认删除原料编号为"' + maIds + '"的数据项？')
         this.loading = true;
-        return delMaterial(maIds);
-      }).then(() => {
+        if (typeof (maIds) === "string") {
+          let form = (await getMaterial(maIds)).data
+          form.maDelete = 1
+          await updateMaterial(form)
+        } else {
+          // id数组
+          let form = null
+          for (let i = 0; i < maIds.length; i++) {
+            form = (await getMaterial(maIds[i])).data
+            form.maDelete = 1
+            await updateMaterial(form)
+          }
+        }
         this.loading = false;
         this.getList();
         this.$modal.msgSuccess("删除成功");
-      }).catch(() => {
-      }).finally(() => {
-        this.loading = false;
-      });
+      } catch (error) {
+        // 取消删除
+      }
     },
     /** 导出按钮操作 */
     handleExport() {

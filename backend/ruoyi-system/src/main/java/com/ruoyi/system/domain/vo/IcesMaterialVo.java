@@ -34,6 +34,12 @@ public class IcesMaterialVo {
     private String maName;
 
     /**
+     * 已删除
+     */
+    @ExcelProperty(value = "已删除")
+    private Long maDelete;
+
+    /**
      * 创建时间
      */
     @ExcelProperty(value = "创建时间")

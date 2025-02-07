@@ -9,6 +9,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="已删除" prop="maDelete">
+        <el-input
+          v-model="queryParams.maDelete"
+          placeholder="请输入已删除"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -65,6 +73,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="原料ID" align="center" prop="maId" v-if="true"/>
       <el-table-column label="原料名称" align="center" prop="maName" />
+      <el-table-column label="已删除" align="center" prop="maDelete" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
@@ -153,6 +162,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         maName: undefined,
+        maDelete: undefined,
       },
       // 表单参数
       form: {},

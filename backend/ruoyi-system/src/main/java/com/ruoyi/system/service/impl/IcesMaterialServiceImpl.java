@@ -62,6 +62,7 @@ public class IcesMaterialServiceImpl implements IIcesMaterialService {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesMaterial> lqw = Wrappers.lambdaQuery();
         lqw.like(StringUtils.isNotBlank(bo.getMaName()), IcesMaterial::getMaName, bo.getMaName());
+        lqw.eq(bo.getMaDelete() != null, IcesMaterial::getMaDelete, bo.getMaDelete());
         return lqw;
     }
 

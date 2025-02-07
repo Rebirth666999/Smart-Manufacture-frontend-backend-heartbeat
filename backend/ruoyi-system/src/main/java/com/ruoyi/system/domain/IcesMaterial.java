@@ -7,15 +7,13 @@ import java.io.Serializable;
 import java.util.Date;
 import java.math.BigDecimal;
 
-import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 原料对象 ices_material
  *
  * @author ruoyi
- * @date 2025-02-06
+ * @date 2025-02-07
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -37,14 +35,6 @@ public class IcesMaterial extends BaseEntity {
      * 已删除
      */
     private Long maDelete;
-    /**
-     * 创建时间
-     */
-    private Date maCreateTime;
-    /**
-     * 修改时间
-     */
-    private Date maUpdateTime;
     /**
      * 描述
      */

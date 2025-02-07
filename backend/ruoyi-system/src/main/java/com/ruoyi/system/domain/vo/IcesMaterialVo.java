@@ -1,7 +1,5 @@
 package com.ruoyi.system.domain.vo;
 
-import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.ruoyi.common.annotation.ExcelDictFormat;
@@ -15,7 +13,7 @@ import java.util.Date;
  * 原料视图对象 ices_material
  *
  * @author ruoyi
- * @date 2025-02-06
+ * @date 2025-02-07
  */
 @Data
 @ExcelIgnoreUnannotated
@@ -39,13 +37,13 @@ public class IcesMaterialVo {
      * 创建时间
      */
     @ExcelProperty(value = "创建时间")
-    private Date maCreateTime;
+    private Date createTime;
 
     /**
-     * 修改时间
+     * 更新时间
      */
-    @ExcelProperty(value = "修改时间")
-    private Date maUpdateTime;
+    @ExcelProperty(value = "更新时间")
+    private Date updateTime;
 
 
 }

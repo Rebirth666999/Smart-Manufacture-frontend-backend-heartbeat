@@ -65,14 +65,14 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="原料ID" align="center" prop="maId" v-if="true"/>
       <el-table-column label="原料名称" align="center" prop="maName" />
-      <el-table-column label="创建时间" align="center" prop="maCreateTime" width="180">
+      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.maCreateTime, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="修改时间" align="center" prop="maUpdateTime" width="180">
+      <el-table-column label="更新时间" align="center" prop="updateTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.maUpdateTime, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -158,6 +158,9 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        maId: [
+          { required: true, message: "原料ID不能为空", trigger: "blur" }
+        ],
         maName: [
           { required: true, message: "原料名称不能为空", trigger: "blur" }
         ],
@@ -188,9 +191,11 @@ export default {
         maId: undefined,
         maName: undefined,
         maDelete: undefined,
-        maCreateTime: undefined,
-        maUpdateTime: undefined,
-        maDesc: undefined
+        maDesc: undefined,
+        createBy: undefined,
+        updateBy: undefined,
+        createTime: undefined,
+        updateTime: undefined
       };
       this.resetForm("form");
     },

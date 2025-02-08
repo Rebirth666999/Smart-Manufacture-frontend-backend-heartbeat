@@ -277,19 +277,30 @@ export default {
       });
     },
     /** 删除按钮操作 */
-    handleDelete(row) {
+    async handleDelete(row) {
       const prIds = row.prId || this.ids;
-      this.$modal.confirm('是否确认删除产品编号为"' + prIds + '"的数据项？').then(() => {
+      try {
+        await this.$modal.confirm('是否确认删除产品编号为"' + prIds + '"的数据项？')
         this.loading = true;
-        return delProduct(prIds);
-      }).then(() => {
+        if (typeof (prIds) === "string") {
+          let form = (await getProduct(prIds)).data
+          form.prDelete = 1
+          await updateProduct(form)
+        } else {
+          // id数组
+          let form = null
+          for (let i = 0; i < prIds.length; i++) {
+            form = (await getProduct(prIds[i])).data
+            form.prDelete = 1
+            await updateProduct(form)
+          }
+        }
         this.loading = false;
         this.getList();
         this.$modal.msgSuccess("删除成功");
-      }).catch(() => {
-      }).finally(() => {
-        this.loading = false;
-      });
+      } catch (error) {
+        // 取消删除
+      }
     },
     /** 导出按钮操作 */
     handleExport() {

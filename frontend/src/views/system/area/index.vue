@@ -269,19 +269,30 @@ export default {
       });
     },
     /** 删除按钮操作 */
-    handleDelete(row) {
+    async handleDelete(row) {
       const arIds = row.arId || this.ids;
-      this.$modal.confirm('是否确认删除车间编号为"' + arIds + '"的数据项？').then(() => {
+      try {
+        await this.$modal.confirm('是否确认删除车间编号为"' + arIds + '"的数据项？')
         this.loading = true;
-        return delArea(arIds);
-      }).then(() => {
+        if (typeof (arIds) === "string") {
+          let form = (await getArea(arIds)).data
+          form.arDelete = 1
+          await updateArea(form)
+        } else {
+          // id数组
+          let form = null
+          for (let i = 0; i < arIds.length; i++) {
+            form = (await getArea(arIds[i])).data
+            form.arDelete = 1
+            await updateArea(form)
+          }
+        }
         this.loading = false;
         this.getList();
         this.$modal.msgSuccess("删除成功");
-      }).catch(() => {
-      }).finally(() => {
-        this.loading = false;
-      });
+      } catch (error) {
+        // 取消删除
+      }
     },
     /** 导出按钮操作 */
     handleExport() {

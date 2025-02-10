@@ -99,7 +99,7 @@
         </template>
       </el-table-column>
       <el-table-column label="库存" align="center" prop="msStock" />
-      <el-table-column label="已删除" align="center" prop="msDelete" />
+      <!-- <el-table-column label="已删除" align="center" prop="msDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -210,7 +210,7 @@ export default {
         pageSize: 10,
         arId: this.$route.query.arId,
         maId: this.$route.query.maId,
-        msDelete: undefined,
+        msDelete: 0,
       },
       // 1-查原料的库存，2-查车间的库存
       mode: 0,
@@ -345,19 +345,30 @@ export default {
       });
     },
     /** 删除按钮操作 */
-    handleDelete(row) {
+    async handleDelete(row) {
       const msIds = row.msId || this.ids;
-      this.$modal.confirm('是否确认删除车间原料库存编号为"' + msIds + '"的数据项？').then(() => {
+      try {
+        await this.$modal.confirm('是否确认删除车间原料库存编号为"' + msIds + '"的数据项？')
         this.loading = true;
-        return delMaterialStock(msIds);
-      }).then(() => {
+        if (typeof (msIds) === "string") {
+          let form = (await getMaterialStock(msIds)).data
+          form.msDelete = 1
+          await updateMaterialStock(form)
+        } else {
+          // id数组
+          let form = null
+          for (let i = 0; i < msIds.length; i++) {
+            form = (await getMaterialStock(msIds[i])).data
+            form.msDelete = 1
+            await updateMaterialStock(form)
+          }
+        }
         this.loading = false;
         this.getList();
         this.$modal.msgSuccess("删除成功");
-      }).catch(() => {
-      }).finally(() => {
-        this.loading = false;
-      });
+      } catch (error) {
+        // 取消删除
+      }
     },
     /** 导出按钮操作 */
     handleExport() {

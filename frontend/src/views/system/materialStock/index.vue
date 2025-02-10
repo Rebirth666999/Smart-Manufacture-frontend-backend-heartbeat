@@ -123,6 +123,38 @@
     <!-- 添加或修改车间原料库存对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="车间" prop="arId">
+          <el-select
+            v-model="form.arId"
+            placeholder="请选择车间"
+            :disabled="mode === 2"
+            style="width: 100%;"
+          >
+            <el-option
+              v-for="item in areaList"
+              :key="item.arId"
+              :label="item.arName"
+              :value="item.arId"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="原料" prop="maId">
+          <el-select
+            v-model="form.maId"
+            placeholder="请选择原料"
+            :disabled="mode === 1"
+            style="width: 100%;"
+          >
+            <el-option
+              v-for="item in materialList"
+              :key="item.maId"
+              :label="item.maName"
+              :value="item.maId"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="库存" prop="msStock">
           <el-input v-model="form.msStock" placeholder="请输入库存" />
         </el-form-item>
@@ -259,6 +291,11 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      if (this.mode === 1) {
+        this.form.maId = this.$route.query.maId
+      } else if (this.mode === 2) {
+        this.form.arId = this.$route.query.arId
+      }
       this.open = true;
       this.title = "添加车间原料库存";
     },

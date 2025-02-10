@@ -325,6 +325,7 @@ export default {
         if (valid) {
           this.buttonLoading = true;
           if (this.form.msId != null) {
+            // 修改
             updateMaterialStock(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
@@ -333,6 +334,13 @@ export default {
               this.buttonLoading = false;
             });
           } else {
+            // 添加
+            // 先过额外检验
+            if (!this.checkMaterialStock()) {
+              this.$modal.msgError("已存在对应项目");
+              this.buttonLoading = false;
+              return;
+            }
             addMaterialStock(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
@@ -343,6 +351,12 @@ export default {
           }
         }
       });
+    },
+    // 插入和修改的额外检验
+    // 原料-区域组合不可与已有组合重复
+    async checkMaterialStock() {
+      const response = await listMaterialStock({ arId: this.form.arId, maId: this.form.maId, msDelete: 0})
+      return response.rows.length < 1
     },
     /** 删除按钮操作 */
     async handleDelete(row) {

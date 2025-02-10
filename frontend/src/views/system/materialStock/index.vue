@@ -135,7 +135,7 @@
           <el-select
             v-model="form.arId"
             placeholder="请选择车间"
-            :disabled="mode === 2"
+            :disabled="mode === 2 || form.msId != null"
             style="width: 100%;"
           >
             <el-option
@@ -151,7 +151,7 @@
           <el-select
             v-model="form.maId"
             placeholder="请选择原料"
-            :disabled="mode === 1"
+            :disabled="mode === 1 || form.msId != null"
             style="width: 100%;"
           >
             <el-option

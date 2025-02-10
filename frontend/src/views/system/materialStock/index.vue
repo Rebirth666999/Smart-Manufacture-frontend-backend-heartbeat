@@ -88,8 +88,16 @@
     <el-table v-loading="loading" :data="materialStockList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="车间原料库存ID" align="center" prop="msId" v-if="true"/>
-      <el-table-column label="车间ID" align="center" prop="arId" />
-      <el-table-column label="原料ID" align="center" prop="maId" />
+      <el-table-column label="车间" align="center" prop="arId">
+        <template slot-scope="scope">
+          {{ areaList.find(ele => ele.arId === scope.row.arId).arName }}
+        </template>
+      </el-table-column>
+      <el-table-column label="原料" align="center" prop="maId">
+        <template slot-scope="scope">
+          {{ materialList.find(ele => ele.maId === scope.row.maId).maName }}
+        </template>
+      </el-table-column>
       <el-table-column label="库存" align="center" prop="msStock" />
       <el-table-column label="已删除" align="center" prop="msDelete" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -214,10 +222,10 @@ export default {
           { required: true, message: "车间原料库存ID不能为空", trigger: "blur" }
         ],
         arId: [
-          { required: true, message: "车间ID不能为空", trigger: "change" }
+          { required: true, message: "车间不能为空", trigger: "change" }
         ],
         maId: [
-          { required: true, message: "原料ID不能为空", trigger: "change" }
+          { required: true, message: "原料不能为空", trigger: "change" }
         ],
         msStock: [
           { required: true, message: "库存不能为空", trigger: "blur" }

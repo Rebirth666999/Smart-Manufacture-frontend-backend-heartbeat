@@ -72,7 +72,13 @@
     <el-table v-loading="loading" :data="materialList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="原料ID" align="center" prop="maId" v-if="true" />
-      <el-table-column label="原料名称" align="center" prop="maName" />
+      <el-table-column label="原料名称" align="center" prop="maName">
+        <template slot-scope="scope">
+          <el-button type="text" @click="handleMaterialView(scope.row)">
+            <span>{{ scope.row.maName }}</span>
+          </el-button>
+        </template>
+      </el-table-column>
       <!-- <el-table-column label="已删除" align="center" prop="maDelete" /> -->
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
@@ -302,6 +308,10 @@ export default {
       this.download('system/material/export', {
         ...this.queryParams
       }, `material_${new Date().getTime()}.xlsx`)
+    },
+    // 查看原料库存
+    handleMaterialView(row) {
+      this.$router.push(`/assets/materialStock?maId=${row.maId}`)
     }
   }
 };

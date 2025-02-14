@@ -11,6 +11,21 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="原料" prop="maId">
+        <el-select
+          v-model="queryParams.maId"
+          placeholder="请选择原料"
+          clearable
+        >
+          <el-option
+            v-for="item in materialList"
+            :key="item.maId"
+            :label="item.maName"
+            :value="item.maId"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <!-- <el-form-item label="已删除" prop="mrDelete">
         <el-input
           v-model="queryParams.mrDelete"
@@ -136,6 +151,20 @@
     <!-- 添加或修改原料台账对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="原料" prop="maId">
+          <el-select
+            v-model="form.maId"
+            placeholder="请选择原料"
+          >
+            <el-option
+              v-for="item in materialList"
+              :key="item.maId"
+              :label="item.maName"
+              :value="item.maId"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="变动类型" prop="mrType">
           <el-select v-model="form.mrType" placeholder="请选择变动类型">
             <el-option
@@ -166,6 +195,7 @@
 
 <script>
 import { listMaterialRecord, getMaterialRecord, delMaterialRecord, addMaterialRecord, updateMaterialRecord } from "@/api/system/materialRecord";
+import { listMaterial } from "@/api/system/material";
 
 export default {
   name: "MaterialRecord",
@@ -219,13 +249,22 @@ export default {
         mrEst: [
           { required: true, message: "预计变动值不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 原料列表
+      materialList: []
     };
   },
   created() {
+    this.getMaterialList();
     this.getList();
   },
   methods: {
+    // 查询原料列表
+    getMaterialList() {
+      listMaterial().then(response => {
+        this.materialList = response.rows;
+      });
+    },
     /** 查询原料台账列表 */
     getList() {
       this.loading = true;

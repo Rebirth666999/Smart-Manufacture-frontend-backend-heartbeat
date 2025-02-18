@@ -162,7 +162,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         emtName: undefined,
-        emtDelete: undefined,
+        emtDelete: 0,
       },
       // 表单参数
       form: {},

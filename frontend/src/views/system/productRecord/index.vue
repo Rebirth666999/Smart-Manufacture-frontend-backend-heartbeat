@@ -231,7 +231,7 @@ export default {
         pageSize: 10,
         prId: undefined,
         prrType: undefined,
-        prrDelete: undefined,
+        prrDelete: 0,
         createTime: undefined,
       },
       // 表单参数

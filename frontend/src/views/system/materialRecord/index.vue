@@ -230,7 +230,7 @@ export default {
         pageSize: 10,
         maId: undefined,
         mrType: undefined,
-        mrDelete: undefined,
+        mrDelete: 0,
         createTime: undefined,
       },
       // 表单参数

@@ -101,7 +101,11 @@
     <el-table v-loading="loading" :data="materialRecordList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="原料台账ID" align="center" prop="mrId" v-if="true"/>
-      <el-table-column label="所属原料ID" align="center" prop="maId" />
+      <el-table-column label="所属原料" align="center" prop="maId">
+        <template slot-scope="scope">
+          {{ materialList.find(ele => ele.maId === scope.row.maId).maName }}
+        </template>
+      </el-table-column>
       <el-table-column label="变动类型" align="center" prop="mrType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_record_type" :value="scope.row.mrType"/>

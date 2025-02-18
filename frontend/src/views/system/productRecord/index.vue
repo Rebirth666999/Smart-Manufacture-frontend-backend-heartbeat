@@ -101,7 +101,11 @@
     <el-table v-loading="loading" :data="productRecordList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="产品台账ID" align="center" prop="prrId" v-if="true"/>
-      <el-table-column label="所属产品ID" align="center" prop="prId" />
+      <el-table-column label="所属产品" align="center" prop="prId">
+        <template slot-scope="scope">
+          {{ productList.find(ele => ele.prId === scope.row.prId).prName }}
+        </template>
+      </el-table-column>
       <el-table-column label="变动类型" align="center" prop="prrType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_record_type" :value="scope.row.prrType"/>

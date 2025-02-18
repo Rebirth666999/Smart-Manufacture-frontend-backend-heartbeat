@@ -11,6 +11,21 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="产品" prop="prId">
+        <el-select
+          v-model="queryParams.prId"
+          placeholder="请选择产品"
+          clearable
+        >
+          <el-option
+            v-for="item in productList"
+            :key="item.prId"
+            :label="item.prName"
+            :value="item.prId"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <!-- <el-form-item label="已删除" prop="prrDelete">
         <el-input
           v-model="queryParams.prrDelete"
@@ -136,6 +151,21 @@
     <!-- 添加或修改产品台账对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="产品" prop="prId">
+          <el-select
+            v-model="form.prId"
+            placeholder="请选择产品"
+            clearable
+          >
+            <el-option
+              v-for="item in productList"
+              :key="item.prId"
+              :label="item.prName"
+              :value="item.prId"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="变动类型" prop="prrType">
           <el-select v-model="form.prrType" placeholder="请选择变动类型">
             <el-option
@@ -166,6 +196,7 @@
 
 <script>
 import { listProductRecord, getProductRecord, delProductRecord, addProductRecord, updateProductRecord } from "@/api/system/productRecord";
+import { listProduct } from "@/api/system/product";
 
 export default {
   name: "ProductRecord",
@@ -219,13 +250,22 @@ export default {
         prrEst: [
           { required: true, message: "预计变动值不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 产品列表
+      productList: []
     };
   },
   created() {
+    this.getProductList();
     this.getList();
   },
   methods: {
+    // 查询产品列表
+    getProductList() {
+      listProduct().then(response => {
+        this.productList = response.rows
+      })
+    },
     /** 查询产品台账列表 */
     getList() {
       this.loading = true;

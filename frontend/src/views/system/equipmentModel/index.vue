@@ -275,19 +275,30 @@ export default {
       });
     },
     /** 删除按钮操作 */
-    handleDelete(row) {
+    async handleDelete(row) {
       const emIds = row.emId || this.ids;
-      this.$modal.confirm('是否确认删除设备模型编号为"' + emIds + '"的数据项？').then(() => {
+      try {
+        await this.$modal.confirm('是否确认删除设备模型编号为"' + emIds + '"的数据项？')
         this.loading = true;
-        return delEquipmentModel(emIds);
-      }).then(() => {
+        if (typeof (emIds) === "string") {
+          let form = (await getEquipmentModel(emIds)).data
+          form.emDelete = 1
+          await updateEquipmentModel(form)
+        } else {
+          // id数组
+          let form = null
+          for (let i = 0; i < emIds.length; i++) {
+            form = (await getEquipmentModel(emIds[i])).data
+            form.emDelete = 1
+            await updateEquipmentModel(form)
+          }
+        }
         this.loading = false;
         this.getList();
         this.$modal.msgSuccess("删除成功");
-      }).catch(() => {
-      }).finally(() => {
-        this.loading = false;
-      });
+      } catch (error) {
+        // 取消删除
+      }
     },
     /** 导出按钮操作 */
     handleExport() {

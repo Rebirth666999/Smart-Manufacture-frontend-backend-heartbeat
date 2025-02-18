@@ -1,16 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="变动类型" prop="mrType">
-        <el-select v-model="queryParams.mrType" placeholder="请选择变动类型" clearable>
-          <el-option
-            v-for="dict in dict.type.ices_record_type"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
       <el-form-item label="原料" prop="maId">
         <el-select
           v-model="queryParams.maId"
@@ -24,6 +14,16 @@
             :value="item.maId"
           >
           </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="变动类型" prop="mrType">
+        <el-select v-model="queryParams.mrType" placeholder="请选择变动类型" clearable>
+          <el-option
+            v-for="dict in dict.type.ices_record_type"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
         </el-select>
       </el-form-item>
       <!-- <el-form-item label="已删除" prop="mrDelete">

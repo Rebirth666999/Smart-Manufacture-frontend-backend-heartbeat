@@ -72,7 +72,13 @@
     <el-table v-loading="loading" :data="equipmentModelTypeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="模型类型ID" align="center" prop="emtId" v-if="true"/>
-      <el-table-column label="名称" align="center" prop="emtName" />
+      <el-table-column label="名称" align="center" prop="emtName">
+        <template slot-scope="scope">
+          <el-button type="text" @click="handleEquipmentModelTypeView(scope.row)">
+            <span>{{ scope.row.emtName }}</span>
+          </el-button>
+        </template>
+      </el-table-column>
       <!-- <el-table-column label="已删除" align="center" prop="emtDelete" /> -->
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
@@ -299,6 +305,10 @@ export default {
       this.download('system/equipmentModelType/export', {
         ...this.queryParams
       }, `equipmentModelType_${new Date().getTime()}.xlsx`)
+    },
+    // 查看模型类型下属的模型
+    handleEquipmentModelTypeView(row) {
+      this.$router.push(`/equipment/equipmentModel?emtId=${row.emtId}`)
     }
   }
 };

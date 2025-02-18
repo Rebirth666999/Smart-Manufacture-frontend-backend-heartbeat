@@ -6,6 +6,7 @@
           v-model="queryParams.emtId"
           placeholder="请选择模型类型"
           clearable
+          :disabled="mode === 1"
         >
           <el-option
             v-for="item in equipmentModelTypeList"
@@ -87,7 +88,11 @@
     <el-table v-loading="loading" :data="equipmentModelList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="设备模型ID" align="center" prop="emId" v-if="true"/>
-      <el-table-column label="所属模型类型ID" align="center" prop="emtId" />
+      <el-table-column label="所属模型类型" align="center" prop="emtId">
+        <template slot-scope="scope">
+          {{ equipmentModelTypeList.find(ele => ele.emtId === scope.row.emtId).emtName }}
+        </template>
+      </el-table-column>
       <el-table-column label="名称" align="center" prop="emName" />
       <!-- <el-table-column label="已删除" align="center" prop="emDelete" /> -->
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
@@ -136,6 +141,7 @@
             v-model="form.emtId"
             placeholder="请选择模型类型"
             clearable
+            :disabled="mode === 1"
           >
             <el-option
               v-for="item in equipmentModelTypeList"
@@ -193,7 +199,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        emtId: undefined,
+        emtId: this.$route.query.emtId,
         emName: undefined,
         emDelete: 0,
       },
@@ -213,9 +219,16 @@ export default {
       },
       // 设备模型类型数据
       equipmentModelTypeList: [],
+      // 1-根据设备类型管理
+      mode: 0
     };
   },
   created() {
+    // 检查来源
+    if (this.$route.query.emtId) {
+      this.mode = 1
+    }
+    
     this.getEquipmentModelTypeList();
     this.getList();
   },
@@ -274,6 +287,9 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      if (this.mode === 1) {
+        this.form.emtId = this.$route.query.emtId
+      }
       this.open = true;
       this.title = "添加设备模型";
     },

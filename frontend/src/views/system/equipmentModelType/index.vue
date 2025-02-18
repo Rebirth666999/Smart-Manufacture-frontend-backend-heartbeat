@@ -9,14 +9,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="已删除" prop="emtDelete">
+      <!-- <el-form-item label="已删除" prop="emtDelete">
         <el-input
           v-model="queryParams.emtDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -73,7 +73,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="模型类型ID" align="center" prop="emtId" v-if="true"/>
       <el-table-column label="名称" align="center" prop="emtName" />
-      <el-table-column label="已删除" align="center" prop="emtDelete" />
+      <!-- <el-table-column label="已删除" align="center" prop="emtDelete" /> -->
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
@@ -269,19 +269,30 @@ export default {
       });
     },
     /** 删除按钮操作 */
-    handleDelete(row) {
+    async handleDelete(row) {
       const emtIds = row.emtId || this.ids;
-      this.$modal.confirm('是否确认删除设备模型类型编号为"' + emtIds + '"的数据项？').then(() => {
+      try {
+        await this.$modal.confirm('是否确认删除设备模型类型编号为"' + emtIds + '"的数据项？')
         this.loading = true;
-        return delEquipmentModelType(emtIds);
-      }).then(() => {
+        if (typeof (emtIds) === "string") {
+          let form = (await getEquipmentModelType(emtIds)).data
+          form.emtDelete = 1
+          await updateEquipmentModelType(form)
+        } else {
+          // id数组
+          let form = null
+          for (let i = 0; i < emtIds.length; i++) {
+            form = (await getEquipmentModelType(emtIds[i])).data
+            form.emtDelete = 1
+            await updateEquipmentModelType(form)
+          }
+        }
         this.loading = false;
         this.getList();
         this.$modal.msgSuccess("删除成功");
-      }).catch(() => {
-      }).finally(() => {
-        this.loading = false;
-      });
+      } catch (error) {
+        // 取消删除
+      }
     },
     /** 导出按钮操作 */
     handleExport() {

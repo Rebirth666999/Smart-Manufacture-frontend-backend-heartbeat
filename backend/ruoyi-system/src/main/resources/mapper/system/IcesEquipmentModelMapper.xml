@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.IcesEquipmentModelMapper">
+
+    <resultMap type="com.ruoyi.system.domain.IcesEquipmentModel" id="IcesEquipmentModelResult">
+        <result property="emId" column="em_id"/>
+        <result property="emtId" column="emt_id"/>
+        <result property="emName" column="em_name"/>
+        <result property="emDelete" column="em_delete"/>
+        <result property="emDesc" column="em_desc"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

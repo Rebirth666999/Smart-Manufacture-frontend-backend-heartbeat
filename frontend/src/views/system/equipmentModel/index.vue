@@ -9,14 +9,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="已删除" prop="emDelete">
+      <!-- <el-form-item label="已删除" prop="emDelete">
         <el-input
           v-model="queryParams.emDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -74,7 +74,7 @@
       <el-table-column label="设备模型ID" align="center" prop="emId" v-if="true"/>
       <el-table-column label="所属模型类型ID" align="center" prop="emtId" />
       <el-table-column label="名称" align="center" prop="emName" />
-      <el-table-column label="已删除" align="center" prop="emDelete" />
+      <!-- <el-table-column label="已删除" align="center" prop="emDelete" /> -->
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
@@ -164,7 +164,7 @@ export default {
         pageSize: 10,
         emtId: undefined,
         emName: undefined,
-        emDelete: undefined,
+        emDelete: 0,
       },
       // 表单参数
       form: {},

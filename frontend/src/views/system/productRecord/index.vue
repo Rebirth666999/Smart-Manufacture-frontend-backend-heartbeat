@@ -11,14 +11,14 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="已删除" prop="prrDelete">
+      <!-- <el-form-item label="已删除" prop="prrDelete">
         <el-input
           v-model="queryParams.prrDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="创建时间">
         <el-date-picker
           v-model="daterangeCreateTime"
@@ -94,7 +94,7 @@
       </el-table-column>
       <el-table-column label="预计变动值" align="center" prop="prrEst" />
       <el-table-column label="实际变动值" align="center" prop="prrReal" />
-      <el-table-column label="已删除" align="center" prop="prrDelete" />
+      <!-- <el-table-column label="已删除" align="center" prop="prrDelete" /> -->
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>

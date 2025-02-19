@@ -1,6 +1,22 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="车间" prop="arId">
+        <el-select
+          v-model="queryParams.arId"
+          placeholder="请选择车间"
+          clearable
+          :disabled="mode === 1"
+        >
+          <el-option
+            v-for="item in areaList"
+            :key="item.arId"
+            :label="item.arName"
+            :value="item.arId"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="名称" prop="acName">
         <el-input
           v-model="queryParams.acName"
@@ -80,7 +96,11 @@
     <el-table v-loading="loading" :data="areaControlList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="主控节点ID" align="center" prop="acId" v-if="true"/>
-      <el-table-column label="所属车间ID" align="center" prop="arId" />
+      <el-table-column label="所属车间" align="center" prop="arId">
+        <template slot-scope="scope">
+          {{ areaList.find(ele => ele.arId === scope.row.arId).arName }}
+        </template>
+      </el-table-column>
       <el-table-column label="名称" align="center" prop="acName" />
       <el-table-column label="IP地址" align="center" prop="acIp" />
       <!-- <el-table-column label="已删除" align="center" prop="acDelete" /> -->
@@ -115,6 +135,21 @@
     <!-- 添加或修改主控节点对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="车间" prop="arId">
+          <el-select
+            v-model="form.arId"
+            placeholder="请选择车间"
+            :disabled="mode === 1"
+          >
+            <el-option
+              v-for="item in areaList"
+              :key="item.arId"
+              :label="item.arName"
+              :value="item.arId"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="名称" prop="acName">
           <el-input v-model="form.acName" placeholder="请输入名称" />
         </el-form-item>
@@ -135,6 +170,7 @@
 
 <script>
 import { listAreaControl, getAreaControl, delAreaControl, addAreaControl, updateAreaControl } from "@/api/system/areaControl";
+import { listArea } from "@/api/system/area";
 
 export default {
   name: "AreaControl",
@@ -185,13 +221,24 @@ export default {
         acIp: [
           { required: true, message: "IP地址不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 1-按照车间筛选主控节点
+      mode: 0,
+      // 车间列表（筛选用）
+      areaList: [],
     };
   },
   created() {
+    this.getAreaList();
     this.getList();
   },
   methods: {
+    // 获取车间列表
+    getAreaList() {
+      listArea().then(response => {
+        this.areaList = response.rows;
+      });
+    },
     /** 查询主控节点列表 */
     getList() {
       this.loading = true;

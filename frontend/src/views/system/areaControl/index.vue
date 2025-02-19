@@ -167,7 +167,7 @@ export default {
         arId: undefined,
         acName: undefined,
         acIp: undefined,
-        acDelete: undefined,
+        acDelete: 0,
       },
       // 表单参数
       form: {},
@@ -282,19 +282,30 @@ export default {
       });
     },
     /** 删除按钮操作 */
-    handleDelete(row) {
+    async handleDelete(row) {
       const acIds = row.acId || this.ids;
-      this.$modal.confirm('是否确认删除主控节点编号为"' + acIds + '"的数据项？').then(() => {
+      try {
+        await this.$modal.confirm('是否确认删除主控节点编号为"' + acIds + '"的数据项？')
         this.loading = true;
-        return delAreaControl(acIds);
-      }).then(() => {
+        if (typeof (acIds) === "string") {
+          let form = (await getAreaControl(acIds)).data
+          form.acDelete = 1
+          await updateAreaControl(form)
+        } else {
+          // id数组
+          let form = null
+          for (let i = 0; i < acIds.length; i++) {
+            form = (await getAreaControl(acIds[i])).data
+            form.acDelete = 1
+            await updateAreaControl(form)
+          }
+        }
         this.loading = false;
         this.getList();
         this.$modal.msgSuccess("删除成功");
-      }).catch(() => {
-      }).finally(() => {
-        this.loading = false;
-      });
+      } catch (error) {
+        // 取消删除
+      }
     },
     /** 导出按钮操作 */
     handleExport() {

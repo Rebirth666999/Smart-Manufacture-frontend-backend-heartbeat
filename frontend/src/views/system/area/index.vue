@@ -72,13 +72,7 @@
     <el-table v-loading="loading" :data="areaList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="车间ID" align="center" prop="arId" v-if="true"/>
-      <el-table-column label="车间名称" align="center" prop="arName">
-        <template slot-scope="scope">
-          <el-button type="text" @click="handleAreaView(scope.row)">
-            <span>{{ scope.row.arName }}</span>
-          </el-button>
-        </template>
-      </el-table-column>
+      <el-table-column label="车间名称" align="center" prop="arName" />
       <!-- <el-table-column label="已删除" align="center" prop="arDelete" /> -->
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
@@ -99,6 +93,12 @@
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:area:edit']"
           >修改</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-box"
+            @click="handleAreaStockView(scope.row)"
+          >查看库存</el-button>
           <el-button
             size="mini"
             type="text"
@@ -307,7 +307,7 @@ export default {
       }, `area_${new Date().getTime()}.xlsx`)
     },
     // 查看车间库存
-    handleAreaView(row) {
+    handleAreaStockView(row) {
       this.$router.push(`/assets/materialStock?arId=${row.arId}`)
     }
   }

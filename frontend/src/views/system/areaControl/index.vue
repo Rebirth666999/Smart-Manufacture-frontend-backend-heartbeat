@@ -1,5 +1,16 @@
 <template>
   <div class="app-container">
+    <!-- 顶部提示 -->
+    <el-alert
+      v-show="hint.length > 0"
+      :title="`正在根据${hint}筛选主控节点`"
+      type="info"
+      show-icon
+      :closable="false"
+      class="mb8"
+    >
+    </el-alert>
+
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="车间" prop="arId">
         <el-select
@@ -226,6 +237,8 @@ export default {
       mode: 0,
       // 车间列表（筛选用）
       areaList: [],
+      // 页面顶部提示
+      hint: ''
     };
   },
   created() {
@@ -241,6 +254,11 @@ export default {
     getAreaList() {
       listArea().then(response => {
         this.areaList = response.rows;
+        if (this.mode === 1) {
+          this.hint = "车间 "
+          this.hint += response.rows.find(ele => ele.arId === this.$route.query.arId).arName
+          this.hint += " "
+        }
       });
     },
     /** 查询主控节点列表 */

@@ -1,5 +1,16 @@
 <template>
   <div class="app-container">
+    <!-- 顶部提示 -->
+    <el-alert
+      v-show="hint.length > 0"
+      :title="`正在根据${hint}筛选设备模型`"
+      type="info"
+      show-icon
+      :closable="false"
+      class="mb8"
+    >
+    </el-alert>
+
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="模型类型" prop="emtId">
         <el-select
@@ -220,7 +231,9 @@ export default {
       // 设备模型类型数据
       equipmentModelTypeList: [],
       // 1-根据设备类型管理
-      mode: 0
+      mode: 0,
+      // 页面顶部提示
+      hint: ''
     };
   },
   created() {
@@ -237,6 +250,11 @@ export default {
     getEquipmentModelTypeList() {
       listEquipmentModelType().then(response => {
         this.equipmentModelTypeList = response.rows;
+        if (this.mode === 1) {
+          this.hint = "设备模型类型 "
+          this.hint += response.rows.find(ele => ele.emtId === this.$route.query.emtId).emtName
+          this.hint += " "
+        }
       });
     },
     /** 查询设备模型列表 */

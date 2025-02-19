@@ -264,6 +264,28 @@ export default {
     this.getList();
   },
   methods: {
+    // 获取原料列表
+    getMaterialList() {
+      listMaterial().then(response => {
+        this.materialList = response.rows;
+        if (this.mode === 1) {
+          this.hint = "原料 "
+          this.hint += response.rows.find(ele => ele.maId === this.$route.query.maId).maName
+          this.hint += " "
+        }
+      });
+    },
+    // 获取车间列表
+    getAreaList() {
+      listArea().then(response => {
+        this.areaList = response.rows;
+        if (this.mode === 2) {
+          this.hint = "车间 "
+          this.hint += response.rows.find(ele => ele.arId === this.$route.query.arId).arName
+          this.hint += " "
+        }
+      });
+    },
     /** 查询车间原料库存列表 */
     getList() {
       this.loading = true;
@@ -402,29 +424,7 @@ export default {
       this.download('system/materialStock/export', {
         ...this.queryParams
       }, `materialStock_${new Date().getTime()}.xlsx`)
-    },
-    // 获取原料列表
-    getMaterialList() {
-      listMaterial().then(response => {
-        this.materialList = response.rows;
-        if (this.mode === 1) {
-          this.hint = "原料 "
-          this.hint += response.rows.find(ele => ele.maId === this.$route.query.maId).maName
-          this.hint += " "
-        }
-      });
-    },
-    // 获取车间列表
-    getAreaList() {
-      listArea().then(response => {
-        this.areaList = response.rows;
-        if (this.mode === 2) {
-          this.hint = "车间 "
-          this.hint += response.rows.find(ele => ele.arId === this.$route.query.arId).arName
-          this.hint += " "
-        }
-      });
-    },
+    }
   }
 };
 </script>

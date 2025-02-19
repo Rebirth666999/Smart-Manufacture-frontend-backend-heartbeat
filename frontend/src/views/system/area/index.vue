@@ -96,6 +96,12 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-position"
+            @click="handleAreaControlView(scope.row)"
+          >主控节点</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-box"
             @click="handleAreaStockView(scope.row)"
           >查看库存</el-button>
@@ -309,6 +315,10 @@ export default {
     // 查看车间库存
     handleAreaStockView(row) {
       this.$router.push(`/assets/materialStock?arId=${row.arId}`)
+    },
+    // 查看车间主控节点
+    handleAreaControlView(row) {
+      this.$router.push(`/equipment/areaControl?arId=${row.arId}`)
     }
   }
 };

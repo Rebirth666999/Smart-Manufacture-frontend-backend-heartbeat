@@ -72,13 +72,7 @@
     <el-table v-loading="loading" :data="materialList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="原料ID" align="center" prop="maId" v-if="true" />
-      <el-table-column label="原料名称" align="center" prop="maName">
-        <template slot-scope="scope">
-          <el-button type="text" @click="handleMaterialView(scope.row)">
-            <span>{{ scope.row.maName }}</span>
-          </el-button>
-        </template>
-      </el-table-column>
+      <el-table-column label="原料名称" align="center" prop="maName" />
       <!-- <el-table-column label="已删除" align="center" prop="maDelete" /> -->
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
@@ -99,6 +93,12 @@
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:material:edit']"
           >修改</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-box"
+            @click="handleMaterialView(scope.row)"
+          >查看库存</el-button>
           <el-button
             size="mini"
             type="text"

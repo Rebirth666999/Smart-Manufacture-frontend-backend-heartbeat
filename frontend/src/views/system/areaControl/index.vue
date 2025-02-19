@@ -200,7 +200,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        arId: undefined,
+        arId: this.$route.query.arId,
         acName: undefined,
         acIp: undefined,
         acDelete: 0,
@@ -229,6 +229,10 @@ export default {
     };
   },
   created() {
+    // 检查来源
+    if (this.$route.query.arId) {
+      this.mode = 1
+    }
     this.getAreaList();
     this.getList();
   },
@@ -288,6 +292,9 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      if (this.mode === 1) {
+        this.form.arId = this.$route.query.arId
+      }
       this.open = true;
       this.title = "添加主控节点";
     },

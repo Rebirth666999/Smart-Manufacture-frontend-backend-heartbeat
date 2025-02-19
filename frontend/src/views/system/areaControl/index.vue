@@ -17,14 +17,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="已删除" prop="acDelete">
+      <!-- <el-form-item label="已删除" prop="acDelete">
         <el-input
           v-model="queryParams.acDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -83,7 +83,7 @@
       <el-table-column label="所属车间ID" align="center" prop="arId" />
       <el-table-column label="名称" align="center" prop="acName" />
       <el-table-column label="IP地址" align="center" prop="acIp" />
-      <el-table-column label="已删除" align="center" prop="acDelete" />
+      <!-- <el-table-column label="已删除" align="center" prop="acDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

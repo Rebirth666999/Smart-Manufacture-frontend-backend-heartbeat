@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="原料" prop="maId">
+      <el-form-item label="所属原料" prop="maId">
         <el-select
           v-model="queryParams.maId"
           placeholder="请选择原料"
@@ -12,6 +12,18 @@
             :key="item.maId"
             :label="item.maName"
             :value="item.maId"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="所属车间" prop="arId">
+        <el-select v-model="queryParams.arId" placeholder="请选择车间" 
+        @keyup.enter.native="handleQuery">
+          <el-option
+            v-for="item in areaList"
+            :key="item.arId"
+            :label="item.arName"
+            :value="item.arId"
           >
           </el-option>
         </el-select>
@@ -106,7 +118,11 @@
           {{ materialList.find(ele => ele.maId === scope.row.maId).maName }}
         </template>
       </el-table-column>
-      <el-table-column label="所属车间ID" align="center" prop="arId" />
+      <el-table-column label="所属车间" align="center" prop="arId">
+        <template slot-scope="scope">
+          {{ areaList.find(ele => ele.arId === scope.row.arId).arName }}
+        </template>
+      </el-table-column>
       <el-table-column label="变动类型" align="center" prop="mrType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_record_type" :value="scope.row.mrType"/>
@@ -170,6 +186,20 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="车间" prop="arId">
+          <el-select
+            v-model="form.arId"
+            placeholder="请选择车间"
+          >
+            <el-option
+              v-for="item in areaList"
+              :key="item.arId"
+              :label="item.arName"
+              :value="item.arId"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="变动类型" prop="mrType">
           <el-select v-model="form.mrType" placeholder="请选择变动类型">
             <el-option
@@ -201,6 +231,7 @@
 <script>
 import { listMaterialRecord, getMaterialRecord, delMaterialRecord, addMaterialRecord, updateMaterialRecord } from "@/api/system/materialRecord";
 import { listMaterial } from "@/api/system/material";
+import { listArea } from "@/api/system/area";
 
 export default {
   name: "MaterialRecord",
@@ -260,11 +291,14 @@ export default {
         ],
       },
       // 原料列表
-      materialList: []
+      materialList: [],
+      // 车间列表
+      areaList: [],
     };
   },
   created() {
     this.getMaterialList();
+    this.getAreaList();
     this.getList();
   },
   methods: {
@@ -272,6 +306,12 @@ export default {
     getMaterialList() {
       listMaterial().then(response => {
         this.materialList = response.rows;
+      });
+    },
+    // 查询车间列表
+    getAreaList() {
+      listArea().then(response => {
+        this.areaList = response.rows;
       });
     },
     /** 查询原料台账列表 */

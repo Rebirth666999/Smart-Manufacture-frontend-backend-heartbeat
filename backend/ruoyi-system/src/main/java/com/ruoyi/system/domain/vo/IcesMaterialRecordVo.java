@@ -13,7 +13,7 @@ import java.util.Date;
  * 原料台账视图对象 ices_material_record
  *
  * @author ruoyi
- * @date 2025-02-14
+ * @date 2025-02-26
  */
 @Data
 @ExcelIgnoreUnannotated
@@ -32,6 +32,12 @@ public class IcesMaterialRecordVo {
      */
     @ExcelProperty(value = "所属原料ID")
     private Long maId;
+
+    /**
+     * 所属车间ID
+     */
+    @ExcelProperty(value = "所属车间ID")
+    private Long arId;
 
     /**
      * 变动类型
@@ -57,18 +63,6 @@ public class IcesMaterialRecordVo {
      */
     @ExcelProperty(value = "已删除")
     private Long mrDelete;
-
-    /**
-     * 创建时间
-     */
-    @ExcelProperty(value = "创建时间")
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    @ExcelProperty(value = "更新时间")
-    private Date updateTime;
 
 
 }

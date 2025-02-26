@@ -8,7 +8,7 @@ import com.ruoyi.common.core.mapper.BaseMapperPlus;
  * 原料台账Mapper接口
  *
  * @author ruoyi
- * @date 2025-02-14
+ * @date 2025-02-26
  */
 public interface IcesMaterialRecordMapper extends BaseMapperPlus<IcesMaterialRecordMapper, IcesMaterialRecord, IcesMaterialRecordVo> {
 

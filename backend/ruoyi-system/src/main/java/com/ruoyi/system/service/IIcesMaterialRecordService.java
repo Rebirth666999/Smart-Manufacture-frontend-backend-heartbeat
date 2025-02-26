@@ -13,7 +13,7 @@ import java.util.List;
  * 原料台账Service接口
  *
  * @author ruoyi
- * @date 2025-02-14
+ * @date 2025-02-26
  */
 public interface IIcesMaterialRecordService {
 

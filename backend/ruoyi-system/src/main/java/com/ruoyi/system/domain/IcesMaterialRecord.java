@@ -13,7 +13,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 原料台账对象 ices_material_record
  *
  * @author ruoyi
- * @date 2025-02-14
+ * @date 2025-02-26
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -31,6 +31,10 @@ public class IcesMaterialRecord extends BaseEntity {
      * 所属原料ID
      */
     private Long maId;
+    /**
+     * 所属车间ID
+     */
+    private Long arId;
     /**
      * 变动类型
      */

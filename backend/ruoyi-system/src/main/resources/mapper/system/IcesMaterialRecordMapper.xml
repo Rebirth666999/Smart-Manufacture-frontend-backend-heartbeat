@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="com.ruoyi.system.domain.IcesMaterialRecord" id="IcesMaterialRecordResult">
         <result property="mrId" column="mr_id"/>
         <result property="maId" column="ma_id"/>
+        <result property="arId" column="ar_id"/>
         <result property="mrType" column="mr_type"/>
         <result property="mrEst" column="mr_est"/>
         <result property="mrReal" column="mr_real"/>

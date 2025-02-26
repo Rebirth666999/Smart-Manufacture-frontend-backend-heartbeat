@@ -1,21 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="原料" prop="maId">
-        <el-select
-          v-model="queryParams.maId"
-          placeholder="请选择原料"
-          clearable
-        >
-          <el-option
-            v-for="item in materialList"
-            :key="item.maId"
-            :label="item.maName"
-            :value="item.maId"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
       <el-form-item label="变动类型" prop="mrType">
         <el-select v-model="queryParams.mrType" placeholder="请选择变动类型" clearable>
           <el-option
@@ -26,25 +11,13 @@
           />
         </el-select>
       </el-form-item>
-      <!-- <el-form-item label="已删除" prop="mrDelete">
+      <el-form-item label="已删除" prop="mrDelete">
         <el-input
           v-model="queryParams.mrDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item> -->
-      <el-form-item label="创建时间">
-        <el-date-picker
-          v-model="daterangeCreateTime"
-          style="width: 240px"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          type="daterange"
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          :default-time="['00:00:00', '23:59:59']"
-        ></el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -101,11 +74,8 @@
     <el-table v-loading="loading" :data="materialRecordList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="原料台账ID" align="center" prop="mrId" v-if="true"/>
-      <el-table-column label="所属原料" align="center" prop="maId">
-        <template slot-scope="scope">
-          {{ materialList.find(ele => ele.maId === scope.row.maId).maName }}
-        </template>
-      </el-table-column>
+      <el-table-column label="所属原料ID" align="center" prop="maId" />
+      <el-table-column label="所属车间ID" align="center" prop="arId" />
       <el-table-column label="变动类型" align="center" prop="mrType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_record_type" :value="scope.row.mrType"/>
@@ -113,17 +83,7 @@
       </el-table-column>
       <el-table-column label="预计变动值" align="center" prop="mrEst" />
       <el-table-column label="实际变动值" align="center" prop="mrReal" />
-      <!-- <el-table-column label="已删除" align="center" prop="mrDelete" /> -->
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="更新时间" align="center" prop="updateTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column label="已删除" align="center" prop="mrDelete" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -155,20 +115,6 @@
     <!-- 添加或修改原料台账对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="原料" prop="maId">
-          <el-select
-            v-model="form.maId"
-            placeholder="请选择原料"
-          >
-            <el-option
-              v-for="item in materialList"
-              :key="item.maId"
-              :label="item.maName"
-              :value="item.maId"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="变动类型" prop="mrType">
           <el-select v-model="form.mrType" placeholder="请选择变动类型">
             <el-option
@@ -199,7 +145,6 @@
 
 <script>
 import { listMaterialRecord, getMaterialRecord, delMaterialRecord, addMaterialRecord, updateMaterialRecord } from "@/api/system/materialRecord";
-import { listMaterial } from "@/api/system/material";
 
 export default {
   name: "MaterialRecord",
@@ -226,16 +171,14 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
-      // 描述时间范围
-      daterangeCreateTime: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
         maId: undefined,
+        arId: undefined,
         mrType: undefined,
-        mrDelete: 0,
-        createTime: undefined,
+        mrDelete: undefined,
       },
       // 表单参数
       form: {},
@@ -247,36 +190,25 @@ export default {
         maId: [
           { required: true, message: "所属原料ID不能为空", trigger: "change" }
         ],
+        arId: [
+          { required: true, message: "所属车间ID不能为空", trigger: "change" }
+        ],
         mrType: [
           { required: true, message: "变动类型不能为空", trigger: "change" }
         ],
         mrEst: [
           { required: true, message: "预计变动值不能为空", trigger: "blur" }
         ],
-      },
-      // 原料列表
-      materialList: []
+      }
     };
   },
   created() {
-    this.getMaterialList();
     this.getList();
   },
   methods: {
-    // 查询原料列表
-    getMaterialList() {
-      listMaterial().then(response => {
-        this.materialList = response.rows;
-      });
-    },
     /** 查询原料台账列表 */
     getList() {
       this.loading = true;
-      this.queryParams.params = {};
-      if (null != this.daterangeCreateTime && '' != this.daterangeCreateTime) {
-        this.queryParams.params["beginCreateTime"] = this.daterangeCreateTime[0];
-        this.queryParams.params["endCreateTime"] = this.daterangeCreateTime[1];
-      }
       listMaterialRecord(this.queryParams).then(response => {
         this.materialRecordList = response.rows;
         this.total = response.total;
@@ -293,6 +225,7 @@ export default {
       this.form = {
         mrId: undefined,
         maId: undefined,
+        arId: undefined,
         mrType: undefined,
         mrEst: undefined,
         mrReal: undefined,
@@ -312,7 +245,6 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.daterangeCreateTime = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },

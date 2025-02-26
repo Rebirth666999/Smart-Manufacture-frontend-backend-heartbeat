@@ -14,7 +14,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 原料台账业务对象 ices_material_record
  *
  * @author ruoyi
- * @date 2025-02-14
+ * @date 2025-02-26
  */
 
 @Data
@@ -32,6 +32,12 @@ public class IcesMaterialRecordBo extends BaseEntity {
      */
     @NotNull(message = "所属原料ID不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long maId;
+
+    /**
+     * 所属车间ID
+     */
+    @NotNull(message = "所属车间ID不能为空", groups = { AddGroup.class, EditGroup.class })
+    private Long arId;
 
     /**
      * 变动类型

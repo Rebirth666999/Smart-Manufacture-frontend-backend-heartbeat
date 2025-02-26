@@ -23,7 +23,7 @@ import java.util.Collection;
  * 原料台账Service业务层处理
  *
  * @author ruoyi
- * @date 2025-02-14
+ * @date 2025-02-26
  */
 @RequiredArgsConstructor
 @Service
@@ -62,10 +62,9 @@ public class IcesMaterialRecordServiceImpl implements IIcesMaterialRecordService
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesMaterialRecord> lqw = Wrappers.lambdaQuery();
         lqw.eq(bo.getMaId() != null, IcesMaterialRecord::getMaId, bo.getMaId());
+        lqw.eq(bo.getArId() != null, IcesMaterialRecord::getArId, bo.getArId());
         lqw.eq(StringUtils.isNotBlank(bo.getMrType()), IcesMaterialRecord::getMrType, bo.getMrType());
         lqw.eq(bo.getMrDelete() != null, IcesMaterialRecord::getMrDelete, bo.getMrDelete());
-        lqw.between(params.get("beginCreateTime") != null && params.get("endCreateTime") != null,
-            IcesMaterialRecord::getCreateTime ,params.get("beginCreateTime"), params.get("endCreateTime"));
         return lqw;
     }
 

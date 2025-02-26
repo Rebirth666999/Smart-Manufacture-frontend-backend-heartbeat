@@ -11,14 +11,14 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="已删除" prop="mrDelete">
+      <!-- <el-form-item label="已删除" prop="mrDelete">
         <el-input
           v-model="queryParams.mrDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -83,7 +83,7 @@
       </el-table-column>
       <el-table-column label="预计变动值" align="center" prop="mrEst" />
       <el-table-column label="实际变动值" align="center" prop="mrReal" />
-      <el-table-column label="已删除" align="center" prop="mrDelete" />
+      <!-- <el-table-column label="已删除" align="center" prop="mrDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -178,7 +178,7 @@ export default {
         maId: undefined,
         arId: undefined,
         mrType: undefined,
-        mrDelete: undefined,
+        mrDelete: 0,
       },
       // 表单参数
       form: {},

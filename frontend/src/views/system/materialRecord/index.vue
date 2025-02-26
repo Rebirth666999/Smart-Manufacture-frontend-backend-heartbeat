@@ -1,6 +1,21 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="原料" prop="maId">
+        <el-select
+          v-model="queryParams.maId"
+          placeholder="请选择原料"
+          clearable
+        >
+          <el-option
+            v-for="item in materialList"
+            :key="item.maId"
+            :label="item.maName"
+            :value="item.maId"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="变动类型" prop="mrType">
         <el-select v-model="queryParams.mrType" placeholder="请选择变动类型" clearable>
           <el-option
@@ -74,7 +89,11 @@
     <el-table v-loading="loading" :data="materialRecordList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="原料台账ID" align="center" prop="mrId" v-if="true"/>
-      <el-table-column label="所属原料ID" align="center" prop="maId" />
+      <el-table-column label="所属原料" align="center" prop="maId">
+        <template slot-scope="scope">
+          {{ materialList.find(ele => ele.maId === scope.row.maId).maName }}
+        </template>
+      </el-table-column>
       <el-table-column label="所属车间ID" align="center" prop="arId" />
       <el-table-column label="变动类型" align="center" prop="mrType">
         <template slot-scope="scope">
@@ -125,6 +144,20 @@
     <!-- 添加或修改原料台账对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="原料" prop="maId">
+          <el-select
+            v-model="form.maId"
+            placeholder="请选择原料"
+          >
+            <el-option
+              v-for="item in materialList"
+              :key="item.maId"
+              :label="item.maName"
+              :value="item.maId"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="变动类型" prop="mrType">
           <el-select v-model="form.mrType" placeholder="请选择变动类型">
             <el-option
@@ -155,6 +188,7 @@
 
 <script>
 import { listMaterialRecord, getMaterialRecord, delMaterialRecord, addMaterialRecord, updateMaterialRecord } from "@/api/system/materialRecord";
+import { listMaterial } from "@/api/system/material";
 
 export default {
   name: "MaterialRecord",
@@ -209,13 +243,22 @@ export default {
         mrEst: [
           { required: true, message: "预计变动值不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 原料列表
+      materialList: []
     };
   },
   created() {
+    this.getMaterialList();
     this.getList();
   },
   methods: {
+    // 查询原料列表
+    getMaterialList() {
+      listMaterial().then(response => {
+        this.materialList = response.rows;
+      });
+    },
     /** 查询原料台账列表 */
     getList() {
       this.loading = true;

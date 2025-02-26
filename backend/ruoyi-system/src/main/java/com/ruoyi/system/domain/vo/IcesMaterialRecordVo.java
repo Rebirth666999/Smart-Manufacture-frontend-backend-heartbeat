@@ -64,5 +64,17 @@ public class IcesMaterialRecordVo {
     @ExcelProperty(value = "已删除")
     private Long mrDelete;
 
+    /**
+     * 创建时间
+     */
+    @ExcelProperty(value = "创建时间")
+    private Date createTime;
+
+    /**
+     * 更新时间
+     */
+    @ExcelProperty(value = "更新时间")
+    private Date updateTime;
+
 
 }

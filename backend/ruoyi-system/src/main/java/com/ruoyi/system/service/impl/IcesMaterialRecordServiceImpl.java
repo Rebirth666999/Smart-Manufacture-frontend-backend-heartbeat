@@ -65,6 +65,8 @@ public class IcesMaterialRecordServiceImpl implements IIcesMaterialRecordService
         lqw.eq(bo.getArId() != null, IcesMaterialRecord::getArId, bo.getArId());
         lqw.eq(StringUtils.isNotBlank(bo.getMrType()), IcesMaterialRecord::getMrType, bo.getMrType());
         lqw.eq(bo.getMrDelete() != null, IcesMaterialRecord::getMrDelete, bo.getMrDelete());
+        lqw.between(params.get("beginCreateTime") != null && params.get("endCreateTime") != null,
+            IcesMaterialRecord::getCreateTime ,params.get("beginCreateTime"), params.get("endCreateTime"));
         return lqw;
     }
 

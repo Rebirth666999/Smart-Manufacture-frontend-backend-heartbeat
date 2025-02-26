@@ -103,6 +103,10 @@ public class IcesEquipmentModelTypeController extends BaseController {
     @DeleteMapping("/{emtIds}")
     public R<Void> remove(@NotEmpty(message = "主键不能为空")
                           @PathVariable Long[] emtIds) {
-        return toAjax(iIcesEquipmentModelTypeService.deleteWithValidByIds(Arrays.asList(emtIds), true));
+        if (iIcesEquipmentModelTypeService.deleteWithValidByIds(Arrays.asList(emtIds), true)) {
+            return R.ok();
+        } else {
+            return R.fail("请先弃用该类型下所有模型");
+        }
     }
 }

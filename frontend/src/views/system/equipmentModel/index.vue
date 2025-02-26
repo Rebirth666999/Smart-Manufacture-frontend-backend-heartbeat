@@ -143,6 +143,26 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-finished"
+          >提交审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-refresh-left"
+          >撤回审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-document-copy"
+          >复制配置</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+          >弃用</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:equipmentModel:remove']"

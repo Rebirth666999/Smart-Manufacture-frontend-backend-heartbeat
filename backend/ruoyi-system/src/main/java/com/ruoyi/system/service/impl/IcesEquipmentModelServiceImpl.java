@@ -23,7 +23,7 @@ import java.util.Collection;
  * 设备模型Service业务层处理
  *
  * @author ruoyi
- * @date 2025-02-18
+ * @date 2025-02-26
  */
 @RequiredArgsConstructor
 @Service
@@ -63,6 +63,7 @@ public class IcesEquipmentModelServiceImpl implements IIcesEquipmentModelService
         LambdaQueryWrapper<IcesEquipmentModel> lqw = Wrappers.lambdaQuery();
         lqw.eq(bo.getEmtId() != null, IcesEquipmentModel::getEmtId, bo.getEmtId());
         lqw.like(StringUtils.isNotBlank(bo.getEmName()), IcesEquipmentModel::getEmName, bo.getEmName());
+        lqw.eq(StringUtils.isNotBlank(bo.getEmStat()), IcesEquipmentModel::getEmStat, bo.getEmStat());
         lqw.eq(bo.getEmDelete() != null, IcesEquipmentModel::getEmDelete, bo.getEmDelete());
         return lqw;
     }

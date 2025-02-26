@@ -13,7 +13,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 设备模型对象 ices_equipment_model
  *
  * @author ruoyi
- * @date 2025-02-18
+ * @date 2025-02-26
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -35,6 +35,10 @@ public class IcesEquipmentModel extends BaseEntity {
      * 名称
      */
     private String emName;
+    /**
+     * 状态
+     */
+    private String emStat;
     /**
      * 已删除
      */

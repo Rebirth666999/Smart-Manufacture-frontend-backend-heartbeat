@@ -13,7 +13,7 @@ import java.util.Date;
  * 设备模型视图对象 ices_equipment_model
  *
  * @author ruoyi
- * @date 2025-02-18
+ * @date 2025-02-26
  */
 @Data
 @ExcelIgnoreUnannotated
@@ -38,6 +38,13 @@ public class IcesEquipmentModelVo {
      */
     @ExcelProperty(value = "名称")
     private String emName;
+
+    /**
+     * 状态
+     */
+    @ExcelProperty(value = "状态", converter = ExcelDictConvert.class)
+    @ExcelDictFormat(dictType = "ices_equipment_model_status")
+    private String emStat;
 
     /**
      * 已删除

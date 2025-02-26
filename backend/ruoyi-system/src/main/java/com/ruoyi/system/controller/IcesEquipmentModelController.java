@@ -29,7 +29,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * 设备模型
  *
  * @author ruoyi
- * @date 2025-02-18
+ * @date 2025-02-26
  */
 @Validated
 @RequiredArgsConstructor

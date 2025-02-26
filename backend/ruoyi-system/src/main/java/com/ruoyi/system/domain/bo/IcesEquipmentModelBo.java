@@ -14,7 +14,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 设备模型业务对象 ices_equipment_model
  *
  * @author ruoyi
- * @date 2025-02-18
+ * @date 2025-02-26
  */
 
 @Data
@@ -38,6 +38,11 @@ public class IcesEquipmentModelBo extends BaseEntity {
      */
     @NotBlank(message = "名称不能为空", groups = { AddGroup.class, EditGroup.class })
     private String emName;
+
+    /**
+     * 状态
+     */
+    private String emStat;
 
     /**
      * 已删除

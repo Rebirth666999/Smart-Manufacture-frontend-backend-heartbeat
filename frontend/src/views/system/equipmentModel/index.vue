@@ -1,33 +1,6 @@
 <template>
   <div class="app-container">
-    <!-- 顶部提示 -->
-    <el-alert
-      v-show="hint.length > 0"
-      :title="`正在根据${hint}筛选设备模型`"
-      type="info"
-      show-icon
-      :closable="false"
-      class="mb8"
-    >
-    </el-alert>
-
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="模型类型" prop="emtId">
-        <el-select
-          v-model="queryParams.emtId"
-          placeholder="请选择模型类型"
-          clearable
-          :disabled="mode === 1"
-        >
-          <el-option
-            v-for="item in equipmentModelTypeList"
-            :key="item.emtId"
-            :label="item.emtName"
-            :value="item.emtId"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
       <el-form-item label="名称" prop="emName">
         <el-input
           v-model="queryParams.emName"
@@ -36,14 +9,24 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <!-- <el-form-item label="已删除" prop="emDelete">
+      <el-form-item label="状态" prop="emStat">
+        <el-select v-model="queryParams.emStat" placeholder="请选择状态" clearable>
+          <el-option
+            v-for="dict in dict.type.ices_equipment_model_status"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="已删除" prop="emDelete">
         <el-input
           v-model="queryParams.emDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -99,21 +82,22 @@
     <el-table v-loading="loading" :data="equipmentModelList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="设备模型ID" align="center" prop="emId" v-if="true"/>
-      <el-table-column label="所属模型类型" align="center" prop="emtId">
+      <el-table-column label="所属模型类型ID" align="center" prop="emtId" />
+      <el-table-column label="名称" align="center" prop="emName" />
+      <el-table-column label="状态" align="center" prop="emStat">
         <template slot-scope="scope">
-          {{ equipmentModelTypeList.find(ele => ele.emtId === scope.row.emtId).emtName }}
+          <dict-tag :options="dict.type.ices_equipment_model_status" :value="scope.row.emStat"/>
         </template>
       </el-table-column>
-      <el-table-column label="名称" align="center" prop="emName" />
-      <!-- <el-table-column label="已删除" align="center" prop="emDelete" /> -->
+      <el-table-column label="已删除" align="center" prop="emDelete" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="更新时间" align="center" prop="updateTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+          <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -147,22 +131,6 @@
     <!-- 添加或修改设备模型对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="模型类型" prop="emtId">
-          <el-select
-            v-model="form.emtId"
-            placeholder="请选择模型类型"
-            clearable
-            :disabled="mode === 1"
-          >
-            <el-option
-              v-for="item in equipmentModelTypeList"
-              :key="item.emtId"
-              :label="item.emtName"
-              :value="item.emtId"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="名称" prop="emName">
           <el-input v-model="form.emName" placeholder="请输入名称" />
         </el-form-item>
@@ -180,10 +148,10 @@
 
 <script>
 import { listEquipmentModel, getEquipmentModel, delEquipmentModel, addEquipmentModel, updateEquipmentModel } from "@/api/system/equipmentModel";
-import { listEquipmentModelType } from "@/api/system/equipmentModelType";
 
 export default {
   name: "EquipmentModel",
+  dicts: ['ices_equipment_model_status'],
   data() {
     return {
       // 按钮loading
@@ -210,9 +178,10 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        emtId: this.$route.query.emtId,
+        emtId: undefined,
         emName: undefined,
-        emDelete: 0,
+        emStat: undefined,
+        emDelete: undefined,
       },
       // 表单参数
       form: {},
@@ -227,36 +196,13 @@ export default {
         emName: [
           { required: true, message: "名称不能为空", trigger: "blur" }
         ],
-      },
-      // 设备模型类型数据
-      equipmentModelTypeList: [],
-      // 1-根据设备类型管理
-      mode: 0,
-      // 页面顶部提示
-      hint: ''
+      }
     };
   },
   created() {
-    // 检查来源
-    if (this.$route.query.emtId) {
-      this.mode = 1
-    }
-    
-    this.getEquipmentModelTypeList();
     this.getList();
   },
   methods: {
-    // 查询模型类型列表
-    getEquipmentModelTypeList() {
-      listEquipmentModelType().then(response => {
-        this.equipmentModelTypeList = response.rows;
-        if (this.mode === 1) {
-          this.hint = "设备模型类型 "
-          this.hint += response.rows.find(ele => ele.emtId === this.$route.query.emtId).emtName
-          this.hint += " "
-        }
-      });
-    },
     /** 查询设备模型列表 */
     getList() {
       this.loading = true;
@@ -277,6 +223,7 @@ export default {
         emId: undefined,
         emtId: undefined,
         emName: undefined,
+        emStat: undefined,
         emDelete: undefined,
         emDesc: undefined,
         createBy: undefined,
@@ -305,9 +252,6 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
-      if (this.mode === 1) {
-        this.form.emtId = this.$route.query.emtId
-      }
       this.open = true;
       this.title = "添加设备模型";
     },
@@ -349,30 +293,19 @@ export default {
       });
     },
     /** 删除按钮操作 */
-    async handleDelete(row) {
+    handleDelete(row) {
       const emIds = row.emId || this.ids;
-      try {
-        await this.$modal.confirm('是否确认删除设备模型编号为"' + emIds + '"的数据项？')
+      this.$modal.confirm('是否确认删除设备模型编号为"' + emIds + '"的数据项？').then(() => {
         this.loading = true;
-        if (typeof (emIds) === "string") {
-          let form = (await getEquipmentModel(emIds)).data
-          form.emDelete = 1
-          await updateEquipmentModel(form)
-        } else {
-          // id数组
-          let form = null
-          for (let i = 0; i < emIds.length; i++) {
-            form = (await getEquipmentModel(emIds[i])).data
-            form.emDelete = 1
-            await updateEquipmentModel(form)
-          }
-        }
+        return delEquipmentModel(emIds);
+      }).then(() => {
         this.loading = false;
         this.getList();
         this.$modal.msgSuccess("删除成功");
-      } catch (error) {
-        // 取消删除
-      }
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
     },
     /** 导出按钮操作 */
     handleExport() {

@@ -13,7 +13,7 @@ import java.util.List;
  * 设备模型Service接口
  *
  * @author ruoyi
- * @date 2025-02-18
+ * @date 2025-02-26
  */
 public interface IIcesEquipmentModelService {
 

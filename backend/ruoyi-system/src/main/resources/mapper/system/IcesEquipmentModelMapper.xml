@@ -8,6 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="emId" column="em_id"/>
         <result property="emtId" column="emt_id"/>
         <result property="emName" column="em_name"/>
+        <result property="emStat" column="em_stat"/>
         <result property="emDelete" column="em_delete"/>
         <result property="emDesc" column="em_desc"/>
         <result property="createBy" column="create_by"/>

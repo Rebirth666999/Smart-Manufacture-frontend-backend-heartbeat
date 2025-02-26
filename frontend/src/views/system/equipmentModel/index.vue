@@ -1,6 +1,21 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="模型类型" prop="emtId">
+        <el-select
+          v-model="queryParams.emtId"
+          placeholder="请选择模型类型"
+          clearable
+        >
+          <el-option
+            v-for="item in equipmentModelTypeList"
+            :key="item.emtId"
+            :label="item.emtName"
+            :value="item.emtId"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="名称" prop="emName">
         <el-input
           v-model="queryParams.emName"
@@ -131,6 +146,21 @@
     <!-- 添加或修改设备模型对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="模型类型" prop="emtId">
+          <el-select
+            v-model="form.emtId"
+            placeholder="请选择模型类型"
+            clearable
+          >
+            <el-option
+              v-for="item in equipmentModelTypeList"
+              :key="item.emtId"
+              :label="item.emtName"
+              :value="item.emtId"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="名称" prop="emName">
           <el-input v-model="form.emName" placeholder="请输入名称" />
         </el-form-item>
@@ -148,6 +178,7 @@
 
 <script>
 import { listEquipmentModel, getEquipmentModel, delEquipmentModel, addEquipmentModel, updateEquipmentModel } from "@/api/system/equipmentModel";
+import { listEquipmentModelType } from "@/api/system/equipmentModelType";
 
 export default {
   name: "EquipmentModel",
@@ -196,13 +227,22 @@ export default {
         emName: [
           { required: true, message: "名称不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 设备模型类型数据
+      equipmentModelTypeList: [],
     };
   },
   created() {
+    this.getEquipmentModelTypeList();
     this.getList();
   },
   methods: {
+    // 查询模型类型列表
+    getEquipmentModelTypeList() {
+      listEquipmentModelType().then(response => {
+        this.equipmentModelTypeList = response.rows;
+      });
+    },
     /** 查询设备模型列表 */
     getList() {
       this.loading = true;

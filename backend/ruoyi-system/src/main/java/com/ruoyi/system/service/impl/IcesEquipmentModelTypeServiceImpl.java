@@ -103,7 +103,10 @@ public class IcesEquipmentModelTypeServiceImpl implements IIcesEquipmentModelTyp
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
         if(isValid){
-            //TODO 做一些业务上的校验,判断是否需要校验
+            // TODO 设备模型类型删除逻辑
+            // TODO 类型下没有模型，直接从数据库删除
+            // TODO 类型下只有已弃用和未发布的模型，更改已删除字段
+            // TODO 不满足如上情况，拒绝删除
         }
         return baseMapper.deleteBatchIds(ids) > 0;
     }

@@ -9,14 +9,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="已删除" prop="moDelete">
+      <!-- <el-form-item label="已删除" prop="moDelete">
         <el-input
           v-model="queryParams.moDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -74,7 +74,7 @@
       <el-table-column label="模型操作ID" align="center" prop="moId" v-if="true"/>
       <el-table-column label="所属设备模型ID" align="center" prop="emId" />
       <el-table-column label="名称" align="center" prop="moName" />
-      <el-table-column label="已删除" align="center" prop="moDelete" />
+      <!-- <el-table-column label="已删除" align="center" prop="moDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -154,7 +154,7 @@ export default {
         pageSize: 10,
         emId: undefined,
         moName: undefined,
-        moDelete: undefined,
+        moDelete: 0,
       },
       // 表单参数
       form: {},

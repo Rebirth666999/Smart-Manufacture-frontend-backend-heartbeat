@@ -235,7 +235,7 @@ export default {
     this.getList();
   },
   methods: {
-    // 查询车间列表
+    // 查询设备模型列表
     getEquipmentModelList() {
       listEquipmentModel().then(response => {
         this.equipmentModelList = response.rows;

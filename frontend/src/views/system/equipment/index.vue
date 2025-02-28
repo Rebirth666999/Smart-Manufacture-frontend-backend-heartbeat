@@ -24,6 +24,18 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="设备模型" prop="emId">
+        <el-select v-model="queryParams.emId" placeholder="请选择设备模型" 
+        @keyup.enter.native="handleQuery">
+          <el-option
+            v-for="item in equipmentModelList"
+            :key="item.emId"
+            :label="item.emName"
+            :value="item.emId"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="状态" prop="eqStat">
         <el-select v-model="queryParams.eqStat" placeholder="请选择状态" clearable>
           <el-option
@@ -102,7 +114,11 @@
           {{ areaList.find(ele => ele.arId === scope.row.arId).arName }}
         </template>
       </el-table-column>
-      <el-table-column label="所属设备模型ID" align="center" prop="emId" />
+      <el-table-column label="所属设备模型" align="center" prop="emId">
+        <template slot-scope="scope">
+          {{ equipmentModelList.find(ele => ele.emId === scope.row.emId).emName }}
+        </template>
+      </el-table-column>
       <el-table-column label="名称" align="center" prop="eqName" />
       <el-table-column label="状态" align="center" prop="eqStat">
         <template slot-scope="scope">
@@ -164,6 +180,20 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="设备模型" prop="emId">
+          <el-select
+            v-model="form.emId"
+            placeholder="请选择设备模型"
+          >
+            <el-option
+              v-for="item in equipmentModelList"
+              :key="item.emId"
+              :label="item.emName"
+              :value="item.emId"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="采购时间" prop="eqIntroduceTime">
           <el-date-picker clearable
             v-model="form.eqIntroduceTime"
@@ -190,6 +220,7 @@
 <script>
 import { listEquipment, getEquipment, delEquipment, addEquipment, updateEquipment } from "@/api/system/equipment";
 import { listArea } from "@/api/system/area";
+import { listEquipmentModel } from "@/api/system/equipmentModel";
 
 export default {
   name: "Equipment",
@@ -251,10 +282,13 @@ export default {
       },
       // 车间列表
       areaList: [],
+      // 设备模型列表
+      equipmentModelList: [],
     };
   },
   created() {
     this.getAreaList();
+    this.getEquipmentModelList();
     this.getList();
   },
   methods: {
@@ -262,6 +296,12 @@ export default {
     getAreaList() {
       listArea().then(response => {
         this.areaList = response.rows;
+      });
+    },
+    // 查询设备模型列表
+    getEquipmentModelList() {
+      listEquipmentModel().then(response => {
+        this.equipmentModelList = response.rows;
       });
     },
     /** 查询设备列表 */

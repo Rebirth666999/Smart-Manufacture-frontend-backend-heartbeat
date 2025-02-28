@@ -144,6 +144,21 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-bell"
+          >查看事件</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-position"
+          >原子操作</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-set-up"
+          >设备操作</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-finished"
           >提交审核</el-button>
           <el-button

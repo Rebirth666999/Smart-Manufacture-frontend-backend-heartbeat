@@ -9,8 +9,8 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态代码" prop="eqStat">
-        <el-select v-model="queryParams.eqStat" placeholder="请选择状态代码" clearable>
+      <el-form-item label="状态" prop="eqStat">
+        <el-select v-model="queryParams.eqStat" placeholder="请选择状态" clearable>
           <el-option
             v-for="dict in dict.type.ices_equipment_status"
             :key="dict.value"
@@ -85,7 +85,7 @@
       <el-table-column label="所属车间ID" align="center" prop="arId" />
       <el-table-column label="所属设备模型ID" align="center" prop="emId" />
       <el-table-column label="名称" align="center" prop="eqName" />
-      <el-table-column label="状态代码" align="center" prop="eqStat">
+      <el-table-column label="状态" align="center" prop="eqStat">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_equipment_status" :value="scope.row.eqStat"/>
         </template>

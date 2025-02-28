@@ -143,6 +143,12 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-position"
+            @click="handleModelOperationView(scope.row)"
+          >模型操作</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-finished"
           >提交审核</el-button>
           <el-button
@@ -405,6 +411,10 @@ export default {
       this.download('system/equipmentModel/export', {
         ...this.queryParams
       }, `equipmentModel_${new Date().getTime()}.xlsx`)
+    },
+    // 查看模型操作
+    handleModelOperationView(row) {
+      this.$router.push(`/equipment/modelOperation?emId=${row.emId}`)
     }
   }
 };

@@ -1,5 +1,16 @@
 <template>
   <div class="app-container">
+    <!-- 顶部提示 -->
+    <el-alert
+      v-show="hint.length > 0"
+      :title="`正在根据${hint}筛选模型操作`"
+      type="info"
+      show-icon
+      :closable="false"
+      class="mb8"
+    >
+    </el-alert>
+
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="名称" prop="moName">
         <el-input
@@ -10,8 +21,13 @@
         />
       </el-form-item>
       <el-form-item label="设备模型" prop="emId">
-        <el-select v-model="queryParams.emId" placeholder="请选择设备模型" 
-        @keyup.enter.native="handleQuery">
+        <el-select
+          v-model="queryParams.emId"
+          placeholder="请选择设备模型"
+          @keyup.enter.native="handleQuery"
+          clearable
+          :disabled="mode === 1"
+        >
           <el-option
             v-for="item in equipmentModelList"
             :key="item.emId"
@@ -129,6 +145,7 @@
           <el-select
             v-model="form.emId"
             placeholder="请选择设备模型"
+            :disabled="mode === 1"
           >
             <el-option
               v-for="item in equipmentModelList"
@@ -183,7 +200,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        emId: undefined,
+        emId: this.$route.query.emId,
         moName: undefined,
         moDelete: 0,
       },
@@ -203,9 +220,17 @@ export default {
       },
       // 设备模型列表
       equipmentModelList: [],
+      // 1-按照模型查看模型操作
+      mode: 0,
+      // 页面顶部提示
+      hint: ''
     };
   },
   created() {
+    // 检查来源
+    if (this.$route.query.emId) {
+      this.mode = 1
+    }
     this.getEquipmentModelList();
     this.getList();
   },
@@ -214,6 +239,11 @@ export default {
     getEquipmentModelList() {
       listEquipmentModel().then(response => {
         this.equipmentModelList = response.rows;
+        if (this.mode === 1) {
+          this.hint = "设备模型 "
+          this.hint += response.rows.find(ele => ele.emId === this.$route.query.emId).emName
+          this.hint += " "
+        }
       });
     },
     /** 查询设备模型操作列表 */
@@ -264,6 +294,9 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      if (this.mode === 1) {
+        this.form.emId = this.$route.query.emId
+      }
       this.open = true;
       this.title = "添加设备模型操作";
     },

@@ -9,6 +9,21 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="车间" prop="arId">
+        <el-select
+          v-model="queryParams.arId"
+          placeholder="请选择车间"
+          clearable
+        >
+          <el-option
+            v-for="item in areaList"
+            :key="item.arId"
+            :label="item.arName"
+            :value="item.arId"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="状态" prop="eqStat">
         <el-select v-model="queryParams.eqStat" placeholder="请选择状态" clearable>
           <el-option
@@ -82,7 +97,11 @@
     <el-table v-loading="loading" :data="equipmentList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="设备ID" align="center" prop="eqId" v-if="true"/>
-      <el-table-column label="所属车间ID" align="center" prop="arId" />
+      <el-table-column label="所属车间" align="center" prop="arId">
+        <template slot-scope="scope">
+          {{ areaList.find(ele => ele.arId === scope.row.arId).arName }}
+        </template>
+      </el-table-column>
       <el-table-column label="所属设备模型ID" align="center" prop="emId" />
       <el-table-column label="名称" align="center" prop="eqName" />
       <el-table-column label="状态" align="center" prop="eqStat">
@@ -131,6 +150,20 @@
         <el-form-item label="名称" prop="eqName">
           <el-input v-model="form.eqName" placeholder="请输入名称" />
         </el-form-item>
+        <el-form-item label="车间" prop="arId">
+          <el-select
+            v-model="form.arId"
+            placeholder="请选择车间"
+          >
+            <el-option
+              v-for="item in areaList"
+              :key="item.arId"
+              :label="item.arName"
+              :value="item.arId"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="采购时间" prop="eqIntroduceTime">
           <el-date-picker clearable
             v-model="form.eqIntroduceTime"
@@ -156,6 +189,7 @@
 
 <script>
 import { listEquipment, getEquipment, delEquipment, addEquipment, updateEquipment } from "@/api/system/equipment";
+import { listArea } from "@/api/system/area";
 
 export default {
   name: "Equipment",
@@ -214,13 +248,22 @@ export default {
         eqIp: [
           { required: true, message: "IP地址不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 车间列表
+      areaList: [],
     };
   },
   created() {
+    this.getAreaList();
     this.getList();
   },
   methods: {
+    // 获取车间列表
+    getAreaList() {
+      listArea().then(response => {
+        this.areaList = response.rows;
+      });
+    },
     /** 查询设备列表 */
     getList() {
       this.loading = true;

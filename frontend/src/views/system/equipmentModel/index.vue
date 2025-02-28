@@ -109,12 +109,12 @@
     <el-table v-loading="loading" :data="equipmentModelList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="设备模型ID" align="center" prop="emId" v-if="true"/>
+      <el-table-column label="名称" align="center" prop="emName" />
       <el-table-column label="所属模型类型" align="center" prop="emtId">
         <template slot-scope="scope">
           {{ equipmentModelTypeList.find(ele => ele.emtId === scope.row.emtId).emtName }}
         </template>
       </el-table-column>
-      <el-table-column label="名称" align="center" prop="emName" />
       <el-table-column label="状态" align="center" prop="emStat">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_equipment_model_status" :value="scope.row.emStat"/>

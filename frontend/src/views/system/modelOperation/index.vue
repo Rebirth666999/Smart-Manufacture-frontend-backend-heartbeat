@@ -9,6 +9,18 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="设备模型" prop="emId">
+        <el-select v-model="queryParams.emId" placeholder="请选择设备模型" 
+        @keyup.enter.native="handleQuery">
+          <el-option
+            v-for="item in equipmentModelList"
+            :key="item.emId"
+            :label="item.emName"
+            :value="item.emId"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <!-- <el-form-item label="已删除" prop="moDelete">
         <el-input
           v-model="queryParams.moDelete"
@@ -72,8 +84,12 @@
     <el-table v-loading="loading" :data="modelOperationList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="模型操作ID" align="center" prop="moId" v-if="true"/>
-      <el-table-column label="所属设备模型ID" align="center" prop="emId" />
       <el-table-column label="名称" align="center" prop="moName" />
+      <el-table-column label="所属设备模型" align="center" prop="emId">
+        <template slot-scope="scope">
+          {{ equipmentModelList.find(ele => ele.emId === scope.row.emId).emName }}
+        </template>
+      </el-table-column>
       <!-- <el-table-column label="已删除" align="center" prop="moDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -109,6 +125,20 @@
         <el-form-item label="名称" prop="moName">
           <el-input v-model="form.moName" placeholder="请输入名称" />
         </el-form-item>
+        <el-form-item label="设备模型" prop="emId">
+          <el-select
+            v-model="form.emId"
+            placeholder="请选择设备模型"
+          >
+            <el-option
+              v-for="item in equipmentModelList"
+              :key="item.emId"
+              :label="item.emName"
+              :value="item.emId"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="描述" prop="moDesc">
           <el-input v-model="form.moDesc" type="textarea" placeholder="请输入内容" />
         </el-form-item>
@@ -123,6 +153,7 @@
 
 <script>
 import { listModelOperation, getModelOperation, delModelOperation, addModelOperation, updateModelOperation } from "@/api/system/modelOperation";
+import { listEquipmentModel } from "@/api/system/equipmentModel";
 
 export default {
   name: "ModelOperation",
@@ -169,13 +200,22 @@ export default {
         moName: [
           { required: true, message: "名称不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 设备模型列表
+      equipmentModelList: [],
     };
   },
   created() {
+    this.getEquipmentModelList();
     this.getList();
   },
   methods: {
+    // 查询车间列表
+    getEquipmentModelList() {
+      listEquipmentModel().then(response => {
+        this.equipmentModelList = response.rows;
+      });
+    },
     /** 查询设备模型操作列表 */
     getList() {
       this.loading = true;

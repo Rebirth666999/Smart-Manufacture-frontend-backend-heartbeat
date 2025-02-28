@@ -110,7 +110,7 @@
           <el-input v-model="form.moName" placeholder="请输入名称" />
         </el-form-item>
         <el-form-item label="描述" prop="moDesc">
-          <el-input v-model="form.moDesc" placeholder="请输入描述" />
+          <el-input v-model="form.moDesc" type="textarea" placeholder="请输入内容" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

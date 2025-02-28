@@ -386,6 +386,8 @@ export default {
               this.buttonLoading = false;
             });
           } else {
+            // 添加设备的默认状态：未发布
+            this.form.eqStat = "1"
             addEquipment(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;

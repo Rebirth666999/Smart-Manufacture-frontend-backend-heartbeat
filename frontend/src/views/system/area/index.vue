@@ -131,7 +131,7 @@
           <el-input v-model="form.arName" placeholder="请输入车间名称" />
         </el-form-item>
         <el-form-item label="描述" prop="arDesc">
-          <el-input v-model="form.arDesc" placeholder="请输入描述" />
+          <el-input v-model="form.arDesc" type="textarea" placeholder="请输入描述" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

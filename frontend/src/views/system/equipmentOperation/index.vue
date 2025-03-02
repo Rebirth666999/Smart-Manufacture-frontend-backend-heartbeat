@@ -9,13 +9,17 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="所属设备ID" prop="eqId">
-        <el-input
-          v-model="queryParams.eqId"
-          placeholder="请输入所属设备ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+      <el-form-item label="设备" prop="eqId">
+        <el-select v-model="queryParams.eqId" placeholder="请选择设备" 
+        @keyup.enter.native="handleQuery" :disabled="mode === 1">
+          <el-option
+            v-for="item in equipmentList"
+            :key="item.eqId"
+            :label="item.eqName"
+            :value="item.eqId"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <!-- <el-form-item label="已删除" prop="eoDelete">
         <el-input
@@ -81,7 +85,11 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="设备操作ID" align="center" prop="eoId" v-if="true"/>
       <el-table-column label="对应模型操作ID" align="center" prop="moId" />
-      <el-table-column label="所属设备ID" align="center" prop="eqId" />
+      <el-table-column label="所属设备" align="center" prop="eqId">
+        <template slot-scope="scope">
+          {{ equipmentList.find(ele => ele.eqId === scope.row.eqId).eqName }}
+        </template>
+      </el-table-column>
       <el-table-column label="名称" align="center" prop="eoName" />
       <el-table-column label="执行时长" align="center" prop="eoExecTime" />
       <!-- <el-table-column label="已删除" align="center" prop="eoDelete" /> -->
@@ -120,8 +128,17 @@
         <el-form-item label="对应模型操作ID" prop="moId">
           <el-input v-model="form.moId" placeholder="请输入对应模型操作ID" />
         </el-form-item>
-        <el-form-item label="所属设备ID" prop="eqId">
-          <el-input v-model="form.eqId" placeholder="请输入所属设备ID" />
+        <el-form-item label="设备" prop="eqId">
+          <el-select v-model="form.eqId" placeholder="请选择设备" 
+          :disabled="mode === 1">
+            <el-option
+              v-for="item in equipmentList"
+              :key="item.eqId"
+              :label="item.eqName"
+              :value="item.eqId"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="名称" prop="eoName">
           <el-input v-model="form.eoName" placeholder="请输入名称" />
@@ -142,7 +159,7 @@
 </template>
 
 <script>
-import { listEquipmentOperation, getEquipmentOperation, delEquipmentOperation, addEquipmentOperation, updateEquipmentOperation } from "@/api/system/equipmentOperation";
+import { listEquipmentOperation, getEquipmentOperation, delEquipmentOperation, addEquipmentOperation, updateEquipmentOperation } from "@/api/system/equipmentOperation";import { listEquipment } from "@/api/system/equipment";
 
 export default {
   name: "EquipmentOperation",
@@ -189,13 +206,26 @@ export default {
         eqId: [
           { required: true, message: "所属设备ID不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 设备列表
+      equipmentList: [],
+      // 1-按设备查看设备操作（未发布，可修改）
+      mode: 0,
+      // 页面顶部提示
+      hint: ''
     };
   },
   created() {
+    this.getEquipmentList();
     this.getList();
   },
   methods: {
+    // 查询设备列表
+    getEquipmentList() {
+      listEquipment().then(response => {
+        this.equipmentList = response.rows;
+      });
+    },
     /** 查询设备操作列表 */
     getList() {
       this.loading = true;

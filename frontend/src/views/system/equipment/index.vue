@@ -109,6 +109,7 @@
     <el-table v-loading="loading" :data="equipmentList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="设备ID" align="center" prop="eqId" v-if="true"/>
+      <el-table-column label="名称" align="center" prop="eqName" />
       <el-table-column label="所属车间" align="center" prop="arId">
         <template slot-scope="scope">
           {{ areaList.find(ele => ele.arId === scope.row.arId).arName }}
@@ -119,7 +120,6 @@
           {{ equipmentModelList.find(ele => ele.emId === scope.row.emId).emName }}
         </template>
       </el-table-column>
-      <el-table-column label="名称" align="center" prop="eqName" />
       <el-table-column label="状态" align="center" prop="eqStat">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_equipment_status" :value="scope.row.eqStat"/>

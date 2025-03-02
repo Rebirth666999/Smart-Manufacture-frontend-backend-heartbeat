@@ -52,7 +52,7 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5" v-if="this.mode !== 2">
+      <el-col :span="1.5" v-if="mode !== 2">
         <el-button
           type="primary"
           plain
@@ -62,7 +62,7 @@
           v-hasPermi="['system:modelOperation:add']"
         >新增</el-button>
       </el-col>
-      <el-col :span="1.5" v-if="this.mode !== 2">
+      <el-col :span="1.5" v-if="mode !== 2">
         <el-button
           type="success"
           plain
@@ -73,7 +73,7 @@
           v-hasPermi="['system:modelOperation:edit']"
         >修改</el-button>
       </el-col>
-      <el-col :span="1.5" v-if="this.mode !== 2">
+      <el-col :span="1.5" v-if="mode !== 2">
         <el-button
           type="danger"
           plain
@@ -107,7 +107,7 @@
         </template>
       </el-table-column>
       <!-- <el-table-column label="已删除" align="center" prop="moDelete" /> -->
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width"  v-if="this.mode !== 2">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width"  v-if="mode !== 2">
         <template slot-scope="scope">
           <el-button
             size="mini"

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="事件类型代码" prop="erType">
+      <el-form-item label="事件类型" prop="erType">
         <el-select v-model="queryParams.erType" placeholder="请选择事件类型代码" clearable>
           <el-option
             v-for="dict in dict.type.ices_equipment_record_type"
@@ -11,7 +11,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="事件状态代码" prop="erStat">
+      <el-form-item label="事件状态" prop="erStat">
         <el-select v-model="queryParams.erStat" placeholder="请选择事件状态代码" clearable>
           <el-option
             v-for="dict in dict.type.ices_equipment_record_status"
@@ -97,12 +97,12 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="事件日志ID" align="center" prop="erId" v-if="true"/>
       <el-table-column label="关联设备ID" align="center" prop="eqId" />
-      <el-table-column label="事件类型代码" align="center" prop="erType">
+      <el-table-column label="事件类型" align="center" prop="erType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_equipment_record_type" :value="scope.row.erType"/>
         </template>
       </el-table-column>
-      <el-table-column label="事件状态代码" align="center" prop="erStat">
+      <el-table-column label="事件状态" align="center" prop="erStat">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_equipment_record_status" :value="scope.row.erStat"/>
         </template>

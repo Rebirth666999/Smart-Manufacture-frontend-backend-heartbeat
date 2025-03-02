@@ -14,7 +14,7 @@
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="设备" prop="eqId">
         <el-select v-model="queryParams.eqId" placeholder="请选择设备" 
-        @keyup.enter.native="handleQuery" :disabled="mode === 1">
+        @keyup.enter.native="handleQuery" :disabled="mode !== 0">
           <el-option
             v-for="item in equipmentList"
             :key="item.eqId"
@@ -39,7 +39,7 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
+      <el-col :span="1.5" v-if="this.mode !== 2">
         <el-button
           type="primary"
           plain
@@ -49,7 +49,7 @@
           v-hasPermi="['system:equipmentAtomOperation:add']"
         >新增</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <el-col :span="1.5" v-if="this.mode !== 2">
         <el-button
           type="success"
           plain
@@ -60,7 +60,7 @@
           v-hasPermi="['system:equipmentAtomOperation:edit']"
         >修改</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <el-col :span="1.5" v-if="this.mode !== 2">
         <el-button
           type="danger"
           plain
@@ -102,7 +102,7 @@
       <el-table-column label="执行时长" align="center" prop="eaoExecTime" />
       <!-- <el-table-column label="已删除" align="center" prop="eaoDelete" /> -->
       <!-- <el-table-column label="描述" align="center" prop="eaoDesc" /> -->
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="this.mode !== 2">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -135,7 +135,7 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="设备" prop="eqId">
           <el-select v-model="form.eqId" placeholder="请选择设备" 
-          :disabled="mode === 1">
+          :disabled="mode !== 0">
             <el-option
               v-for="item in equipmentList"
               :key="item.eqId"
@@ -235,6 +235,7 @@ export default {
       // 设备列表
       equipmentList: [],
       // 1-按设备查看原子操作（未发布，可修改）
+      // 2-按设备查看原子操作（不可编辑）
       mode: 0,
       // 页面顶部提示
       hint: ''
@@ -254,9 +255,15 @@ export default {
       listEquipment().then(response => {
         this.equipmentList = response.rows;
         if (this.mode === 1) {
+          let equipment = response.rows.find(ele => ele.eqId === this.$route.query.eqId)
+          // 构建筛选提示文本
           this.hint = "设备 "
-          this.hint += response.rows.find(ele => ele.eqId === this.$route.query.eqId).eqName
+          this.hint += equipment.eqName
           this.hint += " "
+          // 检查状态
+          if (equipment.eqStat !== '1') {
+            this.mode = 2
+          }
         }
       });
     },

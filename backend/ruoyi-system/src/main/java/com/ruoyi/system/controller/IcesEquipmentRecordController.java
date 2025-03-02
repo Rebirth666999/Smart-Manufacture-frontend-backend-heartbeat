@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+import com.ruoyi.system.domain.IcesEquipmentRecord;
 import lombok.RequiredArgsConstructor;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.*;
@@ -66,7 +67,7 @@ public class IcesEquipmentRecordController extends BaseController {
      */
     @SaCheckPermission("system:equipmentRecord:query")
     @GetMapping("/{erId}")
-    public R<IcesEquipmentRecordVo> getInfo(@NotNull(message = "主键不能为空")
+    public R<IcesEquipmentRecord> getInfo(@NotNull(message = "主键不能为空")
                                      @PathVariable Long erId) {
         return R.ok(iIcesEquipmentRecordService.queryById(erId));
     }

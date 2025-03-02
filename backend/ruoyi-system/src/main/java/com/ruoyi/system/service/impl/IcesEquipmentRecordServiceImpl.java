@@ -35,8 +35,8 @@ public class IcesEquipmentRecordServiceImpl implements IIcesEquipmentRecordServi
      * 查询设备事件日志
      */
     @Override
-    public IcesEquipmentRecordVo queryById(Long erId){
-        return baseMapper.selectVoById(erId);
+    public IcesEquipmentRecord queryById(Long erId){
+        return baseMapper.selectById(erId);
     }
 
     /**

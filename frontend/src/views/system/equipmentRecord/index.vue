@@ -270,7 +270,7 @@ export default {
     this.getList();
   },
   methods: {
-    // 查询设备模型列表
+    // 查询设备列表
     getEquipmentList() {
       listEquipment().then(response => {
         this.equipmentList = response.rows;

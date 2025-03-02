@@ -1,9 +1,20 @@
 <template>
   <div class="app-container">
+    <!-- 顶部提示 -->
+    <el-alert
+      v-show="hint.length > 0"
+      :title="`正在根据${hint}筛选模型操作`"
+      type="info"
+      show-icon
+      :closable="false"
+      class="mb8"
+    >
+    </el-alert>
+    
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="设备" prop="eqId">
         <el-select v-model="queryParams.eqId" placeholder="请选择设备" 
-        @keyup.enter.native="handleQuery">
+        @keyup.enter.native="handleQuery" :disabled="mode === 1">
           <el-option
             v-for="item in equipmentList"
             :key="item.eqId"
@@ -213,7 +224,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        eqId: undefined,
+        eqId: this.$route.query.eqId,
         erType: undefined,
         erStat: undefined,
         erBegin: undefined,
@@ -244,9 +255,17 @@ export default {
       },
       // 设备列表
       equipmentList: [],
+      // 1-按设备查看日志
+      mode: 0,
+      // 页面顶部提示
+      hint: ''
     };
   },
   created() {
+    // 检查来源
+    if (this.$route.query.eqId) {
+      this.mode = 1
+    }
     this.getEquipmentList();
     this.getList();
   },
@@ -255,6 +274,11 @@ export default {
     getEquipmentList() {
       listEquipment().then(response => {
         this.equipmentList = response.rows;
+        if (this.mode === 1) {
+          this.hint = "设备 "
+          this.hint += response.rows.find(ele => ele.eqId === this.$route.query.eqId).eqName
+          this.hint += " "
+        }
       });
     },
     /** 查询设备事件日志列表 */

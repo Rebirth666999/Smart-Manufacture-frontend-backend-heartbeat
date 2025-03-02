@@ -145,6 +145,7 @@
             size="mini"
             type="text"
             icon="el-icon-bell"
+            @click="handleEquipmentRecordView(scope.row)"
           >查看事件</el-button>
           <el-button
             size="mini"
@@ -454,6 +455,9 @@ export default {
       this.download('system/equipment/export', {
         ...this.queryParams
       }, `equipment_${new Date().getTime()}.xlsx`)
+    },
+    handleEquipmentRecordView(row) {
+      this.$router.push(`/equipment/equipmentRecord?eqId=${row.eqId}`)
     }
   }
 };

@@ -51,5 +51,11 @@ public class IcesAreaControlVo {
     @ExcelProperty(value = "已删除")
     private Long acDelete;
 
+    /**
+     * 描述
+     */
+    @ExcelProperty(value = "描述")
+    private String acDesc;
+
 
 }

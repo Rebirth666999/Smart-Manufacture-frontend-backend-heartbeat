@@ -73,5 +73,11 @@ public class IcesEquipmentRecordVo {
     @ExcelProperty(value = "已删除")
     private Long erDelete;
 
+    /**
+     * 描述
+     */
+    @ExcelProperty(value = "描述")
+    private String erDesc;
+
 
 }

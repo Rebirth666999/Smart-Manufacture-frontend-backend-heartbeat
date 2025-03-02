@@ -45,5 +45,11 @@ public class IcesModelOperationVo {
     @ExcelProperty(value = "已删除")
     private Long moDelete;
 
+    /**
+     * 描述
+     */
+    @ExcelProperty(value = "描述")
+    private String moDesc;
+
 
 }

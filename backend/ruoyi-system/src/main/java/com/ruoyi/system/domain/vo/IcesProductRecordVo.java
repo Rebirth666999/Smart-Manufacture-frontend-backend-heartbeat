@@ -70,5 +70,11 @@ public class IcesProductRecordVo {
     @ExcelProperty(value = "更新时间")
     private Date updateTime;
 
+    /**
+     * 描述
+     */
+    @ExcelProperty(value = "描述")
+    private String prrDesc;
+
 
 }

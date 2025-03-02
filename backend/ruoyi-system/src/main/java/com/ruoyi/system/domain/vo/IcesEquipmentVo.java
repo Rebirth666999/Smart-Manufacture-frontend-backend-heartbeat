@@ -55,6 +55,12 @@ public class IcesEquipmentVo {
     private String eqStat;
 
     /**
+     * 采购时间
+     */
+    @ExcelProperty(value = "采购时间")
+    private Date eqIntroduceTime;
+
+    /**
      * 上次通讯时间
      */
     @ExcelProperty(value = "上次通讯时间")
@@ -71,6 +77,12 @@ public class IcesEquipmentVo {
      */
     @ExcelProperty(value = "已删除")
     private Long eqDelete;
+
+    /**
+     * 描述
+     */
+    @ExcelProperty(value = "描述")
+    private String eqDesc;
 
 
 }

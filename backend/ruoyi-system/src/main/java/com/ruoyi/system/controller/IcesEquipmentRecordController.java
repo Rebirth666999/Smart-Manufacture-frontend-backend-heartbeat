@@ -67,7 +67,7 @@ public class IcesEquipmentRecordController extends BaseController {
      */
     @SaCheckPermission("system:equipmentRecord:query")
     @GetMapping("/{erId}")
-    public R<IcesEquipmentRecord> getInfo(@NotNull(message = "主键不能为空")
+    public R<IcesEquipmentRecordVo> getInfo(@NotNull(message = "主键不能为空")
                                      @PathVariable Long erId) {
         return R.ok(iIcesEquipmentRecordService.queryById(erId));
     }

@@ -20,7 +20,7 @@ public interface IIcesEquipmentRecordService {
     /**
      * 查询设备事件日志
      */
-    IcesEquipmentRecord queryById(Long erId);
+    IcesEquipmentRecordVo queryById(Long erId);
 
     /**
      * 查询设备事件日志列表

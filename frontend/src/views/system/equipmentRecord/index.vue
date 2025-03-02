@@ -1,6 +1,18 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="设备" prop="eqId">
+        <el-select v-model="queryParams.eqId" placeholder="请选择设备" 
+        @keyup.enter.native="handleQuery">
+          <el-option
+            v-for="item in equipmentList"
+            :key="item.eqId"
+            :label="item.eqName"
+            :value="item.eqId"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="事件类型" prop="erType">
         <el-select v-model="queryParams.erType" placeholder="请选择事件类型代码" clearable>
           <el-option
@@ -96,7 +108,11 @@
     <el-table v-loading="loading" :data="equipmentRecordList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="事件日志ID" align="center" prop="erId" v-if="true"/>
-      <el-table-column label="关联设备ID" align="center" prop="eqId" />
+      <el-table-column label="关联设备" align="center" prop="eqId">
+        <template slot-scope="scope">
+          {{ equipmentList.find(ele => ele.eqId === scope.row.eqId).eqName }}
+        </template>
+      </el-table-column>
       <el-table-column label="事件类型" align="center" prop="erType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_equipment_record_type" :value="scope.row.erType"/>
@@ -164,6 +180,7 @@
 
 <script>
 import { listEquipmentRecord, getEquipmentRecord, delEquipmentRecord, addEquipmentRecord, updateEquipmentRecord } from "@/api/system/equipmentRecord";
+import { listEquipment } from "@/api/system/equipment";
 
 export default {
   name: "EquipmentRecord",
@@ -224,13 +241,22 @@ export default {
         erBegin: [
           { required: true, message: "发生时间不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 设备列表
+      equipmentList: [],
     };
   },
   created() {
+    this.getEquipmentList();
     this.getList();
   },
   methods: {
+    // 查询设备模型列表
+    getEquipmentList() {
+      listEquipment().then(response => {
+        this.equipmentList = response.rows;
+      });
+    },
     /** 查询设备事件日志列表 */
     getList() {
       this.loading = true;

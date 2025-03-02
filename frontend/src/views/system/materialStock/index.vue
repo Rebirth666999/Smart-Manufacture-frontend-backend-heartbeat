@@ -101,12 +101,12 @@
       <el-table-column label="车间原料库存ID" align="center" prop="msId" v-if="true"/>
       <el-table-column label="车间" align="center" prop="arId">
         <template slot-scope="scope">
-          {{ areaList.find(ele => ele.arId === scope.row.arId).arName }}
+          {{ areaList.find(ele => ele.arId === scope.row.arId).arName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="原料" align="center" prop="maId">
         <template slot-scope="scope">
-          {{ materialList.find(ele => ele.maId === scope.row.maId).maName }}
+          {{ materialList.find(ele => ele.maId === scope.row.maId).maName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="库存" align="center" prop="msStock" />
@@ -250,7 +250,7 @@ export default {
       hint: ''
     };
   },
-  created() {
+  async created() {
     // 检查来源
     if (this.$route.query.maId) {
       this.mode = 1
@@ -258,8 +258,8 @@ export default {
       this.mode = 2
     }
     // 获取原料和车间列表
-    this.getMaterialList()
-    this.getAreaList()
+    await this.getMaterialList()
+    await this.getAreaList()
     // 初次筛选
     this.getList();
   },

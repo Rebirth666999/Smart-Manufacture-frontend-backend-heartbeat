@@ -89,7 +89,7 @@
       <el-table-column label="设备原子操作ID" align="center" prop="eaoId" v-if="true"/>
       <el-table-column label="所属设备" align="center" prop="eqId">
         <template slot-scope="scope">
-          {{ equipmentList.find(ele => ele.eqId === scope.row.eqId).eqName }}
+          {{ equipmentList.find(ele => ele.eqId === scope.row.eqId).eqName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="操作类型" align="center" prop="eaoType">
@@ -241,12 +241,12 @@ export default {
       hint: ''
     };
   },
-  created() {
+  async created() {
     // 检查来源
     if (this.$route.query.eqId) {
       this.mode = 1
     }
-    this.getEquipmentList();
+    await this.getEquipmentList();
     this.getList();
   },
   methods: {

@@ -103,7 +103,7 @@
       <el-table-column label="产品台账ID" align="center" prop="prrId" v-if="true"/>
       <el-table-column label="所属产品" align="center" prop="prId">
         <template slot-scope="scope">
-          {{ productList.find(ele => ele.prId === scope.row.prId).prName }}
+          {{ productList.find(ele => ele.prId === scope.row.prId).prName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="变动类型" align="center" prop="prrType">
@@ -259,8 +259,8 @@ export default {
       productList: []
     };
   },
-  created() {
-    this.getProductList();
+  async created() {
+    await this.getProductList();
     this.getList();
   },
   methods: {

@@ -109,7 +109,7 @@
       <el-table-column label="主控节点ID" align="center" prop="acId" v-if="true"/>
       <el-table-column label="所属车间" align="center" prop="arId">
         <template slot-scope="scope">
-          {{ areaList.find(ele => ele.arId === scope.row.arId).arName }}
+          {{ areaList.find(ele => ele.arId === scope.row.arId).arName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="名称" align="center" prop="acName" />
@@ -241,12 +241,12 @@ export default {
       hint: ''
     };
   },
-  created() {
+  async created() {
     // 检查来源
     if (this.$route.query.arId) {
       this.mode = 1
     }
-    this.getAreaList();
+    await this.getAreaList();
     this.getList();
   },
   methods: {

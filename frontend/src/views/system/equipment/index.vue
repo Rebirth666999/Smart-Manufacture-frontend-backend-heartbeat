@@ -112,12 +112,12 @@
       <el-table-column label="名称" align="center" prop="eqName" />
       <el-table-column label="所属车间" align="center" prop="arId">
         <template slot-scope="scope">
-          {{ areaList.find(ele => ele.arId === scope.row.arId).arName }}
+          {{ areaList.find(ele => ele.arId === scope.row.arId).arName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="所属设备模型" align="center" prop="emId">
         <template slot-scope="scope">
-          {{ equipmentModelList.find(ele => ele.emId === scope.row.emId).emName }}
+          {{ equipmentModelList.find(ele => ele.emId === scope.row.emId).emName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center" prop="eqStat">
@@ -330,9 +330,9 @@ export default {
       equipmentModelList: [],
     };
   },
-  created() {
-    this.getAreaList();
-    this.getEquipmentModelList();
+  async created() {
+    await this.getAreaList();
+    await this.getEquipmentModelList();
     this.getList();
   },
   methods: {

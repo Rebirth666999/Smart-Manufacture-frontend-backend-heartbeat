@@ -121,7 +121,7 @@
       <el-table-column label="事件日志ID" align="center" prop="erId" v-if="true"/>
       <el-table-column label="关联设备" align="center" prop="eqId">
         <template slot-scope="scope">
-          {{ equipmentList.find(ele => ele.eqId === scope.row.eqId).eqName }}
+          {{ equipmentList.find(ele => ele.eqId === scope.row.eqId).eqName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="事件类型" align="center" prop="erType">
@@ -261,12 +261,12 @@ export default {
       hint: ''
     };
   },
-  created() {
+  async created() {
     // 检查来源
     if (this.$route.query.eqId) {
       this.mode = 1
     }
-    this.getEquipmentList();
+    await this.getEquipmentList();
     this.getList();
   },
   methods: {

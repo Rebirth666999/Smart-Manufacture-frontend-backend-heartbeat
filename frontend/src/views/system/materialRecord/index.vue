@@ -115,12 +115,12 @@
       <el-table-column label="原料台账ID" align="center" prop="mrId" v-if="true"/>
       <el-table-column label="所属原料" align="center" prop="maId">
         <template slot-scope="scope">
-          {{ materialList.find(ele => ele.maId === scope.row.maId).maName }}
+          {{ materialList.find(ele => ele.maId === scope.row.maId).maName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="所属车间" align="center" prop="arId">
         <template slot-scope="scope">
-          {{ areaList.find(ele => ele.arId === scope.row.arId).arName }}
+          {{ areaList.find(ele => ele.arId === scope.row.arId).arName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="变动类型" align="center" prop="mrType">
@@ -296,9 +296,9 @@ export default {
       areaList: [],
     };
   },
-  created() {
-    this.getMaterialList();
-    this.getAreaList();
+  async created() {
+    await this.getMaterialList();
+    await this.getAreaList();
     this.getList();
   },
   methods: {

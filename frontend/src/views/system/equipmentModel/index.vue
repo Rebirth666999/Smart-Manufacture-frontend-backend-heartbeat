@@ -112,7 +112,7 @@
       <el-table-column label="名称" align="center" prop="emName" />
       <el-table-column label="所属模型类型" align="center" prop="emtId">
         <template slot-scope="scope">
-          {{ equipmentModelTypeList.find(ele => ele.emtId === scope.row.emtId).emtName }}
+          {{ equipmentModelTypeList.find(ele => ele.emtId === scope.row.emtId).emtName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center" prop="emStat">
@@ -285,12 +285,12 @@ export default {
       hint: ''
     };
   },
-  created() {
+  async created() {
     // 检查来源
     if (this.$route.query.emtId) {
       this.mode = 1
     }
-    this.getEquipmentModelTypeList();
+    await this.getEquipmentModelTypeList();
     this.getList();
   },
   methods: {

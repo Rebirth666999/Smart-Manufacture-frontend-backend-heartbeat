@@ -103,7 +103,7 @@
       <el-table-column label="名称" align="center" prop="moName" />
       <el-table-column label="所属设备模型" align="center" prop="emId">
         <template slot-scope="scope">
-          {{ equipmentModelList.find(ele => ele.emId === scope.row.emId).emName }}
+          {{ equipmentModelList.find(ele => ele.emId === scope.row.emId).emName || '' }}
         </template>
       </el-table-column>
       <!-- <el-table-column label="已删除" align="center" prop="moDelete" /> -->
@@ -227,12 +227,12 @@ export default {
       hint: ''
     };
   },
-  created() {
+  async created() {
     // 检查来源
     if (this.$route.query.emId) {
       this.mode = 1
     }
-    this.getEquipmentModelList();
+    await this.getEquipmentModelList();
     this.getList();
   },
   methods: {

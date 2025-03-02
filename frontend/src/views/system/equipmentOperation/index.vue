@@ -104,12 +104,12 @@
       <el-table-column label="设备操作ID" align="center" prop="eoId" v-if="true"/>
       <el-table-column label="对应模型操作" align="center" prop="moId">
         <template slot-scope="scope">
-          {{ modelOperationList.find(ele => ele.moId === scope.row.moId).moName }}
+          {{ modelOperationList.find(ele => ele.moId === scope.row.moId).moName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="所属设备" align="center" prop="eqId">
         <template slot-scope="scope">
-          {{ equipmentList.find(ele => ele.eqId === scope.row.eqId).eqName }}
+          {{ equipmentList.find(ele => ele.eqId === scope.row.eqId).eqName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="名称" align="center" prop="eoName" />
@@ -271,7 +271,6 @@ export default {
       this.$router.back();
     }
     this.getExtraList();
-    this.getList();
   },
   methods: {
     // 查询列表
@@ -282,6 +281,7 @@ export default {
         // 获取设备所属设备模型的模型操作
         listModelOperation({ emId: equipment.emId, moDelete: 0 }).then(response => {
           this.modelOperationList = response.rows;
+          this.getList();
         })
         if (this.mode === 1) {
           // 设置筛选提示

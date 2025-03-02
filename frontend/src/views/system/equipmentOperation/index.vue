@@ -1,5 +1,16 @@
 <template>
   <div class="app-container">
+    <!-- 顶部提示 -->
+    <el-alert
+      v-show="hint.length > 0"
+      :title="`正在根据${hint}筛选设备操作`"
+      type="info"
+      show-icon
+      :closable="false"
+      class="mb8"
+    >
+    </el-alert>
+
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="对应模型操作ID" prop="moId">
         <el-input
@@ -190,7 +201,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         moId: undefined,
-        eqId: undefined,
+        eqId: this.$route.query.eqId,
         eoDelete: 0,
       },
       // 表单参数
@@ -216,6 +227,13 @@ export default {
     };
   },
   created() {
+    // 检查来源
+    if (this.$route.query.eqId) {
+      this.mode = 1;
+    } else {
+      this.$modal.msgError("请重新进入此页面");
+      this.$router.back();
+    }
     this.getEquipmentList();
     this.getList();
   },
@@ -224,6 +242,11 @@ export default {
     getEquipmentList() {
       listEquipment().then(response => {
         this.equipmentList = response.rows;
+        if (this.mode === 1) {
+          this.hint = "设备 "
+          this.hint += response.rows.find(ele => ele.eqId === this.$route.query.eqId).eqName
+          this.hint += " "
+        }
       });
     },
     /** 查询设备操作列表 */
@@ -276,6 +299,9 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      if (this.mode === 1) {
+        this.form.eqId = this.$route.query.eqId
+      }
       this.open = true;
       this.title = "添加设备操作";
     },

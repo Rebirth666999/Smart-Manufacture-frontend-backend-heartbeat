@@ -158,6 +158,7 @@
             size="mini"
             type="text"
             icon="el-icon-set-up"
+            @click="handleEquipmentOperationView(scope.row)"
           >设备操作</el-button>
           <el-button
             size="mini"
@@ -468,6 +469,9 @@ export default {
     },
     handleAtomOperationView(row) {
       this.$router.push(`/equipment/equipmentAtomOperation?eqId=${row.eqId}`)
+    },
+    handleEquipmentOperationView(row) {
+      this.$router.push(`/equipment/equipmentOperation?eqId=${row.eqId}`)
     }
   }
 };

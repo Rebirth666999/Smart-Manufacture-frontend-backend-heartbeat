@@ -129,13 +129,13 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-edit"
+            icon="el-icon-brush"
             v-if="mode !== 2"
           >设计</el-button>
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-edit"
+            icon="el-icon-search"
           >查看</el-button>
           <el-button
             size="mini"

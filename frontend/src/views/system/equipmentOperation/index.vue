@@ -17,14 +17,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="已删除" prop="eoDelete">
+      <!-- <el-form-item label="已删除" prop="eoDelete">
         <el-input
           v-model="queryParams.eoDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -84,8 +84,8 @@
       <el-table-column label="所属设备ID" align="center" prop="eqId" />
       <el-table-column label="名称" align="center" prop="eoName" />
       <el-table-column label="执行时长" align="center" prop="eoExecTime" />
-      <el-table-column label="已删除" align="center" prop="eoDelete" />
-      <el-table-column label="描述" align="center" prop="eoDesc" />
+      <!-- <el-table-column label="已删除" align="center" prop="eoDelete" /> -->
+      <!-- <el-table-column label="描述" align="center" prop="eoDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -174,7 +174,7 @@ export default {
         pageSize: 10,
         moId: undefined,
         eqId: undefined,
-        eoDelete: undefined,
+        eoDelete: 0,
       },
       // 表单参数
       form: {},

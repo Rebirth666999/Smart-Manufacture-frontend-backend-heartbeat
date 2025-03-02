@@ -14,7 +14,7 @@
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="设备" prop="eqId">
         <el-select v-model="queryParams.eqId" placeholder="请选择设备" 
-        @keyup.enter.native="handleQuery" :disabled="mode === 1">
+        @keyup.enter.native="handleQuery" :disabled="mode === 1" clearable>
           <el-option
             v-for="item in equipmentList"
             :key="item.eqId"

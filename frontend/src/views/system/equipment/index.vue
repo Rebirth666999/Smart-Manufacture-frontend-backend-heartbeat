@@ -26,7 +26,7 @@
       </el-form-item>
       <el-form-item label="设备模型" prop="emId">
         <el-select v-model="queryParams.emId" placeholder="请选择设备模型" 
-        @keyup.enter.native="handleQuery">
+        @keyup.enter.native="handleQuery" clearable>
           <el-option
             v-for="item in equipmentModelList"
             :key="item.emId"

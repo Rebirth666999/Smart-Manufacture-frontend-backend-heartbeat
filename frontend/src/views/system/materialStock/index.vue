@@ -14,7 +14,7 @@
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="车间" prop="arId">
         <el-select v-model="queryParams.arId" placeholder="请选择车间" 
-        @keyup.enter.native="handleQuery" :disabled="mode === 2">
+        @keyup.enter.native="handleQuery" :disabled="mode === 2" clearable>
           <el-option
             v-for="item in areaList"
             :key="item.arId"
@@ -26,7 +26,7 @@
       </el-form-item>
       <el-form-item label="原料" prop="maId">
         <el-select v-model="queryParams.maId" placeholder="请选择原料" 
-        @keyup.enter.native="handleQuery" :disabled="mode === 1">
+        @keyup.enter.native="handleQuery" :disabled="mode === 1" clearable>
           <el-option
             v-for="item in materialList"
             :key="item.maId"

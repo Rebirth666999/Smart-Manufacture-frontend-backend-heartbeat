@@ -18,7 +18,7 @@
       </el-form-item>
       <el-form-item label="所属车间" prop="arId">
         <el-select v-model="queryParams.arId" placeholder="请选择车间" 
-        @keyup.enter.native="handleQuery">
+        @keyup.enter.native="handleQuery" clearable>
           <el-option
             v-for="item in areaList"
             :key="item.arId"

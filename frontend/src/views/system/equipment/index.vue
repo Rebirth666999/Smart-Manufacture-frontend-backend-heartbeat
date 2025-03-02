@@ -152,6 +152,7 @@
             size="mini"
             type="text"
             icon="el-icon-position"
+            @click="handleAtomOperationView(scope.row)"
           >原子操作</el-button>
           <el-button
             size="mini"
@@ -464,6 +465,9 @@ export default {
     },
     handleEquipmentRecordView(row) {
       this.$router.push(`/equipment/equipmentRecord?eqId=${row.eqId}`)
+    },
+    handleAtomOperationView(row) {
+      this.$router.push(`/equipment/equipmentAtomOperation?eqId=${row.eqId}`)
     }
   }
 };

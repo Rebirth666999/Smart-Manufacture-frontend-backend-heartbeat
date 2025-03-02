@@ -3,7 +3,7 @@
     <!-- 顶部提示 -->
     <el-alert
       v-show="hint.length > 0"
-      :title="`正在根据${hint}筛选模型操作`"
+      :title="`正在根据${hint}筛选设备事件`"
       type="info"
       show-icon
       :closable="false"

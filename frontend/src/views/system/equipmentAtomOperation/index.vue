@@ -1,13 +1,17 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="所属设备ID" prop="eqId">
-        <el-input
-          v-model="queryParams.eqId"
-          placeholder="请输入所属设备ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+      <el-form-item label="设备" prop="eqId">
+        <el-select v-model="queryParams.eqId" placeholder="请选择设备" 
+        @keyup.enter.native="handleQuery" :disabled="mode === 1">
+          <el-option
+            v-for="item in equipmentList"
+            :key="item.eqId"
+            :label="item.eqName"
+            :value="item.eqId"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <!-- <el-form-item label="已删除" prop="eaoDelete">
         <el-input
@@ -72,7 +76,11 @@
     <el-table v-loading="loading" :data="equipmentAtomOperationList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="设备原子操作ID" align="center" prop="eaoId" v-if="true"/>
-      <el-table-column label="所属设备ID" align="center" prop="eqId" />
+      <el-table-column label="所属设备" align="center" prop="eqId">
+        <template slot-scope="scope">
+          {{ equipmentList.find(ele => ele.eqId === scope.row.eqId).eqName }}
+        </template>
+      </el-table-column>
       <el-table-column label="操作类型" align="center" prop="eaoType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_equipment_atom_operation_type" :value="scope.row.eaoType"/>
@@ -114,8 +122,17 @@
     <!-- 添加或修改设备原子操作对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="所属设备ID" prop="eqId">
-          <el-input v-model="form.eqId" placeholder="请输入所属设备ID" />
+        <el-form-item label="设备" prop="eqId">
+          <el-select v-model="form.eqId" placeholder="请选择设备" 
+          :disabled="mode === 1">
+            <el-option
+              v-for="item in equipmentList"
+              :key="item.eqId"
+              :label="item.eqName"
+              :value="item.eqId"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="操作类型" prop="eaoType">
           <el-select v-model="form.eaoType" placeholder="请选择操作类型">
@@ -150,6 +167,7 @@
 
 <script>
 import { listEquipmentAtomOperation, getEquipmentAtomOperation, delEquipmentAtomOperation, addEquipmentAtomOperation, updateEquipmentAtomOperation } from "@/api/system/equipmentAtomOperation";
+import { listEquipment } from "@/api/system/equipment";
 
 export default {
   name: "EquipmentAtomOperation",
@@ -202,13 +220,26 @@ export default {
         eaoUrl: [
           { required: true, message: "URL不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 设备列表
+      equipmentList: [],
+      // 1-按设备查看原子操作（未发布，可修改）
+      mode: 0,
+      // 页面顶部提示
+      hint: ''
     };
   },
   created() {
+    this.getEquipmentList();
     this.getList();
   },
   methods: {
+    // 查询设备模型列表
+    getEquipmentList() {
+      listEquipment().then(response => {
+        this.equipmentList = response.rows;
+      });
+    },
     /** 查询设备原子操作列表 */
     getList() {
       this.loading = true;

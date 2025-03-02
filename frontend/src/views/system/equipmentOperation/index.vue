@@ -26,7 +26,7 @@
       </el-form-item>
       <el-form-item label="设备" prop="eqId">
         <el-select v-model="queryParams.eqId" placeholder="请选择设备" 
-        @keyup.enter.native="handleQuery" :disabled="mode === 1" clearable>
+        @keyup.enter.native="handleQuery" :disabled="mode !== 0" clearable>
           <el-option
             v-for="item in equipmentList"
             :key="item.eqId"
@@ -59,6 +59,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['system:equipmentOperation:add']"
+          v-if="mode !== 2"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -70,6 +71,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['system:equipmentOperation:edit']"
+          v-if="mode !== 2"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -81,6 +83,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['system:equipmentOperation:remove']"
+          v-if="mode !== 2"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -121,13 +124,26 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:equipmentOperation:edit']"
+            v-if="mode !== 2"
           >修改</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            v-if="mode !== 2"
+          >设计</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+          >查看</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:equipmentOperation:remove']"
+            v-if="mode !== 2"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -157,7 +173,7 @@
         </el-form-item>
         <el-form-item label="设备" prop="eqId">
           <el-select v-model="form.eqId" placeholder="请选择设备" 
-          :disabled="mode === 1">
+          :disabled="mode !== 0">
             <el-option
               v-for="item in equipmentList"
               :key="item.eqId"
@@ -240,6 +256,7 @@ export default {
       // 模型操作列表
       modelOperationList: [],
       // 1-按设备查看设备操作（未发布，可修改）
+      // 2-按设备查看设备操作（不可修改）
       mode: 0,
       // 页面顶部提示
       hint: ''
@@ -266,11 +283,15 @@ export default {
         listModelOperation({ emId: equipment.emId, moDelete: 0 }).then(response => {
           this.modelOperationList = response.rows;
         })
-        // 设置筛选提示
         if (this.mode === 1) {
+          // 设置筛选提示
           this.hint = "设备 "
           this.hint += equipment.eqName
           this.hint += " "
+          // 检查状态
+          if (equipment.eqStat !== '1') {
+            this.mode = 2
+          }
         }
       });
     },

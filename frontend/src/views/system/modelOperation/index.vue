@@ -26,7 +26,7 @@
           placeholder="请选择设备模型"
           @keyup.enter.native="handleQuery"
           clearable
-          :disabled="mode === 1"
+          :disabled="mode !== 0"
         >
           <el-option
             v-for="item in equipmentModelList"
@@ -52,7 +52,7 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
+      <el-col :span="1.5" v-if="this.mode !== 2">
         <el-button
           type="primary"
           plain
@@ -62,7 +62,7 @@
           v-hasPermi="['system:modelOperation:add']"
         >新增</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <el-col :span="1.5" v-if="this.mode !== 2">
         <el-button
           type="success"
           plain
@@ -73,7 +73,7 @@
           v-hasPermi="['system:modelOperation:edit']"
         >修改</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <el-col :span="1.5" v-if="this.mode !== 2">
         <el-button
           type="danger"
           plain
@@ -107,7 +107,7 @@
         </template>
       </el-table-column>
       <!-- <el-table-column label="已删除" align="center" prop="moDelete" /> -->
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width"  v-if="this.mode !== 2">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -145,7 +145,7 @@
           <el-select
             v-model="form.emId"
             placeholder="请选择设备模型"
-            :disabled="mode === 1"
+            :disabled="mode !== 0"
           >
             <el-option
               v-for="item in equipmentModelList"
@@ -220,7 +220,8 @@ export default {
       },
       // 设备模型列表
       equipmentModelList: [],
-      // 1-按照模型查看模型操作
+      // 1-按照模型查看模型操作（模型未发布，操作可编辑）
+      // 2-按照模型查看模型操作（不可编辑）
       mode: 0,
       // 页面顶部提示
       hint: ''
@@ -240,9 +241,15 @@ export default {
       listEquipmentModel().then(response => {
         this.equipmentModelList = response.rows;
         if (this.mode === 1) {
+          let model = response.rows.find(ele => ele.emId === this.$route.query.emId)
+          // 构建筛选提示文本
           this.hint = "设备模型 "
-          this.hint += response.rows.find(ele => ele.emId === this.$route.query.emId).emName
+          this.hint += model.emName
           this.hint += " "
+          // 检查模型状态
+          if (model.emStat !== '1') {
+            this.mode = 2
+          }
         }
       });
     },

@@ -139,6 +139,7 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:equipmentModel:edit']"
+            v-show="scope.row.emStat === '1'"
           >修改</el-button>
           <el-button
             size="mini"
@@ -150,21 +151,25 @@
             size="mini"
             type="text"
             icon="el-icon-finished"
+            v-show="scope.row.emStat === '1'"
           >提交审核</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-refresh-left"
+            v-show="scope.row.emStat === '2' || scope.row.emStat === '6'"
           >撤回审核</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-document-copy"
+            v-show="scope.row.emStat >= '4'"
           >复制配置</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
+            v-show="scope.row.emStat === '4'"
           >弃用</el-button>
           <el-button
             size="mini"
@@ -172,6 +177,7 @@
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:equipmentModel:remove']"
+            v-show="scope.row.emStat === '1'"
           >删除</el-button>
         </template>
       </el-table-column>

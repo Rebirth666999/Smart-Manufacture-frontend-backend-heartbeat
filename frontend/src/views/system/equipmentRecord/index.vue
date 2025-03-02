@@ -60,7 +60,7 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button
           type="primary"
           plain
@@ -69,7 +69,7 @@
           @click="handleAdd"
           v-hasPermi="['system:equipmentRecord:add']"
         >新增</el-button>
-      </el-col>
+      </el-col> -->
       <el-col :span="1.5">
         <el-button
           type="success"

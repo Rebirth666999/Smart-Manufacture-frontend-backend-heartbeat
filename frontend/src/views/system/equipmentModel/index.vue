@@ -163,7 +163,7 @@
             size="mini"
             type="text"
             icon="el-icon-document-copy"
-            v-show="scope.row.emStat >= '4'"
+            v-show="scope.row.emStat !== '1' && scope.row.emStat !== '2' && scope.row.emStat !== '3'"
           >复制配置</el-button>
           <el-button
             size="mini"

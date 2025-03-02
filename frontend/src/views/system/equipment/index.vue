@@ -140,6 +140,7 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:equipment:edit']"
+            v-show="scope.row.eqStat === '1'"
           >修改</el-button>
           <el-button
             size="mini"
@@ -161,21 +162,25 @@
             size="mini"
             type="text"
             icon="el-icon-finished"
+            v-show="scope.row.eqStat === '1'"
           >提交审核</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-refresh-left"
+            v-show="scope.row.eqStat === '2' || scope.row.eqStat === 'b'"
           >撤回审核</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-document-copy"
+            v-show="scope.row.eqStat !== '1' && scope.row.eqStat !== '2' && scope.row.eqStat !== '3'"
           >复制配置</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
+            v-show="scope.row.eqStat === '4' || scope.row.eqStat === '5' || scope.row.eqStat === '8' || scope.row.eqStat === '9'"
           >弃用</el-button>
           <el-button
             size="mini"
@@ -183,6 +188,7 @@
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:equipment:remove']"
+            v-show="scope.row.eqStat === '1'"
           >删除</el-button>
         </template>
       </el-table-column>

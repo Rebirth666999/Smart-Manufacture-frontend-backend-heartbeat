@@ -65,6 +65,10 @@ export default {
         window.bpmnInstances.bpmnElement,
         { eaoId: this.eaoId }
       );
+      window.bpmnInstances.modeling.updateProperties(
+        window.bpmnInstances.bpmnElement,
+        { name: this.list.find(ele => ele.eaoId === this.eaoId).eaoName || '' }
+      );
     },
     // 更新属性：描述
     updateDesc() {

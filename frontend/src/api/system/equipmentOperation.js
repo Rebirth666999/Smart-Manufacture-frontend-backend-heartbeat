@@ -42,3 +42,23 @@ export function delEquipmentOperation(eoId) {
     method: 'delete'
   })
 }
+
+// 保存流程模型
+export function saveModel(data) {
+  return request({
+    url: '/system/equipmentOperation/model/save',
+    method: 'post',
+    headers: {
+      'Content-Type': 'text/plain;charset=utf-8'
+    },
+    data: data
+  })
+}
+
+// 获取流程模型
+export function getBpmnXml(eoModel) {
+  return request({
+    url: '/system/equipmentOperation/model/bpmnXml/' + eoModel,
+    method: 'get'
+  })
+}

@@ -1,5 +1,6 @@
 package com.ruoyi.system.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ruoyi.system.domain.IcesEquipmentOperation;
 import com.ruoyi.system.domain.vo.IcesEquipmentOperationVo;
 import com.ruoyi.system.domain.bo.IcesEquipmentOperationBo;
@@ -52,5 +53,5 @@ public interface IIcesEquipmentOperationService {
     String queryBpmnXmlById(String modelId);
 
     // 根据XML文件保存设备操作流程
-    void saveModel(String modelXML) throws DocumentException;
+    void saveModel(String modelXML) throws DocumentException, JsonProcessingException;
 }

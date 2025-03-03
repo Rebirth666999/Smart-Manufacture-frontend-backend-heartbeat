@@ -30,7 +30,6 @@ public class IcesEquipmentOperationStepBo extends BaseEntity {
     /**
      * 对应原子操作ID
      */
-    @NotNull(message = "对应原子操作ID不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long eaoId;
 
     /**

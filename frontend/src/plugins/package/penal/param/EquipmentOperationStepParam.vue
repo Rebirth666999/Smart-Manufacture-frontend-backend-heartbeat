@@ -3,15 +3,15 @@
     <!-- 显示参数表格 -->
     <el-table :data="paramList" size="mini" max-height="240" border fit>
       <el-table-column label="序号" width="50px" type="index" />
-      <el-table-column label="名称" prop="eospa_name" show-overflow-tooltip />
-      <el-table-column label="类型" prop="eospa_type" show-overflow-tooltip>
+      <el-table-column label="名称" prop="eospaName" show-overflow-tooltip />
+      <el-table-column label="类型" prop="eospaType" show-overflow-tooltip>
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.ices_param_type" :value="scope.row.eospa_type"/>
+          <dict-tag :options="dict.type.ices_param_type" :value="scope.row.eospaType"/>
         </template>
       </el-table-column>
-      <el-table-column label="位置" prop="eospa_pos" show-overflow-tooltip>
+      <el-table-column label="位置" prop="eospaPos" show-overflow-tooltip>
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.ices_param_position" :value="scope.row.eospa_pos"/>
+          <dict-tag :options="dict.type.ices_param_position" :value="scope.row.eospaPos"/>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="90px">
@@ -145,19 +145,19 @@ export default {
           // 更新显示数组
           if (this.editingPropertyIndex !== -1) {
             // 修改参数
-            this.paramList[this.editingPropertyIndex].eospa_name = eospa_name
-            this.paramList[this.editingPropertyIndex].parent = parseInt(parent) || 0
-            this.paramList[this.editingPropertyIndex].eospa_type = eospa_type
-            this.paramList[this.editingPropertyIndex].eospa_pos = eospa_pos
-            this.paramList[this.editingPropertyIndex].eospa_value = eospa_value
+            this.paramList[this.editingPropertyIndex].eospaName = eospa_name
+            this.paramList[this.editingPropertyIndex].eospaIdParent = parseInt(parent) || 0
+            this.paramList[this.editingPropertyIndex].eospaType = eospa_type
+            this.paramList[this.editingPropertyIndex].eospaPos = eospa_pos
+            this.paramList[this.editingPropertyIndex].eospaValue = eospa_value
           } else {
             // 新建参数
             this.paramList.push({
-              eospa_name: eospa_name,
-              parent: parseInt(parent) || 0,
-              eospa_type: eospa_type,
-              eospa_pos: eospa_pos,
-              eospa_value: eospa_value
+              eospaName: eospa_name,
+              eospaIdParent: parseInt(parent) || 0,
+              eospaType: eospa_type,
+              eospaPos: eospa_pos,
+              eospaValue: eospa_value
             })
           }
           this.updateParams()

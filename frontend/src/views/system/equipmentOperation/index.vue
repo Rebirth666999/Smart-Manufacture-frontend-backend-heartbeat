@@ -218,7 +218,8 @@
 </template>
 
 <script>
-import { listEquipmentOperation, getEquipmentOperation, delEquipmentOperation, addEquipmentOperation, updateEquipmentOperation } from "@/api/system/equipmentOperation";import { listEquipment } from "@/api/system/equipment";
+import { listEquipmentOperation, getEquipmentOperation, delEquipmentOperation, addEquipmentOperation, updateEquipmentOperation, saveModel, getBpmnXml } from "@/api/system/equipmentOperation";
+import { listEquipment } from "@/api/system/equipment";
 import { listModelOperation } from "@/api/system/modelOperation";
 import { listEquipmentAtomOperation } from "@/api/system/equipmentAtomOperation";
 import ProcessDesigner from '@/components/ProcessDesigner';
@@ -460,48 +461,33 @@ export default {
         processName: row.eoName,
         processKey: "process_" + row.eoId
       }
-      this.designerData.bpmnXml = ''
-      this.designerOpen = true
-      // if (row.eoId) {
-      //   this.designerData.loading = true;
-      //   getBpmnXml(row.eoId).then(response => {
-      //     this.designerData.bpmnXml = response.data || '';
-      //     this.designerData.loading = false;
-      //     this.designerOpen = true;
-      //   })
-      // }
+      if (row.eoModel) {
+        this.designerData.loading = true;
+        getBpmnXml(row.eoModel).then(response => {
+          this.designerData.bpmnXml = response.data || '';
+          this.designerData.loading = false;
+          this.designerOpen = true;
+        })
+      } else {
+        this.designerData.bpmnXml = '';
+        this.designerOpen = true;
+      }
     },
     // 保存流程按钮操作
     onSaveDesigner(bpmnXml) {
       this.bpmnXml = bpmnXml;
-      console.log(bpmnXml)
-      // let dataBody = {
-      //   modelId: this.designerData.modelId,
-      //   bpmnXml: this.bpmnXml
-      // }
-      // this.$confirm("是否将此模型保存为新版本？", "提示", {
-      //   distinguishCancelAndClose: true,
-      //   confirmButtonText: '是',
-      //   cancelButtonText: '否'
-      // }).then(() => {
-      //   this.confirmSave(dataBody, true)
-      // }).catch(action => {
-      //   if (action === 'cancel') {
-      //     this.confirmSave(dataBody, false)
-      //   }
-      // })
-    },
-    // 确认保存流程
-    confirmSave(body, newVersion) {
-      // this.designerData.loading = true;
-      // saveModel(Object.assign(body, {
-      //   newVersion: newVersion
-      // })).then(() => {
-      //   this.designerOpen = false;
-      //   this.getList();
-      // }).finally(() => {
-      //   this.designerData.loading = false;
-      // })
+      this.$confirm("是否保存设备操作流程？", "提示", {
+        distinguishCancelAndClose: true,
+        confirmButtonText: '是',
+        cancelButtonText: '否'
+      }).then(() => {
+        saveModel(bpmnXml).then(response => {
+          this.designerOpen = false
+          this.getList();
+          this.$modal.msgSuccess("保存成功");
+        })
+      }).catch(action => {
+      })
     },
   }
 };

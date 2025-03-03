@@ -136,11 +136,6 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-search"
-          >查看</el-button>
-          <el-button
-            size="mini"
-            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:equipmentOperation:remove']"

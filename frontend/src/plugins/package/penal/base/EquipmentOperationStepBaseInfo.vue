@@ -9,9 +9,6 @@
           @change="updateBaseInfo('id')"
         />
       </el-form-item>
-      <el-form-item label="名称">
-        <el-input v-model="elementBaseInfo.name" clearable @change="updateBaseInfo('name')" />
-      </el-form-item>
     </el-form>
   </div>
 </template>

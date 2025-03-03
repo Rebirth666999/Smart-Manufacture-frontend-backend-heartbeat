@@ -99,7 +99,7 @@ PaletteProvider.prototype.getPaletteEntries = function() {
     },
     "create.start-event": createAction("bpmn:StartEvent", "event", "bpmn-icon-start-event-none", translate("Create StartEvent")),
     "create.end-event": createAction("bpmn:EndEvent", "event", "bpmn-icon-end-event-none", translate("Create EndEvent")),
-    "create.task": createAction("bpmn:Task", "activity", "bpmn-icon-task", translate("Create Task"))
+    "create.task": createAction("bpmn:Task", "activity", "bpmn-icon-task", "创建操作步骤")
   });
 
   return actions;

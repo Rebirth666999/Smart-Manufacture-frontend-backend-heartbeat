@@ -36,6 +36,10 @@ public class IcesEquipmentOperation extends BaseEntity {
      */
     private Long eqId;
     /**
+     * 后端flowable模型ID
+     */
+    private String eoModel;
+    /**
      * 名称
      */
     private String eoName;

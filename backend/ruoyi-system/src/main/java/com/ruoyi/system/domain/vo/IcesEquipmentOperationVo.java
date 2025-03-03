@@ -39,6 +39,13 @@ public class IcesEquipmentOperationVo {
     @ExcelProperty(value = "所属设备ID")
     private Long eqId;
 
+
+    /**
+     * 后端flowable模型ID
+     */
+    @ExcelProperty(value = "flowable模型ID")
+    private String eoModel;
+
     /**
      * 名称
      */

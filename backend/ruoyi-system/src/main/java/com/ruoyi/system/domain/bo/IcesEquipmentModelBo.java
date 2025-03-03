@@ -1,5 +1,6 @@
 package com.ruoyi.system.domain.bo;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.ruoyi.common.core.validate.AddGroup;
 import com.ruoyi.common.core.validate.EditGroup;
 import lombok.Data;
@@ -32,6 +33,11 @@ public class IcesEquipmentModelBo extends BaseEntity {
      */
     @NotNull(message = "所属模型类型ID不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long emtId;
+
+    /**
+     * 后端flowable模型ID
+     */
+    private String eoModel;
 
     /**
      * 名称

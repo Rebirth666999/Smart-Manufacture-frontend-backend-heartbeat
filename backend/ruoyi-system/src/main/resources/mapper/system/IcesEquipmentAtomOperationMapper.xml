@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.IcesEquipmentAtomOperationMapper">
+
+    <resultMap type="com.ruoyi.system.domain.IcesEquipmentAtomOperation" id="IcesEquipmentAtomOperationResult">
+        <result property="eaoId" column="eao_id"/>
+        <result property="eqId" column="eq_id"/>
+        <result property="eaoName" column="eao_name"/>
+        <result property="eaoType" column="eao_type"/>
+        <result property="eaoRequestType" column="eao_request_type"/>
+        <result property="eaoUrl" column="eao_url"/>
+        <result property="eaoExecTime" column="eao_exec_time"/>
+        <result property="eaoDelete" column="eao_delete"/>
+        <result property="eaoDesc" column="eao_desc"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

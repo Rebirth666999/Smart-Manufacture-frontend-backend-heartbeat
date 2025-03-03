@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.IcesProductMapper">
+
+    <resultMap type="com.ruoyi.system.domain.IcesProduct" id="IcesProductResult">
+        <result property="prId" column="pr_id"/>
+        <result property="prName" column="pr_name"/>
+        <result property="prStock" column="pr_stock"/>
+        <result property="prDelete" column="pr_delete"/>
+        <result property="prDesc" column="pr_desc"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

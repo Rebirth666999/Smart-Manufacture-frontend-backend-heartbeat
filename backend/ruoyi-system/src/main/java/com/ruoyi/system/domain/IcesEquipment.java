@@ -1,0 +1,69 @@
+package com.ruoyi.system.domain;
+
+import com.baomidou.mybatisplus.annotation.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import java.io.Serializable;
+import java.util.Date;
+import java.math.BigDecimal;
+
+import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ruoyi.common.core.domain.BaseEntity;
+
+/**
+ * 设备对象 ices_equipment
+ *
+ * @author ruoyi
+ * @date 2025-02-28
+ */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@TableName("ices_equipment")
+public class IcesEquipment extends BaseEntity {
+
+    private static final long serialVersionUID=1L;
+
+    /**
+     * 设备ID
+     */
+    @TableId(value = "eq_id")
+    private Long eqId;
+    /**
+     * 所属车间ID
+     */
+    private Long arId;
+    /**
+     * 所属设备模型ID
+     */
+    private Long emId;
+    /**
+     * 名称
+     */
+    private String eqName;
+    /**
+     * 状态代码
+     */
+    private String eqStat;
+    /**
+     * 采购时间
+     */
+    private Date eqIntroduceTime;
+    /**
+     * 上次通讯时间
+     */
+    private Date eqCommunicateTime;
+    /**
+     * IP地址
+     */
+    private String eqIp;
+    /**
+     * 已删除
+     */
+    private Long eqDelete;
+    /**
+     * 描述
+     */
+    private String eqDesc;
+
+}

@@ -32,6 +32,10 @@ public class IcesEquipmentAtomOperation extends BaseEntity {
      */
     private Long eqId;
     /**
+     * 原子操作名称
+     */
+    private String eaoName;
+    /**
      * 操作类型
      */
     private String eaoType;

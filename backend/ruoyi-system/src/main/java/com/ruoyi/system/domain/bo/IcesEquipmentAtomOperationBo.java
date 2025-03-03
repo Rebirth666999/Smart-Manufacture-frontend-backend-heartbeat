@@ -1,5 +1,6 @@
 package com.ruoyi.system.domain.bo;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.ruoyi.common.core.validate.AddGroup;
 import com.ruoyi.common.core.validate.EditGroup;
 import lombok.Data;
@@ -32,6 +33,12 @@ public class IcesEquipmentAtomOperationBo extends BaseEntity {
      */
     @NotNull(message = "所属设备ID不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long eqId;
+
+    /**
+     * 原子操作名称
+     */
+    @NotBlank(message = "操作名称不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String eaoName;
 
     /**
      * 操作类型

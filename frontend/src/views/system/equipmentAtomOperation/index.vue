@@ -87,6 +87,7 @@
     <el-table v-loading="loading" :data="equipmentAtomOperationList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="设备原子操作ID" align="center" prop="eaoId" v-if="true"/>
+      <el-table-column label="操作名称" align="center" prop="eaoName" />
       <el-table-column label="所属设备" align="center" prop="eqId">
         <template slot-scope="scope">
           {{ equipmentList.find(ele => ele.eqId === scope.row.eqId).eqName || '' }}
@@ -144,6 +145,9 @@
             >
             </el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="操作名称" prop="eaoName">
+          <el-input v-model="form.eaoName" placeholder="请输入操作名称" />
         </el-form-item>
         <el-form-item label="操作类型" prop="eaoType">
           <el-select v-model="form.eaoType" placeholder="请选择操作类型">
@@ -222,6 +226,9 @@ export default {
         eqId: [
           { required: true, message: "所属设备ID不能为空", trigger: "blur" }
         ],
+        eaoName: [
+          { required: true, message: "操作名称不能为空", trigger: "blur" }
+        ],
         eaoType: [
           { required: true, message: "操作类型不能为空", trigger: "change" }
         ],
@@ -286,6 +293,7 @@ export default {
       this.form = {
         eaoId: undefined,
         eqId: undefined,
+        eaoName: undefined,
         eaoType: undefined,
         eaoRequestType: undefined,
         eaoUrl: undefined,

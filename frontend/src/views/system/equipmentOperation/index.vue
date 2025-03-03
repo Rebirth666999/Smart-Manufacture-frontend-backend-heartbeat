@@ -130,6 +130,7 @@
             size="mini"
             type="text"
             icon="el-icon-brush"
+            @click="handleDesigner(scope.row)"
             v-if="mode !== 2"
           >设计</el-button>
           <el-button
@@ -198,15 +199,39 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 流程设计对话框 -->
+    <el-dialog :title="designerData.title" :visible.sync="designerOpen" append-to-body fullscreen>
+      <process-designer
+        :key="designerOpen"
+        style="border:1px solid rgba(0, 0, 0, 0.1);"
+        ref="modelDesigner"
+        v-loading="designerData.loading"
+        :bpmnXml="designerData.bpmnXml"
+        :designerForm="designerData.form"
+        :mode="1"
+        :extraList="atomOperationList"
+        @save="onSaveDesigner"
+      />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { listEquipmentOperation, getEquipmentOperation, delEquipmentOperation, addEquipmentOperation, updateEquipmentOperation } from "@/api/system/equipmentOperation";import { listEquipment } from "@/api/system/equipment";
 import { listModelOperation } from "@/api/system/modelOperation";
+import { listEquipmentAtomOperation } from "@/api/system/equipmentAtomOperation";
+import ProcessDesigner from '@/components/ProcessDesigner';
+import ProcessViewer from '@/components/ProcessViewer';
+
+import { getBpmnXml, listModel, historyModel, latestModel, addModel, updateModel, saveModel, delModel, deployModel } from "@/api/workflow/model";
 
 export default {
   name: "EquipmentOperation",
+  components: {
+    ProcessDesigner,
+    ProcessViewer,
+  },
   data() {
     return {
       // 按钮loading
@@ -250,16 +275,32 @@ export default {
         eqId: [
           { required: true, message: "所属设备ID不能为空", trigger: "blur" }
         ],
+        eoName: [
+          { required: true, message: "操作名称不能为空", trigger: "blur" }
+        ],
       },
       // 设备列表
       equipmentList: [],
       // 模型操作列表
       modelOperationList: [],
+      atomOperationList: [],
       // 1-按设备查看设备操作（未发布，可修改）
       // 2-按设备查看设备操作（不可修改）
       mode: 0,
       // 页面顶部提示
-      hint: ''
+      hint: '',
+      // 设计窗口是否打开
+      designerOpen: false,
+      // 设计器相关数据
+      designerData: {
+        loading: false,
+        bpmnXml: '',
+        modelId: null,
+        form: {
+          processName: null,
+          processKey: null
+        }
+      },
     };
   },
   created() {
@@ -281,7 +322,11 @@ export default {
         // 获取设备所属设备模型的模型操作
         listModelOperation({ emId: equipment.emId, moDelete: 0 }).then(response => {
           this.modelOperationList = response.rows;
-          this.getList();
+          // 获取设备的原子操作
+          listEquipmentAtomOperation({ eqId: equipment.eqId, moDelete: 0 }).then(response => {
+            this.atomOperationList = response.rows;
+            this.getList();
+          })
         })
         if (this.mode === 1) {
           // 设置筛选提示
@@ -408,7 +453,57 @@ export default {
       this.download('system/equipmentOperation/export', {
         ...this.queryParams
       }, `equipmentOperation_${new Date().getTime()}.xlsx`)
-    }
+    },
+    /** 设计按钮操作 */
+    handleDesigner(row) {
+      this.designerData.title = "流程设计 - " + (row.eoName || 'new process');
+      this.designerData.modelId = "model_" + row.eoId;
+      this.designerData.form = {
+        processName: row.eoName || 'new process',
+        processKey: "process_" + row.eoId
+      }
+      this.designerData.bpmnXml = ''
+      this.designerOpen = true
+      // if (row.eoId) {
+      //   this.designerData.loading = true;
+      //   getBpmnXml(row.eoId).then(response => {
+      //     this.designerData.bpmnXml = response.data || '';
+      //     this.designerData.loading = false;
+      //     this.designerOpen = true;
+      //   })
+      // }
+    },
+    // 保存模型按钮操作
+    onSaveDesigner(bpmnXml) {
+      this.bpmnXml = bpmnXml;
+      console.log(bpmnXml)
+      // let dataBody = {
+      //   modelId: this.designerData.modelId,
+      //   bpmnXml: this.bpmnXml
+      // }
+      // this.$confirm("是否将此模型保存为新版本？", "提示", {
+      //   distinguishCancelAndClose: true,
+      //   confirmButtonText: '是',
+      //   cancelButtonText: '否'
+      // }).then(() => {
+      //   this.confirmSave(dataBody, true)
+      // }).catch(action => {
+      //   if (action === 'cancel') {
+      //     this.confirmSave(dataBody, false)
+      //   }
+      // })
+    },
+    confirmSave(body, newVersion) {
+      // this.designerData.loading = true;
+      // saveModel(Object.assign(body, {
+      //   newVersion: newVersion
+      // })).then(() => {
+      //   this.designerOpen = false;
+      //   this.getList();
+      // }).finally(() => {
+      //   this.designerData.loading = false;
+      // })
+    },
   }
 };
 </script>

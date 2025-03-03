@@ -16,7 +16,7 @@
       @event="handlerEvent"
       @save="onSaveProcess"
     />
-    <bmpn-process-penal :bpmn-modeler="modeler" :prefix="controlForm.prefix" class="process-panel" />
+    <bmpn-process-penal :bpmn-modeler="modeler" :prefix="controlForm.prefix" :mode="mode" :extraList='extraList' class="process-panel" />
   </div>
 </template>
 
@@ -27,7 +27,8 @@ import { BpmnProcessDesigner, BmpnProcessPenal } from '@/plugins/package/index';
 // 自定义元素选中时的弹出菜单（修改 默认任务 为 用户任务）
 import CustomContentPadProvider from '@/plugins/package/designer/plugins/content-pad';
 // 自定义左侧菜单（修改 默认任务 为 用户任务）
-import CustomPaletteProvider from '@/plugins/package/designer/plugins/palette';
+import RuoyiPaletteProvider from '@/plugins/package/designer/plugins/palette/ruoyi';
+import EquipmentOperationPaletteProvider from '@/plugins/package/designer/plugins/palette/equipmentOperation'
 import { vuePlugin } from '@/plugins/package/highlight';
 import 'highlight.js/styles/atom-one-dark-reasonable.css';
 Vue.use(vuePlugin);
@@ -42,6 +43,18 @@ export default {
     designerForm: {
       type: Object,
       required: true
+    },
+    // mode代表设计器职能，决定可以添加的操作类型
+    // 0-ruoyi原先的表单审批流程
+    // 1-设备操作流程
+    // 2-产品工艺流程
+    mode: {
+      type: Number,
+      required: true
+    },
+    extraList: {
+      type: Array,
+      required: false
     }
   },
   components: {
@@ -61,7 +74,7 @@ export default {
         labelVisible: false,
         prefix: 'flowable',
         headerButtonSize: 'small',
-        additionalModel: [CustomContentPadProvider, CustomPaletteProvider]
+        additionalModel: [CustomContentPadProvider, this.mode === 0? RuoyiPaletteProvider:EquipmentOperationPaletteProvider]
       }
     }
   },

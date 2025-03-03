@@ -279,6 +279,7 @@
         v-loading="designerData.loading"
         :bpmnXml="designerData.bpmnXml"
         :designerForm="designerData.form"
+        :mode="0"
         @save="onSaveDesigner"
       />
     </el-dialog>

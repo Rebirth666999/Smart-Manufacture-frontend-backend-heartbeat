@@ -68,14 +68,14 @@ export default {
     id: {
       immediate: true,
       handler(val) {
-        val && val.length && this.resetAttributesList();
+        val && val.length && this.resetParamsList();
       }
     }
   },
   methods: {
     // 查看已有的参数并更新列表显示
-    resetAttributesList() {
-      this.paramList = JSON.parse(window.bpmnInstances.bpmnElement.businessObject.$attrs.params || '')
+    resetParamsList() {
+      this.paramList = JSON.parse(window.bpmnInstances.bpmnElement.businessObject.$attrs.params || '[]')
     },
     // 打开新增/修改参数窗口
     openAttributesForm(attr, index) {
@@ -126,7 +126,7 @@ export default {
         { params: JSON.stringify(this.paramList) }
       )
       this.propertyFormModelVisible = false
-      setTimeout(() => this.resetAttributesList(), 100)
+      setTimeout(() => this.resetParamsList(), 100)
     }
   }
 };

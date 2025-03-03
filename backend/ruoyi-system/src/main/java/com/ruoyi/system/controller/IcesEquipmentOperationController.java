@@ -105,4 +105,29 @@ public class IcesEquipmentOperationController extends BaseController {
                           @PathVariable Long[] eoIds) {
         return toAjax(iIcesEquipmentOperationService.deleteWithValidByIds(Arrays.asList(eoIds), true));
     }
+
+    /**
+     * 获取设备操作流程模型XML
+     *
+     * @param modelId 模型主键
+     */
+    @GetMapping(value = "/model/bpmnXml/{modelId}")
+    public R<String> getBpmnXml(@NotNull(message = "主键不能为空") @PathVariable("modelId") String modelId) {
+        return R.ok("操作成功", iIcesEquipmentOperationService.queryBpmnXmlById(modelId));
+    }
+
+    /**
+     * 根据XML保存模型
+     *
+     * @param modelXML 模型XML文本
+     */
+    @PostMapping("/model/save")
+    public R<String> save(@RequestBody String modelXML) {
+        try {
+            iIcesEquipmentOperationService.saveModel(modelXML);
+            return R.ok();
+        } catch (Exception e) {
+            return R.fail();
+        }
+    }
 }

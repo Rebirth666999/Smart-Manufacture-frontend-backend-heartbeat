@@ -224,8 +224,6 @@ import { listEquipmentAtomOperation } from "@/api/system/equipmentAtomOperation"
 import ProcessDesigner from '@/components/ProcessDesigner';
 import ProcessViewer from '@/components/ProcessViewer';
 
-import { getBpmnXml, listModel, historyModel, latestModel, addModel, updateModel, saveModel, delModel, deployModel } from "@/api/workflow/model";
-
 export default {
   name: "EquipmentOperation",
   components: {
@@ -456,10 +454,10 @@ export default {
     },
     /** 设计按钮操作 */
     handleDesigner(row) {
-      this.designerData.title = "流程设计 - " + (row.eoName || 'new process');
+      this.designerData.title = "设备操作流程设计 - " + row.eoName;
       this.designerData.modelId = "model_" + row.eoId;
       this.designerData.form = {
-        processName: row.eoName || 'new process',
+        processName: row.eoName,
         processKey: "process_" + row.eoId
       }
       this.designerData.bpmnXml = ''
@@ -473,7 +471,7 @@ export default {
       //   })
       // }
     },
-    // 保存模型按钮操作
+    // 保存流程按钮操作
     onSaveDesigner(bpmnXml) {
       this.bpmnXml = bpmnXml;
       console.log(bpmnXml)
@@ -493,6 +491,7 @@ export default {
       //   }
       // })
     },
+    // 确认保存流程
     confirmSave(body, newVersion) {
       // this.designerData.loading = true;
       // saveModel(Object.assign(body, {

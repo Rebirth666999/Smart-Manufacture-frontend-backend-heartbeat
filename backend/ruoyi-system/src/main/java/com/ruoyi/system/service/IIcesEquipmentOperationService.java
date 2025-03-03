@@ -5,6 +5,7 @@ import com.ruoyi.system.domain.vo.IcesEquipmentOperationVo;
 import com.ruoyi.system.domain.bo.IcesEquipmentOperationBo;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
+import org.dom4j.DocumentException;
 
 import java.util.Collection;
 import java.util.List;
@@ -46,4 +47,10 @@ public interface IIcesEquipmentOperationService {
      * 校验并批量删除设备操作信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+    // 获取设备操作流程模型XML
+    String queryBpmnXmlById(String modelId);
+
+    // 根据XML文件保存设备操作流程
+    void saveModel(String modelXML) throws DocumentException;
 }

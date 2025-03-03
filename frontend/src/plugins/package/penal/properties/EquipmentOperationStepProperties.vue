@@ -18,6 +18,20 @@
         </el-select>
       </div>
     </div>
+    <div class="element-property input-property">
+      <div class="element-property__label">描述：</div>
+      <div class="element-property__value">
+        <el-input
+          type="textarea"
+          v-model="eosDesc"
+          size="mini"
+          resize="vertical"
+          :autosize="{ minRows: 2, maxRows: 4 }"
+          @input="updateDesc"
+          @blur="updateDesc"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -30,7 +44,8 @@ export default {
   },
   data() {
     return {
-      eaoId: ''
+      eaoId: '',
+      eosDesc: ''
     };
   },
   watch: {
@@ -39,6 +54,7 @@ export default {
       immediate: true,
       handler: function(id) {
         this.eaoId = window.bpmnInstances.bpmnElement.businessObject.$attrs.eaoId || ''
+        this.eosDesc = window.bpmnInstances.bpmnElement.businessObject.$attrs.eosDesc || ''
       }
     }
   },
@@ -48,6 +64,13 @@ export default {
       window.bpmnInstances.modeling.updateProperties(
         window.bpmnInstances.bpmnElement,
         { eaoId: this.eaoId }
+      );
+    },
+    // 更新属性：描述
+    updateDesc() {
+      window.bpmnInstances.modeling.updateProperties(
+        window.bpmnInstances.bpmnElement,
+        { eosDesc: this.eosDesc }
       );
     }
   },

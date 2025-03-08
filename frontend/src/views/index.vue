@@ -1,6 +1,6 @@
 <template>
   <div class="app-container home">
-    <el-row :gutter="20">
+    <!-- <el-row :gutter="20">
       <el-col :sm="24" :lg="12" style="padding-left: 20px">
         <h2>RuoYi-Vue-Plus后台管理框架</h2>
         <p>
@@ -104,17 +104,20 @@
         </el-row>
       </el-col>
     </el-row>
-    <el-divider />
+    <el-divider /> -->
+    <img :src="bgImage" >
   </div>
 </template>
 
 <script>
+import bg from "@/assets/images/bg.png";
 export default {
   name: "Index",
   data() {
     return {
       // 版本号
       version: "0.8.3",
+      bgImage: bg
     };
   },
   methods: {

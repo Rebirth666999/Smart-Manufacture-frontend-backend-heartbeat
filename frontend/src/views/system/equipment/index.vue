@@ -28,7 +28,7 @@
         <el-select v-model="queryParams.emId" placeholder="请选择设备模型" 
         @keyup.enter.native="handleQuery" clearable>
           <el-option
-            v-for="item in equipmentModelList"
+            v-for="item in equipmentModelListFull"
             :key="item.emId"
             :label="item.emName"
             :value="item.emId"
@@ -117,7 +117,7 @@
       </el-table-column>
       <el-table-column label="所属设备模型" align="center" prop="emId">
         <template slot-scope="scope">
-          {{ equipmentModelList.find(ele => ele.emId === scope.row.emId).emName || '' }}
+          {{ equipmentModelListFull.find(ele => ele.emId === scope.row.emId).emName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center" prop="eqStat">
@@ -165,25 +165,56 @@
             type="text"
             icon="el-icon-finished"
             v-show="scope.row.eqStat === '1'"
+            @click="handleSubmitReview(scope.row)"
           >提交审核</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-refresh-left"
-            v-show="scope.row.eqStat === '2' || scope.row.eqStat === 'b'"
+            v-show="scope.row.eqStat === '2' || scope.row.eqStat === 'd' || scope.row.eqStat === 'f' || scope.row.eqStat === 'h'"
+            @click="handleWithdrawReview(scope.row)"
           >撤回审核</el-button>
-          <el-button
+          <!-- <el-button
             size="mini"
             type="text"
             icon="el-icon-document-copy"
             v-show="scope.row.eqStat !== '1' && scope.row.eqStat !== '2' && scope.row.eqStat !== '3'"
-          >复制配置</el-button>
+          >复制配置</el-button> -->
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-video-pause"
+            v-show="scope.row.eqStat === '4' || scope.row.eqStat === '5' || scope.row.eqStat === '8' || scope.row.eqStat === '9'"
+            @click="handleStopReview(scope.row)"
+          >停用</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-video-play"
+            v-show="scope.row.eqStat === 'a'"
+            @click="handleResumeReview(scope.row)"
+          >恢复使用</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-setting"
+            v-show="scope.row.eqStat === 'a'"
+            @click="handleMaintaince(scope.row)"
+          >开始维护</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-setting"
+            v-show="scope.row.eqStat === 'b'"
+            @click="handleMaintainceComplete(scope.row)"
+          >结束维护</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
-            v-show="scope.row.eqStat === '4' || scope.row.eqStat === '5' || scope.row.eqStat === '8' || scope.row.eqStat === '9'"
-          >弃用</el-button>
+            v-show="scope.row.eqStat === 'a'"
+            @click="handleDepreciateReview(scope.row)"
+          >报废</el-button>
           <el-button
             size="mini"
             type="text"
@@ -326,8 +357,10 @@ export default {
       },
       // 车间列表
       areaList: [],
-      // 设备模型列表
+      // 已发布的设备模型列表
       equipmentModelList: [],
+      // 设备模型列表
+      equipmentModelListFull: [],
     };
   },
   async created() {
@@ -345,6 +378,9 @@ export default {
     // 查询设备模型列表
     getEquipmentModelList() {
       listEquipmentModel().then(response => {
+        this.equipmentModelListFull = response.rows;
+      });
+      listEquipmentModel({ emStat: "4" }).then(response => {
         this.equipmentModelList = response.rows;
       });
     },
@@ -464,12 +500,144 @@ export default {
         ...this.queryParams
       }, `equipment_${new Date().getTime()}.xlsx`)
     },
+    // 提交审核
+    handleSubmitReview(row) {
+      const eqId = row.eqId;
+      this.$modal.confirm('是否要提交审核？审核在开始之前可以撤回。').then(() => {
+        this.loading = true;
+        getEquipment(eqId).then(response => {
+          this.form = response.data;
+          this.form.eqStat = "2";
+          updateEquipment(this.form).then(response => {
+            this.$modal.msgSuccess("已提交审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 撤回审核
+    handleWithdrawReview(row) {
+      const eqId = row.eqId;
+      this.$modal.confirm('是否要撤回审核？若审核已开始即无法撤回。').then(() => {
+        this.loading = true;
+        getEquipment(eqId).then(response => {
+          this.form = response.data;
+          if (this.form.eqStat === '2') this.form.eqStat = '1'
+          else if (this.form.eqStat === 'd') this.form.eqStat = '4'
+          else if (this.form.eqStat === 'f') this.form.eqStat = 'a'
+          else if (this.form.eqStat === 'h') this.form.eqStat = 'a'
+          updateEquipment(this.form).then(response => {
+            this.$modal.msgSuccess("已撤回审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 停用设备
+    handleStopReview(row) {
+      const eqId = row.eqId;
+      this.$modal.confirm('是否停用此设备？停用设备需要进行停用审核。').then(() => {
+        this.loading = true;
+        getEquipment(eqId).then(response => {
+          this.form = response.data;
+          this.form.eqStat = 'd';
+          updateEquipment(this.form).then(response => {
+            this.$modal.msgSuccess("已提交停用审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 设备报废
+    handleDepreciateReview(row) {
+      const eqId = row.eqId;
+      this.$modal.confirm('是否要将此设备提交报废审核？请注意您仍需进行固定资产报废的流程。').then(() => {
+        this.loading = true;
+        getEquipment(eqId).then(response => {
+          this.form = response.data;
+          this.form.eqStat = 'f';
+          updateEquipment(this.form).then(response => {
+            this.$modal.msgSuccess("已提交设备报废审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 设备维护
+    handleMaintaince(row) {
+      const eqId = row.eqId;
+      this.$modal.confirm('是否要开始设备维护？').then(() => {
+        this.loading = true;
+        getEquipment(eqId).then(response => {
+          this.form = response.data;
+          this.form.eqStat = 'b';
+          updateEquipment(this.form).then(response => {
+            this.$modal.msgSuccess("设备维护已提交");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 设备维护结束
+    handleMaintainceComplete(row) {
+      const eqId = row.eqId;
+      this.$modal.confirm('是否要结束设备维护？').then(() => {
+        this.loading = true;
+        getEquipment(eqId).then(response => {
+          this.form = response.data;
+          this.form.eqStat = 'a';
+          updateEquipment(this.form).then(response => {
+            this.$modal.msgSuccess("结束设备维护已提交");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 恢复使用审核
+    handleResumeReview(row) {
+      const eqId = row.eqId;
+      this.$modal.confirm('是否要恢复设备的使用？恢复使用需要先进行审核。').then(() => {
+        this.loading = true;
+        getEquipment(eqId).then(response => {
+          this.form = response.data;
+          this.form.eqStat = "h";
+          updateEquipment(this.form).then(response => {
+            this.$modal.msgSuccess("已提交恢复使用审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 查看事件
     handleEquipmentRecordView(row) {
       this.$router.push(`/equipment/equipmentRecord?eqId=${row.eqId}`)
     },
+    // 设备原子操作
     handleAtomOperationView(row) {
       this.$router.push(`/equipment/equipmentAtomOperation?eqId=${row.eqId}`)
     },
+    // 设备操作
     handleEquipmentOperationView(row) {
       this.$router.push(`/equipment/equipmentOperation?eqId=${row.eqId}`)
     }

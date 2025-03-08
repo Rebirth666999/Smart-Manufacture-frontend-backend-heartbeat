@@ -51,7 +51,7 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
+      <el-col :span="1.5" v-if="mode !== 2">
         <el-button
           type="primary"
           plain
@@ -61,7 +61,7 @@
           v-hasPermi="['system:materialStock:add']"
         >新增</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <el-col :span="1.5" v-if="mode !== 2">
         <el-button
           type="success"
           plain
@@ -72,7 +72,7 @@
           v-hasPermi="['system:materialStock:edit']"
         >修改</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <el-col :span="1.5" v-if="mode !== 2">
         <el-button
           type="danger"
           plain
@@ -111,7 +111,7 @@
       </el-table-column>
       <el-table-column label="库存" align="center" prop="msStock" />
       <!-- <el-table-column label="已删除" align="center" prop="msDelete" /> -->
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="mode !== 2">
         <template slot-scope="scope">
           <el-button
             size="mini"

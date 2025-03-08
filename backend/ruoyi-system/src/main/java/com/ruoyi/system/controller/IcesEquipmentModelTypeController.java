@@ -106,7 +106,7 @@ public class IcesEquipmentModelTypeController extends BaseController {
         if (iIcesEquipmentModelTypeService.deleteWithValidByIds(Arrays.asList(emtIds), true)) {
             return R.ok();
         } else {
-            return R.fail("请先弃用该类型下所有模型");
+            return R.fail("请先弃用或删除该类型下所有模型");
         }
     }
 }

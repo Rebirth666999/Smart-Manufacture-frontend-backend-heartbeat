@@ -20,7 +20,7 @@
           :disabled="mode === 1"
         >
           <el-option
-            v-for="item in equipmentModelTypeList"
+            v-for="item in equipmentModelTypeListFull"
             :key="item.emtId"
             :label="item.emtName"
             :value="item.emtId"
@@ -112,7 +112,7 @@
       <el-table-column label="名称" align="center" prop="emName" />
       <el-table-column label="所属模型类型" align="center" prop="emtId">
         <template slot-scope="scope">
-          {{ equipmentModelTypeList.find(ele => ele.emtId === scope.row.emtId).emtName || '' }}
+          {{ equipmentModelTypeListFull.find(ele => ele.emtId === scope.row.emtId).emtName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center" prop="emStat">
@@ -152,24 +152,27 @@
             type="text"
             icon="el-icon-finished"
             v-show="scope.row.emStat === '1'"
+            @click="handleSubmitReview(scope.row)"
           >提交审核</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-refresh-left"
             v-show="scope.row.emStat === '2' || scope.row.emStat === '6'"
+            @click="handleWithdrawReview(scope.row)"
           >撤回审核</el-button>
-          <el-button
+          <!-- <el-button
             size="mini"
             type="text"
             icon="el-icon-document-copy"
             v-show="scope.row.emStat !== '1' && scope.row.emStat !== '2' && scope.row.emStat !== '3'"
-          >复制配置</el-button>
+          >复制配置</el-button> -->
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             v-show="scope.row.emStat === '4'"
+            @click="handleDepreciateReview(scope.row)"
           >弃用</el-button>
           <el-button
             size="mini"
@@ -277,6 +280,8 @@ export default {
           { required: true, message: "名称不能为空", trigger: "blur" }
         ],
       },
+      // 设备模型类型数据（附带已弃用的模型类型）
+      equipmentModelTypeListFull: [],
       // 设备模型类型数据
       equipmentModelTypeList: [],
       // 1-根据设备类型管理
@@ -296,13 +301,18 @@ export default {
   methods: {
     // 查询模型类型列表
     getEquipmentModelTypeList() {
+      // 完整列表
       listEquipmentModelType().then(response => {
-        this.equipmentModelTypeList = response.rows;
+        this.equipmentModelTypeListFull = response.rows;
         if (this.mode === 1) {
           this.hint = "设备模型类型 "
           this.hint += response.rows.find(ele => ele.emtId === this.$route.query.emtId).emtName
           this.hint += " "
         }
+      });
+      // 未弃用列表
+      listEquipmentModelType({ emtDelete: 0 }).then(response => {
+        this.equipmentModelTypeList = response.rows;
       });
     },
     /** 查询设备模型列表 */
@@ -386,6 +396,7 @@ export default {
               this.buttonLoading = false;
             });
           } else {
+            this.form.emStat = '1'
             addEquipmentModel(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
@@ -417,6 +428,61 @@ export default {
       this.download('system/equipmentModel/export', {
         ...this.queryParams
       }, `equipmentModel_${new Date().getTime()}.xlsx`)
+    },
+    // 提交审核
+    handleSubmitReview(row) {
+      const emId = row.emId;
+      this.$modal.confirm('是否要提交审核？审核在开始之前可以撤回。').then(() => {
+        this.loading = true;
+        getEquipmentModel(emId).then(response => {
+          this.form = response.data;
+          this.form.emStat = "2";
+          updateEquipmentModel(this.form).then(response => {
+            this.$modal.msgSuccess("已提交审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 撤回审核
+    handleWithdrawReview(row) {
+      const emId = row.emId;
+      this.$modal.confirm('是否要撤回审核？若审核已开始即无法撤回。').then(() => {
+        this.loading = true;
+        getEquipmentModel(emId).then(response => {
+          this.form = response.data;
+          if (this.form.emStat === '2') this.form.emStat = '1'
+          else this.form.emStat = '4';
+          updateEquipmentModel(this.form).then(response => {
+            this.$modal.msgSuccess("已撤回审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 弃用设备模型
+    handleDepreciateReview(row) {
+      const emId = row.emId;
+      this.$modal.confirm('是否弃用此设备模型？弃用设备模型需要进行模型弃用审核。').then(() => {
+        this.loading = true;
+        getEquipmentModel(emId).then(response => {
+          this.form = response.data;
+          this.form.emStat = '6';
+          updateEquipmentModel(this.form).then(response => {
+            this.$modal.msgSuccess("已提交模型弃用审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
     },
     // 查看模型操作
     handleModelOperationView(row) {

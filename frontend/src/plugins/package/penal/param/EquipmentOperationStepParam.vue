@@ -29,14 +29,14 @@
     <!-- 添加/修改参数窗口 -->
     <el-dialog :visible.sync="propertyFormModelVisible" title="参数配置" width="600px" append-to-body destroy-on-close>
       <el-form :model="propertyForm" label-width="130px" size="mini" ref="attributeFormRef" @submit.native.prevent :rules="rules">
-        <el-form-item label="参数名称：" prop="eospa_name">
-          <el-input v-model="propertyForm.eospa_name" clearable />
+        <el-form-item label="参数名称：" prop="eospaName">
+          <el-input v-model="propertyForm.eospaName" clearable />
         </el-form-item>
-        <el-form-item label="父级参数序号：" prop="parent">
-          <el-input v-model="propertyForm.parent" clearable />
+        <el-form-item label="父级参数序号：" prop="eospaIdParent">
+          <el-input v-model="propertyForm.eospaIdParent" clearable />
         </el-form-item>
-        <el-form-item label="参数类型：" prop="eospa_type">
-          <el-select v-model="propertyForm.eospa_type" placeholder="请选择参数类型" style="width: 100%;">
+        <el-form-item label="参数类型：" prop="eospaType">
+          <el-select v-model="propertyForm.eospaType" placeholder="请选择参数类型" style="width: 100%;">
             <el-option
               v-for="dict in dict.type.ices_param_type"
               :key="dict.value"
@@ -45,8 +45,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="参数位置：" prop="eospa_pos">
-          <el-select v-model="propertyForm.eospa_pos" placeholder="请选择参数位置" style="width: 100%;">
+        <el-form-item label="参数位置：" prop="eospaPos">
+          <el-select v-model="propertyForm.eospaPos" placeholder="请选择参数位置" style="width: 100%;">
             <el-option
               v-for="dict in dict.type.ices_param_position"
               :key="dict.value"
@@ -55,8 +55,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="默认值：" prop="eospa_value">
-          <el-input v-model="propertyForm.eospa_value" clearable />
+        <el-form-item label="默认值：" prop="eospaValue">
+          <el-input v-model="propertyForm.eospaValue" clearable />
         </el-form-item>
       </el-form>
       <template slot="footer">
@@ -141,23 +141,23 @@ export default {
     saveParam() {
       this.$refs["attributeFormRef"].validate(valid => {
         if (valid) {
-          const { eospa_name, parent, eospa_type, eospa_pos, eospa_value } = this.propertyForm
+          const { eospaName, eospaIdParent, eospaType, eospaPos, eospaValue } = this.propertyForm
           // 更新显示数组
           if (this.editingPropertyIndex !== -1) {
             // 修改参数
-            this.paramList[this.editingPropertyIndex].eospaName = eospa_name
-            this.paramList[this.editingPropertyIndex].eospaIdParent = parseInt(parent) || 0
-            this.paramList[this.editingPropertyIndex].eospaType = eospa_type
-            this.paramList[this.editingPropertyIndex].eospaPos = eospa_pos
-            this.paramList[this.editingPropertyIndex].eospaValue = eospa_value
+            this.paramList[this.editingPropertyIndex].eospaName = eospaName
+            this.paramList[this.editingPropertyIndex].eospaIdParent = parseInt(eospaIdParent) || 0
+            this.paramList[this.editingPropertyIndex].eospaType = eospaType
+            this.paramList[this.editingPropertyIndex].eospaPos = eospaPos
+            this.paramList[this.editingPropertyIndex].eospaValue = eospaValue
           } else {
             // 新建参数
             this.paramList.push({
-              eospaName: eospa_name,
-              eospaIdParent: parseInt(parent) || 0,
-              eospaType: eospa_type,
-              eospaPos: eospa_pos,
-              eospaValue: eospa_value
+              eospaName: eospaName,
+              eospaIdParent: parseInt(eospaIdParent) || 0,
+              eospaType: eospaType,
+              eospaPos: eospaPos,
+              eospaValue: eospaValue
             })
           }
           this.updateParams()

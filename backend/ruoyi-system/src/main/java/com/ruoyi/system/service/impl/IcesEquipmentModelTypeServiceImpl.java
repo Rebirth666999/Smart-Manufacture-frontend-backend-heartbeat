@@ -7,6 +7,9 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.domain.bo.IcesEquipmentModelBo;
+import com.ruoyi.system.domain.vo.IcesEquipmentModelVo;
+import com.ruoyi.system.service.IIcesEquipmentModelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesEquipmentModelTypeBo;
@@ -30,6 +33,7 @@ import java.util.Collection;
 public class IcesEquipmentModelTypeServiceImpl implements IIcesEquipmentModelTypeService {
 
     private final IcesEquipmentModelTypeMapper baseMapper;
+    private final IIcesEquipmentModelService iIcesEquipmentModelService;
 
     /**
      * 查询设备模型类型
@@ -102,13 +106,38 @@ public class IcesEquipmentModelTypeServiceImpl implements IIcesEquipmentModelTyp
      */
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
+        // 设备模型类型删除逻辑
+        // 类型下没有模型，直接从数据库删除
+        // 类型下只有已弃用的模型，更改已删除字段
+        // 不满足如上情况，拒绝删除
         if(isValid){
-            // TODO 设备模型类型删除逻辑
-            // TODO 类型下没有模型，直接从数据库删除
-            // TODO 类型下只有已弃用和未发布的模型，更改已删除字段
-            // TODO 不满足如上情况，拒绝删除
-            return false;
+            for (Long id : ids) {
+                // 构建搜索条件
+                IcesEquipmentModelBo equipmentModelBo = new IcesEquipmentModelBo();
+                equipmentModelBo.setEmtId(id);
+                // 找到所有设备模型
+                List<IcesEquipmentModelVo> list = iIcesEquipmentModelService.queryList(equipmentModelBo);
+                for (IcesEquipmentModelVo vo : list) {
+                    // 设备模型不是已弃用，拒绝删除
+                    if (!("5".equals(vo.getEmStat()))) {
+                        return false;
+                    }
+                }
+            }
         }
-        return baseMapper.deleteBatchIds(ids) > 0;
+        for (Long id : ids) {
+            IcesEquipmentModelBo equipmentModelBo = new IcesEquipmentModelBo();
+            equipmentModelBo.setEmtId(id);
+            List<IcesEquipmentModelVo> list = iIcesEquipmentModelService.queryList(equipmentModelBo);
+            if (list.isEmpty()) {
+                baseMapper.deleteById(id);
+            } else {
+                IcesEquipmentModelTypeBo modelTypeBo = new IcesEquipmentModelTypeBo();
+                modelTypeBo.setEmtId(id);
+                modelTypeBo.setEmtDelete(1L);
+                updateByBo(modelTypeBo);
+            }
+        }
+        return true;
     }
 }

@@ -26,7 +26,7 @@ import com.ruoyi.system.service.IIcesEquipmentService;
 import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
- * 设备
+ * 设备控制器，用于管理设备相关的操作
  *
  * @author ruoyi
  * @date 2025-02-28
@@ -41,6 +41,10 @@ public class IcesEquipmentController extends BaseController {
 
     /**
      * 查询设备列表
+     *
+     * @param bo 设备查询参数对象
+     * @param pageQuery 分页查询参数
+     * @return 设备列表信息
      */
     @SaCheckPermission("system:equipment:list")
     @GetMapping("/list")
@@ -49,7 +53,10 @@ public class IcesEquipmentController extends BaseController {
     }
 
     /**
-     * 导出设备列表
+     * 导出设备列表到Excel
+     *
+     * @param bo 设备查询参数对象
+     * @param response HTTP响应对象，用于输出Excel文件
      */
     @SaCheckPermission("system:equipment:export")
     @Log(title = "设备", businessType = BusinessType.EXPORT)
@@ -62,7 +69,8 @@ public class IcesEquipmentController extends BaseController {
     /**
      * 获取设备详细信息
      *
-     * @param eqId 主键
+     * @param eqId 设备主键ID
+     * @return 设备详细信息
      */
     @SaCheckPermission("system:equipment:query")
     @GetMapping("/{eqId}")
@@ -72,7 +80,10 @@ public class IcesEquipmentController extends BaseController {
     }
 
     /**
-     * 新增设备
+     * 新增设备信息
+     *
+     * @param bo 设备新增参数对象
+     * @return 新增结果
      */
     @SaCheckPermission("system:equipment:add")
     @Log(title = "设备", businessType = BusinessType.INSERT)
@@ -83,7 +94,10 @@ public class IcesEquipmentController extends BaseController {
     }
 
     /**
-     * 修改设备
+     * 修改设备信息
+     *
+     * @param bo 设备修改参数对象
+     * @return 修改结果
      */
     @SaCheckPermission("system:equipment:edit")
     @Log(title = "设备", businessType = BusinessType.UPDATE)
@@ -94,9 +108,10 @@ public class IcesEquipmentController extends BaseController {
     }
 
     /**
-     * 删除设备
+     * 删除设备信息
      *
-     * @param eqIds 主键串
+     * @param eqIds 设备主键ID数组
+     * @return 删除结果
      */
     @SaCheckPermission("system:equipment:remove")
     @Log(title = "设备", businessType = BusinessType.DELETE)

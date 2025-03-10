@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button onclick="beginListenHeartbeat()">开始接受心跳信息</button>
+</body>
+<script>
+    function beginListenHeartbeat() {
+        // 发送 POST 请求到 http://localhost:8080/heartbeat1
+        fetch("http://localhost:8080/heartbeat1", {
+            method: "POST",
+            headers: {
+                "Content-Type": "text/plain" // 服务器接受纯文本
+            },
+            body: "browser" // 发送的字符串
+        })
+            .then(response => response.text()) // 解析响应为文本
+            .then(data => {
+                console.log("Response from server:", data);
+                // 如果请求成功，跳转到新的 HTML 页面
+                window.location.href = "ws.html"; // 替换为你的新页面路径
+            })
+            .catch(error => {
+                console.error("Error sending POST request:", error);
+                alert("Failed to send POST request. Please try again.");
+            });
+    }
+</script>
+</html>

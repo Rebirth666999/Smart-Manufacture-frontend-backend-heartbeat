@@ -2,12 +2,19 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="目标产品" prop="prId">
-        <el-input
+        <el-select
           v-model="queryParams.prId"
-          placeholder="请输入目标产品ID"
+          placeholder="请选择目标产品"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="item in productList"
+            :key="item.prId"
+            :label="item.prName"
+            :value="item.prId"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="名称" prop="procName">
         <el-input
@@ -90,7 +97,11 @@
     <el-table v-loading="loading" :data="processList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="工艺流程ID" align="center" prop="procId" v-if="true"/>
-      <el-table-column label="目标产品ID" align="center" prop="prId" />
+      <el-table-column label="目标产品" align="center" prop="prId">
+        <template slot-scope="scope">
+          {{ productList.find(ele => ele.prId === scope.row.prId).prName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="工艺流程名称" align="center" prop="procName" />
       <el-table-column label="工艺流程状态" align="center" prop="procStat">
         <template slot-scope="scope">
@@ -131,7 +142,18 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="目标产品" prop="prId">
-          <el-input v-model="form.prId" placeholder="请输入目标产品ID" />
+          <el-select
+            v-model="form.prId"
+            placeholder="请选择目标产品"
+          >
+            <el-option
+              v-for="item in productList"
+              :key="item.prId"
+              :label="item.prName"
+              :value="item.prId"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="名称" prop="procName">
           <el-input v-model="form.procName" placeholder="请输入工艺流程名称" />
@@ -150,6 +172,7 @@
 
 <script>
 import { listProcess, getProcess, delProcess, addProcess, updateProcess } from "@/api/system/process";
+import { listProduct } from "@/api/system/product";
 
 export default {
   name: "Process",
@@ -198,13 +221,22 @@ export default {
         procName: [
           { required: true, message: "工艺流程名称不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 产品列表
+      productList: []
     };
   },
-  created() {
+  async created() {
+    await this.getProductList();
     this.getList();
   },
   methods: {
+    // 查询产品列表
+    getProductList() {
+      listProduct().then(response => {
+        this.productList = response.rows
+      })
+    },
     /** 查询工艺流程列表 */
     getList() {
       this.loading = true;

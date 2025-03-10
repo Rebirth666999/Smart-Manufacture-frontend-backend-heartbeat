@@ -27,14 +27,14 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="已删除" prop="procDelete">
+      <!-- <el-form-item label="已删除" prop="procDelete">
         <el-input
           v-model="queryParams.procDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -97,7 +97,7 @@
           <dict-tag :options="dict.type.ices_process_status" :value="scope.row.procStat"/>
         </template>
       </el-table-column>
-      <el-table-column label="已删除" align="center" prop="procDelete" />
+      <!-- <el-table-column label="已删除" align="center" prop="procDelete" /> -->
       <el-table-column label="描述" align="center" prop="procDesc" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -183,7 +183,7 @@ export default {
         prId: undefined,
         procName: undefined,
         procStat: undefined,
-        procDelete: undefined,
+        procDelete: 0,
       },
       // 表单参数
       form: {},

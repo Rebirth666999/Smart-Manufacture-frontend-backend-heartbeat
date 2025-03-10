@@ -352,6 +352,12 @@
                 <version>${ruoyi-flowable-plus.version}</version>
             </dependency>
 
+            <!-- websocket -->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>backend-service</artifactId>
+                <version>${ruoyi-flowable-plus.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -367,6 +373,7 @@
         <module>ruoyi-oss</module>
         <module>ruoyi-sms</module>
         <module>ruoyi-system</module>
+        <module>backend-service</module>
     </modules>
     <packaging>pom</packaging>
 

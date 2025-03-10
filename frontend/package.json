@@ -5,10 +5,10 @@
   "author": "KonBAI",
   "license": "MIT",
   "scripts": {
-    "dev": "vue-cli-service serve",
-    "build:prod": "vue-cli-service build",
-    "preview": "node build/index.js --preview",
-    "lint": "eslint --ext .js,.vue src"
+    "dev": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
+    "build:prod": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
+    "preview": "set NODE_OPTIONS=--openssl-legacy-provider && node build/index.js --preview",
+    "lint": "set NODE_OPTIONS=--openssl-legacy-provider && eslint --ext .js,.vue src"
   },
   "husky": {
     "hooks": {

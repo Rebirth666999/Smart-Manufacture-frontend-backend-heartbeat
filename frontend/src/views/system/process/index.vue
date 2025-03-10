@@ -315,6 +315,8 @@ export default {
               this.buttonLoading = false;
             });
           } else {
+            // 新增状态自动转为未发布
+            this.form.procStat = '1'
             addProcess(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;

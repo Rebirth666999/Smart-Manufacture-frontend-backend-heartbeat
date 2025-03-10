@@ -41,6 +41,12 @@
             <artifactId>ruoyi-sms</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>2.0.3</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
 </project>

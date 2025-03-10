@@ -40,6 +40,13 @@ public class IcesProcessVo {
     private String procName;
 
     /**
+     * 工艺流程状态
+     */
+    @ExcelProperty(value = "工艺流程状态", converter = ExcelDictConvert.class)
+    @ExcelDictFormat(dictType = "ices_process_status")
+    private String procStat;
+
+    /**
      * 已删除
      */
     @ExcelProperty(value = "已删除")

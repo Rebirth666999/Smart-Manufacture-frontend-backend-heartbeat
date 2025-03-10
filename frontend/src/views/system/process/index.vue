@@ -17,6 +17,16 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="工艺流程状态" prop="procStat">
+        <el-select v-model="queryParams.procStat" placeholder="请选择工艺流程状态" clearable>
+          <el-option
+            v-for="dict in dict.type.ices_process_status"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item label="已删除" prop="procDelete">
         <el-input
           v-model="queryParams.procDelete"
@@ -82,6 +92,11 @@
       <el-table-column label="工艺流程ID" align="center" prop="procId" v-if="true"/>
       <el-table-column label="目标产品ID" align="center" prop="prId" />
       <el-table-column label="工艺流程名称" align="center" prop="procName" />
+      <el-table-column label="工艺流程状态" align="center" prop="procStat">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.ices_process_status" :value="scope.row.procStat"/>
+        </template>
+      </el-table-column>
       <el-table-column label="已删除" align="center" prop="procDelete" />
       <el-table-column label="描述" align="center" prop="procDesc" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -122,7 +137,7 @@
           <el-input v-model="form.procName" placeholder="请输入工艺流程名称" />
         </el-form-item>
         <el-form-item label="描述" prop="procDesc">
-          <el-input v-model="form.procDesc" type="textarea" placeholder="请输入描述" />
+          <el-input v-model="form.procDesc" type="textarea" placeholder="请输入内容" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -138,6 +153,7 @@ import { listProcess, getProcess, delProcess, addProcess, updateProcess } from "
 
 export default {
   name: "Process",
+  dicts: ['ices_process_status'],
   data() {
     return {
       // 按钮loading
@@ -166,6 +182,7 @@ export default {
         pageSize: 10,
         prId: undefined,
         procName: undefined,
+        procStat: undefined,
         procDelete: undefined,
       },
       // 表单参数
@@ -208,6 +225,7 @@ export default {
         procId: undefined,
         prId: undefined,
         procName: undefined,
+        procStat: undefined,
         procDelete: undefined,
         procDesc: undefined,
         createBy: undefined,

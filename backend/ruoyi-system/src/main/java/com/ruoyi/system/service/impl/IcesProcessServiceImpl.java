@@ -63,6 +63,7 @@ public class IcesProcessServiceImpl implements IIcesProcessService {
         LambdaQueryWrapper<IcesProcess> lqw = Wrappers.lambdaQuery();
         lqw.eq(bo.getPrId() != null, IcesProcess::getPrId, bo.getPrId());
         lqw.like(StringUtils.isNotBlank(bo.getProcName()), IcesProcess::getProcName, bo.getProcName());
+        lqw.eq(StringUtils.isNotBlank(bo.getProcStat()), IcesProcess::getProcStat, bo.getProcStat());
         lqw.eq(bo.getProcDelete() != null, IcesProcess::getProcDelete, bo.getProcDelete());
         return lqw;
     }

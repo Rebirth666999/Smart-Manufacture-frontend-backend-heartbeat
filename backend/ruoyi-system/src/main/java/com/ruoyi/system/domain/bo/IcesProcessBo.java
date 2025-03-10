@@ -40,6 +40,11 @@ public class IcesProcessBo extends BaseEntity {
     private String procName;
 
     /**
+     * 工艺流程状态
+     */
+    private String procStat;
+
+    /**
      * 已删除
      */
     private Long procDelete;

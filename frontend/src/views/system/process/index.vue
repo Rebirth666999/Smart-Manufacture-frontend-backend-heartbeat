@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="目标产品ID" prop="prId">
+      <el-form-item label="目标产品" prop="prId">
         <el-input
           v-model="queryParams.prId"
           placeholder="请输入目标产品ID"
@@ -9,7 +9,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="工艺流程名称" prop="procName">
+      <el-form-item label="名称" prop="procName">
         <el-input
           v-model="queryParams.procName"
           placeholder="请输入工艺流程名称"
@@ -17,7 +17,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="工艺流程状态" prop="procStat">
+      <el-form-item label="状态" prop="procStat">
         <el-select v-model="queryParams.procStat" placeholder="请选择工艺流程状态" clearable>
           <el-option
             v-for="dict in dict.type.ices_process_status"
@@ -130,10 +130,10 @@
     <!-- 添加或修改工艺流程对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="目标产品ID" prop="prId">
+        <el-form-item label="目标产品" prop="prId">
           <el-input v-model="form.prId" placeholder="请输入目标产品ID" />
         </el-form-item>
-        <el-form-item label="工艺流程名称" prop="procName">
+        <el-form-item label="名称" prop="procName">
           <el-input v-model="form.procName" placeholder="请输入工艺流程名称" />
         </el-form-item>
         <el-form-item label="描述" prop="procDesc">

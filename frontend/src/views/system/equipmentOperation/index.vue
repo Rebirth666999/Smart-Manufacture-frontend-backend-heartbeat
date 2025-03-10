@@ -136,6 +136,12 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-search"
+            @click="handleViewer(scope.row)"
+          >查看流程</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:equipmentOperation:remove']"
@@ -207,6 +213,16 @@
         :mode="1"
         :extraList="atomOperationList"
         @save="onSaveDesigner"
+      />
+    </el-dialog>
+
+    <!-- 查看流程对话框 -->
+    <el-dialog :title="viewerData.title" :visible.sync="viewerOpen" width="70%" append-to-body>
+      <process-viewer
+        v-loading="viewerData.loading"
+        :key="`designer-${viewerData.index}`"
+        :xml="viewerData.bpmnXml"
+        :style="{height: '60vh'}"
       />
     </el-dialog>
   </div>
@@ -294,6 +310,15 @@ export default {
           processName: null,
           processKey: null
         }
+      },
+      // 查看窗口是否打开
+      viewerOpen: false,
+      // 查看器相关数据
+      viewerData: {
+        title: '',
+        loading: false,
+        index: undefined,
+        bpmnXml: ''
       },
     };
   },
@@ -482,6 +507,17 @@ export default {
           this.$modal.msgSuccess("保存成功");
         })
       }).catch(action => {
+      })
+    },
+    /** 查看流程按钮操作 */
+    handleViewer(row) {
+      this.viewerData.loading = true
+      this.viewerData.title = row.eoName
+      this.viewerData.index = row.eoModel
+      this.viewerOpen = true
+      getBpmnXml(row.eoModel).then(response => {
+        this.viewerData.bpmnXml = response.data || ''
+        this.viewerData.loading = false
       })
     },
   }

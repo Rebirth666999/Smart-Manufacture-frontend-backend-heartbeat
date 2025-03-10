@@ -118,13 +118,51 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:process:edit']"
+            v-show="scope.row.procStat === '1'"
           >修改</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-brush"
+            v-show="scope.row.procStat === '1'"
+          >设计</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-finished"
+            v-show="scope.row.procStat === '1'"
+          >提交审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-refresh-left"
+            v-show="scope.row.procStat === '2' || scope.row.procStat === '7'"
+          >撤回审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-video-pause"
+            v-show="scope.row.procStat === '5'"
+          >停用</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-video-play"
+            v-show="scope.row.procStat === '4'"
+          >激活</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            v-show="scope.row.procStat === '4'"
+          >弃用</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:process:remove']"
+            v-show="scope.row.procStat === '1'"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -315,6 +353,8 @@ export default {
               this.buttonLoading = false;
             });
           } else {
+            // 新增状态自动转为未发布
+            this.form.procStat = '1'
             addProcess(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;

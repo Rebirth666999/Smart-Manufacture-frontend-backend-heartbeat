@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询关联-工艺步骤的跨轮次前序步骤列表
+// 查询工艺步骤的跨轮次前序步骤列表
 export function listProcessStepPrevRound(query) {
   return request({
     url: '/system/processStepPrevRound/list',
@@ -9,7 +9,7 @@ export function listProcessStepPrevRound(query) {
   })
 }
 
-// 查询关联-工艺步骤的跨轮次前序步骤详细
+// 查询工艺步骤的跨轮次前序步骤详细
 export function getProcessStepPrevRound(psprId) {
   return request({
     url: '/system/processStepPrevRound/' + psprId,
@@ -17,7 +17,7 @@ export function getProcessStepPrevRound(psprId) {
   })
 }
 
-// 新增关联-工艺步骤的跨轮次前序步骤
+// 新增工艺步骤的跨轮次前序步骤
 export function addProcessStepPrevRound(data) {
   return request({
     url: '/system/processStepPrevRound',
@@ -26,7 +26,7 @@ export function addProcessStepPrevRound(data) {
   })
 }
 
-// 修改关联-工艺步骤的跨轮次前序步骤
+// 修改工艺步骤的跨轮次前序步骤
 export function updateProcessStepPrevRound(data) {
   return request({
     url: '/system/processStepPrevRound',
@@ -35,7 +35,7 @@ export function updateProcessStepPrevRound(data) {
   })
 }
 
-// 删除关联-工艺步骤的跨轮次前序步骤
+// 删除工艺步骤的跨轮次前序步骤
 export function delProcessStepPrevRound(psprId) {
   return request({
     url: '/system/processStepPrevRound/' + psprId,

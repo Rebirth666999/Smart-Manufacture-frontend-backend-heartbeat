@@ -105,7 +105,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改关联-工艺步骤的跨轮次前序步骤对话框 -->
+    <!-- 添加或修改工艺步骤的跨轮次前序步骤对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="当前工艺步骤ID" prop="psIdCur">
@@ -144,7 +144,7 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 关联-工艺步骤的跨轮次前序步骤表格数据
+      // 工艺步骤的跨轮次前序步骤表格数据
       processStepPrevRoundList: [],
       // 弹出层标题
       title: "",
@@ -179,7 +179,7 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询关联-工艺步骤的跨轮次前序步骤列表 */
+    /** 查询工艺步骤的跨轮次前序步骤列表 */
     getList() {
       this.loading = true;
       listProcessStepPrevRound(this.queryParams).then(response => {
@@ -227,7 +227,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加关联-工艺步骤的跨轮次前序步骤";
+      this.title = "添加工艺步骤的跨轮次前序步骤";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -238,7 +238,7 @@ export default {
         this.loading = false;
         this.form = response.data;
         this.open = true;
-        this.title = "修改关联-工艺步骤的跨轮次前序步骤";
+        this.title = "修改工艺步骤的跨轮次前序步骤";
       });
     },
     /** 提交按钮 */
@@ -269,7 +269,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const psprIds = row.psprId || this.ids;
-      this.$modal.confirm('是否确认删除关联-工艺步骤的跨轮次前序步骤编号为"' + psprIds + '"的数据项？').then(() => {
+      this.$modal.confirm('是否确认删除工艺步骤的跨轮次前序步骤编号为"' + psprIds + '"的数据项？').then(() => {
         this.loading = true;
         return delProcessStepPrevRound(psprIds);
       }).then(() => {

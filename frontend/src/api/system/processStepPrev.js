@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询关联-工艺步骤的前序步骤列表
+// 查询工艺步骤的前序步骤列表
 export function listProcessStepPrev(query) {
   return request({
     url: '/system/processStepPrev/list',
@@ -9,7 +9,7 @@ export function listProcessStepPrev(query) {
   })
 }
 
-// 查询关联-工艺步骤的前序步骤详细
+// 查询工艺步骤的前序步骤详细
 export function getProcessStepPrev(pspId) {
   return request({
     url: '/system/processStepPrev/' + pspId,
@@ -17,7 +17,7 @@ export function getProcessStepPrev(pspId) {
   })
 }
 
-// 新增关联-工艺步骤的前序步骤
+// 新增工艺步骤的前序步骤
 export function addProcessStepPrev(data) {
   return request({
     url: '/system/processStepPrev',
@@ -26,7 +26,7 @@ export function addProcessStepPrev(data) {
   })
 }
 
-// 修改关联-工艺步骤的前序步骤
+// 修改工艺步骤的前序步骤
 export function updateProcessStepPrev(data) {
   return request({
     url: '/system/processStepPrev',
@@ -35,7 +35,7 @@ export function updateProcessStepPrev(data) {
   })
 }
 
-// 删除关联-工艺步骤的前序步骤
+// 删除工艺步骤的前序步骤
 export function delProcessStepPrev(pspId) {
   return request({
     url: '/system/processStepPrev/' + pspId,

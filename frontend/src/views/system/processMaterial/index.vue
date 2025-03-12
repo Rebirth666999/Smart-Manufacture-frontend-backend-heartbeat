@@ -2,20 +2,34 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="工艺流程" prop="procId">
-        <el-input
+        <el-select
           v-model="queryParams.procId"
-          placeholder="请输入工艺流程"
+          placeholder="请选择工艺流程"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="item in processList"
+            :key="item.procId"
+            :label="item.procName"
+            :value="item.procId"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="原料" prop="maId">
-        <el-input
+        <el-select
           v-model="queryParams.maId"
-          placeholder="请输入原料"
+          placeholder="请选择原料"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="item in materialList"
+            :key="item.maId"
+            :label="item.maName"
+            :value="item.maId"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <!-- <el-form-item label="已删除" prop="pmDelete">
         <el-input
@@ -80,8 +94,16 @@
     <el-table v-loading="loading" :data="processMaterialList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="原料需求ID" align="center" prop="pmId" v-if="true"/>
-      <el-table-column label="所属工艺流程" align="center" prop="procId" />
-      <el-table-column label="所用原料" align="center" prop="maId" />
+      <el-table-column label="所属工艺流程" align="center" prop="procId">
+        <template slot-scope="scope">
+          {{ processList.find(ele => ele.procId === scope.row.procId).procName || '' }}
+        </template>
+      </el-table-column>
+      <el-table-column label="所用原料" align="center" prop="maId">
+        <template slot-scope="scope">
+          {{ materialList.find(ele => ele.maId === scope.row.maId).maName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="所需原料数量" align="center" prop="pmDemand" />
       <!-- <el-table-column label="已删除" align="center" prop="pmDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -116,10 +138,34 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="所属工艺流程" prop="procId">
-          <el-input v-model="form.procId" placeholder="请输入所属工艺流程" />
+          <el-select
+            v-model="form.procId"
+            placeholder="请选择工艺流程"
+            clearable
+          >
+            <el-option
+              v-for="item in processList"
+              :key="item.procId"
+              :label="item.procName"
+              :value="item.procId"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="所用原料" prop="maId">
-          <el-input v-model="form.maId" placeholder="请输入所用原料" />
+          <el-select
+            v-model="form.maId"
+            placeholder="请选择原料"
+            clearable
+          >
+            <el-option
+              v-for="item in materialList"
+              :key="item.maId"
+              :label="item.maName"
+              :value="item.maId"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="所需原料数量" prop="pmDemand">
           <el-input v-model="form.pmDemand" placeholder="请输入所需原料数量" />
@@ -135,6 +181,8 @@
 
 <script>
 import { listProcessMaterial, getProcessMaterial, delProcessMaterial, addProcessMaterial, updateProcessMaterial } from "@/api/system/processMaterial";
+import { listProcess } from "@/api/system/process";
+import { listMaterial } from "@/api/system/material";
 
 export default {
   name: "ProcessMaterial",
@@ -184,13 +232,31 @@ export default {
         pmDemand: [
           { required: true, message: "所需原料数量不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 工艺流程列表
+      processList: [],
+      // 原料列表
+      materialList: []
     };
   },
-  created() {
+  async created() {
+    await this.getProcessList();
+    await this.getMaterialList();
     this.getList();
   },
   methods: {
+    // 查询工艺流程列表
+    getProcessList() {
+      listProcess().then(response => {
+        this.processList = response.rows
+      })
+    },
+    // 查询原料列表
+    getMaterialList() {
+      listMaterial().then(response => {
+        this.materialList = response.rows
+      })
+    },
     /** 查询关联-工艺流程原料需求列表 */
     getList() {
       this.loading = true;

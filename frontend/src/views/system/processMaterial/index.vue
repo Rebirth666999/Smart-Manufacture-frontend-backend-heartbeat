@@ -1,18 +1,18 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="所属工艺流程ID" prop="procId">
+      <el-form-item label="工艺流程" prop="procId">
         <el-input
           v-model="queryParams.procId"
-          placeholder="请输入所属工艺流程ID"
+          placeholder="请输入工艺流程"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="所用原料ID" prop="maId">
+      <el-form-item label="原料" prop="maId">
         <el-input
           v-model="queryParams.maId"
-          placeholder="请输入所用原料ID"
+          placeholder="请输入原料"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -80,8 +80,8 @@
     <el-table v-loading="loading" :data="processMaterialList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="原料需求ID" align="center" prop="pmId" v-if="true"/>
-      <el-table-column label="所属工艺流程ID" align="center" prop="procId" />
-      <el-table-column label="所用原料ID" align="center" prop="maId" />
+      <el-table-column label="所属工艺流程" align="center" prop="procId" />
+      <el-table-column label="所用原料" align="center" prop="maId" />
       <el-table-column label="所需原料数量" align="center" prop="pmDemand" />
       <!-- <el-table-column label="已删除" align="center" prop="pmDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -114,12 +114,12 @@
 
     <!-- 添加或修改关联-工艺流程原料需求对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="所属工艺流程ID" prop="procId">
-          <el-input v-model="form.procId" placeholder="请输入所属工艺流程ID" />
+      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
+        <el-form-item label="所属工艺流程" prop="procId">
+          <el-input v-model="form.procId" placeholder="请输入所属工艺流程" />
         </el-form-item>
-        <el-form-item label="所用原料ID" prop="maId">
-          <el-input v-model="form.maId" placeholder="请输入所用原料ID" />
+        <el-form-item label="所用原料" prop="maId">
+          <el-input v-model="form.maId" placeholder="请输入所用原料" />
         </el-form-item>
         <el-form-item label="所需原料数量" prop="pmDemand">
           <el-input v-model="form.pmDemand" placeholder="请输入所需原料数量" />
@@ -176,10 +176,10 @@ export default {
           { required: true, message: "原料需求ID不能为空", trigger: "blur" }
         ],
         procId: [
-          { required: true, message: "所属工艺流程ID不能为空", trigger: "blur" }
+          { required: true, message: "所属工艺流程不能为空", trigger: "blur" }
         ],
         maId: [
-          { required: true, message: "所用原料ID不能为空", trigger: "blur" }
+          { required: true, message: "所用原料不能为空", trigger: "blur" }
         ],
         pmDemand: [
           { required: true, message: "所需原料数量不能为空", trigger: "blur" }

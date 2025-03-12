@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询关联-工艺流程原料需求列表
+// 查询工艺流程原料需求列表
 export function listProcessMaterial(query) {
   return request({
     url: '/system/processMaterial/list',
@@ -9,7 +9,7 @@ export function listProcessMaterial(query) {
   })
 }
 
-// 查询关联-工艺流程原料需求详细
+// 查询工艺流程原料需求详细
 export function getProcessMaterial(pmId) {
   return request({
     url: '/system/processMaterial/' + pmId,
@@ -17,7 +17,7 @@ export function getProcessMaterial(pmId) {
   })
 }
 
-// 新增关联-工艺流程原料需求
+// 新增工艺流程原料需求
 export function addProcessMaterial(data) {
   return request({
     url: '/system/processMaterial',
@@ -26,7 +26,7 @@ export function addProcessMaterial(data) {
   })
 }
 
-// 修改关联-工艺流程原料需求
+// 修改工艺流程原料需求
 export function updateProcessMaterial(data) {
   return request({
     url: '/system/processMaterial',
@@ -35,7 +35,7 @@ export function updateProcessMaterial(data) {
   })
 }
 
-// 删除关联-工艺流程原料需求
+// 删除工艺流程原料需求
 export function delProcessMaterial(pmId) {
   return request({
     url: '/system/processMaterial/' + pmId,

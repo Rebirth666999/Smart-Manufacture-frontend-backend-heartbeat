@@ -17,14 +17,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="已删除" prop="pmDelete">
+      <!-- <el-form-item label="已删除" prop="pmDelete">
         <el-input
           v-model="queryParams.pmDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -83,7 +83,7 @@
       <el-table-column label="所属工艺流程ID" align="center" prop="procId" />
       <el-table-column label="所用原料ID" align="center" prop="maId" />
       <el-table-column label="所需原料数量" align="center" prop="pmDemand" />
-      <el-table-column label="已删除" align="center" prop="pmDelete" />
+      <!-- <el-table-column label="已删除" align="center" prop="pmDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -166,7 +166,7 @@ export default {
         pageSize: 10,
         procId: undefined,
         maId: undefined,
-        pmDelete: undefined,
+        pmDelete: 0,
       },
       // 表单参数
       form: {},

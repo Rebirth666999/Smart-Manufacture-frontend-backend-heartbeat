@@ -140,7 +140,7 @@ export default {
     updateDesc() {
       window.bpmnInstances.modeling.updateProperties(
         window.bpmnInstances.bpmnElement,
-        { eosDesc: this.eosDesc }
+        { psDesc: this.psDesc }
       );
     }
   },

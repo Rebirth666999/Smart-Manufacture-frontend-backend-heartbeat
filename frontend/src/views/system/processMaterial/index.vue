@@ -1,11 +1,23 @@
 <template>
   <div class="app-container">
+    <!-- 顶部提示 -->
+    <el-alert
+      v-show="hint.length > 0"
+      :title="`正在根据${hint}筛选工艺流程原料需求`"
+      type="info"
+      show-icon
+      :closable="false"
+      class="mb8"
+    >
+    </el-alert>
+
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="工艺流程" prop="procId">
         <el-select
           v-model="queryParams.procId"
           placeholder="请选择工艺流程"
           clearable
+          :disabled="mode === 1"
         >
           <el-option
             v-for="item in processList"
@@ -142,6 +154,7 @@
             v-model="form.procId"
             placeholder="请选择工艺流程"
             clearable
+            :disabled="mode === 1"
           >
             <el-option
               v-for="item in processList"
@@ -212,7 +225,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        procId: undefined,
+        procId: this.$route.query.procId,
         maId: undefined,
         pmDelete: 0,
       },
@@ -236,10 +249,18 @@ export default {
       // 工艺流程列表
       processList: [],
       // 原料列表
-      materialList: []
+      materialList: [],
+      // 1-按工艺流程查看原料需求
+      mode: 0,
+      // 筛选提示文本
+      hint: ''
     };
   },
   async created() {
+    // 检查来源
+    if (this.$route.query.procId) {
+      this.mode = 1
+    }
     await this.getProcessList();
     await this.getMaterialList();
     this.getList();
@@ -249,6 +270,11 @@ export default {
     getProcessList() {
       listProcess().then(response => {
         this.processList = response.rows
+        if (this.mode === 1) {
+          this.hint = "工艺流程 "
+          this.hint += response.rows.find(ele => ele.procId === this.$route.query.procId).procName
+          this.hint += " "
+        }
       })
     },
     // 查询原料列表
@@ -305,6 +331,9 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      if (this.mode === 1) {
+        this.form.procId = this.$route.query.procId
+      }
       this.open = true;
       this.title = "添加工艺流程原料需求";
     },

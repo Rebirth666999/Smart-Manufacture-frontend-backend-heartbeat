@@ -123,6 +123,12 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-box"
+            @click="handleProcessMaterialView(scope.row)"
+          >原料需求</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-brush"
             v-show="scope.row.procStat === '1'"
           >设计</el-button>
@@ -386,6 +392,10 @@ export default {
       this.download('system/process/export', {
         ...this.queryParams
       }, `process_${new Date().getTime()}.xlsx`)
+    },
+    // 查看工艺流程的原料需求
+    handleProcessMaterialView(row) {
+      this.$router.push(`/processFlow/processMaterial?procId=${row.procId}`)
     }
   }
 };

@@ -223,7 +223,7 @@
         :bpmnXml="designerData.bpmnXml"
         :designerForm="designerData.form"
         :mode="2"
-        :extraList="[]"
+        :extraList="{emList: equipmentModelList, moList: modelOperationList}"
         @save="onSaveDesigner"
       />
     </el-dialog>
@@ -233,6 +233,8 @@
 <script>
 import { listProcess, getProcess, delProcess, addProcess, updateProcess } from "@/api/system/process";
 import { listProduct } from "@/api/system/product";
+import { listEquipmentModel } from "@/api/system/equipmentModel";
+import { listModelOperation } from "@/api/system/modelOperation";
 import ProcessDesigner from '@/components/ProcessDesigner';
 import ProcessViewer from '@/components/ProcessViewer';
 
@@ -303,10 +305,16 @@ export default {
           processKey: null
         }
       },
+      // 设备模型列表
+      equipmentModelList: [],
+      // 模型操作列表
+      modelOperationList: [],
     };
   },
   async created() {
     await this.getProductList();
+    await this.getEquipmentModelList();
+    await this.getModelOperationList();
     this.getList();
   },
   methods: {
@@ -315,6 +323,18 @@ export default {
       listProduct().then(response => {
         this.productList = response.rows
       })
+    },
+    // 查询设备模型列表
+    getEquipmentModelList() {
+      listEquipmentModel().then(response => {
+        this.equipmentModelList = response.rows;
+      });
+    },
+    // 查询模型操作列表
+    getModelOperationList() {
+      listModelOperation().then(response => {
+        this.modelOperationList = response.rows;
+      });
     },
     /** 查询工艺流程列表 */
     getList() {

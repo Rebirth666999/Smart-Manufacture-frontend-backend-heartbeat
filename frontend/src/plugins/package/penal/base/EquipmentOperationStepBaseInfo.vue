@@ -4,7 +4,7 @@
       <el-form-item label="ID">
         <el-input
           v-model="elementBaseInfo.id"
-          :disabled="idEditDisabled || elementBaseInfo.$type === 'bpmn:Process'"
+          disabled
           clearable
           @change="updateBaseInfo('id')"
         />

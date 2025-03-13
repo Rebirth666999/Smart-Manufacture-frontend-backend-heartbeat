@@ -123,8 +123,15 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-box"
+            @click="handleProcessMaterialView(scope.row)"
+          >原料需求</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-brush"
             v-show="scope.row.procStat === '1'"
+            @click="handleDesigner(scope.row)"
           >设计</el-button>
           <el-button
             size="mini"
@@ -205,15 +212,39 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 流程设计对话框 -->
+    <el-dialog :title="designerData.title" :visible.sync="designerOpen" append-to-body fullscreen>
+      <process-designer
+        :key="designerOpen"
+        style="border:1px solid rgba(0, 0, 0, 0.1);"
+        ref="modelDesigner"
+        v-loading="designerData.loading"
+        :bpmnXml="designerData.bpmnXml"
+        :designerForm="designerData.form"
+        :mode="2"
+        :extraList="{emList: equipmentModelList, moList: modelOperationList}"
+        @save="onSaveDesigner"
+      />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { listProcess, getProcess, delProcess, addProcess, updateProcess } from "@/api/system/process";
 import { listProduct } from "@/api/system/product";
+import { listEquipmentModel } from "@/api/system/equipmentModel";
+import { listModelOperation } from "@/api/system/modelOperation";
+import ProcessDesigner from '@/components/ProcessDesigner';
+import ProcessViewer from '@/components/ProcessViewer';
+
 
 export default {
   name: "Process",
+  components: {
+    ProcessDesigner,
+    ProcessViewer,
+  },
   dicts: ['ices_process_status'],
   data() {
     return {
@@ -261,11 +292,29 @@ export default {
         ],
       },
       // 产品列表
-      productList: []
+      productList: [],
+      // 设计窗口是否打开
+      designerOpen: false,
+      // 设计器相关数据
+      designerData: {
+        loading: false,
+        bpmnXml: '',
+        modelId: null,
+        form: {
+          processName: null,
+          processKey: null
+        }
+      },
+      // 设备模型列表
+      equipmentModelList: [],
+      // 模型操作列表
+      modelOperationList: [],
     };
   },
   async created() {
     await this.getProductList();
+    await this.getEquipmentModelList();
+    await this.getModelOperationList();
     this.getList();
   },
   methods: {
@@ -274,6 +323,18 @@ export default {
       listProduct().then(response => {
         this.productList = response.rows
       })
+    },
+    // 查询设备模型列表
+    getEquipmentModelList() {
+      listEquipmentModel().then(response => {
+        this.equipmentModelList = response.rows;
+      });
+    },
+    // 查询模型操作列表
+    getModelOperationList() {
+      listModelOperation().then(response => {
+        this.modelOperationList = response.rows;
+      });
     },
     /** 查询工艺流程列表 */
     getList() {
@@ -386,7 +447,51 @@ export default {
       this.download('system/process/export', {
         ...this.queryParams
       }, `process_${new Date().getTime()}.xlsx`)
-    }
+    },
+    // 查看工艺流程的原料需求
+    handleProcessMaterialView(row) {
+      this.$router.push(`/processFlow/processMaterial?procId=${row.procId}`)
+    },
+    /** 设计按钮操作 */
+    handleDesigner(row) {
+      this.designerData.title = "工艺流程设计 - " + row.procName;
+      this.designerData.modelId = "model_" + row.procId;
+      this.designerData.form = {
+        processName: row.procName,
+        processKey: "process_" + row.procId
+      }
+
+      this.designerData.bpmnXml = '';
+      this.designerOpen = true;
+
+      // if (row.eoModel) {
+      //   this.designerData.loading = true;
+      //   getBpmnXml(row.eoModel).then(response => {
+      //     this.designerData.bpmnXml = response.data || '';
+      //     this.designerData.loading = false;
+      //     this.designerOpen = true;
+      //   })
+      // } else {
+      //   this.designerData.bpmnXml = '';
+      //   this.designerOpen = true;
+      // }
+    },
+    // 保存流程按钮操作
+    onSaveDesigner(bpmnXml) {
+      // this.bpmnXml = bpmnXml;
+      // this.$confirm("是否保存工艺流程？", "提示", {
+      //   distinguishCancelAndClose: true,
+      //   confirmButtonText: '是',
+      //   cancelButtonText: '否'
+      // }).then(() => {
+      //   saveModel(bpmnXml).then(response => {
+      //     this.designerOpen = false
+      //     this.getList();
+      //     this.$modal.msgSuccess("保存成功");
+      //   })
+      // }).catch(action => {
+      // })
+    },
   }
 };
 </script>

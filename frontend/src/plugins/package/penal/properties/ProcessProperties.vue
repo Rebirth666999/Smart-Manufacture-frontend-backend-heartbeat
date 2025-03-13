@@ -10,7 +10,7 @@
           @blur="updateEquipmentModel"
         >
           <el-option
-            v-for="item in emList"
+            v-for="item in emList.filter((ele) => ele.emStat === '4')"
             :key="item.emId"
             :label="item.emName"
             :value="item.emId"

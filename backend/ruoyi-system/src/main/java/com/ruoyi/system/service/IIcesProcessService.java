@@ -1,10 +1,12 @@
 package com.ruoyi.system.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ruoyi.system.domain.IcesProcess;
 import com.ruoyi.system.domain.vo.IcesProcessVo;
 import com.ruoyi.system.domain.bo.IcesProcessBo;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
+import org.dom4j.DocumentException;
 
 import java.util.Collection;
 import java.util.List;
@@ -46,4 +48,10 @@ public interface IIcesProcessService {
      * 校验并批量删除工艺流程信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+    String queryBpmnXmlById(String modelId);
+    /**
+     * 保存工艺流程
+     */
+    void saveProcess(String modelXML)throws DocumentException, JsonProcessingException;
+
 }

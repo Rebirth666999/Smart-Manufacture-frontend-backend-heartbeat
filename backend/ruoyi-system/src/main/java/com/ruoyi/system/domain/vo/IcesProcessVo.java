@@ -40,6 +40,12 @@ public class IcesProcessVo {
     private String procName;
 
     /**
+     * 自动生成模型ID
+     */
+    @ExcelProperty(value = "flowable模型ID")
+    private String procModel;
+
+    /**
      * 工艺流程状态
      */
     @ExcelProperty(value = "工艺流程状态", converter = ExcelDictConvert.class)

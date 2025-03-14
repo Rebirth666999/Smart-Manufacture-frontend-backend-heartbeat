@@ -231,7 +231,7 @@
 </template>
 
 <script>
-import { listProcess, getProcess, delProcess, addProcess, updateProcess } from "@/api/system/process";
+import { listProcess, getProcess, delProcess, addProcess, updateProcess, saveModel, getBpmnXml } from "@/api/system/process";
 import { listProduct } from "@/api/system/product";
 import { listEquipmentModel } from "@/api/system/equipmentModel";
 import { listModelOperation } from "@/api/system/modelOperation";
@@ -460,37 +460,33 @@ export default {
         processName: row.procName,
         processKey: "process_" + row.procId
       }
-
-      this.designerData.bpmnXml = '';
-      this.designerOpen = true;
-
-      // if (row.eoModel) {
-      //   this.designerData.loading = true;
-      //   getBpmnXml(row.eoModel).then(response => {
-      //     this.designerData.bpmnXml = response.data || '';
-      //     this.designerData.loading = false;
-      //     this.designerOpen = true;
-      //   })
-      // } else {
-      //   this.designerData.bpmnXml = '';
-      //   this.designerOpen = true;
-      // }
+      // 读取已设计的流程
+      if (row.procModel) {
+        this.designerData.loading = true;
+        getBpmnXml(row.procModel).then(response => {
+          this.designerData.bpmnXml = response.data || '';
+          this.designerData.loading = false;
+          this.designerOpen = true;
+        })
+      } else {
+        this.designerData.bpmnXml = '';
+        this.designerOpen = true;
+      }
     },
     // 保存流程按钮操作
     onSaveDesigner(bpmnXml) {
-      // this.bpmnXml = bpmnXml;
-      // this.$confirm("是否保存工艺流程？", "提示", {
-      //   distinguishCancelAndClose: true,
-      //   confirmButtonText: '是',
-      //   cancelButtonText: '否'
-      // }).then(() => {
-      //   saveModel(bpmnXml).then(response => {
-      //     this.designerOpen = false
-      //     this.getList();
-      //     this.$modal.msgSuccess("保存成功");
-      //   })
-      // }).catch(action => {
-      // })
+      this.$confirm("是否保存工艺流程？", "提示", {
+        distinguishCancelAndClose: true,
+        confirmButtonText: '是',
+        cancelButtonText: '否'
+      }).then(() => {
+        saveModel(bpmnXml).then(response => {
+          this.designerOpen = false
+          this.getList();
+          this.$modal.msgSuccess("保存成功");
+        })
+      }).catch(action => {
+      })
     },
   }
 };

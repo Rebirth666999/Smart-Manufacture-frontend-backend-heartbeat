@@ -11,9 +11,10 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.ruoyi.system.domain.IcesProcessStepPrev;
-import com.ruoyi.system.domain.IcesProcessStepPrevRound;
 import com.ruoyi.system.domain.bo.*;
+import com.ruoyi.system.domain.vo.IcesProcessStepPrevRoundVo;
+import com.ruoyi.system.domain.vo.IcesProcessStepPrevVo;
+import com.ruoyi.system.domain.vo.IcesProcessStepVo;
 import com.ruoyi.system.service.*;
 import lombok.RequiredArgsConstructor;
 import org.dom4j.Document;
@@ -148,6 +149,7 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
         // 检查模型是否存在
         Model model = repositoryService.getModel(modelId);
         if (ObjectUtil.isNull(model)) {
+            newModelFlag = 1;
             // 新建模型
             Model newModel = repositoryService.newModel();
             newModel.setName(processName);
@@ -163,6 +165,56 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
 
         // 保存XML
         repositoryService.addModelEditorSource(modelId, StringUtils.getBytes(modelXML, StandardCharsets.UTF_8));
+
+        // 不是新模型，先删除原先数据库的所有数据
+        if (newModelFlag == 0) {
+            // 构造搜索条件
+            IcesProcessStepBo bo = new IcesProcessStepBo();
+            bo.setProcId(procId);
+            // 查找所有符合条件的步骤
+            List<IcesProcessStepVo> processStepVos = processStepService.queryList(bo);
+            // 取出步骤的ID
+            List<Long> processStepIds = new ArrayList<>();
+            for (IcesProcessStepVo processStepVo : processStepVos) {
+                processStepIds.add(processStepVo.getPsId());
+            }
+            // 数据库存在步骤需要删除
+            if (!processStepIds.isEmpty()) {
+                // 用于删除的集合
+                List<Long> deleteIds = new ArrayList<>();
+
+                // 找到所有前序步骤关系
+                List<IcesProcessStepPrevVo> processStepPrevVos = stepPrevService.queryList(new IcesProcessStepPrevBo());
+                // 找到所有与步骤有关的前序关系
+                for (IcesProcessStepPrevVo processStepPrevVo : processStepPrevVos) {
+                    if (processStepIds.contains(processStepPrevVo.getPsIdCur()) || processStepIds.contains(processStepPrevVo.getPsIdPrev())) {
+                        deleteIds.add(processStepPrevVo.getPspId());
+                    }
+                }
+                // 删除前序关系
+                if (!deleteIds.isEmpty()) {
+                    stepPrevService.deleteWithValidByIds(deleteIds, false);
+                    deleteIds.clear();
+                }
+
+                // 找到所有跨轮前序步骤关系
+                List<IcesProcessStepPrevRoundVo> processStepPrevRoundVos = prevRoundService.queryList(new IcesProcessStepPrevRoundBo());
+                // 找到所有与步骤有关的前序关系
+                for (IcesProcessStepPrevRoundVo processStepPrevRoundVo : processStepPrevRoundVos) {
+                    if (processStepIds.contains(processStepPrevRoundVo.getPsIdCur()) || processStepIds.contains(processStepPrevRoundVo.getPsIdPrev())) {
+                        deleteIds.add(processStepPrevRoundVo.getPsprId());
+                    }
+                }
+                // 删除前序关系
+                if (!deleteIds.isEmpty()) {
+                    prevRoundService.deleteWithValidByIds(deleteIds, false);
+                    deleteIds.clear();
+                }
+
+                // 最后删除步骤
+                processStepService.deleteWithValidByIds(processStepIds, false);
+            }
+        }
 
         // 读取XML中的模型
         Iterator<Element> iterator = process.elementIterator();

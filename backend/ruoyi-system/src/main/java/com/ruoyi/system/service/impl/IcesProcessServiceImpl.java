@@ -170,7 +170,6 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
         List<Element> flows = new ArrayList<>();  // 所有连接线
         List<IcesProcessStepBo> steps = new ArrayList<>();  // 步骤实体数组
         Map<String, IcesProcessStepBo> stepMap = new HashMap<>();  // XML中对象id和步骤实体的映射
-        Map<Element, IcesProcessStepBo> servicetaskMap = new HashMap<>();  // XML对象和步骤实体的映射
 
         while (iterator.hasNext()) {
             Element next = iterator.next();
@@ -194,9 +193,8 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
                 step.setProcId(procId);
                 step.setMoId(Long.parseLong(next.attributeValue("moId")));
                 step.setPsDesc(next.attributeValue("psDesc"));
-
+                steps.add(step);
                 stepMap.put(next.attributeValue("id"), step);
-                servicetaskMap.put(next, step);
             } else if (Objects.equals(next.getName(), "sequenceFlow")) {
                 flows.add(next);
             }
@@ -208,17 +206,16 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
         }
 
 
-//        先读出prev属性，有的话解析json成字符串数组，for 遍历把数组id用map 映射process实体。取出实体中的psID,new一个跨轮前序关联实体bo，把对应的两个id放进去，用service的方法插入
+        // 先读出prev属性，有的话解析json成字符串数组，for 遍历把数组id用map 映射process实体。
+        // 取出实体中的psID,new一个跨轮前序关联实体bo，把对应的两个id放进去，用service的方法插入
 
         // 解析flows，保存前序任务关系
         for (Element flow : flows) {
             IcesProcessStepPrevBo stepPrevBo = new IcesProcessStepPrevBo();
-            stepPrevBo.setPsIdCur(stepMap.get(flow.attributeValue("targetRef")) != null
-                ? stepMap.get(flow.attributeValue("targetRef")).getPsId()
-                : null);
-            stepPrevBo.setPsIdPrev(stepMap.get(flow.attributeValue("sourceRef")) != null
-                ? stepMap.get(flow.attributeValue("sourceRef")).getPsId()
-                : null);
+            if (stepMap.get(flow.attributeValue("targetRef")) != null)
+                stepPrevBo.setPsIdCur(stepMap.get(flow.attributeValue("targetRef")).getPsId());
+            if (stepMap.get(flow.attributeValue("sourceRef")) != null)
+                stepPrevBo.setPsIdPrev(stepMap.get(flow.attributeValue("sourceRef")).getPsId());
             // 仅在两个ID都存在时插入
             if (stepPrevBo.getPsIdCur() != null && stepPrevBo.getPsIdPrev() != null) {
                 stepPrevService.insertByBo(stepPrevBo);

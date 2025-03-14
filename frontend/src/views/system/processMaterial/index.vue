@@ -17,7 +17,7 @@
           v-model="queryParams.procId"
           placeholder="请选择工艺流程"
           clearable
-          :disabled="mode === 1"
+          :disabled="mode !== 0"
         >
           <el-option
             v-for="item in processList"
@@ -66,6 +66,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['system:processMaterial:add']"
+          v-if="mode !== 2"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -77,6 +78,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['system:processMaterial:edit']"
+          v-if="mode !== 2"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -88,6 +90,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['system:processMaterial:remove']"
+          v-if="mode !== 2"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -118,7 +121,7 @@
       </el-table-column>
       <el-table-column label="所需原料数量" align="center" prop="pmDemand" />
       <!-- <el-table-column label="已删除" align="center" prop="pmDelete" /> -->
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="mode !== 2">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -251,6 +254,7 @@ export default {
       // 原料列表
       materialList: [],
       // 1-按工艺流程查看原料需求
+      // 2-按工艺流程查看原料需求（不可修改）
       mode: 0,
       // 筛选提示文本
       hint: ''
@@ -271,9 +275,14 @@ export default {
       listProcess().then(response => {
         this.processList = response.rows
         if (this.mode === 1) {
+          let process = response.rows.find(ele => ele.procId === this.$route.query.procId)
           this.hint = "工艺流程 "
-          this.hint += response.rows.find(ele => ele.procId === this.$route.query.procId).procName
+          this.hint += process.procName
           this.hint += " "
+          // 检查状态
+          if (process.procStat !== '1') {
+            this.mode = 2
+          }
         }
       })
     },

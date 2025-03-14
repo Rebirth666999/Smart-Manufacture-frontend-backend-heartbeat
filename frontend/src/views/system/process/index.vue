@@ -136,32 +136,43 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-search"
+            @click="handleViewer(scope.row)"
+          >查看流程</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-finished"
             v-show="scope.row.procStat === '1'"
+            @click="handleSubmitReview(scope.row)"
           >提交审核</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-refresh-left"
             v-show="scope.row.procStat === '2' || scope.row.procStat === '7'"
+            @click="handleWithdrawReview(scope.row)"
           >撤回审核</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-video-pause"
             v-show="scope.row.procStat === '5'"
+            @click="handleDeactivate(scope.row)"
           >停用</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-video-play"
             v-show="scope.row.procStat === '4'"
+            @click="handleActivate(scope.row)"
           >激活</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             v-show="scope.row.procStat === '4'"
+            @click="handleDepreciateReview(scope.row)"
           >弃用</el-button>
           <el-button
             size="mini"
@@ -225,6 +236,16 @@
         :mode="2"
         :extraList="{emList: equipmentModelList, moList: modelOperationList}"
         @save="onSaveDesigner"
+      />
+    </el-dialog>
+
+    <!-- 查看流程对话框 -->
+    <el-dialog :title="viewerData.title" :visible.sync="viewerOpen" width="70%" append-to-body>
+      <process-viewer
+        v-loading="viewerData.loading"
+        :key="`designer-${viewerData.index}`"
+        :xml="viewerData.bpmnXml"
+        :style="{height: '60vh'}"
       />
     </el-dialog>
   </div>
@@ -304,6 +325,15 @@ export default {
           processName: null,
           processKey: null
         }
+      },
+      // 查看窗口是否打开
+      viewerOpen: false,
+      // 查看器相关数据
+      viewerData: {
+        title: '',
+        loading: false,
+        index: undefined,
+        bpmnXml: ''
       },
       // 设备模型列表
       equipmentModelList: [],
@@ -488,6 +518,108 @@ export default {
       }).catch(action => {
       })
     },
+    /** 查看流程按钮操作 */
+    handleViewer(row) {
+      this.viewerData.loading = true
+      this.viewerData.title = row.procName
+      this.viewerData.index = row.procModel
+      this.viewerOpen = true
+      getBpmnXml(row.procModel).then(response => {
+        this.viewerData.bpmnXml = response.data || ''
+        this.viewerData.loading = false
+      })
+    },
+    // 提交审核
+    handleSubmitReview(row) {
+      const procId = row.procId;
+      this.$modal.confirm('是否要提交审核？审核在开始之前可以撤回。').then(() => {
+        this.loading = true;
+        getProcess(procId).then(response => {
+          this.form = response.data;
+          this.form.procStat = "2";
+          updateProcess(this.form).then(response => {
+            this.$modal.msgSuccess("已提交审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 撤回审核
+    handleWithdrawReview(row) {
+      const procId = row.procId;
+      this.$modal.confirm('是否要撤回审核？若审核已开始即无法撤回。').then(() => {
+        this.loading = true;
+        getProcess(procId).then(response => {
+          this.form = response.data;
+          if (this.form.procStat === '2') this.form.procStat = '1'
+          else this.form.procStat = '4';
+          updateProcess(this.form).then(response => {
+            this.$modal.msgSuccess("已撤回审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 弃用工艺流程
+    handleDepreciateReview(row) {
+      const procId = row.procId;
+      this.$modal.confirm('是否弃用此工艺流程？弃用工艺流程需要进行工艺流程弃用审核。').then(() => {
+        this.loading = true;
+        getProcess(procId).then(response => {
+          this.form = response.data;
+          this.form.procStat = '7';
+          updateProcess(this.form).then(response => {
+            this.$modal.msgSuccess("已提交工艺流程弃用审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 激活工艺流程
+    handleActivate(row) {
+      const procId = row.procId;
+      this.$modal.confirm('是否激活此工艺流程？').then(() => {
+        this.loading = true;
+        getProcess(procId).then(response => {
+          this.form = response.data;
+          this.form.procStat = '5';
+          updateProcess(this.form).then(response => {
+            this.$modal.msgSuccess("已激活工艺流程");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 取消激活工艺流程
+    handleDeactivate(row) {
+      const procId = row.procId;
+      this.$modal.confirm('是否停用此工艺流程？').then(() => {
+        this.loading = true;
+        getProcess(procId).then(response => {
+          this.form = response.data;
+          this.form.procStat = '4';
+          updateProcess(this.form).then(response => {
+            this.$modal.msgSuccess("已停用工艺流程");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    }
   }
 };
 </script>

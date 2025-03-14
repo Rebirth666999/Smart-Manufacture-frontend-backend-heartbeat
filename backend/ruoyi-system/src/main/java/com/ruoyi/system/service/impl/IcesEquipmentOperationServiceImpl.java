@@ -16,6 +16,9 @@ import com.ruoyi.system.domain.IcesEquipmentOperationStepPrev;
 import com.ruoyi.system.domain.bo.IcesEquipmentOperationStepBo;
 import com.ruoyi.system.domain.bo.IcesEquipmentOperationStepParamBo;
 import com.ruoyi.system.domain.bo.IcesEquipmentOperationStepPrevBo;
+import com.ruoyi.system.domain.vo.IcesEquipmentOperationStepParamVo;
+import com.ruoyi.system.domain.vo.IcesEquipmentOperationStepPrevVo;
+import com.ruoyi.system.domain.vo.IcesEquipmentOperationStepVo;
 import com.ruoyi.system.service.IIcesEquipmentOperationStepParamService;
 import com.ruoyi.system.service.IIcesEquipmentOperationStepPrevService;
 import com.ruoyi.system.service.IIcesEquipmentOperationStepService;
@@ -167,6 +170,59 @@ public class IcesEquipmentOperationServiceImpl extends FlowServiceFactory implem
         }
         // 保存XML
         repositoryService.addModelEditorSource(modelId ,StringUtils.getBytes(modelXML, StandardCharsets.UTF_8));
+
+        // 不是新模型，先删除原先数据库的所有数据
+        if (newModelFlag == 0) {
+            // 构造搜索条件
+            IcesEquipmentOperationStepBo bo = new IcesEquipmentOperationStepBo();
+            bo.setEoId(eoId);
+            // 查找所有符合条件的步骤
+            List<IcesEquipmentOperationStepVo> operationStepVos = operationStepService.queryList(bo);
+            // 取出步骤的ID
+            List<Long> operationStepIds = new ArrayList<>();
+            for (IcesEquipmentOperationStepVo operationStepVo : operationStepVos) {
+                operationStepIds.add(operationStepVo.getEosId());
+            }
+            // 数据库存在步骤需要删除
+            if (!operationStepIds.isEmpty()) {
+                // 用于删除的集合
+                List<Long> deleteIds = new ArrayList<>();
+
+                // 找到所有前序步骤关系
+                List<IcesEquipmentOperationStepPrevVo> operationStepPrevVos = stepPrevService.queryList(new IcesEquipmentOperationStepPrevBo());
+                // 找到所有与步骤有关的前序关系
+                for (IcesEquipmentOperationStepPrevVo operationStepPrevVo : operationStepPrevVos) {
+                    if (operationStepIds.contains(operationStepPrevVo.getEosIdCur()) || operationStepIds.contains(operationStepPrevVo.getEosIdPrev())) {
+                        deleteIds.add(operationStepPrevVo.getEosprId());
+                    }
+                }
+                // 删除前序关系
+                if (!deleteIds.isEmpty()) {
+                    stepPrevService.deleteWithValidByIds(deleteIds, false);
+                    deleteIds.clear();
+                }
+
+
+                IcesEquipmentOperationStepParamBo paramBo = new IcesEquipmentOperationStepParamBo();
+                for (Long id: operationStepIds) {
+                    // 构造搜索条件
+                    paramBo.setEosId(id);
+                    // 找到步骤参数
+                    List<IcesEquipmentOperationStepParamVo> paramVos = stepParamService.queryList(paramBo);
+                    // id全部放进集合
+                    for (IcesEquipmentOperationStepParamVo paramVo : paramVos) {
+                        deleteIds.add(paramVo.getEospaId());
+                    }
+                }
+                // 删除步骤参数
+                if (!deleteIds.isEmpty()) {
+                    stepParamService.deleteWithValidByIds(deleteIds, false);
+                }
+
+                // 最后删除步骤
+                operationStepService.deleteWithValidByIds(operationStepIds, false);
+            }
+        }
 
         // 读取XML中的模型
         Iterator<Element> iterator = process.elementIterator();

@@ -170,6 +170,7 @@
             type="text"
             icon="el-icon-delete"
             v-show="scope.row.procStat === '4'"
+            @click="handleDepreciateReview(scope.row)"
           >弃用</el-button>
           <el-button
             size="mini"
@@ -555,6 +556,24 @@ export default {
           else this.form.procStat = '4';
           updateProcess(this.form).then(response => {
             this.$modal.msgSuccess("已撤回审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 弃用设备模型
+    handleDepreciateReview(row) {
+      const procId = row.procId;
+      this.$modal.confirm('是否弃用此设备模型？弃用设备模型需要进行模型弃用审核。').then(() => {
+        this.loading = true;
+        getProcess(procId).then(response => {
+          this.form = response.data;
+          this.form.procStat = '7';
+          updateProcess(this.form).then(response => {
+            this.$modal.msgSuccess("已提交模型弃用审核");
             this.getList();
           })
         });

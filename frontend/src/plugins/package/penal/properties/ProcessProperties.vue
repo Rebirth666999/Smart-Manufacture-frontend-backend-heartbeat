@@ -99,6 +99,16 @@ export default {
         this.psDesc = window.bpmnInstances.bpmnElement.businessObject.$attrs.psDesc || ''
         this.elements = window.bpmnInstances.bpmnElement.parent.children.filter((ele) => ele.type === "bpmn:ServiceTask")
         this.prev = JSON.parse(window.bpmnInstances.bpmnElement.businessObject.$attrs.prev || '[]')
+        // 删除不存在的ID
+        for (let i = this.prev.length - 1; i > -1; i--) {
+          if (this.elements.findIndex((ele) => ele.id === this.prev[i]) === -1) {
+            this.prev.splice(i, 1); 
+          }
+        }
+        window.bpmnInstances.modeling.updateProperties(
+          window.bpmnInstances.bpmnElement,
+          { prev: JSON.stringify(this.prev) }
+        );
       }
     }
   },

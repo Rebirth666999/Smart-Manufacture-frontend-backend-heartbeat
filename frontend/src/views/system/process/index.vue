@@ -151,6 +151,7 @@
             type="text"
             icon="el-icon-refresh-left"
             v-show="scope.row.procStat === '2' || scope.row.procStat === '7'"
+            @click="handleWithdrawReview(scope.row)"
           >撤回审核</el-button>
           <el-button
             size="mini"
@@ -535,6 +536,25 @@ export default {
           this.form.procStat = "2";
           updateProcess(this.form).then(response => {
             this.$modal.msgSuccess("已提交审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 撤回审核
+    handleWithdrawReview(row) {
+      const procId = row.procId;
+      this.$modal.confirm('是否要撤回审核？若审核已开始即无法撤回。').then(() => {
+        this.loading = true;
+        getProcess(procId).then(response => {
+          this.form = response.data;
+          if (this.form.procStat === '2') this.form.procStat = '1'
+          else this.form.procStat = '4';
+          updateProcess(this.form).then(response => {
+            this.$modal.msgSuccess("已撤回审核");
             this.getList();
           })
         });

@@ -40,6 +40,11 @@ public class IcesProcessBo extends BaseEntity {
     private String procName;
 
     /**
+     * 自动生成模型ID
+     */
+    private String procModel;
+
+    /**
      * 工艺流程状态
      */
     private String procStat;

@@ -144,6 +144,7 @@
             type="text"
             icon="el-icon-finished"
             v-show="scope.row.procStat === '1'"
+            @click="handleSubmitReview(scope.row)"
           >提交审核</el-button>
           <el-button
             size="mini"
@@ -523,6 +524,24 @@ export default {
         this.viewerData.bpmnXml = response.data || ''
         this.viewerData.loading = false
       })
+    },
+    // 提交审核
+    handleSubmitReview(row) {
+      const procId = row.procId;
+      this.$modal.confirm('是否要提交审核？审核在开始之前可以撤回。').then(() => {
+        this.loading = true;
+        getProcess(procId).then(response => {
+          this.form = response.data;
+          this.form.procStat = "2";
+          updateProcess(this.form).then(response => {
+            this.$modal.msgSuccess("已提交审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
     },
   }
 };

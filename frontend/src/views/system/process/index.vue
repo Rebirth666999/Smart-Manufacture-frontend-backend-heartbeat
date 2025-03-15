@@ -510,10 +510,13 @@ export default {
         confirmButtonText: '是',
         cancelButtonText: '否'
       }).then(() => {
+        this.designerData.loading = true;
         saveModel(bpmnXml).then(response => {
           this.designerOpen = false
           this.getList();
           this.$modal.msgSuccess("保存成功");
+        }).finally(() => {
+          this.designerData.loading = false;
         })
       }).catch(action => {
       })

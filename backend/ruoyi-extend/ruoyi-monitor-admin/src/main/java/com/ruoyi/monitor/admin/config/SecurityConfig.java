@@ -35,6 +35,10 @@ public class SecurityConfig {
                     , "/actuator"
                     , "/actuator/**"
                 ).permitAll()
+                .antMatchers(
+                    "/heartbeat1/**",
+                    "/heartbeat1"
+                ).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage(adminContextPath + "/login")

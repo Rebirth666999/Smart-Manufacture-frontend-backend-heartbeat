@@ -25,10 +25,12 @@ import Vue from 'vue';
 import '@/plugins/package/theme/index.scss';
 import { BpmnProcessDesigner, BmpnProcessPenal } from '@/plugins/package/index';
 // 自定义元素选中时的弹出菜单（修改 默认任务 为 用户任务）
-import CustomContentPadProvider from '@/plugins/package/designer/plugins/content-pad';
+import RuoyiContentPadProvider from '@/plugins/package/designer/plugins/content-pad/ruoyi';
+import IndustryContentPadProvider from '@/plugins/package/designer/plugins/content-pad/industry';
 // 自定义左侧菜单（修改 默认任务 为 用户任务）
 import RuoyiPaletteProvider from '@/plugins/package/designer/plugins/palette/ruoyi';
 import EquipmentOperationPaletteProvider from '@/plugins/package/designer/plugins/palette/equipmentOperation'
+import ProcessPaletteProvider from '@/plugins/package/designer/plugins/palette/process'
 import { vuePlugin } from '@/plugins/package/highlight';
 import 'highlight.js/styles/atom-one-dark-reasonable.css';
 Vue.use(vuePlugin);
@@ -53,7 +55,7 @@ export default {
       required: true
     },
     extraList: {
-      type: Array,
+      type: Object,
       required: false
     }
   },
@@ -74,8 +76,20 @@ export default {
         labelVisible: false,
         prefix: 'flowable',
         headerButtonSize: 'small',
-        additionalModel: [CustomContentPadProvider, this.mode === 0? RuoyiPaletteProvider:EquipmentOperationPaletteProvider]
+        additionalModel: []
       }
+    }
+  },
+  created() {
+    if (this.mode === 0) {
+      this.controlForm.additionalModel.push(RuoyiContentPadProvider)
+      this.controlForm.additionalModel.push(RuoyiPaletteProvider)
+    } else if (this.mode === 1) {
+      this.controlForm.additionalModel.push(IndustryContentPadProvider)
+      this.controlForm.additionalModel.push(EquipmentOperationPaletteProvider)
+    } else {
+      this.controlForm.additionalModel.push(IndustryContentPadProvider)
+      this.controlForm.additionalModel.push(ProcessPaletteProvider)
     }
   },
   methods: {

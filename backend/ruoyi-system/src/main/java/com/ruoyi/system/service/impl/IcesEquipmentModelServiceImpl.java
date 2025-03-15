@@ -15,6 +15,7 @@ import com.ruoyi.system.domain.IcesEquipmentModel;
 import com.ruoyi.system.mapper.IcesEquipmentModelMapper;
 import com.ruoyi.system.service.IIcesEquipmentModelService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Collection;
@@ -45,6 +46,22 @@ public class IcesEquipmentModelServiceImpl implements IIcesEquipmentModelService
     @Override
     public TableDataInfo<IcesEquipmentModelVo> queryPageList(IcesEquipmentModelBo bo, PageQuery pageQuery) {
         LambdaQueryWrapper<IcesEquipmentModel> lqw = buildQueryWrapper(bo);
+        Page<IcesEquipmentModelVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
+        return TableDataInfo.build(result);
+    }
+
+    /**
+     * 审核端查询设备模型列表
+     */
+    @Override
+    public TableDataInfo<IcesEquipmentModelVo> queryReviewList(IcesEquipmentModelBo bo, PageQuery pageQuery) {
+        LambdaQueryWrapper<IcesEquipmentModel> lqw = buildQueryWrapper(bo);
+        List<String> stats = new ArrayList<>();
+        stats.add("2");  // 待审核
+        stats.add("3");  // 审核中
+        stats.add("6");  // 待审核（弃用）
+        stats.add("7");  // 审核中（弃用）
+        lqw.in(IcesEquipmentModel::getEmStat, stats);
         Page<IcesEquipmentModelVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
         return TableDataInfo.build(result);
     }

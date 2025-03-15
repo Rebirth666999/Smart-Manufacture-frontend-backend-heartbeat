@@ -8,7 +8,12 @@
     "dev": "vue-cli-service serve",
     "build:prod": "vue-cli-service build",
     "preview": "node build/index.js --preview",
-    "lint": "eslint --ext .js,.vue src"
+    "lint": "eslint --ext .js,.vue src",
+
+    "dev:new": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
+    "build:prod:new": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
+    "preview:new": "set NODE_OPTIONS=--openssl-legacy-provider && node build/index.js --preview",
+    "lint:new": "set NODE_OPTIONS=--openssl-legacy-provider && eslint --ext .js,.vue src"
   },
   "husky": {
     "hooks": {

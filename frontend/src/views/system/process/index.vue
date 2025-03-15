@@ -1,0 +1,628 @@
+<template>
+  <div class="app-container">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="目标产品" prop="prId">
+        <el-select
+          v-model="queryParams.prId"
+          placeholder="请选择目标产品"
+          clearable
+        >
+          <el-option
+            v-for="item in productList"
+            :key="item.prId"
+            :label="item.prName"
+            :value="item.prId"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="名称" prop="procName">
+        <el-input
+          v-model="queryParams.procName"
+          placeholder="请输入工艺流程名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="状态" prop="procStat">
+        <el-select v-model="queryParams.procStat" placeholder="请选择工艺流程状态" clearable>
+          <el-option
+            v-for="dict in dict.type.ices_process_status"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <!-- <el-form-item label="已删除" prop="procDelete">
+        <el-input
+          v-model="queryParams.procDelete"
+          placeholder="请输入已删除"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item> -->
+      <el-form-item>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+      </el-form-item>
+    </el-form>
+
+    <el-row :gutter="10" class="mb8">
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-plus"
+          size="mini"
+          @click="handleAdd"
+          v-hasPermi="['system:process:add']"
+        >新增</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="success"
+          plain
+          icon="el-icon-edit"
+          size="mini"
+          :disabled="single"
+          @click="handleUpdate"
+          v-hasPermi="['system:process:edit']"
+        >修改</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="danger"
+          plain
+          icon="el-icon-delete"
+          size="mini"
+          :disabled="multiple"
+          @click="handleDelete"
+          v-hasPermi="['system:process:remove']"
+        >删除</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['system:process:export']"
+        >导出</el-button>
+      </el-col>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+    </el-row>
+
+    <el-table v-loading="loading" :data="processList" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="工艺流程ID" align="center" prop="procId" v-if="true"/>
+      <el-table-column label="目标产品" align="center" prop="prId">
+        <template slot-scope="scope">
+          {{ productList.find(ele => ele.prId === scope.row.prId).prName || '' }}
+        </template>
+      </el-table-column>
+      <el-table-column label="工艺流程名称" align="center" prop="procName" />
+      <el-table-column label="工艺流程状态" align="center" prop="procStat">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.ices_process_status" :value="scope.row.procStat"/>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column label="已删除" align="center" prop="procDelete" /> -->
+      <!-- <el-table-column label="描述" align="center" prop="procDesc" /> -->
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleUpdate(scope.row)"
+            v-hasPermi="['system:process:edit']"
+            v-show="scope.row.procStat === '1'"
+          >修改</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-box"
+            @click="handleProcessMaterialView(scope.row)"
+          >原料需求</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-brush"
+            v-show="scope.row.procStat === '1'"
+            @click="handleDesigner(scope.row)"
+          >设计</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-search"
+            @click="handleViewer(scope.row)"
+          >查看流程</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-finished"
+            v-show="scope.row.procStat === '1'"
+            @click="handleSubmitReview(scope.row)"
+          >提交审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-refresh-left"
+            v-show="scope.row.procStat === '2' || scope.row.procStat === '7'"
+            @click="handleWithdrawReview(scope.row)"
+          >撤回审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-video-pause"
+            v-show="scope.row.procStat === '5'"
+            @click="handleDeactivate(scope.row)"
+          >停用</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-video-play"
+            v-show="scope.row.procStat === '4'"
+            @click="handleActivate(scope.row)"
+          >激活</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            v-show="scope.row.procStat === '4'"
+            @click="handleDepreciateReview(scope.row)"
+          >弃用</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            @click="handleDelete(scope.row)"
+            v-hasPermi="['system:process:remove']"
+            v-show="scope.row.procStat === '1'"
+          >删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
+
+    <!-- 添加或修改工艺流程对话框 -->
+    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="目标产品" prop="prId">
+          <el-select
+            v-model="form.prId"
+            placeholder="请选择目标产品"
+          >
+            <el-option
+              v-for="item in productList"
+              :key="item.prId"
+              :label="item.prName"
+              :value="item.prId"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="名称" prop="procName">
+          <el-input v-model="form.procName" placeholder="请输入工艺流程名称" />
+        </el-form-item>
+        <el-form-item label="描述" prop="procDesc">
+          <el-input v-model="form.procDesc" type="textarea" placeholder="请输入内容" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 流程设计对话框 -->
+    <el-dialog :title="designerData.title" :visible.sync="designerOpen" append-to-body fullscreen>
+      <process-designer
+        :key="designerOpen"
+        style="border:1px solid rgba(0, 0, 0, 0.1);"
+        ref="modelDesigner"
+        v-loading="designerData.loading"
+        :bpmnXml="designerData.bpmnXml"
+        :designerForm="designerData.form"
+        :mode="2"
+        :extraList="{emList: equipmentModelList, moList: modelOperationList}"
+        @save="onSaveDesigner"
+      />
+    </el-dialog>
+
+    <!-- 查看流程对话框 -->
+    <el-dialog :title="viewerData.title" :visible.sync="viewerOpen" width="70%" append-to-body>
+      <process-viewer
+        v-loading="viewerData.loading"
+        :key="`designer-${viewerData.index}`"
+        :xml="viewerData.bpmnXml"
+        :style="{height: '60vh'}"
+      />
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import { listProcess, getProcess, delProcess, addProcess, updateProcess, saveModel, getBpmnXml } from "@/api/system/process";
+import { listProduct } from "@/api/system/product";
+import { listEquipmentModel } from "@/api/system/equipmentModel";
+import { listModelOperation } from "@/api/system/modelOperation";
+import ProcessDesigner from '@/components/ProcessDesigner';
+import ProcessViewer from '@/components/ProcessViewer';
+
+
+export default {
+  name: "Process",
+  components: {
+    ProcessDesigner,
+    ProcessViewer,
+  },
+  dicts: ['ices_process_status'],
+  data() {
+    return {
+      // 按钮loading
+      buttonLoading: false,
+      // 遮罩层
+      loading: true,
+      // 选中数组
+      ids: [],
+      // 非单个禁用
+      single: true,
+      // 非多个禁用
+      multiple: true,
+      // 显示搜索条件
+      showSearch: true,
+      // 总条数
+      total: 0,
+      // 工艺流程表格数据
+      processList: [],
+      // 弹出层标题
+      title: "",
+      // 是否显示弹出层
+      open: false,
+      // 查询参数
+      queryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        prId: undefined,
+        procName: undefined,
+        procStat: undefined,
+        procDelete: 0,
+      },
+      // 表单参数
+      form: {},
+      // 表单校验
+      rules: {
+        procId: [
+          { required: true, message: "工艺流程ID不能为空", trigger: "blur" }
+        ],
+        prId: [
+          { required: true, message: "目标产品ID不能为空", trigger: "blur" }
+        ],
+        procName: [
+          { required: true, message: "工艺流程名称不能为空", trigger: "blur" }
+        ],
+      },
+      // 产品列表
+      productList: [],
+      // 设计窗口是否打开
+      designerOpen: false,
+      // 设计器相关数据
+      designerData: {
+        loading: false,
+        bpmnXml: '',
+        modelId: null,
+        form: {
+          processName: null,
+          processKey: null
+        }
+      },
+      // 查看窗口是否打开
+      viewerOpen: false,
+      // 查看器相关数据
+      viewerData: {
+        title: '',
+        loading: false,
+        index: undefined,
+        bpmnXml: ''
+      },
+      // 设备模型列表
+      equipmentModelList: [],
+      // 模型操作列表
+      modelOperationList: [],
+    };
+  },
+  async created() {
+    await this.getProductList();
+    await this.getEquipmentModelList();
+    await this.getModelOperationList();
+    this.getList();
+  },
+  methods: {
+    // 查询产品列表
+    getProductList() {
+      listProduct().then(response => {
+        this.productList = response.rows
+      })
+    },
+    // 查询设备模型列表
+    getEquipmentModelList() {
+      listEquipmentModel().then(response => {
+        this.equipmentModelList = response.rows;
+      });
+    },
+    // 查询模型操作列表
+    getModelOperationList() {
+      listModelOperation().then(response => {
+        this.modelOperationList = response.rows;
+      });
+    },
+    /** 查询工艺流程列表 */
+    getList() {
+      this.loading = true;
+      listProcess(this.queryParams).then(response => {
+        this.processList = response.rows;
+        this.total = response.total;
+        this.loading = false;
+      });
+    },
+    // 取消按钮
+    cancel() {
+      this.open = false;
+      this.reset();
+    },
+    // 表单重置
+    reset() {
+      this.form = {
+        procId: undefined,
+        prId: undefined,
+        procName: undefined,
+        procStat: undefined,
+        procDelete: undefined,
+        procDesc: undefined,
+        createBy: undefined,
+        updateBy: undefined,
+        createTime: undefined,
+        updateTime: undefined
+      };
+      this.resetForm("form");
+    },
+    /** 搜索按钮操作 */
+    handleQuery() {
+      this.queryParams.pageNum = 1;
+      this.getList();
+    },
+    /** 重置按钮操作 */
+    resetQuery() {
+      this.resetForm("queryForm");
+      this.handleQuery();
+    },
+    // 多选框选中数据
+    handleSelectionChange(selection) {
+      this.ids = selection.map(item => item.procId)
+      this.single = selection.length!==1
+      this.multiple = !selection.length
+    },
+    /** 新增按钮操作 */
+    handleAdd() {
+      this.reset();
+      this.open = true;
+      this.title = "添加工艺流程";
+    },
+    /** 修改按钮操作 */
+    handleUpdate(row) {
+      this.loading = true;
+      this.reset();
+      const procId = row.procId || this.ids
+      getProcess(procId).then(response => {
+        this.loading = false;
+        this.form = response.data;
+        this.open = true;
+        this.title = "修改工艺流程";
+      });
+    },
+    /** 提交按钮 */
+    submitForm() {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          this.buttonLoading = true;
+          if (this.form.procId != null) {
+            updateProcess(this.form).then(response => {
+              this.$modal.msgSuccess("修改成功");
+              this.open = false;
+              this.getList();
+            }).finally(() => {
+              this.buttonLoading = false;
+            });
+          } else {
+            // 新增状态自动转为未发布
+            this.form.procStat = '1'
+            addProcess(this.form).then(response => {
+              this.$modal.msgSuccess("新增成功");
+              this.open = false;
+              this.getList();
+            }).finally(() => {
+              this.buttonLoading = false;
+            });
+          }
+        }
+      });
+    },
+    /** 删除按钮操作 */
+    handleDelete(row) {
+      const procIds = row.procId || this.ids;
+      this.$modal.confirm('是否确认删除工艺流程编号为"' + procIds + '"的数据项？').then(() => {
+        this.loading = true;
+        return delProcess(procIds);
+      }).then(() => {
+        this.loading = false;
+        this.getList();
+        this.$modal.msgSuccess("删除成功");
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    /** 导出按钮操作 */
+    handleExport() {
+      this.download('system/process/export', {
+        ...this.queryParams
+      }, `process_${new Date().getTime()}.xlsx`)
+    },
+    // 查看工艺流程的原料需求
+    handleProcessMaterialView(row) {
+      this.$router.push(`/processFlow/processMaterial?procId=${row.procId}`)
+    },
+    /** 设计按钮操作 */
+    handleDesigner(row) {
+      this.designerData.title = "工艺流程设计 - " + row.procName;
+      this.designerData.modelId = "model_" + row.procId;
+      this.designerData.form = {
+        processName: row.procName,
+        processKey: "process_" + row.procId
+      }
+      // 读取已设计的流程
+      if (row.procModel) {
+        this.designerData.loading = true;
+        getBpmnXml(row.procModel).then(response => {
+          this.designerData.bpmnXml = response.data || '';
+          this.designerData.loading = false;
+          this.designerOpen = true;
+        })
+      } else {
+        this.designerData.bpmnXml = '';
+        this.designerOpen = true;
+      }
+    },
+    // 保存流程按钮操作
+    onSaveDesigner(bpmnXml) {
+      this.$confirm("是否保存工艺流程？", "提示", {
+        distinguishCancelAndClose: true,
+        confirmButtonText: '是',
+        cancelButtonText: '否'
+      }).then(() => {
+        this.designerData.loading = true;
+        saveModel(bpmnXml).then(response => {
+          this.designerOpen = false
+          this.getList();
+          this.$modal.msgSuccess("保存成功");
+        }).finally(() => {
+          this.designerData.loading = false;
+        })
+      }).catch(action => {
+      })
+    },
+    /** 查看流程按钮操作 */
+    handleViewer(row) {
+      this.viewerData.loading = true
+      this.viewerData.title = row.procName
+      this.viewerData.index = row.procModel
+      this.viewerOpen = true
+      getBpmnXml(row.procModel).then(response => {
+        this.viewerData.bpmnXml = response.data || ''
+        this.viewerData.loading = false
+      })
+    },
+    // 提交审核
+    handleSubmitReview(row) {
+      const procId = row.procId;
+      this.$modal.confirm('是否要提交审核？审核在开始之前可以撤回。').then(() => {
+        this.loading = true;
+        getProcess(procId).then(response => {
+          this.form = response.data;
+          this.form.procStat = "2";
+          updateProcess(this.form).then(response => {
+            this.$modal.msgSuccess("已提交审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 撤回审核
+    handleWithdrawReview(row) {
+      const procId = row.procId;
+      this.$modal.confirm('是否要撤回审核？若审核已开始即无法撤回。').then(() => {
+        this.loading = true;
+        getProcess(procId).then(response => {
+          this.form = response.data;
+          if (this.form.procStat === '2') this.form.procStat = '1'
+          else this.form.procStat = '4';
+          updateProcess(this.form).then(response => {
+            this.$modal.msgSuccess("已撤回审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 弃用工艺流程
+    handleDepreciateReview(row) {
+      const procId = row.procId;
+      this.$modal.confirm('是否弃用此工艺流程？弃用工艺流程需要进行工艺流程弃用审核。').then(() => {
+        this.loading = true;
+        getProcess(procId).then(response => {
+          this.form = response.data;
+          this.form.procStat = '7';
+          updateProcess(this.form).then(response => {
+            this.$modal.msgSuccess("已提交工艺流程弃用审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 激活工艺流程
+    handleActivate(row) {
+      const procId = row.procId;
+      this.$modal.confirm('是否激活此工艺流程？').then(() => {
+        this.loading = true;
+        getProcess(procId).then(response => {
+          this.form = response.data;
+          this.form.procStat = '5';
+          updateProcess(this.form).then(response => {
+            this.$modal.msgSuccess("已激活工艺流程");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 取消激活工艺流程
+    handleDeactivate(row) {
+      const procId = row.procId;
+      this.$modal.confirm('是否停用此工艺流程？').then(() => {
+        this.loading = true;
+        getProcess(procId).then(response => {
+          this.form = response.data;
+          this.form.procStat = '4';
+          updateProcess(this.form).then(response => {
+            this.$modal.msgSuccess("已停用工艺流程");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    }
+  }
+};
+</script>

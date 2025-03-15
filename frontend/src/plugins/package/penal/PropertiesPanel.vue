@@ -42,6 +42,7 @@
         <div slot="title" class="panel-tab__title"><i class="el-icon-s-promotion"></i>其他</div>
         <element-other-config :id="elementId" />
       </el-collapse-item>
+
       <!-- 设备操作流程 -->
       <el-collapse-item
         name="eosBasic"
@@ -73,12 +74,35 @@
         </div>
         <eos-param :id="elementId" :type="elementType" />
       </el-collapse-item>
+
+      <!-- 产品工艺流程 -->
+      <el-collapse-item
+        name="procBasic"
+        v-if="mode === 2"
+        key="procBasic"
+      >
+        <div slot="title" class="panel-tab__title">
+          <i class="el-icon-info"></i>常规
+        </div>
+        <proc-base-info :id-edit-disabled="idEditDisabled"   :business-object="elementBusinessObject" :type="elementType" />
+      </el-collapse-item>
+      <el-collapse-item
+        name="procProperties"
+        v-if="mode === 2 && elementType === 'ServiceTask'"
+        key="procProperties"
+      >
+        <div slot="title" class="panel-tab__title">
+          <i class="el-icon-s-promotion"></i>步骤属性
+        </div>
+        <proc-properties :id="elementId" :emList="extraList.emList" :moList="extraList.moList" />
+      </el-collapse-item>
     </el-collapse>
   </div>
 </template>
 <script>
 import ElementBaseInfo from "./base/ElementBaseInfo";
 import EosBaseInfo from "./base/EquipmentOperationStepBaseInfo";
+import ProcBaseInfo from "./base/ProcessBaseInfo";
 import ElementOtherConfig from "./other/ElementOtherConfig";
 import ElementTask from "./task/ElementTask";
 import ElementMultiInstance from "./multi-instance/ElementMultiInstance";
@@ -86,7 +110,8 @@ import FlowCondition from "./flow-condition/FlowCondition";
 import SignalAndMassage from "./signal-message/SignalAndMessage";
 import ElementListeners from "./listeners/ElementListeners";
 import ElementProperties from "./properties/ElementProperties";
-import EosProperties from "./properties/EquipmentOperationStepProperties"
+import EosProperties from "./properties/EquipmentOperationStepProperties";
+import ProcProperties from "./properties/ProcessProperties";
 import ElementForm from "./form/ElementForm";
 import UserTaskListeners from "./listeners/UserTaskListeners";
 import EosParam from "./param/EquipmentOperationStepParam";
@@ -108,7 +133,9 @@ export default {
     ElementBaseInfo,
     EosBaseInfo,
     EosProperties,
-    EosParam
+    EosParam,
+    ProcBaseInfo,
+    ProcProperties
   },
   componentName: "BpmnPropertiesPanel",
   props: {
@@ -134,7 +161,7 @@ export default {
       required: true
     },
     extraList: {
-      type: Array,
+      type: Object,
       required: false
     }
   },

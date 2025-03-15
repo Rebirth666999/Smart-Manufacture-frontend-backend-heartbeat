@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p style="border: 1px solid black; width: 400px; height: 80px" id="showName"></p>
+<p style="border: 1px solid black; width: 600px; height: 200px" id="showMsg"></p>
+<button onclick="fetchName()">获取用户名</button>
+<button onclick="sendToArm1()">发送测试动作启动请求</button>
+</body>
+<script>
+    let ws = new WebSocket("ws://localhost:8080/heartbeat");
+
+    ws.onmessage = function (msg) {
+        console.log(msg.data);
+        document.getElementById("showMsg").innerHTML = msg.data;
+    };
+
+    ws.onclose = function () {
+        console.log("WebSocket connection closed.");
+    };
+    function fetchName() {
+        // 发送 GET 请求到 http://localhost:8080/getName
+        fetch("http://localhost:8080/getName")
+            .then(response => response.text()) // 解析响应为文本
+            .then(data => {
+                console.log("Response from server:", data);
+                document.getElementById("showName").innerHTML = data; // 显示返回的用户名
+            })
+            .catch(error => {
+                console.error("Error fetching name:", error);
+                alert("Failed to fetch name. Please try again.");
+            });
+    }
+    /*function sendToArm1(){
+        fetch("http://localhost:8080/arm1test")
+            .then(response => response.text())
+            .then(data=>{
+                console.log("arm1test return :",data);
+                document.getElementById("showName").innerText=data;
+            })
+            .catch(error => {
+                console.error("Error fetching name:", error);
+                alert("Failed to get response from Arm1. Please try again.");
+            });
+    }*/
+    function sendToArm1() {
+        const url = "http://192.168.135.137:8000/test";
+        const data = {
+            "productionTask": {
+                "ptId": 4,
+                "ptLatestEndtime": "",
+                "ptNum": "",
+                "ptPriority": 6,
+                "preemptive": false
+            },
+            "processRoute": [
+                {"prdPid": 1, "eqId": 2,"opId":2,"opParam": {"enable": true},"prdPreProcess":0,"prdPara": {"param1": "value1"}},
+                {"prdPid": 2, "eqId": 1,"opId":1,"opParam": {"enable": true},"prdPreProcess":1,"prdPara": {"param1": "value1"}},
+                {"prdPid": 3, "eqId": 4,"opId":3,"opParam": {"op_param": 1},"prdPreProcess":2,"prdPara": {"param1": "value1"}}
+            ]
+        };
+
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.text())
+            .then(data => {
+                console.log("arm1test return:", data);
+                document.getElementById("showName").innerText = data;
+            })
+            .catch(error => {
+                console.error("Error fetching name:", error);
+                alert("Failed to get response from Arm1. Please try again.");
+            });
+    }
+</script>
+</html>

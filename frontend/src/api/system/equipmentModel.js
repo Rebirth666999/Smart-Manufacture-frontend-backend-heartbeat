@@ -9,6 +9,15 @@ export function listEquipmentModel(query) {
   })
 }
 
+// 审核端查询设备模型列表
+export function listReviewEquipmentModel(query) {
+  return request({
+    url: '/system/equipmentModel/reviewList',
+    method: 'get',
+    params: query
+  })
+}
+
 // 查询设备模型详细
 export function getEquipmentModel(emId) {
   return request({

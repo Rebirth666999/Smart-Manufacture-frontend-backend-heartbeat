@@ -28,6 +28,11 @@ public interface IIcesEquipmentModelService {
     TableDataInfo<IcesEquipmentModelVo> queryPageList(IcesEquipmentModelBo bo, PageQuery pageQuery);
 
     /**
+     * 审核端查询设备模型列表
+     */
+    TableDataInfo<IcesEquipmentModelVo> queryReviewList(IcesEquipmentModelBo bo, PageQuery pageQuery);
+
+    /**
      * 查询设备模型列表
      */
     List<IcesEquipmentModelVo> queryList(IcesEquipmentModelBo bo);

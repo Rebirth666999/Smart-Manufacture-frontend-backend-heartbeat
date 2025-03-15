@@ -39,7 +39,7 @@
       <el-form-item label="状态" prop="emStat">
         <el-select v-model="queryParams.emStat" placeholder="请选择状态" clearable>
           <el-option
-            v-for="dict in dict.type.ices_equipment_model_status"
+            v-for="dict in dict.type.ices_equipment_model_status_review"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -85,7 +85,7 @@
       </el-table-column>
       <el-table-column label="状态" align="center" prop="emStat">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.ices_equipment_model_status" :value="scope.row.emStat"/>
+          <dict-tag :options="dict.type.ices_equipment_model_status_review" :value="scope.row.emStat"/>
         </template>
       </el-table-column>
       <!-- <el-table-column label="已删除" align="center" prop="emDelete" /> -->
@@ -160,12 +160,12 @@
 </template>
 
 <script>
-import { listEquipmentModel, getEquipmentModel, delEquipmentModel, addEquipmentModel, updateEquipmentModel } from "@/api/system/equipmentModel";
+import { listEquipmentModel, getEquipmentModel, delEquipmentModel, addEquipmentModel, updateEquipmentModel, listReviewEquipmentModel } from "@/api/system/equipmentModel";
 import { listEquipmentModelType } from "@/api/system/equipmentModelType";
 
 export default {
   name: "EquipmentModel",
-  dicts: ['ices_equipment_model_status'],
+  dicts: ['ices_equipment_model_status_review'],
   data() {
     return {
       // 按钮loading
@@ -249,7 +249,7 @@ export default {
     /** 查询设备模型列表 */
     getList() {
       this.loading = true;
-      listEquipmentModel(this.queryParams).then(response => {
+      listReviewEquipmentModel(this.queryParams).then(response => {
         this.equipmentModelList = response.rows;
         this.total = response.total;
         this.loading = false;

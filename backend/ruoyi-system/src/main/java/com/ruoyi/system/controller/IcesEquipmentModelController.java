@@ -49,6 +49,14 @@ public class IcesEquipmentModelController extends BaseController {
     }
 
     /**
+     * 审核端查询设备模型列表
+     */
+    @GetMapping("/reviewList")
+    public TableDataInfo<IcesEquipmentModelVo> reviewList(IcesEquipmentModelBo bo, PageQuery pageQuery) {
+        return iIcesEquipmentModelService.queryReviewList(bo, pageQuery);
+    }
+
+    /**
      * 导出设备模型列表
      */
     @SaCheckPermission("system:equipmentModel:export")

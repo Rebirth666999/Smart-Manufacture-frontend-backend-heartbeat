@@ -13,9 +13,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ruoyi.flowable.factory.FlowServiceFactory;
 import com.ruoyi.system.domain.IcesEquipmentOperationStep;
 import com.ruoyi.system.domain.IcesEquipmentOperationStepPrev;
-import com.ruoyi.system.domain.bo.IcesEquipmentOperationStepBo;
-import com.ruoyi.system.domain.bo.IcesEquipmentOperationStepParamBo;
-import com.ruoyi.system.domain.bo.IcesEquipmentOperationStepPrevBo;
+import com.ruoyi.system.domain.bo.*;
 import com.ruoyi.system.domain.vo.IcesEquipmentOperationStepParamVo;
 import com.ruoyi.system.domain.vo.IcesEquipmentOperationStepPrevVo;
 import com.ruoyi.system.domain.vo.IcesEquipmentOperationStepVo;
@@ -29,7 +27,6 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.flowable.engine.repository.Model;
 import org.springframework.stereotype.Service;
-import com.ruoyi.system.domain.bo.IcesEquipmentOperationBo;
 import com.ruoyi.system.domain.vo.IcesEquipmentOperationVo;
 import com.ruoyi.system.domain.IcesEquipmentOperation;
 import com.ruoyi.system.mapper.IcesEquipmentOperationMapper;
@@ -291,9 +288,14 @@ public class IcesEquipmentOperationServiceImpl extends FlowServiceFactory implem
         // 解析flows的各个对象，根据箭头的走向和stepMap，将前序任务关系存进数据库
         for (Element flow: flows) {
             IcesEquipmentOperationStepPrevBo stepPrevBo = new IcesEquipmentOperationStepPrevBo();
-            stepPrevBo.setEosIdCur(stepMap.get(flow.attributeValue("targetRef")).getEosId());
-            stepPrevBo.setEosIdPrev(stepMap.get(flow.attributeValue("sourceRef")).getEosId());
-            stepPrevService.insertByBo(stepPrevBo);
+            if (stepMap.get(flow.attributeValue("targetRef")) != null)
+                stepPrevBo.setEosIdCur(stepMap.get(flow.attributeValue("targetRef")).getEosId());
+            if (stepMap.get(flow.attributeValue("sourceRef")) != null)
+                stepPrevBo.setEosIdPrev(stepMap.get(flow.attributeValue("sourceRef")).getEosId());
+            // 仅在两个ID都存在时插入
+            if (stepPrevBo.getEosIdCur() != null && stepPrevBo.getEosIdPrev() != null) {
+                stepPrevService.insertByBo(stepPrevBo);
+            }
         }
     }
 }

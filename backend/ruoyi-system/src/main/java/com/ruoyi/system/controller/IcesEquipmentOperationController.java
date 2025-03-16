@@ -127,7 +127,7 @@ public class IcesEquipmentOperationController extends BaseController {
             iIcesEquipmentOperationService.saveModel(modelXML);
             return R.ok();
         } catch (Exception e) {
-            return R.fail();
+            return R.fail("操作失败，请检查是否已为所有步骤分配原子操作");
         }
     }
 }

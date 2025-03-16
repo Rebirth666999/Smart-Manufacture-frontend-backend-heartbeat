@@ -127,7 +127,7 @@ public class IcesProcessController extends BaseController {
             iIcesProcessService.saveProcess(modelXML);
             return R.ok();
         } catch (Exception e) {
-            return R.fail();
+            return R.fail("操作失败，请检查是否已为所有步骤分配模型操作");
         }
     }
 

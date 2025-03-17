@@ -35,7 +35,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="订单优先级" prop="orPriority">
+      <el-form-item label="优先级" prop="orPriority">
         <el-input
           v-model="queryParams.orPriority"
           placeholder="请输入订单优先级"
@@ -165,8 +165,8 @@
     />
 
     <!-- 添加或修改订单对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="530px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="所需产品" prop="prId">
           <el-input v-model="form.prId" placeholder="请输入所需产品" />
         </el-form-item>

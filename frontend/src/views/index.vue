@@ -105,7 +105,9 @@
       </el-col>
     </el-row>
     <el-divider /> -->
-    <img :src="bgImage" >
+    <div class="mainImg">
+      <img :src="bgImage" >
+    </div>
   </div>
 </template>
 
@@ -188,6 +190,11 @@ export default {
       margin-inline-end: 0;
       padding-inline-start: 40px;
     }
+  }
+
+  .mainImg {
+    display: flex;
+    justify-content: center;
   }
 }
 </style>

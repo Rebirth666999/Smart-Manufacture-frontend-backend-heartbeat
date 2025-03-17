@@ -10,12 +10,19 @@
         />
       </el-form-item>
       <el-form-item label="工艺流程" prop="procId">
-        <el-input
+        <el-select
           v-model="queryParams.procId"
-          placeholder="请输入工艺流程"
+          placeholder="请选择工艺流程"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="item in processListFull"
+            :key="item.procId"
+            :label="item.procName"
+            :value="item.procId"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="状态" prop="mpStat">
         <el-select v-model="queryParams.mpStat" placeholder="请选择状态" clearable>
@@ -99,7 +106,11 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="生产计划" align="center" prop="mpId" v-if="true"/>
       <el-table-column label="所属订单" align="center" prop="orId" />
-      <el-table-column label="工艺流程" align="center" prop="procId" />
+      <el-table-column label="工艺流程" align="center" prop="procId">
+        <template slot-scope="scope">
+          {{ processListFull.find(ele => ele.procId === scope.row.procId).procName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="状态" align="center" prop="mpStat">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_manufacture_plan_status" :value="scope.row.mpStat"/>
@@ -160,7 +171,19 @@
           <el-input v-model="form.orId" placeholder="请输入所属订单" />
         </el-form-item>
         <el-form-item label="工艺流程" prop="procId">
-          <el-input v-model="form.procId" placeholder="请输入采用工艺流程" />
+          <el-select
+            v-model="form.procId"
+            placeholder="请选择工艺流程"
+            clearable
+          >
+            <el-option
+              v-for="item in processList"
+              :key="item.procId"
+              :label="item.procName"
+              :value="item.procId"
+            >
+            </el-option>
+        </el-select>
         </el-form-item>
         <el-form-item label="最晚结束时间" prop="mpEndPlan">
           <el-date-picker clearable
@@ -190,6 +213,7 @@
 
 <script>
 import { listManufacturePlan, getManufacturePlan, delManufacturePlan, addManufacturePlan, updateManufacturePlan } from "@/api/system/manufacturePlan";
+import { listProcess } from "@/api/system/process";
 
 export default {
   name: "ManufacturePlan",
@@ -248,13 +272,27 @@ export default {
         mpQtyPlan: [
           { required: true, message: "产品数量不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 已发布的所有工艺流程
+      processList: [],
+      // 所有工艺流程
+      processListFull: []
     };
   },
-  created() {
+  async created() {
+    await this.getProcessList();
     this.getList();
   },
   methods: {
+    // 查询工艺流程列表
+    getProcessList() {
+      listProcess(this.queryParams).then(response => {
+        this.processListFull = response.rows;
+        for (let item in response.rows) {
+          if (item.procStat === '4') this.processList.push(item)
+        }
+      });
+    },
     /** 查询生产计划列表 */
     getList() {
       this.loading = true;

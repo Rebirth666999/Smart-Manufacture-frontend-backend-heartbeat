@@ -112,7 +112,11 @@
     <el-table v-loading="loading" :data="manufacturePlanList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="生产计划" align="center" prop="mpId" v-if="true"/>
-      <el-table-column label="所属订单" align="center" prop="orId" />
+      <el-table-column label="所属订单" align="center" prop="orId">
+        <template slot-scope="scope">
+          {{ orderList.find(ele => ele.orId === scope.row.orId).orName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="工艺流程" align="center" prop="procId">
         <template slot-scope="scope">
           {{ processListFull.find(ele => ele.procId === scope.row.procId).procName || '' }}
@@ -311,8 +315,8 @@ export default {
     getProcessList() {
       listProcess().then(response => {
         this.processListFull = response.rows;
-        for (let item in response.rows) {
-          if (item.procStat === '4') this.processList.push(item)
+        for (let item of response.rows) {
+          if (item.procStat === '5') this.processList.push(item)
         }
       });
     },
@@ -406,6 +410,8 @@ export default {
               this.buttonLoading = false;
             });
           } else {
+            // 新增生产计划分配默认状态
+            this.form.mpStat = '1'
             addManufacturePlan(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;

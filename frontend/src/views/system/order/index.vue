@@ -55,14 +55,14 @@
           :default-time="['00:00:00', '23:59:59']"
         ></el-date-picker>
       </el-form-item>
-      <el-form-item label="已删除" prop="orDelete">
+      <!-- <el-form-item label="已删除" prop="orDelete">
         <el-input
           v-model="queryParams.orDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -134,7 +134,7 @@
         </template>
       </el-table-column>
       <el-table-column label="总价" align="center" prop="orPrice" />
-      <el-table-column label="已删除" align="center" prop="orDelete" />
+      <!-- <el-table-column label="已删除" align="center" prop="orDelete" /> -->
       <el-table-column label="描述" align="center" prop="orDesc" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -245,7 +245,7 @@ export default {
         orStat: undefined,
         orPriority: undefined,
         orDeadline: undefined,
-        orDelete: undefined,
+        orDelete: 0,
       },
       // 表单参数
       form: {},

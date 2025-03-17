@@ -1,18 +1,18 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="所需产品ID" prop="prId">
+      <el-form-item label="所需产品" prop="prId">
         <el-input
           v-model="queryParams.prId"
-          placeholder="请输入所需产品ID"
+          placeholder="请输入所需产品"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="客户ID" prop="clId">
+      <el-form-item label="客户" prop="clId">
         <el-input
           v-model="queryParams.clId"
-          placeholder="请输入客户ID"
+          placeholder="请输入客户"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -25,8 +25,8 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态代码" prop="orStat">
-        <el-select v-model="queryParams.orStat" placeholder="请选择状态代码" clearable>
+      <el-form-item label="状态" prop="orStat">
+        <el-select v-model="queryParams.orStat" placeholder="请选择状态" clearable>
           <el-option
             v-for="dict in dict.type.ices_order_status"
             :key="dict.value"
@@ -118,8 +118,8 @@
     <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="订单ID" align="center" prop="orId" v-if="true"/>
-      <el-table-column label="所需产品ID" align="center" prop="prId" />
-      <el-table-column label="客户ID" align="center" prop="clId" />
+      <el-table-column label="所需产品" align="center" prop="prId" />
+      <el-table-column label="客户" align="center" prop="clId" />
       <el-table-column label="订单名称" align="center" prop="orName" />
       <el-table-column label="状态代码" align="center" prop="orStat">
         <template slot-scope="scope">
@@ -167,11 +167,11 @@
     <!-- 添加或修改订单对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="所需产品ID" prop="prId">
-          <el-input v-model="form.prId" placeholder="请输入所需产品ID" />
+        <el-form-item label="所需产品" prop="prId">
+          <el-input v-model="form.prId" placeholder="请输入所需产品" />
         </el-form-item>
-        <el-form-item label="客户ID" prop="clId">
-          <el-input v-model="form.clId" placeholder="请输入客户ID" />
+        <el-form-item label="客户" prop="clId">
+          <el-input v-model="form.clId" placeholder="请输入客户" />
         </el-form-item>
         <el-form-item label="订单名称" prop="orName">
           <el-input v-model="form.orName" placeholder="请输入订单名称" />

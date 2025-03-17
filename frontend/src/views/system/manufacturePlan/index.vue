@@ -1,24 +1,24 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="所属订单ID" prop="orId">
+      <el-form-item label="所属订单" prop="orId">
         <el-input
           v-model="queryParams.orId"
-          placeholder="请输入所属订单ID"
+          placeholder="请输入所属订单"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="采用工艺流程ID" prop="procId">
+      <el-form-item label="工艺流程" prop="procId">
         <el-input
           v-model="queryParams.procId"
-          placeholder="请输入采用工艺流程ID"
+          placeholder="请输入工艺流程"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态代码" prop="mpStat">
-        <el-select v-model="queryParams.mpStat" placeholder="请选择状态代码" clearable>
+      <el-form-item label="状态" prop="mpStat">
+        <el-select v-model="queryParams.mpStat" placeholder="请选择状态" clearable>
           <el-option
             v-for="dict in dict.type.ices_manufacture_plan_status"
             :key="dict.value"
@@ -27,10 +27,10 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="生产计划优先级" prop="mpPriority">
+      <el-form-item label="优先级" prop="mpPriority">
         <el-input
           v-model="queryParams.mpPriority"
-          placeholder="请输入生产计划优先级"
+          placeholder="请输入优先级"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -97,10 +97,10 @@
 
     <el-table v-loading="loading" :data="manufacturePlanList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="生产计划ID" align="center" prop="mpId" v-if="true"/>
-      <el-table-column label="所属订单ID" align="center" prop="orId" />
-      <el-table-column label="采用工艺流程ID" align="center" prop="procId" />
-      <el-table-column label="状态代码" align="center" prop="mpStat">
+      <el-table-column label="生产计划" align="center" prop="mpId" v-if="true"/>
+      <el-table-column label="所属订单" align="center" prop="orId" />
+      <el-table-column label="工艺流程" align="center" prop="procId" />
+      <el-table-column label="状态" align="center" prop="mpStat">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_manufacture_plan_status" :value="scope.row.mpStat"/>
         </template>
@@ -120,7 +120,7 @@
           <span>{{ parseTime(scope.row.mpEndReal, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="生产计划优先级" align="center" prop="mpPriority" />
+      <el-table-column label="优先级" align="center" prop="mpPriority" />
       <el-table-column label="计划产品数量" align="center" prop="mpQtyPlan" />
       <el-table-column label="已完成产品数量" align="center" prop="mpQtyReal" />
       <!-- <el-table-column label="已删除" align="center" prop="mpDelete" /> -->
@@ -156,11 +156,11 @@
     <!-- 添加或修改生产计划对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="所属订单ID" prop="orId">
-          <el-input v-model="form.orId" placeholder="请输入所属订单ID" />
+        <el-form-item label="所属订单" prop="orId">
+          <el-input v-model="form.orId" placeholder="请输入所属订单" />
         </el-form-item>
-        <el-form-item label="采用工艺流程ID" prop="procId">
-          <el-input v-model="form.procId" placeholder="请输入采用工艺流程ID" />
+        <el-form-item label="工艺流程" prop="procId">
+          <el-input v-model="form.procId" placeholder="请输入采用工艺流程" />
         </el-form-item>
         <el-form-item label="最晚结束时间" prop="mpEndPlan">
           <el-date-picker clearable
@@ -170,8 +170,8 @@
             placeholder="请选择最晚结束时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="生产计划优先级" prop="mpPriority">
-          <el-input v-model="form.mpPriority" placeholder="请输入生产计划优先级" />
+        <el-form-item label="优先级" prop="mpPriority">
+          <el-input v-model="form.mpPriority" placeholder="请输入优先级" />
         </el-form-item>
         <el-form-item label="计划产品数量" prop="mpQtyPlan">
           <el-input v-model="form.mpQtyPlan" placeholder="请输入计划产品数量" />
@@ -231,22 +231,22 @@ export default {
       // 表单校验
       rules: {
         mpId: [
-          { required: true, message: "生产计划ID不能为空", trigger: "blur" }
+          { required: true, message: "生产计划不能为空", trigger: "blur" }
         ],
         orId: [
-          { required: true, message: "所属订单ID不能为空", trigger: "blur" }
+          { required: true, message: "所属订单不能为空", trigger: "blur" }
         ],
         procId: [
-          { required: true, message: "采用工艺流程ID不能为空", trigger: "blur" }
+          { required: true, message: "工艺流程不能为空", trigger: "blur" }
         ],
         mpEndPlan: [
           { required: true, message: "最晚结束时间不能为空", trigger: "blur" }
         ],
         mpPriority: [
-          { required: true, message: "生产计划优先级不能为空", trigger: "blur" }
+          { required: true, message: "优先级不能为空", trigger: "blur" }
         ],
         mpQtyPlan: [
-          { required: true, message: "计划产品数量不能为空", trigger: "blur" }
+          { required: true, message: "产品数量不能为空", trigger: "blur" }
         ],
       }
     };

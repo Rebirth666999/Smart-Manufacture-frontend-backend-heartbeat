@@ -35,14 +35,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="已删除" prop="mpDelete">
+      <!-- <el-form-item label="已删除" prop="mpDelete">
         <el-input
           v-model="queryParams.mpDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -123,7 +123,7 @@
       <el-table-column label="生产计划优先级" align="center" prop="mpPriority" />
       <el-table-column label="计划产品数量" align="center" prop="mpQtyPlan" />
       <el-table-column label="已完成产品数量" align="center" prop="mpQtyReal" />
-      <el-table-column label="已删除" align="center" prop="mpDelete" />
+      <!-- <el-table-column label="已删除" align="center" prop="mpDelete" /> -->
       <el-table-column label="描述" align="center" prop="mpDesc" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -224,7 +224,7 @@ export default {
         procId: undefined,
         mpStat: undefined,
         mpPriority: undefined,
-        mpDelete: undefined,
+        mpDelete: 0,
       },
       // 表单参数
       form: {},

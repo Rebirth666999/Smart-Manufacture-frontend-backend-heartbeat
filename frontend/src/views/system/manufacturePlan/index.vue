@@ -111,7 +111,7 @@
 
     <el-table v-loading="loading" :data="manufacturePlanList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="生产计划" align="center" prop="mpId" v-if="true"/>
+      <el-table-column label="生产计划ID" align="center" prop="mpId" v-if="true"/>
       <el-table-column label="所属订单" align="center" prop="orId">
         <template slot-scope="scope">
           {{ orderList.find(ele => ele.orId === scope.row.orId).orName || '' }}
@@ -177,7 +177,7 @@
 
     <!-- 添加或修改生产计划对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="540px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="所属订单" prop="orId">
           <el-select
             v-model="form.orId"

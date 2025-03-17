@@ -1,24 +1,38 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="所属生产计划ID" prop="mpId">
-        <el-input
+      <el-form-item label="生产计划" prop="mpId">
+        <el-select
           v-model="queryParams.mpId"
-          placeholder="请输入所属生产计划ID"
+          placeholder="请选择生产计划"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="item in manufacturePlanList"
+            :key="item.mpId"
+            :label="item.mpName"
+            :value="item.mpId"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
-      <el-form-item label="目标车间ID" prop="arId">
-        <el-input
+      <el-form-item label="目标车间" prop="arId">
+        <el-select
           v-model="queryParams.arId"
-          placeholder="请输入目标车间ID"
+          placeholder="请选择车间"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="item in areaList"
+            :key="item.arId"
+            :label="item.arName"
+            :value="item.arId"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
-      <el-form-item label="状态代码" prop="mtStat">
-        <el-select v-model="queryParams.mtStat" placeholder="请选择状态代码" clearable>
+      <el-form-item label="状态" prop="mtStat">
+        <el-select v-model="queryParams.mtStat" placeholder="请选择状态" clearable>
           <el-option
             v-for="dict in dict.type.ices_order_status"
             :key="dict.value"
@@ -27,7 +41,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="任务优先级" prop="mtPriority">
+      <el-form-item label="优先级" prop="mtPriority">
         <el-input
           v-model="queryParams.mtPriority"
           placeholder="请输入任务优先级"
@@ -35,14 +49,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="已删除" prop="mtDelete">
+      <!-- <el-form-item label="已删除" prop="mtDelete">
         <el-input
           v-model="queryParams.mtDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -98,9 +112,17 @@
     <el-table v-loading="loading" :data="manufactureTaskList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="生产任务ID" align="center" prop="mtId" v-if="true"/>
-      <el-table-column label="所属生产计划ID" align="center" prop="mpId" />
-      <el-table-column label="目标车间ID" align="center" prop="arId" />
-      <el-table-column label="状态代码" align="center" prop="mtStat">
+      <el-table-column label="所属生产计划" align="center" prop="mpId">
+        <template slot-scope="scope">
+          {{ manufacturePlanList.find(ele => ele.mpId === scope.row.mpId).mpName || '' }}
+        </template>
+      </el-table-column>
+      <el-table-column label="目标车间" align="center" prop="arId">
+        <template slot-scope="scope">
+          {{ areaList.find(ele => ele.arId === scope.row.arId).arName || '' }}
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" align="center" prop="mtStat">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_order_status" :value="scope.row.mtStat"/>
         </template>
@@ -120,10 +142,10 @@
           <span>{{ parseTime(scope.row.mtEndReal, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="任务优先级" align="center" prop="mtPriority" />
+      <el-table-column label="优先级" align="center" prop="mtPriority" />
       <el-table-column label="计划产品数量" align="center" prop="mtQtyPlan" />
       <el-table-column label="已完成产品数量" align="center" prop="mtQtyReal" />
-      <el-table-column label="已删除" align="center" prop="mtDelete" />
+      <!-- <el-table-column label="已删除" align="center" prop="mtDelete" /> -->
       <el-table-column label="描述" align="center" prop="mtDesc" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -154,13 +176,36 @@
     />
 
     <!-- 添加或修改生产任务对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="所属生产计划ID" prop="mpId">
-          <el-input v-model="form.mpId" placeholder="请输入所属生产计划ID" />
+    <el-dialog :title="title" :visible.sync="open" width="540px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
+        <el-form-item label="所属生产计划" prop="mpId">
+          <el-select
+            v-model="form.mpId"
+            placeholder="请选择生产计划"
+            clearable
+          >
+            <el-option
+              v-for="item in manufacturePlanList"
+              :key="item.mpId"
+              :label="item.mpName"
+              :value="item.mpId"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="目标车间ID" prop="arId">
-          <el-input v-model="form.arId" placeholder="请输入目标车间ID" />
+        <el-form-item label="目标车间" prop="arId">
+          <el-select
+            v-model="form.arId"
+            placeholder="请选择车间"
+          >
+            <el-option
+              v-for="item in areaList"
+              :key="item.arId"
+              :label="item.arName"
+              :value="item.arId"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="最晚结束时间" prop="mtEndPlan">
           <el-date-picker clearable
@@ -170,7 +215,7 @@
             placeholder="请选择最晚结束时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="任务优先级" prop="mtPriority">
+        <el-form-item label="优先级" prop="mtPriority">
           <el-input v-model="form.mtPriority" placeholder="请输入任务优先级" />
         </el-form-item>
         <el-form-item label="计划产品数量" prop="mtQtyPlan">
@@ -190,6 +235,8 @@
 
 <script>
 import { listManufactureTask, getManufactureTask, delManufactureTask, addManufactureTask, updateManufactureTask } from "@/api/system/manufactureTask";
+import { listArea } from "@/api/system/area";
+import { listManufacturePlan } from "@/api/system/manufacturePlan";
 
 export default {
   name: "ManufactureTask",
@@ -224,20 +271,20 @@ export default {
         arId: undefined,
         mtStat: undefined,
         mtPriority: undefined,
-        mtDelete: undefined,
+        mtDelete: 0,
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
         mtId: [
-          { required: true, message: "生产任务ID不能为空", trigger: "blur" }
+          { required: true, message: "生产任务不能为空", trigger: "blur" }
         ],
         mpId: [
-          { required: true, message: "所属生产计划ID不能为空", trigger: "blur" }
+          { required: true, message: "所属生产计划不能为空", trigger: "blur" }
         ],
         arId: [
-          { required: true, message: "目标车间ID不能为空", trigger: "blur" }
+          { required: true, message: "目标车间不能为空", trigger: "blur" }
         ],
         mtEndPlan: [
           { required: true, message: "最晚结束时间不能为空", trigger: "blur" }
@@ -248,13 +295,31 @@ export default {
         mtQtyPlan: [
           { required: true, message: "计划产品数量不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 车间列表
+      areaList: [],
+      // 生产计划列表
+      manufacturePlanList: [],
     };
   },
-  created() {
+  async created() {
+    await this.getAreaList();
+    await this.getManufacturePlanList();
     this.getList();
   },
   methods: {
+    // 获取生产计划列表
+    getManufacturePlanList() {
+      listManufacturePlan().then(response => {
+        this.manufacturePlanList = response.rows;
+      });
+    },
+    // 获取车间列表
+    getAreaList() {
+      listArea().then(response => {
+        this.areaList = response.rows;
+      });
+    },
     /** 查询生产任务列表 */
     getList() {
       this.loading = true;

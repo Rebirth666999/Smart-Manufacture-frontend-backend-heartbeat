@@ -2,12 +2,19 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="所属订单" prop="orId">
-        <el-input
+        <el-select
           v-model="queryParams.orId"
-          placeholder="请输入所属订单"
+          placeholder="请选择订单"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="item in orderList"
+            :key="item.orId"
+            :label="item.orName"
+            :value="item.orId"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="工艺流程" prop="procId">
         <el-select
@@ -168,7 +175,19 @@
     <el-dialog :title="title" :visible.sync="open" width="540px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-form-item label="所属订单" prop="orId">
-          <el-input v-model="form.orId" placeholder="请输入所属订单" />
+          <el-select
+            v-model="form.orId"
+            placeholder="请选择订单"
+            clearable
+          >
+            <el-option
+              v-for="item in orderList"
+              :key="item.orId"
+              :label="item.orName"
+              :value="item.orId"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="工艺流程" prop="procId">
           <el-select
@@ -214,6 +233,7 @@
 <script>
 import { listManufacturePlan, getManufacturePlan, delManufacturePlan, addManufacturePlan, updateManufacturePlan } from "@/api/system/manufacturePlan";
 import { listProcess } from "@/api/system/process";
+import { listOrder } from "@/api/system/order";
 
 export default {
   name: "ManufacturePlan",
@@ -276,21 +296,30 @@ export default {
       // 已发布的所有工艺流程
       processList: [],
       // 所有工艺流程
-      processListFull: []
+      processListFull: [],
+      // 订单列表
+      orderList: []
     };
   },
   async created() {
     await this.getProcessList();
+    await this.getOrderList();
     this.getList();
   },
   methods: {
     // 查询工艺流程列表
     getProcessList() {
-      listProcess(this.queryParams).then(response => {
+      listProcess().then(response => {
         this.processListFull = response.rows;
         for (let item in response.rows) {
           if (item.procStat === '4') this.processList.push(item)
         }
+      });
+    },
+    // 查询产品列表
+    getOrderList() {
+      listOrder().then(response => {
+        this.orderList = response.rows;
       });
     },
     /** 查询生产计划列表 */

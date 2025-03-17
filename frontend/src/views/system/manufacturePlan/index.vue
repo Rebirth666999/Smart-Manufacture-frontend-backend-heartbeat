@@ -154,8 +154,8 @@
     />
 
     <!-- 添加或修改生产计划对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="540px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-form-item label="所属订单" prop="orId">
           <el-input v-model="form.orId" placeholder="请输入所属订单" />
         </el-form-item>

@@ -400,6 +400,8 @@ export default {
               this.buttonLoading = false;
             });
           } else {
+            // 新增订单的默认状态
+            this.form.orStat = '1'
             addOrder(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;

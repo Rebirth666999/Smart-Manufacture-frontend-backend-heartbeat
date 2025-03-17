@@ -10,12 +10,19 @@
         />
       </el-form-item>
       <el-form-item label="目标车间" prop="arId">
-        <el-input
+        <el-select
           v-model="queryParams.arId"
-          placeholder="请输入目标车间"
+          placeholder="请选择车间"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="item in areaList"
+            :key="item.arId"
+            :label="item.arName"
+            :value="item.arId"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="状态" prop="mtStat">
         <el-select v-model="queryParams.mtStat" placeholder="请选择状态" clearable>
@@ -99,7 +106,11 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="生产任务ID" align="center" prop="mtId" v-if="true"/>
       <el-table-column label="所属生产计划" align="center" prop="mpId" />
-      <el-table-column label="目标车间" align="center" prop="arId" />
+      <el-table-column label="目标车间" align="center" prop="arId">
+        <template slot-scope="scope">
+          {{ areaList.find(ele => ele.arId === scope.row.arId).arName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="状态" align="center" prop="mtStat">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_order_status" :value="scope.row.mtStat"/>
@@ -160,7 +171,18 @@
           <el-input v-model="form.mpId" placeholder="请输入所属生产计划" />
         </el-form-item>
         <el-form-item label="目标车间" prop="arId">
-          <el-input v-model="form.arId" placeholder="请输入目标车间" />
+          <el-select
+            v-model="form.arId"
+            placeholder="请选择车间"
+          >
+            <el-option
+              v-for="item in areaList"
+              :key="item.arId"
+              :label="item.arName"
+              :value="item.arId"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="最晚结束时间" prop="mtEndPlan">
           <el-date-picker clearable
@@ -190,6 +212,7 @@
 
 <script>
 import { listManufactureTask, getManufactureTask, delManufactureTask, addManufactureTask, updateManufactureTask } from "@/api/system/manufactureTask";
+import { listArea } from "@/api/system/area";
 
 export default {
   name: "ManufactureTask",
@@ -248,13 +271,22 @@ export default {
         mtQtyPlan: [
           { required: true, message: "计划产品数量不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 车间列表
+      areaList: [],
     };
   },
-  created() {
+  async created() {
+    await this.getAreaList();
     this.getList();
   },
   methods: {
+    // 获取车间列表
+    getAreaList() {
+      listArea().then(response => {
+        this.areaList = response.rows;
+      });
+    },
     /** 查询生产任务列表 */
     getList() {
       this.loading = true;

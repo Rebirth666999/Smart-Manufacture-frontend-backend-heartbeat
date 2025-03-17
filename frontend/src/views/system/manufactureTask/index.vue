@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="所属生产计划" prop="mpId">
+      <el-form-item label="生产计划" prop="mpId">
         <el-input
           v-model="queryParams.mpId"
           placeholder="请输入所属生产计划ID"
@@ -27,7 +27,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="任务优先级" prop="mtPriority">
+      <el-form-item label="优先级" prop="mtPriority">
         <el-input
           v-model="queryParams.mtPriority"
           placeholder="请输入任务优先级"
@@ -97,7 +97,7 @@
 
     <el-table v-loading="loading" :data="manufactureTaskList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="生产任务" align="center" prop="mtId" v-if="true"/>
+      <el-table-column label="生产任务ID" align="center" prop="mtId" v-if="true"/>
       <el-table-column label="所属生产计划" align="center" prop="mpId" />
       <el-table-column label="目标车间" align="center" prop="arId" />
       <el-table-column label="状态" align="center" prop="mtStat">
@@ -120,7 +120,7 @@
           <span>{{ parseTime(scope.row.mtEndReal, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="任务优先级" align="center" prop="mtPriority" />
+      <el-table-column label="优先级" align="center" prop="mtPriority" />
       <el-table-column label="计划产品数量" align="center" prop="mtQtyPlan" />
       <el-table-column label="已完成产品数量" align="center" prop="mtQtyReal" />
       <!-- <el-table-column label="已删除" align="center" prop="mtDelete" /> -->
@@ -154,8 +154,8 @@
     />
 
     <!-- 添加或修改生产任务对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="540px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="所属生产计划" prop="mpId">
           <el-input v-model="form.mpId" placeholder="请输入所属生产计划" />
         </el-form-item>
@@ -170,7 +170,7 @@
             placeholder="请选择最晚结束时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="任务优先级" prop="mtPriority">
+        <el-form-item label="优先级" prop="mtPriority">
           <el-input v-model="form.mtPriority" placeholder="请输入任务优先级" />
         </el-form-item>
         <el-form-item label="计划产品数量" prop="mtQtyPlan">

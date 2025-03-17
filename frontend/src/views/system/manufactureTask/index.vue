@@ -2,12 +2,19 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="生产计划" prop="mpId">
-        <el-input
+        <el-select
           v-model="queryParams.mpId"
-          placeholder="请输入所属生产计划ID"
+          placeholder="请选择生产计划"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="item in manufacturePlanList"
+            :key="item.mpId"
+            :label="item.mpName"
+            :value="item.mpId"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="目标车间" prop="arId">
         <el-select
@@ -105,7 +112,11 @@
     <el-table v-loading="loading" :data="manufactureTaskList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="生产任务ID" align="center" prop="mtId" v-if="true"/>
-      <el-table-column label="所属生产计划" align="center" prop="mpId" />
+      <el-table-column label="所属生产计划" align="center" prop="mpId">
+        <template slot-scope="scope">
+          {{ manufacturePlanList.find(ele => ele.mpId === scope.row.mpId).mpName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="目标车间" align="center" prop="arId">
         <template slot-scope="scope">
           {{ areaList.find(ele => ele.arId === scope.row.arId).arName || '' }}
@@ -168,7 +179,19 @@
     <el-dialog :title="title" :visible.sync="open" width="540px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="所属生产计划" prop="mpId">
-          <el-input v-model="form.mpId" placeholder="请输入所属生产计划" />
+          <el-select
+            v-model="form.mpId"
+            placeholder="请选择生产计划"
+            clearable
+          >
+            <el-option
+              v-for="item in manufacturePlanList"
+              :key="item.mpId"
+              :label="item.mpName"
+              :value="item.mpId"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="目标车间" prop="arId">
           <el-select
@@ -213,6 +236,7 @@
 <script>
 import { listManufactureTask, getManufactureTask, delManufactureTask, addManufactureTask, updateManufactureTask } from "@/api/system/manufactureTask";
 import { listArea } from "@/api/system/area";
+import { listManufacturePlan } from "@/api/system/manufacturePlan";
 
 export default {
   name: "ManufactureTask",
@@ -274,13 +298,22 @@ export default {
       },
       // 车间列表
       areaList: [],
+      // 生产计划列表
+      manufacturePlanList: [],
     };
   },
   async created() {
     await this.getAreaList();
+    await this.getManufacturePlanList();
     this.getList();
   },
   methods: {
+    // 获取生产计划列表
+    getManufacturePlanList() {
+      listManufacturePlan().then(response => {
+        this.manufacturePlanList = response.rows;
+      });
+    },
     // 获取车间列表
     getAreaList() {
       listArea().then(response => {

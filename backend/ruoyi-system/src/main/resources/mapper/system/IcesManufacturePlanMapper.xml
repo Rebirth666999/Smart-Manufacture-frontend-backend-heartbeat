@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.IcesManufacturePlanMapper">
+
+    <resultMap type="com.ruoyi.system.domain.IcesManufacturePlan" id="IcesManufacturePlanResult">
+        <result property="mpId" column="mp_id"/>
+        <result property="orId" column="or_id"/>
+        <result property="procId" column="proc_id"/>
+        <result property="mpStat" column="mp_stat"/>
+        <result property="mpBegin" column="mp_begin"/>
+        <result property="mpEndPlan" column="mp_end_plan"/>
+        <result property="mpEndReal" column="mp_end_real"/>
+        <result property="mpPriority" column="mp_priority"/>
+        <result property="mpQtyPlan" column="mp_qty_plan"/>
+        <result property="mpQtyReal" column="mp_qty_real"/>
+        <result property="mpDelete" column="mp_delete"/>
+        <result property="mpDesc" column="mp_desc"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

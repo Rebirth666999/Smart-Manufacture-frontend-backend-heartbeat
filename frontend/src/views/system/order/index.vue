@@ -2,12 +2,19 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="所需产品" prop="prId">
-        <el-input
+        <el-select
           v-model="queryParams.prId"
-          placeholder="请输入所需产品"
+          placeholder="请选择产品"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="item in productList"
+            :key="item.prId"
+            :label="item.prName"
+            :value="item.prId"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="客户" prop="clId">
         <el-input
@@ -118,7 +125,11 @@
     <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="订单ID" align="center" prop="orId" v-if="true"/>
-      <el-table-column label="所需产品" align="center" prop="prId" />
+      <el-table-column label="所需产品" align="center" prop="prId">
+        <template slot-scope="scope">
+          {{ productList.find(ele => ele.prId === scope.row.prId).prName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="客户" align="center" prop="clId" />
       <el-table-column label="订单名称" align="center" prop="orName" />
       <el-table-column label="状态代码" align="center" prop="orStat">
@@ -168,7 +179,18 @@
     <el-dialog :title="title" :visible.sync="open" width="530px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="所需产品" prop="prId">
-          <el-input v-model="form.prId" placeholder="请输入所需产品" />
+          <el-select
+            v-model="form.prId"
+            placeholder="请选择产品"
+          >
+            <el-option
+              v-for="item in productList"
+              :key="item.prId"
+              :label="item.prName"
+              :value="item.prId"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="客户" prop="clId">
           <el-input v-model="form.clId" placeholder="请输入客户" />
@@ -207,6 +229,7 @@
 
 <script>
 import { listOrder, getOrder, delOrder, addOrder, updateOrder } from "@/api/system/order";
+import { listProduct } from "@/api/system/product";
 
 export default {
   name: "Order",
@@ -272,13 +295,22 @@ export default {
         orPrice: [
           { required: true, message: "总价不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 产品列表
+      productList: []
     };
   },
-  created() {
+  async created() {
+    await this.getProductList();
     this.getList();
   },
   methods: {
+    // 查询产品列表
+    getProductList() {
+      listProduct().then(response => {
+        this.productList = response.rows
+      })
+    },
     /** 查询订单列表 */
     getList() {
       this.loading = true;

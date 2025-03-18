@@ -3,7 +3,7 @@
     <div class="process-canvas" style="height: 100%;" ref="processCanvas" v-show="!isLoading" />
     <!-- 画布视角控件：放大缩小按钮 -->
     <div style="position: absolute; top: 0px; left: 0px; width: 100%;">
-      <el-row type="flex" justify="end">
+      <el-row type="flex" justify="start">
         <el-button-group key="scale-control" size="medium">
           <el-button size="medium" type="default" :plain="true" :disabled="defaultZoom <= 0.3" icon="el-icon-zoom-out" @click="processZoomOut()" />
           <el-button size="medium" type="default" style="width: 90px;">{{ Math.floor(this.defaultZoom * 10 * 10) + "%" }}</el-button>
@@ -12,6 +12,10 @@
           <slot />
         </el-button-group>
       </el-row>
+    </div>
+    <!-- 右侧边栏显示属性信息 -->
+    <div class="viewer-penal">
+      
     </div>
   </div>
 </template>
@@ -128,4 +132,21 @@ export default {
 </script>
 
 <style scoped>
+.process-viewer {
+  display: flex;
+}
+.process-canvas {
+  width: 100%;
+}
+.viewer-penal {
+  width: 480px;
+  background: #fff;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  padding: 0 8px;
+  border-left: 1px solid #eee;
+  box-shadow: 0 0 8px #ccc;
+  max-height: 100%;
+  overflow: scroll;
+}
 </style>

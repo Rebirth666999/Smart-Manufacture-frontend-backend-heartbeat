@@ -10,7 +10,7 @@
           <el-option
             v-for="item in manufacturePlanList"
             :key="item.mpId"
-            :label="item.mpName"
+            :label="item.mpId"
             :value="item.mpId"
           >
           </el-option>
@@ -112,11 +112,7 @@
     <el-table v-loading="loading" :data="manufactureTaskList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="生产任务ID" align="center" prop="mtId" v-if="true"/>
-      <el-table-column label="所属生产计划" align="center" prop="mpId">
-        <template slot-scope="scope">
-          {{ manufacturePlanList.find(ele => ele.mpId === scope.row.mpId).mpName || '' }}
-        </template>
-      </el-table-column>
+      <el-table-column label="所属生产计划ID" align="center" prop="mpId" />
       <el-table-column label="目标车间" align="center" prop="arId">
         <template slot-scope="scope">
           {{ areaList.find(ele => ele.arId === scope.row.arId).arName || '' }}
@@ -187,7 +183,7 @@
             <el-option
               v-for="item in manufacturePlanList"
               :key="item.mpId"
-              :label="item.mpName"
+              :label="item.mpId"
               :value="item.mpId"
             >
             </el-option>

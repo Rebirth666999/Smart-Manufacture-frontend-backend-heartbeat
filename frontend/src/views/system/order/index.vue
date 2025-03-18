@@ -159,6 +159,20 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-finished"
+            v-if="scope.row.orStat==='1'"
+            @click="handleSubmitReview(scope.row)"
+          >提交审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-refresh-left"
+            v-show="scope.row.orStat === '2' || scope.row.orStat === 'B'"
+            @click="handleWithdrawReview(scope.row)"
+          >撤回审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:order:remove']"
@@ -433,6 +447,41 @@ export default {
       this.download('system/order/export', {
         ...this.queryParams
       }, `order_${new Date().getTime()}.xlsx`)
+    },
+    handleSubmitReview(row) {
+      const orId = row.orId;
+      this.$modal.confirm('是否要提交审核？审核在开始之前可以撤回。').then(() => {
+        this.loading = true;
+        getOrder(orId).then(response => {
+          this.form = response.data;
+          this.form.orStat = "2";
+          updateOrder(this.form).then(response => {
+            this.$modal.msgSuccess("已提交审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    handleWithdrawReview(row) {
+      const orId = row.orId;
+      this.$modal.confirm('是否要撤回审核？若审核已开始即无法撤回。').then(() => {
+        this.loading = true;
+        getOrder(orId).then(response => {
+          this.form = response.data;
+          if (this.form.orStat === '2') this.form.orStat = '1'
+          else if (this.form.orStat === 'B') this.form.orStat = '4'
+          updateOrder(this.form).then(response => {
+            this.$modal.msgSuccess("已撤回审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
     }
   }
 };

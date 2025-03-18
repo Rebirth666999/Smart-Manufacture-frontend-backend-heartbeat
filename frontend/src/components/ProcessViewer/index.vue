@@ -37,6 +37,7 @@
         </el-table>
       </el-row>
     </el-dialog>
+    <!-- 画布视角控件：放大缩小按钮 -->
     <div style="position: absolute; top: 0px; left: 0px; width: 100%;">
       <el-row type="flex" justify="end">
         <el-button-group key="scale-control" size="medium">

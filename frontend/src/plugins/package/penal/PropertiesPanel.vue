@@ -62,7 +62,7 @@
         <div slot="title" class="panel-tab__title">
           <i class="el-icon-s-promotion"></i>步骤属性
         </div>
-        <eos-properties :id="elementId" :list="extraList"/>
+        <eos-properties :id="elementId" :list="extraList.eaoList"/>
       </el-collapse-item>
       <el-collapse-item
         name="eosParam"

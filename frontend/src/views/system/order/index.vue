@@ -167,7 +167,7 @@
             size="mini"
             type="text"
             icon="el-icon-refresh-left"
-            v-show="scope.row.orStat === '2' || scope.row.orStat === 'B'"
+            v-show="scope.row.orStat === '2' || scope.row.orStat === 'b'"
             @click="handleWithdrawReview(scope.row)"
           >撤回审核</el-button>
           <el-button
@@ -472,7 +472,7 @@ export default {
         getOrder(orId).then(response => {
           this.form = response.data;
           if (this.form.orStat === '2') this.form.orStat = '1'
-          else if (this.form.orStat === 'B') this.form.orStat = '4'
+          else if (this.form.orStat === 'b') this.form.orStat = '4'
           updateOrder(this.form).then(response => {
             this.$modal.msgSuccess("已撤回审核");
             this.getList();

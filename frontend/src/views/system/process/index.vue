@@ -246,6 +246,8 @@
         :key="`designer-${viewerData.index}`"
         :xml="viewerData.bpmnXml"
         :style="{height: 'calc(100vh - 124.5px)'}"
+        :mode="2"
+        :extraList="{emList: equipmentModelList, moList: modelOperationList}"
       />
     </el-dialog>
   </div>

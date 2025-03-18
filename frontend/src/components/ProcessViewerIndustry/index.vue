@@ -2,7 +2,7 @@
   <div class="process-viewer">
     <div class="process-canvas" style="height: 100%;" ref="processCanvas" v-show="!isLoading" />
     <!-- 画布视角控件：放大缩小按钮 -->
-    <div style="position: absolute; top: 0px; left: 0px; width: 100%;">
+    <div style="position: absolute; top: 0px; left: 0px;">
       <el-row type="flex" justify="start">
         <el-button-group key="scale-control" size="medium">
           <el-button size="medium" type="default" :plain="true" :disabled="defaultZoom <= 0.3" icon="el-icon-zoom-out" @click="processZoomOut()" />
@@ -15,7 +15,29 @@
     </div>
     <!-- 右侧边栏显示属性信息 -->
     <div class="viewer-penal">
-      
+      <el-collapse>
+        <!-- 产品工艺流程 -->
+        <el-collapse-item
+          name="procBasic"
+          v-if="mode === 2"
+          key="procBasic"
+        >
+          <div slot="title" class="panel-tab__title">
+            <i class="el-icon-info"></i>常规
+          </div>
+          <proc-base-info :element="element" />
+        </el-collapse-item>
+        <el-collapse-item
+          name="procProperties"
+          v-if="mode === 2 && element.type === 'bpmn:ServiceTask'"
+          key="procProperties"
+        >
+          <div slot="title" class="panel-tab__title">
+            <i class="el-icon-s-promotion"></i>步骤属性
+          </div>
+          <proc-properties :element="element" :emList="extraList.emList" :moList="extraList.moList" />
+        </el-collapse-item>
+      </el-collapse>
     </div>
   </div>
 </template>
@@ -24,11 +46,21 @@
 import '@/plugins/package/theme/index.scss';
 import BpmnViewer from 'bpmn-js/lib/Viewer';
 import MoveCanvasModule from 'diagram-js/lib/navigation/movecanvas';
+import ProcBaseInfo from "@/plugins/package/penal/base/ProcessBaseInfoView";
+import ProcProperties from "@/plugins/package/penal/properties/ProcessPropertiesView";
 
 export default {
+  name: 'ProcessViewerIndustry',
+  components: {
+    ProcBaseInfo,
+    ProcProperties
+  },
   props: {
     xml: {
       type: String
+    },
+    mode: {
+      type: Number
     },
     extraList: {
       type: Object
@@ -40,14 +72,12 @@ export default {
       // 是否正在加载流程图
       isLoading: false,
       bpmnViewer: undefined,
-      // 已完成流程元素
-      processNodeInfo: undefined,
       // 当前任务id
       selectTaskId: undefined,
-      // 任务节点审批记录
-      taskCommentList: [],
-      // 已完成任务悬浮延迟Timer
-      hoverTimer: null
+      // 选中对象
+      element: {
+        type: null
+      },
     }
   },
   watch: {
@@ -97,6 +127,7 @@ export default {
     // 任务悬浮弹窗
     onSelectElement(element) {
       console.log(element)
+      this.element = element;
     },
     // 显示流程图
     async importXML(xml) {
@@ -131,7 +162,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .process-viewer {
   display: flex;
 }
@@ -149,4 +180,15 @@ export default {
   max-height: 100%;
   overflow: scroll;
 }
+.panel-tab__title {
+  font-weight: 600;
+  padding: 0 8px;
+  font-size: 1.1em;
+  line-height: 1.2em;
+  i {
+    margin-right: 8px;
+    font-size: 1.2em;
+  }
+}
+
 </style>

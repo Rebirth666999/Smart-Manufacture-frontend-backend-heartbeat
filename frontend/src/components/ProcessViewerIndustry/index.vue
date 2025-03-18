@@ -16,6 +16,38 @@
     <!-- 右侧边栏显示属性信息 -->
     <div class="viewer-penal">
       <el-collapse>
+        <!-- 设备操作流程 -->
+        <el-collapse-item
+          name="eosBasic"
+          v-if="mode === 1"
+          key="eosBasic"
+        >
+          <div slot="title" class="panel-tab__title">
+            <i class="el-icon-info"></i>常规
+          </div>
+          <eos-base-info :element="element" />
+        </el-collapse-item>
+        <el-collapse-item
+          name="eosProperties"
+          v-if="mode === 1 && element.type === 'bpmn:Task'"
+          key="eosProperties"
+        >
+          <div slot="title" class="panel-tab__title">
+            <i class="el-icon-s-promotion"></i>步骤属性
+          </div>
+          <eos-properties :element="element" :list="extraList.eaoList"/>
+        </el-collapse-item>
+        <el-collapse-item
+          name="eosParam"
+          v-if="mode === 1 && element.type === 'bpmn:Task'"
+          key="eosParam"
+        >
+          <div slot="title" class="panel-tab__title">
+            <i class="el-icon-s-operation"></i>步骤参数
+          </div>
+          <eos-param :element="element" />
+        </el-collapse-item>
+
         <!-- 产品工艺流程 -->
         <el-collapse-item
           name="procBasic"
@@ -46,14 +78,20 @@
 import '@/plugins/package/theme/index.scss';
 import BpmnViewer from 'bpmn-js/lib/Viewer';
 import MoveCanvasModule from 'diagram-js/lib/navigation/movecanvas';
-import ProcBaseInfo from "@/plugins/package/penal/base/ProcessBaseInfoView";
+import ProcBaseInfo from "@/plugins/package/penal/base/IndustryBaseInfoView";
 import ProcProperties from "@/plugins/package/penal/properties/ProcessPropertiesView";
+import EosBaseInfo from "@/plugins/package/penal/base/IndustryBaseInfoView";
+import EosProperties from "@/plugins/package/penal/properties/EquipmentOperationStepPropertiesView";
+import EosParam from "@/plugins/package/penal/param/EquipmentOperationStepParamView";
 
 export default {
   name: 'ProcessViewerIndustry',
   components: {
     ProcBaseInfo,
-    ProcProperties
+    ProcProperties,
+    EosBaseInfo,
+    EosProperties,
+    EosParam,
   },
   props: {
     xml: {
@@ -124,9 +162,8 @@ export default {
       }
       this.bpmnViewer = null;
     },
-    // 任务悬浮弹窗
+    // 点击步骤的回调函数
     onSelectElement(element) {
-      console.log(element)
       this.element = element;
     },
     // 显示流程图

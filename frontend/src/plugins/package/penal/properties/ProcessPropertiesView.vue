@@ -42,12 +42,11 @@ export default {
       immediate: true,
       handler: function(element) {
         if (element.type === 'bpmn:ServiceTask') {
-          this.emId = element.businessObject.$attrs.emId
-          this.moId = element.businessObject.$attrs.moId
-          this.psDesc = element.businessObject.$attrs.psDesc
-          this.prev = JSON.parse(element.businessObject.$attrs.prev)
+          this.emId = element.businessObject.$attrs.emId || ''
+          this.moId = element.businessObject.$attrs.moId || ''
+          this.psDesc = element.businessObject.$attrs.psDesc || ''
+          this.prev = JSON.parse(element.businessObject.$attrs.prev || '[]')
           this.elements = element.parent.children
-          console.warn(this.elements)
         }
       }
     }

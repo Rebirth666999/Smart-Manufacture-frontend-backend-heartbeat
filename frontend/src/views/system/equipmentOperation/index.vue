@@ -211,18 +211,20 @@
         :bpmnXml="designerData.bpmnXml"
         :designerForm="designerData.form"
         :mode="1"
-        :extraList="atomOperationList"
+        :extraList="{ eaoList: atomOperationList }"
         @save="onSaveDesigner"
       />
     </el-dialog>
 
     <!-- 查看流程对话框 -->
-    <el-dialog :title="viewerData.title" :visible.sync="viewerOpen" width="70%" append-to-body>
+    <el-dialog :title="viewerData.title" :visible.sync="viewerOpen" append-to-body fullscreen>
       <process-viewer
         v-loading="viewerData.loading"
         :key="`designer-${viewerData.index}`"
         :xml="viewerData.bpmnXml"
-        :style="{height: '60vh'}"
+        :style="{height: 'calc(100vh - 124.5px)'}"
+        :mode="1"
+        :extraList="{ eaoList: atomOperationList }"
       />
     </el-dialog>
   </div>
@@ -234,7 +236,7 @@ import { listEquipment } from "@/api/system/equipment";
 import { listModelOperation } from "@/api/system/modelOperation";
 import { listEquipmentAtomOperation } from "@/api/system/equipmentAtomOperation";
 import ProcessDesigner from '@/components/ProcessDesigner';
-import ProcessViewer from '@/components/ProcessViewer';
+import ProcessViewer from '@/components/ProcessViewerIndustry';
 
 export default {
   name: "EquipmentOperation",
@@ -515,7 +517,7 @@ export default {
     /** 查看流程按钮操作 */
     handleViewer(row) {
       this.viewerData.loading = true
-      this.viewerData.title = row.eoName
+      this.viewerData.title = "查看设备操作流程 - " + row.eoName
       this.viewerData.index = row.eoModel
       this.viewerOpen = true
       getBpmnXml(row.eoModel).then(response => {

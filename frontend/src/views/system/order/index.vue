@@ -174,6 +174,13 @@
             size="mini"
             type="text"
             icon="el-icon-delete"
+            v-show="scope.row.orStat === '4'"
+            @click="handleDepreciateReview(scope.row)"
+          >弃用</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:order:remove']"
           >删除</el-button>
@@ -448,6 +455,7 @@ export default {
         ...this.queryParams
       }, `order_${new Date().getTime()}.xlsx`)
     },
+    // 提交审核
     handleSubmitReview(row) {
       const orId = row.orId;
       this.$modal.confirm('是否要提交审核？审核在开始之前可以撤回。').then(() => {
@@ -465,6 +473,7 @@ export default {
         this.loading = false;
       });
     },
+    // 撤回审核操作
     handleWithdrawReview(row) {
       const orId = row.orId;
       this.$modal.confirm('是否要撤回审核？若审核已开始即无法撤回。').then(() => {
@@ -475,6 +484,24 @@ export default {
           else if (this.form.orStat === 'b') this.form.orStat = '4'
           updateOrder(this.form).then(response => {
             this.$modal.msgSuccess("已撤回审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 弃用订单
+    handleDepreciateReview(row) {
+      const orId = row.orId;
+      this.$modal.confirm('是否弃用此订单？弃用订单需要进行订单弃用审核。').then(() => {
+        this.loading = true;
+        getOrder(orId).then(response => {
+          this.form = response.data;
+          this.form.orStat = "b";
+          updateOrder(this.form).then(response => {
+            this.$modal.msgSuccess("已提交订单弃用审核");
             this.getList();
           })
         });

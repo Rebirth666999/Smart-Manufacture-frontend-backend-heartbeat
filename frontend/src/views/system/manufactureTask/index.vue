@@ -400,6 +400,8 @@ export default {
               this.buttonLoading = false;
             });
           } else {
+            // 生产任务的默认状态
+            this.form.mtStat = '1'
             addManufactureTask(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;

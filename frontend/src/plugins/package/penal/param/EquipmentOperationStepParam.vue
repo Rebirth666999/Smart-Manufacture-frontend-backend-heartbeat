@@ -91,13 +91,13 @@ export default {
       propertyFormModelVisible: false,
       // 表单校验
       rules: {
-        eospa_name: [
+        eospaName: [
           { required: true, message: "参数名称不能为空", trigger: "blur" }
         ],
-        eospa_type: [
+        eospaType: [
           { required: true, message: "参数类型不能为空", trigger: "blur" }
         ],
-        eospa_pos: [
+        eospaPos: [
           { required: true, message: "参数位置不能为空", trigger: "blur" }
         ],
       },

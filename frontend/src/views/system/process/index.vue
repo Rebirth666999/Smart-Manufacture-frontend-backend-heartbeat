@@ -240,12 +240,12 @@
     </el-dialog>
 
     <!-- 查看流程对话框 -->
-    <el-dialog :title="viewerData.title" :visible.sync="viewerOpen" width="70%" append-to-body>
+    <el-dialog :title="viewerData.title" :visible.sync="viewerOpen" append-to-body fullscreen>
       <process-viewer
         v-loading="viewerData.loading"
         :key="`designer-${viewerData.index}`"
         :xml="viewerData.bpmnXml"
-        :style="{height: '60vh'}"
+        :style="{height: 'calc(100vh - 124.5px)'}"
       />
     </el-dialog>
   </div>
@@ -257,7 +257,7 @@ import { listProduct } from "@/api/system/product";
 import { listEquipmentModel } from "@/api/system/equipmentModel";
 import { listModelOperation } from "@/api/system/modelOperation";
 import ProcessDesigner from '@/components/ProcessDesigner';
-import ProcessViewer from '@/components/ProcessViewer';
+import ProcessViewer from '@/components/ProcessViewerIndustry';
 
 
 export default {
@@ -524,7 +524,7 @@ export default {
     /** 查看流程按钮操作 */
     handleViewer(row) {
       this.viewerData.loading = true
-      this.viewerData.title = row.procName
+      this.viewerData.title = "查看流程 - " + row.procName
       this.viewerData.index = row.procModel
       this.viewerOpen = true
       getBpmnXml(row.procModel).then(response => {

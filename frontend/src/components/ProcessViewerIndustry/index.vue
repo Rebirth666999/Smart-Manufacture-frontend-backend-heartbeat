@@ -97,6 +97,9 @@ export default {
     xml: {
       type: String
     },
+    // mode代表查看器职能
+    // 1-设备操作流程查看
+    // 2-产品工艺流程查看
     mode: {
       type: Number
     },

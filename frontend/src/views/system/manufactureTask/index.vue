@@ -233,6 +233,7 @@
 import { listManufactureTask, getManufactureTask, delManufactureTask, addManufactureTask, updateManufactureTask } from "@/api/system/manufactureTask";
 import { listArea } from "@/api/system/area";
 import { listManufacturePlan } from "@/api/system/manufacturePlan";
+import { listProcess } from "@/api/system/process";
 
 export default {
   name: "ManufactureTask",
@@ -296,14 +297,23 @@ export default {
       areaList: [],
       // 生产计划列表
       manufacturePlanList: [],
+      // 工艺流程列表
+      processList: []
     };
   },
   async created() {
     await this.getAreaList();
     await this.getManufacturePlanList();
+    await this.getProcessList();
     this.getList();
   },
   methods: {
+    // 获取工艺流程列表
+    getProcessList() {
+      listProcess().then(response => {
+        this.processList = response.rows;
+      });
+    },
     // 获取生产计划列表
     getManufacturePlanList() {
       listManufacturePlan().then(response => {

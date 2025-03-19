@@ -51,7 +51,7 @@
         <!-- 产品工艺流程 -->
         <el-collapse-item
           name="procBasic"
-          v-if="mode === 2"
+          v-if="mode === 2 || mode === 3"
           key="procBasic"
         >
           <div slot="title" class="panel-tab__title">
@@ -61,13 +61,25 @@
         </el-collapse-item>
         <el-collapse-item
           name="procProperties"
-          v-if="mode === 2 && element.type === 'bpmn:ServiceTask'"
+          v-if="(mode === 2 || mode === 3) && element.type === 'bpmn:ServiceTask'"
           key="procProperties"
         >
           <div slot="title" class="panel-tab__title">
             <i class="el-icon-s-promotion"></i>步骤属性
           </div>
           <proc-properties :element="element" :emList="extraList.emList" :moList="extraList.moList" />
+        </el-collapse-item>
+
+        <!-- 分配设备给对应步骤 -->
+        <el-collapse-item
+          name="deviceTask"
+          v-if="mode === 3 && element.type === 'bpmn:ServiceTask'"
+          key="deviceTask"
+        >
+          <div slot="title" class="panel-tab__title">
+            <i class="el-icon-link"></i>分配设备
+          </div>
+          <proc-device-task @updateTask="updateTask" :element="element" :eqList="extraList.eqList" :eoList="extraList.eoList" :taskList="taskList" />
         </el-collapse-item>
       </el-collapse>
     </div>
@@ -83,6 +95,7 @@ import ProcProperties from "@/plugins/package/penal/properties/ProcessProperties
 import EosBaseInfo from "@/plugins/package/penal/base/IndustryBaseInfoView";
 import EosProperties from "@/plugins/package/penal/properties/EquipmentOperationStepPropertiesView";
 import EosParam from "@/plugins/package/penal/param/EquipmentOperationStepParamView";
+import ProcDeviceTask from "@/plugins/package/penal/task/DeviceTask";
 
 export default {
   name: 'ProcessViewerIndustry',
@@ -92,6 +105,7 @@ export default {
     EosBaseInfo,
     EosProperties,
     EosParam,
+    ProcDeviceTask
   },
   props: {
     xml: {
@@ -100,6 +114,7 @@ export default {
     // mode代表查看器职能
     // 1-设备操作流程查看
     // 2-产品工艺流程查看
+    // 3-分配设备任务
     mode: {
       type: Number
     },
@@ -119,6 +134,8 @@ export default {
       element: {
         type: null
       },
+      // mode = 3时，维护步骤对应的设备和设备操作
+      taskList: []
     }
   },
   watch: {
@@ -193,6 +210,16 @@ export default {
         } finally {
           this.isLoading = false;
         }
+      }
+    },
+
+    // 更新已经暂存的任务
+    updateTask(data) {
+      const idx = this.taskList.findIndex(ele => ele.id === data.id)
+      if (idx === -1) {
+        this.taskList.push(data)
+      } else {
+        this.taskList[idx] = data
       }
     }
   },

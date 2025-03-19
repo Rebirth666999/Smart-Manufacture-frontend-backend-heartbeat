@@ -155,6 +155,12 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-download"
+            @click="handleGenerateDeviceTask(scope.row)"
+          >生成设备任务</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:manufactureTask:remove']"
@@ -226,6 +232,18 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 分配设备任务对话框 -->
+    <el-dialog :title="viewerData.title" :visible.sync="viewerOpen" append-to-body fullscreen>
+      <process-viewer
+        v-loading="viewerData.loading"
+        :key="`designer-${viewerData.index}`"
+        :xml="viewerData.bpmnXml"
+        :style="{height: 'calc(100vh - 124.5px)'}"
+        :mode="3"
+        :extraList="{emList: viewerData.emList, moList: viewerData.moList, eqList: viewerData.eqList, eoList: viewerData.eoList}"
+      />
+    </el-dialog>
   </div>
 </template>
 
@@ -233,9 +251,20 @@
 import { listManufactureTask, getManufactureTask, delManufactureTask, addManufactureTask, updateManufactureTask } from "@/api/system/manufactureTask";
 import { listArea } from "@/api/system/area";
 import { listManufacturePlan } from "@/api/system/manufacturePlan";
+import { listProcess, getBpmnXml } from "@/api/system/process";
+
+import { listEquipment } from "@/api/system/equipment";
+import { listEquipmentOperation } from "@/api/system/equipmentOperation";
+import { listModelOperation } from "@/api/system/modelOperation";
+import { listEquipmentModel } from "@/api/system/equipmentModel";
+
+import ProcessViewer from '@/components/ProcessViewerIndustry';
 
 export default {
   name: "ManufactureTask",
+  components: {
+    ProcessViewer,
+  },
   dicts: ['ices_order_status'],
   data() {
     return {
@@ -296,14 +325,55 @@ export default {
       areaList: [],
       // 生产计划列表
       manufacturePlanList: [],
+      // 工艺流程列表
+      processList: [],
+      // 查看窗口是否打开
+      viewerOpen: false,
+      // 查看器相关数据
+      viewerData: {
+        title: '',
+        loading: false,
+        index: undefined,
+        bpmnXml: '',
+        emList: [],  // 设备模型列表
+        moList: [],  // 模型操作列表
+        eqList: [],  // 设备列表（满足在对应的车间）
+        eoList: [],  // 设备操作列表
+      },
+      // 设备列表（全）
+      eqList: [],
     };
   },
   async created() {
     await this.getAreaList();
     await this.getManufacturePlanList();
+    await this.getProcessList();
+    await this.getReferenceList();
     this.getList();
   },
   methods: {
+    // 获取流程信息参照所需的列表
+    // 设备模型、模型操作、设备操作、设备
+    getReferenceList() {
+      listEquipmentModel().then(response => {
+        this.viewerData.emList = response.rows;
+      });
+      listModelOperation().then(response => {
+        this.viewerData.moList = response.rows;
+      });
+      listEquipmentOperation().then(response => {
+        this.viewerData.eoList = response.rows;
+      });
+      listEquipment().then(response => {
+        this.eqList = response.rows;
+      });
+    },
+    // 获取工艺流程列表
+    getProcessList() {
+      listProcess().then(response => {
+        this.processList = response.rows;
+      });
+    },
     // 获取生产计划列表
     getManufacturePlanList() {
       listManufacturePlan().then(response => {
@@ -433,6 +503,24 @@ export default {
       this.download('system/manufactureTask/export', {
         ...this.queryParams
       }, `manufactureTask_${new Date().getTime()}.xlsx`)
+    },
+    // 生成生产任务
+    handleGenerateDeviceTask(row) {
+      // 找到生产计划
+      const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpId === row.mpId)
+      // 找到工艺流程
+      const process = this.processList.find(ele => ele.procId === manufacturePlan.procId)
+      // 找到可分配的设备
+      this.viewerData.eqList = this.eqList.filter(ele => ele.arId === row.arId)
+      // 打开流程
+      this.viewerData.loading = true
+      this.viewerData.title = "分配设备任务"
+      this.viewerData.index = process.procModel
+      this.viewerOpen = true
+      getBpmnXml(process.procModel).then(response => {
+        this.viewerData.bpmnXml = response.data || ''
+        this.viewerData.loading = false
+      })
     }
   }
 };

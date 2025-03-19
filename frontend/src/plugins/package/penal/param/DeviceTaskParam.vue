@@ -127,7 +127,7 @@ export default {
     },
     // 打开新增/修改参数窗口
     openParamsForm(attr, index) {
-      const param = this.task.param.find(ele => ele.epspaId === attr.eospaId)
+      const param = this.task.param.find(ele => ele.eospaId === attr.eospaId)
       this.editParam = this.paramList[index]
       this.dtpaValue = param ? param.dtpaValue : ''
       this.propertyFormModelVisible = true;
@@ -140,11 +140,11 @@ export default {
         // 填充默认值
         if (this.dtpaValue.length === 0) this.dtpaValue = this.editParam.eospaValue
         // 保存参数
-        const idx = this.task.param.findIndex(ele => ele.epspaId === attr.eospaId)
+        const idx = this.task.param.findIndex(ele => ele.eospaId === this.editParam.eospaId)
         if (idx === -1) {
-          this.task.param.push({ epspaId: this.editParam.eospaId, dtpaValue: this.dtpaValue })
+          this.task.param.push({ eospaId: this.editParam.eospaId, dtpaValue: this.dtpaValue })
         } else {
-          this.task.param[idx] = { epspaId: this.editParam.eospaId, dtpaValue: this.dtpaValue }
+          this.task.param[idx] = { eospaId: this.editParam.eospaId, dtpaValue: this.dtpaValue }
         }
         this.$emit('updateTask', this.task)
         this.propertyFormModelVisible = false

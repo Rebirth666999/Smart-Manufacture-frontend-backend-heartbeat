@@ -72,11 +72,11 @@ export default {
     // 更新属性：设备
     updateEquipment() {
       this.eoId = ''
-      this.$emit('updateTask', { id: this.current.id, eqId: this.eqId, eoId: '' })
+      this.$emit('updateTask', { id: this.current.id, eqId: this.eqId, eoId: '', param: [] })
     },
     // 更新属性：设备操作
     updateEquipmentOperation() {
-      this.$emit('updateTask', { id: this.current.id, eqId: this.eqId, eoId: this.eoId })
+      this.$emit('updateTask', { id: this.current.id, eqId: this.eqId, eoId: this.eoId, param: [] })
     },
   },
   beforeDestroy() {

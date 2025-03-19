@@ -241,7 +241,7 @@
         :xml="viewerData.bpmnXml"
         :style="{height: 'calc(100vh - 124.5px)'}"
         :mode="3"
-        :extraList="{}"
+        :extraList="{emList: viewerData.emList, moList: viewerData.moList, eqList: viewerData.eqList, eoList: viewerData.eoList}"
       />
     </el-dialog>
   </div>
@@ -252,6 +252,12 @@ import { listManufactureTask, getManufactureTask, delManufactureTask, addManufac
 import { listArea } from "@/api/system/area";
 import { listManufacturePlan } from "@/api/system/manufacturePlan";
 import { listProcess, getBpmnXml } from "@/api/system/process";
+
+import { listEquipment } from "@/api/system/equipment";
+import { listEquipmentOperation } from "@/api/system/equipmentOperation";
+import { listModelOperation } from "@/api/system/modelOperation";
+import { listEquipmentModel } from "@/api/system/equipmentModel";
+
 import ProcessViewer from '@/components/ProcessViewerIndustry';
 
 export default {
@@ -328,17 +334,40 @@ export default {
         title: '',
         loading: false,
         index: undefined,
-        bpmnXml: ''
+        bpmnXml: '',
+        emList: [],  // 设备模型列表
+        moList: [],  // 模型操作列表
+        eqList: [],  // 设备列表（满足在对应的车间）
+        eoList: [],  // 设备操作列表
       },
+      // 设备列表（全）
+      eqList: [],
     };
   },
   async created() {
     await this.getAreaList();
     await this.getManufacturePlanList();
     await this.getProcessList();
+    await this.getReferenceList();
     this.getList();
   },
   methods: {
+    // 获取流程信息参照所需的列表
+    // 设备模型、模型操作、设备操作、设备
+    getReferenceList() {
+      listEquipmentModel().then(response => {
+        this.viewerData.emList = response.rows;
+      });
+      listModelOperation().then(response => {
+        this.viewerData.moList = response.rows;
+      });
+      listEquipmentOperation().then(response => {
+        this.viewerData.eoList = response.rows;
+      });
+      listEquipment().then(response => {
+        this.eqList = response.rows;
+      });
+    },
     // 获取工艺流程列表
     getProcessList() {
       listProcess().then(response => {
@@ -481,6 +510,8 @@ export default {
       const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpId === row.mpId)
       // 找到工艺流程
       const process = this.processList.find(ele => ele.procId === manufacturePlan.procId)
+      // 找到可分配的设备
+      this.viewerData.eqList = this.eqList.filter(ele => ele.arId === row.arId)
       // 打开流程
       this.viewerData.loading = true
       this.viewerData.title = "分配设备任务"

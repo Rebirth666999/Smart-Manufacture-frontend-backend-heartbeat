@@ -159,6 +159,20 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-finished"
+            v-if="scope.row.mpStat==='1'"
+            @click="handleSubmitReview(scope.row)"          
+          >提交审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-refresh-left"
+            v-show="scope.row.mpStat === '2'"
+            @click="handleWithdrawReview(scope.row)"
+          >撤回审核</el-button>          
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:manufacturePlan:remove']"
@@ -443,6 +457,40 @@ export default {
       this.download('system/manufacturePlan/export', {
         ...this.queryParams
       }, `manufacturePlan_${new Date().getTime()}.xlsx`)
+    },
+    handleSubmitReview(row) {
+      const mpId = row.mpId;
+      this.$modal.confirm('是否要提交审核？审核在开始之前可以撤回。').then(() => {
+        this.loading = true;
+        getManufacturePlan(mpId).then(response => {
+          this.form = response.data;
+          this.form.mpStat = "2";
+          updateManufacturePlan(this.form).then(response => {
+            this.$modal.msgSuccess("已提交审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    handleWithdrawReview(row) {
+      const mpId = row.mpId;
+      this.$modal.confirm('是否要撤回审核？若审核已开始即无法撤回。').then(() => {
+        this.loading = true;
+        getManufacturePlan(mpId).then(response => {
+          this.form = response.data;
+          this.form.mpStat = "1";
+          updateManufacturePlan(this.form).then(response => {
+            this.$modal.msgSuccess("已撤回审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
     }
   }
 };

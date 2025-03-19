@@ -155,6 +155,12 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-download"
+            @click="handleGenerateDeviceTask(scope.row)"
+          >生成设备任务</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:manufactureTask:remove']"
@@ -226,6 +232,18 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 分配设备任务对话框 -->
+    <el-dialog :title="viewerData.title" :visible.sync="viewerOpen" append-to-body fullscreen>
+      <process-viewer
+        v-loading="viewerData.loading"
+        :key="`designer-${viewerData.index}`"
+        :xml="viewerData.bpmnXml"
+        :style="{height: 'calc(100vh - 124.5px)'}"
+        :mode="3"
+        :extraList="{}"
+      />
+    </el-dialog>
   </div>
 </template>
 
@@ -233,10 +251,14 @@
 import { listManufactureTask, getManufactureTask, delManufactureTask, addManufactureTask, updateManufactureTask } from "@/api/system/manufactureTask";
 import { listArea } from "@/api/system/area";
 import { listManufacturePlan } from "@/api/system/manufacturePlan";
-import { listProcess } from "@/api/system/process";
+import { listProcess, getBpmnXml } from "@/api/system/process";
+import ProcessViewer from '@/components/ProcessViewerIndustry';
 
 export default {
   name: "ManufactureTask",
+  components: {
+    ProcessViewer,
+  },
   dicts: ['ices_order_status'],
   data() {
     return {
@@ -298,7 +320,16 @@ export default {
       // 生产计划列表
       manufacturePlanList: [],
       // 工艺流程列表
-      processList: []
+      processList: [],
+      // 查看窗口是否打开
+      viewerOpen: false,
+      // 查看器相关数据
+      viewerData: {
+        title: '',
+        loading: false,
+        index: undefined,
+        bpmnXml: ''
+      },
     };
   },
   async created() {
@@ -443,6 +474,22 @@ export default {
       this.download('system/manufactureTask/export', {
         ...this.queryParams
       }, `manufactureTask_${new Date().getTime()}.xlsx`)
+    },
+    // 生成生产任务
+    handleGenerateDeviceTask(row) {
+      // 找到生产计划
+      const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpId === row.mpId)
+      // 找到工艺流程
+      const process = this.processList.find(ele => ele.procId === manufacturePlan.procId)
+      // 打开流程
+      this.viewerData.loading = true
+      this.viewerData.title = "分配设备任务"
+      this.viewerData.index = process.procModel
+      this.viewerOpen = true
+      getBpmnXml(process.procModel).then(response => {
+        this.viewerData.bpmnXml = response.data || ''
+        this.viewerData.loading = false
+      })
     }
   }
 };

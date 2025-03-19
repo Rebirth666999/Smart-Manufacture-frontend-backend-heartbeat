@@ -241,7 +241,7 @@
         :xml="viewerData.bpmnXml"
         :style="{height: 'calc(100vh - 124.5px)'}"
         :mode="3"
-        :extraList="{emList: viewerData.emList, moList: viewerData.moList, eqList: viewerData.eqList, eoList: viewerData.eoList}"
+        :extraList="{ emList: viewerData.emList, moList: viewerData.moList, eqList: viewerData.eqList, eoList: viewerData.eoList, eosList: viewerData.eosList, eospaList: viewerData.eospaList }"
       />
     </el-dialog>
   </div>
@@ -257,6 +257,8 @@ import { listEquipment } from "@/api/system/equipment";
 import { listEquipmentOperation } from "@/api/system/equipmentOperation";
 import { listModelOperation } from "@/api/system/modelOperation";
 import { listEquipmentModel } from "@/api/system/equipmentModel";
+import { listEquipmentOperationStep } from "@/api/system/equipmentOperationStep";
+import { listEquipmentOperationStepParam } from "@/api/system/equipmentOperationStepParam";
 
 import ProcessViewer from '@/components/ProcessViewerIndustry';
 
@@ -335,10 +337,12 @@ export default {
         loading: false,
         index: undefined,
         bpmnXml: '',
-        emList: [],  // 设备模型列表
-        moList: [],  // 模型操作列表
-        eqList: [],  // 设备列表（满足在对应的车间）
-        eoList: [],  // 设备操作列表
+        emList: [],     // 设备模型列表
+        moList: [],     // 模型操作列表
+        eqList: [],     // 设备列表（满足在对应的车间）
+        eoList: [],     // 设备操作列表
+        eosList: [],    // 设备操作步骤列表
+        eospaList: [],  // 设备操作步骤参数列表
       },
       // 设备列表（全）
       eqList: [],
@@ -366,6 +370,12 @@ export default {
       });
       listEquipment().then(response => {
         this.eqList = response.rows;
+      });
+      listEquipmentOperationStep().then(response => {
+        this.viewerData.eosList = response.rows;
+      });
+      listEquipmentOperationStepParam().then(response => {
+        this.viewerData.eospaList = response.rows;
       });
     },
     // 获取工艺流程列表

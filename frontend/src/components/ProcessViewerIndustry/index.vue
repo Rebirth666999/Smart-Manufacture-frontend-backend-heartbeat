@@ -81,6 +81,18 @@
           </div>
           <proc-device-task @updateTask="updateTask" :element="element" :eqList="extraList.eqList" :eoList="extraList.eoList" :taskList="taskList" />
         </el-collapse-item>
+
+        <!-- 设置设备操作参数 -->
+        <el-collapse-item
+          name="deviceTaskParam"
+          v-if="mode === 3 && element.type === 'bpmn:ServiceTask'"
+          key="deviceTaskParam"
+        >
+          <div slot="title" class="panel-tab__title">
+            <i class="el-icon-s-operation"></i>操作参数
+          </div>
+          <proc-device-task-param @updateTask="updateTask" :element="element" :eosList="extraList.eosList" :eospaList="extraList.eospaList" :taskList="taskList" />
+        </el-collapse-item>
       </el-collapse>
     </div>
   </div>
@@ -96,6 +108,7 @@ import EosBaseInfo from "@/plugins/package/penal/base/IndustryBaseInfoView";
 import EosProperties from "@/plugins/package/penal/properties/EquipmentOperationStepPropertiesView";
 import EosParam from "@/plugins/package/penal/param/EquipmentOperationStepParamView";
 import ProcDeviceTask from "@/plugins/package/penal/task/DeviceTask";
+import ProcDeviceTaskParam from "@/plugins/package/penal/param/DeviceTaskParam";
 
 export default {
   name: 'ProcessViewerIndustry',
@@ -105,7 +118,8 @@ export default {
     EosBaseInfo,
     EosProperties,
     EosParam,
-    ProcDeviceTask
+    ProcDeviceTask,
+    ProcDeviceTaskParam
   },
   props: {
     xml: {
@@ -219,7 +233,8 @@ export default {
       if (idx === -1) {
         this.taskList.push(data)
       } else {
-        this.taskList[idx] = data
+        this.taskList.splice(idx, 1)
+        this.taskList.push(data)
       }
     }
   },

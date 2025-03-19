@@ -458,6 +458,7 @@ export default {
         ...this.queryParams
       }, `manufacturePlan_${new Date().getTime()}.xlsx`)
     },
+    // 提交审核
     handleSubmitReview(row) {
       const mpId = row.mpId;
       this.$modal.confirm('是否要提交审核？审核在开始之前可以撤回。').then(() => {
@@ -475,6 +476,7 @@ export default {
         this.loading = false;
       });
     },
+    // 撤回审核
     handleWithdrawReview(row) {
       const mpId = row.mpId;
       this.$modal.confirm('是否要撤回审核？若审核已开始即无法撤回。').then(() => {

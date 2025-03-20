@@ -37,7 +37,7 @@
           <dict-tag :options="dict.type.ices_param_position" :value="editParam.eospaPos"/>
         </el-descriptions-item>
         <el-descriptions-item label="默认值">
-          {{ editParam.eospaValue || 0 }}
+          {{ editParam.eospaValue || '' }}
         </el-descriptions-item>
       </el-descriptions>
     </el-dialog>

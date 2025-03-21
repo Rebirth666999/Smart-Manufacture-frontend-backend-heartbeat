@@ -6,6 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="com.ruoyi.system.domain.IcesDeviceTask" id="IcesDeviceTaskResult">
         <result property="dtId" column="dt_id"/>
+        <result property="eqId" column="eq_id"/>
         <result property="mtId" column="mt_id"/>
         <result property="eoId" column="eo_id"/>
         <result property="dtStat" column="dt_stat"/>

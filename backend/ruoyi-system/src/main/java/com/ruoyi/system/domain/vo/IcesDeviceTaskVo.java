@@ -30,6 +30,12 @@ public class IcesDeviceTaskVo {
     private Long dtId;
 
     /**
+     * 设备ID
+     */
+    @ExcelProperty(value = "设备ID")
+    private Long eqId;
+
+    /**
      * 所属生产任务ID
      */
     @ExcelProperty(value = "所属生产任务ID")

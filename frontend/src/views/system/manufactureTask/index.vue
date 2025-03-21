@@ -242,6 +242,7 @@
         :style="{height: 'calc(100vh - 124.5px)'}"
         :mode="3"
         :extraList="{ emList: viewerData.emList, moList: viewerData.moList, eqList: viewerData.eqList, eoList: viewerData.eoList, eosList: viewerData.eosList, eospaList: viewerData.eospaList }"
+        @saveTask="onSaveTask"
       />
     </el-dialog>
   </div>
@@ -346,6 +347,8 @@ export default {
       },
       // 设备列表（全）
       eqList: [],
+      // 当前选中的生成任务
+      currentManufactureTask: null
     };
   },
   async created() {
@@ -516,6 +519,7 @@ export default {
     },
     // 生成生产任务
     handleGenerateDeviceTask(row) {
+      this.currentManufactureTask = row
       // 找到生产计划
       const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpId === row.mpId)
       // 找到工艺流程
@@ -530,6 +534,12 @@ export default {
       getBpmnXml(process.procModel).then(response => {
         this.viewerData.bpmnXml = response.data || ''
         this.viewerData.loading = false
+      })
+    },
+    onSaveTask(steps) {
+      console.warn({
+        manufactureTask: this.currentManufactureTask,
+        deviceTask: steps
       })
     }
   }

@@ -240,8 +240,7 @@ export default {
     },
     // 提交设备任务
     submitDeviceTask() {
-      console.log("提交设备任务")
-      console.warn(this.taskList)
+      this.$emit("saveTask", this.taskList)
     }
   },
   destroyed() {

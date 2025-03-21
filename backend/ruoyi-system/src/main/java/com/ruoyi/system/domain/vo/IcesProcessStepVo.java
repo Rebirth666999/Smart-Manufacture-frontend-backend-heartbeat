@@ -40,6 +40,12 @@ public class IcesProcessStepVo {
     private Long moId;
 
     /**
+     * 自动生成活动ID
+     */
+    @ExcelProperty(value = "自动生成活动ID")
+    private String psModel;
+
+    /**
      * 已删除
      */
     @ExcelProperty(value = "已删除")

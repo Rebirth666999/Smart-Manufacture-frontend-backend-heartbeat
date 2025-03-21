@@ -36,6 +36,10 @@ public class IcesProcessStep extends BaseEntity {
      */
     private Long moId;
     /**
+     * 自动生成活动ID
+     */
+    private String psModel;
+    /**
      * 已删除
      */
     private Long psDelete;

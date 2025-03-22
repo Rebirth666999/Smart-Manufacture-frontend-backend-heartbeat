@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.IcesOrderMapper">
+
+    <resultMap type="com.ruoyi.system.domain.IcesOrder" id="IcesOrderResult">
+        <result property="orId" column="or_id"/>
+        <result property="prId" column="pr_id"/>
+        <result property="clId" column="cl_id"/>
+        <result property="orName" column="or_name"/>
+        <result property="orStat" column="or_stat"/>
+        <result property="orDemand" column="or_demand"/>
+        <result property="orPriority" column="or_priority"/>
+        <result property="orDeadline" column="or_deadline"/>
+        <result property="orPrice" column="or_price"/>
+        <result property="orDelete" column="or_delete"/>
+        <result property="orDesc" column="or_desc"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

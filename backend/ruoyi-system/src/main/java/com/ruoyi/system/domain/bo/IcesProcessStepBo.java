@@ -40,6 +40,11 @@ public class IcesProcessStepBo extends BaseEntity {
     private Long moId;
 
     /**
+     * 自动生成活动ID
+     */
+    private String psModel;
+
+    /**
      * 已删除
      */
     @NotNull(message = "已删除不能为空", groups = { EditGroup.class })
@@ -48,7 +53,6 @@ public class IcesProcessStepBo extends BaseEntity {
     /**
      * 描述
      */
-    @NotBlank(message = "描述不能为空", groups = { AddGroup.class, EditGroup.class })
     private String psDesc;
 
 

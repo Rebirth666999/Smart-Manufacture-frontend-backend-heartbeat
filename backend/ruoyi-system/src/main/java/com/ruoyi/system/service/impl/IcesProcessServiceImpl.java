@@ -230,12 +230,14 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
                 // 开始事件
                 IcesProcessStepBo step = new IcesProcessStepBo();
                 step.setProcId(procId);
+                step.setPsModel(next.attributeValue("id"));
                 steps.add(step);
                 stepMap.put(next.attributeValue("id"), step);
             } else if (Objects.equals(next.getName(), "endEvent")) {
                 // 结束事件
                 IcesProcessStepBo step = new IcesProcessStepBo();
                 step.setProcId(procId);
+                step.setPsModel(next.attributeValue("id"));
                 steps.add(step);
                 stepMap.put(next.attributeValue("id"), step);
             } else if (Objects.equals(next.getName(), "serviceTask")) {
@@ -243,6 +245,7 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
                 tasks.add(next);
                 IcesProcessStepBo step = new IcesProcessStepBo();
                 step.setProcId(procId);
+                step.setPsModel(next.attributeValue("id"));
                 step.setMoId(Long.parseLong(next.attributeValue("moId")));
                 step.setPsDesc(next.attributeValue("psDesc"));
                 steps.add(step);

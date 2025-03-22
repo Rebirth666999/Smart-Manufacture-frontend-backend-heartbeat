@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.IcesDeviceTaskMapper">
+
+    <resultMap type="com.ruoyi.system.domain.IcesDeviceTask" id="IcesDeviceTaskResult">
+        <result property="dtId" column="dt_id"/>
+        <result property="eqId" column="eq_id"/>
+        <result property="mtId" column="mt_id"/>
+        <result property="eoId" column="eo_id"/>
+        <result property="dtStat" column="dt_stat"/>
+        <result property="dtBegin" column="dt_begin"/>
+        <result property="dtEnd" column="dt_end"/>
+        <result property="dtDelete" column="dt_delete"/>
+        <result property="dtDesc" column="dt_desc"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

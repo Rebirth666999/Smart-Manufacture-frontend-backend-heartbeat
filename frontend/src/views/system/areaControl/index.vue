@@ -224,7 +224,7 @@ export default {
           { required: true, message: "主控节点ID不能为空", trigger: "blur" }
         ],
         arId: [
-          { required: true, message: "所属车间ID不能为空", trigger: "change" }
+          { required: true, message: "所属车间不能为空", trigger: "change" }
         ],
         acName: [
           { required: true, message: "名称不能为空", trigger: "blur" }

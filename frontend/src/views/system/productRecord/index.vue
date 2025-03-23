@@ -246,7 +246,7 @@ export default {
           { required: true, message: "产品台账ID不能为空", trigger: "blur" }
         ],
         prId: [
-          { required: true, message: "所属产品ID不能为空", trigger: "change" }
+          { required: true, message: "所属产品不能为空", trigger: "change" }
         ],
         prrType: [
           { required: true, message: "变动类型不能为空", trigger: "change" }

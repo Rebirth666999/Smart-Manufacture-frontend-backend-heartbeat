@@ -274,7 +274,7 @@ export default {
           { required: true, message: "设备模型ID不能为空", trigger: "blur" }
         ],
         emtId: [
-          { required: true, message: "所属模型类型ID不能为空", trigger: "change" }
+          { required: true, message: "所属模型类型不能为空", trigger: "change" }
         ],
         emName: [
           { required: true, message: "名称不能为空", trigger: "blur" }

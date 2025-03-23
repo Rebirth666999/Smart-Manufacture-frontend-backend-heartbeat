@@ -278,10 +278,10 @@ export default {
           { required: true, message: "原料台账ID不能为空", trigger: "blur" }
         ],
         maId: [
-          { required: true, message: "所属原料ID不能为空", trigger: "change" }
+          { required: true, message: "所属原料不能为空", trigger: "change" }
         ],
         arId: [
-          { required: true, message: "所属车间ID不能为空", trigger: "change" }
+          { required: true, message: "所属车间不能为空", trigger: "change" }
         ],
         mrType: [
           { required: true, message: "变动类型不能为空", trigger: "change" }

@@ -308,7 +308,7 @@ export default {
           { required: true, message: "工艺流程ID不能为空", trigger: "blur" }
         ],
         prId: [
-          { required: true, message: "目标产品ID不能为空", trigger: "blur" }
+          { required: true, message: "目标产品不能为空", trigger: "blur" }
         ],
         procName: [
           { required: true, message: "工艺流程名称不能为空", trigger: "blur" }

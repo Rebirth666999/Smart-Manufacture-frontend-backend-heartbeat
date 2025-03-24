@@ -160,10 +160,10 @@
       <el-descriptions :column="1" border>
         <el-descriptions-item label="生产计划ID">{{ viewData.mpId }}</el-descriptions-item>
         <el-descriptions-item label="所属订单">
-          {{ orderList.find(ele => ele.orId === viewData.orId)?.orName || viewData.orId }}
+          {{ orderList.find(ele => ele.orId === viewData.orId).orName || viewData.orId }}
         </el-descriptions-item>
         <el-descriptions-item label="工艺流程">
-          {{ processListFull.find(ele => ele.procId === viewData.procId)?.procName || viewData.procId }}
+          {{ processListFull.find(ele => ele.procId === viewData.procId).procName || viewData.procId }}
         </el-descriptions-item>
         <el-descriptions-item label="状态">
           <dict-tag :options="dict.type.ices_manufacture_plan_status_review" :value="viewData.mpStat"/>

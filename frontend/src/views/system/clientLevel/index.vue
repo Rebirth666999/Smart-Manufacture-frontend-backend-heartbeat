@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="110px">
       <el-form-item label="客户等级标识" prop="cllLabel">
         <el-input
           v-model="queryParams.cllLabel"
@@ -114,7 +114,7 @@
 
     <!-- 添加或修改客户等级对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="客户等级标识" prop="cllLabel">
           <el-input v-model="form.cllLabel" placeholder="请输入客户等级标识" />
         </el-form-item>

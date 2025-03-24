@@ -9,14 +9,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="已删除" prop="cpDelete">
+      <!-- <el-form-item label="已删除" prop="cpDelete">
         <el-input
           v-model="queryParams.cpDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -74,7 +74,7 @@
       <el-table-column label="优惠策略ID" align="center" prop="cpId" v-if="true"/>
       <el-table-column label="名称" align="center" prop="cpName" />
       <el-table-column label="类别" align="center" prop="cpType" />
-      <el-table-column label="已删除" align="center" prop="cpDelete" />
+      <!-- <el-table-column label="已删除" align="center" prop="cpDelete" /> -->
       <el-table-column label="描述" align="center" prop="cpDesc" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -155,7 +155,7 @@ export default {
         pageSize: 10,
         cpName: undefined,
         cpType: undefined,
-        cpDelete: undefined,
+        cpDelete: 0,
       },
       // 表单参数
       form: {},
@@ -292,3 +292,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

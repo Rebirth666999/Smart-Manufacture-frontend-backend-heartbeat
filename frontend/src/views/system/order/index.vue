@@ -299,7 +299,7 @@ export default {
           { required: true, message: "订单ID不能为空", trigger: "blur" }
         ],
         prId: [
-          { required: true, message: "所需产品ID不能为空", trigger: "blur" }
+          { required: true, message: "所需产品不能为空", trigger: "blur" }
         ],
         orName: [
           { required: true, message: "订单名称不能为空", trigger: "blur" }
@@ -513,3 +513,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

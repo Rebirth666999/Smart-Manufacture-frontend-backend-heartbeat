@@ -340,10 +340,10 @@ export default {
           { required: true, message: "设备ID不能为空", trigger: "blur" }
         ],
         arId: [
-          { required: true, message: "所属车间ID不能为空", trigger: "change" }
+          { required: true, message: "所属车间不能为空", trigger: "change" }
         ],
         emId: [
-          { required: true, message: "所属设备模型ID不能为空", trigger: "change" }
+          { required: true, message: "所属设备模型不能为空", trigger: "change" }
         ],
         eqName: [
           { required: true, message: "名称不能为空", trigger: "blur" }
@@ -644,3 +644,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

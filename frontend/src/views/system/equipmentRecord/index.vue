@@ -238,7 +238,7 @@ export default {
           { required: true, message: "事件日志ID不能为空", trigger: "blur" }
         ],
         eqId: [
-          { required: true, message: "关联设备ID不能为空", trigger: "change" }
+          { required: true, message: "关联设备不能为空", trigger: "change" }
         ],
         erType: [
           { required: true, message: "事件类型代码不能为空", trigger: "change" }
@@ -403,3 +403,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

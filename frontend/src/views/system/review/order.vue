@@ -159,7 +159,7 @@
       <el-descriptions :column="1" border>
         <el-descriptions-item label="订单ID">{{ viewData.orId }}</el-descriptions-item>
         <el-descriptions-item label="所需产品">
-          {{ productList.find(ele => ele.prId === viewData.prId)?.prName || viewData.prId }}
+          {{ productList.find(ele => ele.prId === viewData.prId).prName || viewData.prId }}
         </el-descriptions-item>
         <el-descriptions-item label="客户">{{ viewData.clId }}</el-descriptions-item>
         <el-descriptions-item label="订单名称">{{ viewData.orName }}</el-descriptions-item>

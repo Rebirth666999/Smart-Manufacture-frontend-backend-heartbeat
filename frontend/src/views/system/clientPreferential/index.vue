@@ -9,6 +9,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="类别" prop="cpType">
+        <el-input
+          v-model="queryParams.cpType"
+          placeholder="请输入类别"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <!-- <el-form-item label="已删除" prop="cpDelete">
         <el-input
           v-model="queryParams.cpDelete"
@@ -75,7 +83,7 @@
       <el-table-column label="名称" align="center" prop="cpName" />
       <el-table-column label="类别" align="center" prop="cpType" />
       <!-- <el-table-column label="已删除" align="center" prop="cpDelete" /> -->
-      <el-table-column label="描述" align="center" prop="cpDesc" />
+      <!-- <el-table-column label="描述" align="center" prop="cpDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -109,6 +117,9 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="名称" prop="cpName">
           <el-input v-model="form.cpName" placeholder="请输入名称" />
+        </el-form-item>
+        <el-form-item label="类别" prop="cpType">
+          <el-input v-model="form.cpType" placeholder="请输入类别" />
         </el-form-item>
         <el-form-item label="描述" prop="cpDesc">
           <el-input v-model="form.cpDesc" type="textarea" placeholder="请输入内容" />

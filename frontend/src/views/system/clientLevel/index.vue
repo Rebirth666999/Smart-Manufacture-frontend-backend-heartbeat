@@ -83,7 +83,7 @@
       <el-table-column label="客户等级标识" align="center" prop="cllLabel" />
       <el-table-column label="客户等级名称" align="center" prop="cllName" />
       <!-- <el-table-column label="已删除" align="center" prop="cllDelete" /> -->
-      <el-table-column label="描述" align="center" prop="cllDesc" /> 
+      <!-- <el-table-column label="描述" align="center" prop="cllDesc" />  -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

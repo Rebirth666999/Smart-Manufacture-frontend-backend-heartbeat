@@ -75,7 +75,7 @@
       <el-table-column label="名称" align="center" prop="cpName" />
       <el-table-column label="类别" align="center" prop="cpType" />
       <!-- <el-table-column label="已删除" align="center" prop="cpDelete" /> -->
-      <el-table-column label="描述" align="center" prop="cpDesc" />
+      <!-- <el-table-column label="描述" align="center" prop="cpDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

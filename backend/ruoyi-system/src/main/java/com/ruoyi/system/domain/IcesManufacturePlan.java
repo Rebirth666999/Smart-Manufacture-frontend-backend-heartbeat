@@ -30,13 +30,17 @@ public class IcesManufacturePlan extends BaseEntity {
     @TableId(value = "mp_id")
     private Long mpId;
     /**
+     * 生产计划编码
+     */
+    private String mpCode;
+    /**
      * 所属订单ID
      */
-    private Long orId;
+    private String orCode;
     /**
      * 采用工艺流程ID
      */
-    private Long procId;
+    private String procCode;
     /**
      * 状态代码
      */

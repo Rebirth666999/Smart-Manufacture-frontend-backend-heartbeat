@@ -6,8 +6,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="com.ruoyi.system.domain.IcesDeviceTaskPrev" id="IcesDeviceTaskPrevResult">
         <result property="dtprId" column="dtpr_id"/>
-        <result property="dtIdCur" column="dt_id_cur"/>
-        <result property="dtIdPrev" column="dt_id_prev"/>
+        <result property="dtprCode" column="dtpr_code"/>
+        <result property="mtCode" column="mt_code"/>
+        <result property="dtCodeCur" column="dt_code_cur"/>
+        <result property="dtCodePrev" column="dt_code_prev"/>
         <result property="dtprDelete" column="dtpr_delete"/>
         <result property="createBy" column="create_by"/>
         <result property="updateBy" column="update_by"/>

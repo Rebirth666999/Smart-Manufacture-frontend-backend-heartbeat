@@ -28,6 +28,10 @@ public class IcesClientLevel extends BaseEntity {
     @TableId(value = "cll_id")
     private Long cllId;
     /**
+     * 客户等级编码
+     */
+    private String cllCode;
+    /**
      * 客户等级标识
      */
     private String cllLabel;

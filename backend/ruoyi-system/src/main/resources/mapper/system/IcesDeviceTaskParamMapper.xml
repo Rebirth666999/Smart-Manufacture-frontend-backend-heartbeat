@@ -6,8 +6,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="com.ruoyi.system.domain.IcesDeviceTaskParam" id="IcesDeviceTaskParamResult">
         <result property="dtpaId" column="dtpa_id"/>
-        <result property="eospaId" column="eospa_id"/>
-        <result property="dtId" column="dt_id"/>
+        <result property="dtpaCode" column="dtpa_code"/>
+        <result property="mtCode" column="mt_code"/>
+        <result property="eospaCode" column="eospa_code"/>
+        <result property="dtCode" column="dt_code"/>
         <result property="dtpaValue" column="dtpa_value"/>
         <result property="dtpaDelete" column="dtpa_delete"/>
         <result property="createBy" column="create_by"/>

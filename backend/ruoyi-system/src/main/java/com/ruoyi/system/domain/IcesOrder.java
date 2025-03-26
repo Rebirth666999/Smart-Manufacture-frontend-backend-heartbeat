@@ -30,13 +30,17 @@ public class IcesOrder extends BaseEntity {
     @TableId(value = "or_id")
     private Long orId;
     /**
+     * 订单编码
+     */
+    private String orCode;
+    /**
      * 所需产品ID
      */
-    private Long prId;
+    private String maCode;
     /**
      * 客户ID
      */
-    private Long clId;
+    private String clCode;
     /**
      * 订单名称
      */
@@ -61,6 +65,14 @@ public class IcesOrder extends BaseEntity {
      * 总价
      */
     private Long orPrice;
+    /**
+     * 收货人
+     */
+    private String orRecv;
+    /**
+     * 收货地址
+     */
+    private String orAddr;
     /**
      * 已删除
      */

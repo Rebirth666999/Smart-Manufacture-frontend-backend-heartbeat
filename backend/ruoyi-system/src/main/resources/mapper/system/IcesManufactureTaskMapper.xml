@@ -6,8 +6,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="com.ruoyi.system.domain.IcesManufactureTask" id="IcesManufactureTaskResult">
         <result property="mtId" column="mt_id"/>
-        <result property="mpId" column="mp_id"/>
-        <result property="arId" column="ar_id"/>
+        <result property="mtCode" column="mt_code"/>
+        <result property="mpCode" column="mp_code"/>
+        <result property="arCode" column="ar_code"/>
+        <result property="stCodeMa" column="st_code_ma"/>
+        <result property="stCodePr" column="st_code_pr"/>
         <result property="mtStat" column="mt_stat"/>
         <result property="mtBegin" column="mt_begin"/>
         <result property="mtEndPlan" column="mt_end_plan"/>

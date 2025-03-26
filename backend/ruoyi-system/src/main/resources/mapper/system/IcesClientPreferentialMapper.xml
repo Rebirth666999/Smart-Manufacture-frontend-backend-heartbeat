@@ -6,6 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="com.ruoyi.system.domain.IcesClientPreferential" id="IcesClientPreferentialResult">
         <result property="cpId" column="cp_id"/>
+        <result property="cpCode" column="cp_code"/>
         <result property="cpName" column="cp_name"/>
         <result property="cpType" column="cp_type"/>
         <result property="cpDelete" column="cp_delete"/>

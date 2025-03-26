@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesEquipmentOperationStepParamBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesEquipmentOperationStepParamServiceImpl implements IIcesEquipmentOperationStepParamService {
 
     private final IcesEquipmentOperationStepParamMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询设备操作步骤参数
@@ -74,6 +76,7 @@ public class IcesEquipmentOperationStepParamServiceImpl implements IIcesEquipmen
      */
     @Override
     public Boolean insertByBo(IcesEquipmentOperationStepParamBo bo) {
+        bo.setEospaCode(codeService.insertByType("EquipmentOperationStepParam"));
         IcesEquipmentOperationStepParam add = BeanUtil.toBean(bo, IcesEquipmentOperationStepParam.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

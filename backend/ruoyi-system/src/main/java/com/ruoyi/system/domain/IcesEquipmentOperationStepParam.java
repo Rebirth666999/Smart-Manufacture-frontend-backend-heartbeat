@@ -32,9 +32,22 @@ public class IcesEquipmentOperationStepParam extends BaseEntity {
      */
     private Long eosId;
     /**
+     * 操作步骤参数编码
+     */
+    private String eospaCode;
+    /**
+     * 所属设备操作
+     */
+    private String eoCode;
+    /**
+     * 所属设备操作步骤
+     */
+    private String eosCode;
+
+    /**
      * 父级参数ID
      */
-    private Long eospaIdParent;
+    private Long eospaCodeParent;
     /**
      * 参数名称
      */

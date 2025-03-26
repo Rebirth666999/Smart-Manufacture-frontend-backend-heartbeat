@@ -6,8 +6,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="com.ruoyi.system.domain.IcesEquipmentOperationStepParam" id="IcesEquipmentOperationStepParamResult">
         <result property="eospaId" column="eospa_id"/>
-        <result property="eosId" column="eos_id"/>
-        <result property="eospaIdParent" column="eospa_id_parent"/>
+        <result property="eospaCode" column="eospa_code"/>
+        <result property="eoCode" column="eo_code"/>
+        <result property="eosCode" column="eos_code"/>
+        <result property="eospaCodeParent" column="eos_code_parent"/>
         <result property="eospaName" column="eospa_name"/>
         <result property="eospaType" column="eospa_type"/>
         <result property="eospaPos" column="eospa_pos"/>

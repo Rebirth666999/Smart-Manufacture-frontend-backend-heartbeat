@@ -632,7 +632,7 @@ export default {
     },
     // 查看事件
     handleEquipmentRecordView(row) {
-      this.$router.push(`/equipment/equipmentRecord?eqId=${row.eqId}`)
+      this.$router.push(`/equipment/equipmentRecord?eqCode=${row.eqCode}`)
     },
     // 设备原子操作
     handleAtomOperationView(row) {

@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesEquipmentRecordBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesEquipmentRecordServiceImpl implements IIcesEquipmentRecordService {
 
     private final IcesEquipmentRecordMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询设备事件日志
@@ -75,6 +77,7 @@ public class IcesEquipmentRecordServiceImpl implements IIcesEquipmentRecordServi
      */
     @Override
     public Boolean insertByBo(IcesEquipmentRecordBo bo) {
+        bo.setErCode(codeService.insertByType("EquipmentRecord"));
         IcesEquipmentRecord add = BeanUtil.toBean(bo, IcesEquipmentRecord.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

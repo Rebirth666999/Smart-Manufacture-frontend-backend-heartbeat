@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesProcessMaterialBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesProcessMaterialServiceImpl implements IIcesProcessMaterialService {
 
     private final IcesProcessMaterialMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询关联-工艺流程原料需求
@@ -72,6 +74,7 @@ public class IcesProcessMaterialServiceImpl implements IIcesProcessMaterialServi
      */
     @Override
     public Boolean insertByBo(IcesProcessMaterialBo bo) {
+        bo.setPmCode(codeService.insertByType("ProcessMaterial"));
         IcesProcessMaterial add = BeanUtil.toBean(bo, IcesProcessMaterial.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

@@ -483,7 +483,7 @@ export default {
     },
     // 查看工艺流程的原料需求
     handleProcessMaterialView(row) {
-      this.$router.push(`/processFlow/processMaterial?procId=${row.procId}`)
+      this.$router.push(`/processFlow/processMaterial?procCode=${row.procCode}`)
     },
     /** 设计按钮操作 */
     handleDesigner(row) {

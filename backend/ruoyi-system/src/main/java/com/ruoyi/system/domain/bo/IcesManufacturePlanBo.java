@@ -72,12 +72,12 @@ public class IcesManufacturePlanBo extends BaseEntity {
      * 计划产品数量
      */
     @NotNull(message = "计划产品数量不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long mpQtyPlan;
+    private Float mpQtyPlan;
 
     /**
      * 已完成产品数量
      */
-    private Long mpQtyReal;
+    private Float mpQtyReal;
 
     /**
      * 已删除

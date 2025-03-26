@@ -76,13 +76,13 @@ public class IcesManufactureTaskVo {
      * 计划产品数量
      */
     @ExcelProperty(value = "计划产品数量")
-    private Long mtQtyPlan;
+    private Float mtQtyPlan;
 
     /**
      * 已完成产品数量
      */
     @ExcelProperty(value = "已完成产品数量")
-    private Long mtQtyReal;
+    private Float mtQtyReal;
 
     /**
      * 已删除

@@ -42,7 +42,7 @@ public class IcesProcessMaterial extends BaseEntity {
     /**
      * 所需原料数量
      */
-    private Long pmDemand;
+    private Float pmDemand;
     /**
      * 已删除
      */

@@ -61,7 +61,7 @@ public class IcesEquipmentAtomOperationBo extends BaseEntity {
     /**
      * 执行时长
      */
-    private Long eaoExecTime;
+    private Float eaoExecTime;
 
     /**
      * 已删除

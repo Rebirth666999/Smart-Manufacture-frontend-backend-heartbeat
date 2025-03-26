@@ -58,7 +58,7 @@ public class IcesOrderVo {
      * 所需产品数量
      */
     @ExcelProperty(value = "所需产品数量")
-    private Long orDemand;
+    private Float orDemand;
 
     /**
      * 订单优先级
@@ -76,7 +76,7 @@ public class IcesOrderVo {
      * 总价
      */
     @ExcelProperty(value = "总价")
-    private Long orPrice;
+    private Float orPrice;
 
     /**
      * 已删除

@@ -52,7 +52,7 @@ public class IcesOrder extends BaseEntity {
     /**
      * 所需产品数量
      */
-    private Long orDemand;
+    private Float orDemand;
     /**
      * 订单优先级
      */
@@ -64,7 +64,7 @@ public class IcesOrder extends BaseEntity {
     /**
      * 总价
      */
-    private Long orPrice;
+    private Float orPrice;
     /**
      * 收货人
      */

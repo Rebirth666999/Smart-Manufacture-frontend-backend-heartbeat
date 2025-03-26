@@ -62,7 +62,7 @@ public class IcesEquipmentAtomOperationVo {
      * 执行时长
      */
     @ExcelProperty(value = "执行时长")
-    private Long eaoExecTime;
+    private Float eaoExecTime;
 
     /**
      * 已删除

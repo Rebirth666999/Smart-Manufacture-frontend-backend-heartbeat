@@ -43,7 +43,7 @@ public class IcesProcessMaterialVo {
      * 所需原料数量
      */
     @ExcelProperty(value = "所需原料数量")
-    private Long pmDemand;
+    private Float pmDemand;
 
     /**
      * 已删除

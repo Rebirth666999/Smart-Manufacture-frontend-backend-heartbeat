@@ -43,7 +43,7 @@ public class IcesProcessMaterialBo extends BaseEntity {
      * 所需原料数量
      */
     @NotNull(message = "所需原料数量不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long pmDemand;
+    private Float pmDemand;
 
     /**
      * 已删除

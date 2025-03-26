@@ -55,7 +55,7 @@ public class IcesOrderBo extends BaseEntity {
      * 所需产品数量
      */
     @NotNull(message = "所需产品数量不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long orDemand;
+    private Float orDemand;
 
     /**
      * 订单优先级
@@ -73,7 +73,7 @@ public class IcesOrderBo extends BaseEntity {
      * 总价
      */
     @NotNull(message = "总价不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long orPrice;
+    private Float orPrice;
 
     /**
      * 已删除

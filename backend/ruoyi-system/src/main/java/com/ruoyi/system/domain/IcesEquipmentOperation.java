@@ -58,7 +58,7 @@ public class IcesEquipmentOperation extends BaseEntity {
     /**
      * 执行时长
      */
-    private Long eoExecTime;
+    private Float eoExecTime;
     /**
      * 已删除
      */

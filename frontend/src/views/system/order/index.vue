@@ -125,7 +125,7 @@
     <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="订单ID" align="center" prop="orId" v-if="true"/>
-      <el-table-column label="订单编码" align="center" prop="orId" />
+      <el-table-column label="订单编码" align="center" prop="orCode" />
       <el-table-column label="所需产品" align="center" prop="maCode">
         <template slot-scope="scope">
           {{ productList.find(ele => ele.maCode === scope.row.maCode).maName || '' }}

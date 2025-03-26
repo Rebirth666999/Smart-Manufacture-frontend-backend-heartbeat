@@ -7,9 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.ruoyi.system.domain.bo.IcesEquipmentModelBo;
-import com.ruoyi.system.domain.vo.IcesEquipmentModelVo;
-import com.ruoyi.system.service.IIcesEquipmentModelService;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesEquipmentModelTypeBo;
@@ -33,7 +31,7 @@ import java.util.Collection;
 public class IcesEquipmentModelTypeServiceImpl implements IIcesEquipmentModelTypeService {
 
     private final IcesEquipmentModelTypeMapper baseMapper;
-    private final IIcesEquipmentModelService iIcesEquipmentModelService;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询设备模型类型
@@ -75,6 +73,7 @@ public class IcesEquipmentModelTypeServiceImpl implements IIcesEquipmentModelTyp
      */
     @Override
     public Boolean insertByBo(IcesEquipmentModelTypeBo bo) {
+        bo.setEmtCode(codeService.insertByType("EquipmentModelType"));
         IcesEquipmentModelType add = BeanUtil.toBean(bo, IcesEquipmentModelType.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

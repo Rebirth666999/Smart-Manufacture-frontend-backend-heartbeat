@@ -36,6 +36,18 @@ public class IcesEquipmentOperationStep extends BaseEntity {
      */
     private Long eoId;
     /**
+     * 操作步骤编码
+     */
+    private String eosCode;
+    /**
+     * 对应原子操作
+     */
+    private String eaoCode;
+    /**
+     * 所属设备操作
+     */
+    private String eoCode;
+    /**
      * 已删除
      */
     private Long eosDelete;

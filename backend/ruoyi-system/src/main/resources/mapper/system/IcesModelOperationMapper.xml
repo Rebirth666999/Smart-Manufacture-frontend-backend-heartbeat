@@ -6,7 +6,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="com.ruoyi.system.domain.IcesModelOperation" id="IcesModelOperationResult">
         <result property="moId" column="mo_id"/>
-        <result property="emId" column="em_id"/>
+        <result property="moCode" column="mo_code"/>
+        <result property="emCode" column="em_code"/>
         <result property="moName" column="mo_name"/>
         <result property="moDelete" column="mo_delete"/>
         <result property="moDesc" column="mo_desc"/>

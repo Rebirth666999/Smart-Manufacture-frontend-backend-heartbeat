@@ -30,11 +30,19 @@ public class IcesEquipmentOperationStepPrev extends BaseEntity {
     /**
      * 当前设备操作步骤ID
      */
-    private Long eosIdCur;
+    private Long eosCodeCur;
+    /**
+     * 前序步骤关联编码
+     */
+    private String eosprCode;
+    /**
+     * 所属设备操作
+     */
+    private String eoCode;
     /**
      * 前序设备操作步骤ID
      */
-    private Long eosIdPrev;
+    private Long eosCodePrev;
     /**
      * 已删除
      */

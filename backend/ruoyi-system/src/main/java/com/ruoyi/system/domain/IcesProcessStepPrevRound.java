@@ -30,7 +30,7 @@ public class IcesProcessStepPrevRound extends BaseEntity {
     /**
      * 跨轮前序步骤关联编码
      */
-    private Long psprCode;
+    private String psprCode;
     /**
      * 所属工艺流程
      */

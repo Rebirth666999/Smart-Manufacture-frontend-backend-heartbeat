@@ -28,7 +28,7 @@ public class IcesProcessStep extends BaseEntity {
     @TableId(value = "ps_id")
     private Long psId;
     /**
-     * 工艺流程编码
+     * 工艺步骤编码
      */
     private String psCode;
     /**

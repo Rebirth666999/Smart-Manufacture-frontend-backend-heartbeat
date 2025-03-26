@@ -28,16 +28,22 @@ public class IcesProcessMaterialVo {
     private Long pmId;
 
     /**
-     * 所属工艺流程ID
+     * 原料需求编码
      */
-    @ExcelProperty(value = "所属工艺流程ID")
-    private Long procId;
+    @ExcelProperty(value = "原料需求编码")
+    private String pmCode;
 
     /**
-     * 所用原料ID
+     * 所属工艺流程
      */
-    @ExcelProperty(value = "所用原料ID")
-    private Long maId;
+    @ExcelProperty(value = "所属工艺流程")
+    private String procCode;
+
+    /**
+     * 所用原料
+     */
+    @ExcelProperty(value = "所用原料")
+    private String maCode;
 
     /**
      * 所需原料数量

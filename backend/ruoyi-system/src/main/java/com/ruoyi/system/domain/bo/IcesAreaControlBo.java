@@ -28,10 +28,15 @@ public class IcesAreaControlBo extends BaseEntity {
     private Long acId;
 
     /**
-     * 所属车间ID
+     * 主控节点编码
      */
-    @NotNull(message = "所属车间ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long arId;
+    private String acCode;
+
+    /**
+     * 所属车间
+     */
+    @NotBlank(message = "所属车间不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String arCode;
 
     /**
      * 名称

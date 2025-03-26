@@ -28,6 +28,12 @@ public class IcesAreaVo {
     private Long arId;
 
     /**
+     * 车间编码
+     */
+    @ExcelProperty(value = "车间编码")
+    private String arCode;
+
+    /**
      * 车间名称
      */
     @ExcelProperty(value = "车间名称")

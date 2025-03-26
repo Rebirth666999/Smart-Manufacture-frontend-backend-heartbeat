@@ -30,10 +30,16 @@ public class IcesEquipmentRecordVo {
     private Long erId;
 
     /**
-     * 关联设备ID
+     * 设备日志编码
      */
-    @ExcelProperty(value = "关联设备ID")
-    private Long eqId;
+    @ExcelProperty(value = "设备日志编码")
+    private String erCode;
+
+    /**
+     * 关联设备
+     */
+    @ExcelProperty(value = "关联设备")
+    private String eqCode;
 
     /**
      * 事件类型代码

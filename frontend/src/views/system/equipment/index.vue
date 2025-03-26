@@ -640,7 +640,7 @@ export default {
     },
     // 设备操作
     handleEquipmentOperationView(row) {
-      this.$router.push(`/equipment/equipmentOperation?eqId=${row.eqId}`)
+      this.$router.push(`/equipment/equipmentOperation?eqCode=${row.eqCode}`)
     }
   }
 };

@@ -17,9 +17,7 @@ import com.ruoyi.system.domain.bo.*;
 import com.ruoyi.system.domain.vo.IcesEquipmentOperationStepParamVo;
 import com.ruoyi.system.domain.vo.IcesEquipmentOperationStepPrevVo;
 import com.ruoyi.system.domain.vo.IcesEquipmentOperationStepVo;
-import com.ruoyi.system.service.IIcesEquipmentOperationStepParamService;
-import com.ruoyi.system.service.IIcesEquipmentOperationStepPrevService;
-import com.ruoyi.system.service.IIcesEquipmentOperationStepService;
+import com.ruoyi.system.service.*;
 import lombok.RequiredArgsConstructor;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -30,7 +28,6 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.vo.IcesEquipmentOperationVo;
 import com.ruoyi.system.domain.IcesEquipmentOperation;
 import com.ruoyi.system.mapper.IcesEquipmentOperationMapper;
-import com.ruoyi.system.service.IIcesEquipmentOperationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.ByteArrayInputStream;
@@ -48,6 +45,7 @@ import java.util.*;
 public class IcesEquipmentOperationServiceImpl extends FlowServiceFactory implements IIcesEquipmentOperationService {
 
     private final IcesEquipmentOperationMapper baseMapper;
+    private final IIcesCodeService codeService;
     private final IIcesEquipmentOperationStepService operationStepService;
     private final IIcesEquipmentOperationStepParamService stepParamService;
     private final IIcesEquipmentOperationStepPrevService stepPrevService;
@@ -93,6 +91,7 @@ public class IcesEquipmentOperationServiceImpl extends FlowServiceFactory implem
      */
     @Override
     public Boolean insertByBo(IcesEquipmentOperationBo bo) {
+        bo.setEoCode(codeService.insertByType("EquipmentOperation"));
         IcesEquipmentOperation add = BeanUtil.toBean(bo, IcesEquipmentOperation.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

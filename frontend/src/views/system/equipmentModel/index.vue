@@ -487,7 +487,7 @@ export default {
     },
     // 查看模型操作
     handleModelOperationView(row) {
-      this.$router.push(`/equipment/modelOperation?emId=${row.emId}`)
+      this.$router.push(`/equipment/modelOperation?emCode=${row.emCode}`)
     }
   }
 };

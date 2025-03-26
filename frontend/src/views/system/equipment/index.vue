@@ -636,7 +636,7 @@ export default {
     },
     // 设备原子操作
     handleAtomOperationView(row) {
-      this.$router.push(`/equipment/equipmentAtomOperation?eqId=${row.eqId}`)
+      this.$router.push(`/equipment/equipmentAtomOperation?eqCode=${row.eqCode}`)
     },
     // 设备操作
     handleEquipmentOperationView(row) {

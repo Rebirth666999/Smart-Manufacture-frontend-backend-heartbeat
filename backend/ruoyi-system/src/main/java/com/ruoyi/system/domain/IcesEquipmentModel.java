@@ -28,9 +28,13 @@ public class IcesEquipmentModel extends BaseEntity {
     @TableId(value = "em_id")
     private Long emId;
     /**
-     * 所属模型类型ID
+     * 设备模型编码
      */
-    private Long emtId;
+    private String emCode;
+    /**
+     * 所属模型类型
+     */
+    private String emtCode;
     /**
      * 名称
      */

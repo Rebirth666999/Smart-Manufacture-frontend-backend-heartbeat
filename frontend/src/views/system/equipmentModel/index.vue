@@ -12,18 +12,18 @@
     </el-alert>
 
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="模型类型" prop="emtId">
+      <el-form-item label="模型类型" prop="emtCode">
         <el-select
-          v-model="queryParams.emtId"
+          v-model="queryParams.emtCode"
           placeholder="请选择模型类型"
           clearable
           :disabled="mode === 1"
         >
           <el-option
             v-for="item in equipmentModelTypeListFull"
-            :key="item.emtId"
+            :key="item.emtCode"
             :label="item.emtName"
-            :value="item.emtId"
+            :value="item.emtCode"
           >
           </el-option>
         </el-select>
@@ -109,10 +109,11 @@
     <el-table v-loading="loading" :data="equipmentModelList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="设备模型ID" align="center" prop="emId" v-if="true"/>
+      <el-table-column label="设备模型编码" align="center" prop="emCode" />
       <el-table-column label="名称" align="center" prop="emName" />
-      <el-table-column label="所属模型类型" align="center" prop="emtId">
+      <el-table-column label="所属模型类型" align="center" prop="emtCode">
         <template slot-scope="scope">
-          {{ equipmentModelTypeListFull.find(ele => ele.emtId === scope.row.emtId).emtName || '' }}
+          {{ equipmentModelTypeListFull.find(ele => ele.emtCode === scope.row.emtCode).emtName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center" prop="emStat">
@@ -197,18 +198,18 @@
     <!-- 添加或修改设备模型对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="模型类型" prop="emtId">
+        <el-form-item label="模型类型" prop="emtCode">
           <el-select
-            v-model="form.emtId"
+            v-model="form.emtCode"
             placeholder="请选择模型类型"
             clearable
             :disabled="mode === 1"
           >
             <el-option
               v-for="item in equipmentModelTypeList"
-              :key="item.emtId"
+              :key="item.emtCode"
               :label="item.emtName"
-              :value="item.emtId"
+              :value="item.emtCode"
             >
             </el-option>
           </el-select>
@@ -261,7 +262,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        emtId: this.$route.query.emtId,
+        emtCode: this.$route.query.emtCode,
         emName: undefined,
         emStat: undefined,
         emDelete: 0,
@@ -273,7 +274,7 @@ export default {
         emId: [
           { required: true, message: "设备模型ID不能为空", trigger: "blur" }
         ],
-        emtId: [
+        emtCode: [
           { required: true, message: "所属模型类型不能为空", trigger: "change" }
         ],
         emName: [
@@ -292,7 +293,7 @@ export default {
   },
   async created() {
     // 检查来源
-    if (this.$route.query.emtId) {
+    if (this.$route.query.emtCode) {
       this.mode = 1
     }
     await this.getEquipmentModelTypeList();
@@ -306,7 +307,7 @@ export default {
         this.equipmentModelTypeListFull = response.rows;
         if (this.mode === 1) {
           this.hint = "设备模型类型 "
-          this.hint += response.rows.find(ele => ele.emtId === this.$route.query.emtId).emtName
+          this.hint += response.rows.find(ele => ele.emtCode === this.$route.query.emtCode).emtName
           this.hint += " "
         }
       });
@@ -333,7 +334,7 @@ export default {
     reset() {
       this.form = {
         emId: undefined,
-        emtId: undefined,
+        emtCode: undefined,
         emName: undefined,
         emStat: undefined,
         emDelete: undefined,
@@ -365,7 +366,7 @@ export default {
     handleAdd() {
       this.reset();
       if (this.mode === 1) {
-        this.form.emtId = this.$route.query.emtId
+        this.form.emtCode = this.$route.query.emtCode
       }
       this.open = true;
       this.title = "添加设备模型";

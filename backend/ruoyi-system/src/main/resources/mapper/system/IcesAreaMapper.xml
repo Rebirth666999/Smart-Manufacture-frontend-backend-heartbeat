@@ -6,8 +6,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="com.ruoyi.system.domain.IcesArea" id="IcesAreaResult">
         <result property="arId" column="ar_id"/>
-        <result property="arName" column="ar_name"/>
         <result property="arCode" column="ar_code"/>
+        <result property="arName" column="ar_name"/>
         <result property="arDelete" column="ar_delete"/>
         <result property="arDesc" column="ar_desc"/>
         <result property="createBy" column="create_by"/>

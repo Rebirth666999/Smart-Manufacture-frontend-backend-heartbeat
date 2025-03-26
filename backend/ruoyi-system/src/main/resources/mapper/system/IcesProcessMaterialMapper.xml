@@ -6,8 +6,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="com.ruoyi.system.domain.IcesProcessMaterial" id="IcesProcessMaterialResult">
         <result property="pmId" column="pm_id"/>
-        <result property="procId" column="proc_id"/>
-        <result property="maId" column="ma_id"/>
         <result property="pmCode" column="pm_code"/>
         <result property="procCode" column="proc_code"/>
         <result property="maCode" column="ma_code"/>

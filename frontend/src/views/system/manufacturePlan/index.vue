@@ -112,6 +112,7 @@
     <el-table v-loading="loading" :data="manufacturePlanList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="生产计划ID" align="center" prop="mpId" v-if="true"/>
+      <el-table-column label="生产计划编码" align="center" prop="mpCode" />
       <el-table-column label="所属订单" align="center" prop="orCode">
         <template slot-scope="scope">
           {{ orderList.find(ele => ele.orCode === scope.row.orCode).orName || '' }}

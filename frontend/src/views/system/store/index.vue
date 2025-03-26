@@ -123,7 +123,7 @@
 
     <!-- 添加或修改仓库对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="仓库名称" prop="stName">
           <el-input v-model="form.stName" placeholder="请输入仓库名称" />
         </el-form-item>
@@ -332,3 +332,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

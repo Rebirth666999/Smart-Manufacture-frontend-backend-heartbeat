@@ -6,6 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="com.ruoyi.system.domain.IcesEquipmentModelType" id="IcesEquipmentModelTypeResult">
         <result property="emtId" column="emt_id"/>
+        <result property="emtCode" column="emt_code"/>
         <result property="emtName" column="emt_name"/>
         <result property="emtDelete" column="emt_delete"/>
         <result property="emtDesc" column="emt_desc"/>

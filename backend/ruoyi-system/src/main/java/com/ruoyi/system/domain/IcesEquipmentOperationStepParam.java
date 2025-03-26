@@ -28,10 +28,6 @@ public class IcesEquipmentOperationStepParam extends BaseEntity {
     @TableId(value = "eospa_id")
     private Long eospaId;
     /**
-     * 所属设备操作步骤ID
-     */
-    private Long eosId;
-    /**
      * 操作步骤参数编码
      */
     private String eospaCode;
@@ -43,11 +39,10 @@ public class IcesEquipmentOperationStepParam extends BaseEntity {
      * 所属设备操作步骤
      */
     private String eosCode;
-
     /**
-     * 父级参数ID
+     * 父级参数
      */
-    private Long eospaCodeParent;
+    private String eospaCodeParent;
     /**
      * 参数名称
      */

@@ -29,10 +29,15 @@ public class IcesEquipmentAtomOperationBo extends BaseEntity {
     private Long eaoId;
 
     /**
-     * 所属设备ID
+     * 原子操作编码
      */
-    @NotNull(message = "所属设备ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long eqId;
+    private String eaoCode;
+
+    /**
+     * 所属设备
+     */
+    @NotBlank(message = "所属设备不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String eqCode;
 
     /**
      * 原子操作名称

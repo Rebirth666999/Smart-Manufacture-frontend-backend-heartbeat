@@ -28,10 +28,16 @@ public class IcesEquipmentAtomOperationVo {
     private Long eaoId;
 
     /**
-     * 所属设备ID
+     * 原子操作编码
      */
-    @ExcelProperty(value = "所属设备ID")
-    private Long eqId;
+    @ExcelProperty(value = "原子操作编码")
+    private String eaoCode;
+
+    /**
+     * 所属设备
+     */
+    @ExcelProperty(value = "所属设备")
+    private String eqCode;
 
     /**
      * 原子操作名称

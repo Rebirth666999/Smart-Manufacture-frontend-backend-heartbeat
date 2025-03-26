@@ -28,10 +28,6 @@ public class IcesEquipmentOperationStepPrev extends BaseEntity {
     @TableId(value = "eospr_id")
     private Long eosprId;
     /**
-     * 当前设备操作步骤ID
-     */
-    private Long eosCodeCur;
-    /**
      * 前序步骤关联编码
      */
     private String eosprCode;
@@ -40,9 +36,13 @@ public class IcesEquipmentOperationStepPrev extends BaseEntity {
      */
     private String eoCode;
     /**
-     * 前序设备操作步骤ID
+     * 当前设备操作步骤
      */
-    private Long eosCodePrev;
+    private String eosCodeCur;
+    /**
+     * 前序设备操作步骤
+     */
+    private String eosCodePrev;
     /**
      * 已删除
      */

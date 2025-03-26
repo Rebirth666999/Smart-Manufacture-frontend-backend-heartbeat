@@ -28,14 +28,6 @@ public class IcesEquipmentOperationStep extends BaseEntity {
     @TableId(value = "eos_id")
     private Long eosId;
     /**
-     * 对应原子操作ID
-     */
-    private Long eaoId;
-    /**
-     * 所属设备操作ID
-     */
-    private Long eoId;
-    /**
      * 操作步骤编码
      */
     private String eosCode;

@@ -28,10 +28,6 @@ public class IcesModelOperation extends BaseEntity {
     @TableId(value = "mo_id")
     private Long moId;
     /**
-     * 所属设备模型ID
-     */
-    private Long emId;
-    /**
      * 模型操作编码
      */
     private String moCode;

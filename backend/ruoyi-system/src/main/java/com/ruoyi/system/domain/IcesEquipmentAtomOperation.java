@@ -28,10 +28,6 @@ public class IcesEquipmentAtomOperation extends BaseEntity {
     @TableId(value = "eao_id")
     private Long eaoId;
     /**
-     * 所属设备ID
-     */
-    private Long eqId;
-    /**
      * 原子操作编码
      */
     private String eaoCode;

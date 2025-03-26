@@ -97,6 +97,7 @@
     <el-table v-loading="loading" :data="processList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="工艺流程ID" align="center" prop="procId" v-if="true"/>
+      <el-table-column label="工艺流程编码" align="center" prop="procCode" />
       <el-table-column label="目标产品" align="center" prop="maCode">
         <template slot-scope="scope">
           {{ productList.find(ele => ele.maCode === scope.row.maCode).maName || '' }}

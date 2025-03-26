@@ -45,6 +45,7 @@ import java.util.*;
 public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesProcessService {
 
     private final IcesProcessMapper baseMapper;
+    private final IIcesCodeService codeService;
     private final IIcesProcessStepService processStepService;
     private final IIcesProcessStepPrevService stepPrevService;
 
@@ -93,6 +94,7 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
      */
     @Override
     public Boolean insertByBo(IcesProcessBo bo) {
+        bo.setProcCode(codeService.insertByType("Process"));
         IcesProcess add = BeanUtil.toBean(bo, IcesProcess.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

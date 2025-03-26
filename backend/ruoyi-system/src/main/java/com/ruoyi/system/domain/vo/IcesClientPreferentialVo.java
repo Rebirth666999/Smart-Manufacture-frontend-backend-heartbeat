@@ -28,6 +28,12 @@ public class IcesClientPreferentialVo {
     private Long cpId;
 
     /**
+     * 优惠策略编码
+     */
+    @ExcelProperty(value = "优惠策略编码")
+    private String cpCode;
+
+    /**
      * 名称
      */
     @ExcelProperty(value = "名称")

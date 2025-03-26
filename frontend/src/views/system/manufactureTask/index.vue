@@ -1,32 +1,32 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="生产计划" prop="mpId">
+      <el-form-item label="生产计划" prop="mpCode">
         <el-select
-          v-model="queryParams.mpId"
+          v-model="queryParams.mpCode"
           placeholder="请选择生产计划"
           clearable
         >
           <el-option
             v-for="item in manufacturePlanList"
-            :key="item.mpId"
-            :label="item.mpId"
-            :value="item.mpId"
+            :key="item.mpCode"
+            :label="item.mpCode"
+            :value="item.mpCode"
           >
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="目标车间" prop="arId">
+      <el-form-item label="目标车间" prop="arCode">
         <el-select
-          v-model="queryParams.arId"
+          v-model="queryParams.arCode"
           placeholder="请选择车间"
           clearable
         >
           <el-option
             v-for="item in areaList"
-            :key="item.arId"
+            :key="item.arCode"
             :label="item.arName"
-            :value="item.arId"
+            :value="item.arCode"
           >
           </el-option>
         </el-select>
@@ -112,10 +112,11 @@
     <el-table v-loading="loading" :data="manufactureTaskList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="生产任务ID" align="center" prop="mtId" v-if="true"/>
-      <el-table-column label="所属生产计划ID" align="center" prop="mpId" />
-      <el-table-column label="目标车间" align="center" prop="arId">
+      <el-table-column label="生产任务编码" align="center" prop="mtCode" />
+      <el-table-column label="所属生产计划" align="center" prop="mpCode" />
+      <el-table-column label="目标车间" align="center" prop="arCode">
         <template slot-scope="scope">
-          {{ areaList.find(ele => ele.arId === scope.row.arId).arName || '' }}
+          {{ areaList.find(ele => ele.arCode === scope.row.arCode).arName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center" prop="mtStat">
@@ -180,31 +181,31 @@
     <!-- 添加或修改生产任务对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="540px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="110px">
-        <el-form-item label="所属生产计划" prop="mpId">
+        <el-form-item label="所属生产计划" prop="mpCode">
           <el-select
-            v-model="form.mpId"
+            v-model="form.mpCode"
             placeholder="请选择生产计划"
             clearable
           >
             <el-option
               v-for="item in manufacturePlanList"
-              :key="item.mpId"
-              :label="item.mpId"
-              :value="item.mpId"
+              :key="item.mpCode"
+              :label="item.mpCode"
+              :value="item.mpCode"
             >
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="目标车间" prop="arId">
+        <el-form-item label="目标车间" prop="arCode">
           <el-select
-            v-model="form.arId"
+            v-model="form.arCode"
             placeholder="请选择车间"
           >
             <el-option
               v-for="item in areaList"
-              :key="item.arId"
+              :key="item.arCode"
               :label="item.arName"
-              :value="item.arId"
+              :value="item.arCode"
             >
             </el-option>
           </el-select>
@@ -295,8 +296,8 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        mpId: undefined,
-        arId: undefined,
+        mpCode: undefined,
+        arCode: undefined,
         mtStat: undefined,
         mtPriority: undefined,
         mtDelete: 0,
@@ -308,10 +309,10 @@ export default {
         mtId: [
           { required: true, message: "生产任务不能为空", trigger: "blur" }
         ],
-        mpId: [
+        mpCode: [
           { required: true, message: "所属生产计划不能为空", trigger: "blur" }
         ],
-        arId: [
+        arCode: [
           { required: true, message: "目标车间不能为空", trigger: "blur" }
         ],
         mtEndPlan: [
@@ -417,8 +418,8 @@ export default {
     reset() {
       this.form = {
         mtId: undefined,
-        mpId: undefined,
-        arId: undefined,
+        mpCode: undefined,
+        arCode: undefined,
         mtStat: undefined,
         mtBegin: undefined,
         mtEndPlan: undefined,
@@ -521,11 +522,11 @@ export default {
     handleGenerateDeviceTask(row) {
       this.currentManufactureTask = row
       // 找到生产计划
-      const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpId === row.mpId)
+      const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpCode === row.mpCode)
       // 找到工艺流程
       const process = this.processList.find(ele => ele.procId === manufacturePlan.procId)
       // 找到可分配的设备
-      this.viewerData.eqList = this.eqList.filter(ele => ele.arId === row.arId)
+      this.viewerData.eqList = this.eqList.filter(ele => ele.arCode === row.arCode)
       // 打开流程
       this.viewerData.loading = true
       this.viewerData.title = "分配设备任务"

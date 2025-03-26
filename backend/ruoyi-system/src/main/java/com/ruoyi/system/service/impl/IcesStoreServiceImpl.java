@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesStoreBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesStoreServiceImpl implements IIcesStoreService {
 
     private final IcesStoreMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询仓库
@@ -72,6 +74,7 @@ public class IcesStoreServiceImpl implements IIcesStoreService {
      */
     @Override
     public Boolean insertByBo(IcesStoreBo bo) {
+        bo.setStCode(codeService.insertByType("Store"));
         IcesStore add = BeanUtil.toBean(bo, IcesStore.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

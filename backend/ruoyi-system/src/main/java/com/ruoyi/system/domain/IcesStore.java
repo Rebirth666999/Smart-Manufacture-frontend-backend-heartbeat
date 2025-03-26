@@ -42,11 +42,11 @@ public class IcesStore extends BaseEntity {
     /**
      * 货位数量
      */
-    private Long stSpace;
+    private Float stSpace;
     /**
      * 空闲货位数量
      */
-    private Long stFree;
+    private Float stFree;
     /**
      * 已删除
      */

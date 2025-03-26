@@ -1,24 +1,24 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="所需产品" prop="prId">
+      <el-form-item label="所需产品" prop="maCode">
         <el-select
-          v-model="queryParams.prId"
+          v-model="queryParams.maCode"
           placeholder="请选择产品"
           clearable
         >
           <el-option
             v-for="item in productList"
-            :key="item.prId"
-            :label="item.prName"
-            :value="item.prId"
+            :key="item.maCode"
+            :label="item.maName"
+            :value="item.maCode"
           >
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="客户" prop="clId">
+      <el-form-item label="客户" prop="clCode">
         <el-input
-          v-model="queryParams.clId"
+          v-model="queryParams.clCode"
           placeholder="请输入客户"
           clearable
           @keyup.enter.native="handleQuery"
@@ -125,12 +125,12 @@
     <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="订单ID" align="center" prop="orId" v-if="true"/>
-      <el-table-column label="所需产品" align="center" prop="prId">
+      <el-table-column label="所需产品" align="center" prop="maCode">
         <template slot-scope="scope">
-          {{ productList.find(ele => ele.prId === scope.row.prId).prName || '' }}
+          {{ productList.find(ele => ele.maCode === scope.row.maCode).maName || '' }}
         </template>
       </el-table-column>
-      <el-table-column label="客户" align="center" prop="clId" />
+      <el-table-column label="客户" align="center" prop="clCode" />
       <el-table-column label="订单名称" align="center" prop="orName" />
       <el-table-column label="状态代码" align="center" prop="orStat">
         <template slot-scope="scope">
@@ -199,22 +199,22 @@
     <!-- 添加或修改订单对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="530px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="110px">
-        <el-form-item label="所需产品" prop="prId">
+        <el-form-item label="所需产品" prop="maCode">
           <el-select
-            v-model="form.prId"
+            v-model="form.maCode"
             placeholder="请选择产品"
           >
             <el-option
               v-for="item in productList"
-              :key="item.prId"
-              :label="item.prName"
-              :value="item.prId"
+              :key="item.maCode"
+              :label="item.maName"
+              :value="item.maCode"
             >
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="客户" prop="clId">
-          <el-input v-model="form.clId" placeholder="请输入客户" />
+        <el-form-item label="客户" prop="clCode">
+          <el-input v-model="form.clCode" placeholder="请输入客户" />
         </el-form-item>
         <el-form-item label="订单名称" prop="orName">
           <el-input v-model="form.orName" placeholder="请输入订单名称" />
@@ -250,7 +250,7 @@
 
 <script>
 import { listOrder, getOrder, delOrder, addOrder, updateOrder } from "@/api/system/order";
-// import { listProduct } from "@/api/system/product";
+import { listMaterial } from "@/api/system/material";
 
 export default {
   name: "Order",
@@ -283,8 +283,8 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        prId: undefined,
-        clId: undefined,
+        maCode: undefined,
+        clCode: undefined,
         orName: undefined,
         orStat: undefined,
         orPriority: undefined,
@@ -298,7 +298,7 @@ export default {
         orId: [
           { required: true, message: "订单ID不能为空", trigger: "blur" }
         ],
-        prId: [
+        maCode: [
           { required: true, message: "所需产品不能为空", trigger: "blur" }
         ],
         orName: [
@@ -328,7 +328,7 @@ export default {
   methods: {
     // 查询产品列表
     getProductList() {
-      listProduct().then(response => {
+      listMaterial({ maType: '2' }).then(response => {
         this.productList = response.rows
       })
     },
@@ -355,8 +355,8 @@ export default {
     reset() {
       this.form = {
         orId: undefined,
-        prId: undefined,
-        clId: undefined,
+        maCode: undefined,
+        clCode: undefined,
         orName: undefined,
         orStat: undefined,
         orDemand: undefined,

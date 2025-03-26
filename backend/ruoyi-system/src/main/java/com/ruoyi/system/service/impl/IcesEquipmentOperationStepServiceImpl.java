@@ -61,8 +61,8 @@ public class IcesEquipmentOperationStepServiceImpl implements IIcesEquipmentOper
     private LambdaQueryWrapper<IcesEquipmentOperationStep> buildQueryWrapper(IcesEquipmentOperationStepBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesEquipmentOperationStep> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getEaoId() != null, IcesEquipmentOperationStep::getEaoId, bo.getEaoId());
-        lqw.eq(bo.getEoId() != null, IcesEquipmentOperationStep::getEoId, bo.getEoId());
+        lqw.eq(bo.getEaoCode() != null, IcesEquipmentOperationStep::getEaoCode, bo.getEaoCode());
+        lqw.eq(bo.getEoCode() != null, IcesEquipmentOperationStep::getEoCode, bo.getEoCode());
         lqw.eq(bo.getEosDelete() != null, IcesEquipmentOperationStep::getEosDelete, bo.getEosDelete());
         return lqw;
     }

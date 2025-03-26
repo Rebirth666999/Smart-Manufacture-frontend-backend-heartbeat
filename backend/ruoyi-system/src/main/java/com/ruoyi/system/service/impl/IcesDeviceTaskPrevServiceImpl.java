@@ -61,8 +61,8 @@ public class IcesDeviceTaskPrevServiceImpl implements IIcesDeviceTaskPrevService
     private LambdaQueryWrapper<IcesDeviceTaskPrev> buildQueryWrapper(IcesDeviceTaskPrevBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesDeviceTaskPrev> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getDtIdCur() != null, IcesDeviceTaskPrev::getDtIdCur, bo.getDtIdCur());
-        lqw.eq(bo.getDtIdPrev() != null, IcesDeviceTaskPrev::getDtIdPrev, bo.getDtIdPrev());
+        lqw.eq(bo.getDtCodeCur() != null, IcesDeviceTaskPrev::getDtCodeCur, bo.getDtCodeCur());
+        lqw.eq(bo.getDtCodePrev() != null, IcesDeviceTaskPrev::getDtCodePrev, bo.getDtCodePrev());
         return lqw;
     }
 

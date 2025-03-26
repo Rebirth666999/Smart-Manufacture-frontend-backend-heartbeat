@@ -9,29 +9,29 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="车间" prop="arId">
+      <el-form-item label="车间" prop="arCode">
         <el-select
-          v-model="queryParams.arId"
+          v-model="queryParams.arCode"
           placeholder="请选择车间"
           clearable
         >
           <el-option
             v-for="item in areaList"
-            :key="item.arId"
+            :key="item.arCode"
             :label="item.arName"
-            :value="item.arId"
+            :value="item.arCode"
           >
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="设备模型" prop="emId">
-        <el-select v-model="queryParams.emId" placeholder="请选择设备模型" 
+      <el-form-item label="设备模型" prop="emCode">
+        <el-select v-model="queryParams.emCode" placeholder="请选择设备模型" 
         @keyup.enter.native="handleQuery" clearable>
           <el-option
             v-for="item in equipmentModelListFull"
-            :key="item.emId"
+            :key="item.emCode"
             :label="item.emName"
-            :value="item.emId"
+            :value="item.emCode"
           >
           </el-option>
         </el-select>
@@ -109,15 +109,16 @@
     <el-table v-loading="loading" :data="equipmentList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="设备ID" align="center" prop="eqId" v-if="true"/>
+      <el-table-column label="设备编码" align="center" prop="eqCode" />
       <el-table-column label="名称" align="center" prop="eqName" />
-      <el-table-column label="所属车间" align="center" prop="arId">
+      <el-table-column label="所属车间" align="center" prop="arCode">
         <template slot-scope="scope">
-          {{ areaList.find(ele => ele.arId === scope.row.arId).arName || '' }}
+          {{ areaList.find(ele => ele.arCode === scope.row.arCode).arName || '' }}
         </template>
       </el-table-column>
-      <el-table-column label="所属设备模型" align="center" prop="emId">
+      <el-table-column label="所属设备模型" align="center" prop="emCode">
         <template slot-scope="scope">
-          {{ equipmentModelListFull.find(ele => ele.emId === scope.row.emId).emName || '' }}
+          {{ equipmentModelListFull.find(ele => ele.emCode === scope.row.emCode).emName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center" prop="eqStat">
@@ -241,30 +242,30 @@
         <el-form-item label="名称" prop="eqName">
           <el-input v-model="form.eqName" placeholder="请输入名称" />
         </el-form-item>
-        <el-form-item label="车间" prop="arId">
+        <el-form-item label="车间" prop="arCode">
           <el-select
-            v-model="form.arId"
+            v-model="form.arCode"
             placeholder="请选择车间"
           >
             <el-option
               v-for="item in areaList"
-              :key="item.arId"
+              :key="item.arCode"
               :label="item.arName"
-              :value="item.arId"
+              :value="item.arCode"
             >
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="设备模型" prop="emId">
+        <el-form-item label="设备模型" prop="emCode">
           <el-select
-            v-model="form.emId"
+            v-model="form.emCode"
             placeholder="请选择设备模型"
           >
             <el-option
               v-for="item in equipmentModelList"
-              :key="item.emId"
+              :key="item.emCode"
               :label="item.emName"
-              :value="item.emId"
+              :value="item.emCode"
             >
             </el-option>
           </el-select>
@@ -326,8 +327,8 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        arId: undefined,
-        emId: undefined,
+        arCode: undefined,
+        emCode: undefined,
         eqName: undefined,
         eqStat: undefined,
         eqDelete: 0,
@@ -339,10 +340,10 @@ export default {
         eqId: [
           { required: true, message: "设备ID不能为空", trigger: "blur" }
         ],
-        arId: [
+        arCode: [
           { required: true, message: "所属车间不能为空", trigger: "change" }
         ],
-        emId: [
+        emCode: [
           { required: true, message: "所属设备模型不能为空", trigger: "change" }
         ],
         eqName: [
@@ -402,8 +403,8 @@ export default {
     reset() {
       this.form = {
         eqId: undefined,
-        arId: undefined,
-        emId: undefined,
+        arCode: undefined,
+        emCode: undefined,
         eqName: undefined,
         eqStat: undefined,
         eqIntroduceTime: undefined,

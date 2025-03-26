@@ -61,8 +61,8 @@ public class IcesProcessMaterialServiceImpl implements IIcesProcessMaterialServi
     private LambdaQueryWrapper<IcesProcessMaterial> buildQueryWrapper(IcesProcessMaterialBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesProcessMaterial> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getProcId() != null, IcesProcessMaterial::getProcId, bo.getProcId());
-        lqw.eq(bo.getMaId() != null, IcesProcessMaterial::getMaId, bo.getMaId());
+        lqw.eq(bo.getProcCode() != null, IcesProcessMaterial::getProcCode, bo.getProcCode());
+        lqw.eq(bo.getMaCode() != null, IcesProcessMaterial::getMaCode, bo.getMaCode());
         lqw.eq(bo.getPmDelete() != null, IcesProcessMaterial::getPmDelete, bo.getPmDelete());
         return lqw;
     }

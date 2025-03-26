@@ -61,8 +61,8 @@ public class IcesDeviceTaskParamServiceImpl implements IIcesDeviceTaskParamServi
     private LambdaQueryWrapper<IcesDeviceTaskParam> buildQueryWrapper(IcesDeviceTaskParamBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesDeviceTaskParam> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getEospaId() != null, IcesDeviceTaskParam::getEospaId, bo.getEospaId());
-        lqw.eq(bo.getDtId() != null, IcesDeviceTaskParam::getDtId, bo.getDtId());
+        lqw.eq(bo.getEospaCode() != null, IcesDeviceTaskParam::getEospaCode, bo.getEospaCode());
+        lqw.eq(bo.getDtCode() != null, IcesDeviceTaskParam::getDtCode, bo.getDtCode());
         lqw.eq(bo.getDtpaDelete() != null, IcesDeviceTaskParam::getDtpaDelete, bo.getDtpaDelete());
         return lqw;
     }

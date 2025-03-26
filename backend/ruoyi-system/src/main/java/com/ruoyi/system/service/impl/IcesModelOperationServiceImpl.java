@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesModelOperationBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesModelOperationServiceImpl implements IIcesModelOperationService {
 
     private final IcesModelOperationMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询设备模型操作
@@ -61,7 +63,7 @@ public class IcesModelOperationServiceImpl implements IIcesModelOperationService
     private LambdaQueryWrapper<IcesModelOperation> buildQueryWrapper(IcesModelOperationBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesModelOperation> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getEmId() != null, IcesModelOperation::getEmId, bo.getEmId());
+        lqw.eq(bo.getEmCode() != null, IcesModelOperation::getEmCode, bo.getEmCode());
         lqw.like(StringUtils.isNotBlank(bo.getMoName()), IcesModelOperation::getMoName, bo.getMoName());
         lqw.eq(bo.getMoDelete() != null, IcesModelOperation::getMoDelete, bo.getMoDelete());
         return lqw;
@@ -72,6 +74,7 @@ public class IcesModelOperationServiceImpl implements IIcesModelOperationService
      */
     @Override
     public Boolean insertByBo(IcesModelOperationBo bo) {
+        bo.setMoCode(codeService.insertByType("ModelOperation"));
         IcesModelOperation add = BeanUtil.toBean(bo, IcesModelOperation.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

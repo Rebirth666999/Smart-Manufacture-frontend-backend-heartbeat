@@ -61,9 +61,9 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
     private LambdaQueryWrapper<IcesDeviceTask> buildQueryWrapper(IcesDeviceTaskBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesDeviceTask> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getEqId() != null, IcesDeviceTask::getEqId, bo.getEqId());
-        lqw.eq(bo.getMtId() != null, IcesDeviceTask::getMtId, bo.getMtId());
-        lqw.eq(bo.getEoId() != null, IcesDeviceTask::getEoId, bo.getEoId());
+        lqw.eq(bo.getEqCode() != null, IcesDeviceTask::getEqCode, bo.getEqCode());
+        lqw.eq(bo.getMtCode() != null, IcesDeviceTask::getMtCode, bo.getMtCode());
+        lqw.eq(bo.getEoCode() != null, IcesDeviceTask::getEoCode, bo.getEoCode());
         lqw.eq(StringUtils.isNotBlank(bo.getDtStat()), IcesDeviceTask::getDtStat, bo.getDtStat());
         lqw.eq(bo.getDtDelete() != null, IcesDeviceTask::getDtDelete, bo.getDtDelete());
         return lqw;

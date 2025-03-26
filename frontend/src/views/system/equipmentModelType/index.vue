@@ -72,6 +72,7 @@
     <el-table v-loading="loading" :data="equipmentModelTypeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="模型类型ID" align="center" prop="emtId" v-if="true"/>
+      <el-table-column label="模型类型编码" align="center" prop="emtCode" />
       <el-table-column label="名称" align="center" prop="emtName" />
       <!-- <el-table-column label="已删除" align="center" prop="emtDelete" /> -->
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
@@ -297,7 +298,7 @@ export default {
     },
     // 查看模型类型下属的模型
     handleEquipmentModelTypeView(row) {
-      this.$router.push(`/equipment/equipmentModel?emtId=${row.emtId}`)
+      this.$router.push(`/equipment/equipmentModel?emtCode=${row.emtCode}`)
     }
   }
 };

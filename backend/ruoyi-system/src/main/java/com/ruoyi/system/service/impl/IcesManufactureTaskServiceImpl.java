@@ -61,8 +61,8 @@ public class IcesManufactureTaskServiceImpl implements IIcesManufactureTaskServi
     private LambdaQueryWrapper<IcesManufactureTask> buildQueryWrapper(IcesManufactureTaskBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesManufactureTask> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getMpId() != null, IcesManufactureTask::getMpId, bo.getMpId());
-        lqw.eq(bo.getArId() != null, IcesManufactureTask::getArId, bo.getArId());
+        lqw.eq(bo.getMpCode() != null, IcesManufactureTask::getMpCode, bo.getMpCode());
+        lqw.eq(bo.getArCode() != null, IcesManufactureTask::getArCode, bo.getArCode());
         lqw.eq(StringUtils.isNotBlank(bo.getMtStat()), IcesManufactureTask::getMtStat, bo.getMtStat());
         lqw.eq(bo.getMtPriority() != null, IcesManufactureTask::getMtPriority, bo.getMtPriority());
         lqw.eq(bo.getMtDelete() != null, IcesManufactureTask::getMtDelete, bo.getMtDelete());
@@ -78,7 +78,7 @@ public class IcesManufactureTaskServiceImpl implements IIcesManufactureTaskServi
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
-            bo.setMtId(add.getMtId());
+            bo.setMtCode(add.getMtCode());
         }
         return flag;
     }

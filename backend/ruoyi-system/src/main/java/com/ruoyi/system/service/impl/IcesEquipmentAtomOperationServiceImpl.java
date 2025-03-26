@@ -61,7 +61,7 @@ public class IcesEquipmentAtomOperationServiceImpl implements IIcesEquipmentAtom
     private LambdaQueryWrapper<IcesEquipmentAtomOperation> buildQueryWrapper(IcesEquipmentAtomOperationBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesEquipmentAtomOperation> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getEqId() != null, IcesEquipmentAtomOperation::getEqId, bo.getEqId());
+        lqw.eq(bo.getEqCode() != null, IcesEquipmentAtomOperation::getEqCode, bo.getEqCode());
         lqw.eq(bo.getEaoDelete() != null, IcesEquipmentAtomOperation::getEaoDelete, bo.getEaoDelete());
         return lqw;
     }

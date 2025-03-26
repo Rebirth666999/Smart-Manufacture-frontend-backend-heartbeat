@@ -61,8 +61,8 @@ public class IcesProcessStepServiceImpl implements IIcesProcessStepService {
     private LambdaQueryWrapper<IcesProcessStep> buildQueryWrapper(IcesProcessStepBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesProcessStep> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getProcId() != null, IcesProcessStep::getProcId, bo.getProcId());
-        lqw.eq(bo.getMoId() != null, IcesProcessStep::getMoId, bo.getMoId());
+        lqw.eq(bo.getProcCode() != null, IcesProcessStep::getProcCode, bo.getProcCode());
+        lqw.eq(bo.getMoCode() != null, IcesProcessStep::getMoCode, bo.getMoCode());
         lqw.eq(bo.getPsDelete() != null, IcesProcessStep::getPsDelete, bo.getPsDelete());
         return lqw;
     }

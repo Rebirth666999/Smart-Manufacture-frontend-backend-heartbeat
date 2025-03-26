@@ -198,7 +198,7 @@
 <script>
 import { listProcessMaterial, getProcessMaterial, delProcessMaterial, addProcessMaterial, updateProcessMaterial } from "@/api/system/processMaterial";
 import { listProcess } from "@/api/system/process";
-import { listMaterial } from "@/api/system/material";
+// import { listMaterial } from "@/api/system/material";
 
 export default {
   name: "ProcessMaterial",

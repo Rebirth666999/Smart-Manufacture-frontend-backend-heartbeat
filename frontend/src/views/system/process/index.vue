@@ -255,7 +255,7 @@
 
 <script>
 import { listProcess, getProcess, delProcess, addProcess, updateProcess, saveModel, getBpmnXml } from "@/api/system/process";
-import { listProduct } from "@/api/system/product";
+// import { listProduct } from "@/api/system/product";
 import { listEquipmentModel } from "@/api/system/equipmentModel";
 import { listModelOperation } from "@/api/system/modelOperation";
 import ProcessDesigner from '@/components/ProcessDesigner';

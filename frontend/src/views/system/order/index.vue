@@ -250,7 +250,7 @@
 
 <script>
 import { listOrder, getOrder, delOrder, addOrder, updateOrder } from "@/api/system/order";
-import { listProduct } from "@/api/system/product";
+// import { listProduct } from "@/api/system/product";
 
 export default {
   name: "Order",

@@ -186,7 +186,7 @@
 
 <script>
 import { getOrder, listReviewOrder } from "@/api/system/order";
-import { listProduct } from "@/api/system/product";
+// import { listProduct } from "@/api/system/product";
 
 export default {
   name: "OrderReview",

@@ -290,7 +290,7 @@ public class IcesEquipmentOperationServiceImpl extends FlowServiceFactory implem
             if (stepMap.get(flow.attributeValue("sourceRef")) != null)
                 stepPrevBo.setEosCodePrev(stepMap.get(flow.attributeValue("sourceRef")).getEosCode());
             // 仅在两个ID都存在时插入
-            if (stepPrevBo.getEosCodeCur() != null && stepPrevBo.getEosCodePrev() != null) {
+            if (StringUtils.isNotBlank(stepPrevBo.getEosCodeCur()) && StringUtils.isNotBlank(stepPrevBo.getEosCodePrev())) {
                 stepPrevBo.setEoCode(eoCode);
                 stepPrevService.insertByBo(stepPrevBo);
             }

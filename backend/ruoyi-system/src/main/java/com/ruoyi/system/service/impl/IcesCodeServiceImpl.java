@@ -48,6 +48,6 @@ public class IcesCodeServiceImpl implements IIcesCodeService {
         code.setCoNum(maxNum + 1);
         baseMapper.insert(code);
         // 构造字符串返回
-        return code.getCoType() + String.format("%05d", code.getCoNum());
+        return code.getCoType() + "-" + String.format("%05d", code.getCoNum());
     }
 }

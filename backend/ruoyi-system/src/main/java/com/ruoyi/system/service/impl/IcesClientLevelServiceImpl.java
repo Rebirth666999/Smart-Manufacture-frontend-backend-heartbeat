@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesClientLevelBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesClientLevelServiceImpl implements IIcesClientLevelService {
 
     private final IcesClientLevelMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询客户等级
@@ -72,6 +74,7 @@ public class IcesClientLevelServiceImpl implements IIcesClientLevelService {
      */
     @Override
     public Boolean insertByBo(IcesClientLevelBo bo) {
+        bo.setCllCode(codeService.insertByType("ClientLevel"));
         IcesClientLevel add = BeanUtil.toBean(bo, IcesClientLevel.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

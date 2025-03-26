@@ -80,6 +80,7 @@
     <el-table v-loading="loading" :data="clientLevelList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="客户等级ID" align="center" prop="cllId" v-if="true"/>
+      <el-table-column label="客户等级编码" align="center" prop="cllCode" />
       <el-table-column label="客户等级标识" align="center" prop="cllLabel" />
       <el-table-column label="客户等级名称" align="center" prop="cllName" />
       <!-- <el-table-column label="已删除" align="center" prop="cllDelete" /> -->

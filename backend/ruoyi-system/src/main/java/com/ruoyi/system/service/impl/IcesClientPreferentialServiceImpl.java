@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesClientPreferentialBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesClientPreferentialServiceImpl implements IIcesClientPreferentialService {
 
     private final IcesClientPreferentialMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询客户优惠策略
@@ -72,6 +74,7 @@ public class IcesClientPreferentialServiceImpl implements IIcesClientPreferentia
      */
     @Override
     public Boolean insertByBo(IcesClientPreferentialBo bo) {
+        bo.setCpCode(codeService.insertByType("ClientPreferential"));
         IcesClientPreferential add = BeanUtil.toBean(bo, IcesClientPreferential.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

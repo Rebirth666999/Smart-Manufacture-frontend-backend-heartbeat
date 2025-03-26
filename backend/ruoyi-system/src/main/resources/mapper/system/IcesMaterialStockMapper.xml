@@ -6,6 +6,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="com.ruoyi.system.domain.IcesMaterialStock" id="IcesMaterialStockResult">
         <result property="msId" column="ms_id"/>
+        <result property="msCode" column="ms_code"/>
+        <result property="stCode" column="st_code"/>
+        <result property="maCode" column="ma_code"/>
         <result property="arId" column="ar_id"/>
         <result property="maId" column="ma_id"/>
         <result property="msStock" column="ms_stock"/>

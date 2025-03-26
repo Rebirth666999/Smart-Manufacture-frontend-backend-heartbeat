@@ -43,5 +43,17 @@ public class IcesMaterialStock extends BaseEntity {
      * 已删除
      */
     private Long msDelete;
+    /**
+     * 仓库原料库存编码
+     */
+    private String msCode;
+    /**
+     * 仓库
+     */
+    private String stCode;
+    /**
+     * 物料
+     */
+    private String maCode;
 
 }

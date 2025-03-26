@@ -36,6 +36,18 @@ public class IcesProcessMaterial extends BaseEntity {
      */
     private Long maId;
     /**
+     * 原料需求编码
+     */
+    private String pmCode;
+    /**
+     *所需工艺流程
+     */
+    private String procCode;
+    /**
+     * 所用原料
+     */
+    private String maCode;
+    /**
      * 所需原料数量
      */
     private Long pmDemand;

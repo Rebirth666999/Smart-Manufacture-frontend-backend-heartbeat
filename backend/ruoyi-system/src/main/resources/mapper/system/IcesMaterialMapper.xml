@@ -10,6 +10,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="maDelete" column="ma_delete"/>
         <result property="maDesc" column="ma_desc"/>
         <result property="createBy" column="create_by"/>
+        <result property="maCode" column="ma_code"/>
+        <result property="maType" column="ma_type"/>
+        <result property="maOccupy" column="ma_occupy"/>
         <result property="updateBy" column="update_by"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>

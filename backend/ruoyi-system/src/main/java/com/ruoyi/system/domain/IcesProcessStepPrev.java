@@ -36,6 +36,22 @@ public class IcesProcessStepPrev extends BaseEntity {
      */
     private Long psIdPrev;
     /**
+     * 跨轮前序步骤关联编码
+     */
+    private Long pspCode;
+    /**
+     * 所属工艺流程
+     */
+    private String procCode;
+    /**
+     * 当前工艺步骤
+     */
+    private String psCodeCur;
+    /**
+     * 跨轮次前序工艺步骤
+     */
+    private String psCodePrev;
+    /**
      * 已删除
      */
     private Long pspDelete;

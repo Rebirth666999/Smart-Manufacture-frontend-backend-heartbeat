@@ -32,6 +32,14 @@ public class IcesProcess extends BaseEntity {
      */
     private Long prId;
     /**
+     * 工艺流程编码
+     */
+    private String procCode;
+    /**
+     * 目标产品
+     */
+    private String maCode;
+    /**
      * 工艺流程名称
      */
     private String procName;

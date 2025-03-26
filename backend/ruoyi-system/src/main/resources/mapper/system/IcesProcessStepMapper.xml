@@ -8,6 +8,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="psId" column="ps_id"/>
         <result property="procId" column="proc_id"/>
         <result property="moId" column="mo_id"/>
+        <result property="psCode" column="psp_code"/>
+        <result property="procCode" column="proc_code"/>
+        <result property="moCode" column="mo_code"/>
         <result property="psModel" column="ps_model"/>
         <result property="psDelete" column="ps_delete"/>
         <result property="psDesc" column="ps_desc"/>

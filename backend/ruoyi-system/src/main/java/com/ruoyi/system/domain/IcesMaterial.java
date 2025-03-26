@@ -39,5 +39,16 @@ public class IcesMaterial extends BaseEntity {
      * 描述
      */
     private String maDesc;
-
+    /**
+    *物料编码
+     */
+    private String maCode;
+    /**
+    *占用货位数量
+     */
+    private float maOccupy;
+    /**
+    *类型
+     */
+    private String maType;
 }

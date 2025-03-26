@@ -36,6 +36,18 @@ public class IcesMaterialRecord extends BaseEntity {
      */
     private Long arId;
     /**
+     *台帐编码
+     */
+    private String mrCode;
+    /**
+     * 物料
+     */
+    private String maCode;
+    /**
+     * 仓库
+     */
+    private String stCode;
+    /**
      * 变动类型
      */
     private String mrType;

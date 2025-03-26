@@ -40,6 +40,18 @@ public class IcesProcessStep extends BaseEntity {
      */
     private String psModel;
     /**
+     * 工艺流程编码
+     */
+    private String psCode;
+    /**
+     * 所属工艺流程
+     */
+    private String procCode;
+    /**
+     * 设备模型操作
+     */
+    private String moCode;
+    /**
      * 已删除
      */
     private Long psDelete;

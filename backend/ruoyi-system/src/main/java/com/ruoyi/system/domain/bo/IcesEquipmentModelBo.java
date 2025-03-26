@@ -29,12 +29,6 @@ public class IcesEquipmentModelBo extends BaseEntity {
     private Long emId;
 
     /**
-     * 所属模型类型ID
-     */
-    @NotNull(message = "所属模型类型ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long emtId;
-
-    /**
      * 设备模型编码
      */
     private String emCode;

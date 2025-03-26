@@ -50,7 +50,7 @@ public class IcesMaterialVo {
      * 占用货位数量
      */
     @ExcelProperty(value = "占用货位数量")
-    private Long maOccupy;
+    private Float maOccupy;
 
     /**
      * 已删除

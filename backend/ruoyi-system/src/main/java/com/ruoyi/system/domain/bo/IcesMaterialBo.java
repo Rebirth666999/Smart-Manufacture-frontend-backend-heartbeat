@@ -48,7 +48,7 @@ public class IcesMaterialBo extends BaseEntity {
      * 占用货位数量
      */
     @NotNull(message = "占用货位数量不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long maOccupy;
+    private Float maOccupy;
 
     /**
      * 已删除

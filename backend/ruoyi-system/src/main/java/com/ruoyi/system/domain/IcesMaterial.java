@@ -42,7 +42,7 @@ public class IcesMaterial extends BaseEntity {
     /**
      * 占用货位数量
      */
-    private Long maOccupy;
+    private Float maOccupy;
     /**
      * 已删除
      */

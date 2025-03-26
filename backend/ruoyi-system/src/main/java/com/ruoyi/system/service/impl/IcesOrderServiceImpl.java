@@ -61,8 +61,8 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
     private LambdaQueryWrapper<IcesOrder> buildQueryWrapper(IcesOrderBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesOrder> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getPrId() != null, IcesOrder::getPrId, bo.getPrId());
-        lqw.eq(bo.getClId() != null, IcesOrder::getClId, bo.getClId());
+        lqw.eq(bo.getMaCode() != null, IcesOrder::getMaCode, bo.getMaCode());
+        lqw.eq(bo.getClCode() != null, IcesOrder::getClCode, bo.getClCode());
         lqw.like(StringUtils.isNotBlank(bo.getOrName()), IcesOrder::getOrName, bo.getOrName());
         lqw.eq(StringUtils.isNotBlank(bo.getOrStat()), IcesOrder::getOrStat, bo.getOrStat());
         lqw.eq(bo.getOrPriority() != null, IcesOrder::getOrPriority, bo.getOrPriority());

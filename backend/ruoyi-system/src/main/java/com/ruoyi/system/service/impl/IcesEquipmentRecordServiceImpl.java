@@ -61,7 +61,7 @@ public class IcesEquipmentRecordServiceImpl implements IIcesEquipmentRecordServi
     private LambdaQueryWrapper<IcesEquipmentRecord> buildQueryWrapper(IcesEquipmentRecordBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesEquipmentRecord> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getEqId() != null, IcesEquipmentRecord::getEqId, bo.getEqId());
+        lqw.eq(bo.getEqCode() != null, IcesEquipmentRecord::getEqCode, bo.getEqCode());
         lqw.eq(StringUtils.isNotBlank(bo.getErType()), IcesEquipmentRecord::getErType, bo.getErType());
         lqw.eq(StringUtils.isNotBlank(bo.getErStat()), IcesEquipmentRecord::getErStat, bo.getErStat());
         lqw.between(params.get("beginErBegin") != null && params.get("endErBegin") != null,

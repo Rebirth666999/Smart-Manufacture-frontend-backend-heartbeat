@@ -61,7 +61,7 @@ public class IcesAreaControlServiceImpl implements IIcesAreaControlService {
     private LambdaQueryWrapper<IcesAreaControl> buildQueryWrapper(IcesAreaControlBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesAreaControl> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getArId() != null, IcesAreaControl::getArId, bo.getArId());
+        lqw.eq(bo.getArCode() != null, IcesAreaControl::getArCode, bo.getArCode());
         lqw.like(StringUtils.isNotBlank(bo.getAcName()), IcesAreaControl::getAcName, bo.getAcName());
         lqw.eq(StringUtils.isNotBlank(bo.getAcIp()), IcesAreaControl::getAcIp, bo.getAcIp());
         lqw.eq(bo.getAcDelete() != null, IcesAreaControl::getAcDelete, bo.getAcDelete());

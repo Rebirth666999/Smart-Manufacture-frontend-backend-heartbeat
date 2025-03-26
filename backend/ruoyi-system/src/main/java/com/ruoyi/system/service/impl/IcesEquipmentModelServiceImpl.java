@@ -78,7 +78,7 @@ public class IcesEquipmentModelServiceImpl implements IIcesEquipmentModelService
     private LambdaQueryWrapper<IcesEquipmentModel> buildQueryWrapper(IcesEquipmentModelBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesEquipmentModel> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getEmtId() != null, IcesEquipmentModel::getEmtId, bo.getEmtId());
+        lqw.eq(bo.getEmtCode() != null, IcesEquipmentModel::getEmtCode, bo.getEmtCode());
         lqw.like(StringUtils.isNotBlank(bo.getEmName()), IcesEquipmentModel::getEmName, bo.getEmName());
         lqw.eq(StringUtils.isNotBlank(bo.getEmStat()), IcesEquipmentModel::getEmStat, bo.getEmStat());
         lqw.eq(bo.getEmDelete() != null, IcesEquipmentModel::getEmDelete, bo.getEmDelete());

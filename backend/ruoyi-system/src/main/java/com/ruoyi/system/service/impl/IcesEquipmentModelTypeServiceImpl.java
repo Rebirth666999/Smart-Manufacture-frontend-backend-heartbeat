@@ -110,34 +110,34 @@ public class IcesEquipmentModelTypeServiceImpl implements IIcesEquipmentModelTyp
         // 类型下没有模型，直接从数据库删除
         // 类型下只有已弃用的模型，更改已删除字段
         // 不满足如上情况，拒绝删除
-        if(isValid){
-            for (Long id : ids) {
-                // 构建搜索条件
-                IcesEquipmentModelBo equipmentModelBo = new IcesEquipmentModelBo();
-                equipmentModelBo.setEmtId(id);
-                // 找到所有设备模型
-                List<IcesEquipmentModelVo> list = iIcesEquipmentModelService.queryList(equipmentModelBo);
-                for (IcesEquipmentModelVo vo : list) {
-                    // 设备模型不是已弃用，拒绝删除
-                    if (!("5".equals(vo.getEmStat()))) {
-                        return false;
-                    }
-                }
-            }
-        }
-        for (Long id : ids) {
-            IcesEquipmentModelBo equipmentModelBo = new IcesEquipmentModelBo();
-            equipmentModelBo.setEmtId(id);
-            List<IcesEquipmentModelVo> list = iIcesEquipmentModelService.queryList(equipmentModelBo);
-            if (list.isEmpty()) {
-                baseMapper.deleteById(id);
-            } else {
-                IcesEquipmentModelTypeBo modelTypeBo = new IcesEquipmentModelTypeBo();
-                modelTypeBo.setEmtId(id);
-                modelTypeBo.setEmtDelete(1L);
-                updateByBo(modelTypeBo);
-            }
-        }
+//        if(isValid){
+//            for (Long id : ids) {
+//                // 构建搜索条件
+//                IcesEquipmentModelBo equipmentModelBo = new IcesEquipmentModelBo();
+//                equipmentModelBo.setEmtId(id);
+//                // 找到所有设备模型
+//                List<IcesEquipmentModelVo> list = iIcesEquipmentModelService.queryList(equipmentModelBo);
+//                for (IcesEquipmentModelVo vo : list) {
+//                    // 设备模型不是已弃用，拒绝删除
+//                    if (!("5".equals(vo.getEmStat()))) {
+//                        return false;
+//                    }
+//                }
+//            }
+//        }
+//        for (Long id : ids) {
+//            IcesEquipmentModelBo equipmentModelBo = new IcesEquipmentModelBo();
+//            equipmentModelBo.setEmtId(id);
+//            List<IcesEquipmentModelVo> list = iIcesEquipmentModelService.queryList(equipmentModelBo);
+//            if (list.isEmpty()) {
+//                baseMapper.deleteById(id);
+//            } else {
+//                IcesEquipmentModelTypeBo modelTypeBo = new IcesEquipmentModelTypeBo();
+//                modelTypeBo.setEmtId(id);
+//                modelTypeBo.setEmtDelete(1L);
+//                updateByBo(modelTypeBo);
+//            }
+//        }
         return true;
     }
 }

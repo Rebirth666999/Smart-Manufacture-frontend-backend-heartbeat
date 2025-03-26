@@ -61,7 +61,7 @@ public class IcesModelOperationServiceImpl implements IIcesModelOperationService
     private LambdaQueryWrapper<IcesModelOperation> buildQueryWrapper(IcesModelOperationBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesModelOperation> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getEmId() != null, IcesModelOperation::getEmId, bo.getEmId());
+        lqw.eq(bo.getEmCode() != null, IcesModelOperation::getEmCode, bo.getEmCode());
         lqw.like(StringUtils.isNotBlank(bo.getMoName()), IcesModelOperation::getMoName, bo.getMoName());
         lqw.eq(bo.getMoDelete() != null, IcesModelOperation::getMoDelete, bo.getMoDelete());
         return lqw;

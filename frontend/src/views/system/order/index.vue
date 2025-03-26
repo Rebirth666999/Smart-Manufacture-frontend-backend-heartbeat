@@ -236,6 +236,12 @@
         <el-form-item label="总价" prop="orPrice">
           <el-input v-model="form.orPrice" placeholder="请输入总价" />
         </el-form-item>
+        <el-form-item label="收货人" prop="orRecv">
+          <el-input v-model="form.orRecv" placeholder="请输入收货人" />
+        </el-form-item>
+        <el-form-item label="收货地址" prop="orAddr">
+          <el-input v-model="form.orAddr" placeholder="请输入收货地址" />
+        </el-form-item>
         <el-form-item label="描述" prop="orDesc">
           <el-input v-model="form.orDesc" type="textarea" placeholder="请输入内容" />
         </el-form-item>
@@ -316,6 +322,12 @@ export default {
         orPrice: [
           { required: true, message: "总价不能为空", trigger: "blur" }
         ],
+        orRecv: [
+          { required: true, message: "收货人不能为空", trigger: "blur" }
+        ],
+        orAddr: [
+          { required: true, message: "收货地址不能为空", trigger: "blur" }
+        ],
       },
       // 产品列表
       productList: []
@@ -363,6 +375,8 @@ export default {
         orPriority: undefined,
         orDeadline: undefined,
         orPrice: undefined,
+        orRecv: undefined,
+        orAddr: undefined,
         orDelete: undefined,
         orDesc: undefined,
         createBy: undefined,

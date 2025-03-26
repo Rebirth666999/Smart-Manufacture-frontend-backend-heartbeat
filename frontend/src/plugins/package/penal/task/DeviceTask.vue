@@ -3,28 +3,28 @@
     <el-form class="penal-form" label-width="70px">
       <el-form-item label="设备">
         <el-select
-          v-model="eqId"
+          v-model="eqCode"
           @change="updateEquipment"
         >
           <el-option
-            v-for="item in eqList.filter(ele => ele.emId === attrs.emId)"
-            :key="item.eqId"
+            v-for="item in eqList.filter(ele => ele.emCode === attrs.emCode)"
+            :key="item.eqCode"
             :label="item.eqName"
-            :value="item.eqId"
+            :value="item.eqCode"
           >
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="设备操作" v-show="eqId">
+      <el-form-item label="设备操作" v-show="eqCode">
         <el-select
-          v-model="eoId"
+          v-model="eoCode"
           @change="updateEquipmentOperation"
         >
           <el-option
-            v-for="item in eoList.filter(ele => ele.eqId === eqId && ele.moId === attrs.moId)"
-            :key="item.eoId"
+            v-for="item in eoList.filter(ele => ele.eqCode === eqCode && ele.moCode === attrs.moCode)"
+            :key="item.eoCode"
             :label="item.eoName"
-            :value="item.eoId"
+            :value="item.eoCode"
           >
           </el-option>
         </el-select>
@@ -46,8 +46,8 @@ export default {
     return {
       current: null,
       attrs: {},
-      eqId: '',
-      eoId: ''
+      eqCode: '',
+      eoCode: ''
     };
   },
   watch: {
@@ -59,11 +59,11 @@ export default {
         this.attrs = element.businessObject.$attrs
         const currentTask = this.taskList.find(ele => ele.id === element.id)
         if (currentTask) {
-          this.eqId = currentTask.eqId
-          this.eoId = currentTask.eoId
+          this.eqCode = currentTask.eqCode
+          this.eoCode = currentTask.eoCode
         } else {
-          this.eqId = ''
-          this.eoId = ''
+          this.eqCode = ''
+          this.eoCode = ''
         }
       }
     }
@@ -71,12 +71,12 @@ export default {
   methods: {
     // 更新属性：设备
     updateEquipment() {
-      this.eoId = ''
-      this.$emit('updateTask', { id: this.current.id, eqId: this.eqId, eoId: '', param: [] })
+      this.eoCode = ''
+      this.$emit('updateTask', { id: this.current.id, eqCode: this.eqCode, eoCode: '', param: [] })
     },
     // 更新属性：设备操作
     updateEquipmentOperation() {
-      this.$emit('updateTask', { id: this.current.id, eqId: this.eqId, eoId: this.eoId, param: [] })
+      this.$emit('updateTask', { id: this.current.id, eqCode: this.eqCode, eoCode: this.eoCode, param: [] })
     },
   },
   beforeDestroy() {

@@ -585,7 +585,7 @@ export default {
       // 找到生产计划
       const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpCode === row.mpCode)
       // 找到工艺流程
-      const process = this.processList.find(ele => ele.procId === manufacturePlan.procId)
+      const process = this.processList.find(ele => ele.procCode === manufacturePlan.procCode)
       // 找到可分配的设备
       this.viewerData.eqList = this.eqList.filter(ele => ele.arCode === row.arCode)
       // 打开流程

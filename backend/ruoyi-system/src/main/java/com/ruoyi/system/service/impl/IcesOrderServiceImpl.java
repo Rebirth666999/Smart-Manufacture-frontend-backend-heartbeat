@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesOrderBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesOrderServiceImpl implements IIcesOrderService {
 
     private final IcesOrderMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询订单
@@ -77,6 +79,7 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
      */
     @Override
     public Boolean insertByBo(IcesOrderBo bo) {
+        bo.setOrCode(codeService.insertByType("Order"));
         IcesOrder add = BeanUtil.toBean(bo, IcesOrder.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

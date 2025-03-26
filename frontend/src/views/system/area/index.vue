@@ -309,7 +309,7 @@ export default {
     },
     // 查看车间主控节点
     handleAreaControlView(row) {
-      this.$router.push(`/equipment/areaControl?arId=${row.arId}`)
+      this.$router.push(`/equipment/areaControl?arCode=${row.arCode}`)
     }
   }
 };

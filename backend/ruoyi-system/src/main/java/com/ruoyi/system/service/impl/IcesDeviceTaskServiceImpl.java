@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesDeviceTaskBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
 
     private final IcesDeviceTaskMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询设备任务
@@ -74,6 +76,7 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
      */
     @Override
     public Boolean insertByBo(IcesDeviceTaskBo bo) {
+        bo.setDtCode(codeService.insertByType("DeviceTask"));
         IcesDeviceTask add = BeanUtil.toBean(bo, IcesDeviceTask.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

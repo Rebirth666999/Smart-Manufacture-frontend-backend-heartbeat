@@ -197,54 +197,74 @@
     />
 
     <!-- 添加或修改订单对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="530px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
-        <el-form-item label="所需产品" prop="maCode">
-          <el-select
-            v-model="form.maCode"
-            placeholder="请选择产品"
-          >
-            <el-option
-              v-for="item in productList"
-              :key="item.maCode"
-              :label="item.maName"
-              :value="item.maCode"
+    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+        <el-col :span="12">
+          <el-form-item label="所需产品" prop="maCode">
+            <el-select
+              v-model="form.maCode"
+              placeholder="请选择产品"
             >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="客户" prop="clCode">
-          <el-input v-model="form.clCode" placeholder="请输入客户" />
-        </el-form-item>
-        <el-form-item label="订单名称" prop="orName">
-          <el-input v-model="form.orName" placeholder="请输入订单名称" />
-        </el-form-item>
-        <el-form-item label="所需产品数量" prop="orDemand">
-          <el-input v-model="form.orDemand" placeholder="请输入所需产品数量" />
-        </el-form-item>
-        <el-form-item label="订单优先级" prop="orPriority">
-          <el-input v-model="form.orPriority" placeholder="请输入订单优先级" />
-        </el-form-item>
-        <el-form-item label="截止时间" prop="orDeadline">
-          <el-date-picker clearable
-            v-model="form.orDeadline"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="请选择截止时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="总价" prop="orPrice">
-          <el-input v-model="form.orPrice" placeholder="请输入总价" />
-        </el-form-item>
-        <el-form-item label="收货人" prop="orRecv">
-          <el-input v-model="form.orRecv" placeholder="请输入收货人" />
-        </el-form-item>
-        <el-form-item label="收货地址" prop="orAddr">
-          <el-input v-model="form.orAddr" placeholder="请输入收货地址" />
-        </el-form-item>
-        <el-form-item label="描述" prop="orDesc">
-          <el-input v-model="form.orDesc" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
+              <el-option
+                v-for="item in productList"
+                :key="item.maCode"
+                :label="item.maName"
+                :value="item.maCode"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="客户" prop="clCode">
+            <el-input v-model="form.clCode" placeholder="请输入客户" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="订单名称" prop="orName">
+            <el-input v-model="form.orName" placeholder="请输入订单名称" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="所需产品数量" prop="orDemand">
+            <el-input v-model="form.orDemand" placeholder="请输入所需产品数量" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="订单优先级" prop="orPriority">
+            <el-input v-model="form.orPriority" placeholder="请输入订单优先级" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="截止时间" prop="orDeadline">
+            <el-date-picker clearable
+              v-model="form.orDeadline"
+              type="datetime"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              placeholder="请选择截止时间">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="总价" prop="orPrice">
+            <el-input v-model="form.orPrice" placeholder="请输入总价" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="收货人" prop="orRecv">
+            <el-input v-model="form.orRecv" placeholder="请输入收货人" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="收货地址" prop="orAddr">
+            <el-input v-model="form.orAddr" type="textarea" placeholder="请输入收货地址" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="描述" prop="orDesc">
+            <el-input v-model="form.orDesc" type="textarea" placeholder="请输入内容" />
+          </el-form-item>
+        </el-col>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>

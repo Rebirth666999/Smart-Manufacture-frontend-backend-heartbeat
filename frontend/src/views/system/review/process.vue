@@ -136,7 +136,7 @@
 
 <script>
 import { getProcess, listReviewProcess, getBpmnXml } from "@/api/system/process";
-import { listProduct } from "@/api/system/product";
+// import { listProduct } from "@/api/system/product";
 import ProcessViewer from '@/components/ProcessViewer';
 
 export default {

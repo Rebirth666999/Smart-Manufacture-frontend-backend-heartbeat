@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.domain.IcesAreaControl;
 import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -63,6 +64,7 @@ public class IcesAreaServiceImpl implements IIcesAreaService {
     private LambdaQueryWrapper<IcesArea> buildQueryWrapper(IcesAreaBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesArea> lqw = Wrappers.lambdaQuery();
+        lqw.eq(StringUtils.isNotBlank(bo.getArCode()), IcesArea::getArCode, bo.getArCode());
         lqw.like(StringUtils.isNotBlank(bo.getArName()), IcesArea::getArName, bo.getArName());
         lqw.eq(bo.getArDelete() != null, IcesArea::getArDelete, bo.getArDelete());
         return lqw;

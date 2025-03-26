@@ -80,6 +80,7 @@
     <el-table v-loading="loading" :data="clientPreferentialList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="优惠策略ID" align="center" prop="cpId" v-if="true"/>
+      <el-table-column label="优惠策略编码" align="center" prop="cpCode" />
       <el-table-column label="名称" align="center" prop="cpName" />
       <el-table-column label="类别" align="center" prop="cpType" />
       <!-- <el-table-column label="已删除" align="center" prop="cpDelete" /> -->

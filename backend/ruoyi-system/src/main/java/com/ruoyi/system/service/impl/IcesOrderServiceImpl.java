@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesOrderBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesOrderServiceImpl implements IIcesOrderService {
 
     private final IcesOrderMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询订单
@@ -61,8 +63,9 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
     private LambdaQueryWrapper<IcesOrder> buildQueryWrapper(IcesOrderBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesOrder> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getMaCode() != null, IcesOrder::getMaCode, bo.getMaCode());
-        lqw.eq(bo.getClCode() != null, IcesOrder::getClCode, bo.getClCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getOrCode()), IcesOrder::getOrCode, bo.getOrCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getMaCode()), IcesOrder::getMaCode, bo.getMaCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getClCode()), IcesOrder::getClCode, bo.getClCode());
         lqw.like(StringUtils.isNotBlank(bo.getOrName()), IcesOrder::getOrName, bo.getOrName());
         lqw.eq(StringUtils.isNotBlank(bo.getOrStat()), IcesOrder::getOrStat, bo.getOrStat());
         lqw.eq(bo.getOrPriority() != null, IcesOrder::getOrPriority, bo.getOrPriority());
@@ -77,6 +80,7 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
      */
     @Override
     public Boolean insertByBo(IcesOrderBo bo) {
+        bo.setOrCode(codeService.insertByType("Order"));
         IcesOrder add = BeanUtil.toBean(bo, IcesOrder.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

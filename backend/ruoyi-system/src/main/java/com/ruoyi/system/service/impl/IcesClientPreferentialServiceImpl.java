@@ -63,6 +63,7 @@ public class IcesClientPreferentialServiceImpl implements IIcesClientPreferentia
     private LambdaQueryWrapper<IcesClientPreferential> buildQueryWrapper(IcesClientPreferentialBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesClientPreferential> lqw = Wrappers.lambdaQuery();
+        lqw.like(StringUtils.isNotBlank(bo.getCpCode()), IcesClientPreferential::getCpCode, bo.getCpCode());
         lqw.like(StringUtils.isNotBlank(bo.getCpName()), IcesClientPreferential::getCpName, bo.getCpName());
         lqw.like(StringUtils.isNotBlank(bo.getCpType()), IcesClientPreferential::getCpType, bo.getCpType());
         lqw.eq(bo.getCpDelete() != null, IcesClientPreferential::getCpDelete, bo.getCpDelete());

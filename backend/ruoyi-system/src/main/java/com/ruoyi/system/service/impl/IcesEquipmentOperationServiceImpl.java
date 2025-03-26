@@ -80,8 +80,9 @@ public class IcesEquipmentOperationServiceImpl extends FlowServiceFactory implem
     private LambdaQueryWrapper<IcesEquipmentOperation> buildQueryWrapper(IcesEquipmentOperationBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesEquipmentOperation> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getMoCode() != null, IcesEquipmentOperation::getMoCode, bo.getMoCode());
-        lqw.eq(bo.getEqCode() != null, IcesEquipmentOperation::getEqCode, bo.getEqCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getEoCode()), IcesEquipmentOperation::getEoCode, bo.getEoCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getMoCode()), IcesEquipmentOperation::getMoCode, bo.getMoCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getEqCode()), IcesEquipmentOperation::getEqCode, bo.getEqCode());
         lqw.eq(bo.getEoDelete() != null, IcesEquipmentOperation::getEoDelete, bo.getEoDelete());
         return lqw;
     }

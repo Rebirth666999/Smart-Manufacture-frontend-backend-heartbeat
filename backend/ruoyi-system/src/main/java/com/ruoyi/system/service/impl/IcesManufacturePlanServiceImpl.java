@@ -63,8 +63,9 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
     private LambdaQueryWrapper<IcesManufacturePlan> buildQueryWrapper(IcesManufacturePlanBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesManufacturePlan> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getOrCode() != null, IcesManufacturePlan::getOrCode, bo.getOrCode());
-        lqw.eq(bo.getProcCode() != null, IcesManufacturePlan::getProcCode, bo.getProcCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getMpCode()), IcesManufacturePlan::getMpCode, bo.getMpCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getOrCode()), IcesManufacturePlan::getOrCode, bo.getOrCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getProcCode()), IcesManufacturePlan::getProcCode, bo.getProcCode());
         lqw.eq(StringUtils.isNotBlank(bo.getMpStat()), IcesManufacturePlan::getMpStat, bo.getMpStat());
         lqw.eq(bo.getMpPriority() != null, IcesManufacturePlan::getMpPriority, bo.getMpPriority());
         lqw.eq(bo.getMpDelete() != null, IcesManufacturePlan::getMpDelete, bo.getMpDelete());

@@ -63,6 +63,7 @@ public class IcesStoreServiceImpl implements IIcesStoreService {
     private LambdaQueryWrapper<IcesStore> buildQueryWrapper(IcesStoreBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesStore> lqw = Wrappers.lambdaQuery();
+        lqw.like(StringUtils.isNotBlank(bo.getStCode()), IcesStore::getStCode, bo.getStCode());
         lqw.like(StringUtils.isNotBlank(bo.getStName()), IcesStore::getStName, bo.getStName());
         lqw.eq(StringUtils.isNotBlank(bo.getStType()), IcesStore::getStType, bo.getStType());
         lqw.eq(bo.getStDelete() != null, IcesStore::getStDelete, bo.getStDelete());

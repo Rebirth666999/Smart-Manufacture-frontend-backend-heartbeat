@@ -63,6 +63,7 @@ public class IcesClientLevelServiceImpl implements IIcesClientLevelService {
     private LambdaQueryWrapper<IcesClientLevel> buildQueryWrapper(IcesClientLevelBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesClientLevel> lqw = Wrappers.lambdaQuery();
+        lqw.like(StringUtils.isNotBlank(bo.getCllCode()), IcesClientLevel::getCllCode, bo.getCllCode());
         lqw.like(StringUtils.isNotBlank(bo.getCllLabel()), IcesClientLevel::getCllLabel, bo.getCllLabel());
         lqw.like(StringUtils.isNotBlank(bo.getCllName()), IcesClientLevel::getCllName, bo.getCllName());
         lqw.eq(bo.getCllDelete() != null, IcesClientLevel::getCllDelete, bo.getCllDelete());

@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesProcessStepPrevRoundBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesProcessStepPrevRoundServiceImpl implements IIcesProcessStepPrevRoundService {
 
     private final IcesProcessStepPrevRoundMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询关联-工艺步骤的跨轮次前序步骤
@@ -72,6 +74,7 @@ public class IcesProcessStepPrevRoundServiceImpl implements IIcesProcessStepPrev
      */
     @Override
     public Boolean insertByBo(IcesProcessStepPrevRoundBo bo) {
+        bo.setPsprCode(codeService.insertByType("ProcessStepPrevRound"));
         IcesProcessStepPrevRound add = BeanUtil.toBean(bo, IcesProcessStepPrevRound.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

@@ -2,10 +2,10 @@
   <div class="panel-tab__content">
     <el-descriptions border :column="1">
       <el-descriptions-item label="设备模型">
-        {{ emList.find(ele => ele.emId === emId).emName }}
+        {{ emList.find(ele => ele.emCode === emCode).emName }}
       </el-descriptions-item>
       <el-descriptions-item label="模型操作">
-        {{ moList.find(ele => ele.moId === moId).moName }}
+        {{ moList.find(ele => ele.moCode === moCode).moName }}
       </el-descriptions-item>
       <el-descriptions-item label="描述">
         {{ psDesc || '' }}
@@ -29,8 +29,8 @@ export default {
   },
   data() {
     return {
-      emId: '',
-      moId: '',
+      emCode: '',
+      moCode: '',
       psDesc: '',
       prev: [],
       elements: []
@@ -42,8 +42,8 @@ export default {
       immediate: true,
       handler: function(element) {
         if (element.type === 'bpmn:ServiceTask') {
-          this.emId = element.businessObject.$attrs.emId || ''
-          this.moId = element.businessObject.$attrs.moId || ''
+          this.emCode = element.businessObject.$attrs.emCode || ''
+          this.moCode = element.businessObject.$attrs.moCode || ''
           this.psDesc = element.businessObject.$attrs.psDesc || ''
           this.prev = JSON.parse(element.businessObject.$attrs.prev || '[]')
           this.elements = element.parent.children

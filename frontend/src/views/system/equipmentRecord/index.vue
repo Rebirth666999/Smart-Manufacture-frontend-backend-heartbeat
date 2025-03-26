@@ -119,6 +119,7 @@
     <el-table v-loading="loading" :data="equipmentRecordList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="事件日志ID" align="center" prop="erId" v-if="true"/>
+      <el-table-column label="事件日志编码" align="center" prop="erCode"/>
       <el-table-column label="关联设备" align="center" prop="eqCode">
         <template slot-scope="scope">
           {{ equipmentList.find(ele => ele.eqCode === scope.row.eqCode).eqName || '' }}

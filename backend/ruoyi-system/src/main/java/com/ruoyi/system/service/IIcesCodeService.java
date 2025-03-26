@@ -16,34 +16,6 @@ import java.util.List;
  * @date 2025-03-26
  */
 public interface IIcesCodeService {
-
-    /**
-     * 查询业务编码
-     */
-    IcesCodeVo queryById(Long coId);
-
-    /**
-     * 查询业务编码列表
-     */
-    TableDataInfo<IcesCodeVo> queryPageList(IcesCodeBo bo, PageQuery pageQuery);
-
-    /**
-     * 查询业务编码列表
-     */
-    List<IcesCodeVo> queryList(IcesCodeBo bo);
-
-    /**
-     * 新增业务编码
-     */
-    Boolean insertByBo(IcesCodeBo bo);
-
-    /**
-     * 修改业务编码
-     */
-    Boolean updateByBo(IcesCodeBo bo);
-
-    /**
-     * 校验并批量删除业务编码信息
-     */
-    Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+    // 按类型新增业务编码
+    String insertByType(String type);
 }

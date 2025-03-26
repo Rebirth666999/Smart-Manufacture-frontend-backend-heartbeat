@@ -28,6 +28,12 @@ public class IcesClientLevelVo {
     private Long cllId;
 
     /**
+     * 客户等级编码
+     */
+    @ExcelProperty(value = "客户等级编码")
+    private String cllCode;
+
+    /**
      * 客户等级标识
      */
     @ExcelProperty(value = "客户等级标识")

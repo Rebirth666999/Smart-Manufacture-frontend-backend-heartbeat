@@ -28,6 +28,11 @@ public class IcesClientPreferentialBo extends BaseEntity {
     private Long cpId;
 
     /**
+     * 优惠策略编码
+     */
+    private String cpCode;
+
+    /**
      * 名称
      */
     @NotBlank(message = "名称不能为空", groups = { AddGroup.class, EditGroup.class })

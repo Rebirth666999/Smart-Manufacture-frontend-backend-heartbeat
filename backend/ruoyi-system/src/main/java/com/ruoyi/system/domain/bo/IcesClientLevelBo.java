@@ -28,6 +28,11 @@ public class IcesClientLevelBo extends BaseEntity {
     private Long cllId;
 
     /**
+     * 客户等级编码
+     */
+    private String cllCode;
+
+    /**
      * 客户等级标识
      */
     @NotBlank(message = "客户等级标识不能为空", groups = { AddGroup.class, EditGroup.class })

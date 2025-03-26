@@ -28,6 +28,11 @@ public class IcesEquipmentModelTypeBo extends BaseEntity {
     private Long emtId;
 
     /**
+     * 模型类型编码
+     */
+    private String emtCode;
+
+    /**
      * 名称
      */
     @NotBlank(message = "名称不能为空", groups = { AddGroup.class, EditGroup.class })

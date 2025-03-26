@@ -28,13 +28,21 @@ public class IcesDeviceTaskPrev extends BaseEntity {
     @TableId(value = "dtpr_id")
     private Long dtprId;
     /**
-     * 当前设备任务ID
+     * 前序任务关联编码
      */
-    private Long dtIdCur;
+    private String dtprCode;
     /**
-     * 前序设备任务ID
+     * 所属生产任务
      */
-    private Long dtIdPrev;
+    private String mtCode;
+    /**
+     * 当前设备任务
+     */
+    private String dtCodeCur;
+    /**
+     * 前序设备任务
+     */
+    private String dtCodePrev;
     /**
      * 已删除
      */

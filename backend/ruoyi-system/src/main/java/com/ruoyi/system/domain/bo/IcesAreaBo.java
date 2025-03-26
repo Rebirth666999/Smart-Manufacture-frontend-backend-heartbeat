@@ -28,11 +28,15 @@ public class IcesAreaBo extends BaseEntity {
     private Long arId;
 
     /**
+     * 车间编码
+     */
+    private String arCode;
+
+    /**
      * 车间名称
      */
     @NotBlank(message = "车间名称不能为空", groups = { AddGroup.class, EditGroup.class })
     private String arName;
-
     /**
      * 已删除
      */

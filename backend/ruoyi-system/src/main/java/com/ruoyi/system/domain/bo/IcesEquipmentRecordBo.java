@@ -30,10 +30,15 @@ public class IcesEquipmentRecordBo extends BaseEntity {
     private Long erId;
 
     /**
-     * 关联设备ID
+     * 设备日志编码
      */
-    @NotNull(message = "关联设备ID不能为空", groups = { EditGroup.class })
-    private Long eqId;
+    private String erCode;
+
+    /**
+     * 关联设备
+     */
+    @NotBlank(message = "关联设备不能为空", groups = { EditGroup.class })
+    private String eqCode;
 
     /**
      * 事件类型代码

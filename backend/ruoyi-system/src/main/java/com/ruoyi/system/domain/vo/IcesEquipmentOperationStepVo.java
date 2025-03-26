@@ -28,16 +28,22 @@ public class IcesEquipmentOperationStepVo {
     private Long eosId;
 
     /**
-     * 对应原子操作ID
+     * 操作步骤编码
      */
-    @ExcelProperty(value = "对应原子操作ID")
-    private Long eaoId;
+    @ExcelProperty(value = "操作步骤编码")
+    private String eosCode;
 
     /**
-     * 所属设备操作ID
+     * 对应原子操作
      */
-    @ExcelProperty(value = "所属设备操作ID")
-    private Long eoId;
+    @ExcelProperty(value = "对应原子操作")
+    private String eaoCode;
+
+    /**
+     * 所属设备操作
+     */
+    @ExcelProperty(value = "所属设备操作")
+    private String eoCode;
 
     /**
      * 已删除

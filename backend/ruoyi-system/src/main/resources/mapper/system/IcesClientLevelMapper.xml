@@ -6,6 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="com.ruoyi.system.domain.IcesClientLevel" id="IcesClientLevelResult">
         <result property="cllId" column="cll_id"/>
+        <result property="cllCode" column="cll_code"/>
         <result property="cllLabel" column="cll_label"/>
         <result property="cllName" column="cll_name"/>
         <result property="cllDelete" column="cll_delete"/>

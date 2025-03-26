@@ -28,13 +28,21 @@ public class IcesProcessStepPrevRound extends BaseEntity {
     @TableId(value = "pspr_id")
     private Long psprId;
     /**
-     * 当前工艺步骤ID
+     * 跨轮前序步骤关联编码
      */
-    private Long psIdCur;
+    private String psprCode;
     /**
-     * 跨轮次前序工艺步骤ID
+     * 所属工艺流程
      */
-    private Long psIdPrev;
+    private String procCode;
+    /**
+     * 当前工艺步骤
+     */
+    private String psCodeCur;
+    /**
+     * 跨轮次前序工艺步骤
+     */
+    private String psCodePrev;
     /**
      * 已删除
      */

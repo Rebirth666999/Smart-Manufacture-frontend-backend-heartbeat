@@ -6,8 +6,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="com.ruoyi.system.domain.IcesEquipment" id="IcesEquipmentResult">
         <result property="eqId" column="eq_id"/>
-        <result property="arId" column="ar_id"/>
-        <result property="emId" column="em_id"/>
+        <result property="eqCode" column="eq_code"/>
+        <result property="arCode" column="ar_code"/>
+        <result property="emCode" column="em_code"/>
         <result property="eqName" column="eq_name"/>
         <result property="eqStat" column="eq_stat"/>
         <result property="eqIntroduceTime" column="eq_introduce_time"/>

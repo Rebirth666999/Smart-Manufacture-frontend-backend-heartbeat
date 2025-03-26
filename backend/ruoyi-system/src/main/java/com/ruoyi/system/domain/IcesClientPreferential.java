@@ -28,6 +28,10 @@ public class IcesClientPreferential extends BaseEntity {
     @TableId(value = "cp_id")
     private Long cpId;
     /**
+     * 优惠策略编码
+     */
+    private String cpCode;
+    /**
      * 名称
      */
     private String cpName;

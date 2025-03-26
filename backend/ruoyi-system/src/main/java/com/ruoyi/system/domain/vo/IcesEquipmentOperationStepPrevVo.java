@@ -28,16 +28,28 @@ public class IcesEquipmentOperationStepPrevVo {
     private Long eosprId;
 
     /**
-     * 当前设备操作步骤ID
+     * 所属设备操作
      */
-    @ExcelProperty(value = "当前设备操作步骤ID")
-    private Long eosIdCur;
+    @ExcelProperty(value = "所属设备操作")
+    private String eoCode;
 
     /**
-     * 前序设备操作步骤ID
+     * 前序步骤关联编码
      */
-    @ExcelProperty(value = "前序设备操作步骤ID")
-    private Long eosIdPrev;
+    @ExcelProperty(value = "前序步骤关联编码")
+    private String eosprCode;
+
+    /**
+     * 当前设备操作步骤
+     */
+    @ExcelProperty(value = "当前设备操作步骤")
+    private String eosCodeCur;
+
+    /**
+     * 前序设备操作步骤
+     */
+    @ExcelProperty(value = "前序设备操作步骤")
+    private String eosCodePrev;
 
     /**
      * 已删除

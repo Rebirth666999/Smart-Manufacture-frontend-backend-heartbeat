@@ -28,16 +28,28 @@ public class IcesDeviceTaskParamVo {
     private Long dtpaId;
 
     /**
-     * 对应操作步骤参数ID
+     * 设备任务参数编码
      */
-    @ExcelProperty(value = "对应操作步骤参数ID")
-    private Long eospaId;
+    @ExcelProperty(value = "设备任务参数编码")
+    private String dtpaCode;
 
     /**
-     * 所属设备任务ID
+     * 所属生产任务
      */
-    @ExcelProperty(value = "所属设备任务ID")
-    private Long dtId;
+    @ExcelProperty(value = "所属生产任务")
+    private String mtCode;
+
+    /**
+     * 对应操作步骤参数
+     */
+    @ExcelProperty(value = "对应操作步骤参数")
+    private String eospaCode;
+
+    /**
+     * 所属设备任务
+     */
+    @ExcelProperty(value = "所属设备任务")
+    private String dtCode;
 
     /**
      * 参数值

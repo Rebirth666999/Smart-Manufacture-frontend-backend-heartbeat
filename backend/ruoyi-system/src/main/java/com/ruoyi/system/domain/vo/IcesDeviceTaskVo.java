@@ -30,22 +30,28 @@ public class IcesDeviceTaskVo {
     private Long dtId;
 
     /**
-     * 设备ID
+     * 设备任务编码
      */
-    @ExcelProperty(value = "设备ID")
-    private Long eqId;
+    @ExcelProperty(value = "设备任务编码")
+    private String dtCode;
 
     /**
-     * 所属生产任务ID
+     * 设备
      */
-    @ExcelProperty(value = "所属生产任务ID")
-    private Long mtId;
+    @ExcelProperty(value = "设备")
+    private String eqCode;
 
     /**
-     * 设备操作ID
+     * 所属生产任务
      */
-    @ExcelProperty(value = "设备操作ID")
-    private Long eoId;
+    @ExcelProperty(value = "所属生产任务")
+    private String mtCode;
+
+    /**
+     * 设备操作
+     */
+    @ExcelProperty(value = "设备操作")
+    private String eoCode;
 
     /**
      * 状态代码

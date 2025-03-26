@@ -30,16 +30,22 @@ public class IcesManufacturePlanVo {
     private Long mpId;
 
     /**
-     * 所属订单ID
+     * 生产计划编码
      */
-    @ExcelProperty(value = "所属订单ID")
-    private Long orId;
+    @ExcelProperty(value = "生产计划编码")
+    private String mpCode;
 
     /**
-     * 采用工艺流程ID
+     * 所属订单
      */
-    @ExcelProperty(value = "采用工艺流程ID")
-    private Long procId;
+    @ExcelProperty(value = "所属订单")
+    private String orCode;
+
+    /**
+     * 采用工艺流程
+     */
+    @ExcelProperty(value = "采用工艺流程")
+    private String procCode;
 
     /**
      * 状态代码

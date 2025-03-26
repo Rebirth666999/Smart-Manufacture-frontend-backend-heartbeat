@@ -30,16 +30,34 @@ public class IcesManufactureTaskVo {
     private Long mtId;
 
     /**
-     * 所属生产计划ID
+     * 生产任务编码
      */
-    @ExcelProperty(value = "所属生产计划ID")
-    private Long mpId;
+    @ExcelProperty(value = "生产任务编码")
+    private String mtCode;
 
     /**
-     * 目标车间ID
+     * 所属生产计划
      */
-    @ExcelProperty(value = "目标车间ID")
-    private Long arId;
+    @ExcelProperty(value = "所属生产计划")
+    private String mpCode;
+
+    /**
+     * 目标车间
+     */
+    @ExcelProperty(value = "目标车间")
+    private String arCode;
+
+    /**
+     * 原料仓库
+     */
+    @ExcelProperty(value = "原料仓库")
+    private String stCodeMa;
+
+    /**
+     * 产品仓库
+     */
+    @ExcelProperty(value = "产品仓库")
+    private String stCodePr;
 
     /**
      * 状态代码

@@ -30,16 +30,22 @@ public class IcesOrderVo {
     private Long orId;
 
     /**
-     * 所需产品ID
+     * 订单编码
      */
-    @ExcelProperty(value = "所需产品ID")
-    private Long prId;
+    @ExcelProperty(value = "订单编码")
+    private String orCode;
 
     /**
-     * 客户ID
+     * 所需产品
      */
-    @ExcelProperty(value = "客户ID")
-    private Long clId;
+    @ExcelProperty(value = "所需产品")
+    private String maCode;
+
+    /**
+     * 客户
+     */
+    @ExcelProperty(value = "客户")
+    private String clCode;
 
     /**
      * 订单名称
@@ -77,6 +83,18 @@ public class IcesOrderVo {
      */
     @ExcelProperty(value = "总价")
     private Float orPrice;
+
+    /**
+     * 收货人
+     */
+    @ExcelProperty(value = "收货人")
+    private String orRecv;
+
+    /**
+     * 收货地址
+     */
+    @ExcelProperty(value = "收货地址")
+    private String orAddr;
 
     /**
      * 已删除

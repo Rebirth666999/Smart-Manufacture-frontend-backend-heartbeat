@@ -30,16 +30,21 @@ public class IcesManufacturePlanBo extends BaseEntity {
     private Long mpId;
 
     /**
-     * 所属订单ID
+     * 生产计划编码
      */
-    @NotNull(message = "所属订单ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long orId;
+    private String mpCode;
 
     /**
-     * 采用工艺流程ID
+     * 所属订单
      */
-    @NotNull(message = "采用工艺流程ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long procId;
+    @NotBlank(message = "所属订单不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String orCode;
+
+    /**
+     * 采用工艺流程
+     */
+    @NotBlank(message = "采用工艺流程不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String procCode;
 
     /**
      * 状态代码

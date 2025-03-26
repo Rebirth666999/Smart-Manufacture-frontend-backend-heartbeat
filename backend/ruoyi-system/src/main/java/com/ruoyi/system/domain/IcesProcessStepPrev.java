@@ -28,14 +28,6 @@ public class IcesProcessStepPrev extends BaseEntity {
     @TableId(value = "psp_id")
     private Long pspId;
     /**
-     * 当前工艺步骤ID
-     */
-    private Long psIdCur;
-    /**
-     * 前序工艺步骤ID
-     */
-    private Long psIdPrev;
-    /**
      * 跨轮前序步骤关联编码
      */
     private Long pspCode;

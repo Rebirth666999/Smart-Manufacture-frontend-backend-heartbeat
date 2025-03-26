@@ -28,19 +28,11 @@ public class IcesProcessMaterial extends BaseEntity {
     @TableId(value = "pm_id")
     private Long pmId;
     /**
-     * 所属工艺流程ID
-     */
-    private Long procId;
-    /**
-     * 所用原料ID
-     */
-    private Long maId;
-    /**
      * 原料需求编码
      */
     private String pmCode;
     /**
-     *所需工艺流程
+     * 所属工艺流程
      */
     private String procCode;
     /**

@@ -34,11 +34,11 @@ public class IcesOrder extends BaseEntity {
      */
     private String orCode;
     /**
-     * 所需产品ID
+     * 所需产品
      */
     private String maCode;
     /**
-     * 客户ID
+     * 客户
      */
     private String clCode;
     /**

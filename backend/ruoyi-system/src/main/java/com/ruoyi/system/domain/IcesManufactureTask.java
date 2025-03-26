@@ -34,11 +34,11 @@ public class IcesManufactureTask extends BaseEntity {
      */
     private String mtCode;
     /**
-     * 所属生产计划ID
+     * 所属生产计划
      */
     private String mpCode;
     /**
-     * 目标车间ID
+     * 目标车间
      */
     private String arCode;
     /**

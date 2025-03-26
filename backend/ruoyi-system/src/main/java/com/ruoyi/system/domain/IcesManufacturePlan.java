@@ -34,11 +34,11 @@ public class IcesManufacturePlan extends BaseEntity {
      */
     private String mpCode;
     /**
-     * 所属订单ID
+     * 所属订单
      */
     private String orCode;
     /**
-     * 采用工艺流程ID
+     * 采用工艺流程
      */
     private String procCode;
     /**

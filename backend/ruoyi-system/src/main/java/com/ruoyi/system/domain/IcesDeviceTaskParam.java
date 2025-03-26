@@ -36,11 +36,11 @@ public class IcesDeviceTaskParam extends BaseEntity {
      */
     private String mtCode;
     /**
-     * 对应操作步骤参数ID
+     * 对应操作步骤参数
      */
     private String eospaCode;
     /**
-     * 所属设备任务ID
+     * 所属设备任务
      */
     private String dtCode;
     /**

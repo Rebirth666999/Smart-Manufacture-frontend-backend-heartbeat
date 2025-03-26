@@ -36,11 +36,11 @@ public class IcesDeviceTaskPrev extends BaseEntity {
      */
     private String mtCode;
     /**
-     * 当前设备任务ID
+     * 当前设备任务
      */
     private String dtCodeCur;
     /**
-     * 前序设备任务ID
+     * 前序设备任务
      */
     private String dtCodePrev;
     /**

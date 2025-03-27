@@ -28,9 +28,13 @@ public class IcesProcess extends BaseEntity {
     @TableId(value = "proc_id")
     private Long procId;
     /**
-     * 目标产品ID
+     * 工艺流程编码
      */
-    private Long prId;
+    private String procCode;
+    /**
+     * 目标产品
+     */
+    private String maCode;
     /**
      * 工艺流程名称
      */

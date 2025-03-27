@@ -28,16 +28,27 @@ public class IcesProcessStepPrevRoundBo extends BaseEntity {
     private Long psprId;
 
     /**
-     * 当前工艺步骤ID
+     * 跨轮前序步骤关联编码
      */
-    @NotNull(message = "当前工艺步骤ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long psIdCur;
+    private String psprCode;
 
     /**
-     * 跨轮次前序工艺步骤ID
+     * 所属工艺流程
      */
-    @NotNull(message = "跨轮次前序工艺步骤ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long psIdPrev;
+    @NotBlank(message = "所属工艺流程不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String procCode;
+
+    /**
+     * 当前工艺步骤
+     */
+    @NotBlank(message = "当前工艺步骤不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String psCodeCur;
+
+    /**
+     * 跨轮次前序工艺步骤
+     */
+    @NotBlank(message = "跨轮次前序工艺步骤不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String psCodePrev;
 
     /**
      * 已删除

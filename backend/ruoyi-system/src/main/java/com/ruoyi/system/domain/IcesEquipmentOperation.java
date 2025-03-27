@@ -28,13 +28,17 @@ public class IcesEquipmentOperation extends BaseEntity {
     @TableId(value = "eo_id")
     private Long eoId;
     /**
-     * 对应模型操作ID
+     * 设备操作编码
      */
-    private Long moId;
+    private String eoCode;
     /**
-     * 所属设备ID
+     * 对应模型操作
      */
-    private Long eqId;
+    private String moCode;
+    /**
+     * 所属设备
+     */
+    private String eqCode;
     /**
      * 后端flowable模型ID
      */
@@ -46,7 +50,7 @@ public class IcesEquipmentOperation extends BaseEntity {
     /**
      * 执行时长
      */
-    private Long eoExecTime;
+    private Float eoExecTime;
     /**
      * 已删除
      */

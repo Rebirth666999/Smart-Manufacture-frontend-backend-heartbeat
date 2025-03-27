@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesManufacturePlanBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanService {
 
     private final IcesManufacturePlanMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询生产计划
@@ -61,8 +63,9 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
     private LambdaQueryWrapper<IcesManufacturePlan> buildQueryWrapper(IcesManufacturePlanBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesManufacturePlan> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getOrId() != null, IcesManufacturePlan::getOrId, bo.getOrId());
-        lqw.eq(bo.getProcId() != null, IcesManufacturePlan::getProcId, bo.getProcId());
+        lqw.eq(StringUtils.isNotBlank(bo.getMpCode()), IcesManufacturePlan::getMpCode, bo.getMpCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getOrCode()), IcesManufacturePlan::getOrCode, bo.getOrCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getProcCode()), IcesManufacturePlan::getProcCode, bo.getProcCode());
         lqw.eq(StringUtils.isNotBlank(bo.getMpStat()), IcesManufacturePlan::getMpStat, bo.getMpStat());
         lqw.eq(bo.getMpPriority() != null, IcesManufacturePlan::getMpPriority, bo.getMpPriority());
         lqw.eq(bo.getMpDelete() != null, IcesManufacturePlan::getMpDelete, bo.getMpDelete());
@@ -74,6 +77,7 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
      */
     @Override
     public Boolean insertByBo(IcesManufacturePlanBo bo) {
+        bo.setMpCode(codeService.insertByType("ManufacturePlan"));
         IcesManufacturePlan add = BeanUtil.toBean(bo, IcesManufacturePlan.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

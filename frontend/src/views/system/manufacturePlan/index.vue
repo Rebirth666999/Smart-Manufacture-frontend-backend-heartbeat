@@ -1,32 +1,32 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="所属订单" prop="orId">
+      <el-form-item label="所属订单" prop="orCode">
         <el-select
-          v-model="queryParams.orId"
+          v-model="queryParams.orCode"
           placeholder="请选择订单"
           clearable
         >
           <el-option
             v-for="item in orderList"
-            :key="item.orId"
+            :key="item.orCode"
             :label="item.orName"
-            :value="item.orId"
+            :value="item.orCode"
           >
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="工艺流程" prop="procId">
+      <el-form-item label="工艺流程" prop="procCode">
         <el-select
-          v-model="queryParams.procId"
+          v-model="queryParams.procCode"
           placeholder="请选择工艺流程"
           clearable
         >
           <el-option
             v-for="item in processListFull"
-            :key="item.procId"
+            :key="item.procCode"
             :label="item.procName"
-            :value="item.procId"
+            :value="item.procCode"
           >
           </el-option>
         </el-select>
@@ -112,14 +112,15 @@
     <el-table v-loading="loading" :data="manufacturePlanList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="生产计划ID" align="center" prop="mpId" v-if="true"/>
-      <el-table-column label="所属订单" align="center" prop="orId">
+      <el-table-column label="生产计划编码" align="center" prop="mpCode" />
+      <el-table-column label="所属订单" align="center" prop="orCode">
         <template slot-scope="scope">
-          {{ orderList.find(ele => ele.orId === scope.row.orId).orName || '' }}
+          {{ orderList.find(ele => ele.orCode === scope.row.orCode).orName || '' }}
         </template>
       </el-table-column>
-      <el-table-column label="工艺流程" align="center" prop="procId">
+      <el-table-column label="工艺流程" align="center" prop="procCode">
         <template slot-scope="scope">
-          {{ processListFull.find(ele => ele.procId === scope.row.procId).procName || '' }}
+          {{ processListFull.find(ele => ele.procCode === scope.row.procCode).procName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center" prop="mpStat">
@@ -192,32 +193,32 @@
     <!-- 添加或修改生产计划对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="540px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="110px">
-        <el-form-item label="所属订单" prop="orId">
+        <el-form-item label="所属订单" prop="orCode">
           <el-select
-            v-model="form.orId"
+            v-model="form.orCode"
             placeholder="请选择订单"
             clearable
           >
             <el-option
               v-for="item in orderList"
-              :key="item.orId"
+              :key="item.orCode"
               :label="item.orName"
-              :value="item.orId"
+              :value="item.orCode"
             >
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="工艺流程" prop="procId">
+        <el-form-item label="工艺流程" prop="procCode">
           <el-select
-            v-model="form.procId"
+            v-model="form.procCode"
             placeholder="请选择工艺流程"
             clearable
           >
             <el-option
               v-for="item in processList"
-              :key="item.procId"
+              :key="item.procCode"
               :label="item.procName"
-              :value="item.procId"
+              :value="item.procCode"
             >
             </el-option>
         </el-select>
@@ -282,8 +283,8 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        orId: undefined,
-        procId: undefined,
+        orCode: undefined,
+        procCode: undefined,
         mpStat: undefined,
         mpPriority: undefined,
         mpDelete: 0,
@@ -295,10 +296,10 @@ export default {
         mpId: [
           { required: true, message: "生产计划不能为空", trigger: "blur" }
         ],
-        orId: [
+        orCode: [
           { required: true, message: "所属订单不能为空", trigger: "blur" }
         ],
-        procId: [
+        procCode: [
           { required: true, message: "工艺流程不能为空", trigger: "blur" }
         ],
         mpEndPlan: [
@@ -358,8 +359,8 @@ export default {
     reset() {
       this.form = {
         mpId: undefined,
-        orId: undefined,
-        procId: undefined,
+        orCode: undefined,
+        procCode: undefined,
         mpStat: undefined,
         mpBegin: undefined,
         mpEndPlan: undefined,

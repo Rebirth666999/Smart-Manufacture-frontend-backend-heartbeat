@@ -28,13 +28,21 @@ public class IcesDeviceTaskParam extends BaseEntity {
     @TableId(value = "dtpa_id")
     private Long dtpaId;
     /**
-     * 对应操作步骤参数ID
+     * 设备任务参数编码
      */
-    private Long eospaId;
+    private String dtpaCode;
     /**
-     * 所属设备任务ID
+     * 所属生产任务
      */
-    private Long dtId;
+    private String mtCode;
+    /**
+     * 对应操作步骤参数
+     */
+    private String eospaCode;
+    /**
+     * 所属设备任务
+     */
+    private String dtCode;
     /**
      * 参数值
      */

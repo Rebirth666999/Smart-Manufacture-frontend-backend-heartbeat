@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesEquipmentOperationStepBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesEquipmentOperationStepServiceImpl implements IIcesEquipmentOperationStepService {
 
     private final IcesEquipmentOperationStepMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询设备操作步骤
@@ -61,8 +63,9 @@ public class IcesEquipmentOperationStepServiceImpl implements IIcesEquipmentOper
     private LambdaQueryWrapper<IcesEquipmentOperationStep> buildQueryWrapper(IcesEquipmentOperationStepBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesEquipmentOperationStep> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getEaoId() != null, IcesEquipmentOperationStep::getEaoId, bo.getEaoId());
-        lqw.eq(bo.getEoId() != null, IcesEquipmentOperationStep::getEoId, bo.getEoId());
+        lqw.eq(StringUtils.isNotBlank(bo.getEosCode()), IcesEquipmentOperationStep::getEosCode, bo.getEosCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getEaoCode()), IcesEquipmentOperationStep::getEaoCode, bo.getEaoCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getEoCode()), IcesEquipmentOperationStep::getEoCode, bo.getEoCode());
         lqw.eq(bo.getEosDelete() != null, IcesEquipmentOperationStep::getEosDelete, bo.getEosDelete());
         return lqw;
     }
@@ -72,6 +75,7 @@ public class IcesEquipmentOperationStepServiceImpl implements IIcesEquipmentOper
      */
     @Override
     public Boolean insertByBo(IcesEquipmentOperationStepBo bo) {
+        bo.setEosCode(codeService.insertByType("EquipmentOperationStep"));
         IcesEquipmentOperationStep add = BeanUtil.toBean(bo, IcesEquipmentOperationStep.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

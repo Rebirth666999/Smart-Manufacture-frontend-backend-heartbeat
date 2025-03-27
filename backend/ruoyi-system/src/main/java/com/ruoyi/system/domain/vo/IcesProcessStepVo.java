@@ -28,16 +28,22 @@ public class IcesProcessStepVo {
     private Long psId;
 
     /**
-     * 所属工艺流程ID
+     * 工艺步骤编码
      */
-    @ExcelProperty(value = "所属工艺流程ID")
-    private Long procId;
+    @ExcelProperty(value = "工艺流程编码")
+    private String psCode;
 
     /**
-     * 设备模型操作ID
+     * 所属工艺流程
      */
-    @ExcelProperty(value = "设备模型操作ID")
-    private Long moId;
+    @ExcelProperty(value = "所属工艺流程")
+    private String procCode;
+
+    /**
+     * 设备模型操作
+     */
+    @ExcelProperty(value = "设备模型操作")
+    private String moCode;
 
     /**
      * 自动生成活动ID

@@ -30,17 +30,21 @@ public class IcesDeviceTask extends BaseEntity {
     @TableId(value = "dt_id")
     private Long dtId;
     /**
-     * 设备ID
+     * 设备任务编码
      */
-    private Long eqId;
+    private String dtCode;
     /**
-     * 所属生产任务ID
+     * 设备
      */
-    private Long mtId;
+    private String eqCode;
     /**
-     * 设备操作ID
+     * 所属生产任务
      */
-    private Long eoId;
+    private String mtCode;
+    /**
+     * 设备操作
+     */
+    private String eoCode;
     /**
      * 状态代码
      */

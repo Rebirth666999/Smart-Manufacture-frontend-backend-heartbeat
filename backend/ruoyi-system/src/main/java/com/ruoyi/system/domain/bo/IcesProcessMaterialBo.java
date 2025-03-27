@@ -28,22 +28,27 @@ public class IcesProcessMaterialBo extends BaseEntity {
     private Long pmId;
 
     /**
-     * 所属工艺流程ID
+     * 原料需求编码
      */
-    @NotNull(message = "所属工艺流程ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long procId;
+    private String pmCode;
 
     /**
-     * 所用原料ID
+     * 所属工艺流程
      */
-    @NotNull(message = "所用原料ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long maId;
+    @NotBlank(message = "所属工艺流程不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String procCode;
+
+    /**
+     * 所用原料
+     */
+    @NotBlank(message = "所用原料不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String maCode;
 
     /**
      * 所需原料数量
      */
     @NotNull(message = "所需原料数量不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long pmDemand;
+    private Float pmDemand;
 
     /**
      * 已删除

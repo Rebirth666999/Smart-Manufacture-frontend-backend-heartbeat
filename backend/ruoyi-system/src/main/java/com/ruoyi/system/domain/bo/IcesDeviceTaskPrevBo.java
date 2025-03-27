@@ -28,16 +28,27 @@ public class IcesDeviceTaskPrevBo extends BaseEntity {
     private Long dtprId;
 
     /**
-     * 当前设备任务ID
+     * 前序任务关联编码
      */
-    @NotNull(message = "当前设备任务ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long dtIdCur;
+    private String dtprCode;
 
     /**
-     * 前序设备任务ID
+     * 所属生产任务
      */
-    @NotNull(message = "前序设备任务ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long dtIdPrev;
+    @NotBlank(message = "所属生产任务不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String mtCode;
+
+    /**
+     * 当前设备任务
+     */
+    @NotBlank(message = "当前设备任务不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String dtCodeCur;
+
+    /**
+     * 前序设备任务
+     */
+    @NotBlank(message = "前序设备任务不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String dtCodePrev;
 
     /**
      * 已删除

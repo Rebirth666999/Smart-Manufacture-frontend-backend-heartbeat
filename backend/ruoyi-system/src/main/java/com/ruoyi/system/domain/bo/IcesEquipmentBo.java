@@ -30,16 +30,21 @@ public class IcesEquipmentBo extends BaseEntity {
     private Long eqId;
 
     /**
-     * 所属车间ID
+     * 设备编码
      */
-    @NotNull(message = "所属车间ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long arId;
+    private String eqCode;
 
     /**
-     * 所属设备模型ID
+     * 所属车间
      */
-    @NotNull(message = "所属设备模型ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long emId;
+    @NotBlank(message = "所属车间不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String arCode;
+
+    /**
+     * 所属设备模型
+     */
+    @NotBlank(message = "所属设备模型不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String emCode;
 
     /**
      * 名称

@@ -1,11 +1,13 @@
 package com.ruoyi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesProcessStepPrevBo;
@@ -29,6 +31,7 @@ import java.util.Collection;
 public class IcesProcessStepPrevServiceImpl implements IIcesProcessStepPrevService {
 
     private final IcesProcessStepPrevMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询关联-工艺步骤的前序步骤
@@ -63,8 +66,9 @@ public class IcesProcessStepPrevServiceImpl implements IIcesProcessStepPrevServi
     private LambdaQueryWrapper<IcesProcessStepPrev> buildQueryWrapper(IcesProcessStepPrevBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesProcessStepPrev> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getPsIdPrev() != null, IcesProcessStepPrev::getPsIdPrev, bo.getPsIdPrev());
-        lqw.eq(bo.getPsIdCur() != null, IcesProcessStepPrev::getPsIdCur, bo.getPsIdCur());
+        lqw.eq(StringUtils.isNotBlank(bo.getPspCode()), IcesProcessStepPrev::getPspCode, bo.getPspCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getPsCodePrev()), IcesProcessStepPrev::getPsCodePrev, bo.getPsCodePrev());
+        lqw.eq(StringUtils.isNotBlank(bo.getPsCodeCur()), IcesProcessStepPrev::getPsCodeCur, bo.getPsCodeCur());
         lqw.eq(bo.getPspDelete() != null, IcesProcessStepPrev::getPspDelete, bo.getPspDelete());
         return lqw;
     }
@@ -74,6 +78,7 @@ public class IcesProcessStepPrevServiceImpl implements IIcesProcessStepPrevServi
      */
     @Override
     public Boolean insertByBo(IcesProcessStepPrevBo bo) {
+        bo.setPspCode(codeService.insertByType("ProcessStepPrev"));
         IcesProcessStepPrev add = BeanUtil.toBean(bo, IcesProcessStepPrev.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

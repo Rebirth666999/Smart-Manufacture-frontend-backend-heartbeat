@@ -28,16 +28,21 @@ public class IcesEquipmentOperationBo extends BaseEntity {
     private Long eoId;
 
     /**
-     * 对应模型操作ID
+     * 设备操作编码
      */
-    @NotNull(message = "对应模型操作ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long moId;
+    private String eoCode;
 
     /**
-     * 所属设备ID
+     * 对应模型操作
      */
-    @NotNull(message = "所属设备ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long eqId;
+    @NotBlank(message = "对应模型操作不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String moCode;
+
+    /**
+     * 所属设备
+     */
+    @NotBlank(message = "所属设备不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String eqCode;
 
     /**
      * 名称
@@ -47,7 +52,7 @@ public class IcesEquipmentOperationBo extends BaseEntity {
     /**
      * 执行时长
      */
-    private Long eoExecTime;
+    private Float eoExecTime;
 
     /**
      * 已删除

@@ -30,16 +30,22 @@ public class IcesEquipmentVo {
     private Long eqId;
 
     /**
-     * 所属车间ID
+     * 设备编码
      */
-    @ExcelProperty(value = "所属车间ID")
-    private Long arId;
+    @ExcelProperty(value = "设备编码")
+    private String eqCode;
 
     /**
-     * 所属设备模型ID
+     * 所属车间
      */
-    @ExcelProperty(value = "所属设备模型ID")
-    private Long emId;
+    @ExcelProperty(value = "所属车间")
+    private String arCode;
+
+    /**
+     * 所属设备模型
+     */
+    @ExcelProperty(value = "所属设备模型")
+    private String emCode;
 
     /**
      * 名称

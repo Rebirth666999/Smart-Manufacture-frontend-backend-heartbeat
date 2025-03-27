@@ -28,16 +28,28 @@ public class IcesEquipmentOperationStepParamVo {
     private Long eospaId;
 
     /**
-     * 所属设备操作步骤ID
+     * 操作步骤参数编码
      */
-    @ExcelProperty(value = "所属设备操作步骤ID")
-    private Long eosId;
+    @ExcelProperty(value = "操作步骤参数编码")
+    private String eospaCode;
 
     /**
-     * 父级参数ID
+     * 所属设备操作
      */
-    @ExcelProperty(value = "父级参数ID")
-    private Long eospaIdParent;
+    @ExcelProperty(value = "所属设备操作")
+    private String eoCode;
+
+    /**
+     * 所属设备操作步骤
+     */
+    @ExcelProperty(value = "所属设备操作步骤")
+    private String eosCode;
+
+    /**
+     * 父级参数
+     */
+    @ExcelProperty(value = "父级参数")
+    private String eospaCodeParent;
 
     /**
      * 参数名称

@@ -28,16 +28,27 @@ public class IcesEquipmentOperationStepPrevBo extends BaseEntity {
     private Long eosprId;
 
     /**
-     * 当前设备操作步骤ID
+     * 前序步骤关联编码
      */
-    @NotNull(message = "当前设备操作步骤ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long eosIdCur;
+    private String eosprCode;
 
     /**
-     * 前序设备操作步骤ID
+     * 所属设备操作
      */
-    @NotNull(message = "前序设备操作步骤ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long eosIdPrev;
+    @NotBlank(message = "所属设备操作不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String eoCode;
+
+    /**
+     * 当前设备操作步骤
+     */
+    @NotBlank(message = "当前设备操作步骤不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String eosCodeCur;
+
+    /**
+     * 前序设备操作步骤
+     */
+    @NotBlank(message = "前序设备操作步骤不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String eosCodePrev;
 
     /**
      * 已删除

@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesDeviceTaskParamBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesDeviceTaskParamServiceImpl implements IIcesDeviceTaskParamService {
 
     private final IcesDeviceTaskParamMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询设备任务参数
@@ -61,8 +63,9 @@ public class IcesDeviceTaskParamServiceImpl implements IIcesDeviceTaskParamServi
     private LambdaQueryWrapper<IcesDeviceTaskParam> buildQueryWrapper(IcesDeviceTaskParamBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesDeviceTaskParam> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getEospaId() != null, IcesDeviceTaskParam::getEospaId, bo.getEospaId());
-        lqw.eq(bo.getDtId() != null, IcesDeviceTaskParam::getDtId, bo.getDtId());
+        lqw.eq(StringUtils.isNotBlank(bo.getDtpaCode()), IcesDeviceTaskParam::getDtpaCode, bo.getDtpaCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getEospaCode()), IcesDeviceTaskParam::getEospaCode, bo.getEospaCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getDtCode()), IcesDeviceTaskParam::getDtCode, bo.getDtCode());
         lqw.eq(bo.getDtpaDelete() != null, IcesDeviceTaskParam::getDtpaDelete, bo.getDtpaDelete());
         return lqw;
     }
@@ -72,6 +75,7 @@ public class IcesDeviceTaskParamServiceImpl implements IIcesDeviceTaskParamServi
      */
     @Override
     public Boolean insertByBo(IcesDeviceTaskParamBo bo) {
+        bo.setDtpaCode(codeService.insertByType("DeviceTaskParam"));
         IcesDeviceTaskParam add = BeanUtil.toBean(bo, IcesDeviceTaskParam.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

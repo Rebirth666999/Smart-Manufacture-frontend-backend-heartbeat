@@ -28,10 +28,16 @@ public class IcesModelOperationVo {
     private Long moId;
 
     /**
-     * 所属设备模型ID
+     * 模型操作编码
      */
-    @ExcelProperty(value = "所属设备模型ID")
-    private Long emId;
+    @ExcelProperty(value = "模型操作编码")
+    private String moCode;
+
+    /**
+     * 所属设备模型
+     */
+    @ExcelProperty(value = "所属设备模型")
+    private String emCode;
 
     /**
      * 名称

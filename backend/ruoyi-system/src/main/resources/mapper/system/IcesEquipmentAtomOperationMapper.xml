@@ -6,7 +6,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="com.ruoyi.system.domain.IcesEquipmentAtomOperation" id="IcesEquipmentAtomOperationResult">
         <result property="eaoId" column="eao_id"/>
-        <result property="eqId" column="eq_id"/>
+        <result property="eaoCode" column="eao_code"/>
+        <result property="eqCode" column="eq_code"/>
         <result property="eaoName" column="eao_name"/>
         <result property="eaoType" column="eao_type"/>
         <result property="eaoRequestType" column="eao_request_type"/>

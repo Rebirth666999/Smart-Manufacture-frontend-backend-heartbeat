@@ -1,7 +1,6 @@
 package com.ruoyi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -38,7 +37,10 @@ public class IcesProcessStepPrevRoundServiceImpl implements IIcesProcessStepPrev
     public IcesProcessStepPrevRoundVo queryById(Long psprId){
         return baseMapper.selectVoById(psprId);
     }
-
+    @Override
+    public IcesProcessStepPrevRoundVo queryByCurId(Long psIdCur){
+        return baseMapper.selectVoById(psIdCur);
+    }
     /**
      * 查询关联-工艺步骤的跨轮次前序步骤列表
      */
@@ -108,4 +110,6 @@ public class IcesProcessStepPrevRoundServiceImpl implements IIcesProcessStepPrev
         }
         return baseMapper.deleteBatchIds(ids) > 0;
     }
+
+
 }

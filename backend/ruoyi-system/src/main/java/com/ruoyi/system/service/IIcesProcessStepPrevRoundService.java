@@ -22,6 +22,8 @@ public interface IIcesProcessStepPrevRoundService {
      */
     IcesProcessStepPrevRoundVo queryById(Long psprId);
 
+    IcesProcessStepPrevRoundVo queryByCurId(Long psIdCur);
+
     /**
      * 查询关联-工艺步骤的跨轮次前序步骤列表
      */
@@ -46,4 +48,6 @@ public interface IIcesProcessStepPrevRoundService {
      * 校验并批量删除关联-工艺步骤的跨轮次前序步骤信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+
 }

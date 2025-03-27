@@ -2,12 +2,13 @@ package com.ruoyi.system.controller;
 
 import java.util.List;
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.*;
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import org.dom4j.DocumentException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
 import com.ruoyi.common.annotation.RepeatSubmit;
@@ -17,13 +18,15 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.validate.AddGroup;
 import com.ruoyi.common.core.validate.EditGroup;
-import com.ruoyi.common.core.validate.QueryGroup;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.system.domain.vo.IcesDeviceTaskVo;
 import com.ruoyi.system.domain.bo.IcesDeviceTaskBo;
 import com.ruoyi.system.service.IIcesDeviceTaskService;
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.system.service.IIcesProcessStepService;
+import com.ruoyi.system.service.IIcesProcessStepPrevService;
+import com.ruoyi.system.service.IIcesProcessStepPrevRoundService;
 
 /**
  * 设备任务
@@ -38,6 +41,10 @@ import com.ruoyi.common.core.page.TableDataInfo;
 public class IcesDeviceTaskController extends BaseController {
 
     private final IIcesDeviceTaskService iIcesDeviceTaskService;
+    private final IIcesProcessStepService processStepService;
+    private final IIcesProcessStepPrevService processStepPrevService;
+    private final IIcesProcessStepPrevRoundService processStepPrevRoundService;
+
 
     /**
      * 查询设备任务列表
@@ -67,7 +74,7 @@ public class IcesDeviceTaskController extends BaseController {
     @SaCheckPermission("system:deviceTask:query")
     @GetMapping("/{dtId}")
     public R<IcesDeviceTaskVo> getInfo(@NotNull(message = "主键不能为空")
-                                     @PathVariable Long dtId) {
+                                       @PathVariable Long dtId) {
         return R.ok(iIcesDeviceTaskService.queryById(dtId));
     }
 
@@ -105,4 +112,17 @@ public class IcesDeviceTaskController extends BaseController {
                           @PathVariable Long[] dtIds) {
         return toAjax(iIcesDeviceTaskService.deleteWithValidByIds(Arrays.asList(dtIds), true));
     }
+    @SaCheckPermission("system:deviceTask:save")
+    @Log(title = "设备任务", businessType = BusinessType.INSERT)
+    @RepeatSubmit()
+    @PostMapping("/saveDtasks")
+    public R<Void> saveDtasks(@RequestBody String jsonStr) throws DocumentException, JsonProcessingException {
+        iIcesDeviceTaskService.saveDtasks(jsonStr);
+        return R.ok();
+    }
+
+
 }
+
+
+

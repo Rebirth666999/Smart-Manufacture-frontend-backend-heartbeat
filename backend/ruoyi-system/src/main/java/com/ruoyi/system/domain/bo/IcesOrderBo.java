@@ -30,15 +30,21 @@ public class IcesOrderBo extends BaseEntity {
     private Long orId;
 
     /**
-     * 所需产品ID
+     * 订单编码
      */
-    @NotNull(message = "所需产品ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long prId;
+    private String orCode;
 
     /**
-     * 客户ID
+     * 所需产品
      */
-    private Long clId;
+    @NotBlank(message = "所需产品不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String maCode;
+
+    /**
+     * 客户
+     */
+    @NotBlank(message = "客户不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String clCode;
 
     /**
      * 订单名称
@@ -55,7 +61,7 @@ public class IcesOrderBo extends BaseEntity {
      * 所需产品数量
      */
     @NotNull(message = "所需产品数量不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long orDemand;
+    private Float orDemand;
 
     /**
      * 订单优先级
@@ -73,7 +79,18 @@ public class IcesOrderBo extends BaseEntity {
      * 总价
      */
     @NotNull(message = "总价不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long orPrice;
+    private Float orPrice;
+
+    /**
+     * 收货人
+     */
+    @NotBlank(message = "收货人不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String orRecv;
+    /**
+     * 收货地址
+     */
+    @NotBlank(message = "收货地址不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String orAddr;
 
     /**
      * 已删除

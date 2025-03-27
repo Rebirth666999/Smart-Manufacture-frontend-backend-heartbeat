@@ -5,15 +5,15 @@
       <div class="element-property__value">
         <el-select
           size="mini"
-          v-model="eaoId"
+          v-model="eaoCode"
           @change="updateAtomOperation"
           @blur="updateAtomOperation"
         >
           <el-option
             v-for="item in list"
-            :key="item.eaoId"
+            :key="item.eaoCode"
             :label="item.eaoName"
-            :value="item.eaoId"
+            :value="item.eaoCode"
           ></el-option>
         </el-select>
       </div>
@@ -44,7 +44,7 @@ export default {
   },
   data() {
     return {
-      eaoId: '',
+      eaoCode: '',
       eosDesc: ''
     };
   },
@@ -53,7 +53,7 @@ export default {
     id: {
       immediate: true,
       handler: function(id) {
-        this.eaoId = window.bpmnInstances.bpmnElement.businessObject.$attrs.eaoId || ''
+        this.eaoCode = window.bpmnInstances.bpmnElement.businessObject.$attrs.eaoCode || ''
         this.eosDesc = window.bpmnInstances.bpmnElement.businessObject.$attrs.eosDesc || ''
       }
     }
@@ -63,11 +63,11 @@ export default {
     updateAtomOperation() {
       window.bpmnInstances.modeling.updateProperties(
         window.bpmnInstances.bpmnElement,
-        { eaoId: this.eaoId }
+        { eaoCode: this.eaoCode }
       );
       window.bpmnInstances.modeling.updateProperties(
         window.bpmnInstances.bpmnElement,
-        { name: this.list.find(ele => ele.eaoId === this.eaoId).eaoName || '' }
+        { name: this.list.find(ele => ele.eaoCode === this.eaoCode).eaoName || '' }
       );
     },
     // 更新属性：描述

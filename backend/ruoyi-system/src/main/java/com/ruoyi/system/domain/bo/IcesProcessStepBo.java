@@ -28,16 +28,21 @@ public class IcesProcessStepBo extends BaseEntity {
     private Long psId;
 
     /**
-     * 所属工艺流程ID
+     * 工艺步骤编码
      */
-    @NotNull(message = "所属工艺流程ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long procId;
+    private String psCode;
 
     /**
-     * 设备模型操作ID
+     * 所属工艺流程
      */
-    @NotNull(message = "设备模型操作ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long moId;
+    @NotBlank(message = "所属工艺流程不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String procCode;
+
+    /**
+     * 设备模型操作
+     */
+    @NotBlank(message = "设备模型操作不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String moCode;
 
     /**
      * 自动生成活动ID

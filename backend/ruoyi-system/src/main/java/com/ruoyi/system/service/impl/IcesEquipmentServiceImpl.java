@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesEquipmentBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesEquipmentServiceImpl implements IIcesEquipmentService {
 
     private final IcesEquipmentMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询设备
@@ -61,8 +63,9 @@ public class IcesEquipmentServiceImpl implements IIcesEquipmentService {
     private LambdaQueryWrapper<IcesEquipment> buildQueryWrapper(IcesEquipmentBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesEquipment> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getArId() != null, IcesEquipment::getArId, bo.getArId());
-        lqw.eq(bo.getEmId() != null, IcesEquipment::getEmId, bo.getEmId());
+        lqw.eq(StringUtils.isNotBlank(bo.getEqCode()), IcesEquipment::getEqCode, bo.getEqCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getArCode()), IcesEquipment::getArCode, bo.getArCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getEmCode()), IcesEquipment::getEmCode, bo.getEmCode());
         lqw.like(StringUtils.isNotBlank(bo.getEqName()), IcesEquipment::getEqName, bo.getEqName());
         lqw.eq(StringUtils.isNotBlank(bo.getEqStat()), IcesEquipment::getEqStat, bo.getEqStat());
         lqw.eq(bo.getEqDelete() != null, IcesEquipment::getEqDelete, bo.getEqDelete());
@@ -74,11 +77,12 @@ public class IcesEquipmentServiceImpl implements IIcesEquipmentService {
      */
     @Override
     public Boolean insertByBo(IcesEquipmentBo bo) {
+        bo.setEqCode(codeService.insertByType("Equipment"));
         IcesEquipment add = BeanUtil.toBean(bo, IcesEquipment.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
-            bo.setEqId(add.getEqId());
+            bo.setEqCode(add.getEqCode());
         }
         return flag;
     }

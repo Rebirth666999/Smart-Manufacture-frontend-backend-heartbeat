@@ -26,10 +26,10 @@ import com.ruoyi.system.service.IIcesMaterialService;
 import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
- * 原料
+ * 物料
  *
  * @author ruoyi
- * @date 2025-02-07
+ * @date 2025-03-26
  */
 @Validated
 @RequiredArgsConstructor
@@ -40,7 +40,7 @@ public class IcesMaterialController extends BaseController {
     private final IIcesMaterialService iIcesMaterialService;
 
     /**
-     * 查询原料列表
+     * 查询物料列表
      */
     @SaCheckPermission("system:material:list")
     @GetMapping("/list")
@@ -49,18 +49,18 @@ public class IcesMaterialController extends BaseController {
     }
 
     /**
-     * 导出原料列表
+     * 导出物料列表
      */
     @SaCheckPermission("system:material:export")
-    @Log(title = "原料", businessType = BusinessType.EXPORT)
+    @Log(title = "物料", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(IcesMaterialBo bo, HttpServletResponse response) {
         List<IcesMaterialVo> list = iIcesMaterialService.queryList(bo);
-        ExcelUtil.exportExcel(list, "原料", IcesMaterialVo.class, response);
+        ExcelUtil.exportExcel(list, "物料", IcesMaterialVo.class, response);
     }
 
     /**
-     * 获取原料详细信息
+     * 获取物料详细信息
      *
      * @param maId 主键
      */
@@ -72,10 +72,10 @@ public class IcesMaterialController extends BaseController {
     }
 
     /**
-     * 新增原料
+     * 新增物料
      */
     @SaCheckPermission("system:material:add")
-    @Log(title = "原料", businessType = BusinessType.INSERT)
+    @Log(title = "物料", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody IcesMaterialBo bo) {
@@ -83,10 +83,10 @@ public class IcesMaterialController extends BaseController {
     }
 
     /**
-     * 修改原料
+     * 修改物料
      */
     @SaCheckPermission("system:material:edit")
-    @Log(title = "原料", businessType = BusinessType.UPDATE)
+    @Log(title = "物料", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody IcesMaterialBo bo) {
@@ -94,12 +94,12 @@ public class IcesMaterialController extends BaseController {
     }
 
     /**
-     * 删除原料
+     * 删除物料
      *
      * @param maIds 主键串
      */
     @SaCheckPermission("system:material:remove")
-    @Log(title = "原料", businessType = BusinessType.DELETE)
+    @Log(title = "物料", businessType = BusinessType.DELETE)
     @DeleteMapping("/{maIds}")
     public R<Void> remove(@NotEmpty(message = "主键不能为空")
                           @PathVariable Long[] maIds) {

@@ -28,16 +28,27 @@ public class IcesDeviceTaskParamBo extends BaseEntity {
     private Long dtpaId;
 
     /**
-     * 对应操作步骤参数ID
+     * 设备任务参数编码
      */
-    @NotNull(message = "对应操作步骤参数ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long eospaId;
+    private String dtpaCode;
 
     /**
-     * 所属设备任务ID
+     * 所属生产任务
      */
-    @NotNull(message = "所属设备任务ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long dtId;
+    @NotNull(message = "所属生产任务不能为空", groups = { EditGroup.class })
+    private String mtCode;
+
+    /**
+     * 对应操作步骤参数
+     */
+    @NotBlank(message = "对应操作步骤参数不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String eospaCode;
+
+    /**
+     * 所属设备任务
+     */
+    @NotBlank(message = "所属设备任务不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String dtCode;
 
     /**
      * 参数值

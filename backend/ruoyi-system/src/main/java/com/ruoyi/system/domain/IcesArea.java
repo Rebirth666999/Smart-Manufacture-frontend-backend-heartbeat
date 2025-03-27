@@ -28,6 +28,10 @@ public class IcesArea extends BaseEntity {
     @TableId(value = "ar_id")
     private Long arId;
     /**
+     * 车间编号
+     */
+    private String arCode;
+    /**
      * 车间名称
      */
     private String arName;

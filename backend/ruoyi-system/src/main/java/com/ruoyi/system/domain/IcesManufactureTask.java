@@ -30,13 +30,25 @@ public class IcesManufactureTask extends BaseEntity {
     @TableId(value = "mt_id")
     private Long mtId;
     /**
-     * 所属生产计划ID
+     * 生产任务编码
      */
-    private Long mpId;
+    private String mtCode;
     /**
-     * 目标车间ID
+     * 所属生产计划
      */
-    private Long arId;
+    private String mpCode;
+    /**
+     * 目标车间
+     */
+    private String arCode;
+    /**
+     * 原料仓库
+     */
+    private String stCodeMa;
+    /**
+     * 产品仓库
+     */
+    private String stCodePr;
     /**
      * 状态代码
      */
@@ -60,11 +72,11 @@ public class IcesManufactureTask extends BaseEntity {
     /**
      * 计划产品数量
      */
-    private Long mtQtyPlan;
+    private Float mtQtyPlan;
     /**
      * 已完成产品数量
      */
-    private Long mtQtyReal;
+    private Float mtQtyReal;
     /**
      * 已删除
      */

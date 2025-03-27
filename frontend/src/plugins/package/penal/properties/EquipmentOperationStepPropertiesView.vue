@@ -2,7 +2,7 @@
   <div class="panel-tab__content">
     <el-descriptions border :column="1">
       <el-descriptions-item label="原子操作">
-        {{ list.find(ele => ele.eaoId === eaoId).eaoName }}
+        {{ list.find(ele => ele.eaoCode === eaoCode).eaoName }}
       </el-descriptions-item>
       <el-descriptions-item label="描述">
         {{ eosDesc || '' }}
@@ -20,7 +20,7 @@ export default {
   },
   data() {
     return {
-      eaoId: '',
+      eaoCode: '',
       eosDesc: ''
     };
   },
@@ -29,7 +29,7 @@ export default {
     element: {
       immediate: true,
       handler: function(element) {
-        this.eaoId = element.businessObject.$attrs.eaoId || ''
+        this.eaoCode = element.businessObject.$attrs.eaoCode || ''
         this.eosDesc = element.businessObject.$attrs.eosDesc || ''
       }
     }

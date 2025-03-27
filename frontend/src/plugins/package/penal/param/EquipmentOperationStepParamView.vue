@@ -28,7 +28,7 @@
           {{ editParam.eospaName || '' }}
         </el-descriptions-item>
         <el-descriptions-item label="父级参数序号">
-          {{ editParam.eospaIdParent || 0 }}
+          {{ editParam.eospaCodeParent || '' }}
         </el-descriptions-item>
         <el-descriptions-item label="参数类型">
           <dict-tag :options="dict.type.ices_param_type" :value="editParam.eospaType"/>
@@ -60,7 +60,7 @@ export default {
       // 查看参数的属性
       editParam: {
         eospaName: '',
-        eospaIdParent: 0,
+        eospaCodeParent: '',
         eospaType: '',
         eospaPos: '',
         eospaValue: ''

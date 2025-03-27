@@ -28,6 +28,12 @@ public class IcesEquipmentModelTypeVo {
     private Long emtId;
 
     /**
+     * 模型类型编码
+     */
+    @ExcelProperty(value = "模型类型编码")
+    private String emtCode;
+
+    /**
      * 名称
      */
     @ExcelProperty(value = "名称")

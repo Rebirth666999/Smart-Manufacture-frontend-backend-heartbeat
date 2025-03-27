@@ -12,33 +12,33 @@
     </el-alert>
 
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="工艺流程" prop="procId">
+      <el-form-item label="工艺流程" prop="procCode">
         <el-select
-          v-model="queryParams.procId"
+          v-model="queryParams.procCode"
           placeholder="请选择工艺流程"
           clearable
           :disabled="mode !== 0"
         >
           <el-option
             v-for="item in processList"
-            :key="item.procId"
+            :key="item.procCode"
             :label="item.procName"
-            :value="item.procId"
+            :value="item.procCode"
           >
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="原料" prop="maId">
+      <el-form-item label="原料" prop="maCode">
         <el-select
-          v-model="queryParams.maId"
+          v-model="queryParams.maCode"
           placeholder="请选择原料"
           clearable
         >
           <el-option
             v-for="item in materialList"
-            :key="item.maId"
+            :key="item.maCode"
             :label="item.maName"
-            :value="item.maId"
+            :value="item.maCode"
           >
           </el-option>
         </el-select>
@@ -109,14 +109,15 @@
     <el-table v-loading="loading" :data="processMaterialList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="原料需求ID" align="center" prop="pmId" v-if="true"/>
-      <el-table-column label="所属工艺流程" align="center" prop="procId">
+      <el-table-column label="原料需求编码" align="center" prop="pmCode" />
+      <el-table-column label="所属工艺流程" align="center" prop="procCode">
         <template slot-scope="scope">
-          {{ processList.find(ele => ele.procId === scope.row.procId).procName || '' }}
+          {{ processList.find(ele => ele.procCode === scope.row.procCode).procName || '' }}
         </template>
       </el-table-column>
-      <el-table-column label="所用原料" align="center" prop="maId">
+      <el-table-column label="所用原料" align="center" prop="maCode">
         <template slot-scope="scope">
-          {{ materialList.find(ele => ele.maId === scope.row.maId).maName || '' }}
+          {{ materialList.find(ele => ele.maCode === scope.row.maCode).maName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="所需原料数量" align="center" prop="pmDemand" />
@@ -152,33 +153,33 @@
     <!-- 添加或修改工艺流程原料需求对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="110px">
-        <el-form-item label="所属工艺流程" prop="procId">
+        <el-form-item label="所属工艺流程" prop="procCode">
           <el-select
-            v-model="form.procId"
+            v-model="form.procCode"
             placeholder="请选择工艺流程"
             clearable
             :disabled="mode === 1"
           >
             <el-option
               v-for="item in processList"
-              :key="item.procId"
+              :key="item.procCode"
               :label="item.procName"
-              :value="item.procId"
+              :value="item.procCode"
             >
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="所用原料" prop="maId">
+        <el-form-item label="所用原料" prop="maCode">
           <el-select
-            v-model="form.maId"
+            v-model="form.maCode"
             placeholder="请选择原料"
             clearable
           >
             <el-option
               v-for="item in materialList"
-              :key="item.maId"
+              :key="item.maCode"
               :label="item.maName"
-              :value="item.maId"
+              :value="item.maCode"
             >
             </el-option>
           </el-select>
@@ -228,8 +229,8 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        procId: this.$route.query.procId,
-        maId: undefined,
+        procCode: this.$route.query.procCode,
+        maCode: undefined,
         pmDelete: 0,
       },
       // 表单参数
@@ -239,10 +240,10 @@ export default {
         pmId: [
           { required: true, message: "原料需求ID不能为空", trigger: "blur" }
         ],
-        procId: [
+        procCode: [
           { required: true, message: "所属工艺流程不能为空", trigger: "blur" }
         ],
-        maId: [
+        maCode: [
           { required: true, message: "所用原料不能为空", trigger: "blur" }
         ],
         pmDemand: [
@@ -262,7 +263,7 @@ export default {
   },
   async created() {
     // 检查来源
-    if (this.$route.query.procId) {
+    if (this.$route.query.procCode) {
       this.mode = 1
     }
     await this.getProcessList();
@@ -275,7 +276,7 @@ export default {
       listProcess().then(response => {
         this.processList = response.rows
         if (this.mode === 1) {
-          let process = response.rows.find(ele => ele.procId === this.$route.query.procId)
+          let process = response.rows.find(ele => ele.procCode === this.$route.query.procCode)
           this.hint = "工艺流程 "
           this.hint += process.procName
           this.hint += " "
@@ -288,7 +289,7 @@ export default {
     },
     // 查询原料列表
     getMaterialList() {
-      listMaterial().then(response => {
+      listMaterial({ maType: '1' }).then(response => {
         this.materialList = response.rows
       })
     },
@@ -310,8 +311,8 @@ export default {
     reset() {
       this.form = {
         pmId: undefined,
-        procId: undefined,
-        maId: undefined,
+        procCode: undefined,
+        maCode: undefined,
         pmDemand: undefined,
         pmDelete: undefined,
         createBy: undefined,
@@ -341,7 +342,7 @@ export default {
     handleAdd() {
       this.reset();
       if (this.mode === 1) {
-        this.form.procId = this.$route.query.procId
+        this.form.procCode = this.$route.query.procCode
       }
       this.open = true;
       this.title = "添加工艺流程原料需求";

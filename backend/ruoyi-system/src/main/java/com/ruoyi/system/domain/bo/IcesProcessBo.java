@@ -28,10 +28,15 @@ public class IcesProcessBo extends BaseEntity {
     private Long procId;
 
     /**
-     * 目标产品ID
+     * 工艺流程编码
      */
-    @NotNull(message = "目标产品ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long prId;
+    private String procCode;
+
+    /**
+     * 目标产品
+     */
+    @NotBlank(message = "目标产品不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String maCode;
 
     /**
      * 工艺流程名称

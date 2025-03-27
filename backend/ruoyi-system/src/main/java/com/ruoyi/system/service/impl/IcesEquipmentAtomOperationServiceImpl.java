@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesEquipmentAtomOperationBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesEquipmentAtomOperationServiceImpl implements IIcesEquipmentAtomOperationService {
 
     private final IcesEquipmentAtomOperationMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询设备原子操作
@@ -61,7 +63,8 @@ public class IcesEquipmentAtomOperationServiceImpl implements IIcesEquipmentAtom
     private LambdaQueryWrapper<IcesEquipmentAtomOperation> buildQueryWrapper(IcesEquipmentAtomOperationBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesEquipmentAtomOperation> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getEqId() != null, IcesEquipmentAtomOperation::getEqId, bo.getEqId());
+        lqw.eq(StringUtils.isNotBlank(bo.getEaoCode()), IcesEquipmentAtomOperation::getEaoCode, bo.getEaoCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getEqCode()), IcesEquipmentAtomOperation::getEqCode, bo.getEqCode());
         lqw.eq(bo.getEaoDelete() != null, IcesEquipmentAtomOperation::getEaoDelete, bo.getEaoDelete());
         return lqw;
     }
@@ -71,6 +74,7 @@ public class IcesEquipmentAtomOperationServiceImpl implements IIcesEquipmentAtom
      */
     @Override
     public Boolean insertByBo(IcesEquipmentAtomOperationBo bo) {
+        bo.setEaoCode(codeService.insertByType("EquipmentAtomOperation"));
         IcesEquipmentAtomOperation add = BeanUtil.toBean(bo, IcesEquipmentAtomOperation.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

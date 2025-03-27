@@ -28,9 +28,13 @@ public class IcesAreaControl extends BaseEntity {
     @TableId(value = "ac_id")
     private Long acId;
     /**
-     * 所属车间ID
+     * 主控节点编码
      */
-    private Long arId;
+    private String acCode;
+    /**
+     * 所属车间
+     */
+    private String arCode;
     /**
      * 名称
      */

@@ -30,9 +30,13 @@ public class IcesEquipmentRecord extends BaseEntity {
     @TableId(value = "er_id")
     private Long erId;
     /**
-     * 关联设备ID
+     * 设备日志编码
      */
-    private Long eqId;
+    private String erCode;
+    /**
+     * 关联设备
+     */
+    private String eqCode;
     /**
      * 事件类型代码
      */

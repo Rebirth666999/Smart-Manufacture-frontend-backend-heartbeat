@@ -45,11 +45,10 @@ import java.util.*;
 public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesProcessService {
 
     private final IcesProcessMapper baseMapper;
+    private final IIcesCodeService codeService;
     private final IIcesProcessStepService processStepService;
     private final IIcesProcessStepPrevService stepPrevService;
-
     private final IIcesProcessStepPrevRoundService prevRoundService;
-    private Serializable eoId;
 
     /**
      * 查询工艺流程
@@ -81,7 +80,8 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
     private LambdaQueryWrapper<IcesProcess> buildQueryWrapper(IcesProcessBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesProcess> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getPrId() != null, IcesProcess::getPrId, bo.getPrId());
+        lqw.eq(StringUtils.isNotBlank(bo.getProcCode()), IcesProcess::getProcCode, bo.getProcCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getMaCode()), IcesProcess::getMaCode, bo.getMaCode());
         lqw.like(StringUtils.isNotBlank(bo.getProcName()), IcesProcess::getProcName, bo.getProcName());
         lqw.eq(StringUtils.isNotBlank(bo.getProcStat()), IcesProcess::getProcStat, bo.getProcStat());
         lqw.eq(bo.getProcDelete() != null, IcesProcess::getProcDelete, bo.getProcDelete());
@@ -93,6 +93,7 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
      */
     @Override
     public Boolean insertByBo(IcesProcessBo bo) {
+        bo.setProcCode(codeService.insertByType("Process"));
         IcesProcess add = BeanUtil.toBean(bo, IcesProcess.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
@@ -143,11 +144,13 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
         String processId = process.attributeValue("id");
         String processName = process.attributeValue("name");
         Long procId = Long.parseLong(processId.replace("process_", ""));
-        String modelId = queryById(procId).getProcModel();
+        IcesProcess icesProcess = baseMapper.selectById(procId);
+        String procModel = icesProcess.getProcModel();
+        String procCode = icesProcess.getProcCode();
         int newModelFlag = 0;  // 是否为新建模型
 
         // 检查模型是否存在
-        Model model = repositoryService.getModel(modelId);
+        Model model = repositoryService.getModel(procModel);
         if (ObjectUtil.isNull(model)) {
             newModelFlag = 1;
             // 新建模型
@@ -157,22 +160,21 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
             repositoryService.saveModel(newModel);
 
             // 保存模型ID
-            modelId = newModel.getId();
-            IcesProcess icesProcess = baseMapper.selectById(procId);
-            icesProcess.setProcModel(modelId);
+            procModel = newModel.getId();
+            icesProcess.setProcModel(procModel);
             baseMapper.updateById(icesProcess);
         }
 
         // 保存XML
-        repositoryService.addModelEditorSource(modelId, StringUtils.getBytes(modelXML, StandardCharsets.UTF_8));
+        repositoryService.addModelEditorSource(procModel, StringUtils.getBytes(modelXML, StandardCharsets.UTF_8));
 
         // 不是新模型，先删除原先数据库的所有数据
         if (newModelFlag == 0) {
             // 构造搜索条件
-            IcesProcessStepBo bo = new IcesProcessStepBo();
-            bo.setProcId(procId);
+            IcesProcessStepBo processStepBo = new IcesProcessStepBo();
+            processStepBo.setProcCode(procCode);
             // 查找所有符合条件的步骤
-            List<IcesProcessStepVo> processStepVos = processStepService.queryList(bo);
+            List<IcesProcessStepVo> processStepVos = processStepService.queryList(processStepBo);
             // 取出步骤的ID
             List<Long> processStepIds = new ArrayList<>();
             for (IcesProcessStepVo processStepVo : processStepVos) {
@@ -180,35 +182,34 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
             }
             // 数据库存在步骤需要删除
             if (!processStepIds.isEmpty()) {
-                // 用于删除的集合
-                List<Long> deleteIds = new ArrayList<>();
-
-                // 找到所有前序步骤关系
-                List<IcesProcessStepPrevVo> processStepPrevVos = stepPrevService.queryList(new IcesProcessStepPrevBo());
-                // 找到所有与步骤有关的前序关系
-                for (IcesProcessStepPrevVo processStepPrevVo : processStepPrevVos) {
-                    if (processStepIds.contains(processStepPrevVo.getPsIdCur()) || processStepIds.contains(processStepPrevVo.getPsIdPrev())) {
-                        deleteIds.add(processStepPrevVo.getPspId());
-                    }
+                // 构造搜索条件
+                IcesProcessStepPrevBo stepPrevBo = new IcesProcessStepPrevBo();
+                stepPrevBo.setProcCode(procCode);
+                // 查找所有符合条件的前序步骤关系
+                List<IcesProcessStepPrevVo> stepPrevVos = stepPrevService.queryList(stepPrevBo);
+                // 取出关系的ID
+                List<Long> stepPrevIds = new ArrayList<>();
+                for (IcesProcessStepPrevVo stepPrevVo : stepPrevVos) {
+                    stepPrevIds.add(stepPrevVo.getPspId());
                 }
-                // 删除前序关系
-                if (!deleteIds.isEmpty()) {
-                    stepPrevService.deleteWithValidByIds(deleteIds, false);
-                    deleteIds.clear();
+                // 删除关系
+                if (!stepPrevIds.isEmpty()) {
+                    stepPrevService.deleteWithValidByIds(stepPrevIds, false);
                 }
 
-                // 找到所有跨轮前序步骤关系
-                List<IcesProcessStepPrevRoundVo> processStepPrevRoundVos = prevRoundService.queryList(new IcesProcessStepPrevRoundBo());
-                // 找到所有与步骤有关的前序关系
-                for (IcesProcessStepPrevRoundVo processStepPrevRoundVo : processStepPrevRoundVos) {
-                    if (processStepIds.contains(processStepPrevRoundVo.getPsIdCur()) || processStepIds.contains(processStepPrevRoundVo.getPsIdPrev())) {
-                        deleteIds.add(processStepPrevRoundVo.getPsprId());
-                    }
+                // 构造搜索条件
+                IcesProcessStepPrevRoundBo prevRoundBo = new IcesProcessStepPrevRoundBo();
+                prevRoundBo.setProcCode(procCode);
+                // 查找所有符合条件的前序步骤关系
+                List<IcesProcessStepPrevRoundVo> prevRoundVos = prevRoundService.queryList(prevRoundBo);
+                // 取出关系的ID
+                List<Long> prevRoundIds = new ArrayList<>();
+                for (IcesProcessStepPrevRoundVo prevRoundVo : prevRoundVos) {
+                    prevRoundIds.add(prevRoundVo.getPsprId());
                 }
-                // 删除前序关系
-                if (!deleteIds.isEmpty()) {
-                    prevRoundService.deleteWithValidByIds(deleteIds, false);
-                    deleteIds.clear();
+                // 删除关系
+                if (!prevRoundIds.isEmpty()) {
+                    prevRoundService.deleteWithValidByIds(prevRoundIds, false);
                 }
 
                 // 最后删除步骤
@@ -229,14 +230,14 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
             if (Objects.equals(next.getName(), "startEvent")) {
                 // 开始事件
                 IcesProcessStepBo step = new IcesProcessStepBo();
-                step.setProcId(procId);
+                step.setProcCode(procCode);
                 step.setPsModel(next.attributeValue("id"));
                 steps.add(step);
                 stepMap.put(next.attributeValue("id"), step);
             } else if (Objects.equals(next.getName(), "endEvent")) {
                 // 结束事件
                 IcesProcessStepBo step = new IcesProcessStepBo();
-                step.setProcId(procId);
+                step.setProcCode(procCode);
                 step.setPsModel(next.attributeValue("id"));
                 steps.add(step);
                 stepMap.put(next.attributeValue("id"), step);
@@ -244,9 +245,9 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
                 // 操作步骤
                 tasks.add(next);
                 IcesProcessStepBo step = new IcesProcessStepBo();
-                step.setProcId(procId);
+                step.setProcCode(procCode);
                 step.setPsModel(next.attributeValue("id"));
-                step.setMoId(Long.parseLong(next.attributeValue("moId")));
+                step.setMoCode(next.attributeValue("moId"));
                 step.setPsDesc(next.attributeValue("psDesc"));
                 steps.add(step);
                 stepMap.put(next.attributeValue("id"), step);
@@ -268,11 +269,12 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
         for (Element flow : flows) {
             IcesProcessStepPrevBo stepPrevBo = new IcesProcessStepPrevBo();
             if (stepMap.get(flow.attributeValue("targetRef")) != null)
-                stepPrevBo.setPsIdCur(stepMap.get(flow.attributeValue("targetRef")).getPsId());
+                stepPrevBo.setPsCodeCur(stepMap.get(flow.attributeValue("targetRef")).getPsCode());
             if (stepMap.get(flow.attributeValue("sourceRef")) != null)
-                stepPrevBo.setPsIdPrev(stepMap.get(flow.attributeValue("sourceRef")).getPsId());
+                stepPrevBo.setPsCodePrev(stepMap.get(flow.attributeValue("sourceRef")).getPsCode());
             // 仅在两个ID都存在时插入
-            if (stepPrevBo.getPsIdCur() != null && stepPrevBo.getPsIdPrev() != null) {
+            if (StringUtils.isNotBlank(stepPrevBo.getPsCodePrev()) && StringUtils.isNotBlank(stepPrevBo.getPsCodeCur())) {
+                stepPrevBo.setProcCode(procCode);
                 stepPrevService.insertByBo(stepPrevBo);
             }
         }
@@ -288,8 +290,9 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
                     IcesProcessStepBo prevStep = stepMap.get(prevId);
                     if (currentStep != null && prevStep != null) {
                         IcesProcessStepPrevRoundBo stepPrevRoundBo = new IcesProcessStepPrevRoundBo();
-                        stepPrevRoundBo.setPsIdCur(currentStep.getPsId());
-                        stepPrevRoundBo.setPsIdPrev(prevStep.getPsId());
+                        stepPrevRoundBo.setPsCodeCur(currentStep.getPsCode());
+                        stepPrevRoundBo.setPsCodePrev(prevStep.getPsCode());
+                        stepPrevRoundBo.setProcCode(procCode);
                         prevRoundService.insertByBo(stepPrevRoundBo);
                     }
                 }

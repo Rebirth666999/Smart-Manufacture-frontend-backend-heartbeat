@@ -30,16 +30,33 @@ public class IcesManufactureTaskBo extends BaseEntity {
     private Long mtId;
 
     /**
-     * 所属生产计划ID
+     * 生产任务编码
      */
-    @NotNull(message = "所属生产计划ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long mpId;
+    private String mtCode;
 
     /**
-     * 目标车间ID
+     * 所属生产计划
      */
-    @NotNull(message = "目标车间ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long arId;
+    @NotBlank(message = "所属生产计划不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String mpCode;
+
+    /**
+     * 目标车间
+     */
+    @NotBlank(message = "目标车间不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String arCode;
+
+    /**
+     * 原料仓库
+     */
+    @NotBlank(message = "原料仓库不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String stCodeMa;
+
+    /**
+     * 产品仓库
+     */
+    @NotBlank(message = "产品仓库不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String stCodePr;
 
     /**
      * 状态代码
@@ -72,12 +89,12 @@ public class IcesManufactureTaskBo extends BaseEntity {
      * 计划产品数量
      */
     @NotNull(message = "计划产品数量不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long mtQtyPlan;
+    private Float mtQtyPlan;
 
     /**
      * 已完成产品数量
      */
-    private Long mtQtyReal;
+    private Float mtQtyReal;
 
     /**
      * 已删除

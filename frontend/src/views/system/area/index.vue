@@ -72,6 +72,7 @@
     <el-table v-loading="loading" :data="areaList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="车间ID" align="center" prop="arId" v-if="true"/>
+      <el-table-column label="车间编码" align="center" prop="arCode" />
       <el-table-column label="车间名称" align="center" prop="arName" />
       <!-- <el-table-column label="已删除" align="center" prop="arDelete" /> -->
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
@@ -99,12 +100,6 @@
             icon="el-icon-position"
             @click="handleAreaControlView(scope.row)"
           >主控节点</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-box"
-            @click="handleAreaStockView(scope.row)"
-          >查看库存</el-button>
           <el-button
             size="mini"
             type="text"
@@ -312,13 +307,9 @@ export default {
         ...this.queryParams
       }, `area_${new Date().getTime()}.xlsx`)
     },
-    // 查看车间库存
-    handleAreaStockView(row) {
-      this.$router.push(`/assets/materialStock?arId=${row.arId}`)
-    },
     // 查看车间主控节点
     handleAreaControlView(row) {
-      this.$router.push(`/equipment/areaControl?arId=${row.arId}`)
+      this.$router.push(`/equipment/areaControl?arCode=${row.arCode}`)
     }
   }
 };

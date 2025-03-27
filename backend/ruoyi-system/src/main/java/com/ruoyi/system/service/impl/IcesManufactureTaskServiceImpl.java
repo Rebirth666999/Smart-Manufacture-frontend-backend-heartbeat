@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesManufactureTaskBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesManufactureTaskServiceImpl implements IIcesManufactureTaskService {
 
     private final IcesManufactureTaskMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询生产任务
@@ -61,8 +63,9 @@ public class IcesManufactureTaskServiceImpl implements IIcesManufactureTaskServi
     private LambdaQueryWrapper<IcesManufactureTask> buildQueryWrapper(IcesManufactureTaskBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesManufactureTask> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getMpId() != null, IcesManufactureTask::getMpId, bo.getMpId());
-        lqw.eq(bo.getArId() != null, IcesManufactureTask::getArId, bo.getArId());
+        lqw.eq(StringUtils.isNotBlank(bo.getMtCode()), IcesManufactureTask::getMtCode, bo.getMtCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getMpCode()), IcesManufactureTask::getMpCode, bo.getMpCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getArCode()), IcesManufactureTask::getArCode, bo.getArCode());
         lqw.eq(StringUtils.isNotBlank(bo.getMtStat()), IcesManufactureTask::getMtStat, bo.getMtStat());
         lqw.eq(bo.getMtPriority() != null, IcesManufactureTask::getMtPriority, bo.getMtPriority());
         lqw.eq(bo.getMtDelete() != null, IcesManufactureTask::getMtDelete, bo.getMtDelete());
@@ -74,11 +77,12 @@ public class IcesManufactureTaskServiceImpl implements IIcesManufactureTaskServi
      */
     @Override
     public Boolean insertByBo(IcesManufactureTaskBo bo) {
+        bo.setMtCode(codeService.insertByType("ManufactureTask"));
         IcesManufactureTask add = BeanUtil.toBean(bo, IcesManufactureTask.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
-            bo.setMtId(add.getMtId());
+            bo.setMtCode(add.getMtCode());
         }
         return flag;
     }

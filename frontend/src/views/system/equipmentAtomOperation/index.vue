@@ -12,14 +12,14 @@
     </el-alert>
 
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="设备" prop="eqId">
-        <el-select v-model="queryParams.eqId" placeholder="请选择设备" 
+      <el-form-item label="设备" prop="eqCode">
+        <el-select v-model="queryParams.eqCode" placeholder="请选择设备" 
         @keyup.enter.native="handleQuery" :disabled="mode !== 0" clearable>
           <el-option
             v-for="item in equipmentList"
-            :key="item.eqId"
+            :key="item.eqCode"
             :label="item.eqName"
-            :value="item.eqId"
+            :value="item.eqCode"
           >
           </el-option>
         </el-select>
@@ -87,10 +87,11 @@
     <el-table v-loading="loading" :data="equipmentAtomOperationList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="设备原子操作ID" align="center" prop="eaoId" v-if="true"/>
+      <el-table-column label="设备原子操作编码" align="center" prop="eaoCode" />
       <el-table-column label="操作名称" align="center" prop="eaoName" />
-      <el-table-column label="所属设备" align="center" prop="eqId">
+      <el-table-column label="所属设备" align="center" prop="eqCode">
         <template slot-scope="scope">
-          {{ equipmentList.find(ele => ele.eqId === scope.row.eqId).eqName || '' }}
+          {{ equipmentList.find(ele => ele.eqCode === scope.row.eqCode).eqName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="操作类型" align="center" prop="eaoType">
@@ -134,14 +135,14 @@
     <!-- 添加或修改设备原子操作对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="设备" prop="eqId">
-          <el-select v-model="form.eqId" placeholder="请选择设备" 
+        <el-form-item label="设备" prop="eqCode">
+          <el-select v-model="form.eqCode" placeholder="请选择设备" 
           :disabled="mode !== 0">
             <el-option
               v-for="item in equipmentList"
-              :key="item.eqId"
+              :key="item.eqCode"
               :label="item.eqName"
-              :value="item.eqId"
+              :value="item.eqCode"
             >
             </el-option>
           </el-select>
@@ -213,7 +214,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        eqId: this.$route.query.eqId,
+        eqCode: this.$route.query.eqCode,
         eaoDelete: 0,
       },
       // 表单参数
@@ -223,7 +224,7 @@ export default {
         eaoId: [
           { required: true, message: "设备原子操作ID不能为空", trigger: "blur" }
         ],
-        eqId: [
+        eqCode: [
           { required: true, message: "所属设备ID不能为空", trigger: "blur" }
         ],
         eaoName: [
@@ -250,7 +251,7 @@ export default {
   },
   async created() {
     // 检查来源
-    if (this.$route.query.eqId) {
+    if (this.$route.query.eqCode) {
       this.mode = 1
     }
     await this.getEquipmentList();
@@ -262,7 +263,7 @@ export default {
       listEquipment().then(response => {
         this.equipmentList = response.rows;
         if (this.mode === 1) {
-          let equipment = response.rows.find(ele => ele.eqId === this.$route.query.eqId)
+          let equipment = response.rows.find(ele => ele.eqCode === this.$route.query.eqCode)
           // 构建筛选提示文本
           this.hint = "设备 "
           this.hint += equipment.eqName
@@ -292,7 +293,7 @@ export default {
     reset() {
       this.form = {
         eaoId: undefined,
-        eqId: undefined,
+        eqCode: undefined,
         eaoName: undefined,
         eaoType: undefined,
         eaoRequestType: undefined,
@@ -327,7 +328,7 @@ export default {
     handleAdd() {
       this.reset();
       if (this.mode === 1) {
-        this.form.eqId = this.$route.query.eqId
+        this.form.eqCode = this.$route.query.eqCode
       }
       this.open = true;
       this.title = "添加设备原子操作";

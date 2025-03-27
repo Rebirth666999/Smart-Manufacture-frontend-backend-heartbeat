@@ -9,6 +9,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import com.ruoyi.system.domain.IcesDeviceTaskParam;
 import com.ruoyi.system.domain.IcesDeviceTaskPrev;
 import com.ruoyi.system.domain.bo.*;
@@ -22,6 +23,8 @@ import com.ruoyi.system.domain.vo.IcesProcessStepVo;
 import com.ruoyi.system.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.ruoyi.system.domain.bo.IcesDeviceTaskBo;
+import com.ruoyi.system.domain.vo.IcesDeviceTaskVo;
 import com.ruoyi.system.domain.IcesDeviceTask;
 import com.ruoyi.system.mapper.IcesDeviceTaskMapper;
 import com.ruoyi.flowable.factory.FlowServiceFactory;
@@ -41,6 +44,7 @@ import java.util.stream.Collectors;
 public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
 
     private final IcesDeviceTaskMapper baseMapper;
+    private final IIcesCodeService codeService;
     private final IIcesProcessStepService processStepService;
     private final IIcesProcessStepPrevService stepPrevService;
     private final IIcesProcessStepPrevRoundService prevRoundService;
@@ -78,9 +82,10 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
     private LambdaQueryWrapper<IcesDeviceTask> buildQueryWrapper(IcesDeviceTaskBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesDeviceTask> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getEqId() != null, IcesDeviceTask::getEqId, bo.getEqId());
-        lqw.eq(bo.getMtId() != null, IcesDeviceTask::getMtId, bo.getMtId());
-        lqw.eq(bo.getEoId() != null, IcesDeviceTask::getEoId, bo.getEoId());
+        lqw.eq(StringUtils.isNotBlank(bo.getDtCode()), IcesDeviceTask::getDtCode, bo.getDtCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getEqCode()), IcesDeviceTask::getEqCode, bo.getEqCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getMtCode()), IcesDeviceTask::getMtCode, bo.getMtCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getEoCode()), IcesDeviceTask::getEoCode, bo.getEoCode());
         lqw.eq(StringUtils.isNotBlank(bo.getDtStat()), IcesDeviceTask::getDtStat, bo.getDtStat());
         lqw.eq(bo.getDtDelete() != null, IcesDeviceTask::getDtDelete, bo.getDtDelete());
         return lqw;
@@ -91,6 +96,7 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
      */
     @Override
     public Boolean insertByBo(IcesDeviceTaskBo bo) {
+        bo.setDtCode(codeService.insertByType("DeviceTask"));
         IcesDeviceTask add = BeanUtil.toBean(bo, IcesDeviceTask.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

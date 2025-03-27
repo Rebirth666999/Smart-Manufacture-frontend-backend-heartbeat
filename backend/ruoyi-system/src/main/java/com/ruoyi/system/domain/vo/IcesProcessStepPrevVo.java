@@ -28,16 +28,28 @@ public class IcesProcessStepPrevVo {
     private Long pspId;
 
     /**
-     * 当前工艺步骤ID
+     * 跨轮前序步骤关联编码
      */
-    @ExcelProperty(value = "当前工艺步骤ID")
-    private Long psIdCur;
+    @ExcelProperty(value = "跨轮前序步骤关联编码")
+    private String pspCode;
 
     /**
-     * 前序工艺步骤ID
+     * 所属工艺流程
      */
-    @ExcelProperty(value = "前序工艺步骤ID")
-    private Long psIdPrev;
+    @ExcelProperty(value = "所属工艺流程")
+    private String procCode;
+
+    /**
+     * 当前工艺步骤
+     */
+    @ExcelProperty(value = "当前工艺步骤")
+    private String psCodeCur;
+
+    /**
+     * 前序工艺步骤
+     */
+    @ExcelProperty(value = "前序工艺步骤")
+    private String psCodePrev;
 
     /**
      * 已删除

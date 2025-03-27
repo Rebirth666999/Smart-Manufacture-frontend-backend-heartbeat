@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesProcessMaterialBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesProcessMaterialServiceImpl implements IIcesProcessMaterialService {
 
     private final IcesProcessMaterialMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询关联-工艺流程原料需求
@@ -61,8 +63,9 @@ public class IcesProcessMaterialServiceImpl implements IIcesProcessMaterialServi
     private LambdaQueryWrapper<IcesProcessMaterial> buildQueryWrapper(IcesProcessMaterialBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesProcessMaterial> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getProcId() != null, IcesProcessMaterial::getProcId, bo.getProcId());
-        lqw.eq(bo.getMaId() != null, IcesProcessMaterial::getMaId, bo.getMaId());
+        lqw.eq(StringUtils.isNotBlank(bo.getPmCode()), IcesProcessMaterial::getPmCode, bo.getPmCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getProcCode()), IcesProcessMaterial::getProcCode, bo.getProcCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getMaCode()), IcesProcessMaterial::getMaCode, bo.getMaCode());
         lqw.eq(bo.getPmDelete() != null, IcesProcessMaterial::getPmDelete, bo.getPmDelete());
         return lqw;
     }
@@ -72,6 +75,7 @@ public class IcesProcessMaterialServiceImpl implements IIcesProcessMaterialServi
      */
     @Override
     public Boolean insertByBo(IcesProcessMaterialBo bo) {
+        bo.setPmCode(codeService.insertByType("ProcessMaterial"));
         IcesProcessMaterial add = BeanUtil.toBean(bo, IcesProcessMaterial.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

@@ -28,16 +28,28 @@ public class IcesDeviceTaskPrevVo {
     private Long dtprId;
 
     /**
-     * 当前设备任务ID
+     * 前序任务关联编码
      */
-    @ExcelProperty(value = "当前设备任务ID")
-    private Long dtIdCur;
+    @ExcelProperty(value = "前序任务关联编码")
+    private String dtprCode;
 
     /**
-     * 前序设备任务ID
+     * 所属生产任务
      */
-    @ExcelProperty(value = "前序设备任务ID")
-    private Long dtIdPrev;
+    @ExcelProperty(value = "所属生产任务")
+    private String mtCode;
+
+    /**
+     * 当前设备任务
+     */
+    @ExcelProperty(value = "当前设备任务")
+    private String dtCodeCur;
+
+    /**
+     * 前序设备任务
+     */
+    @ExcelProperty(value = "前序设备任务")
+    private String dtCodePrev;
 
     /**
      * 已删除

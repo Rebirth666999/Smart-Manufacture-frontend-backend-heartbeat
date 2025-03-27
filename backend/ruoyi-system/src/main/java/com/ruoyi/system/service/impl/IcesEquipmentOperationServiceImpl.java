@@ -17,9 +17,7 @@ import com.ruoyi.system.domain.bo.*;
 import com.ruoyi.system.domain.vo.IcesEquipmentOperationStepParamVo;
 import com.ruoyi.system.domain.vo.IcesEquipmentOperationStepPrevVo;
 import com.ruoyi.system.domain.vo.IcesEquipmentOperationStepVo;
-import com.ruoyi.system.service.IIcesEquipmentOperationStepParamService;
-import com.ruoyi.system.service.IIcesEquipmentOperationStepPrevService;
-import com.ruoyi.system.service.IIcesEquipmentOperationStepService;
+import com.ruoyi.system.service.*;
 import lombok.RequiredArgsConstructor;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -30,7 +28,6 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.vo.IcesEquipmentOperationVo;
 import com.ruoyi.system.domain.IcesEquipmentOperation;
 import com.ruoyi.system.mapper.IcesEquipmentOperationMapper;
-import com.ruoyi.system.service.IIcesEquipmentOperationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.ByteArrayInputStream;
@@ -48,6 +45,7 @@ import java.util.*;
 public class IcesEquipmentOperationServiceImpl extends FlowServiceFactory implements IIcesEquipmentOperationService {
 
     private final IcesEquipmentOperationMapper baseMapper;
+    private final IIcesCodeService codeService;
     private final IIcesEquipmentOperationStepService operationStepService;
     private final IIcesEquipmentOperationStepParamService stepParamService;
     private final IIcesEquipmentOperationStepPrevService stepPrevService;
@@ -82,8 +80,9 @@ public class IcesEquipmentOperationServiceImpl extends FlowServiceFactory implem
     private LambdaQueryWrapper<IcesEquipmentOperation> buildQueryWrapper(IcesEquipmentOperationBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesEquipmentOperation> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getMoId() != null, IcesEquipmentOperation::getMoId, bo.getMoId());
-        lqw.eq(bo.getEqId() != null, IcesEquipmentOperation::getEqId, bo.getEqId());
+        lqw.eq(StringUtils.isNotBlank(bo.getEoCode()), IcesEquipmentOperation::getEoCode, bo.getEoCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getMoCode()), IcesEquipmentOperation::getMoCode, bo.getMoCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getEqCode()), IcesEquipmentOperation::getEqCode, bo.getEqCode());
         lqw.eq(bo.getEoDelete() != null, IcesEquipmentOperation::getEoDelete, bo.getEoDelete());
         return lqw;
     }
@@ -93,6 +92,7 @@ public class IcesEquipmentOperationServiceImpl extends FlowServiceFactory implem
      */
     @Override
     public Boolean insertByBo(IcesEquipmentOperationBo bo) {
+        bo.setEoCode(codeService.insertByType("EquipmentOperation"));
         IcesEquipmentOperation add = BeanUtil.toBean(bo, IcesEquipmentOperation.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
@@ -142,16 +142,17 @@ public class IcesEquipmentOperationServiceImpl extends FlowServiceFactory implem
         Document document = saxReader.read(new ByteArrayInputStream(modelXML.getBytes(StandardCharsets.UTF_8)));
         Element rootElement = document.getRootElement();
         Element process = rootElement.element("process");  // 定位到process
-        // 读取基本信息，获取设备操作ID
+        // 读取基本信息，获取设备操作对象
         String processId = process.attributeValue("id");
         String processName = process.attributeValue("name");
         Long eoId = Long.parseLong(processId.replace("process_", ""));
-        String modelId = queryById(eoId).getEoModel();
+        IcesEquipmentOperation equipmentOperation = baseMapper.selectById(eoId);
+        String eoModel = equipmentOperation.getEoModel();
+        String eoCode = equipmentOperation.getEoCode();
         int newModelFlag = 0;  // 是否为新建模型
-        // TODO 如果不是新建模型，则应当在插入新内容之前，先把数据库中旧的实体全部删掉
 
         // 检查模型是否存在
-        Model model = repositoryService.getModel(modelId);
+        Model model = repositoryService.getModel(eoModel);
         if (ObjectUtil.isNull(model)) {
             newModelFlag = 1;
             // 新建模型
@@ -160,60 +161,56 @@ public class IcesEquipmentOperationServiceImpl extends FlowServiceFactory implem
             newModel.setKey(processId);
             repositoryService.saveModel(newModel);
             // 保存模型ID
-            modelId = newModel.getId();
-            IcesEquipmentOperation equipmentOperation = baseMapper.selectById(eoId);
-            equipmentOperation.setEoModel(modelId);
+            eoModel = newModel.getId();
+            equipmentOperation.setEoModel(eoModel);
             baseMapper.updateById(equipmentOperation);
         }
         // 保存XML
-        repositoryService.addModelEditorSource(modelId ,StringUtils.getBytes(modelXML, StandardCharsets.UTF_8));
+        repositoryService.addModelEditorSource(eoModel ,StringUtils.getBytes(modelXML, StandardCharsets.UTF_8));
 
         // 不是新模型，先删除原先数据库的所有数据
         if (newModelFlag == 0) {
             // 构造搜索条件
-            IcesEquipmentOperationStepBo bo = new IcesEquipmentOperationStepBo();
-            bo.setEoId(eoId);
+            IcesEquipmentOperationStepBo operationStepBo = new IcesEquipmentOperationStepBo();
+            operationStepBo.setEoCode(eoCode);
             // 查找所有符合条件的步骤
-            List<IcesEquipmentOperationStepVo> operationStepVos = operationStepService.queryList(bo);
+            List<IcesEquipmentOperationStepVo> operationStepVos = operationStepService.queryList(operationStepBo);
             // 取出步骤的ID
             List<Long> operationStepIds = new ArrayList<>();
             for (IcesEquipmentOperationStepVo operationStepVo : operationStepVos) {
                 operationStepIds.add(operationStepVo.getEosId());
             }
+
             // 数据库存在步骤需要删除
             if (!operationStepIds.isEmpty()) {
-                // 用于删除的集合
-                List<Long> deleteIds = new ArrayList<>();
-
-                // 找到所有前序步骤关系
-                List<IcesEquipmentOperationStepPrevVo> operationStepPrevVos = stepPrevService.queryList(new IcesEquipmentOperationStepPrevBo());
-                // 找到所有与步骤有关的前序关系
-                for (IcesEquipmentOperationStepPrevVo operationStepPrevVo : operationStepPrevVos) {
-                    if (operationStepIds.contains(operationStepPrevVo.getEosIdCur()) || operationStepIds.contains(operationStepPrevVo.getEosIdPrev())) {
-                        deleteIds.add(operationStepPrevVo.getEosprId());
-                    }
+                // 构造搜索条件
+                IcesEquipmentOperationStepPrevBo stepPrevBo = new IcesEquipmentOperationStepPrevBo();
+                stepPrevBo.setEoCode(eoCode);
+                // 查找所有符合条件的前部步骤关系
+                List<IcesEquipmentOperationStepPrevVo> stepPrevVos = stepPrevService.queryList(stepPrevBo);
+                // 取出关系的ID
+                List<Long> stepPrevIds = new ArrayList<>();
+                for (IcesEquipmentOperationStepPrevVo stepPrevVo : stepPrevVos) {
+                    stepPrevIds.add(stepPrevVo.getEosprId());
                 }
-                // 删除前序关系
-                if (!deleteIds.isEmpty()) {
-                    stepPrevService.deleteWithValidByIds(deleteIds, false);
-                    deleteIds.clear();
+                // 删除前序步骤关系
+                if (!stepPrevIds.isEmpty()) {
+                    stepPrevService.deleteWithValidByIds(stepPrevIds, false);
                 }
 
-
-                IcesEquipmentOperationStepParamBo paramBo = new IcesEquipmentOperationStepParamBo();
-                for (Long id: operationStepIds) {
-                    // 构造搜索条件
-                    paramBo.setEosId(id);
-                    // 找到步骤参数
-                    List<IcesEquipmentOperationStepParamVo> paramVos = stepParamService.queryList(paramBo);
-                    // id全部放进集合
-                    for (IcesEquipmentOperationStepParamVo paramVo : paramVos) {
-                        deleteIds.add(paramVo.getEospaId());
-                    }
+                // 构造搜索条件
+                IcesEquipmentOperationStepParamBo stepParamBo = new IcesEquipmentOperationStepParamBo();
+                stepParamBo.setEoCode(eoCode);
+                // 查找所有符合条件的步骤参数
+                List<IcesEquipmentOperationStepParamVo> stepParamVos = stepParamService.queryList(stepParamBo);
+                // 取出参数的ID
+                List<Long> stepParamIds = new ArrayList<>();
+                for (IcesEquipmentOperationStepParamVo stepParamVo : stepParamVos) {
+                    stepParamIds.add(stepParamVo.getEospaId());
                 }
                 // 删除步骤参数
-                if (!deleteIds.isEmpty()) {
-                    stepParamService.deleteWithValidByIds(deleteIds, false);
+                if (!stepParamIds.isEmpty()) {
+                    stepParamService.deleteWithValidByIds(stepParamIds, false);
                 }
 
                 // 最后删除步骤
@@ -234,14 +231,14 @@ public class IcesEquipmentOperationServiceImpl extends FlowServiceFactory implem
             if (Objects.equals(next.getName(), "startEvent")) {
                 // 开始事件
                 IcesEquipmentOperationStepBo step = new IcesEquipmentOperationStepBo();
-                step.setEoId(eoId);
+                step.setEoCode(eoCode);
                 steps.add(step);
                 // 保存到映射
                 stepMap.put(next.attributeValue("id"), step);
             } else if (Objects.equals(next.getName(), "endEvent")) {
                 // 结束事件
                 IcesEquipmentOperationStepBo step = new IcesEquipmentOperationStepBo();
-                step.setEoId(eoId);
+                step.setEoCode(eoCode);
                 steps.add(step);
                 // 保存到映射
                 stepMap.put(next.attributeValue("id"), step);
@@ -249,8 +246,8 @@ public class IcesEquipmentOperationServiceImpl extends FlowServiceFactory implem
                 // 操作步骤
                 tasks.add(next);
                 IcesEquipmentOperationStepBo step = new IcesEquipmentOperationStepBo();
-                step.setEoId(eoId);
-                step.setEaoId(Long.parseLong(next.attributeValue("eaoId")));
+                step.setEoCode(eoCode);
+                step.setEaoCode(next.attributeValue("eaoCode"));
                 step.setEosDesc(next.attributeValue("eosDesc"));
                 steps.add(step);
                 // 保存到映射
@@ -274,13 +271,14 @@ public class IcesEquipmentOperationServiceImpl extends FlowServiceFactory implem
                 // 对于每个参数
                 for (IcesEquipmentOperationStepParamBo paramBo: paramBoList) {
                     // 把数组下标解析为实际的参数ID
-                    if (paramBo.getEospaIdParent() == 0) {
-                        paramBo.setEospaIdParent(null);
+                    if (StringUtils.isEmpty(paramBo.getEospaCodeParent())) {
+                        paramBo.setEospaCodeParent(null);
                     } else {
-                        paramBo.setEospaIdParent(paramBoList.get((int) (paramBo.getEospaIdParent() - 1)).getEospaId());
+                        paramBo.setEospaCodeParent(paramBoList.get(Integer.parseInt(paramBo.getEospaCodeParent()) - 1).getEospaCode());
                     }
                     // 设置当前步骤的ID
-                    paramBo.setEosId(taskMap.get(task).getEosId());
+                    paramBo.setEosCode(taskMap.get(task).getEosCode());
+                    paramBo.setEoCode(eoCode);
                     stepParamService.insertByBo(paramBo);
                 }
             }
@@ -289,11 +287,12 @@ public class IcesEquipmentOperationServiceImpl extends FlowServiceFactory implem
         for (Element flow: flows) {
             IcesEquipmentOperationStepPrevBo stepPrevBo = new IcesEquipmentOperationStepPrevBo();
             if (stepMap.get(flow.attributeValue("targetRef")) != null)
-                stepPrevBo.setEosIdCur(stepMap.get(flow.attributeValue("targetRef")).getEosId());
+                stepPrevBo.setEosCodeCur(stepMap.get(flow.attributeValue("targetRef")).getEosCode());
             if (stepMap.get(flow.attributeValue("sourceRef")) != null)
-                stepPrevBo.setEosIdPrev(stepMap.get(flow.attributeValue("sourceRef")).getEosId());
+                stepPrevBo.setEosCodePrev(stepMap.get(flow.attributeValue("sourceRef")).getEosCode());
             // 仅在两个ID都存在时插入
-            if (stepPrevBo.getEosIdCur() != null && stepPrevBo.getEosIdPrev() != null) {
+            if (StringUtils.isNotBlank(stepPrevBo.getEosCodeCur()) && StringUtils.isNotBlank(stepPrevBo.getEosCodePrev())) {
+                stepPrevBo.setEoCode(eoCode);
                 stepPrevService.insertByBo(stepPrevBo);
             }
         }

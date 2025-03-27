@@ -6,8 +6,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="com.ruoyi.system.domain.IcesProcessStepPrevRound" id="IcesProcessStepPrevRoundResult">
         <result property="psprId" column="pspr_id"/>
-        <result property="psIdCur" column="ps_id_cur"/>
-        <result property="psIdPrev" column="ps_id_prev"/>
+        <result property="psprCode" column="pspr_code"/>
+        <result property="procCode" column="proc_code"/>
+        <result property="psCodeCur" column="ps_code_cur"/>
+        <result property="psCodePrev" column="ps_code_prev"/>
         <result property="psprDelete" column="pspr_delete"/>
         <result property="createBy" column="create_by"/>
         <result property="updateBy" column="update_by"/>

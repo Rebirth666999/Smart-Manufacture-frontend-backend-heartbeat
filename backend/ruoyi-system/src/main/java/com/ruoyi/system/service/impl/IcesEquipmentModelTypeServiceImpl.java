@@ -7,9 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.ruoyi.system.domain.bo.IcesEquipmentModelBo;
-import com.ruoyi.system.domain.vo.IcesEquipmentModelVo;
-import com.ruoyi.system.service.IIcesEquipmentModelService;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesEquipmentModelTypeBo;
@@ -33,7 +31,7 @@ import java.util.Collection;
 public class IcesEquipmentModelTypeServiceImpl implements IIcesEquipmentModelTypeService {
 
     private final IcesEquipmentModelTypeMapper baseMapper;
-    private final IIcesEquipmentModelService iIcesEquipmentModelService;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询设备模型类型
@@ -65,6 +63,7 @@ public class IcesEquipmentModelTypeServiceImpl implements IIcesEquipmentModelTyp
     private LambdaQueryWrapper<IcesEquipmentModelType> buildQueryWrapper(IcesEquipmentModelTypeBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesEquipmentModelType> lqw = Wrappers.lambdaQuery();
+        lqw.like(StringUtils.isNotBlank(bo.getEmtCode()), IcesEquipmentModelType::getEmtCode, bo.getEmtCode());
         lqw.like(StringUtils.isNotBlank(bo.getEmtName()), IcesEquipmentModelType::getEmtName, bo.getEmtName());
         lqw.eq(bo.getEmtDelete() != null, IcesEquipmentModelType::getEmtDelete, bo.getEmtDelete());
         return lqw;
@@ -75,6 +74,7 @@ public class IcesEquipmentModelTypeServiceImpl implements IIcesEquipmentModelTyp
      */
     @Override
     public Boolean insertByBo(IcesEquipmentModelTypeBo bo) {
+        bo.setEmtCode(codeService.insertByType("EquipmentModelType"));
         IcesEquipmentModelType add = BeanUtil.toBean(bo, IcesEquipmentModelType.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
@@ -106,38 +106,9 @@ public class IcesEquipmentModelTypeServiceImpl implements IIcesEquipmentModelTyp
      */
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        // 设备模型类型删除逻辑
-        // 类型下没有模型，直接从数据库删除
-        // 类型下只有已弃用的模型，更改已删除字段
-        // 不满足如上情况，拒绝删除
         if(isValid){
-            for (Long id : ids) {
-                // 构建搜索条件
-                IcesEquipmentModelBo equipmentModelBo = new IcesEquipmentModelBo();
-                equipmentModelBo.setEmtId(id);
-                // 找到所有设备模型
-                List<IcesEquipmentModelVo> list = iIcesEquipmentModelService.queryList(equipmentModelBo);
-                for (IcesEquipmentModelVo vo : list) {
-                    // 设备模型不是已弃用，拒绝删除
-                    if (!("5".equals(vo.getEmStat()))) {
-                        return false;
-                    }
-                }
-            }
+            //TODO 做一些业务上的校验,判断是否需要校验
         }
-        for (Long id : ids) {
-            IcesEquipmentModelBo equipmentModelBo = new IcesEquipmentModelBo();
-            equipmentModelBo.setEmtId(id);
-            List<IcesEquipmentModelVo> list = iIcesEquipmentModelService.queryList(equipmentModelBo);
-            if (list.isEmpty()) {
-                baseMapper.deleteById(id);
-            } else {
-                IcesEquipmentModelTypeBo modelTypeBo = new IcesEquipmentModelTypeBo();
-                modelTypeBo.setEmtId(id);
-                modelTypeBo.setEmtDelete(1L);
-                updateByBo(modelTypeBo);
-            }
-        }
-        return true;
+        return baseMapper.deleteBatchIds(ids) > 0;
     }
 }

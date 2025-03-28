@@ -17,10 +17,10 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="客户名称(中)" prop="clName">
+      <el-form-item label="客户名称" prop="clName">
         <el-input
           v-model="queryParams.clName"
-          placeholder="请输入客户名称(中)"
+          placeholder="请输入客户名称"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -35,14 +35,14 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="已删除" prop="clDelete">
+      <!-- <el-form-item label="已删除" prop="clDelete">
         <el-input
           v-model="queryParams.clDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -103,33 +103,33 @@
       <el-table-column label="业务员ID" align="center" prop="clOperator" />
       <el-table-column label="客户名称(中)" align="center" prop="clName" />
       <el-table-column label="客户名称(英)" align="center" prop="clNameEn" />
-      <el-table-column label="法人代表" align="center" prop="clLegalRepres" />
-      <el-table-column label="企业联系人" align="center" prop="clContact" />
+      <!-- <el-table-column label="法人代表" align="center" prop="clLegalRepres" /> -->
+      <!-- <el-table-column label="企业联系人" align="center" prop="clContact" /> -->
       <el-table-column label="联系电话1" align="center" prop="clPhone1" />
-      <el-table-column label="联系电话2" align="center" prop="clPhone2" />
-      <el-table-column label="传真" align="center" prop="clFax" />
-      <el-table-column label="邮政编码" align="center" prop="clPostcode" />
+      <!-- <el-table-column label="联系电话2" align="center" prop="clPhone2" /> -->
+      <!-- <el-table-column label="传真" align="center" prop="clFax" /> -->
+      <!-- <el-table-column label="邮政编码" align="center" prop="clPostcode" /> -->
       <el-table-column label="联系地址" align="center" prop="clAddr" />
-      <el-table-column label="企业性质" align="center" prop="clType" />
-      <el-table-column label="信用等级" align="center" prop="clCreditRank" />
-      <el-table-column label="信用额度" align="center" prop="clCreditQuota" />
-      <el-table-column label="注册资金" align="center" prop="clRegisterCaptial" />
-      <el-table-column label="注册号码" align="center" prop="clRegisterNo" />
-      <el-table-column label="银行卡号" align="center" prop="clBankNum" />
-      <el-table-column label="开户行" align="center" prop="clBank" />
-      <el-table-column label="网址" align="center" prop="clWebsite" />
-      <el-table-column label="注册日期" align="center" prop="clRegisterDate" width="180">
+      <!-- <el-table-column label="企业性质" align="center" prop="clType" /> -->
+      <!-- <el-table-column label="信用等级" align="center" prop="clCreditRank" /> -->
+      <!-- <el-table-column label="信用额度" align="center" prop="clCreditQuota" /> -->
+      <!-- <el-table-column label="注册资金" align="center" prop="clRegisterCaptial" /> -->
+      <!-- <el-table-column label="注册号码" align="center" prop="clRegisterNo" /> -->
+      <!-- <el-table-column label="银行卡号" align="center" prop="clBankNum" /> -->
+      <!-- <el-table-column label="开户行" align="center" prop="clBank" /> -->
+      <!-- <el-table-column label="网址" align="center" prop="clWebsite" /> -->
+      <!-- <el-table-column label="注册日期" align="center" prop="clRegisterDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.clRegisterDate, '{y}-{m}-{d}') }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="状态" align="center" prop="clStat">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_client_status" :value="scope.row.clStat"/>
         </template>
       </el-table-column>
-      <el-table-column label="已删除" align="center" prop="clDelete" />
-      <el-table-column label="描述" align="center" prop="clDesc" />
+      <!-- <el-table-column label="已删除" align="center" prop="clDelete" /> -->
+      <!-- <el-table-column label="描述" align="center" prop="clDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -284,7 +284,7 @@ export default {
         clOperator: undefined,
         clName: undefined,
         clStat: undefined,
-        clDelete: undefined,
+        clDelete: 0,
       },
       // 表单参数
       form: {},

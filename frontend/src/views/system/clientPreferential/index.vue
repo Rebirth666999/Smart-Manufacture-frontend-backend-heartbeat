@@ -97,6 +97,12 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-notebook-1"
+            @click="handleClientLevel(scope.row)"
+          >客户等级</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:clientPreferential:remove']"
@@ -300,6 +306,10 @@ export default {
       this.download('system/clientPreferential/export', {
         ...this.queryParams
       }, `clientPreferential_${new Date().getTime()}.xlsx`)
+    },
+    // 查看对应的客户等级
+    handleClientLevel(row) {
+      this.$router.push(`/order/clientLevelPreferential?cpCode=${row.cpCode}`)
     }
   }
 };

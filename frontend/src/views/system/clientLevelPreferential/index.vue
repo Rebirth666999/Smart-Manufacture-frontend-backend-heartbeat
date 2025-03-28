@@ -23,7 +23,7 @@
        </el-select>
       </el-form-item>
       <el-form-item label="优惠策略" prop="cpCode">
-       <el-select  v-model="queryParams.cpCode" placeholder="请选择优惠政策">
+       <el-select v-model="queryParams.cpCode" placeholder="请选择优惠策略" clearable :disabled="mode === 2">
         <el-option
          v-for="option in clientPreferentialList"
          :key="option.cpCode"
@@ -141,13 +141,13 @@
           </el-select>
         </el-form-item>
         <el-form-item label="优惠策略" prop="cpCode">
-         <el-select v-model="form.cpCode" placeholder="请选择优惠策略">
-          <el-option
-          v-for="option in clientPreferentialList"
-          :key="option.cpCode"
-          :label="option.cpName"
-          :value="option.cpCode">
-          </el-option>
+         <el-select v-model="form.cpCode" placeholder="请选择优惠策略" :disabled="mode === 2">
+            <el-option
+              v-for="option in clientPreferentialList"
+              :key="option.cpCode"
+              :label="option.cpName"
+              :value="option.cpCode">
+            </el-option>
          </el-select>
         </el-form-item>
       </el-form>
@@ -198,7 +198,7 @@ export default {
         pageSize: 10,
         clpCode: undefined,
         cllCode: this.$route.query.cllCode,
-        cpCode: undefined,
+        cpCode: this.$route.query.cpCode,
         clpDelete: 0,
       },
       // 表单参数
@@ -229,6 +229,8 @@ export default {
     // 检查来源
     if (this.$route.query.cllCode) {
       this.mode = 1
+    } else if (this.$route.query.cpCode) {
+      this.mode = 2
     }
     this.getList();
     await this.getClientLevelList();
@@ -250,6 +252,11 @@ export default {
     getClientPreferentialList() {
       listClientPreferential().then(response => {
         this.clientPreferentialList = response.rows;
+        if (this.mode === 2) {
+          this.hint = "优惠策略 "
+          this.hint += response.rows.find(ele => ele.cpCode === this.$route.query.cpCode).cpName
+          this.hint += " "
+        }
       });
     },
     /** 查询关联-客户等级对应的优惠策略列表 */
@@ -302,6 +309,8 @@ export default {
       this.reset();
       if (this.mode === 1) {
         this.form.cllCode = this.$route.query.cllCode
+      } else if (this.mode === 2) {
+        this.form.cpCode = this.$route.query.cpCode
       }
       this.open = true;
       this.title = "添加客户等级对应的优惠策略";

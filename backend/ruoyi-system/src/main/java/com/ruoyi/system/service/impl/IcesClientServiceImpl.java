@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesClientBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesClientServiceImpl implements IIcesClientService {
 
     private final IcesClientMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询客户基本信息
@@ -74,6 +76,7 @@ public class IcesClientServiceImpl implements IIcesClientService {
      */
     @Override
     public Boolean insertByBo(IcesClientBo bo) {
+        bo.setClCode(codeService.insertByType("Client"));
         IcesClient add = BeanUtil.toBean(bo, IcesClient.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

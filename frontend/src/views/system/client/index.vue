@@ -192,7 +192,7 @@
               <el-option
                 v-for="item in clientLevelList"
                 :key="item.cllCode"
-                :label="item.cllName"
+                :label="item.cllLabel"
                 :value="item.cllCode"
               >
               </el-option>

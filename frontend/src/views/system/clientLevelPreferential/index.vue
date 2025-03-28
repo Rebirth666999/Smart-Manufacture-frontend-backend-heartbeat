@@ -10,17 +10,17 @@
         />
       </el-form-item> -->
       <el-form-item label="客户等级" prop="cllCode">
-       <el-select v-model="queryParams.cllCode" placeholder = "请输入客户等级" clearable>
+       <el-select v-model="queryParams.cllCode" placeholder="请输入客户等级" clearable>
         <el-option
          v-for="option in clientLevelList"
           :key="option.cllCode"
-          :label="option.cllName"
+          :label="option.cllLabel"
           :value="option.cllCode">
         </el-option>
        </el-select>
       </el-form-item>
       <el-form-item label="优惠策略" prop="cpCode">
-       <el-select  v-model="queryParams.cpCode" placeholder = "请选择优惠政策">
+       <el-select  v-model="queryParams.cpCode" placeholder="请选择优惠政策">
         <el-option
          v-for="option in clientPreferentialList"
          :key="option.cpCode"
@@ -29,14 +29,14 @@
         </el-option>
        </el-select>
       </el-form-item>
-      <el-form-item label="已删除" prop="clpDelete">
+      <!-- <el-form-item label="已删除" prop="clpDelete">
         <el-input
           v-model="queryParams.clpDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -95,7 +95,7 @@
       <el-table-column label="对应关系编码" align="center" prop="clpCode" />
       <el-table-column label="客户等级" align="center" prop="cllCode" />
       <el-table-column label="优惠策略" align="center" prop="cpCode" />
-      <el-table-column label="已删除" align="center" prop="clpDelete" />
+      <!-- <el-table-column label="已删除" align="center" prop="clpDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -127,15 +127,12 @@
     <!-- 添加或修改关联-客户等级对应的优惠策略对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <!-- <el-form-item label="对应关系编码" prop="clpCode">
-          <el-input v-model="form.clpCode" placeholder="请输入对应关系编码" />
-        </el-form-item> -->
         <el-form-item label="客户等级" prop="cllCode">
-          <el-select v-model="form.cllCode" placehoder="请选择客户等级">
+          <el-select v-model="form.cllCode" placeholder="请选择客户等级">
             <el-option
              v-for="option in clientLevelList"
              :key="option.cllCode"
-             :label="option.cllName"
+             :label="option.cllLabel"
              :value="option.cllCode">
             </el-option>
           </el-select>
@@ -199,7 +196,7 @@ export default {
         clpCode: undefined,
         cllCode: undefined,
         cpCode: undefined,
-        clpDelete: undefined,
+        clpDelete: 0,
       },
       // 表单参数
       form: {},
@@ -207,9 +204,6 @@ export default {
       rules: {
         clpId: [
           { required: true, message: "对应关系ID不能为空", trigger: "blur" }
-        ],
-        clpCode: [
-          { required: true, message: "对应关系编码不能为空", trigger: "blur" }
         ],
         cllCode: [
           { required: true, message: "客户等级不能为空", trigger: "blur" }
@@ -290,7 +284,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加关联-客户等级对应的优惠策略";
+      this.title = "添加客户等级对应的优惠策略";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -301,7 +295,7 @@ export default {
         this.loading = false;
         this.form = response.data;
         this.open = true;
-        this.title = "修改关联-客户等级对应的优惠策略";
+        this.title = "修改客户等级对应的优惠策略";
       });
     },
     /** 提交按钮 */
@@ -332,7 +326,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const clpIds = row.clpId || this.ids;
-      this.$modal.confirm('是否确认删除关联-客户等级对应的优惠策略编号为"' + clpIds + '"的数据项？').then(() => {
+      this.$modal.confirm('是否确认删除客户等级对应的优惠策略编号为"' + clpIds + '"的数据项？').then(() => {
         this.loading = true;
         return delClientLevelPreferential(clpIds);
       }).then(() => {

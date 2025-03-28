@@ -1,16 +1,19 @@
 <template>
   <div class="app-container">
+    <!-- 顶部提示 -->
+    <el-alert
+      v-show="hint.length > 0"
+      :title="`正在根据${hint}筛选客户等级对应的优惠策略`"
+      type="info"
+      show-icon
+      :closable="false"
+      class="mb8"
+    >
+    </el-alert>
+
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <!-- <el-form-item label="对应关系编码" prop="clpCode">
-        <el-input
-          v-model="queryParams.clpCode"
-          placeholder="请输入对应关系编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item> -->
       <el-form-item label="客户等级" prop="cllCode">
-       <el-select v-model="queryParams.cllCode" placeholder="请输入客户等级" clearable>
+       <el-select v-model="queryParams.cllCode" placeholder="请输入客户等级" clearable :disabled="mode === 1">
         <el-option
          v-for="option in clientLevelList"
           :key="option.cllCode"
@@ -128,7 +131,7 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="客户等级" prop="cllCode">
-          <el-select v-model="form.cllCode" placeholder="请选择客户等级">
+          <el-select v-model="form.cllCode" placeholder="请选择客户等级" :disabled="mode === 1">
             <el-option
              v-for="option in clientLevelList"
              :key="option.cllCode"
@@ -194,7 +197,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         clpCode: undefined,
-        cllCode: undefined,
+        cllCode: this.$route.query.cllCode,
         cpCode: undefined,
         clpDelete: 0,
       },
@@ -214,19 +217,33 @@ export default {
         clpDelete: [
           { required: true, message: "已删除不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 1-按客户等级查看优惠策略
+      // 2-按优惠策略查看客户等级
+      mode: 0,
+      // 顶部提示文本
+      hint: ''
     };
   },
   async created() {
+    // 检查来源
+    if (this.$route.query.cllCode) {
+      this.mode = 1
+    }
     this.getList();
     await this.getClientLevelList();
     await this.getClientPreferentialList();
   },
   methods: {
-    //查询用户列表
+    //查询客户列表
     getClientLevelList() {
       listClientLevel().then(response => {
-        this.clientLevelList = response.rows; 
+        this.clientLevelList = response.rows;
+        if (this.mode === 1) {
+          this.hint = "客户等级 "
+          this.hint += response.rows.find(ele => ele.cllCode === this.$route.query.cllCode).cllLabel
+          this.hint += " "
+        }
       });
     },
     //查询优惠政策列表
@@ -283,6 +300,9 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      if (this.mode === 1) {
+        this.form.cllCode = this.$route.query.cllCode
+      }
       this.open = true;
       this.title = "添加客户等级对应的优惠策略";
     },

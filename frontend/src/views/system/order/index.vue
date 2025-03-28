@@ -17,12 +17,19 @@
         </el-select>
       </el-form-item>
       <el-form-item label="客户" prop="clCode">
-        <el-input
+        <el-select
           v-model="queryParams.clCode"
-          placeholder="请输入客户"
+          placeholder="请选择客户"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="item in clientList"
+            :key="item.clCode"
+            :label="item.clName"
+            :value="item.clCode"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="订单名称" prop="orName">
         <el-input
@@ -131,9 +138,13 @@
           {{ productList.find(ele => ele.maCode === scope.row.maCode).maName || '' }}
         </template>
       </el-table-column>
-      <el-table-column label="客户" align="center" prop="clCode" />
+      <el-table-column label="客户" align="center" prop="clCode">
+        <template slot-scope="scope">
+          {{ clientList.find(ele => ele.clCode === scope.row.clCode).clName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="订单名称" align="center" prop="orName" />
-      <el-table-column label="状态代码" align="center" prop="orStat">
+      <el-table-column label="状态" align="center" prop="orStat">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_order_status" :value="scope.row.orStat"/>
         </template>
@@ -218,7 +229,19 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="客户" prop="clCode">
-            <el-input v-model="form.clCode" placeholder="请输入客户" />
+            <el-select
+              v-model="form.clCode"
+              placeholder="请选择客户"
+              clearable
+            >
+              <el-option
+                v-for="item in clientList"
+                :key="item.clCode"
+                :label="item.clName"
+                :value="item.clCode"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -278,6 +301,7 @@
 <script>
 import { listOrder, getOrder, delOrder, addOrder, updateOrder } from "@/api/system/order";
 import { listMaterial } from "@/api/system/material";
+import { listClient } from "@/api/system/client";
 
 export default {
   name: "Order",
@@ -328,6 +352,9 @@ export default {
         maCode: [
           { required: true, message: "所需产品不能为空", trigger: "blur" }
         ],
+        clCode: [
+          { required: true, message: "客户不能为空", trigger: "blur" }
+        ],
         orName: [
           { required: true, message: "订单名称不能为空", trigger: "blur" }
         ],
@@ -351,14 +378,23 @@ export default {
         ],
       },
       // 产品列表
-      productList: []
+      productList: [],
+      // 客户列表
+      clientList: []
     };
   },
   async created() {
     await this.getProductList();
+    await this.getClientList();
     this.getList();
   },
   methods: {
+    // 查询客户列表
+    getClientList() {
+      listClient().then(response => {
+        this.clientList = response.rows
+      })
+    },
     // 查询产品列表
     getProductList() {
       listMaterial({ maType: '2' }).then(response => {

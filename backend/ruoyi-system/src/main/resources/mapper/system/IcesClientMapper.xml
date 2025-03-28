@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.IcesClientMapper">
+
+    <resultMap type="com.ruoyi.system.domain.IcesClient" id="IcesClientResult">
+        <result property="clId" column="cl_id"/>
+        <result property="clCode" column="cl_code"/>
+        <result property="cllCode" column="cll_code"/>
+        <result property="clOperator" column="cl_operator"/>
+        <result property="clName" column="cl_name"/>
+        <result property="clNameEn" column="cl_name_en"/>
+        <result property="clLegalRepres" column="cl_legal_repres"/>
+        <result property="clContact" column="cl_contact"/>
+        <result property="clPhone1" column="cl_phone1"/>
+        <result property="clPhone2" column="cl_phone2"/>
+        <result property="clFax" column="cl_fax"/>
+        <result property="clPostcode" column="cl_postcode"/>
+        <result property="clAddr" column="cl_addr"/>
+        <result property="clType" column="cl_type"/>
+        <result property="clCreditRank" column="cl_credit_rank"/>
+        <result property="clCreditQuota" column="cl_credit_quota"/>
+        <result property="clRegisterCaptial" column="cl_register_captial"/>
+        <result property="clRegisterNo" column="cl_register_no"/>
+        <result property="clBankNum" column="cl_bank_num"/>
+        <result property="clBank" column="cl_bank"/>
+        <result property="clWebsite" column="cl_website"/>
+        <result property="clRegisterDate" column="cl_register_date"/>
+        <result property="clStat" column="cl_stat"/>
+        <result property="clDelete" column="cl_delete"/>
+        <result property="clDesc" column="cl_desc"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

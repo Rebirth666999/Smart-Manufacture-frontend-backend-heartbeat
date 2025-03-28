@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.IcesClientLevelPreferentialMapper">
+
+    <resultMap type="com.ruoyi.system.domain.IcesClientLevelPreferential" id="IcesClientLevelPreferentialResult">
+        <result property="clpId" column="clp_id"/>
+        <result property="clpCode" column="clp_code"/>
+        <result property="cllCode" column="cll_code"/>
+        <result property="cpCode" column="cp_code"/>
+        <result property="clpDelete" column="clp_delete"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

@@ -10,12 +10,19 @@
         />
       </el-form-item>
       <el-form-item label="业务员ID" prop="clOperator">
-        <el-input
+        <el-select
           v-model="queryParams.clOperator"
-          placeholder="请输入业务员ID"
+          placeholder="请选择业务员"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="item in userList"
+            :key="item.userId"
+            :label="item.userName"
+            :value="item.userId"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="客户名称" prop="clName">
         <el-input
@@ -100,7 +107,11 @@
       <el-table-column label="基本信息ID" align="center" prop="clId" v-if="true"/>
       <el-table-column label="客户编码" align="center" prop="clCode" />
       <el-table-column label="客户等级" align="center" prop="cllCode" />
-      <el-table-column label="业务员ID" align="center" prop="clOperator" />
+      <el-table-column label="业务员" align="center" prop="clOperator">
+        <template slot-scope="scope">
+          {{ scope.row.clOperator && (userList.find(ele => ele.userId === scope.row.clOperator).userName || '') }}
+        </template>
+      </el-table-column>
       <el-table-column label="客户名称(中)" align="center" prop="clName" />
       <el-table-column label="客户名称(英)" align="center" prop="clNameEn" />
       <!-- <el-table-column label="法人代表" align="center" prop="clLegalRepres" /> -->
@@ -167,9 +178,19 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="业务员ID" prop="clOperator">
-            <el-input v-model="form.clOperator" placeholder="请输入业务员ID" />
-          </el-form-item>
+          <el-select
+            v-model="form.clOperator"
+            placeholder="请选择业务员"
+            clearable
+          >
+            <el-option
+              v-for="item in userList"
+              :key="item.userId"
+              :label="item.userName"
+              :value="item.userId"
+            >
+            </el-option>
+          </el-select>
         </el-col>
         <el-col :span="12">
           <el-form-item label="客户名称(中)" prop="clName">
@@ -294,6 +315,7 @@
 
 <script>
 import { listClient, getClient, delClient, addClient, updateClient } from "@/api/system/client";
+import { listUser } from "@/api/system/user";
 
 export default {
   name: "Client",
@@ -341,18 +363,26 @@ export default {
           { required: true, message: "客户等级不能为空", trigger: "blur" }
         ],
         clName: [
-          { required: true, message: "客户名称(中)不能为空", trigger: "blur" }
+          { required: true, message: "客户名称不能为空", trigger: "blur" }
         ],
         clStat: [
           { required: true, message: "状态不能为空", trigger: "change" }
         ],
-      }
+      },
+      // 用户列表
+      userList: []
     };
   },
-  created() {
+  async created() {
+    await this.getUserList();
     this.getList();
   },
   methods: {
+    getUserList() {
+      listUser().then(response => {
+        this.userList = response.rows;
+      })
+    },
     /** 查询客户基本信息列表 */
     getList() {
       this.loading = true;

@@ -2,14 +2,21 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="客户等级" prop="cllCode">
-        <el-input
+        <el-select
           v-model="queryParams.cllCode"
-          placeholder="请输入客户等级"
+          placeholder="请选择客户等级"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="item in clientLevelList"
+            :key="item.cllCode"
+            :label="item.cllLabel"
+            :value="item.cllCode"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
-      <el-form-item label="业务员ID" prop="clOperator">
+      <el-form-item label="业务员" prop="clOperator">
         <el-select
           v-model="queryParams.clOperator"
           placeholder="请选择业务员"
@@ -106,7 +113,11 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="基本信息ID" align="center" prop="clId" v-if="true"/>
       <el-table-column label="客户编码" align="center" prop="clCode" />
-      <el-table-column label="客户等级" align="center" prop="cllCode" />
+      <el-table-column label="客户等级" align="center" prop="cllCode">
+        <template slot-scope="scope">
+          {{ clientLevelList.find(ele => ele.cllCode === scope.row.cllCode).cllLabel || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="业务员" align="center" prop="clOperator">
         <template slot-scope="scope">
           {{ scope.row.clOperator && (userList.find(ele => ele.userId === scope.row.clOperator).userName || '') }}
@@ -174,23 +185,36 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-col :span="12">
           <el-form-item label="客户等级" prop="cllCode">
-            <el-input v-model="form.cllCode" placeholder="请输入客户等级" />
+            <el-select
+              v-model="form.cllCode"
+              placeholder="请选择客户等级"
+            >
+              <el-option
+                v-for="item in clientLevelList"
+                :key="item.cllCode"
+                :label="item.cllName"
+                :value="item.cllCode"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-select
-            v-model="form.clOperator"
-            placeholder="请选择业务员"
-            clearable
-          >
-            <el-option
-              v-for="item in userList"
-              :key="item.userId"
-              :label="item.userName"
-              :value="item.userId"
+          <el-form-item label="业务员" prop="clOperator">
+            <el-select
+              v-model="form.clOperator"
+              placeholder="请选择业务员"
+              clearable
             >
-            </el-option>
-          </el-select>
+              <el-option
+                v-for="item in userList"
+                :key="item.userId"
+                :label="item.userName"
+                :value="item.userId"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="客户名称(中)" prop="clName">
@@ -316,6 +340,7 @@
 <script>
 import { listClient, getClient, delClient, addClient, updateClient } from "@/api/system/client";
 import { listUser } from "@/api/system/user";
+import { listClientLevel } from "@/api/system/clientLevel";
 
 export default {
   name: "Client",
@@ -370,14 +395,24 @@ export default {
         ],
       },
       // 用户列表
-      userList: []
+      userList: [],
+      // 客户等级列表
+      clientLevelList: []
     };
   },
   async created() {
     await this.getUserList();
+    await this.getClientLevelList();
     this.getList();
   },
   methods: {
+    // 获取客户等级列表
+    getClientLevelList() {
+      listClientLevel().then(response => {
+        this.clientLevelList = response.rows;
+      })
+    },
+    // 获取用户列表用于业务员字段
     getUserList() {
       listUser().then(response => {
         this.userList = response.rows;

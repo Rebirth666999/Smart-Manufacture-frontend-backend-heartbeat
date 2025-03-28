@@ -97,6 +97,12 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-notebook-1"
+            @click="handlePreferential(scope.row)"
+          >优惠策略</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:clientLevel:remove']"
@@ -300,6 +306,10 @@ export default {
       this.download('system/clientLevel/export', {
         ...this.queryParams
       }, `clientLevel_${new Date().getTime()}.xlsx`)
+    },
+    // 查看对应的优惠策略
+    handlePreferential(row) {
+      this.$router.push(`/order/clientLevelPreferential?cllCode=${row.cllCode}`)
     }
   }
 };

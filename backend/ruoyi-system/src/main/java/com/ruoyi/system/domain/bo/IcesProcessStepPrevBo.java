@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import javax.validation.constraints.*;
 
 import java.util.Date;
+import java.util.List;
 
 import com.ruoyi.common.core.domain.BaseEntity;
 
@@ -57,4 +58,6 @@ public class IcesProcessStepPrevBo extends BaseEntity {
     private Long pspDelete;
 
 
+    public void setPsIds(List<Long> toDelete) {
+    }
 }

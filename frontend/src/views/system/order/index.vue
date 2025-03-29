@@ -1,28 +1,35 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="所需产品" prop="prId">
+      <el-form-item label="所需产品" prop="maCode">
         <el-select
-          v-model="queryParams.prId"
+          v-model="queryParams.maCode"
           placeholder="请选择产品"
           clearable
         >
           <el-option
             v-for="item in productList"
-            :key="item.prId"
-            :label="item.prName"
-            :value="item.prId"
+            :key="item.maCode"
+            :label="item.maName"
+            :value="item.maCode"
           >
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="客户" prop="clId">
-        <el-input
-          v-model="queryParams.clId"
-          placeholder="请输入客户"
+      <el-form-item label="客户" prop="clCode">
+        <el-select
+          v-model="queryParams.clCode"
+          placeholder="请选择客户"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="item in clientList"
+            :key="item.clCode"
+            :label="item.clName"
+            :value="item.clCode"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="订单名称" prop="orName">
         <el-input
@@ -125,14 +132,19 @@
     <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="订单ID" align="center" prop="orId" v-if="true"/>
-      <el-table-column label="所需产品" align="center" prop="prId">
+      <el-table-column label="订单编码" align="center" prop="orCode" />
+      <el-table-column label="所需产品" align="center" prop="maCode">
         <template slot-scope="scope">
-          {{ productList.find(ele => ele.prId === scope.row.prId).prName || '' }}
+          {{ productList.find(ele => ele.maCode === scope.row.maCode).maName || '' }}
         </template>
       </el-table-column>
-      <el-table-column label="客户" align="center" prop="clId" />
+      <el-table-column label="客户" align="center" prop="clCode">
+        <template slot-scope="scope">
+          {{ clientList.find(ele => ele.clCode === scope.row.clCode).clName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="订单名称" align="center" prop="orName" />
-      <el-table-column label="状态代码" align="center" prop="orStat">
+      <el-table-column label="状态" align="center" prop="orStat">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_order_status" :value="scope.row.orStat"/>
         </template>
@@ -197,48 +209,86 @@
     />
 
     <!-- 添加或修改订单对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="530px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
-        <el-form-item label="所需产品" prop="prId">
-          <el-select
-            v-model="form.prId"
-            placeholder="请选择产品"
-          >
-            <el-option
-              v-for="item in productList"
-              :key="item.prId"
-              :label="item.prName"
-              :value="item.prId"
+    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+        <el-col :span="12">
+          <el-form-item label="所需产品" prop="maCode">
+            <el-select
+              v-model="form.maCode"
+              placeholder="请选择产品"
             >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="客户" prop="clId">
-          <el-input v-model="form.clId" placeholder="请输入客户" />
-        </el-form-item>
-        <el-form-item label="订单名称" prop="orName">
-          <el-input v-model="form.orName" placeholder="请输入订单名称" />
-        </el-form-item>
-        <el-form-item label="所需产品数量" prop="orDemand">
-          <el-input v-model="form.orDemand" placeholder="请输入所需产品数量" />
-        </el-form-item>
-        <el-form-item label="订单优先级" prop="orPriority">
-          <el-input v-model="form.orPriority" placeholder="请输入订单优先级" />
-        </el-form-item>
-        <el-form-item label="截止时间" prop="orDeadline">
-          <el-date-picker clearable
-            v-model="form.orDeadline"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="请选择截止时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="总价" prop="orPrice">
-          <el-input v-model="form.orPrice" placeholder="请输入总价" />
-        </el-form-item>
-        <el-form-item label="描述" prop="orDesc">
-          <el-input v-model="form.orDesc" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
+              <el-option
+                v-for="item in productList"
+                :key="item.maCode"
+                :label="item.maName"
+                :value="item.maCode"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="客户" prop="clCode">
+            <el-select
+              v-model="form.clCode"
+              placeholder="请选择客户"
+              clearable
+            >
+              <el-option
+                v-for="item in clientList"
+                :key="item.clCode"
+                :label="item.clName"
+                :value="item.clCode"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="订单名称" prop="orName">
+            <el-input v-model="form.orName" placeholder="请输入订单名称" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="所需产品数量" prop="orDemand">
+            <el-input v-model="form.orDemand" placeholder="请输入所需产品数量" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="订单优先级" prop="orPriority">
+            <el-input v-model="form.orPriority" placeholder="请输入订单优先级" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="截止时间" prop="orDeadline">
+            <el-date-picker clearable
+              v-model="form.orDeadline"
+              type="datetime"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              placeholder="请选择截止时间">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="总价" prop="orPrice">
+            <el-input v-model="form.orPrice" placeholder="请输入总价" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="收货人" prop="orRecv">
+            <el-input v-model="form.orRecv" placeholder="请输入收货人" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="收货地址" prop="orAddr">
+            <el-input v-model="form.orAddr" type="textarea" placeholder="请输入收货地址" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="描述" prop="orDesc">
+            <el-input v-model="form.orDesc" type="textarea" placeholder="请输入内容" />
+          </el-form-item>
+        </el-col>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
@@ -250,7 +300,8 @@
 
 <script>
 import { listOrder, getOrder, delOrder, addOrder, updateOrder } from "@/api/system/order";
-import { listProduct } from "@/api/system/product";
+import { listMaterial } from "@/api/system/material";
+import { listClient } from "@/api/system/client";
 
 export default {
   name: "Order",
@@ -283,8 +334,8 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        prId: undefined,
-        clId: undefined,
+        maCode: undefined,
+        clCode: undefined,
         orName: undefined,
         orStat: undefined,
         orPriority: undefined,
@@ -298,8 +349,11 @@ export default {
         orId: [
           { required: true, message: "订单ID不能为空", trigger: "blur" }
         ],
-        prId: [
-          { required: true, message: "所需产品ID不能为空", trigger: "blur" }
+        maCode: [
+          { required: true, message: "所需产品不能为空", trigger: "blur" }
+        ],
+        clCode: [
+          { required: true, message: "客户不能为空", trigger: "blur" }
         ],
         orName: [
           { required: true, message: "订单名称不能为空", trigger: "blur" }
@@ -316,19 +370,34 @@ export default {
         orPrice: [
           { required: true, message: "总价不能为空", trigger: "blur" }
         ],
+        orRecv: [
+          { required: true, message: "收货人不能为空", trigger: "blur" }
+        ],
+        orAddr: [
+          { required: true, message: "收货地址不能为空", trigger: "blur" }
+        ],
       },
       // 产品列表
-      productList: []
+      productList: [],
+      // 客户列表
+      clientList: []
     };
   },
   async created() {
     await this.getProductList();
+    await this.getClientList();
     this.getList();
   },
   methods: {
+    // 查询客户列表
+    getClientList() {
+      listClient().then(response => {
+        this.clientList = response.rows
+      })
+    },
     // 查询产品列表
     getProductList() {
-      listProduct().then(response => {
+      listMaterial({ maType: '2' }).then(response => {
         this.productList = response.rows
       })
     },
@@ -355,14 +424,16 @@ export default {
     reset() {
       this.form = {
         orId: undefined,
-        prId: undefined,
-        clId: undefined,
+        maCode: undefined,
+        clCode: undefined,
         orName: undefined,
         orStat: undefined,
         orDemand: undefined,
         orPriority: undefined,
         orDeadline: undefined,
         orPrice: undefined,
+        orRecv: undefined,
+        orAddr: undefined,
         orDelete: undefined,
         orDesc: undefined,
         createBy: undefined,
@@ -513,3 +584,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

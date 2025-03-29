@@ -12,26 +12,26 @@
     </el-alert>
 
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="模型操作" prop="moId">
-        <el-select v-model="queryParams.moId" placeholder="请选择模型操作" 
+      <el-form-item label="模型操作" prop="moCode">
+        <el-select v-model="queryParams.moCode" placeholder="请选择模型操作" 
         @keyup.enter.native="handleQuery" clearable>
           <el-option
             v-for="item in modelOperationList"
-            :key="item.moId"
+            :key="item.moCode"
             :label="item.moName"
-            :value="item.moId"
+            :value="item.moCode"
           >
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="设备" prop="eqId">
-        <el-select v-model="queryParams.eqId" placeholder="请选择设备" 
+      <el-form-item label="设备" prop="eqCode">
+        <el-select v-model="queryParams.eqCode" placeholder="请选择设备" 
         @keyup.enter.native="handleQuery" :disabled="mode !== 0" clearable>
           <el-option
             v-for="item in equipmentList"
-            :key="item.eqId"
+            :key="item.eqCode"
             :label="item.eqName"
-            :value="item.eqId"
+            :value="item.eqCode"
           >
           </el-option>
         </el-select>
@@ -102,14 +102,15 @@
     <el-table v-loading="loading" :data="equipmentOperationList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="设备操作ID" align="center" prop="eoId" v-if="true"/>
-      <el-table-column label="对应模型操作" align="center" prop="moId">
+      <el-table-column label="设备操作编码" align="center" prop="eoCode" />
+      <el-table-column label="对应模型操作" align="center" prop="moCode">
         <template slot-scope="scope">
-          {{ modelOperationList.find(ele => ele.moId === scope.row.moId).moName || '' }}
+          {{ modelOperationList.find(ele => ele.moCode === scope.row.moCode).moName || '' }}
         </template>
       </el-table-column>
-      <el-table-column label="所属设备" align="center" prop="eqId">
+      <el-table-column label="所属设备" align="center" prop="eqCode">
         <template slot-scope="scope">
-          {{ equipmentList.find(ele => ele.eqId === scope.row.eqId).eqName || '' }}
+          {{ equipmentList.find(ele => ele.eqCode === scope.row.eqCode).eqName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="名称" align="center" prop="eoName" />
@@ -162,25 +163,25 @@
     <!-- 添加或修改设备操作对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="模型操作" prop="moId">
-          <el-select v-model="form.moId" placeholder="请选择模型操作">
+        <el-form-item label="模型操作" prop="moCode">
+          <el-select v-model="form.moCode" placeholder="请选择模型操作">
             <el-option
               v-for="item in modelOperationList"
-              :key="item.moId"
+              :key="item.moCode"
               :label="item.moName"
-              :value="item.moId"
+              :value="item.moCode"
             >
           </el-option>
         </el-select>
         </el-form-item>
-        <el-form-item label="设备" prop="eqId">
-          <el-select v-model="form.eqId" placeholder="请选择设备" 
+        <el-form-item label="设备" prop="eqCode">
+          <el-select v-model="form.eqCode" placeholder="请选择设备" 
           :disabled="mode !== 0">
             <el-option
               v-for="item in equipmentList"
-              :key="item.eqId"
+              :key="item.eqCode"
               :label="item.eqName"
-              :value="item.eqId"
+              :value="item.eqCode"
             >
             </el-option>
           </el-select>
@@ -270,8 +271,8 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        moId: undefined,
-        eqId: this.$route.query.eqId,
+        moCode: undefined,
+        eqCode: this.$route.query.eqCode,
         eoDelete: 0,
       },
       // 表单参数
@@ -281,11 +282,11 @@ export default {
         eoId: [
           { required: true, message: "设备操作ID不能为空", trigger: "blur" }
         ],
-        moId: [
-          { required: true, message: "对应模型操作ID不能为空", trigger: "blur" }
+        moCode: [
+          { required: true, message: "对应模型操作不能为空", trigger: "blur" }
         ],
-        eqId: [
-          { required: true, message: "所属设备ID不能为空", trigger: "blur" }
+        eqCode: [
+          { required: true, message: "所属设备不能为空", trigger: "blur" }
         ],
         eoName: [
           { required: true, message: "操作名称不能为空", trigger: "blur" }
@@ -326,7 +327,7 @@ export default {
   },
   created() {
     // 检查来源
-    if (this.$route.query.eqId) {
+    if (this.$route.query.eqCode) {
       this.mode = 1;
     } else {
       this.$modal.msgError("请重新进入此页面");
@@ -339,12 +340,12 @@ export default {
     getExtraList() {
       listEquipment().then(response => {
         this.equipmentList = response.rows;
-        let equipment = response.rows.find(ele => ele.eqId === this.$route.query.eqId)
+        let equipment = response.rows.find(ele => ele.eqCode === this.$route.query.eqCode)
         // 获取设备所属设备模型的模型操作
         listModelOperation({ emId: equipment.emId, moDelete: 0 }).then(response => {
           this.modelOperationList = response.rows;
           // 获取设备的原子操作
-          listEquipmentAtomOperation({ eqId: equipment.eqId, moDelete: 0 }).then(response => {
+          listEquipmentAtomOperation({ eqCode: equipment.eqCode, moDelete: 0 }).then(response => {
             this.atomOperationList = response.rows;
             this.getList();
           })
@@ -379,8 +380,8 @@ export default {
     reset() {
       this.form = {
         eoId: undefined,
-        moId: undefined,
-        eqId: undefined,
+        moCode: undefined,
+        eqCode: undefined,
         eoName: undefined,
         eoExecTime: undefined,
         eoDelete: undefined,
@@ -412,7 +413,7 @@ export default {
     handleAdd() {
       this.reset();
       if (this.mode === 1) {
-        this.form.eqId = this.$route.query.eqId
+        this.form.eqCode = this.$route.query.eqCode
       }
       this.open = true;
       this.title = "添加设备操作";
@@ -528,3 +529,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

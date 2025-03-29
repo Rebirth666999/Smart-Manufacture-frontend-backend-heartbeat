@@ -10,10 +10,10 @@ import java.util.Date;
 
 
 /**
- * 原料视图对象 ices_material
+ * 物料视图对象 ices_material
  *
  * @author ruoyi
- * @date 2025-02-07
+ * @date 2025-03-26
  */
 @Data
 @ExcelIgnoreUnannotated
@@ -22,34 +22,41 @@ public class IcesMaterialVo {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 原料ID
+     * 物料ID
      */
-    @ExcelProperty(value = "原料ID")
+    @ExcelProperty(value = "物料ID")
     private Long maId;
 
     /**
-     * 原料名称
+     * 物料编码
      */
-    @ExcelProperty(value = "原料名称")
+    @ExcelProperty(value = "物料编码")
+    private String maCode;
+
+    /**
+     * 物料名称
+     */
+    @ExcelProperty(value = "物料名称")
     private String maName;
+
+    /**
+     * 物料类型
+     */
+    @ExcelProperty(value = "物料类型", converter = ExcelDictConvert.class)
+    @ExcelDictFormat(dictType = "ices_material_type")
+    private String maType;
+
+    /**
+     * 占用货位数量
+     */
+    @ExcelProperty(value = "占用货位数量")
+    private Float maOccupy;
 
     /**
      * 已删除
      */
     @ExcelProperty(value = "已删除")
     private Long maDelete;
-
-    /**
-     * 创建时间
-     */
-    @ExcelProperty(value = "创建时间")
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    @ExcelProperty(value = "更新时间")
-    private Date updateTime;
 
     /**
      * 描述

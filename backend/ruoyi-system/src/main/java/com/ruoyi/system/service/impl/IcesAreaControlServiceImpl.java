@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesAreaControlBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesAreaControlServiceImpl implements IIcesAreaControlService {
 
     private final IcesAreaControlMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询主控节点
@@ -61,7 +63,8 @@ public class IcesAreaControlServiceImpl implements IIcesAreaControlService {
     private LambdaQueryWrapper<IcesAreaControl> buildQueryWrapper(IcesAreaControlBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesAreaControl> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getArId() != null, IcesAreaControl::getArId, bo.getArId());
+        lqw.eq(StringUtils.isNotBlank(bo.getAcCode()), IcesAreaControl::getAcCode, bo.getAcCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getArCode()), IcesAreaControl::getArCode, bo.getArCode());
         lqw.like(StringUtils.isNotBlank(bo.getAcName()), IcesAreaControl::getAcName, bo.getAcName());
         lqw.eq(StringUtils.isNotBlank(bo.getAcIp()), IcesAreaControl::getAcIp, bo.getAcIp());
         lqw.eq(bo.getAcDelete() != null, IcesAreaControl::getAcDelete, bo.getAcDelete());
@@ -73,6 +76,7 @@ public class IcesAreaControlServiceImpl implements IIcesAreaControlService {
      */
     @Override
     public Boolean insertByBo(IcesAreaControlBo bo) {
+        bo.setAcCode(codeService.insertByType("AreaControl"));
         IcesAreaControl add = BeanUtil.toBean(bo, IcesAreaControl.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

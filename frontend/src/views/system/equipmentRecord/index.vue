@@ -12,14 +12,14 @@
     </el-alert>
     
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="设备" prop="eqId">
-        <el-select v-model="queryParams.eqId" placeholder="请选择设备" 
+      <el-form-item label="设备" prop="eqCode">
+        <el-select v-model="queryParams.eqCode" placeholder="请选择设备" 
         @keyup.enter.native="handleQuery" :disabled="mode === 1" clearable>
           <el-option
             v-for="item in equipmentList"
-            :key="item.eqId"
+            :key="item.eqCode"
             :label="item.eqName"
-            :value="item.eqId"
+            :value="item.eqCode"
           >
           </el-option>
         </el-select>
@@ -119,9 +119,10 @@
     <el-table v-loading="loading" :data="equipmentRecordList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="事件日志ID" align="center" prop="erId" v-if="true"/>
-      <el-table-column label="关联设备" align="center" prop="eqId">
+      <el-table-column label="事件日志编码" align="center" prop="erCode"/>
+      <el-table-column label="关联设备" align="center" prop="eqCode">
         <template slot-scope="scope">
-          {{ equipmentList.find(ele => ele.eqId === scope.row.eqId).eqName || '' }}
+          {{ equipmentList.find(ele => ele.eqCode === scope.row.eqCode).eqName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="事件类型" align="center" prop="erType">
@@ -224,7 +225,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        eqId: this.$route.query.eqId,
+        eqCode: this.$route.query.eqCode,
         erType: undefined,
         erStat: undefined,
         erBegin: undefined,
@@ -237,8 +238,8 @@ export default {
         erId: [
           { required: true, message: "事件日志ID不能为空", trigger: "blur" }
         ],
-        eqId: [
-          { required: true, message: "关联设备ID不能为空", trigger: "change" }
+        eqCode: [
+          { required: true, message: "关联设备不能为空", trigger: "change" }
         ],
         erType: [
           { required: true, message: "事件类型代码不能为空", trigger: "change" }
@@ -263,7 +264,7 @@ export default {
   },
   async created() {
     // 检查来源
-    if (this.$route.query.eqId) {
+    if (this.$route.query.eqCode) {
       this.mode = 1
     }
     await this.getEquipmentList();
@@ -276,7 +277,7 @@ export default {
         this.equipmentList = response.rows;
         if (this.mode === 1) {
           this.hint = "设备 "
-          this.hint += response.rows.find(ele => ele.eqId === this.$route.query.eqId).eqName
+          this.hint += response.rows.find(ele => ele.eqCode === this.$route.query.eqCode).eqName
           this.hint += " "
         }
       });
@@ -304,7 +305,7 @@ export default {
     reset() {
       this.form = {
         erId: undefined,
-        eqId: undefined,
+        eqCode: undefined,
         erType: undefined,
         erStat: undefined,
         erLevel: undefined,
@@ -403,3 +404,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

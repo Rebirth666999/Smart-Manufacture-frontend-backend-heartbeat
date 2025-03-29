@@ -1,17 +1,17 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="所属生产任务ID" prop="mtId">
+      <el-form-item label="所属生产任务ID" prop="mtCode">
         <el-input
-          v-model="queryParams.mtId"
+          v-model="queryParams.mtCode"
           placeholder="请输入所属生产任务ID"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="设备操作ID" prop="eoId">
+      <el-form-item label="设备操作ID" prop="eoCode">
         <el-input
-          v-model="queryParams.eoId"
+          v-model="queryParams.eoCode"
           placeholder="请输入设备操作ID"
           clearable
           @keyup.enter.native="handleQuery"
@@ -90,8 +90,9 @@
     <el-table v-loading="loading" :data="deviceTaskList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="设备任务ID" align="center" prop="dtId" v-if="true"/>
-      <el-table-column label="所属生产任务ID" align="center" prop="mtId" />
-      <el-table-column label="设备操作ID" align="center" prop="eoId" />
+      <el-table-column label="设备任务编码" align="center" prop="dtCode" />
+      <el-table-column label="所属生产任务ID" align="center" prop="mtCode" />
+      <el-table-column label="设备操作ID" align="center" prop="eoCode" />
       <el-table-column label="状态代码" align="center" prop="dtStat">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_manufacture_task_status" :value="scope.row.dtStat"/>
@@ -140,11 +141,11 @@
     <!-- 添加或修改设备任务对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="所属生产任务ID" prop="mtId">
-          <el-input v-model="form.mtId" placeholder="请输入所属生产任务ID" />
+        <el-form-item label="所属生产任务ID" prop="mtCode">
+          <el-input v-model="form.mtCode" placeholder="请输入所属生产任务ID" />
         </el-form-item>
-        <el-form-item label="设备操作ID" prop="eoId">
-          <el-input v-model="form.eoId" placeholder="请输入设备操作ID" />
+        <el-form-item label="设备操作ID" prop="eoCode">
+          <el-input v-model="form.eoCode" placeholder="请输入设备操作ID" />
         </el-form-item>
         <el-form-item label="描述" prop="dtDesc">
           <el-input v-model="form.dtDesc" type="textarea" placeholder="请输入内容" />
@@ -190,8 +191,8 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        mtId: undefined,
-        eoId: undefined,
+        mtCode: undefined,
+        eoCode: undefined,
         dtStat: undefined,
         dtDelete: undefined,
       },
@@ -202,10 +203,10 @@ export default {
         dtId: [
           { required: true, message: "设备任务ID不能为空", trigger: "blur" }
         ],
-        mtId: [
+        mtCode: [
           { required: true, message: "所属生产任务ID不能为空", trigger: "blur" }
         ],
-        eoId: [
+        eoCode: [
           { required: true, message: "设备操作ID不能为空", trigger: "blur" }
         ],
       }
@@ -233,8 +234,8 @@ export default {
     reset() {
       this.form = {
         dtId: undefined,
-        mtId: undefined,
-        eoId: undefined,
+        mtCode: undefined,
+        eoCode: undefined,
         dtStat: undefined,
         dtBegin: undefined,
         dtEnd: undefined,
@@ -330,3 +331,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

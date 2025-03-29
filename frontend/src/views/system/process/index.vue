@@ -1,17 +1,17 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="目标产品" prop="prId">
+      <el-form-item label="目标产品" prop="maCode">
         <el-select
-          v-model="queryParams.prId"
+          v-model="queryParams.maCode"
           placeholder="请选择目标产品"
           clearable
         >
           <el-option
             v-for="item in productList"
-            :key="item.prId"
-            :label="item.prName"
-            :value="item.prId"
+            :key="item.maCode"
+            :label="item.maName"
+            :value="item.maCode"
           >
           </el-option>
         </el-select>
@@ -97,9 +97,10 @@
     <el-table v-loading="loading" :data="processList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="工艺流程ID" align="center" prop="procId" v-if="true"/>
-      <el-table-column label="目标产品" align="center" prop="prId">
+      <el-table-column label="工艺流程编码" align="center" prop="procCode" />
+      <el-table-column label="目标产品" align="center" prop="maCode">
         <template slot-scope="scope">
-          {{ productList.find(ele => ele.prId === scope.row.prId).prName || '' }}
+          {{ productList.find(ele => ele.maCode === scope.row.maCode).maName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="工艺流程名称" align="center" prop="procName" />
@@ -197,16 +198,16 @@
     <!-- 添加或修改工艺流程对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="目标产品" prop="prId">
+        <el-form-item label="目标产品" prop="maCode">
           <el-select
-            v-model="form.prId"
+            v-model="form.maCode"
             placeholder="请选择目标产品"
           >
             <el-option
               v-for="item in productList"
-              :key="item.prId"
-              :label="item.prName"
-              :value="item.prId"
+              :key="item.maCode"
+              :label="item.maName"
+              :value="item.maCode"
             >
             </el-option>
           </el-select>
@@ -255,7 +256,7 @@
 
 <script>
 import { listProcess, getProcess, delProcess, addProcess, updateProcess, saveModel, getBpmnXml } from "@/api/system/process";
-import { listProduct } from "@/api/system/product";
+import { listMaterial } from "@/api/system/material";
 import { listEquipmentModel } from "@/api/system/equipmentModel";
 import { listModelOperation } from "@/api/system/modelOperation";
 import ProcessDesigner from '@/components/ProcessDesigner';
@@ -295,7 +296,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        prId: undefined,
+        maCode: undefined,
         procName: undefined,
         procStat: undefined,
         procDelete: 0,
@@ -307,8 +308,8 @@ export default {
         procId: [
           { required: true, message: "工艺流程ID不能为空", trigger: "blur" }
         ],
-        prId: [
-          { required: true, message: "目标产品ID不能为空", trigger: "blur" }
+        maCode: [
+          { required: true, message: "目标产品不能为空", trigger: "blur" }
         ],
         procName: [
           { required: true, message: "工艺流程名称不能为空", trigger: "blur" }
@@ -352,7 +353,7 @@ export default {
   methods: {
     // 查询产品列表
     getProductList() {
-      listProduct().then(response => {
+      listMaterial({ maType: '2' }).then(response => {
         this.productList = response.rows
       })
     },
@@ -386,7 +387,7 @@ export default {
     reset() {
       this.form = {
         procId: undefined,
-        prId: undefined,
+        maCode: undefined,
         procName: undefined,
         procStat: undefined,
         procDelete: undefined,
@@ -482,7 +483,7 @@ export default {
     },
     // 查看工艺流程的原料需求
     handleProcessMaterialView(row) {
-      this.$router.push(`/processFlow/processMaterial?procId=${row.procId}`)
+      this.$router.push(`/processFlow/processMaterial?procCode=${row.procCode}`)
     },
     /** 设计按钮操作 */
     handleDesigner(row) {
@@ -628,3 +629,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

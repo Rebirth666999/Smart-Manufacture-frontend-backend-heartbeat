@@ -28,15 +28,20 @@ public class IcesEquipmentOperationStepBo extends BaseEntity {
     private Long eosId;
 
     /**
-     * 对应原子操作ID
+     * 操作步骤编码
      */
-    private Long eaoId;
+    private String eosCode;
 
     /**
-     * 所属设备操作ID
+     * 对应原子操作
      */
-    @NotNull(message = "所属设备操作ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long eoId;
+    private String eaoCode;
+
+    /**
+     * 所属设备操作
+     */
+    @NotBlank(message = "所属设备操作不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String eoCode;
 
     /**
      * 已删除

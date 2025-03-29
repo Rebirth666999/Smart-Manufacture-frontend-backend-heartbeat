@@ -6,8 +6,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="com.ruoyi.system.domain.IcesEquipmentOperationStepPrev" id="IcesEquipmentOperationStepPrevResult">
         <result property="eosprId" column="eospr_id"/>
-        <result property="eosIdCur" column="eos_id_cur"/>
-        <result property="eosIdPrev" column="eos_id_prev"/>
+        <result property="eosprCode" column="eospr_code"/>
+        <result property="eoCode" column="eo_code"/>
+        <result property="eosCodeCur" column="eos_code_cur"/>
+        <result property="eosCodePrev" column="eos_code_prev"/>
         <result property="eosprDelete" column="eospr_delete"/>
         <result property="createBy" column="create_by"/>
         <result property="updateBy" column="update_by"/>

@@ -28,10 +28,16 @@ public class IcesAreaControlVo {
     private Long acId;
 
     /**
-     * 所属车间ID
+     * 主控节点编码
      */
-    @ExcelProperty(value = "所属车间ID")
-    private Long arId;
+    @ExcelProperty(value = "主控节点编码")
+    private String acCode;
+
+    /**
+     * 所属车间
+     */
+    @ExcelProperty(value = "所属车间")
+    private String arCode;
 
     /**
      * 名称

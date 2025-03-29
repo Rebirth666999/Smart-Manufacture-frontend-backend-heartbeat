@@ -30,13 +30,17 @@ public class IcesManufacturePlan extends BaseEntity {
     @TableId(value = "mp_id")
     private Long mpId;
     /**
-     * 所属订单ID
+     * 生产计划编码
      */
-    private Long orId;
+    private String mpCode;
     /**
-     * 采用工艺流程ID
+     * 所属订单
      */
-    private Long procId;
+    private String orCode;
+    /**
+     * 采用工艺流程
+     */
+    private String procCode;
     /**
      * 状态代码
      */
@@ -60,11 +64,11 @@ public class IcesManufacturePlan extends BaseEntity {
     /**
      * 计划产品数量
      */
-    private Long mpQtyPlan;
+    private Float mpQtyPlan;
     /**
      * 已完成产品数量
      */
-    private Long mpQtyReal;
+    private Float mpQtyReal;
     /**
      * 已删除
      */

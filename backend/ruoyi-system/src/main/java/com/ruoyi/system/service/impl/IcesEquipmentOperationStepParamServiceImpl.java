@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesEquipmentOperationStepParamBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesEquipmentOperationStepParamServiceImpl implements IIcesEquipmentOperationStepParamService {
 
     private final IcesEquipmentOperationStepParamMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询设备操作步骤参数
@@ -61,8 +63,9 @@ public class IcesEquipmentOperationStepParamServiceImpl implements IIcesEquipmen
     private LambdaQueryWrapper<IcesEquipmentOperationStepParam> buildQueryWrapper(IcesEquipmentOperationStepParamBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesEquipmentOperationStepParam> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getEosId() != null, IcesEquipmentOperationStepParam::getEosId, bo.getEosId());
-        lqw.eq(bo.getEospaIdParent() != null, IcesEquipmentOperationStepParam::getEospaIdParent, bo.getEospaIdParent());
+        lqw.eq(StringUtils.isNotBlank(bo.getEospaCode()), IcesEquipmentOperationStepParam::getEospaCode, bo.getEospaCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getEosCode()), IcesEquipmentOperationStepParam::getEosCode, bo.getEosCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getEospaCodeParent()), IcesEquipmentOperationStepParam::getEospaCodeParent, bo.getEospaCodeParent());
         lqw.eq(StringUtils.isNotBlank(bo.getEospaType()), IcesEquipmentOperationStepParam::getEospaType, bo.getEospaType());
         lqw.eq(StringUtils.isNotBlank(bo.getEospaPos()), IcesEquipmentOperationStepParam::getEospaPos, bo.getEospaPos());
         lqw.eq(bo.getEospaDelete() != null, IcesEquipmentOperationStepParam::getEospaDelete, bo.getEospaDelete());
@@ -74,6 +77,7 @@ public class IcesEquipmentOperationStepParamServiceImpl implements IIcesEquipmen
      */
     @Override
     public Boolean insertByBo(IcesEquipmentOperationStepParamBo bo) {
+        bo.setEospaCode(codeService.insertByType("EquipmentOperationStepParam"));
         IcesEquipmentOperationStepParam add = BeanUtil.toBean(bo, IcesEquipmentOperationStepParam.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

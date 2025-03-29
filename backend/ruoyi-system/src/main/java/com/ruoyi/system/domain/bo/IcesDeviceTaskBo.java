@@ -30,22 +30,27 @@ public class IcesDeviceTaskBo extends BaseEntity {
     private Long dtId;
 
     /**
-     * 设备ID
+     * 设备任务编码
      */
-    @NotNull(message = "设备ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long eqId;
+    private String dtCode;
 
     /**
-     * 所属生产任务ID
+     * 设备
      */
-    @NotNull(message = "所属生产任务ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long mtId;
+    @NotBlank(message = "设备不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String eqCode;
 
     /**
-     * 设备操作ID
+     * 所属生产任务
      */
-    @NotNull(message = "设备操作ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long eoId;
+    @NotBlank(message = "所属生产任务不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String mtCode;
+
+    /**
+     * 设备操作
+     */
+    @NotBlank(message = "设备操作不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String eoCode;
 
     /**
      * 状态代码

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.IcesDeviceTaskPrevMapper">
+
+    <resultMap type="com.ruoyi.system.domain.IcesDeviceTaskPrev" id="IcesDeviceTaskPrevResult">
+        <result property="dtprId" column="dtpr_id"/>
+        <result property="dtprCode" column="dtpr_code"/>
+        <result property="mtCode" column="mt_code"/>
+        <result property="dtCodeCur" column="dt_code_cur"/>
+        <result property="dtCodePrev" column="dt_code_prev"/>
+        <result property="dtprDelete" column="dtpr_delete"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

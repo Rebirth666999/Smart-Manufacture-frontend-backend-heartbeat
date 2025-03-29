@@ -6,7 +6,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="com.ruoyi.system.domain.IcesMaterial" id="IcesMaterialResult">
         <result property="maId" column="ma_id"/>
+        <result property="maCode" column="ma_code"/>
         <result property="maName" column="ma_name"/>
+        <result property="maType" column="ma_type"/>
+        <result property="maOccupy" column="ma_occupy"/>
         <result property="maDelete" column="ma_delete"/>
         <result property="maDesc" column="ma_desc"/>
         <result property="createBy" column="create_by"/>

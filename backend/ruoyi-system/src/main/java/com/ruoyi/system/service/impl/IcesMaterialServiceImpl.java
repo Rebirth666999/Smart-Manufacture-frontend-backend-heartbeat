@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesMaterialBo;
@@ -20,19 +21,20 @@ import java.util.Map;
 import java.util.Collection;
 
 /**
- * 原料Service业务层处理
+ * 物料Service业务层处理
  *
  * @author ruoyi
- * @date 2025-02-07
+ * @date 2025-03-26
  */
 @RequiredArgsConstructor
 @Service
 public class IcesMaterialServiceImpl implements IIcesMaterialService {
 
     private final IcesMaterialMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
-     * 查询原料
+     * 查询物料
      */
     @Override
     public IcesMaterialVo queryById(Long maId){
@@ -40,7 +42,7 @@ public class IcesMaterialServiceImpl implements IIcesMaterialService {
     }
 
     /**
-     * 查询原料列表
+     * 查询物料列表
      */
     @Override
     public TableDataInfo<IcesMaterialVo> queryPageList(IcesMaterialBo bo, PageQuery pageQuery) {
@@ -50,7 +52,7 @@ public class IcesMaterialServiceImpl implements IIcesMaterialService {
     }
 
     /**
-     * 查询原料列表
+     * 查询物料列表
      */
     @Override
     public List<IcesMaterialVo> queryList(IcesMaterialBo bo) {
@@ -61,16 +63,19 @@ public class IcesMaterialServiceImpl implements IIcesMaterialService {
     private LambdaQueryWrapper<IcesMaterial> buildQueryWrapper(IcesMaterialBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesMaterial> lqw = Wrappers.lambdaQuery();
+        lqw.eq(StringUtils.isNotBlank(bo.getMaCode()), IcesMaterial::getMaCode, bo.getMaCode());
         lqw.like(StringUtils.isNotBlank(bo.getMaName()), IcesMaterial::getMaName, bo.getMaName());
+        lqw.eq(StringUtils.isNotBlank(bo.getMaType()), IcesMaterial::getMaType, bo.getMaType());
         lqw.eq(bo.getMaDelete() != null, IcesMaterial::getMaDelete, bo.getMaDelete());
         return lqw;
     }
 
     /**
-     * 新增原料
+     * 新增物料
      */
     @Override
     public Boolean insertByBo(IcesMaterialBo bo) {
+        bo.setMaCode(codeService.insertByType("Material"));
         IcesMaterial add = BeanUtil.toBean(bo, IcesMaterial.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
@@ -81,7 +86,7 @@ public class IcesMaterialServiceImpl implements IIcesMaterialService {
     }
 
     /**
-     * 修改原料
+     * 修改物料
      */
     @Override
     public Boolean updateByBo(IcesMaterialBo bo) {
@@ -98,7 +103,7 @@ public class IcesMaterialServiceImpl implements IIcesMaterialService {
     }
 
     /**
-     * 批量删除原料
+     * 批量删除物料
      */
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {

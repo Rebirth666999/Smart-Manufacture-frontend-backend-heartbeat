@@ -5,33 +5,33 @@
       <div class="element-property__value">
         <el-select
           size="mini"
-          v-model="emId"
+          v-model="emCode"
           @change="updateEquipmentModel"
           @blur="updateEquipmentModel"
         >
           <el-option
             v-for="item in emList.filter((ele) => ele.emStat === '4')"
-            :key="item.emId"
+            :key="item.emCode"
             :label="item.emName"
-            :value="item.emId"
+            :value="item.emCode"
           ></el-option>
         </el-select>
       </div>
     </div>
-    <div class="element-property input-property" v-show="emId">
+    <div class="element-property input-property" v-show="emCode">
       <div class="element-property__label">模型操作：</div>
       <div class="element-property__value">
         <el-select
           size="mini"
-          v-model="moId"
+          v-model="moCode"
           @change="updateModelOperation"
           @blur="updateModelOperation"
         >
           <el-option
-            v-for="item in moList.filter((ele) => ele.emId === emId)"
-            :key="item.moId"
+            v-for="item in moList.filter((ele) => ele.emCode === emCode)"
+            :key="item.moCode"
             :label="item.moName"
-            :value="item.moId"
+            :value="item.moCode"
           ></el-option>
         </el-select>
       </div>
@@ -82,8 +82,8 @@ export default {
   },
   data() {
     return {
-      emId: '',
-      moId: '',
+      emCode: '',
+      moCode: '',
       psDesc: '',
       prev: [],
       elements: []
@@ -94,10 +94,10 @@ export default {
     id: {
       immediate: true,
       handler: function(id) {
-        this.emId = window.bpmnInstances.bpmnElement.businessObject.$attrs.emId || ''
-        this.moId = window.bpmnInstances.bpmnElement.businessObject.$attrs.moId || ''
+        this.emCode = window.bpmnInstances.bpmnElement.businessObject.$attrs.emCode || ''
+        this.moCode = window.bpmnInstances.bpmnElement.businessObject.$attrs.moCode || ''
         this.psDesc = window.bpmnInstances.bpmnElement.businessObject.$attrs.psDesc || ''
-        this.elements = window.bpmnInstances.bpmnElement.parent.children.filter((ele) => ele.type === "bpmn:ServiceTask" && ele.businessObject.$attrs.moId)
+        this.elements = window.bpmnInstances.bpmnElement.parent.children.filter((ele) => ele.type === "bpmn:ServiceTask" && ele.businessObject.$attrs.moCode)
         this.prev = JSON.parse(window.bpmnInstances.bpmnElement.businessObject.$attrs.prev || '[]')
         // 删除不存在的ID
         for (let i = this.prev.length - 1; i > -1; i--) {
@@ -117,10 +117,10 @@ export default {
     updateEquipmentModel() {
       window.bpmnInstances.modeling.updateProperties(
         window.bpmnInstances.bpmnElement,
-        { emId: this.emId }
+        { emCode: this.emCode }
       );
-      this.moId = ''
-      let concat = this.emList.find(ele => ele.emId === this.emId).emName || ''
+      this.moCode = ''
+      let concat = this.emList.find(ele => ele.emCode === this.emCode).emName || ''
       window.bpmnInstances.modeling.updateProperties(
         window.bpmnInstances.bpmnElement,
         { name: concat }
@@ -130,10 +130,10 @@ export default {
     updateModelOperation() {
       window.bpmnInstances.modeling.updateProperties(
         window.bpmnInstances.bpmnElement,
-        { moId: this.moId }
+        { moCode: this.moCode }
       );
-      let name = this.emList.find(ele => ele.emId === this.emId).emName + ": " || ''
-      let concat = this.moList.find(ele => ele.moId === this.moId).moName || ''
+      let name = this.emList.find(ele => ele.emCode === this.emCode).emName + ": " || ''
+      let concat = this.moList.find(ele => ele.moCode === this.moCode).moName || ''
       window.bpmnInstances.modeling.updateProperties(
         window.bpmnInstances.bpmnElement,
         { name: name + concat || '' }

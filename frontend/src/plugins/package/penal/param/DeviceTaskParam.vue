@@ -28,7 +28,7 @@
             {{ editParam.eospaName || '' }}
           </el-descriptions-item>
           <el-descriptions-item label="父级参数序号">
-            {{ editParam.eospaIdParent || 0 }}
+            {{ editParam.eospaCodeParent || '' }}
           </el-descriptions-item>
           <el-descriptions-item label="参数类型">
             <dict-tag :options="dict.type.ices_param_type" :value="editParam.eospaType"/>
@@ -74,7 +74,7 @@ export default {
       // 查看参数的属性
       editParam: {
         eospaName: '',
-        eospaIdParent: 0,
+        eospaCodeParent: 0,
         eospaType: '',
         eospaPos: '',
         eospaValue: ''
@@ -110,24 +110,15 @@ export default {
       const currentTask = this.taskList.find(ele => ele.id === this.current.id)
       if (currentTask) {
         this.task = currentTask
-        const eosListCurrent = this.eosList.filter(ele => ele.eoId === currentTask.eoId && ele.eaoId)
+        const eosListCurrent = this.eosList.filter(ele => ele.eoCode === currentTask.eoCode && ele.eaoCode)
         for (let it of eosListCurrent) {
-          this.paramList = this.paramList.concat(this.eospaList.filter(ele => ele.eosId === it.eosId))
+          this.paramList = this.paramList.concat(this.eospaList.filter(ele => ele.eosCode === it.eosCode))
         }
       }
     },
-    // 更新属性：设备
-    updateEquipment() {
-      this.eoId = ''
-      this.$emit('updateTask', { id: this.current.id, eqId: this.eqId, eoId: '' })
-    },
-    // 更新属性：设备操作
-    updateEquipmentOperation() {
-      this.$emit('updateTask', { id: this.current.id, eqId: this.eqId, eoId: this.eoId })
-    },
     // 打开新增/修改参数窗口
     openParamsForm(attr, index) {
-      const param = this.task.param.find(ele => ele.eospaId === attr.eospaId)
+      const param = this.task.param.find(ele => ele.eospaCode === attr.eospaCode)
       this.editParam = this.paramList[index]
       this.dtpaValue = param ? param.dtpaValue : ''
       this.propertyFormModelVisible = true;
@@ -140,11 +131,11 @@ export default {
         // 填充默认值
         if (this.dtpaValue.length === 0) this.dtpaValue = this.editParam.eospaValue
         // 保存参数
-        const idx = this.task.param.findIndex(ele => ele.eospaId === this.editParam.eospaId)
+        const idx = this.task.param.findIndex(ele => ele.eospaCode === this.editParam.eospaCode)
         if (idx === -1) {
-          this.task.param.push({ eospaId: this.editParam.eospaId, dtpaValue: this.dtpaValue })
+          this.task.param.push({ eospaCode: this.editParam.eospaCode, dtpaValue: this.dtpaValue })
         } else {
-          this.task.param[idx] = { eospaId: this.editParam.eospaId, dtpaValue: this.dtpaValue }
+          this.task.param[idx] = { eospaCode: this.editParam.eospaCode, dtpaValue: this.dtpaValue }
         }
         this.$emit('updateTask', this.task)
         this.propertyFormModelVisible = false

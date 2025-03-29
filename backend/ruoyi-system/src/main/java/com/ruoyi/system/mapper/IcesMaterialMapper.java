@@ -5,10 +5,10 @@ import com.ruoyi.system.domain.vo.IcesMaterialVo;
 import com.ruoyi.common.core.mapper.BaseMapperPlus;
 
 /**
- * 原料Mapper接口
+ * 物料Mapper接口
  *
  * @author ruoyi
- * @date 2025-02-07
+ * @date 2025-03-26
  */
 public interface IcesMaterialMapper extends BaseMapperPlus<IcesMaterialMapper, IcesMaterial, IcesMaterialVo> {
 

@@ -28,15 +28,26 @@ public class IcesEquipmentOperationStepParamBo extends BaseEntity {
     private Long eospaId;
 
     /**
-     * 所属设备操作步骤ID
+     * 操作步骤参数编码
      */
-    @NotNull(message = "所属设备操作步骤ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long eosId;
+    private String eospaCode;
 
     /**
-     * 父级参数ID
+     * 所属设备操作
      */
-    private Long eospaIdParent;
+    @NotBlank(message = "所属设备操作不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String eoCode;
+
+    /**
+     * 所属设备操作步骤
+     */
+    @NotBlank(message = "所属设备操作步骤不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String eosCode;
+
+    /**
+     * 父级参数
+     */
+    private String eospaCodeParent;
 
     /**
      * 参数名称

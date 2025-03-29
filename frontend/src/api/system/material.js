@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询原料列表
+// 查询物料列表
 export function listMaterial(query) {
   return request({
     url: '/system/material/list',
@@ -9,7 +9,7 @@ export function listMaterial(query) {
   })
 }
 
-// 查询原料详细
+// 查询物料详细
 export function getMaterial(maId) {
   return request({
     url: '/system/material/' + maId,
@@ -17,7 +17,7 @@ export function getMaterial(maId) {
   })
 }
 
-// 新增原料
+// 新增物料
 export function addMaterial(data) {
   return request({
     url: '/system/material',
@@ -26,7 +26,7 @@ export function addMaterial(data) {
   })
 }
 
-// 修改原料
+// 修改物料
 export function updateMaterial(data) {
   return request({
     url: '/system/material',
@@ -35,7 +35,7 @@ export function updateMaterial(data) {
   })
 }
 
-// 删除原料
+// 删除物料
 export function delMaterial(maId) {
   return request({
     url: '/system/material/' + maId,

@@ -12,18 +12,18 @@
     </el-alert>
 
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="车间" prop="arId">
+      <el-form-item label="车间" prop="arCode">
         <el-select
-          v-model="queryParams.arId"
+          v-model="queryParams.arCode"
           placeholder="请选择车间"
           clearable
           :disabled="mode === 1"
         >
           <el-option
             v-for="item in areaList"
-            :key="item.arId"
+            :key="item.arCode"
             :label="item.arName"
-            :value="item.arId"
+            :value="item.arCode"
           >
           </el-option>
         </el-select>
@@ -107,9 +107,10 @@
     <el-table v-loading="loading" :data="areaControlList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="主控节点ID" align="center" prop="acId" v-if="true"/>
-      <el-table-column label="所属车间" align="center" prop="arId">
+      <el-table-column label="主控节点编码" align="center" prop="acCode" />
+      <el-table-column label="所属车间" align="center" prop="arCode">
         <template slot-scope="scope">
-          {{ areaList.find(ele => ele.arId === scope.row.arId).arName || '' }}
+          {{ areaList.find(ele => ele.arCode === scope.row.arCode).arName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="名称" align="center" prop="acName" />
@@ -146,17 +147,17 @@
     <!-- 添加或修改主控节点对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="车间" prop="arId">
+        <el-form-item label="车间" prop="arCode">
           <el-select
-            v-model="form.arId"
+            v-model="form.arCode"
             placeholder="请选择车间"
             :disabled="mode === 1"
           >
             <el-option
               v-for="item in areaList"
-              :key="item.arId"
+              :key="item.arCode"
               :label="item.arName"
-              :value="item.arId"
+              :value="item.arCode"
             >
             </el-option>
           </el-select>
@@ -211,7 +212,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        arId: this.$route.query.arId,
+        arCode: this.$route.query.arCode,
         acName: undefined,
         acIp: undefined,
         acDelete: 0,
@@ -223,8 +224,8 @@ export default {
         acId: [
           { required: true, message: "主控节点ID不能为空", trigger: "blur" }
         ],
-        arId: [
-          { required: true, message: "所属车间ID不能为空", trigger: "change" }
+        arCode: [
+          { required: true, message: "所属车间不能为空", trigger: "change" }
         ],
         acName: [
           { required: true, message: "名称不能为空", trigger: "blur" }
@@ -243,7 +244,7 @@ export default {
   },
   async created() {
     // 检查来源
-    if (this.$route.query.arId) {
+    if (this.$route.query.arCode) {
       this.mode = 1
     }
     await this.getAreaList();
@@ -256,7 +257,7 @@ export default {
         this.areaList = response.rows;
         if (this.mode === 1) {
           this.hint = "车间 "
-          this.hint += response.rows.find(ele => ele.arId === this.$route.query.arId).arName
+          this.hint += response.rows.find(ele => ele.arCode === this.$route.query.arCode).arName
           this.hint += " "
         }
       });
@@ -279,7 +280,7 @@ export default {
     reset() {
       this.form = {
         acId: undefined,
-        arId: undefined,
+        arCode: undefined,
         acName: undefined,
         acIp: undefined,
         acDelete: undefined,
@@ -311,7 +312,7 @@ export default {
     handleAdd() {
       this.reset();
       if (this.mode === 1) {
-        this.form.arId = this.$route.query.arId
+        this.form.arCode = this.$route.query.arCode
       }
       this.open = true;
       this.title = "添加主控节点";
@@ -388,3 +389,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

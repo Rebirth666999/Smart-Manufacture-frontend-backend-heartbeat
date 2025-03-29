@@ -28,10 +28,15 @@ public class IcesModelOperationBo extends BaseEntity {
     private Long moId;
 
     /**
-     * 所属设备模型ID
+     * 模型操作编码
      */
-    @NotNull(message = "所属设备模型ID不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long emId;
+    private String moCode;
+
+    /**
+     * 所属设备模型
+     */
+    @NotBlank(message = "所属设备模型不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String emCode;
 
     /**
      * 名称

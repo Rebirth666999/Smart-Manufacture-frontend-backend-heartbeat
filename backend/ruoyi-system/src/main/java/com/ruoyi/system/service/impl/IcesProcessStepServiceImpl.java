@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesProcessStepBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesProcessStepServiceImpl implements IIcesProcessStepService {
 
     private final IcesProcessStepMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询工艺步骤
@@ -61,8 +63,9 @@ public class IcesProcessStepServiceImpl implements IIcesProcessStepService {
     private LambdaQueryWrapper<IcesProcessStep> buildQueryWrapper(IcesProcessStepBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesProcessStep> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getProcId() != null, IcesProcessStep::getProcId, bo.getProcId());
-        lqw.eq(bo.getMoId() != null, IcesProcessStep::getMoId, bo.getMoId());
+        lqw.eq(StringUtils.isNotBlank(bo.getPsCode()), IcesProcessStep::getPsCode, bo.getPsCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getProcCode()), IcesProcessStep::getProcCode, bo.getProcCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getMoCode()), IcesProcessStep::getMoCode, bo.getMoCode());
         lqw.eq(bo.getPsDelete() != null, IcesProcessStep::getPsDelete, bo.getPsDelete());
         return lqw;
     }
@@ -72,6 +75,7 @@ public class IcesProcessStepServiceImpl implements IIcesProcessStepService {
      */
     @Override
     public Boolean insertByBo(IcesProcessStepBo bo) {
+        bo.setPsCode(codeService.insertByType("ProcessStep"));
         IcesProcessStep add = BeanUtil.toBean(bo, IcesProcessStep.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

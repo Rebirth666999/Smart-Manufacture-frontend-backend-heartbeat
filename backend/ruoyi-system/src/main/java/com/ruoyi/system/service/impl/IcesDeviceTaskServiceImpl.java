@@ -10,12 +10,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ruoyi.system.service.IIcesCodeService;
-import com.ruoyi.system.domain.IcesDeviceTaskParam;
-import com.ruoyi.system.domain.IcesDeviceTaskPrev;
 import com.ruoyi.system.domain.bo.*;
-import com.ruoyi.system.domain.vo.IcesDeviceTaskParamVo;
-import com.ruoyi.system.domain.vo.IcesDeviceTaskPrevVo;
-import com.ruoyi.system.domain.vo.IcesDeviceTaskParamVo;
 import com.ruoyi.system.domain.vo.IcesDeviceTaskVo;
 import com.ruoyi.system.domain.vo.IcesProcessStepPrevRoundVo;
 import com.ruoyi.system.domain.vo.IcesProcessStepPrevVo;
@@ -24,7 +19,6 @@ import com.ruoyi.system.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesDeviceTaskBo;
-import com.ruoyi.system.domain.vo.IcesDeviceTaskVo;
 import com.ruoyi.system.domain.IcesDeviceTask;
 import com.ruoyi.system.mapper.IcesDeviceTaskMapper;
 import com.ruoyi.flowable.factory.FlowServiceFactory;
@@ -151,111 +145,96 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
         List<Map<String, Object>> deviceTasks = (List<Map<String, Object>>) data.get("deviceTask");
 
         // 创建映射表
-        Map<String, String> modelToStepId = new HashMap<>(); // 哈希表a - 修改为String类型
-        Map<String, List<String>> stepToPrevSteps = new HashMap<>(); // 哈希表b - 修改为String类型
-        Map<String, List<String>> stepToPrevRoundSteps = new HashMap<>(); // 哈希表c - 修改为String类型
+        Map<String, IcesProcessStepVo> modelIdToStep = new HashMap<>();  // 工艺步骤的modelId映射到对象
+        Map<IcesProcessStepVo, List<String>> stepToPrevSteps = new HashMap<>();  // 工艺步骤前序步骤映射表，映射到code
+        Map<IcesProcessStepVo, List<String>> stepToPrevRoundSteps = new HashMap<>();  // 工艺步骤跨轮次前序步骤映射表，映射到code
 
-        // 填充映射表a
-
-//        这段代码的功能是将设备任务中的模型ID映射到对应的工艺步骤ID，具体逻辑如下：
-//        1. 遍历`deviceTasks`列表，提取每个任务的`id`作为`modelId`。
-//        2. 调用`processStepService.queryByModel(modelId)`查询与`modelId`对应的工艺步骤对象`step`。
-//        3. 如果查询结果不为空，将`modelId`和`step.getPsId()`存入`modelToStepId`哈希表。
-
-
-
+        // 查找所属的工艺步骤
         for (Map<String, Object> task : deviceTasks) {
             String modelId = task.get("id").toString();
             IcesProcessStepVo step = processStepService.queryByModel(modelId);
             if (step != null) {
-                modelToStepId.put(modelId, step.getPsCode()); // 使用getPsCode()而不是getPsId()
+                modelIdToStep.put(modelId, step);
             }
         }
 
-        // 填充映射表b和c
-        for (String stepId : modelToStepId.values()) {
-            // 获取普通前序步骤
+        // 查找前序步骤和跨轮前序步骤
+        // 遍历所有的工艺步骤
+        for (IcesProcessStepVo step : modelIdToStep.values()) {
+            // 获取前序步骤
             IcesProcessStepPrevBo icesProcessStepPrevBo = new IcesProcessStepPrevBo();
-            icesProcessStepPrevBo.setPsCodeCur(stepId);
-
+            icesProcessStepPrevBo.setPsCodeCur(step.getPsCode());
             List<IcesProcessStepPrevVo> prevSteps = stepPrevService.queryList(icesProcessStepPrevBo);
-            List<String> prevStepIds = prevSteps.stream()
-                .map(IcesProcessStepPrevVo::getPsCodePrev) // 使用getPsCodePrev()
+            List<String> prevStepCodes = prevSteps.stream()
+                .map(IcesProcessStepPrevVo::getPsCodePrev)
                 .collect(Collectors.toList());
-            stepToPrevSteps.put(stepId, prevStepIds);
+            stepToPrevSteps.put(step, prevStepCodes);
 
             // 获取跨轮次前序步骤
             IcesProcessStepPrevRoundBo icesProcessStepPrevRoundBo = new IcesProcessStepPrevRoundBo();
-            icesProcessStepPrevRoundBo.setPsCodeCur(stepId); // 添加这行，设置当前步骤编码
+            icesProcessStepPrevRoundBo.setPsCodeCur(step.getPsCode()); // 添加这行，设置当前步骤编码
             List<IcesProcessStepPrevRoundVo> prevRoundSteps = prevRoundService.queryList(icesProcessStepPrevRoundBo);
-            List<String> prevRoundStepIds = prevRoundSteps.stream()
-                .map(IcesProcessStepPrevRoundVo::getPsCodePrev) // 使用getPsCodePrev()
+            List<String> prevRoundStepCodes = prevRoundSteps.stream()
+                .map(IcesProcessStepPrevRoundVo::getPsCodePrev)
                 .collect(Collectors.toList());
-            stepToPrevRoundSteps.put(stepId, prevRoundStepIds);
+            stepToPrevRoundSteps.put(step, prevRoundStepCodes);
         }
 
-        // 存储每轮的任务ID映射
-        Map<String, Long> lastRoundTasks = new HashMap<>();
-        Map<String, Long> currentRoundTasks = new HashMap<>();
+        // 存储每轮的任务映射
+        // 对应工艺步骤modelID映射到deviceTask对象
+        Map<String, IcesDeviceTask> lastRoundTasks = new HashMap<>();
+        Map<String, IcesDeviceTask> currentRoundTasks = new HashMap<>();
 
         // 处理每一轮的任务
         for (int round = 0; round < mtQtyPlan; round++) {
+            // 当前轮次转为前一轮次
             lastRoundTasks.clear();
             lastRoundTasks.putAll(currentRoundTasks);
             currentRoundTasks.clear();
 
             for (Map<String, Object> task : deviceTasks) {
                 // 创建设备任务
-                System.out.println("task = " + task);
                 IcesDeviceTask deviceTask = new IcesDeviceTask();
-                deviceTask.setEqCode(task.get("eqCode").toString());
-//                System.out.println("deviceTask.getEqCode() = " + deviceTask.getEqCode());
                 deviceTask.setMtCode(mtCode);
-                System .out.println("deviceTask.getMtCode() = " + deviceTask.getMtCode());
+                deviceTask.setEqCode(task.get("eqCode").toString());
                 deviceTask.setEoCode(task.get("eoCode").toString());
-                System.out.println("deviceTask.getEoCode() = " + deviceTask.getEoCode());
-                deviceTask.setDtStat("1"); // 初始状态
+                deviceTask.setDtStat("1");
                 deviceTask.setDtDelete(0L);
-
-                // 插入设备任务并获取ID
                 deviceTask.setDtCode(codeService.insertByType("DeviceTask"));
                 baseMapper.insert(deviceTask);
-                Long dtId = deviceTask.getDtId();
-                System.out.println(deviceTask.getDtCode());
-                currentRoundTasks.put(task.get("id").toString(), dtId);
+                currentRoundTasks.put(task.get("id").toString(), deviceTask);
 
                 // 处理参数
                 List<Map<String, Object>> params = (List<Map<String, Object>>) task.get("param");
                 for (Map<String, Object> param : params) {
-                    System.out.println("param = " + param);
                     IcesDeviceTaskParamBo taskParamBo = new IcesDeviceTaskParamBo();
                     taskParamBo.setDtCode(deviceTask.getDtCode());
-                    taskParamBo.setEospaCode(param.get("eospaCode").toString());
-                    System.out.println(taskParamBo.getEospaCode());
                     taskParamBo.setMtCode(mtCode);
-//                    taskParamBo.setDtCode(param.get("dtCode").toString());
-//                    System.out.println(taskParamBo.getDtCode());
+                    taskParamBo.setEospaCode(param.get("eospaCode").toString());
                     taskParamBo.setDtpaValue(param.get("dtpaValue").toString());
-                    System.out.println(taskParamBo.getDtpaValue());
                     taskParamBo.setDtpaDelete(0L);
                     deviceTaskParamService.insertByBo(taskParamBo);
                 }
 
-                // 处理前序任务关系
-                String stepId = modelToStepId.get(task.get("id").toString());
+                // 找到当前设备任务对应的工艺步骤
+                IcesProcessStepVo step = modelIdToStep.get(task.get("id").toString());
 
                 // 处理同轮次前序任务
-                List<String> prevStepIds = stepToPrevSteps.get(stepId);
-                if (prevStepIds != null) {
-                    for (String prevStepId : prevStepIds) {
+                List<String> prevStepCodes = stepToPrevSteps.get(step);
+                if (prevStepCodes != null && !prevStepCodes.isEmpty()) {
+                    for (String prevStepCode : prevStepCodes) {
+                        // 遍历所有的前序步骤
+                        // prevStepId是工艺步骤的code
                         for (Map<String, Object> prevTask : deviceTasks) {
-                            if (modelToStepId.get(prevTask.get("id").toString()).equals(prevStepId)) {
-                                Long prevDtId = currentRoundTasks.get(prevTask.get("id").toString());
-                                if (prevDtId != null) {
+                            // 遍历所有传入的设备任务
+                            if (modelIdToStep.get(prevTask.get("id").toString()).getPsCode().equals(prevStepCode)) {
+                                // 找到在list中的的设备任务
+                                IcesDeviceTask deviceTaskPrev = currentRoundTasks.get(prevTask.get("id").toString());
+                                if (deviceTaskPrev != null) {
                                     IcesDeviceTaskPrevBo taskPrevBo = new IcesDeviceTaskPrevBo();
                                     taskPrevBo.setMtCode(mtCode);
-                                    taskPrevBo.setDtCodeCur(prevTask.get("dtCode").toString());
-                                    taskPrevBo.setDtCodePrev(prevTask.get("dtCodePrev").toString());
+                                    taskPrevBo.setDtCodeCur(deviceTask.getDtCode());  // 当前设备任务
+                                    taskPrevBo.setDtCodePrev(deviceTaskPrev.getDtCode());  // 前序设备任务
                                     taskPrevBo.setDtprDelete(0L);
                                     deviceTaskPrevService.insertByBo(taskPrevBo);
                                 }
@@ -266,19 +245,19 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
 
                 // 处理跨轮次前序任务
                 if (round > 0) {
-                    List<String> prevRoundStepIds = stepToPrevRoundSteps.get(stepId);
-                    if (prevRoundStepIds != null) {
-                        for (String prevStepId : prevRoundStepIds) {
+                    List<String> prevRoundStepCodes = stepToPrevRoundSteps.get(step);
+                    if (prevRoundStepCodes != null && !prevRoundStepCodes.isEmpty()) {
+                        for (String prevStepCode : prevRoundStepCodes) {
                             for (Map<String, Object> prevTask : deviceTasks) {
-                                if (modelToStepId.get(prevTask.get("id").toString()).equals(prevStepId)) {
-                                    Long prevDtId = lastRoundTasks.get(prevTask.get("id").toString());
-                                    if (prevDtId != null) {
-                                        IcesDeviceTaskPrevBo taskPrev = new IcesDeviceTaskPrevBo();
-                                        taskPrev.setMtCode(mtCode);
-                                        taskPrev.setDtCodeCur(prevTask.get("dtCode").toString());
-                                        taskPrev.setDtCodePrev(prevTask.get("dtCodePrev").toString());
-                                        taskPrev.setDtprDelete(0L);
-                                        deviceTaskPrevService.insertByBo(taskPrev);
+                                if (modelIdToStep.get(prevTask.get("id").toString()).getPsCode().equals(prevStepCode)) {
+                                    IcesDeviceTask deviceTaskPrev = lastRoundTasks.get(prevTask.get("id").toString());
+                                    if (deviceTaskPrev != null) {
+                                        IcesDeviceTaskPrevBo taskPrevBo = new IcesDeviceTaskPrevBo();
+                                        taskPrevBo.setMtCode(mtCode);
+                                        taskPrevBo.setDtCodeCur(deviceTask.getDtCode());
+                                        taskPrevBo.setDtCodePrev(deviceTaskPrev.getDtCode());
+                                        taskPrevBo.setDtprDelete(0L);
+                                        deviceTaskPrevService.insertByBo(taskPrevBo);
                                     }
                                 }
                             }
@@ -287,8 +266,6 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
                 }
             }
         }
-
-
     }
 }
 

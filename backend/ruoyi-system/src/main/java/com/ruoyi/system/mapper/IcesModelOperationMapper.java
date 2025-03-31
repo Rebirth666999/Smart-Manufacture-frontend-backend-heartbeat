@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @author ruoyi
  * @date 2025-02-28
  */
-
+@Mapper
 public interface IcesModelOperationMapper extends BaseMapperPlus<IcesModelOperationMapper, IcesModelOperation, IcesModelOperationVo> {
 
 }

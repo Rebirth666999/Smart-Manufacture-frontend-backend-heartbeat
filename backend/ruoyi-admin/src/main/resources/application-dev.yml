@@ -6,7 +6,7 @@ spring.boot.admin.client:
   instance:
     service-host-type: IP
   username: ruoyi
-  password:
+  password: 123456
 
 --- # xxl-job 配置
 xxl.job:

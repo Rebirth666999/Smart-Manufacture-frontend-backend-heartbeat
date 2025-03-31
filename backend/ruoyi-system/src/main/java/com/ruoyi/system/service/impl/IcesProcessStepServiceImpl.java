@@ -41,6 +41,9 @@ public class IcesProcessStepServiceImpl implements IIcesProcessStepService {
         return baseMapper.selectVoById(psId);
     }
 
+    public IcesProcessStepVo queryByModel(String modelId){
+        return baseMapper.selectVoOne(Wrappers.lambdaQuery(IcesProcessStep.class).eq(IcesProcessStep::getPsModel, modelId));
+    }
     /**
      * 查询工艺步骤列表
      */
@@ -94,6 +97,7 @@ public class IcesProcessStepServiceImpl implements IIcesProcessStepService {
         validEntityBeforeSave(update);
         return baseMapper.updateById(update) > 0;
     }
+
 
     /**
      * 保存前的数据校验

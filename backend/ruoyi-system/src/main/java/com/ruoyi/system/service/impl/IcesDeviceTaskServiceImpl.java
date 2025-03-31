@@ -144,7 +144,7 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
 
         // 获取manufactureTask信息
         Map<String, Object> manufactureTask = (Map<String, Object>) data.get("manufactureTask");
-        Long mtId = Long.parseLong(manufactureTask.get("mtId").toString());
+        String mtCode = manufactureTask.get("mtCode").toString();
         Integer mtQtyPlan = Integer.parseInt(manufactureTask.get("mtQtyPlan").toString());
 
         // 获取deviceTask列表
@@ -172,31 +172,10 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
             }
         }
 
-//        这段代码的主要功能是为每个步骤（step）获取其普通前序步骤和跨轮次前序步骤，并将结果存储到两个映射表中。以下是代码的详细逻辑分解：
-//        遍历 modelToStepId 的值集合：
-//        modelToStepId 是一个映射表，键为模型 ID（modelId），值为对应的步骤 ID（stepId）。
-//        遍历 modelToStepId.values()，即对每个步骤 ID 进行处理。
-//        获取普通前序步骤：
-//        创建一个 IcesProcessStepPrevBo 对象，作为查询条件。
-//        调用 stepPrevService.queryList(icesProcessStepPrevBo) 方法，获取与当前步骤相关的普通前序步骤列表（prevSteps）。
-//        使用 Java Stream API 将 prevSteps 中的每个对象的 PsIdPrev 属性提取出来，形成一个 Long 类型的列表（prevStepIds）。
-//        将当前步骤 ID（stepId）与对应的普通前序步骤 ID 列表（prevStepIds）存入映射表 stepToPrevSteps。
-//        获取跨轮次前序步骤：
-//        创建一个 IcesProcessStepPrevRoundBo 对象，作为查询条件。
-//        调用 prevRoundService.queryList(icesProcessStepPrevRoundBo) 方法，获取与当前步骤相关的跨轮次前序步骤列表（prevRoundSteps）。
-//        同样使用 Java Stream API 提取 prevRoundSteps 中的每个对象的 PsIdPrev 属性，形成一个 Long 类型的列表（prevRoundStepIds）。
-//        将当前步骤 ID（stepId）与对应的跨轮次前序步骤 ID 列表（prevRoundStepIds）存入映射表 stepToPrevRoundSteps。
-//        存储结果：
-//        普通前序步骤的结果存储在 stepToPrevSteps 映射表中，键为步骤 ID，值为普通前序步骤 ID 列表。
-//        跨轮次前序步骤的结果存储在 stepToPrevRoundSteps 映射表中，键为步骤 ID，值为跨轮次前序步骤 ID 列表。
         // 填充映射表b和c
         for (String stepId : modelToStepId.values()) {
             // 获取普通前序步骤
             IcesProcessStepPrevBo icesProcessStepPrevBo = new IcesProcessStepPrevBo();
-//            这段代码的功能是从prevSteps列表中提取每个步骤的前序步骤ID（PsIdPrev），并将其收集到一个List<Long>类型的列表中。具体逻辑如下：
-//            使用stream()方法对prevSteps列表进行流式处理。
-//            调用map(IcesProcessStepPrevVo::getPsIdPrev)提取每个IcesProcessStepPrevVo对象的PsIdPrev属性。
-//            使用collect(Collectors.toList())将提取的结果收集为一个List<Long>。
             icesProcessStepPrevBo.setPsCodeCur(stepId);
 
             List<IcesProcessStepPrevVo> prevSteps = stepPrevService.queryList(icesProcessStepPrevBo);
@@ -220,30 +199,6 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
         Map<String, Long> currentRoundTasks = new HashMap<>();
 
         // 处理每一轮的任务
-//        外层循环：根据生产计划数量（mtQtyPlan）执行多轮任务创建，每轮处理一组设备任务。
-//        任务映射更新：
-//        将当前轮次的任务映射（currentRoundTasks）保存到上一轮任务映射（lastRoundTasks）中。
-//        清空当前轮次的任务映射，为本轮任务的重新填充做准备。
-//        遍历设备任务列表：
-//        遍历deviceTasks列表，每个任务表示一个设备任务。
-//        创建设备任务对象：
-//        创建IcesDeviceTask对象，并设置以下属性：
-//        eqId：从任务数据中提取设备ID。
-//        mtId：从生产任务信息中获取生产任务ID。
-//        eoId：从任务数据中提取操作ID。
-//        dtStat：设置初始状态为"1"。
-//        dtDelete：设置删除标志为0，表示未删除。
-//        插入设备任务：
-//        调用baseMapper.insert(deviceTask)将设备任务插入数据库。
-//        获取插入后生成的任务ID（dtId），并将其与任务ID（task.get("id")）存入当前轮次的任务映射（currentRoundTasks）。
-//        处理任务参数：
-//        遍历任务参数列表（params），为每个参数创建IcesDeviceTaskParamBo对象。
-//        设置参数对象的属性：
-//        eospaId：从参数数据中提取操作步骤参数ID。
-//        dtId：设置为当前设备任务的ID。
-//        dtpaValue：从参数数据中提取参数值。
-//        dtpaDelete：设置删除标志为0。
-//        调用deviceTaskParamService.insertByBo(taskParamBo)将参数插入服务
         for (int round = 0; round < mtQtyPlan; round++) {
             lastRoundTasks.clear();
             lastRoundTasks.putAll(currentRoundTasks);
@@ -251,25 +206,37 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
 
             for (Map<String, Object> task : deviceTasks) {
                 // 创建设备任务
+                System.out.println("task = " + task);
                 IcesDeviceTask deviceTask = new IcesDeviceTask();
                 deviceTask.setEqCode(task.get("eqCode").toString());
-                deviceTask.setMtCode(task.get("mtCode").toString());
+//                System.out.println("deviceTask.getEqCode() = " + deviceTask.getEqCode());
+                deviceTask.setMtCode(mtCode);
+                System .out.println("deviceTask.getMtCode() = " + deviceTask.getMtCode());
                 deviceTask.setEoCode(task.get("eoCode").toString());
+                System.out.println("deviceTask.getEoCode() = " + deviceTask.getEoCode());
                 deviceTask.setDtStat("1"); // 初始状态
                 deviceTask.setDtDelete(0L);
 
                 // 插入设备任务并获取ID
+                deviceTask.setDtCode(codeService.insertByType("DeviceTask"));
                 baseMapper.insert(deviceTask);
                 Long dtId = deviceTask.getDtId();
+                System.out.println(deviceTask.getDtCode());
                 currentRoundTasks.put(task.get("id").toString(), dtId);
 
                 // 处理参数
                 List<Map<String, Object>> params = (List<Map<String, Object>>) task.get("param");
                 for (Map<String, Object> param : params) {
+                    System.out.println("param = " + param);
                     IcesDeviceTaskParamBo taskParamBo = new IcesDeviceTaskParamBo();
+                    taskParamBo.setDtCode(deviceTask.getDtCode());
                     taskParamBo.setEospaCode(param.get("eospaCode").toString());
-                    taskParamBo.setDtCode(param.get("dtCode").toString());
+                    System.out.println(taskParamBo.getEospaCode());
+                    taskParamBo.setMtCode(mtCode);
+//                    taskParamBo.setDtCode(param.get("dtCode").toString());
+//                    System.out.println(taskParamBo.getDtCode());
                     taskParamBo.setDtpaValue(param.get("dtpaValue").toString());
+                    System.out.println(taskParamBo.getDtpaValue());
                     taskParamBo.setDtpaDelete(0L);
                     deviceTaskParamService.insertByBo(taskParamBo);
                 }
@@ -286,7 +253,8 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
                                 Long prevDtId = currentRoundTasks.get(prevTask.get("id").toString());
                                 if (prevDtId != null) {
                                     IcesDeviceTaskPrevBo taskPrevBo = new IcesDeviceTaskPrevBo();
-                                    taskPrevBo .setDtCodeCur(prevTask.get("dtCode").toString());
+                                    taskPrevBo.setMtCode(mtCode);
+                                    taskPrevBo.setDtCodeCur(prevTask.get("dtCode").toString());
                                     taskPrevBo.setDtCodePrev(prevTask.get("dtCodePrev").toString());
                                     taskPrevBo.setDtprDelete(0L);
                                     deviceTaskPrevService.insertByBo(taskPrevBo);
@@ -306,6 +274,7 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
                                     Long prevDtId = lastRoundTasks.get(prevTask.get("id").toString());
                                     if (prevDtId != null) {
                                         IcesDeviceTaskPrevBo taskPrev = new IcesDeviceTaskPrevBo();
+                                        taskPrev.setMtCode(mtCode);
                                         taskPrev.setDtCodeCur(prevTask.get("dtCode").toString());
                                         taskPrev.setDtCodePrev(prevTask.get("dtCodePrev").toString());
                                         taskPrev.setDtprDelete(0L);

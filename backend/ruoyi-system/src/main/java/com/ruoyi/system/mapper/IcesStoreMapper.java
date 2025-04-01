@@ -10,7 +10,8 @@ import org.apache.ibatis.annotations.Mapper;
  *
  * @author ruoyi
  * @date 2025-03-26
- */@Mapper
+ */
+@Mapper
 public interface IcesStoreMapper extends BaseMapperPlus<IcesStoreMapper, IcesStore, IcesStoreVo> {
 
 }

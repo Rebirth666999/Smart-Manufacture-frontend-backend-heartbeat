@@ -7,6 +7,8 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.domain.IcesManufacturePlan;
+import com.ruoyi.system.domain.vo.IcesManufacturePlanVo;
 import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import com.ruoyi.system.domain.IcesManufactureTask;
 import com.ruoyi.system.mapper.IcesManufactureTaskMapper;
 import com.ruoyi.system.service.IIcesManufactureTaskService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Collection;

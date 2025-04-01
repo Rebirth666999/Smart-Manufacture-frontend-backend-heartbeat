@@ -235,9 +235,9 @@
         <el-form-item label="预计变动值" prop="mrEst">
           <el-input v-model="form.mrEst" placeholder="请输入预计变动值" />
         </el-form-item>
-        <el-form-item label="实际变动值" prop="mrReal">
+        <!-- <el-form-item label="实际变动值" prop="mrReal">
           <el-input v-model="form.mrReal" placeholder="请输入实际变动值" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="描述" prop="mrDesc">
           <el-input v-model="form.mrDesc" type="textarea" placeholder="请输入内容" />
         </el-form-item>
@@ -412,6 +412,14 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          // 检查物料与仓库是否属于同一类
+          let material = this.materialList.find(ele => ele.maCode === this.form.maCode)
+          let store = this.storeList.find(ele => ele.stCode === this.form.stCode)
+          if (material.maType !== store.stType) {
+            this.$modal.msgWarning("请选择与物料类型相符的仓库");
+            return
+          }
+          // 检查无误，提交表单
           this.buttonLoading = true;
           if (this.form.mrId != null) {
             updateMaterialRecord(this.form).then(response => {

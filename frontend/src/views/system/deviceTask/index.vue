@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="110px">
       <el-form-item label="所属生产任务" prop="mtCode">
         <el-input
           v-model="queryParams.mtCode"
@@ -42,7 +42,7 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button
           type="primary"
           plain
@@ -73,7 +73,7 @@
           @click="handleDelete"
           v-hasPermi="['system:deviceTask:remove']"
         >删除</el-button>
-      </el-col>
+      </el-col> -->
       <el-col :span="1.5">
         <el-button
           type="warning"
@@ -110,7 +110,7 @@
       </el-table-column>
       <!-- <el-table-column label="已删除" align="center" prop="dtDelete" /> -->
       <!-- <el-table-column label="描述" align="center" prop="dtDesc" /> -->
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <!-- <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -127,7 +127,7 @@
             v-hasPermi="['system:deviceTask:remove']"
           >删除</el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
 
     <pagination

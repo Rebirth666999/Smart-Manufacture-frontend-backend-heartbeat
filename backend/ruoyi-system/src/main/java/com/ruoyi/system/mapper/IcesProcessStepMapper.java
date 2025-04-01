@@ -3,6 +3,7 @@ package com.ruoyi.system.mapper;
 import com.ruoyi.system.domain.IcesProcessStep;
 import com.ruoyi.system.domain.vo.IcesProcessStepVo;
 import com.ruoyi.common.core.mapper.BaseMapperPlus;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 工艺步骤Mapper接口
@@ -10,6 +11,7 @@ import com.ruoyi.common.core.mapper.BaseMapperPlus;
  * @author ruoyi
  * @date 2025-03-09
  */
+@Mapper
 public interface IcesProcessStepMapper extends BaseMapperPlus<IcesProcessStepMapper, IcesProcessStep, IcesProcessStepVo> {
 
 }

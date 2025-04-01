@@ -1,5 +1,16 @@
 <template>
   <div class="app-container">
+    <!-- 顶部提示 -->
+    <el-alert
+      v-show="hint.length > 0"
+      :title="`正在根据${hint}筛选贸易信息`"
+      type="info"
+      show-icon
+      :closable="false"
+      class="mb8"
+    >
+    </el-alert>
+
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <!-- <el-form-item label="贸易信息编码" prop="ctCode">
         <el-input
@@ -10,7 +21,7 @@
         />
       </el-form-item> -->
       <el-form-item label="客户" prop="clCode">
-       <el-select v-model="queryParams.clCode" placeholder="请选择客户" clearable>
+       <el-select v-model="queryParams.clCode" placeholder="请选择客户" :disabled="mode !== 0" clearable>
         <el-option
         v-for="option in clientList"
         :key="option.clCode"
@@ -34,7 +45,7 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
+      <el-col :span="1.5" v-if="mode !== 2">
         <el-button
           type="primary"
           plain
@@ -44,7 +55,7 @@
           v-hasPermi="['system:clientTrade:add']"
         >新增</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <el-col :span="1.5" v-if="mode !== 2">
         <el-button
           type="success"
           plain
@@ -55,7 +66,7 @@
           v-hasPermi="['system:clientTrade:edit']"
         >修改</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <el-col :span="1.5" v-if="mode !== 2">
         <el-button
           type="danger"
           plain
@@ -90,7 +101,7 @@
       <el-table-column label="国家" align="center" prop="ctCountry" />
       <!-- <el-table-column label="已删除" align="center" prop="ctDelete" /> -->
       <!-- <el-table-column label="描述" align="center" prop="ctDesc" /> -->
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="mode !== 2">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -190,7 +201,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         ctCode: undefined,
-        clCode: undefined,
+        clCode: this.$route.query.clCode,
         ctDelete: 0
       },
       // 表单参数
@@ -215,10 +226,19 @@ export default {
         ctCountry: [
           { required: true, message: "国家不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 1-按照客户筛选贸易信息
+      // 2-按客户筛选贸易信息（不可修改）
+      mode: 0,
+      // 页面顶部提示
+      hint: ''
     };
   },
   async created() {
+    // 检查来源
+    if (this.$route.query.clCode) {
+      this.mode = 1
+    }
     this.getList();
     await this.getClientList();
   },
@@ -227,6 +247,17 @@ export default {
     getClientList() {
       listClient().then(response =>{
         this.clientList = response.rows;
+        if (this.mode === 1) {
+          let client = response.rows.find(ele => ele.clCode === this.$route.query.clCode)
+          // 构建筛选提示文本
+          this.hint = "客户 "
+          this.hint += client.clName
+          this.hint += " "
+          // 检查状态
+          if (client.clStat !== '1') {
+            this.mode = 2
+          }
+        }
       });
     },
     /** 查询客户列表 */
@@ -281,6 +312,9 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      if (this.mode === 1) {
+        this.form.clCode = this.$route.query.clCode
+      }
       this.open = true;
       this.title = "添加客户贸易信息";
     },

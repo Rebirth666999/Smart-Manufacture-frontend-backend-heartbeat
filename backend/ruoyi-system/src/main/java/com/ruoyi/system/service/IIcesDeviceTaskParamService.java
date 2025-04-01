@@ -46,4 +46,5 @@ public interface IIcesDeviceTaskParamService {
      * 校验并批量删除设备任务参数信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
 }

@@ -3,6 +3,7 @@ package com.ruoyi.system.mapper;
 import com.ruoyi.system.domain.IcesDeviceTaskParam;
 import com.ruoyi.system.domain.vo.IcesDeviceTaskParamVo;
 import com.ruoyi.common.core.mapper.BaseMapperPlus;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 设备任务参数Mapper接口
@@ -10,6 +11,7 @@ import com.ruoyi.common.core.mapper.BaseMapperPlus;
  * @author ruoyi
  * @date 2025-03-24
  */
+@Mapper
 public interface IcesDeviceTaskParamMapper extends BaseMapperPlus<IcesDeviceTaskParamMapper, IcesDeviceTaskParam, IcesDeviceTaskParamVo> {
 
 }

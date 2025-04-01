@@ -70,4 +70,8 @@ public class IcesEquipment extends BaseEntity {
      */
     private String eqDesc;
 
+    /**
+     * 审核段查询
+     */
+    public String EmStat;
 }

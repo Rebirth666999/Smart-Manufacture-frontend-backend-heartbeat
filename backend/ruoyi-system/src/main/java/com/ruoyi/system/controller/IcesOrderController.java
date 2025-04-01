@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+import com.ruoyi.system.domain.bo.IcesEquipmentModelBo;
+import com.ruoyi.system.domain.vo.IcesEquipmentModelVo;
 import lombok.RequiredArgsConstructor;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.*;
@@ -48,6 +50,13 @@ public class IcesOrderController extends BaseController {
         return iIcesOrderService.queryPageList(bo, pageQuery);
     }
 
+    /**
+     * 审核端查询订单列表
+     */
+    @GetMapping("/reviewList")
+    public TableDataInfo<IcesOrderVo> reviewList(IcesOrderBo bo, PageQuery pageQuery) {
+        return iIcesOrderService.queryReviewList(bo, pageQuery);
+    }
     /**
      * 导出订单列表
      */

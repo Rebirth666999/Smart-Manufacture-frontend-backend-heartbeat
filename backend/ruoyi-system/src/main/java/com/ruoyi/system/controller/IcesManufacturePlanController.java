@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+import com.ruoyi.system.domain.bo.IcesEquipmentModelBo;
+import com.ruoyi.system.domain.vo.IcesEquipmentModelVo;
 import lombok.RequiredArgsConstructor;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.*;
@@ -46,6 +48,14 @@ public class IcesManufacturePlanController extends BaseController {
     @GetMapping("/list")
     public TableDataInfo<IcesManufacturePlanVo> list(IcesManufacturePlanBo bo, PageQuery pageQuery) {
         return iIcesManufacturePlanService.queryPageList(bo, pageQuery);
+    }
+
+    /**
+     * 审核端查询列表
+     */
+    @GetMapping("/reviewList")
+    public TableDataInfo<IcesManufacturePlanVo> reviewList(IcesManufacturePlanBo bo, PageQuery pageQuery) {
+        return iIcesManufacturePlanService.queryReviewList(bo, pageQuery);
     }
 
     /**

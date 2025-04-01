@@ -78,4 +78,8 @@ public class IcesManufacturePlan extends BaseEntity {
      */
     private String mpDesc;
 
+    /**
+     * 查询审核状态
+     */
+    public String EmStat;
 }

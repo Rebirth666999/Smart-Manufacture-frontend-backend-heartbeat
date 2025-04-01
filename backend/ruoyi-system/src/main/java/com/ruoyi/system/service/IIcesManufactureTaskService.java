@@ -28,6 +28,11 @@ public interface IIcesManufactureTaskService {
     TableDataInfo<IcesManufactureTaskVo> queryPageList(IcesManufactureTaskBo bo, PageQuery pageQuery);
 
     /**
+     * 查询审核状态
+     */
+    TableDataInfo<IcesManufactureTaskVo> queryReviewList(IcesManufactureTaskBo bo, PageQuery pageQuery);
+
+    /**
      * 查询生产任务列表
      */
     List<IcesManufactureTaskVo> queryList(IcesManufactureTaskBo bo);
@@ -46,4 +51,6 @@ public interface IIcesManufactureTaskService {
      * 校验并批量删除生产任务信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+
 }

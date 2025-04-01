@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.domain.bo.IcesEquipmentModelBo;
 import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import com.ruoyi.system.domain.IcesEquipment;
 import com.ruoyi.system.mapper.IcesEquipmentMapper;
 import com.ruoyi.system.service.IIcesEquipmentService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Collection;
@@ -47,6 +49,21 @@ public class IcesEquipmentServiceImpl implements IIcesEquipmentService {
     @Override
     public TableDataInfo<IcesEquipmentVo> queryPageList(IcesEquipmentBo bo, PageQuery pageQuery) {
         LambdaQueryWrapper<IcesEquipment> lqw = buildQueryWrapper(bo);
+        Page<IcesEquipmentVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
+        return TableDataInfo.build(result);
+    }
+
+
+
+    @Override
+    public TableDataInfo<IcesEquipmentVo> queryReviewList(IcesEquipmentBo bo, PageQuery pageQuery) {
+        LambdaQueryWrapper<IcesEquipment> lqw = buildQueryWrapper(bo);
+        List<String> stats = new ArrayList<>();
+        stats.add("2");  // 待审核
+        stats.add("3");  // 审核中
+        stats.add("b");  // 待审核（弃用）
+        stats.add("c");  // 审核中（弃用）
+        lqw.in(IcesEquipment::getEmStat, stats);
         Page<IcesEquipmentVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
         return TableDataInfo.build(result);
     }

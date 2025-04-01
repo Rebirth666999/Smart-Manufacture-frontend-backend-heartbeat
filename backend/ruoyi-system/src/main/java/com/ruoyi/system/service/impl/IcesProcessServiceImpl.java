@@ -27,12 +27,14 @@ import com.ruoyi.system.domain.vo.IcesProcessVo;
 import com.ruoyi.system.domain.IcesProcess;
 import com.ruoyi.system.mapper.IcesProcessMapper;
 import com.ruoyi.flowable.factory.FlowServiceFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 工艺流程Service业务层处理
@@ -136,168 +138,255 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
         return StrUtil.utf8Str(bpmnBytes);
     }
     @Override
+    /**
+     * 保存流程模型（增量更新版本）
+     * @param modelXML 流程模型的XML字符串
+     * @throws DocumentException XML解析异常
+     * @throws JsonProcessingException JSON处理异常
+     */
+    @Transactional
     public void saveProcess(String modelXML) throws DocumentException, JsonProcessingException {
+        // ========== 1. 解析XML和基本模型处理 ==========
+
+        // 使用SAXReader解析XML字符串
         SAXReader saxReader = new SAXReader();
         Document document = saxReader.read(new ByteArrayInputStream(modelXML.getBytes(StandardCharsets.UTF_8)));
+
+        // 获取XML根元素和process元素
         Element rootElement = document.getRootElement();
-        Element process = rootElement.element("process");  // 定位到process
+        Element process = rootElement.element("process");  // 定位到process节点
+
+        // 从process元素中获取流程ID和名称
         String processId = process.attributeValue("id");
         String processName = process.attributeValue("name");
-        Long procId = Long.parseLong(processId.replace("process_", ""));
-        IcesProcess icesProcess = baseMapper.selectById(procId);
-        String procModel = icesProcess.getProcModel();
-        String procCode = icesProcess.getProcCode();
-        int newModelFlag = 0;  // 是否为新建模型
 
-        // 检查模型是否存在
+        // 从流程ID中提取数字部分作为procId
+        Long procId = Long.parseLong(processId.replace("process_", ""));
+
+        // 查询数据库获取流程信息
+        IcesProcess icesProcess = baseMapper.selectById(procId);
+        String procModel = icesProcess.getProcModel();  // 流程模型ID
+        String procCode = icesProcess.getProcCode();    // 流程编码
+        int newModelFlag = 0;  // 标记是否为新建模型(0:已有模型,1:新建模型)
+
+        // 检查模型是否已存在
         Model model = repositoryService.getModel(procModel);
         if (ObjectUtil.isNull(model)) {
             newModelFlag = 1;
-            // 新建模型
+            // 新建模型并保存
             Model newModel = repositoryService.newModel();
-            newModel.setName(processName);
-            newModel.setKey(processId);
+            newModel.setName(processName);   // 设置模型名称
+            newModel.setKey(processId);      // 设置模型Key
             repositoryService.saveModel(newModel);
 
-            // 保存模型ID
+            // 更新流程的模型ID
             procModel = newModel.getId();
             icesProcess.setProcModel(procModel);
             baseMapper.updateById(icesProcess);
         }
 
-        // 保存XML
+        // 保存XML到模型库
         repositoryService.addModelEditorSource(procModel, StringUtils.getBytes(modelXML, StandardCharsets.UTF_8));
 
-        // 不是新模型，先删除原先数据库的所有数据
+        // ========== 2. 获取现有数据快照 ==========
+
+        // 用于存储现有数据的Map:
+        // key: 业务标识, value: 数据库实体
+
+        // 现有步骤映射(psModel -> 步骤实体)
+        Map<String, IcesProcessStepVo> existingSteps = new HashMap<>();
+        // 现有普通流程关系映射(源步骤编码->目标步骤编码 -> 关系实体)
+        Map<String, IcesProcessStepPrevVo> existingFlows = new HashMap<>();
+        // 现有跨轮次流程关系映射(源步骤编码->目标步骤编码 -> 关系实体)
+        Map<String, IcesProcessStepPrevRoundVo> existingRoundFlows = new HashMap<>();
+
+        // 如果不是新建模型，需要获取现有数据用于增量比较
         if (newModelFlag == 0) {
-            // 构造搜索条件
+            // 2.1 查询并缓存现有步骤
             IcesProcessStepBo processStepBo = new IcesProcessStepBo();
             processStepBo.setProcCode(procCode);
-            // 查找所有符合条件的步骤
-            List<IcesProcessStepVo> processStepVos = processStepService.queryList(processStepBo);
-            // 取出步骤的ID
-            List<Long> processStepIds = new ArrayList<>();
-            for (IcesProcessStepVo processStepVo : processStepVos) {
-                processStepIds.add(processStepVo.getPsId());
-            }
-            // 数据库存在步骤需要删除
-            if (!processStepIds.isEmpty()) {
-                // 构造搜索条件
-                IcesProcessStepPrevBo stepPrevBo = new IcesProcessStepPrevBo();
-                stepPrevBo.setProcCode(procCode);
-                // 查找所有符合条件的前序步骤关系
-                List<IcesProcessStepPrevVo> stepPrevVos = stepPrevService.queryList(stepPrevBo);
-                // 取出关系的ID
-                List<Long> stepPrevIds = new ArrayList<>();
-                for (IcesProcessStepPrevVo stepPrevVo : stepPrevVos) {
-                    stepPrevIds.add(stepPrevVo.getPspId());
-                }
-                // 删除关系
-                if (!stepPrevIds.isEmpty()) {
-                    stepPrevService.deleteWithValidByIds(stepPrevIds, false);
-                }
+            List<IcesProcessStepVo> stepList = processStepService.queryList(processStepBo);
+            // 以psModel(模型中的元素ID)为key缓存步骤
+            stepList.forEach(step -> existingSteps.put(step.getPsModel(), step));
 
-                // 构造搜索条件
-                IcesProcessStepPrevRoundBo prevRoundBo = new IcesProcessStepPrevRoundBo();
-                prevRoundBo.setProcCode(procCode);
-                // 查找所有符合条件的前序步骤关系
-                List<IcesProcessStepPrevRoundVo> prevRoundVos = prevRoundService.queryList(prevRoundBo);
-                // 取出关系的ID
-                List<Long> prevRoundIds = new ArrayList<>();
-                for (IcesProcessStepPrevRoundVo prevRoundVo : prevRoundVos) {
-                    prevRoundIds.add(prevRoundVo.getPsprId());
-                }
-                // 删除关系
-                if (!prevRoundIds.isEmpty()) {
-                    prevRoundService.deleteWithValidByIds(prevRoundIds, false);
-                }
+            // 2.2 查询并缓存现有普通流程关系
+            IcesProcessStepPrevBo stepPrevBo = new IcesProcessStepPrevBo();
+            stepPrevBo.setProcCode(procCode);
+            List<IcesProcessStepPrevVo> flowList = stepPrevService.queryList(stepPrevBo);
+            // 以"源步骤编码->目标步骤编码"为key缓存关系
+            flowList.forEach(flow -> existingFlows.put(flow.getPsCodePrev() + "->" + flow.getPsCodeCur(), flow));
 
-                // 最后删除步骤
-                processStepService.deleteWithValidByIds(processStepIds, false);
-            }
+            // 2.3 查询并缓存现有跨轮次流程关系
+            IcesProcessStepPrevRoundBo prevRoundBo = new IcesProcessStepPrevRoundBo();
+            prevRoundBo.setProcCode(procCode);
+            List<IcesProcessStepPrevRoundVo> roundFlowList = prevRoundService.queryList(prevRoundBo);
+            // 以"源步骤编码->目标步骤编码"为key缓存关系
+            roundFlowList.forEach(flow -> existingRoundFlows.put(flow.getPsCodePrev() + "->" + flow.getPsCodeCur(), flow));
         }
 
-        // 读取XML中的模型
-        Iterator<Element> iterator = process.elementIterator();
-        List<Element> tasks = new ArrayList<>();  // 所有任务节点
-        List<Element> flows = new ArrayList<>();  // 所有连接线
-        List<IcesProcessStepBo> steps = new ArrayList<>();  // 步骤实体数组
-        Map<String, IcesProcessStepBo> stepMap = new HashMap<>();  // XML中对象id和步骤实体的映射
+        // ========== 3. 解析XML中的节点 ==========
 
+        // 用于存储从XML解析出的数据
+        List<Element> tasks = new ArrayList<>();    // 所有任务节点
+        List<Element> flows = new ArrayList<>();    // 所有连接线
+        List<IcesProcessStepBo> steps = new ArrayList<>();  // 所有步骤业务对象
+        Map<String, IcesProcessStepBo> stepMap = new HashMap<>();  // XML元素ID到步骤业务的映射
+
+        // 遍历process元素的所有子元素
+        Iterator<Element> iterator = process.elementIterator();
         while (iterator.hasNext()) {
             Element next = iterator.next();
-            // 解析当前节点
-            if (Objects.equals(next.getName(), "startEvent")) {
-                // 开始事件
+            String elementName = next.getName();
+
+            // 3.1 处理开始/结束事件
+            if (Objects.equals(elementName, "startEvent") || Objects.equals(elementName, "endEvent")) {
+                IcesProcessStepBo step = new IcesProcessStepBo();
+                step.setProcCode(procCode);
+                step.setPsModel(next.attributeValue("id"));  // 使用XML元素ID作为模型ID
+                steps.add(step);
+                stepMap.put(next.attributeValue("id"), step);
+            }
+            // 3.2 处理服务任务
+            else if (Objects.equals(elementName, "serviceTask")) {
+                tasks.add(next);  // 添加到任务列表
                 IcesProcessStepBo step = new IcesProcessStepBo();
                 step.setProcCode(procCode);
                 step.setPsModel(next.attributeValue("id"));
+                step.setMoCode(next.attributeValue("moId"));  // 模型对象编码
+                step.setPsDesc(next.attributeValue("psDesc")); // 步骤描述
                 steps.add(step);
                 stepMap.put(next.attributeValue("id"), step);
-            } else if (Objects.equals(next.getName(), "endEvent")) {
-                // 结束事件
-                IcesProcessStepBo step = new IcesProcessStepBo();
-                step.setProcCode(procCode);
-                step.setPsModel(next.attributeValue("id"));
-                steps.add(step);
-                stepMap.put(next.attributeValue("id"), step);
-            } else if (Objects.equals(next.getName(), "serviceTask")) {
-                // 操作步骤
-                tasks.add(next);
-                IcesProcessStepBo step = new IcesProcessStepBo();
-                step.setProcCode(procCode);
-                step.setPsModel(next.attributeValue("id"));
-                step.setMoCode(next.attributeValue("moId"));
-                step.setPsDesc(next.attributeValue("psDesc"));
-                steps.add(step);
-                stepMap.put(next.attributeValue("id"), step);
-            } else if (Objects.equals(next.getName(), "sequenceFlow")) {
+            }
+            // 3.3 处理连接线
+            else if (Objects.equals(elementName, "sequenceFlow")) {
                 flows.add(next);
             }
         }
 
-        // 向数据库插入steps中所有对象
-        for (IcesProcessStepBo step : steps) {
-            processStepService.insertByBo(step);
-        }
+        // ========== 4. 处理步骤 - 增量更新 ==========
 
+        for (IcesProcessStepBo newStep : steps) {
+            String psModel = newStep.getPsModel();
 
-        // 先读出prev属性，有的话解析json成字符串数组，for 遍历把数组id用map 映射process实体。
-        // 取出实体中的psID,new一个跨轮前序关联实体bo，把对应的两个id放进去，用service的方法插入
+            // 4.1 如果步骤已存在，则更新
+            if (existingSteps.containsKey(psModel)) {
+                // 获取已有步骤的ID
+                IcesProcessStepVo existing = existingSteps.get(psModel);
+                newStep.setPsId(existing.getPsId());  // 设置ID以便执行更新
 
-        // 解析flows，保存前序任务关系
-        for (Element flow : flows) {
-            IcesProcessStepPrevBo stepPrevBo = new IcesProcessStepPrevBo();
-            if (stepMap.get(flow.attributeValue("targetRef")) != null)
-                stepPrevBo.setPsCodeCur(stepMap.get(flow.attributeValue("targetRef")).getPsCode());
-            if (stepMap.get(flow.attributeValue("sourceRef")) != null)
-                stepPrevBo.setPsCodePrev(stepMap.get(flow.attributeValue("sourceRef")).getPsCode());
-            // 仅在两个ID都存在时插入
-            if (StringUtils.isNotBlank(stepPrevBo.getPsCodePrev()) && StringUtils.isNotBlank(stepPrevBo.getPsCodeCur())) {
-                stepPrevBo.setProcCode(procCode);
-                stepPrevService.insertByBo(stepPrevBo);
+                // 执行更新操作
+                processStepService.updateByBo(newStep);
+
+                // 从待处理集合移除，剩余的就是需要删除的
+                existingSteps.remove(psModel);
+            }
+            // 4.2 如果步骤不存在，则新增
+            else {
+                processStepService.insertByBo(newStep);
             }
         }
 
-        // 处理prev属性
+        // ========== 5. 处理普通流程关系 - 增量更新 ==========
+
+        for (Element flow : flows) {
+            // 获取连接线的源和目标元素ID
+            String sourceId = flow.attributeValue("sourceRef");
+            String targetId = flow.attributeValue("targetRef");
+
+            // 确保源和目标都存在
+            if (stepMap.containsKey(sourceId) && stepMap.containsKey(targetId)) {
+                // 获取源和目标步骤的业务编码
+                String sourceCode = stepMap.get(sourceId).getPsCode();
+                String targetCode = stepMap.get(targetId).getPsCode();
+                String flowKey = sourceCode + "->" + targetCode;  // 生成关系唯一键
+
+                // 创建流程关系业务对象
+                IcesProcessStepPrevBo stepPrevBo = new IcesProcessStepPrevBo();
+                stepPrevBo.setProcCode(procCode);
+                stepPrevBo.setPsCodePrev(sourceCode);
+                stepPrevBo.setPsCodeCur(targetCode);
+
+                // 5.1 如果关系已存在，则更新
+                if (existingFlows.containsKey(flowKey)) {
+                    IcesProcessStepPrevVo existing = existingFlows.get(flowKey);
+                    stepPrevBo.setPspId(existing.getPspId());  // 设置ID以便更新
+                    stepPrevService.updateByBo(stepPrevBo);
+                    existingFlows.remove(flowKey);  // 从待处理集合移除
+                }
+                // 5.2 如果关系不存在，则新增
+                else {
+                    stepPrevService.insertByBo(stepPrevBo);
+                }
+            }
+        }
+
+        // ========== 6. 处理跨轮次流程关系 - 增量更新 ==========
+
         for (Element task : tasks) {
-            String prevJson = task.attributeValue("prev"); // 获取prev属性
+            // 获取任务的prev属性(JSON格式)
+            String prevJson = task.attributeValue("prev");
             if (StringUtils.isNotBlank(prevJson)) {
-                // 解析JSON成字符串数组
+                // 解析JSON为前驱步骤ID数组
                 String[] prevIds = new ObjectMapper().readValue(prevJson, String[].class);
-                for (String prevId : prevIds) {
-                    IcesProcessStepBo currentStep = stepMap.get(task.attributeValue("id"));
-                    IcesProcessStepBo prevStep = stepMap.get(prevId);
-                    if (currentStep != null && prevStep != null) {
-                        IcesProcessStepPrevRoundBo stepPrevRoundBo = new IcesProcessStepPrevRoundBo();
-                        stepPrevRoundBo.setPsCodeCur(currentStep.getPsCode());
-                        stepPrevRoundBo.setPsCodePrev(prevStep.getPsCode());
-                        stepPrevRoundBo.setProcCode(procCode);
-                        prevRoundService.insertByBo(stepPrevRoundBo);
+                String currentId = task.attributeValue("id");
+
+                // 确保当前任务存在
+                if (stepMap.containsKey(currentId)) {
+                    String currentCode = stepMap.get(currentId).getPsCode();
+
+                    // 处理每个前驱步骤
+                    for (String prevId : prevIds) {
+                        if (stepMap.containsKey(prevId)) {
+                            String prevCode = stepMap.get(prevId).getPsCode();
+                            String roundFlowKey = prevCode + "->" + currentCode;
+
+                            // 创建跨轮次关系业务对象
+                            IcesProcessStepPrevRoundBo stepPrevRoundBo = new IcesProcessStepPrevRoundBo();
+                            stepPrevRoundBo.setProcCode(procCode);
+                            stepPrevRoundBo.setPsCodePrev(prevCode);
+                            stepPrevRoundBo.setPsCodeCur(currentCode);
+
+                            // 6.1 如果关系已存在，则更新
+                            if (existingRoundFlows.containsKey(roundFlowKey)) {
+                                IcesProcessStepPrevRoundVo existing = existingRoundFlows.get(roundFlowKey);
+                                stepPrevRoundBo.setPsprId(existing.getPsprId());  // 设置ID以便更新
+                                prevRoundService.updateByBo(stepPrevRoundBo);
+                                existingRoundFlows.remove(roundFlowKey);  // 从待处理集合移除
+                            }
+                            // 6.2 如果关系不存在，则新增
+                            else {
+                                prevRoundService.insertByBo(stepPrevRoundBo);
+                            }
+                        }
                     }
                 }
             }
         }
 
+        // ========== 7. 清理不再使用的数据 ==========
+
+        // 7.1 删除不再使用的步骤
+        if (!existingSteps.isEmpty()) {
+            List<Long> stepIdsToDelete = existingSteps.values().stream()
+                .map(IcesProcessStepVo::getPsId)
+                .collect(Collectors.toList());
+            processStepService.deleteWithValidByIds(stepIdsToDelete, false);
+        }
+
+        // 7.2 删除不再使用的普通流程关系
+        if (!existingFlows.isEmpty()) {
+            List<Long> flowIdsToDelete = existingFlows.values().stream()
+                .map(IcesProcessStepPrevVo::getPspId)
+                .collect(Collectors.toList());
+            stepPrevService.deleteWithValidByIds(flowIdsToDelete, false);
+        }
+
+        // 7.3 删除不再使用的跨轮次流程关系
+        if (!existingRoundFlows.isEmpty()) {
+            List<Long> roundFlowIdsToDelete = existingRoundFlows.values().stream()
+                .map(IcesProcessStepPrevRoundVo::getPsprId)
+                .collect(Collectors.toList());
+            prevRoundService.deleteWithValidByIds(roundFlowIdsToDelete, false);
+        }
     }
 }

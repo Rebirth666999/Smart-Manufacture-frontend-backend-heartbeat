@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.IcesClientTradeMapper">
+
+    <resultMap type="com.ruoyi.system.domain.IcesClientTrade" id="IcesClientTradeResult">
+        <result property="ctId" column="ct_id"/>
+        <result property="ctCode" column="ct_code"/>
+        <result property="clCode" column="cl_code"/>
+        <result property="ctName" column="ct_name"/>
+        <result property="ctAddr" column="ct_addr"/>
+        <result property="ctPhone" column="ct_phone"/>
+        <result property="ctCountry" column="ct_country"/>
+        <result property="ctDelete" column="ct_delete"/>
+        <result property="ctDesc" column="ct_desc"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

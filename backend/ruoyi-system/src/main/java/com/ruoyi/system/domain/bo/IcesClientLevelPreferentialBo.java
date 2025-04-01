@@ -30,7 +30,7 @@ public class IcesClientLevelPreferentialBo extends BaseEntity {
     /**
      * 对应关系编码
      */
-    @NotBlank(message = "对应关系编码不能为空", groups = { AddGroup.class, EditGroup.class })
+//    @NotBlank(message = "对应关系编码不能为空", groups = { AddGroup.class, EditGroup.class })
     private String clpCode;
 
     /**

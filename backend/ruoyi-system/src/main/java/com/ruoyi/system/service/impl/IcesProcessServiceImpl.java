@@ -11,10 +11,9 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.domain.IcesEquipmentModel;
 import com.ruoyi.system.domain.bo.*;
-import com.ruoyi.system.domain.vo.IcesProcessStepPrevRoundVo;
-import com.ruoyi.system.domain.vo.IcesProcessStepPrevVo;
-import com.ruoyi.system.domain.vo.IcesProcessStepVo;
+import com.ruoyi.system.domain.vo.*;
 import com.ruoyi.system.service.*;
 import lombok.RequiredArgsConstructor;
 import org.dom4j.Document;
@@ -23,7 +22,6 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.flowable.engine.repository.Model;
 import org.springframework.stereotype.Service;
-import com.ruoyi.system.domain.vo.IcesProcessVo;
 import com.ruoyi.system.domain.IcesProcess;
 import com.ruoyi.system.mapper.IcesProcessMapper;
 import com.ruoyi.flowable.factory.FlowServiceFactory;
@@ -66,6 +64,19 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
     @Override
     public TableDataInfo<IcesProcessVo> queryPageList(IcesProcessBo bo, PageQuery pageQuery) {
         LambdaQueryWrapper<IcesProcess> lqw = buildQueryWrapper(bo);
+        Page<IcesProcessVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
+        return TableDataInfo.build(result);
+    }
+
+    @Override
+    public TableDataInfo<IcesProcessVo> queryReviewList(IcesProcessBo bo, PageQuery pageQuery) {
+        LambdaQueryWrapper<IcesProcess> lqw = buildQueryWrapper(bo);
+        List<String> stats = new ArrayList<>();
+        stats.add("2");  // 待审核
+        stats.add("3");  // 审核中
+        stats.add("7");  // 待审核（弃用）
+        stats.add("8");  // 审核中（弃用）
+        lqw.in(IcesProcess::getProcStat, stats);
         Page<IcesProcessVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
         return TableDataInfo.build(result);
     }

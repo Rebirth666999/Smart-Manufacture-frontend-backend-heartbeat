@@ -28,6 +28,11 @@ public interface IIcesOrderService {
     TableDataInfo<IcesOrderVo> queryPageList(IcesOrderBo bo, PageQuery pageQuery);
 
     /**
+     * 审核端查询状态
+     */
+    TableDataInfo<IcesOrderVo> queryReviewList(IcesOrderBo bo, PageQuery pageQuery);
+
+    /**
      * 查询订单列表
      */
     List<IcesOrderVo> queryList(IcesOrderBo bo);
@@ -46,4 +51,6 @@ public interface IIcesOrderService {
      * 校验并批量删除订单信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+
 }

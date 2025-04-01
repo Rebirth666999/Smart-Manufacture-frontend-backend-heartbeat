@@ -135,7 +135,7 @@
 
     <el-table v-loading="loading" :data="materialRecordList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="原料台账ID" align="center" prop="mrId" v-if="true"/>
+      <el-table-column label="物料台账ID" align="center" prop="mrId" v-if="true"/>
       <el-table-column label="台账编码" align="center" prop="mrCode" />
       <el-table-column label="物料" align="center" prop="maCode" >
        <template slot-scope="scope">
@@ -168,13 +168,22 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
+            v-show="scope.row.mrStat === '1'"
             v-hasPermi="['system:materialRecord:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-finished"
+            v-show="scope.row.mrStat === '1'"
+            @click="handleConfirm(scope.row)"
+          >确认</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
+            v-show="scope.row.mrStat === '1'"
             v-hasPermi="['system:materialRecord:remove']"
           >删除</el-button>
         </template>
@@ -189,11 +198,11 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改原料台账对话框 -->
+    <!-- 添加或修改物料台账对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="92px">
         <el-form-item label="物料" prop="maCode">
-         <el-select v-model="form.maCode" placeholder="请选择物料" clearable>
+         <el-select v-model="form.maCode" placeholder="请选择物料" clearable :disabled="confirmFlag">
           <el-option
            v-for="option in materialList"
            :key="option.maCode"
@@ -203,7 +212,7 @@
          </el-select>
         </el-form-item>
         <el-form-item label="仓库" prop="stCode">
-         <el-select v-model="form.stCode" placeholder="请选择仓库" clearable>
+         <el-select v-model="form.stCode" placeholder="请选择仓库" clearable :disabled="confirmFlag">
           <el-option
            v-for="option in storeList"
            :key="option.stCode"
@@ -213,7 +222,7 @@
          </el-select>
         </el-form-item>
         <el-form-item label="变动类型" prop="mrType">
-          <el-select v-model="form.mrType" placeholder="请选择变动类型">
+          <el-select v-model="form.mrType" placeholder="请选择变动类型" :disabled="confirmFlag">
             <el-option
               v-for="dict in dict.type.ices_change_type"
               :key="dict.value"
@@ -222,7 +231,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="台账状态" prop="mrStat">
+        <!-- <el-form-item label="台账状态" prop="mrStat">
           <el-select v-model="form.mrStat" placeholder="请选择台账状态">
             <el-option
               v-for="dict in dict.type.ices_material_status"
@@ -231,15 +240,15 @@
               :value="dict.value"
             ></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="预计变动值" prop="mrEst">
-          <el-input v-model="form.mrEst" placeholder="请输入预计变动值" />
+          <el-input v-model="form.mrEst" placeholder="请输入预计变动值" :disabled="confirmFlag" />
         </el-form-item>
-        <el-form-item label="实际变动值" prop="mrReal">
+        <el-form-item label="实际变动值" prop="mrReal" v-show="confirmFlag">
           <el-input v-model="form.mrReal" placeholder="请输入实际变动值" />
         </el-form-item>
         <el-form-item label="描述" prop="mrDesc">
-          <el-input v-model="form.mrDesc" type="textarea" placeholder="请输入内容" />
+          <el-input v-model="form.mrDesc" type="textarea" placeholder="请输入内容" :disabled="confirmFlag" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -274,7 +283,7 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 原料台账表格数据
+      // 物料台账表格数据
       materialRecordList: [],
       // 弹出层标题
       title: "",
@@ -299,7 +308,7 @@ export default {
       // 表单校验
       rules: {
         mrId: [
-          { required: true, message: "原料台账ID不能为空", trigger: "blur" }
+          { required: true, message: "物料台账ID不能为空", trigger: "blur" }
         ],
         maCode: [
           { required: true, message: "物料不能为空", trigger: "blur" }
@@ -319,7 +328,9 @@ export default {
         mrDelete: [
           { required: true, message: "已删除不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 确认台账模式
+      confirmFlag: false
     };
   },
   async created() {
@@ -340,7 +351,7 @@ export default {
         this.materialList = response.rows;
       });
     },
-    /** 查询原料台账列表 */
+    /** 查询物料台账列表 */
     getList() {
       this.loading = true;
       listMaterialRecord(this.queryParams).then(response => {
@@ -394,7 +405,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加原料台账";
+      this.title = "添加物料台账";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -405,23 +416,49 @@ export default {
         this.loading = false;
         this.form = response.data;
         this.open = true;
-        this.title = "修改原料台账";
+        this.title = "修改物料台账";
       });
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          // 检查物料与仓库是否属于同一类
+          let material = this.materialList.find(ele => ele.maCode === this.form.maCode)
+          let store = this.storeList.find(ele => ele.stCode === this.form.stCode)
+          if (material.maType !== store.stType) {
+            this.$modal.msgWarning("请选择与物料类型相符的仓库");
+            return
+          }
+          // 检查无误，提交表单
           this.buttonLoading = true;
           if (this.form.mrId != null) {
+            // 修改
+            if (this.confirmFlag == true) {
+              // 须填写实际变动值
+              if (!this.form.mrReal) {
+                this.$modal.msgWarning("请输入实际变动值");
+                return
+              }
+              // 修改为已确认
+              this.form.mrStat = '2'
+            }
+
             updateMaterialRecord(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
+              if (this.confirmFlag == true) {
+                this.$modal.msgSuccess("确认成功");
+                this.confirmFlag = false;
+              } else {
+                this.$modal.msgSuccess("修改成功");
+              }
               this.open = false;
               this.getList();
             }).finally(() => {
               this.buttonLoading = false;
             });
           } else {
+            // 新增
+            this.form.mrStat = '1'  // 默认为未确认
             addMaterialRecord(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
@@ -436,7 +473,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const mrIds = row.mrId || this.ids;
-      this.$modal.confirm('是否确认删除原料台账编号为"' + mrIds + '"的数据项？').then(() => {
+      this.$modal.confirm('是否确认删除物料台账编号为"' + mrIds + '"的数据项？').then(() => {
         this.loading = true;
         return delMaterialRecord(mrIds);
       }).then(() => {
@@ -453,6 +490,19 @@ export default {
       this.download('system/materialRecord/export', {
         ...this.queryParams
       }, `materialRecord_${new Date().getTime()}.xlsx`)
+    },
+    // 确认台账
+    handleConfirm(row) {
+      this.loading = true;
+      this.reset();
+      const mrId = row.mrId
+      getMaterialRecord(mrId).then(response => {
+        this.loading = false;
+        this.form = response.data;
+        this.confirmFlag = true;
+        this.open = true;
+        this.title = "确认物料台账";
+      });
     }
   }
 };

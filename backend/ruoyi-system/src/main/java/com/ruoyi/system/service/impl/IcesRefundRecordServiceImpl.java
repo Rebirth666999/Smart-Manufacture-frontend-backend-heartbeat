@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesRefundRecordBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesRefundRecordServiceImpl implements IIcesRefundRecordService {
 
     private final IcesRefundRecordMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询退货记录
@@ -74,6 +76,7 @@ public class IcesRefundRecordServiceImpl implements IIcesRefundRecordService {
      */
     @Override
     public Boolean insertByBo(IcesRefundRecordBo bo) {
+        bo.setRrCode(codeService.insertByType("RefundRecord"));
         IcesRefundRecord add = BeanUtil.toBean(bo, IcesRefundRecord.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

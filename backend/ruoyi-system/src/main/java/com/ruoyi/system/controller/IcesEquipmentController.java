@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+import com.ruoyi.system.domain.bo.IcesEquipmentModelBo;
+import com.ruoyi.system.domain.vo.IcesEquipmentModelVo;
 import lombok.RequiredArgsConstructor;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.*;
@@ -50,6 +52,14 @@ public class IcesEquipmentController extends BaseController {
     @GetMapping("/list")
     public TableDataInfo<IcesEquipmentVo> list(IcesEquipmentBo bo, PageQuery pageQuery) {
         return iIcesEquipmentService.queryPageList(bo, pageQuery);
+    }
+
+    /**
+     * 审核端查询设备模型列表
+     */
+    @GetMapping("/reviewList")
+    public TableDataInfo<IcesEquipmentVo> reviewList(IcesEquipmentBo bo, PageQuery pageQuery) {
+        return iIcesEquipmentService.queryReviewList(bo, pageQuery);
     }
 
     /**

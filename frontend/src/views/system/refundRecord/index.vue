@@ -120,7 +120,7 @@
       </el-table-column>
       <el-table-column label="数量" align="center" prop="rrCount" />
       <!-- <el-table-column label="已删除" align="center" prop="rrDelete" /> -->
-      <el-table-column label="描述" align="center" prop="rrDesc" />
+      <!-- <el-table-column label="描述" align="center" prop="rrDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -163,7 +163,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="产品" prop="maCode">
-          <el-select v-model="form.maCode" :disabled="!form.orCode" placeholder="请选择产品" clearable>
+          <el-select v-model="form.maCode" :disabled="!form.orCode" placeholder="请先选择订单" clearable>
            <el-option
             v-for="option in getMaterialByOrder(form.orCode)"
             :key="option.maCode"
@@ -173,7 +173,7 @@
          </el-select>
         </el-form-item>
         <el-form-item label="客户" prop="clCode">
-          <el-select v-model="form.clCode" :disabled="!form.orCode" placeholder="请选择客户" clearable>
+          <el-select v-model="form.clCode" :disabled="!form.orCode" placeholder="请先选择订单" clearable>
            <el-option
             v-for="option in getClientByOrder(form.orCode)"
             :key="option.clCode"

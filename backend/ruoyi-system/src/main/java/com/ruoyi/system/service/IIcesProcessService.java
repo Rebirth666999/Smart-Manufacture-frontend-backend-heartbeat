@@ -30,6 +30,11 @@ public interface IIcesProcessService {
     TableDataInfo<IcesProcessVo> queryPageList(IcesProcessBo bo, PageQuery pageQuery);
 
     /**
+     * 查询审核状态相关
+     */
+    TableDataInfo<IcesProcessVo> queryReviewList(IcesProcessBo bo, PageQuery pageQuery);
+
+    /**
      * 查询工艺流程列表
      */
     List<IcesProcessVo> queryList(IcesProcessBo bo);
@@ -53,5 +58,6 @@ public interface IIcesProcessService {
      * 保存工艺流程
      */
     void saveProcess(String modelXML)throws DocumentException, JsonProcessingException;
+
 
 }

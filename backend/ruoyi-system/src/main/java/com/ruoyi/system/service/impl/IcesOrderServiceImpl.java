@@ -7,6 +7,8 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.domain.IcesEquipmentModel;
+import com.ruoyi.system.domain.vo.IcesEquipmentModelVo;
 import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import com.ruoyi.system.domain.IcesOrder;
 import com.ruoyi.system.mapper.IcesOrderMapper;
 import com.ruoyi.system.service.IIcesOrderService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Collection;
@@ -47,6 +50,22 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
     @Override
     public TableDataInfo<IcesOrderVo> queryPageList(IcesOrderBo bo, PageQuery pageQuery) {
         LambdaQueryWrapper<IcesOrder> lqw = buildQueryWrapper(bo);
+        Page<IcesOrderVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
+        return TableDataInfo.build(result);
+    }
+
+    /**
+     * 查询审核状态
+     */
+    @Override
+    public TableDataInfo<IcesOrderVo> queryReviewList(IcesOrderBo bo, PageQuery pageQuery) {
+        LambdaQueryWrapper<IcesOrder> lqw = buildQueryWrapper(bo);
+        List<String> stats = new ArrayList<>();
+        stats.add("2");  // 待审核
+        stats.add("3");  // 审核中
+        stats.add("8");  // 待审核（弃用）
+        stats.add("9");  // 审核中（弃用）
+        lqw.in(IcesOrder::getOrStat, stats);
         Page<IcesOrderVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
         return TableDataInfo.build(result);
     }

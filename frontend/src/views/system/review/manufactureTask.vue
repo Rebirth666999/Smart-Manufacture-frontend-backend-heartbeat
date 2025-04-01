@@ -1,15 +1,34 @@
 <template>
   <div class="app-container">
+    <!-- 顶部提示 -->
+    <el-alert
+      v-show="hint.length > 0"
+      :title="`正在根据${hint}筛选生产任务`"
+      type="info"
+      show-icon
+      :closable="false"
+      class="mb8"
+    >
+    </el-alert>
+
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="名称" prop="eqName">
-        <el-input
-          v-model="queryParams.eqName"
-          placeholder="请输入名称"
+      <el-form-item label="生产计划" prop="mpCode">
+        <el-select
+          v-model="queryParams.mpCode"
+          placeholder="请选择生产计划"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+          :disabled="mode === 1"
+        >
+          <el-option
+            v-for="item in manufacturePlanList"
+            :key="item.mpCode"
+            :label="item.mpCode"
+            :value="item.mpCode"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
-      <el-form-item label="车间" prop="arCode">
+      <el-form-item label="目标车间" prop="arCode">
         <el-select
           v-model="queryParams.arCode"
           placeholder="请选择车间"
@@ -24,22 +43,10 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="设备模型" prop="emCode">
-        <el-select v-model="queryParams.emCode" placeholder="请选择设备模型" 
-        @keyup.enter.native="handleQuery" clearable>
+      <el-form-item label="状态" prop="mtStat">
+        <el-select v-model="queryParams.mtStat" placeholder="请选择状态" clearable>
           <el-option
-            v-for="item in equipmentModelListFull"
-            :key="item.emCode"
-            :label="item.emName"
-            :value="item.emCode"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="状态" prop="eqStat">
-        <el-select v-model="queryParams.eqStat" placeholder="请选择状态" clearable>
-          <el-option
-            v-for="dict in dict.type.ices_equipment_status_review"
+            v-for="dict in dict.type.ices_order_status_review"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -60,38 +67,32 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['system:equipment:export']"
+          v-hasPermi="['system:manufactureTask:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="equipmentList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="manufactureTaskList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="设备ID" align="center" prop="eqId" v-if="true"/>
-      <el-table-column label="设备编码" align="center" prop="eqCode" />
-      <el-table-column label="名称" align="center" prop="eqName" />
-      <el-table-column label="所属车间" align="center" prop="arCode">
+      <el-table-column label="生产任务ID" align="center" prop="mtId" v-if="true"/>
+      <el-table-column label="生产任务编码" align="center" prop="mtCode" />
+      <el-table-column label="所属生产计划" align="center" prop="mpCode" />
+      <el-table-column label="目标车间" align="center" prop="arCode">
         <template slot-scope="scope">
           {{ areaList.find(ele => ele.arCode === scope.row.arCode).arName || '' }}
         </template>
       </el-table-column>
-      <el-table-column label="所属设备模型" align="center" prop="emCode">
+      <el-table-column label="状态" align="center" prop="mtStat">
         <template slot-scope="scope">
-          {{ equipmentModelListFull.find(ele => ele.emCode === scope.row.emCode).emName || '' }}
+          <dict-tag :options="dict.type.ices_order_status_review" :value="scope.row.mtStat"/>
         </template>
       </el-table-column>
-      <el-table-column label="状态" align="center" prop="eqStat">
+      <el-table-column label="最晚结束时间" align="center" prop="mtEndPlan" width="180">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.ices_equipment_status_review" :value="scope.row.eqStat"/>
+          <span>{{ parseTime(scope.row.mtEndPlan, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="上次通讯时间" align="center" prop="eqCommunicateTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.eqCommunicateTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="IP地址" align="center" prop="eqIp" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
@@ -107,14 +108,14 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-position"
-            @click="handleEquipmentOperationView(scope.row)"
-          >设备操作</el-button>
+            icon="el-icon-view"
+            @click="handleTaskDetailView(scope.row)"
+          >任务详情</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
-            v-show="scope.row.eqStat === '2' || scope.row.eqStat === 'd' || scope.row.eqStat === 'f' || scope.row.eqStat === 'h'"
+            v-show="scope.row.mtStat === '2' || scope.row.mtStat === '6'"
           >审核</el-button>
         </template>
       </el-table-column>
@@ -131,13 +132,13 @@
 </template>
 
 <script>
-import { getEquipment, listReviewEquipment } from "@/api/system/equipment";
-import { listArea } from "@/api/system/area";
-import { listEquipmentModel } from "@/api/system/equipmentModel";
+import { getManufactureTask, listReviewManufactureTask } from "@/api/system/manufactureTask";
+import { listManufacturePlan } from "@/api/system/manufacturePlan";
+
 
 export default {
-  name: "EquipmentReview",
-  dicts: ['ices_equipment_status_review'],
+  name: "ManufactureTaskReview",
+  dicts: ['ices_order_status_review'],
   data() {
     return {
       // 按钮loading
@@ -154,52 +155,59 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 设备表格数据
-      equipmentList: [],
+      // 生产任务表格数据
+      manufactureTaskList: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        mpCode: this.$route.query.mpCode,
         arCode: undefined,
-        emCode: undefined,
-        eqName: undefined,
-        eqStat: undefined,
-        eqDelete: 0,
+        mtStat: undefined,
+        mtDelete: 0,
       },
-      // 车间列表
+      // 生产计划数据
+      manufacturePlanList: [],
+      // 车间数据
       areaList: [],
-      // 已发布的设备模型列表
-      equipmentModelList: [],
-      // 设备模型列表
-      equipmentModelListFull: [],
+      // 1-根据生产计划筛选
+      mode: 0,
+      // 页面顶部提示
+      hint: ''
     };
   },
   async created() {
+    // 检查来源
+    if (this.$route.query.mpCode) {
+      this.mode = 1
+    }
+    await this.getManufacturePlanList();
     await this.getAreaList();
-    await this.getEquipmentModelList();
     this.getList();
   },
   methods: {
+    // 查询生产计划列表
+    getManufacturePlanList() {
+      return listManufacturePlan().then(response => {
+        this.manufacturePlanList = response.rows;
+        if (this.mode === 1) {
+          this.hint = "生产计划 "
+          this.hint += this.$route.query.mpCode
+          this.hint += " "
+        }
+      });
+    },
     // 获取车间列表
     getAreaList() {
-      listArea().then(response => {
+      return listArea().then(response => {
         this.areaList = response.rows;
       });
     },
-    // 查询设备模型列表
-    getEquipmentModelList() {
-      listEquipmentModel().then(response => {
-        this.equipmentModelListFull = response.rows;
-      });
-      listEquipmentModel({ emStat: "4" }).then(response => {
-        this.equipmentModelList = response.rows;
-      });
-    },
-    /** 查询设备列表 */
+    /** 查询生产任务审核列表 */
     getList() {
       this.loading = true;
-      listReviewEquipment(this.queryParams).then(response => {
-        this.equipmentList = response.rows;
+      listReviewManufactureTask(this.queryParams).then(response => {
+        this.manufactureTaskList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -216,20 +224,28 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.eqId)
+      this.ids = selection.map(item => item.mtId)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('system/equipment/export', {
+      this.download('system/manufactureTask/export', {
         ...this.queryParams
-      }, `equipment_${new Date().getTime()}.xlsx`)
+      }, `manufactureTask_${new Date().getTime()}.xlsx`)
     },
-    // 查看设备操作
-    handleEquipmentOperationView(row) {
-      this.$router.push(`/equipment/equipmentOperation?eqId=${row.eqId}`)
+    // 查看任务详情
+    handleTaskDetailView(row) {
+      this.$router.push(`/manufacture/taskDetail?mtCode=${row.mtCode}`)
     }
   }
 };
-</script> 
+</script>
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style> 

@@ -41,9 +41,6 @@ import com.ruoyi.system.service.IIcesProcessStepPrevRoundService;
 public class IcesDeviceTaskController extends BaseController {
 
     private final IIcesDeviceTaskService iIcesDeviceTaskService;
-    private final IIcesProcessStepService processStepService;
-    private final IIcesProcessStepPrevService processStepPrevService;
-    private final IIcesProcessStepPrevRoundService processStepPrevRoundService;
 
 
     /**
@@ -112,13 +109,22 @@ public class IcesDeviceTaskController extends BaseController {
                           @PathVariable Long[] dtIds) {
         return toAjax(iIcesDeviceTaskService.deleteWithValidByIds(Arrays.asList(dtIds), true));
     }
-    @SaCheckPermission("system:deviceTask:save")
+
+    /**
+     * 从生产任务下发设备任务
+     * @param jsonStr 请求体JSON
+     */
     @Log(title = "设备任务", businessType = BusinessType.INSERT)
     @RepeatSubmit()
-    @PostMapping("/saveDtasks")
-    public R<Void> saveDtasks(@RequestBody String jsonStr) throws DocumentException, JsonProcessingException {
-        iIcesDeviceTaskService.saveDtasks(jsonStr);
-        return R.ok();
+    @PostMapping("/saveTasks")
+    public R<Void> saveDeviceTasks(@RequestBody String jsonStr) {
+        try {
+            iIcesDeviceTaskService.saveDtasks(jsonStr);
+            return R.ok();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.fail();
+        }
     }
 
 

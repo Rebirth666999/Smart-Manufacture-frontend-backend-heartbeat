@@ -9,12 +9,9 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.domain.vo.*;
 import com.ruoyi.system.service.IIcesCodeService;
 import com.ruoyi.system.domain.bo.*;
-import com.ruoyi.system.domain.vo.IcesDeviceTaskVo;
-import com.ruoyi.system.domain.vo.IcesProcessStepPrevRoundVo;
-import com.ruoyi.system.domain.vo.IcesProcessStepPrevVo;
-import com.ruoyi.system.domain.vo.IcesProcessStepVo;
 import com.ruoyi.system.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -158,6 +155,9 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
             }
         }
 
+        // 删除数据库已有的内容
+        deleteExisting(mtCode);
+
         // 查找前序步骤和跨轮前序步骤
         // 遍历所有的工艺步骤
         for (IcesProcessStepVo step : modelIdToStep.values()) {
@@ -265,6 +265,44 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
                     }
                 }
             }
+        }
+    }
+
+    private void deleteExisting(String mtCode) {
+        // 如果数据库中已经存在步骤参数信息，则删除
+        IcesDeviceTaskParamBo taskParamBo = new IcesDeviceTaskParamBo();
+        taskParamBo.setMtCode(mtCode);
+        List<IcesDeviceTaskParamVo> taskParamVos = deviceTaskParamService.queryList(taskParamBo);
+        List<Long> taskParamIds = new ArrayList<>();
+        for (IcesDeviceTaskParamVo taskParamVo : taskParamVos) {
+            taskParamIds.add(taskParamVo.getDtpaId());
+        }
+        if (!taskParamIds.isEmpty()) {
+            deviceTaskParamService.deleteWithValidByIds(taskParamIds, false);
+        }
+
+        // 如果数据库中已经存在前序步骤信息，则删除
+        IcesDeviceTaskPrevBo taskPrevBo = new IcesDeviceTaskPrevBo();
+        taskPrevBo.setMtCode(mtCode);
+        List<IcesDeviceTaskPrevVo> taskPrevVos = deviceTaskPrevService.queryList(taskPrevBo);
+        List<Long> taskPrevIds = new ArrayList<>();
+        for (IcesDeviceTaskPrevVo taskPrevVo : taskPrevVos) {
+            taskPrevIds.add(taskPrevVo.getDtprId());
+        }
+        if (!taskPrevIds.isEmpty()) {
+            deviceTaskPrevService.deleteWithValidByIds(taskPrevIds, false);
+        }
+
+        // 如果数据库中已经存在步骤信息，则删除
+        IcesDeviceTaskBo taskBo = new IcesDeviceTaskBo();
+        taskBo.setMtCode(mtCode);
+        List<IcesDeviceTaskVo> taskVos = queryList(taskBo);
+        List<Long> taskIds = new ArrayList<>();
+        for (IcesDeviceTaskVo taskVo : taskVos) {
+            taskIds.add(taskVo.getDtId());
+        }
+        if (!taskIds.isEmpty()) {
+            deleteWithValidByIds(taskIds, false);
         }
     }
 }

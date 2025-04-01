@@ -74,6 +74,7 @@ public class IcesClientTradeServiceImpl implements IIcesClientTradeService {
      */
     @Override
     public Boolean insertByBo(IcesClientTradeBo bo) {
+        bo.setCtCode(codeService.insertByType("ClientTrade"));
         IcesClientTrade add = BeanUtil.toBean(bo, IcesClientTrade.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
@@ -88,7 +89,6 @@ public class IcesClientTradeServiceImpl implements IIcesClientTradeService {
      */
     @Override
     public Boolean updateByBo(IcesClientTradeBo bo) {
-        bo.setCtCode(codeService.insertByType("ClientTrade"));
         IcesClientTrade update = BeanUtil.toBean(bo, IcesClientTrade.class);
         validEntityBeforeSave(update);
         return baseMapper.updateById(update) > 0;

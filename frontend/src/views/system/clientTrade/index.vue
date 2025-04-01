@@ -89,7 +89,7 @@
       <el-table-column label="收货电话" align="center" prop="ctPhone" />
       <el-table-column label="国家" align="center" prop="ctCountry" />
       <!-- <el-table-column label="已删除" align="center" prop="ctDelete" /> -->
-      <el-table-column label="描述" align="center" prop="ctDesc" />
+      <!-- <el-table-column label="描述" align="center" prop="ctDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

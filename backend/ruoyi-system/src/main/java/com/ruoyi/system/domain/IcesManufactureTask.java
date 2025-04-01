@@ -86,8 +86,4 @@ public class IcesManufactureTask extends BaseEntity {
      */
     private String mtDesc;
 
-    /**
-     * 查询审核状态
-     */
-    public String EmStat;
 }

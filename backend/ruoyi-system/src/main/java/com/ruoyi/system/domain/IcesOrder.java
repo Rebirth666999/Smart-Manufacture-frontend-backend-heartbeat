@@ -82,8 +82,4 @@ public class IcesOrder extends BaseEntity {
      */
     private String orDesc;
 
-    /**
-     * 查询状态
-     */
-    public String EmStat;
 }

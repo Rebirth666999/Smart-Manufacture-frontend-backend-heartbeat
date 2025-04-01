@@ -65,7 +65,7 @@ public class IcesManufactureTaskServiceImpl implements IIcesManufactureTaskServi
         stats.add("3");  // 审核中
         stats.add("a");  // 待审核（弃用）
         stats.add("b");  // 审核中（弃用）
-        lqw.in(IcesManufactureTask::getEmStat, stats);
+        lqw.in(IcesManufactureTask::getMtStat, stats);
         Page<IcesManufactureTaskVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
         return TableDataInfo.build(result);
     }

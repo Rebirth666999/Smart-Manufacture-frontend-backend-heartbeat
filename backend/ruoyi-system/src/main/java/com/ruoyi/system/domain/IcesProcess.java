@@ -55,9 +55,4 @@ public class IcesProcess extends BaseEntity {
      * 描述
      */
     private String procDesc;
-
-    /**
-     * 查询审核状态
-     */
-    private String EmStat;
 }

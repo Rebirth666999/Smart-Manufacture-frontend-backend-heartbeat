@@ -76,7 +76,7 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
         stats.add("3");  // 审核中
         stats.add("7");  // 待审核（弃用）
         stats.add("8");  // 审核中（弃用）
-        lqw.in(IcesProcess::getEmStat, stats);
+        lqw.in(IcesProcess::getProcStat, stats);
         Page<IcesProcessVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
         return TableDataInfo.build(result);
     }

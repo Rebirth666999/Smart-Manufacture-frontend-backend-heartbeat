@@ -63,7 +63,7 @@ public class IcesEquipmentServiceImpl implements IIcesEquipmentService {
         stats.add("3");  // 审核中
         stats.add("b");  // 待审核（弃用）
         stats.add("c");  // 审核中（弃用）
-        lqw.in(IcesEquipment::getEmStat, stats);
+        lqw.in(IcesEquipment::getEqStat, stats);
         Page<IcesEquipmentVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
         return TableDataInfo.build(result);
     }

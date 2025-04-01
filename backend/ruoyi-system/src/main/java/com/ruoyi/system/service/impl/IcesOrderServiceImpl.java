@@ -65,7 +65,7 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
         stats.add("3");  // 审核中
         stats.add("8");  // 待审核（弃用）
         stats.add("9");  // 审核中（弃用）
-        lqw.in(IcesOrder::getEmStat, stats);
+        lqw.in(IcesOrder::getOrStat, stats);
         Page<IcesOrderVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
         return TableDataInfo.build(result);
     }

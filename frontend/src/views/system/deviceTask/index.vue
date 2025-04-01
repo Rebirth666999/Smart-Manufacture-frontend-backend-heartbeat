@@ -20,7 +20,7 @@
       <el-form-item label="状态代码" prop="dtStat">
         <el-select v-model="queryParams.dtStat" placeholder="请选择状态代码" clearable>
           <el-option
-            v-for="dict in dict.type.ices_manufacture_task_status"
+            v-for="dict in dict.type.ices_device_task_status"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -95,7 +95,7 @@
       <el-table-column label="设备操作ID" align="center" prop="eoCode" />
       <el-table-column label="状态代码" align="center" prop="dtStat">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.ices_manufacture_task_status" :value="scope.row.dtStat"/>
+          <dict-tag :options="dict.type.ices_device_task_status" :value="scope.row.dtStat"/>
         </template>
       </el-table-column>
       <el-table-column label="实际开始时间" align="center" prop="dtBegin" width="180">
@@ -164,7 +164,7 @@ import { listDeviceTask, getDeviceTask, delDeviceTask, addDeviceTask, updateDevi
 
 export default {
   name: "DeviceTask",
-  dicts: ['ices_manufacture_task_status'],
+  dicts: ['ices_device_task_status'],
   data() {
     return {
       // 按钮loading

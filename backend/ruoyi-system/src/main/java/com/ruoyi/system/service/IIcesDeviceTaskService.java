@@ -1,10 +1,12 @@
 package com.ruoyi.system.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ruoyi.system.domain.IcesDeviceTask;
 import com.ruoyi.system.domain.vo.IcesDeviceTaskVo;
 import com.ruoyi.system.domain.bo.IcesDeviceTaskBo;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
+import org.dom4j.DocumentException;
 
 import java.util.Collection;
 import java.util.List;
@@ -46,4 +48,17 @@ public interface IIcesDeviceTaskService {
      * 校验并批量删除设备任务信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+    void saveDtasks(String modelXML) throws DocumentException, JsonProcessingException;
+    /**
+     * 保存设备任务
+     */
+
+    /**
+     * 根据当前ID查询前序步骤ID
+     *
+     * @param currentId 当前步骤ID
+     * @return 前序步骤ID
+     */
+
+
 }

@@ -22,6 +22,8 @@ public interface IIcesProcessStepPrevService {
      */
     IcesProcessStepPrevVo queryById(Long pspId);
 
+    IcesProcessStepPrevVo queryByCurId(Long pspIdCur);
+
     /**
      * 查询关联-工艺步骤的前序步骤列表
      */
@@ -46,4 +48,6 @@ public interface IIcesProcessStepPrevService {
      * 校验并批量删除关联-工艺步骤的前序步骤信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+
 }

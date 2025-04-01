@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesMaterialStockBo;
@@ -29,6 +30,7 @@ import java.util.Collection;
 @Service
 public class IcesMaterialStockServiceImpl implements IIcesMaterialStockService {
 
+    private final IIcesCodeService codeService;
     private final IcesMaterialStockMapper baseMapper;
 
     /**
@@ -73,6 +75,7 @@ public class IcesMaterialStockServiceImpl implements IIcesMaterialStockService {
      */
     @Override
     public Boolean insertByBo(IcesMaterialStockBo bo) {
+        bo.setMsCode(codeService.insertByType("MaterialStock"));
         IcesMaterialStock add = BeanUtil.toBean(bo, IcesMaterialStock.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

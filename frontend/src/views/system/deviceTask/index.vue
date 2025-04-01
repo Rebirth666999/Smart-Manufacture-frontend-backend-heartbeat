@@ -1,24 +1,24 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="所属生产任务ID" prop="mtCode">
+      <el-form-item label="所属生产任务" prop="mtCode">
         <el-input
           v-model="queryParams.mtCode"
-          placeholder="请输入所属生产任务ID"
+          placeholder="请输入所属生产任务"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="设备操作ID" prop="eoCode">
+      <el-form-item label="设备操作" prop="eoCode">
         <el-input
           v-model="queryParams.eoCode"
-          placeholder="请输入设备操作ID"
+          placeholder="请输入设备操作"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态代码" prop="dtStat">
-        <el-select v-model="queryParams.dtStat" placeholder="请选择状态代码" clearable>
+      <el-form-item label="状态" prop="dtStat">
+        <el-select v-model="queryParams.dtStat" placeholder="请选择状态" clearable>
           <el-option
             v-for="dict in dict.type.ices_device_task_status"
             :key="dict.value"
@@ -27,14 +27,14 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="已删除" prop="dtDelete">
+      <!-- <el-form-item label="已删除" prop="dtDelete">
         <el-input
           v-model="queryParams.dtDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -91,9 +91,9 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="设备任务ID" align="center" prop="dtId" v-if="true"/>
       <el-table-column label="设备任务编码" align="center" prop="dtCode" />
-      <el-table-column label="所属生产任务ID" align="center" prop="mtCode" />
-      <el-table-column label="设备操作ID" align="center" prop="eoCode" />
-      <el-table-column label="状态代码" align="center" prop="dtStat">
+      <el-table-column label="所属生产任务" align="center" prop="mtCode" />
+      <el-table-column label="设备操作" align="center" prop="eoCode" />
+      <el-table-column label="状态" align="center" prop="dtStat">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_device_task_status" :value="scope.row.dtStat"/>
         </template>
@@ -108,8 +108,8 @@
           <span>{{ parseTime(scope.row.dtEnd, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="已删除" align="center" prop="dtDelete" />
-      <el-table-column label="描述" align="center" prop="dtDesc" />
+      <!-- <el-table-column label="已删除" align="center" prop="dtDelete" /> -->
+      <!-- <el-table-column label="描述" align="center" prop="dtDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -194,7 +194,7 @@ export default {
         mtCode: undefined,
         eoCode: undefined,
         dtStat: undefined,
-        dtDelete: undefined,
+        dtDelete: 0,
       },
       // 表单参数
       form: {},

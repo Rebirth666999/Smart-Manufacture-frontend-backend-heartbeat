@@ -222,7 +222,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="台账状态" prop="mrStat">
+        <!-- <el-form-item label="台账状态" prop="mrStat">
           <el-select v-model="form.mrStat" placeholder="请选择台账状态">
             <el-option
               v-for="dict in dict.type.ices_material_status"
@@ -231,7 +231,7 @@
               :value="dict.value"
             ></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="预计变动值" prop="mrEst">
           <el-input v-model="form.mrEst" placeholder="请输入预计变动值" />
         </el-form-item>
@@ -422,6 +422,7 @@ export default {
               this.buttonLoading = false;
             });
           } else {
+            this.form.mrStat = '1'  // 默认为未确认
             addMaterialRecord(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;

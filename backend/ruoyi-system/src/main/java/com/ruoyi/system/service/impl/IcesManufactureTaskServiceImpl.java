@@ -55,22 +55,6 @@ public class IcesManufactureTaskServiceImpl implements IIcesManufactureTaskServi
     }
 
     /**
-     * 查询审核状态
-     */
-    @Override
-    public TableDataInfo<IcesManufactureTaskVo> queryReviewList(IcesManufactureTaskBo bo, PageQuery pageQuery) {
-        LambdaQueryWrapper<IcesManufactureTask> lqw = buildQueryWrapper(bo);
-        List<String> stats = new ArrayList<>();
-        stats.add("2");  // 待审核
-        stats.add("3");  // 审核中
-        stats.add("a");  // 待审核（弃用）
-        stats.add("b");  // 审核中（弃用）
-        lqw.in(IcesManufactureTask::getMtStat, stats);
-        Page<IcesManufactureTaskVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
-        return TableDataInfo.build(result);
-    }
-
-    /**
      * 查询生产任务列表
      */
     @Override

@@ -28,11 +28,6 @@ public interface IIcesManufactureTaskService {
     TableDataInfo<IcesManufactureTaskVo> queryPageList(IcesManufactureTaskBo bo, PageQuery pageQuery);
 
     /**
-     * 查询审核状态
-     */
-    TableDataInfo<IcesManufactureTaskVo> queryReviewList(IcesManufactureTaskBo bo, PageQuery pageQuery);
-
-    /**
      * 查询生产任务列表
      */
     List<IcesManufactureTaskVo> queryList(IcesManufactureTaskBo bo);

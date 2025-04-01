@@ -191,7 +191,7 @@
 
     <!-- 添加或修改原料台账对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="92px">
         <el-form-item label="物料" prop="maCode">
          <el-select v-model="form.maCode" placeholder="请选择物料" clearable>
           <el-option

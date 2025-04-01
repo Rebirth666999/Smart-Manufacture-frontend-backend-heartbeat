@@ -9,6 +9,15 @@ export function listEquipment(query) {
   })
 }
 
+// 查询审核用设备列表
+export function listReviewEquipment(query) {
+  return request({
+    url: '/system/equipment/reviewList',
+    method: 'get',
+    params: query
+  })
+}
+
 // 查询设备详细
 export function getEquipment(eqId) {
   return request({

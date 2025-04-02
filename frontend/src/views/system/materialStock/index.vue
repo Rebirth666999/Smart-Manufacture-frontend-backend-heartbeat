@@ -234,6 +234,10 @@ export default {
           { required: true, message: "库存不能为空", trigger: "blur" }
         ],
       },
+      // 仓库列表
+      storeList: [],
+      // 物料列表
+      materialList: [],
       // 1-按照物料筛选
       // 2-按照仓库筛选
       mode: 0,

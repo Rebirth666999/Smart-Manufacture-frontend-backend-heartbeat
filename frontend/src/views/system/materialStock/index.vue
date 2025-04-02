@@ -309,42 +309,42 @@ export default {
     },
     /** 提交按钮 */
     /** 提交按钮 */
-submitForm() {
-  this.$refs["form"].validate(valid => {
-    if (valid) {
-      const selectedStore = this.storeList.find(store => store.stCode === this.form.stCode);
-      const selectedMaterial = this.materialList.find(material => material.maCode === this.form.maCode);
-      if (selectedStore && selectedMaterial) {
-        const storeType = selectedStore.stType;
-        const materialType = selectedMaterial.maType;
-        if ((storeType === '1' && materialType === '1') || (storeType === '2' && materialType === '2')) {
-          this.buttonLoading = true;
-          if (this.form.msId != null) {
-            updateMaterialStock(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            }).finally(() => {
-              this.buttonLoading = false;
-            });
+    submitForm() {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          const selectedStore = this.storeList.find(store => store.stCode === this.form.stCode);
+          const selectedMaterial = this.materialList.find(material => material.maCode === this.form.maCode);
+          if (selectedStore && selectedMaterial) {
+            const storeType = selectedStore.stType;
+            const materialType = selectedMaterial.maType;
+            if ((storeType === '1' && materialType === '1') || (storeType === '2' && materialType === '2')) {
+              this.buttonLoading = true;
+              if (this.form.msId != null) {
+                updateMaterialStock(this.form).then(response => {
+                  this.$modal.msgSuccess("修改成功");
+                  this.open = false;
+                  this.getList();
+                }).finally(() => {
+                  this.buttonLoading = false;
+                });
+              } else {
+                addMaterialStock(this.form).then(response => {
+                  this.$modal.msgSuccess("新增成功");
+                  this.open = false;
+                  this.getList();
+                }).finally(() => {
+                  this.buttonLoading = false;
+                });
+              }
+             } else {
+              this.$modal.msgWarning("请选择与物料类型相符的仓库");
+            }
           } else {
-            addMaterialStock(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            }).finally(() => {
-              this.buttonLoading = false;
-            });
+            this.$modal.msgWarning("未找到对应的仓库或物料信息");
           }
-         } else {
-          this.$modal.msgError("仓库类型和物料类型不匹配，新增失败");
         }
-      } else {
-        this.$modal.msgError("未找到对应的仓库或物料信息，新增失败");
-      }
-    }
-  });
-},
+      });
+    },
     /** 删除按钮操作 */
     handleDelete(row) {
       const msIds = row.msId || this.ids;

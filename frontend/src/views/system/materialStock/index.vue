@@ -21,7 +21,7 @@
         />
       </el-form-item> -->
       <el-form-item label="仓库" prop="stCode">
-       <el-select v-model="queryParams.stCode" placeholder="请选择仓库" clearable>
+       <el-select v-model="queryParams.stCode" placeholder="请选择仓库" clearable :disabled="mode === 2">
         <el-option
          v-for="option in storeList"
          :key="option.stCode"
@@ -31,7 +31,7 @@
        </el-select>
       </el-form-item>
       <el-form-item label="物料" prop="maCode">
-       <el-select v-model="queryParams.maCode" placeholder="请选择物料" clearable>
+       <el-select v-model="queryParams.maCode" placeholder="请选择物料" clearable :disabled="mode === 1">
         <el-option
          v-for="option in materialList"
          :key="option.maCode"
@@ -148,7 +148,7 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="仓库" prop="stCode">
-         <el-select v-model="form.stCode" placeholder="请选择仓库" clearable>
+         <el-select v-model="form.stCode" placeholder="请选择仓库" :disabled="mode === 2">
           <el-option
            v-for="option in storeList"
            :key="option.stCode"
@@ -158,7 +158,7 @@
          </el-select>
         </el-form-item>
         <el-form-item label="物料" prop="maCode">
-         <el-select v-model="form.maCode" placeholder="请选择仓库" clearable>
+         <el-select v-model="form.maCode" placeholder="请选择仓库" :disabled="mode === 1">
           <el-option
            v-for="option in materialList"
            :key="option.maCode"

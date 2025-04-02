@@ -1,5 +1,16 @@
 <template>
   <div class="app-container">
+    <!-- 顶部提示 -->
+    <el-alert
+      v-show="hint.length > 0"
+      :title="`正在根据${hint}筛选物料库存`"
+      type="info"
+      show-icon
+      :closable="false"
+      class="mb8"
+    >
+    </el-alert>
+
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <!-- <el-form-item label="仓库原料库存编码" prop="msCode">
         <el-input
@@ -133,7 +144,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改关联-车间原料库存对话框 -->
+    <!-- 添加或修改原料库存对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="仓库" prop="stCode">
@@ -191,7 +202,7 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 关联-车间原料库存表格数据
+      // 原料库存表格数据
       materialStockList: [],
       // 弹出层标题
       title: "",
@@ -202,8 +213,8 @@ export default {
         pageNum: 1,
         pageSize: 10,
         msCode: undefined,
-        stCode: undefined,
-        maCode: undefined,
+        stCode: this.$route.query.stCode,
+        maCode: this.$route.query.maCode,
         msDelete:0,
       },
       // 表单参数
@@ -222,10 +233,21 @@ export default {
         msStock: [
           { required: true, message: "库存不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 1-按照物料筛选
+      // 2-按照仓库筛选
+      mode: 0,
+      // 页面顶部提示
+      hint: ''
     };
   },
   async created() {
+    // 检查来源
+    if (this.$route.query.maCode) {
+      this.mode = 1
+    } else if (this.$route.query.stCode) {
+      this.mode = 2
+    }
     this.getList();
     await this.getMaterialList();
     await this.getStoreList();
@@ -235,15 +257,25 @@ export default {
     getStoreList(){
       listStore().then(response => {
         this.storeList = response.rows;
+        if (this.mode === 2) {
+          this.hint = "仓库 "
+          this.hint += response.rows.find(ele => ele.stCode === this.$route.query.stCode).stName
+          this.hint += " "
+        }
       });
     },
     //查询台账列表
     getMaterialList(){
       listMaterial().then(response => {
         this.materialList = response.rows;
+        if (this.mode === 1) {
+          this.hint = "物料 "
+          this.hint += response.rows.find(ele => ele.maCode === this.$route.query.maCode).maName
+          this.hint += " "
+        }
       });
     },
-    /** 查询关联-车间原料库存列表 */
+    /** 查询原料库存列表 */
     getList() {
       this.loading = true;
       listMaterialStock(this.queryParams).then(response => {
@@ -292,8 +324,13 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      if (this.mode === 1) {
+        this.form.maCode = this.$route.query.maCode
+      } else if (this.mode === 2) {
+        this.form.stCode = this.$route.query.stCode
+      }
       this.open = true;
-      this.title = "添加关联-车间原料库存";
+      this.title = "添加原料库存";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -304,7 +341,7 @@ export default {
         this.loading = false;
         this.form = response.data;
         this.open = true;
-        this.title = "修改关联-车间原料库存";
+        this.title = "修改原料库存";
       });
     },
     /** 提交按钮 */
@@ -348,7 +385,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const msIds = row.msId || this.ids;
-      this.$modal.confirm('是否确认删除关联-车间原料库存编号为"' + msIds + '"的数据项？').then(() => {
+      this.$modal.confirm('是否确认删除原料库存编号为"' + msIds + '"的数据项？').then(() => {
         this.loading = true;
         return delMaterialStock(msIds);
       }).then(() => {

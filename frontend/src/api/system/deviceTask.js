@@ -42,3 +42,12 @@ export function delDeviceTask(dtId) {
     method: 'delete'
   })
 }
+
+// 生成设备任务
+export function saveDeviceTasks(data) {
+  return request({
+    url: '/system/deviceTask/saveTasks',
+    method: 'post',
+    data: data
+  })
+}

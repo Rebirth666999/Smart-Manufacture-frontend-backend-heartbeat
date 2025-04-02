@@ -12,18 +12,18 @@
     </el-alert>
 
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="模型类型" prop="emtId">
+      <el-form-item label="模型类型" prop="emtCode">
         <el-select
-          v-model="queryParams.emtId"
+          v-model="queryParams.emtCode"
           placeholder="请选择模型类型"
           clearable
           :disabled="mode === 1"
         >
           <el-option
             v-for="item in equipmentModelTypeListFull"
-            :key="item.emtId"
+            :key="item.emtCode"
             :label="item.emtName"
-            :value="item.emtId"
+            :value="item.emtCode"
           >
           </el-option>
         </el-select>
@@ -70,9 +70,9 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="设备模型ID" align="center" prop="emId" v-if="true"/>
       <el-table-column label="名称" align="center" prop="emName" />
-      <el-table-column label="所属模型类型" align="center" prop="emtId">
+      <el-table-column label="所属模型类型" align="center" prop="emtCode">
         <template slot-scope="scope">
-          {{ equipmentModelTypeListFull.find(ele => ele.emtId === scope.row.emtId).emtName || '' }}
+          {{ equipmentModelTypeListFull.find(ele => ele.emtCode === scope.row.emtCode).emtName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center" prop="emStat">
@@ -103,7 +103,22 @@
             type="text"
             icon="el-icon-edit"
             v-show="scope.row.emStat === '2' || scope.row.emStat === '6'"
-          >审核</el-button>
+            @click="startReview(scope.row)"
+          >开始审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-finished"
+            v-show="scope.row.emStat === '3' || scope.row.emStat === '7'"
+            @click="passReview(scope.row)"
+          >通过审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-reject"
+            v-show="scope.row.emStat === '3' || scope.row.emStat === '7'"
+            @click="rejectReview(scope.row)"
+          >驳回审核</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -119,7 +134,7 @@
 </template>
 
 <script>
-import { getEquipmentModel, listReviewEquipmentModel } from "@/api/system/equipmentModel";
+import { updateEquipmentModel , getEquipmentModel, listReviewEquipmentModel } from "@/api/system/equipmentModel";
 import { listEquipmentModelType } from "@/api/system/equipmentModelType";
 
 export default {
@@ -147,7 +162,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        emtId: this.$route.query.emtId,
+        emtCode: this.$route.query.emtCode,
         emName: undefined,
         emStat: undefined,
         emDelete: 0,
@@ -162,13 +177,65 @@ export default {
   },
   async created() {
     // 检查来源
-    if (this.$route.query.emtId) {
+    if (this.$route.query.emtCode) {
       this.mode = 1
     }
     await this.getEquipmentModelTypeList();
     this.getList();
   },
   methods: {
+    //开始审核
+    startReview(row) {
+      this.$modal.confirm('是否要开始审核？').then(() => {
+        this.loading = true;
+        getEquipmentModel(row.emId).then(response => {
+          this.form = response.data;
+          if (this.form.emStat === '2') this.form.emStat = '3';
+          else this.form.emStat = '7';
+        updateEquipmentModel(this.form).then(response => {
+            this.$modal.msgSuccess("已开始审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    //通过审核
+    passReview(row) {
+      this.$modal.confirm('是否要通过审核？').then(() => {
+        this.loading = true;
+        getEquipmentModel(row.emId).then(response => {
+          this.form = response.data;
+          if (this.form.emStat === '3' ||this.form.emStat === '7' ) this.form.emStat = '4';
+        updateEquipmentModel(this.form).then(response => {
+            this.$modal.msgSuccess("已通过审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    //驳回审核
+    rejectReview(row) {
+      this.$modal.confirm('是否要驳回审核？').then(() => {
+        this.loading = true;
+        getEquipmentModel(row.emId).then(response => {
+          this.form = response.data;
+          if (this.form.emStat === '3' ||this.form.emStat === '7' ) this.form.emStat = '1';
+        updateEquipmentModel(this.form).then(response => {
+            this.$modal.msgSuccess("已驳回审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
     // 查询模型类型列表
     getEquipmentModelTypeList() {
       // 完整列表
@@ -176,7 +243,7 @@ export default {
         this.equipmentModelTypeListFull = response.rows;
         if (this.mode === 1) {
           this.hint = "设备模型类型 "
-          this.hint += response.rows.find(ele => ele.emtId === this.$route.query.emtId).emtName
+          this.hint += response.rows.find(ele => ele.emtCode === this.$route.query.emtCode).emtName
           this.hint += " "
         }
       });
@@ -214,7 +281,7 @@ export default {
     },
     // 查看模型操作
     handleModelOperationView(row) {
-      this.$router.push(`/equipment/modelOperation?emId=${row.emId}`)
+      this.$router.push(`/equipment/modelOperation?emCode=${row.emCode}`)
     }
   }
 };

@@ -62,7 +62,7 @@ public class IcesEquipmentRecordBo extends BaseEntity {
      * 已删除
      */
     private Long erDelete;
-
+    private Integer erLevel;
     /**
      * 描述
      */

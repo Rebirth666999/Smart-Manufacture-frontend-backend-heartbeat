@@ -479,11 +479,16 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          // 拼接端口号
-          if (this.form.eqPort && this.form.eqPort.length > 0) {
-            this.form.eqIp = "http://" + this.form.eqIp
-            this.form.eqIp += ":"
-            this.form.eqIp += this.form.eqPort
+          if (this.form.eqIp !== 'ROS2') {
+            // 拼接端口号
+            if (this.form.eqPort && this.form.eqPort.length > 0) {
+              this.form.eqIp = "http://" + this.form.eqIp
+              this.form.eqIp += ":"
+              this.form.eqIp += this.form.eqPort
+            } else {
+              this.$modal.msgWarning("请输入设备IP地址和端口号")
+              return
+            }
           }
           this.buttonLoading = true;
           if (this.form.eqId != null) {

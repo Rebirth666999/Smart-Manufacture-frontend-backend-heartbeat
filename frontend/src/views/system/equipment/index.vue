@@ -238,7 +238,7 @@
 
     <!-- 添加或修改设备对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="85px">
         <el-form-item label="名称" prop="eqName">
           <el-input v-model="form.eqName" placeholder="请输入名称" />
         </el-form-item>
@@ -278,7 +278,17 @@
             placeholder="请选择采购时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="IP地址" prop="eqIp">
+        <el-form-item prop="eqIp">
+          <span slot="label">
+            <el-tooltip placement="top">
+              <div slot="content">
+                <div>如为ROS2连接，请输入'ROS2'并保持端口号为空。</div>
+                <div>如为HTTP连接，请正确输入IP地址和端口号。</div>
+              </div>
+              <i class="el-icon-question"></i>
+            </el-tooltip>
+            IP地址
+          </span>
           <el-input v-model="form.eqIp" placeholder="请输入IP地址" style="width: 50%;" />
           <el-input v-model="form.eqPort" style="width: 50%;">
             <template slot="prepend">端口号</template>

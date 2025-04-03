@@ -279,7 +279,10 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="IP地址" prop="eqIp">
-          <el-input v-model="form.eqIp" placeholder="请输入IP地址" />
+          <el-input v-model="form.eqIp" placeholder="请输入IP地址" style="width: 50%;" />
+          <el-input v-model="form.eqPort" style="width: 50%;">
+            <template slot="prepend">端口号</template>
+          </el-input>
         </el-form-item>
         <el-form-item label="描述" prop="eqDesc">
           <el-input v-model="form.eqDesc" type="textarea" placeholder="请输入内容" />
@@ -410,6 +413,7 @@ export default {
         eqIntroduceTime: undefined,
         eqCommunicateTime: undefined,
         eqIp: undefined,
+        eqPort: undefined,
         eqDelete: undefined,
         eqDesc: undefined,
         createBy: undefined,
@@ -447,8 +451,16 @@ export default {
       this.reset();
       const eqId = row.eqId || this.ids
       getEquipment(eqId).then(response => {
-        this.loading = false;
         this.form = response.data;
+        // 处理IP和端口号
+        if (this.form.eqIp) {
+          if (this.form.eqIp.length > 0 && this.form.eqIp.indexOf(":") !== -1) {
+            let url = this.form.eqIp.split("http://")[1].split(":")
+            this.form.eqIp = url[0]
+            this.form.eqPort = url[1]
+          }
+        }
+        this.loading = false;
         this.open = true;
         this.title = "修改设备";
       });
@@ -457,6 +469,12 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          // 拼接端口号
+          if (this.form.eqPort && this.form.eqPort.length > 0) {
+            this.form.eqIp = "http://" + this.form.eqIp
+            this.form.eqIp += ":"
+            this.form.eqIp += this.form.eqPort
+          }
           this.buttonLoading = true;
           if (this.form.eqId != null) {
             updateEquipment(this.form).then(response => {

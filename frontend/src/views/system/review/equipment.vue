@@ -86,11 +86,6 @@
           <dict-tag :options="dict.type.ices_equipment_status_review" :value="scope.row.eqStat"/>
         </template>
       </el-table-column>
-      <el-table-column label="上次通讯时间" align="center" prop="eqCommunicateTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.eqCommunicateTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="IP地址" align="center" prop="eqIp" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
@@ -146,7 +141,7 @@
 </template>
 
 <script>
-import { getEquipment, listReviewEquipment , updateEquipment } from "@/api/system/equipment";
+import { getEquipment, listReviewEquipment, updateEquipment } from "@/api/system/equipment";
 import { listArea } from "@/api/system/area";
 import { listEquipmentModel } from "@/api/system/equipmentModel";
 

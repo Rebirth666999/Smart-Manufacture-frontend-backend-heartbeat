@@ -114,8 +114,23 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            v-show="scope.row.eqStat === '2' || scope.row.eqStat === 'd' || scope.row.eqStat === 'f' || scope.row.eqStat === 'h'"
-          >审核</el-button>
+            v-show="scope.row.eqStat === '2' || scope.row.eqStat === 'b'"
+            @click="startReview(scope.row)"
+          >开始审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-finished"
+            v-show="scope.row.eqStat === '3' || scope.row.eqStat === 'c'"
+            @click="passReview(scope.row)"
+          >通过审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-reject"
+            v-show="scope.row.eqStat === '3' || scope.row.eqStat === 'c'"
+            @click="rejectReview(scope.row)"
+          >驳回审核</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -131,7 +146,7 @@
 </template>
 
 <script>
-import { getEquipment, listReviewEquipment } from "@/api/system/equipment";
+import { getEquipment, listReviewEquipment , updateEquipment } from "@/api/system/equipment";
 import { listArea } from "@/api/system/area";
 import { listEquipmentModel } from "@/api/system/equipmentModel";
 
@@ -180,6 +195,58 @@ export default {
     this.getList();
   },
   methods: {
+    // 开始审核
+    startReview(row) {
+      this.$modal.confirm('是否要开始审核？').then(() => {
+        this.loading = true;
+        getEquipment(row.eqId).then(response => {
+          this.form = response.data;
+          if (this.form.eqStat === '2') this.form.eqStat = '3';
+          else this.form.eqStat = 'c';
+        updateEquipment(this.form).then(response => {
+            this.$modal.msgSuccess("已开始审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 通过审核
+    passReview(row) {
+      this.$modal.confirm('是否要通过审核？ ').then(() => {
+        this.loading = true;
+        getEquipment(row.eqId).then(response => {
+          this.form = response.data;
+          this.form.eqStat = '4';
+        updateEquipment(this.form).then(response => {
+            this.$modal.confirm('已通过审核');
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    //驳回审核
+    rejectReview(row) {
+      this.$modal.confirm('是否要驳回审核？ ').then(() => {
+        this.loading = true;
+        getEquipment(row.eqId).then(response => {
+           this.form = response.data;
+           this.form.eqStat = '1';
+        updateEquipment(this.form).then(response => {
+          this.$modal.confirm('已驳回审核');
+          this.getList();
+        })
+        });
+      }).catch(() => {
+      }).fianlly(() => {
+        this.loading = false;
+      });
+    },
     // 获取车间列表
     getAreaList() {
       listArea().then(response => {

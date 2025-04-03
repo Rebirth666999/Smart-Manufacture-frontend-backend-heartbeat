@@ -114,12 +114,10 @@ public class IcesEquipmentController extends BaseController {
             recordBo.setErCode(bo.getEqCode());
             recordBo.setErType("1");
             recordBo.setErStat("2");
-            System.out.println(bo);
             recordBo.setErDelete(0L);
             recordBo.setErLevel(1);
             recordBo.setErDesc(description);
             iIcesEquipmentRecordService.insertByBo(recordBo);
-            System.out.println(recordBo);
         }
         return toAjax(result);
     }

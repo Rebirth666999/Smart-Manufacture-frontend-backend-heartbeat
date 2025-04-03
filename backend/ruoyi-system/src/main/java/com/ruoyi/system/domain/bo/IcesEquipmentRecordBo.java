@@ -62,6 +62,10 @@ public class IcesEquipmentRecordBo extends BaseEntity {
      * 已删除
      */
     private Long erDelete;
+
+    /**
+     * 事件等级
+     */
     private Integer erLevel;
     /**
      * 描述

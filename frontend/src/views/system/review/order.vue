@@ -12,25 +12,25 @@
     </el-alert>
 
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="所需产品" prop="prId">
+      <el-form-item label="所需产品" prop="maCode">
         <el-select
-          v-model="queryParams.prId"
+          v-model="queryParams.maCode"
           placeholder="请选择产品"
           clearable
           :disabled="mode === 1"
         >
           <el-option
             v-for="item in productList"
-            :key="item.prId"
-            :label="item.prName"
-            :value="item.prId"
+            :key="item.maCode"
+            :label="item.maName"
+            :value="item.maCode"
           >
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="客户" prop="clId">
+      <el-form-item label="客户" prop="clCode">
         <el-input
-          v-model="queryParams.clId"
+          v-model="queryParams.clCode"
           placeholder="请输入客户"
           clearable
           @keyup.enter.native="handleQuery"
@@ -96,13 +96,13 @@
 
     <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="订单ID" align="center" prop="orId" v-if="true"/>
-      <el-table-column label="所需产品" align="center" prop="prId">
+      <el-table-column label="订单ID" align="center" prop="orCode" v-if="true"/>
+      <el-table-column label="所需产品" align="center" prop="maCode">
         <template slot-scope="scope">
-          {{ productList.find(ele => ele.prId === scope.row.prId).prName || '' }}
+          {{ getProductName(scope.row.maCode) }}
         </template>
       </el-table-column>
-      <el-table-column label="客户" align="center" prop="clId" />
+      <el-table-column label="客户" align="center" prop="clCode" />
       <el-table-column label="订单名称" align="center" prop="orName" />
       <el-table-column label="状态代码" align="center" prop="orStat">
         <template slot-scope="scope">
@@ -140,8 +140,23 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            v-show="scope.row.orStat === '2'"
-          >审核</el-button>
+            v-show="scope.row.orStat === '2' || scope.row.orStat === '6'"
+            @click="startReview(scope.row)"
+          >开始审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-check"
+            v-show="scope.row.orStat === '3' || scope.row.orStat === '7'"
+            @click="passReview(scope.row)"
+          >通过审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-close"
+            v-show="scope.row.orStat === '3' || scope.row.orStat === '7'"
+            @click="rejectReview(scope.row)"
+          >驳回审核</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -157,11 +172,11 @@
     <!-- 查看订单详情对话框 -->
     <el-dialog :title="'查看订单详情 - ' + viewData.orName" :visible.sync="viewOpen" width="530px" append-to-body>
       <el-descriptions :column="1" border>
-        <el-descriptions-item label="订单ID">{{ viewData.orId }}</el-descriptions-item>
+        <el-descriptions-item label="订单ID">{{ viewData.orCode }}</el-descriptions-item>
         <el-descriptions-item label="所需产品">
-          {{ productList.find(ele => ele.prId === viewData.prId).prName || viewData.prId }}
+          {{ getProductName(viewData.maCode) }}
         </el-descriptions-item>
-        <el-descriptions-item label="客户">{{ viewData.clId }}</el-descriptions-item>
+        <el-descriptions-item label="客户">{{ viewData.clCode }}</el-descriptions-item>
         <el-descriptions-item label="订单名称">{{ viewData.orName }}</el-descriptions-item>
         <el-descriptions-item label="状态">
           <dict-tag :options="dict.type.ices_order_status_review" :value="viewData.orStat"/>
@@ -185,8 +200,8 @@
 </template>
 
 <script>
-import { getOrder, listReviewOrder } from "@/api/system/order";
-// import { listProduct } from "@/api/system/product";
+import { getOrder, listReviewOrder, updateOrder } from "@/api/system/order";
+import { listMaterial } from "@/api/system/material";
 
 export default {
   name: "OrderReview",
@@ -215,8 +230,8 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        prId: this.$route.query.prId,
-        clId: undefined,
+        maCode: this.$route.query.maCode,
+        clCode: undefined,
         orName: undefined,
         orStat: undefined,
         orPriority: undefined,
@@ -231,29 +246,92 @@ export default {
       // 1-根据产品管理
       mode: 0,
       // 页面顶部提示
-      hint: ''
+      hint: '',
+      // 表单数据
+      form: {}
     };
   },
   async created() {
     // 检查来源
-    if (this.$route.query.prId) {
+    if (this.$route.query.maCode) {
       this.mode = 1
     }
     await this.getProductList();
     this.getList();
   },
-  methods: {
+  methods: {  
+    // 开始审核
+    startReview(row) {
+      this.$modal.confirm('是否要开始审核？').then(() => {
+        this.loading = true;
+        getOrder(row.orId).then(response => {
+          this.form = response.data;
+          if (this.form.orStat === '2') this.form.orStat = '3';
+          else this.form.orStat = '7';
+          updateOrder(this.form).then(response => {
+            this.$modal.msgSuccess("已开始审核");
+            this.getList();
+          });
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    
+    // 通过审核
+    passReview(row) {
+      this.$modal.confirm('是否要通过审核？').then(() => {
+        this.loading = true;
+        getOrder(row.orId).then(response => {
+          this.form = response.data;
+          if (this.form.orStat === '3' || this.form.orStat === '7') this.form.orStat = '4';
+          updateOrder(this.form).then(response => {
+            this.$modal.msgSuccess("已通过审核");
+            this.getList();
+          });
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    
+    // 驳回审核
+    rejectReview(row) {
+      this.$modal.confirm('是否要驳回审核？').then(() => {
+        this.loading = true;
+        getOrder(row.orId).then(response => {
+          this.form = response.data;
+          if (this.form.orStat === '3' || this.form.orStat === '7') this.form.orStat = '1';
+          updateOrder(this.form).then(response => {
+            this.$modal.msgSuccess("已驳回审核");
+            this.getList();
+          });
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    
     // 查询产品列表
     getProductList() {
-      listProduct().then(response => {
-        this.productList = response.rows;
-        if (this.mode === 1) {
-          this.hint = "产品 "
-          this.hint += response.rows.find(ele => ele.prId === this.$route.query.prId).prName
-          this.hint += " "
+      return listMaterial({ maType: '2' }).then(response => {
+        this.productList = response.rows || [];
+        if (this.mode === 1 && this.productList.length > 0) {
+          const product = this.productList.find(ele => ele.maCode === this.$route.query.maCode);
+          if (product) {
+            this.hint = "产品 " + product.maName;
+          } else {
+            this.hint = "产品 " + this.$route.query.maCode;
+          }
         }
-      })
+      }).catch(() => {
+        this.productList = [];
+      });
     },
+    
     /** 查询订单列表 */
     getList() {
       this.loading = true;
@@ -263,8 +341,13 @@ export default {
         this.queryParams.params["endOrDeadline"] = this.daterangeOrDeadline[1];
       }
       listReviewOrder(this.queryParams).then(response => {
-        this.orderList = response.rows;
-        this.total = response.total;
+        this.orderList = response.rows || [];
+        this.total = response.total || 0;
+        this.loading = false;
+      }).catch(error => {
+        console.error("获取订单列表失败:", error);
+        this.orderList = [];
+        this.total = 0;
         this.loading = false;
       });
     },
@@ -281,7 +364,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.orId)
+      this.ids = selection.map(item => item.orCode)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -296,9 +379,19 @@ export default {
       this.loading = true;
       getOrder(row.orId).then(response => {
         this.loading = false;
-        this.viewData = response.data;
+        this.viewData = response.data || {};
         this.viewOpen = true;
+      }).catch(() => {
+        this.loading = false;
+        this.$modal.msgError("获取订单详情失败");
       });
+    },
+    getProductName(maCode) {
+      if (!maCode) return '';
+      if (!this.productList || this.productList.length === 0) return maCode;
+      
+      const product = this.productList.find(ele => ele.maCode === maCode);
+      return product ? product.maName : maCode;
     }
   }
 };

@@ -8,7 +8,14 @@ export function listOrder(query) {
     params: query
   })
 }
-
+//审核查询订单列表
+export function listReviewOrder(query) {
+  return request({
+    url: '/system/order/reviewList',
+    method: 'get',
+    params: query
+  })
+}
 // 查询订单详细
 export function getOrder(orId) {
   return request({

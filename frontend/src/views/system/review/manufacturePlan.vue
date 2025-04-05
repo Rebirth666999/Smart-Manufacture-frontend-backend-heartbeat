@@ -12,34 +12,34 @@
     </el-alert>
 
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="所属订单" prop="orId">
+      <el-form-item label="所属订单" prop="orCode">
         <el-select
-          v-model="queryParams.orId"
+          v-model="queryParams.orCode"
           placeholder="请选择订单"
           clearable
           :disabled="mode === 1"
         >
           <el-option
             v-for="item in orderList"
-            :key="item.orId"
+            :key="item.orCode"
             :label="item.orName"
-            :value="item.orId"
+            :value="item.orCode"
           >
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="工艺流程" prop="procId">
+      <el-form-item label="工艺流程" prop="procCode">
         <el-select
-          v-model="queryParams.procId"
+          v-model="queryParams.procCode"
           placeholder="请选择工艺流程"
           clearable
           :disabled="mode === 2"
         >
           <el-option
             v-for="item in processListFull"
-            :key="item.procId"
+            :key="item.procCode"
             :label="item.procName"
-            :value="item.procId"
+            :value="item.procCode"
           >
           </el-option>
         </el-select>
@@ -84,15 +84,15 @@
 
     <el-table v-loading="loading" :data="manufacturePlanList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="生产计划ID" align="center" prop="mpId" v-if="true"/>
-      <el-table-column label="所属订单" align="center" prop="orId">
+      <el-table-column label="生产计划ID" align="center" prop="mpCode" v-if="true"/>
+      <el-table-column label="所属订单" align="center" prop="orCode">
         <template slot-scope="scope">
-          {{ orderList.find(ele => ele.orId === scope.row.orId).orName || '' }}
+          {{ getOrderName(scope.row.orCode) }}
         </template>
       </el-table-column>
-      <el-table-column label="工艺流程" align="center" prop="procId">
+      <el-table-column label="工艺流程" align="center" prop="procCode">
         <template slot-scope="scope">
-          {{ processListFull.find(ele => ele.procId === scope.row.procId).procName || '' }}
+          {{ getProcessName(scope.row.procCode) }}
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center" prop="mpStat">
@@ -141,8 +141,23 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            v-show="scope.row.mpStat === '2'"
-          >审核</el-button>
+            v-show="scope.row.mpStat === '2' || scope.row.mpStat === '6'"
+            @click="startReview(scope.row)"
+          >开始审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-check"
+            v-show="scope.row.mpStat === '3' || scope.row.mpStat === '7'"
+            @click="passReview(scope.row)"
+          >通过审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-close"
+            v-show="scope.row.mpStat === '3' || scope.row.mpStat === '7'"
+            @click="rejectReview(scope.row)"
+          >驳回审核</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -156,14 +171,14 @@
     />
 
     <!-- 查看生产计划详情对话框 -->
-    <el-dialog :title="`查看生产计划详情 - ID: ${viewData.mpId}`" :visible.sync="viewOpen" width="650px" append-to-body>
+    <el-dialog :title="`查看生产计划详情 - ID: ${viewData.mpCode}`" :visible.sync="viewOpen" width="650px" append-to-body>
       <el-descriptions :column="1" border>
-        <el-descriptions-item label="生产计划ID">{{ viewData.mpId }}</el-descriptions-item>
+        <el-descriptions-item label="生产计划ID">{{ viewData.mpCode }}</el-descriptions-item>
         <el-descriptions-item label="所属订单">
-          {{ orderList.find(ele => ele.orId === viewData.orId).orName || viewData.orId }}
+          {{ getOrderName(viewData.orCode) }}
         </el-descriptions-item>
         <el-descriptions-item label="工艺流程">
-          {{ processListFull.find(ele => ele.procId === viewData.procId).procName || viewData.procId }}
+          {{ getProcessName(viewData.procCode) }}
         </el-descriptions-item>
         <el-descriptions-item label="状态">
           <dict-tag :options="dict.type.ices_manufacture_plan_status_review" :value="viewData.mpStat"/>
@@ -193,7 +208,7 @@
 </template>
 
 <script>
-import { getManufacturePlan, listReviewManufacturePlan } from "@/api/system/manufacturePlan";
+import { getManufacturePlan, listReviewManufacturePlan, updateManufacturePlan } from "@/api/system/manufacturePlan";
 import { listProcess } from "@/api/system/process";
 import { listOrder } from "@/api/system/order";
 
@@ -222,8 +237,8 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        orId: this.$route.query.orId,
-        procId: this.$route.query.procId,
+        orCode: this.$route.query.orCode,
+        procCode: this.$route.query.procCode,
         mpStat: undefined,
         mpPriority: undefined,
         mpDelete: 0,
@@ -243,9 +258,9 @@ export default {
   },
   async created() {
     // 检查来源
-    if (this.$route.query.orId) {
+    if (this.$route.query.orCode) {
       this.mode = 1
-    } else if (this.$route.query.procId) {
+    } else if (this.$route.query.procCode) {
       this.mode = 2
     }
     await this.getProcessList();
@@ -253,34 +268,117 @@ export default {
     this.getList();
   },
   methods: {
+    // 获取订单名称
+    getOrderName(orCode) {
+      if (!orCode) return '';
+      if (!this.orderList || this.orderList.length === 0) return orCode;
+      
+      const order = this.orderList.find(ele => ele.orCode === orCode);
+      return order ? order.orName : orCode;
+    },
+    
+    // 获取工艺流程名称
+    getProcessName(procCode) {
+      if (!procCode) return '';
+      if (!this.processListFull || this.processListFull.length === 0) return procCode;
+      
+      const proc = this.processListFull.find(ele => ele.procCode === procCode);
+      return proc ? proc.procName : procCode;
+    },
+    
+    // 开始审核
+    startReview(row) {
+      this.$modal.confirm('是否要开始审核？').then(() => {
+        this.loading = true;
+        getManufacturePlan(row.mpId).then(response => {
+          this.form = response.data;
+          if (this.form.mpStat === '2') this.form.mpStat = '3';
+          else this.form.mpStat = '7';
+          updateManufacturePlan(this.form).then(response => {
+            this.$modal.msgSuccess("已开始审核");
+            this.getList();
+          });
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    
+    // 通过审核
+    passReview(row) {
+      this.$modal.confirm('是否要通过审核？').then(() => {
+        this.loading = true;
+        getManufacturePlan(row.mpId).then(response => {
+          this.form = response.data;
+          if (this.form.mpStat === '3' || this.form.mpStat === '7') this.form.mpStat = '4';
+          updateManufacturePlan(this.form).then(response => {
+            this.$modal.msgSuccess("已通过审核");
+            this.getList();
+          });
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    
+    // 驳回审核
+    rejectReview(row) {
+      this.$modal.confirm('是否要驳回审核？').then(() => {
+        this.loading = true;
+        getManufacturePlan(row.mpId).then(response => {
+          this.form = response.data;
+          if (this.form.mpStat === '3' || this.form.mpStat === '7') this.form.mpStat = '1';
+          updateManufacturePlan(this.form).then(response => {
+            this.$modal.msgSuccess("已驳回审核");
+            this.getList();
+          });
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+
     // 查询工艺流程列表
     getProcessList() {
-      listProcess().then(response => {
-        this.processListFull = response.rows;
-        if (this.mode === 2) {
-          this.hint = "工艺流程 "
-          this.hint += response.rows.find(ele => ele.procId === this.$route.query.procId).procName
-          this.hint += " "
+      return listProcess().then(response => {
+        this.processListFull = response.rows || [];
+        if (this.mode === 2 && this.processListFull.length > 0) {
+          const proc = this.processListFull.find(ele => ele.procCode === this.$route.query.procCode);
+          if (proc) {
+            this.hint = "工艺流程 " + proc.procName;
+          } else {
+            this.hint = "工艺流程 " + this.$route.query.procCode;
+          }
         }
+      }).catch(() => {
+        this.processListFull = [];
       });
     },
     // 查询订单列表
     getOrderList() {
-      listOrder().then(response => {
-        this.orderList = response.rows;
-        if (this.mode === 1) {
-          this.hint = "订单 "
-          this.hint += response.rows.find(ele => ele.orId === this.$route.query.orId).orName
-          this.hint += " "
+      return listOrder().then(response => {
+        this.orderList = response.rows || [];
+        if (this.mode === 1 && this.orderList.length > 0) {
+          const order = this.orderList.find(ele => ele.orCode === this.$route.query.orCode);
+          if (order) {
+            this.hint = "订单 " + order.orName;
+          } else {
+            this.hint = "订单 " + this.$route.query.orCode;
+          }
         }
+      }).catch(() => {
+        this.orderList = [];
       });
     },
     /** 查询生产计划列表 */
     getList() {
       this.loading = true;
       listReviewManufacturePlan(this.queryParams).then(response => {
-        this.manufacturePlanList = response.rows;
-        this.total = response.total;
+        this.manufacturePlanList = response.rows || [];
+        this.total = response.total || 0;
         this.loading = false;
       });
     },
@@ -311,7 +409,7 @@ export default {
       this.loading = true;
       getManufacturePlan(row.mpId).then(response => {
         this.loading = false;
-        this.viewData = response.data;
+        this.viewData = response.data || {};
         this.viewOpen = true;
       });
     }

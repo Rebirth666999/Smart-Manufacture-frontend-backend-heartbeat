@@ -12,18 +12,18 @@
     </el-alert>
 
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="目标产品" prop="prId">
+      <el-form-item label="目标产品" prop="prCode">
         <el-select
-          v-model="queryParams.prId"
+          v-model="queryParams.prCode"
           placeholder="请选择目标产品"
           clearable
           :disabled="mode === 1"
         >
           <el-option
             v-for="item in productList"
-            :key="item.prId"
+            :key="item.prCode"
             :label="item.prName"
-            :value="item.prId"
+            :value="item.prCode"
           >
           </el-option>
         </el-select>
@@ -69,9 +69,10 @@
     <el-table v-loading="loading" :data="processList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="工艺流程ID" align="center" prop="procId" v-if="true"/>
-      <el-table-column label="目标产品" align="center" prop="prId">
+      <el-table-column label="工艺流程编码" align="center" prop="procCode" />
+      <el-table-column label="目标产品" align="center" prop="maCode">
         <template slot-scope="scope">
-          {{ productList.find(ele => ele.prId === scope.row.prId).prName || '' }}
+          {{ productList.find(ele => ele.maCode === scope.row.maCode).maName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="工艺流程名称" align="center" prop="procName" />
@@ -80,16 +81,7 @@
           <dict-tag :options="dict.type.ices_process_status_review" :value="scope.row.procStat"/>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="更新时间" align="center" prop="updateTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
-        </template>
-      </el-table-column>
+     
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -108,8 +100,23 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            v-show="scope.row.procStat === '2' || scope.row.procStat === '7'"
-          >审核</el-button>
+            v-show="scope.row.procStat === '2' || scope.row.procStat === '6'"
+            @click="startReview(scope.row)"
+          >开始审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-check"
+            v-show="scope.row.procStat === '3' || scope.row.procStat === '7'"
+            @click="passReview(scope.row)"
+          >通过审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-close"
+            v-show="scope.row.procStat === '3' || scope.row.procStat === '7'"
+            @click="rejectReview(scope.row)"
+          >驳回审核</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -135,8 +142,8 @@
 </template>
 
 <script>
-import { getProcess, listReviewProcess, getBpmnXml } from "@/api/system/process";
-// import { listProduct } from "@/api/system/product";
+import { getProcess, listProcess, getBpmnXml, updateProcess ,listReviewProcess} from "@/api/system/process";
+import { listMaterial } from "@/api/system/material";
 import ProcessViewer from '@/components/ProcessViewer';
 
 export default {
@@ -167,7 +174,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        prId: this.$route.query.prId,
+        prCode: this.$route.query.prCode,
         procName: undefined,
         procStat: undefined,
         procDelete: 0,
@@ -186,31 +193,28 @@ export default {
       // 1-根据产品管理
       mode: 0,
       // 页面顶部提示
-      hint: ''
+      hint: '',
+      // 表单数据
+      form: {}
     };
   },
   async created() {
     // 检查来源
-    if (this.$route.query.prId) {
+    if (this.$route.query.prCode) {
       this.mode = 1
     }
     await this.getProductList();
     this.getList();
   },
   methods: {
-    // 查询产品列表
-    getProductList() {
-      listProduct().then(response => {
-        this.productList = response.rows;
-        if (this.mode === 1) {
-          this.hint = "产品 "
-          this.hint += response.rows.find(ele => ele.prId === this.$route.query.prId).prName
-          this.hint += " "
-        }
+ // 查询产品列表
+ getProductList() {
+      listMaterial({ maType: '2' }).then(response => {
+        this.productList = response.rows
       })
     },
-    /** 查询工艺流程列表 */
-    getList() {
+       /** 查询工艺流程列表 */
+       getList() {
       this.loading = true;
       listReviewProcess(this.queryParams).then(response => {
         this.processList = response.rows;
@@ -218,6 +222,64 @@ export default {
         this.loading = false;
       });
     },
+    // 开始审核
+    startReview(row) {
+      this.$modal.confirm('是否要开始审核？').then(() => {
+        this.loading = true;
+        getProcess(row.procId).then(response => {
+          this.form = response.data;
+          if (this.form.procStat === '2') this.form.procStat = '3';
+          else this.form.procStat = '7';
+        updateProcess(this.form).then(response => {
+            this.$modal.msgSuccess("已开始审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    
+    // 通过审核
+    passReview(row) {
+      this.$modal.confirm('是否要通过审核？').then(() => {
+        this.loading = true;
+        getProcess(row.procId).then(response => {
+          this.form = response.data;
+          if (this.form.procStat === '3' || this.form.procStat === '7') this.form.procStat = '4';
+        updateProcess(this.form).then(response => {
+            this.$modal.msgSuccess("已通过审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    
+    // 驳回审核
+    rejectReview(row) {
+      this.$modal.confirm('是否要驳回审核？').then(() => {
+        this.loading = true;
+        getProcess(row.procId).then(response => {
+          this.form = response.data;
+          if (this.form.procStat === '3' || this.form.procStat === '7') this.form.procStat = '1';
+        updateProcess(this.form).then(response => {
+            this.$modal.msgSuccess("已驳回审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    
+   
+ 
+
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
@@ -242,7 +304,7 @@ export default {
     },
     // 查看工艺流程的原料需求
     handleProcessMaterialView(row) {
-      this.$router.push(`/processFlow/processMaterial?procId=${row.procId}`)
+      this.$router.push(`/processFlow/processMaterial?procCode=${row.procCode}`)
     },
     /** 查看流程按钮操作 */
     handleViewer(row) {

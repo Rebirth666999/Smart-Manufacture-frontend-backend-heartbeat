@@ -46,4 +46,7 @@ public interface IIcesProcessStepService {
      * 校验并批量删除工艺步骤信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+
+    IcesProcessStepVo queryByModel(String modelId);
 }

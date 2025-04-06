@@ -46,4 +46,6 @@ public interface IIcesManufactureTaskService {
      * 校验并批量删除生产任务信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+
 }

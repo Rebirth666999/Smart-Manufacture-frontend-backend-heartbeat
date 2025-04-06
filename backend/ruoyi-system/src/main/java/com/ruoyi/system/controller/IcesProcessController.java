@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+import com.ruoyi.system.domain.bo.IcesEquipmentModelBo;
+import com.ruoyi.system.domain.vo.IcesEquipmentModelVo;
 import lombok.RequiredArgsConstructor;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.*;
@@ -46,6 +48,14 @@ public class IcesProcessController extends BaseController {
     @GetMapping("/list")
     public TableDataInfo<IcesProcessVo> list(IcesProcessBo bo, PageQuery pageQuery) {
         return iIcesProcessService.queryPageList(bo, pageQuery);
+    }
+
+    /**
+     * 审核端查询设备模型列表
+     */
+    @GetMapping("/reviewList")
+    public TableDataInfo<IcesProcessVo> reviewList(IcesProcessBo bo, PageQuery pageQuery) {
+        return iIcesProcessService.queryReviewList(bo, pageQuery);
     }
 
     /**

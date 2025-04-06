@@ -55,5 +55,4 @@ public class IcesProcess extends BaseEntity {
      * 描述
      */
     private String procDesc;
-
 }

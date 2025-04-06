@@ -172,6 +172,12 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-files"
+            @click="handleExecuteDeviceTask(scope.row)"
+          >下发设备任务</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:manufactureTask:remove']"
@@ -289,6 +295,8 @@
 
 <script>
 import { listManufactureTask, getManufactureTask, delManufactureTask, addManufactureTask, updateManufactureTask } from "@/api/system/manufactureTask";
+import { listDeviceTask, saveDeviceTasks } from "@/api/system/deviceTask";
+
 import { listArea } from "@/api/system/area";
 import { listManufacturePlan } from "@/api/system/manufacturePlan";
 import { listProcess, getBpmnXml } from "@/api/system/process";
@@ -598,11 +606,25 @@ export default {
         this.viewerData.loading = false
       })
     },
+    // 确认生成设备任务
     onSaveTask(steps) {
-      console.warn({
-        manufactureTask: this.currentManufactureTask,
-        deviceTask: steps
-      })
+      this.$modal.confirm('是否生成设备任务？').then(() => {
+        this.viewerData.loading = true
+        return saveDeviceTasks({
+          manufactureTask: this.currentManufactureTask,
+          deviceTask: steps
+        })
+      }).then(() => {
+        this.$modal.msgSuccess("生成设备任务成功")
+        this.viewerOpen = false
+      }).catch(() => {
+      }).finally(() => {
+        this.viewerData.loading = false
+      });
+    },
+    // 下发设备任务
+    handleExecuteDeviceTask(row) {
+
     }
   }
 };

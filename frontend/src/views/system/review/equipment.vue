@@ -1,16 +1,5 @@
 <template>
   <div class="app-container">
-    <!-- 顶部提示 -->
-    <el-alert
-      v-show="hint.length > 0"
-      :title="`正在根据${hint}筛选设备`"
-      type="info"
-      show-icon
-      :closable="false"
-      class="mb8"
-    >
-    </el-alert>
-
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="名称" prop="eqName">
         <el-input
@@ -20,30 +9,29 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="车间" prop="arId">
+      <el-form-item label="车间" prop="arCode">
         <el-select
-          v-model="queryParams.arId"
+          v-model="queryParams.arCode"
           placeholder="请选择车间"
           clearable
-          :disabled="mode === 1"
         >
           <el-option
             v-for="item in areaList"
-            :key="item.arId"
+            :key="item.arCode"
             :label="item.arName"
-            :value="item.arId"
+            :value="item.arCode"
           >
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="设备模型" prop="emId">
-        <el-select v-model="queryParams.emId" placeholder="请选择设备模型" 
+      <el-form-item label="设备模型" prop="emCode">
+        <el-select v-model="queryParams.emCode" placeholder="请选择设备模型" 
         @keyup.enter.native="handleQuery" clearable>
           <el-option
             v-for="item in equipmentModelListFull"
-            :key="item.emId"
+            :key="item.emCode"
             :label="item.emName"
-            :value="item.emId"
+            :value="item.emCode"
           >
           </el-option>
         </el-select>
@@ -81,25 +69,21 @@
     <el-table v-loading="loading" :data="equipmentList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="设备ID" align="center" prop="eqId" v-if="true"/>
+      <el-table-column label="设备编码" align="center" prop="eqCode" />
       <el-table-column label="名称" align="center" prop="eqName" />
-      <el-table-column label="所属车间" align="center" prop="arId">
+      <el-table-column label="所属车间" align="center" prop="arCode">
         <template slot-scope="scope">
-          {{ areaList.find(ele => ele.arId === scope.row.arId).arName || '' }}
+          {{ areaList.find(ele => ele.arCode === scope.row.arCode).arName || '' }}
         </template>
       </el-table-column>
-      <el-table-column label="所属设备模型" align="center" prop="emId">
+      <el-table-column label="所属设备模型" align="center" prop="emCode">
         <template slot-scope="scope">
-          {{ equipmentModelListFull.find(ele => ele.emId === scope.row.emId).emName || '' }}
+          {{ equipmentModelListFull.find(ele => ele.emCode === scope.row.emCode).emName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center" prop="eqStat">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_equipment_status_review" :value="scope.row.eqStat"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="上次通讯时间" align="center" prop="eqCommunicateTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.eqCommunicateTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="IP地址" align="center" prop="eqIp" />
@@ -125,8 +109,23 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            v-show="scope.row.eqStat === '2' || scope.row.eqStat === 'd' || scope.row.eqStat === 'f' || scope.row.eqStat === 'h'"
-          >审核</el-button>
+            v-show="scope.row.eqStat === '2' || scope.row.eqStat === 'b'"
+            @click="startReview(scope.row)"
+          >开始审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-finished"
+            v-show="scope.row.eqStat === '3' || scope.row.eqStat === 'c'"
+            @click="passReview(scope.row)"
+          >通过审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-reject"
+            v-show="scope.row.eqStat === '3' || scope.row.eqStat === 'c'"
+            @click="rejectReview(scope.row)"
+          >驳回审核</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -142,7 +141,7 @@
 </template>
 
 <script>
-import { getEquipment, listReviewEquipment } from "@/api/system/equipment";
+import { getEquipment, listReviewEquipment, updateEquipment } from "@/api/system/equipment";
 import { listArea } from "@/api/system/area";
 import { listEquipmentModel } from "@/api/system/equipmentModel";
 
@@ -171,54 +170,91 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        arId: this.$route.query.arId,
-        emId: this.$route.query.emId,
+        arCode: undefined,
+        emCode: undefined,
         eqName: undefined,
         eqStat: undefined,
         eqDelete: 0,
       },
       // 车间列表
       areaList: [],
+      // 已发布的设备模型列表
+      equipmentModelList: [],
       // 设备模型列表
       equipmentModelListFull: [],
-      // 1-根据车间管理 2-根据设备模型管理
-      mode: 0,
-      // 页面顶部提示
-      hint: ''
     };
   },
   async created() {
-    // 检查来源
-    if (this.$route.query.arId) {
-      this.mode = 1
-    } else if (this.$route.query.emId) {
-      this.mode = 2
-    }
     await this.getAreaList();
     await this.getEquipmentModelList();
     this.getList();
   },
   methods: {
+    // 开始审核
+    startReview(row) {
+      this.$modal.confirm('是否要开始审核？').then(() => {
+        this.loading = true;
+        getEquipment(row.eqId).then(response => {
+          this.form = response.data;
+          if (this.form.eqStat === '2') this.form.eqStat = '3';
+          else this.form.eqStat = 'c';
+        updateEquipment(this.form).then(response => {
+            this.$modal.msgSuccess("已开始审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 通过审核
+    passReview(row) {
+      this.$modal.confirm('是否要通过审核？ ').then(() => {
+        this.loading = true;
+        getEquipment(row.eqId).then(response => {
+          this.form = response.data;
+          this.form.eqStat = '4';
+        updateEquipment(this.form).then(response => {
+            this.$modal.confirm('已通过审核');
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    //驳回审核
+    rejectReview(row) {
+      this.$modal.confirm('是否要驳回审核？ ').then(() => {
+        this.loading = true;
+        getEquipment(row.eqId).then(response => {
+           this.form = response.data;
+           this.form.eqStat = '1';
+        updateEquipment(this.form).then(response => {
+          this.$modal.confirm('已驳回审核');
+          this.getList();
+        })
+        });
+      }).catch(() => {
+      }).fianlly(() => {
+        this.loading = false;
+      });
+    },
     // 获取车间列表
     getAreaList() {
       listArea().then(response => {
         this.areaList = response.rows;
-        if (this.mode === 1) {
-          this.hint = "车间 "
-          this.hint += response.rows.find(ele => ele.arId === this.$route.query.arId).arName
-          this.hint += " "
-        }
       });
     },
     // 查询设备模型列表
     getEquipmentModelList() {
       listEquipmentModel().then(response => {
         this.equipmentModelListFull = response.rows;
-        if (this.mode === 2) {
-          this.hint = "设备模型 "
-          this.hint += response.rows.find(ele => ele.emId === this.$route.query.emId).emName
-          this.hint += " "
-        }
+      });
+      listEquipmentModel({ emStat: "4" }).then(response => {
+        this.equipmentModelList = response.rows;
       });
     },
     /** 查询设备列表 */

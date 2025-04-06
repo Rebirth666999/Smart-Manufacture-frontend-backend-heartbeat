@@ -3,7 +3,11 @@ package com.ruoyi.system.controller;
 import java.util.List;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
-
+import lombok.Data;
+import com.ruoyi.system.domain.bo.IcesEquipmentRecordBo;
+import com.ruoyi.system.service.IIcesEquipmentRecordService;
+import com.ruoyi.system.domain.bo.IcesEquipmentModelBo;
+import com.ruoyi.system.domain.vo.IcesEquipmentModelVo;
 import lombok.RequiredArgsConstructor;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.*;
@@ -24,7 +28,8 @@ import com.ruoyi.system.domain.vo.IcesEquipmentVo;
 import com.ruoyi.system.domain.bo.IcesEquipmentBo;
 import com.ruoyi.system.service.IIcesEquipmentService;
 import com.ruoyi.common.core.page.TableDataInfo;
-
+import com.ruoyi.common.utils.StringUtils;
+import java.util.Date;
 /**
  * 设备控制器，用于管理设备相关的操作
  *
@@ -38,7 +43,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 public class IcesEquipmentController extends BaseController {
 
     private final IIcesEquipmentService iIcesEquipmentService;
-
+    private final IIcesEquipmentRecordService iIcesEquipmentRecordService;
     /**
      * 查询设备列表
      *
@@ -50,6 +55,14 @@ public class IcesEquipmentController extends BaseController {
     @GetMapping("/list")
     public TableDataInfo<IcesEquipmentVo> list(IcesEquipmentBo bo, PageQuery pageQuery) {
         return iIcesEquipmentService.queryPageList(bo, pageQuery);
+    }
+
+    /**
+     * 审核端查询设备模型列表
+     */
+    @GetMapping("/reviewList")
+    public TableDataInfo<IcesEquipmentVo> reviewList(IcesEquipmentBo bo, PageQuery pageQuery) {
+        return iIcesEquipmentService.queryReviewList(bo, pageQuery);
     }
 
     /**
@@ -90,8 +103,25 @@ public class IcesEquipmentController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody IcesEquipmentBo bo) {
-        return toAjax(iIcesEquipmentService.insertByBo(bo));
+        boolean result = iIcesEquipmentService.insertByBo(bo);
+
+        // 如果设备添加成功，记录设备事件日志
+        if (result && bo.getEqCode() != null) {
+            String description = "新增设备：" + (StringUtils.isNotEmpty(bo.getEqName()) ? bo.getEqName() : bo.getEqCode());
+            IcesEquipmentRecordBo recordBo = new IcesEquipmentRecordBo();
+            recordBo.setEqCode(bo.getEqCode());
+            recordBo.setErBegin(new Date());
+            recordBo.setErCode(bo.getEqCode());
+            recordBo.setErType("1");
+            recordBo.setErStat("2");
+            recordBo.setErDelete(0L);
+            recordBo.setErLevel(1);
+            recordBo.setErDesc(description);
+            iIcesEquipmentRecordService.insertByBo(recordBo);
+        }
+        return toAjax(result);
     }
+
 
     /**
      * 修改设备信息
@@ -104,7 +134,23 @@ public class IcesEquipmentController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody IcesEquipmentBo bo) {
-        return toAjax(iIcesEquipmentService.updateByBo(bo));
+        boolean result = iIcesEquipmentService.updateByBo(bo);
+
+        // 如果设备修改成功，记录设备事件日志
+        if (result && bo.getEqCode() != null) {
+            String description = "修改设备：" + (StringUtils.isNotEmpty(bo.getEqName()) ? bo.getEqName() : bo.getEqCode());
+            IcesEquipmentRecordBo recordBo = new IcesEquipmentRecordBo();
+            recordBo.setEqCode(bo.getEqCode());
+            recordBo.setErBegin(new Date());
+            recordBo.setErCode(bo.getEqCode());
+            recordBo.setErType("c"); // 'u' 表示更新操作
+            recordBo.setErStat("2");
+            recordBo.setErDelete(0L);
+            recordBo.setErLevel(1);
+            recordBo.setErDesc(description);
+            iIcesEquipmentRecordService.insertByBo(recordBo);
+        }
+        return toAjax(result);
     }
 
     /**

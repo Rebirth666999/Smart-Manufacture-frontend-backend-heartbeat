@@ -3,6 +3,7 @@ package com.ruoyi.system.mapper;
 import com.ruoyi.system.domain.IcesOrder;
 import com.ruoyi.system.domain.vo.IcesOrderVo;
 import com.ruoyi.common.core.mapper.BaseMapperPlus;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 订单Mapper接口
@@ -10,6 +11,7 @@ import com.ruoyi.common.core.mapper.BaseMapperPlus;
  * @author ruoyi
  * @date 2025-03-17
  */
+@Mapper
 public interface IcesOrderMapper extends BaseMapperPlus<IcesOrderMapper, IcesOrder, IcesOrderVo> {
 
 }

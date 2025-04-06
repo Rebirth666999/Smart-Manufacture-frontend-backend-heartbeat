@@ -28,6 +28,11 @@ public interface IIcesManufacturePlanService {
     TableDataInfo<IcesManufacturePlanVo> queryPageList(IcesManufacturePlanBo bo, PageQuery pageQuery);
 
     /**
+     * 查询审核状态
+     */
+    TableDataInfo<IcesManufacturePlanVo> queryReviewList(IcesManufacturePlanBo bo, PageQuery pageQuery);
+
+    /**
      * 查询生产计划列表
      */
     List<IcesManufacturePlanVo> queryList(IcesManufacturePlanBo bo);
@@ -46,4 +51,6 @@ public interface IIcesManufacturePlanService {
      * 校验并批量删除生产计划信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+
 }

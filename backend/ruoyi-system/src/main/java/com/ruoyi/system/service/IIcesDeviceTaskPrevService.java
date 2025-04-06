@@ -46,4 +46,6 @@ public interface IIcesDeviceTaskPrevService {
      * 校验并批量删除关联-设备任务的前序任务信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+
 }

@@ -105,6 +105,12 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-box"
+            @click="handleMaterialStock(scope.row)"
+          >库存</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:store:remove']"
@@ -328,6 +334,10 @@ export default {
       this.download('system/store/export', {
         ...this.queryParams
       }, `store_${new Date().getTime()}.xlsx`)
+    },
+    // 查看物料库存
+    handleMaterialStock(row) {
+      this.$router.push(`/assets/materialStock?stCode=${row.stCode}`)
     }
   }
 };

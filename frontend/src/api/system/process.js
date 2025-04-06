@@ -8,7 +8,14 @@ export function listProcess(query) {
     params: query
   })
 }
-
+//审核查询工艺流程列表
+export function listReviewProcess(query) {
+  return request({
+    url: '/system/process/reviewList',
+    method: 'get',
+    params: query
+  })
+}
 // 查询工艺流程详细
 export function getProcess(procId) {
   return request({

@@ -16,9 +16,9 @@
        <el-select v-model="queryParams.cllCode" placeholder="请输入客户等级" clearable :disabled="mode === 1">
         <el-option
          v-for="option in clientLevelList"
-          :key="option.cllCode"
-          :label="option.cllLabel"
-          :value="option.cllCode">
+         :key="option.cllCode"
+         :label="option.cllLabel"
+         :value="option.cllCode">
         </el-option>
        </el-select>
       </el-form-item>
@@ -96,8 +96,16 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="对应关系ID" align="center" prop="clpId" v-if="true"/>
       <el-table-column label="对应关系编码" align="center" prop="clpCode" />
-      <el-table-column label="客户等级" align="center" prop="cllCode" />
-      <el-table-column label="优惠策略" align="center" prop="cpCode" />
+      <el-table-column label="客户等级" align="center" prop="cllCode" >
+      <template slot-scope="scope">
+        {{ clientLevelList.find(ele => ele.cllCode === scope.row.cllCode).cllLabel || '' }}
+       </template>
+      </el-table-column>
+      <el-table-column label="优惠策略" align="center" prop="cpCode" >
+       <template slot-scope="scope">
+        {{ clientPreferentialList.find(ele => ele.cpCode === scope.row.cpCode).cpName || '' }}
+       </template>
+      </el-table-column>
       <!-- <el-table-column label="已删除" align="center" prop="clpDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">

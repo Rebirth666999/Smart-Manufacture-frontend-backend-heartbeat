@@ -78,4 +78,5 @@ public class IcesManufacturePlan extends BaseEntity {
      */
     private String mpDesc;
 
+
 }

@@ -7,6 +7,7 @@ import com.ruoyi.common.annotation.DataColumn;
 import com.ruoyi.common.annotation.DataPermission;
 import com.ruoyi.common.core.domain.entity.SysRole;
 import com.ruoyi.common.core.mapper.BaseMapperPlus;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
  * 角色表 数据层
  *
  * @author Lion Li
- */
+ */@Mapper
 public interface SysRoleMapper extends BaseMapperPlus<SysRoleMapper, SysRole, SysRole> {
 
     @DataPermission({

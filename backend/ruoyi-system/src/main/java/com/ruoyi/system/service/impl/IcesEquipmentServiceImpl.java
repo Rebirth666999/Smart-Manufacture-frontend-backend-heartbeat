@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.domain.IcesCode;
 import com.ruoyi.system.domain.bo.IcesEquipmentModelBo;
 import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,19 @@ public class IcesEquipmentServiceImpl implements IIcesEquipmentService {
     @Override
     public IcesEquipmentVo queryById(Long eqId){
         return baseMapper.selectVoById(eqId);
+    }
+
+    @Override
+    public IcesEquipment selectByEqCode(String eqCode) {
+        final IcesEquipmentBo icesEquipmentBo = new IcesEquipmentBo();
+        icesEquipmentBo.setEqCode(eqCode);
+        final LambdaQueryWrapper<IcesEquipment> lqw = buildQueryWrapper(icesEquipmentBo);
+        return baseMapper.selectOne(lqw);
+    }
+
+    @Override
+    public boolean update(IcesEquipment icesEquipment) {
+        return  baseMapper.updateById(icesEquipment)>0;
     }
 
     /**

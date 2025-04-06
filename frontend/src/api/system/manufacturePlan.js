@@ -8,8 +8,14 @@ export function listManufacturePlan(query) {
     params: query
   })
 }
-
-// 查询生产计划详细
+//审核查询生产计划列表
+export function listReviewManufacturePlan(query) {
+  return request({
+    url: '/system/manufacturePlan/reviewList',
+    method: 'get',
+    params: query
+  })
+}
 export function getManufacturePlan(mpId) {
   return request({
     url: '/system/manufacturePlan/' + mpId,

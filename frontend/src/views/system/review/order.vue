@@ -386,6 +386,7 @@ export default {
         this.$modal.msgError("获取订单详情失败");
       });
     },
+    // 根据物料（产品）的编码，解析得到名称
     getProductName(maCode) {
       if (!maCode) return '';
       if (!this.productList || this.productList.length === 0) return maCode;

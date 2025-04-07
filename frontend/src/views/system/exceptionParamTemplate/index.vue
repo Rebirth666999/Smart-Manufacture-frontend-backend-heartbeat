@@ -1,27 +1,29 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="异常类型" prop="extCode">
-        <el-select v-model="queryParams.extCode" placeholder="请选择异常类型" clearable>
-         <el-option
-          v-for="option in exceptionTypeList"
-          :key="option.extCode"
-          :label="option.extName"
-          :value="option.extCode">
-         </el-option>
+      <el-form-item label="异常" prop="exCode">
+        <el-select v-model="queryParams.exCode" placeholder="请选择异常" clearable>
+          <el-option
+           v-for="option in exceptionList"
+           :key="option.exCode"
+           :label="option.exName"
+           :value="option.exCode">
+          </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="名称" prop="exName">
-        <el-input
-          v-model="queryParams.exName"
-          placeholder="请输入名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+      <el-form-item label="异常源" prop="exsCode">
+        <el-select v-model="queryParams.exsCode" placeholder="请选择异常源" clearable>
+          <el-option
+           v-for="option in exceptionSourceList"
+           :key="option.exsCode"
+           :label="option.exsName"
+           :value="option.exsCode">
+          </el-option>
+        </el-select>
       </el-form-item>
-      <!-- <el-form-item label="已删除" prop="exDelete">
+      <!-- <el-form-item label="已删除" prop="exptDelete">
         <el-input
-          v-model="queryParams.exDelete"
+          v-model="queryParams.exptDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
@@ -41,7 +43,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:exception:add']"
+          v-hasPermi="['system:exceptionParamTemplate:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -52,7 +54,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['system:exception:edit']"
+          v-hasPermi="['system:exceptionParamTemplate:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -63,7 +65,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['system:exception:remove']"
+          v-hasPermi="['system:exceptionParamTemplate:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -73,24 +75,28 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['system:exception:export']"
+          v-hasPermi="['system:exceptionParamTemplate:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="exceptionList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="exceptionParamTemplateList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="异常ID" align="center" prop="exId" v-if="true"/>
-      <el-table-column label="异常编码" align="center" prop="exCode" />
-      <el-table-column label="异常类型" align="center" prop="extCode">
+      <el-table-column label="参数模板ID" align="center" prop="exptId" v-if="true"/>
+      <el-table-column label="参数模板编码" align="center" prop="exptCode" />
+      <el-table-column label="异常" align="center" prop="exCode">
         <template slot-scope="scope">
-          {{ exceptionTypeList.find(ele => ele.extCode === scope.row.extCode).extName || '' }}
+          {{ exceptionList.find(ele => ele.exCode === scope.row.exCode).exName || '' }}
         </template>
       </el-table-column>
-      <el-table-column label="名称" align="center" prop="exName" />
-      <!-- <el-table-column label="已删除" align="center" prop="exDelete" /> -->
-      <!-- <el-table-column label="描述" align="center" prop="exDesc" /> -->
+      <el-table-column label="异常源" align="center" prop="exsCode">
+        <template slot-scope="scope">
+          {{ exceptionSourceList.find(ele => ele.exsCode === scope.row.exsCode).exsName || '' }}
+        </template>
+      </el-table-column>
+      <!-- <el-table-column label="已删除" align="center" prop="exptDelete" /> -->
+      <!-- <el-table-column label="描述" align="center" prop="exptDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -98,14 +104,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:exception:edit']"
+            v-hasPermi="['system:exceptionParamTemplate:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:exception:remove']"
+            v-hasPermi="['system:exceptionParamTemplate:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -119,24 +125,31 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改异常对话框 -->
+    <!-- 添加或修改异常参数模板对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="异常类型" prop="extCode">
-          <el-select v-model="form.extCode" placeholder="请选择异常类型" clearable>
+        <el-form-item label="异常" prop="exCode">
+          <el-select v-model="form.exCode" placeholder="请选择异常" clearable>
             <el-option
-              v-for="option in exceptionTypeList"
-              :key="option.extCode"
-              :label="option.extName"
-              :value="option.extCode">
+             v-for="option in exceptionList"
+             :key="option.exCode"
+             :label="option.exName"
+             :value="option.exCode">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="名称" prop="exName">
-          <el-input v-model="form.exName" placeholder="请输入名称" />
+        <el-form-item label="异常源" prop="exsCode">
+          <el-select v-model="form.exsCode" placeholder="请选择异常源" clearable>
+            <el-option
+             v-for="option in exceptionSourceList"
+             :key="option.exsCode"
+             :label="option.exsName"
+             :value="option.exsCode">
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="描述" prop="exDesc">
-          <el-input v-model="form.exDesc" type="textarea" placeholder="请输入内容" />
+        <el-form-item label="描述" prop="exptDesc">
+          <el-input v-model="form.exptDesc" type="textarea" placeholder="请输入内容" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -148,11 +161,12 @@
 </template>
 
 <script>
-import { listException, getException, delException, addException, updateException } from "@/api/system/exception";
-import { listExceptionType } from "@/api/system/exceptionType";
+import { listExceptionParamTemplate, getExceptionParamTemplate, delExceptionParamTemplate, addExceptionParamTemplate, updateExceptionParamTemplate } from "@/api/system/exceptionParamTemplate";
+import { listException } from "@/api/system/exception";
+import { listExceptionSource } from "@/api/system/exceptionSource";
 
 export default {
-  name: "Exception",
+  name: "ExceptionParamTemplate",
   data() {
     return {
       // 按钮loading
@@ -169,8 +183,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 异常表格数据
-      exceptionList: [],
+      // 异常参数模板表格数据
+      exceptionParamTemplateList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -179,48 +193,54 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        exptCode: undefined,
         exCode: undefined,
-        extCode: undefined,
-        exName: undefined,
-        exDelete: 0,
+        exsCode: undefined,
+        exptDelete: 0,
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        exId: [
-          { required: true, message: "异常ID不能为空", trigger: "blur" }
+        exptId: [
+          { required: true, message: "参数模板ID不能为空", trigger: "blur" }
         ],
-        extCode: [
-          { required: true, message: "异常类型不能为空", trigger: "blur" }
+        exCode: [
+          { required: true, message: "异常不能为空", trigger: "blur" }
         ],
-        exName: [
-          { required: true, message: "名称不能为空", trigger: "blur" }
-        ],
-        exDelete: [
-          { required: true, message: "已删除不能为空", trigger: "blur" }
+        exsCode: [
+          { required: true, message: "异常源不能为空", trigger: "blur" }
         ],
       },
-      // 异常类型列表
-      exceptionTypeList: []
+      // 异常列表
+      exceptionList: [],
+      // 异常源列表
+      exceptionSourceList: []
     };
   },
   async created() {
-    await this.getExceptionTypeList();
+    await this.getExceptionList();
+    await this.getExceptionSourceList();
     this.getList();
   },
   methods: {
-    //获取异常类型列表
-    getExceptionTypeList() {
-      listExceptionType().then(response => {
-        this.exceptionTypeList = response.rows;
+    // 获取异常源列表
+    getExceptionSourceList() {
+      listExceptionSource().then(response => {
+        this.exceptionSourceList = response.rows;
       })
     },
-    /** 查询异常列表 */
+    // 获取异常列表
+    getExceptionList() {
+      listException().then(response => {
+        this.exceptionList = response.rows;
+      })
+    },
+    /** 查询异常参数模板列表 */
     getList() {
       this.loading = true;
-      listException(this.queryParams).then(response => {
-        this.exceptionList = response.rows;
+      listExceptionParamTemplate(this.queryParams).then(response => {
+        this.exceptionParamTemplateList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -233,12 +253,12 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        exId: undefined,
+        exptId: undefined,
+        exptCode: undefined,
         exCode: undefined,
-        extCode: undefined,
-        exName: undefined,
-        exDelete: 0,
-        exDesc: undefined,
+        exsCode: undefined,
+        exptDelete: undefined,
+        exptDesc: undefined,
         createBy: undefined,
         createTime: undefined,
         updateBy: undefined,
@@ -258,7 +278,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.exId)
+      this.ids = selection.map(item => item.exptId)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -266,18 +286,18 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加异常";
+      this.title = "添加异常参数模板";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.loading = true;
       this.reset();
-      const exId = row.exId || this.ids
-      getException(exId).then(response => {
+      const exptId = row.exptId || this.ids
+      getExceptionParamTemplate(exptId).then(response => {
         this.loading = false;
         this.form = response.data;
         this.open = true;
-        this.title = "修改异常";
+        this.title = "修改异常参数模板";
       });
     },
     /** 提交按钮 */
@@ -285,8 +305,8 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           this.buttonLoading = true;
-          if (this.form.exId != null) {
-            updateException(this.form).then(response => {
+          if (this.form.exptId != null) {
+            updateExceptionParamTemplate(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
@@ -294,7 +314,7 @@ export default {
               this.buttonLoading = false;
             });
           } else {
-            addException(this.form).then(response => {
+            addExceptionParamTemplate(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -307,10 +327,10 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const exIds = row.exId || this.ids;
-      this.$modal.confirm('是否确认删除异常编号为"' + exIds + '"的数据项？').then(() => {
+      const exptIds = row.exptId || this.ids;
+      this.$modal.confirm('是否确认删除异常参数模板编号为"' + exptIds + '"的数据项？').then(() => {
         this.loading = true;
-        return delException(exIds);
+        return delExceptionParamTemplate(exptIds);
       }).then(() => {
         this.loading = false;
         this.getList();
@@ -322,9 +342,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('system/exception/export', {
+      this.download('system/exceptionParamTemplate/export', {
         ...this.queryParams
-      }, `exception_${new Date().getTime()}.xlsx`)
+      }, `exceptionParamTemplate_${new Date().getTime()}.xlsx`)
     }
   }
 };

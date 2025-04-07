@@ -184,7 +184,7 @@ export default {
         extCode: undefined,
         extCodeParent: undefined,
         extName: undefined,
-        extDelete: undefined,
+        extDelete: 0,
       },
       // 表单参数
       form: {},

@@ -215,7 +215,7 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
                     taskParamBo.setDtpaDelete(0L);
                     deviceTaskParamService.insertByBo(taskParamBo);
                 }}
-                for (Map<String, Object> task : deviceTasks){
+            for (Map<String, Object> task : deviceTasks){
                 // 找到当前设备任务对应的工艺步骤
                 IcesProcessStepVo step = modelIdToStep.get(task.get("id").toString());
                 IcesDeviceTask deviceTask = currentRoundTasks.get(task.get("id").toString());

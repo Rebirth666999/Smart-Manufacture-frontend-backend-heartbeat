@@ -263,7 +263,7 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
                 IcesProcessStepBo step = new IcesProcessStepBo();
                 step.setProcCode(procCode);
                 step.setPsModel(next.attributeValue("id"));
-                step.setMoCode(next.attributeValue("moId"));  // 模型对象编码
+                step.setMoCode(next.attributeValue("moCode"));  // 模型对象编码
                 step.setPsDesc(next.attributeValue("psDesc")); // 步骤描述
                 steps.add(step);
                 stepMap.put(next.attributeValue("id"), step);
@@ -284,6 +284,7 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
                 // 获取已有步骤的ID
                 IcesProcessStepVo existing = existingSteps.get(psModel);
                 newStep.setPsId(existing.getPsId());  // 设置ID以便执行更新
+                newStep.setPsCode(existing.getPsCode());
 
                 // 执行更新操作
                 processStepService.updateByBo(newStep);
@@ -376,15 +377,7 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
 
         // ========== 7. 清理不再使用的数据 ==========
 
-        // 7.1 删除不再使用的步骤
-        if (!existingSteps.isEmpty()) {
-            List<Long> stepIdsToDelete = existingSteps.values().stream()
-                .map(IcesProcessStepVo::getPsId)
-                .collect(Collectors.toList());
-            processStepService.deleteWithValidByIds(stepIdsToDelete, false);
-        }
-
-        // 7.2 删除不再使用的普通流程关系
+        // 7.1 删除不再使用的普通流程关系
         if (!existingFlows.isEmpty()) {
             List<Long> flowIdsToDelete = existingFlows.values().stream()
                 .map(IcesProcessStepPrevVo::getPspId)
@@ -392,12 +385,20 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
             stepPrevService.deleteWithValidByIds(flowIdsToDelete, false);
         }
 
-        // 7.3 删除不再使用的跨轮次流程关系
+        // 7.2 删除不再使用的跨轮次流程关系
         if (!existingRoundFlows.isEmpty()) {
             List<Long> roundFlowIdsToDelete = existingRoundFlows.values().stream()
                 .map(IcesProcessStepPrevRoundVo::getPsprId)
                 .collect(Collectors.toList());
             prevRoundService.deleteWithValidByIds(roundFlowIdsToDelete, false);
+        }
+
+        // 7.3 删除不再使用的步骤
+        if (!existingSteps.isEmpty()) {
+            List<Long> stepIdsToDelete = existingSteps.values().stream()
+                .map(IcesProcessStepVo::getPsId)
+                .collect(Collectors.toList());
+            processStepService.deleteWithValidByIds(stepIdsToDelete, false);
         }
     }
 }

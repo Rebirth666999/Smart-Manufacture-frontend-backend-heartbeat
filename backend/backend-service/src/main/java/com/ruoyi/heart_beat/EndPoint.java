@@ -3,14 +3,21 @@ package com.ruoyi.heart_beat;
 import javax.servlet.http.HttpSession;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
+
+import com.ruoyi.heart_beat.service.IcesEquipmentHeartbeatSaveService;
 import lombok.extern.slf4j.Slf4j;
 import com.ruoyi.heart_beat.config.GetHttpSessionConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 @ServerEndpoint(value = "/heartbeat",configurator = GetHttpSessionConfig.class)
 @Component
 @Slf4j
@@ -20,6 +27,15 @@ public class EndPoint {
 
     static private final String client_name_1="browser";//前端名称代号
     static private final String client_name_2="controller";//控制节点名称代号
+
+    IcesEquipmentHeartbeatSaveService heartbeatSaveService;
+    private static AutowireCapableBeanFactory beanFactory;
+//    private static ExecutorService executorService = Executors.newFixedThreadPool(2);
+
+    @Autowired
+    public void setBeanFactory(AutowireCapableBeanFactory beanFactory) {
+        EndPoint.beanFactory = beanFactory;
+    }
     @OnOpen
     public void onOpen(Session session, EndpointConfig config){
         String client_name=(String) config.getUserProperties().get("client_name");
@@ -33,15 +49,34 @@ public class EndPoint {
     }
 
     @OnMessage
-    public void onMessage(String msg,Session session){
+    public void onMessage(String msg, Session session) {
         String client_name = (String) session.getUserProperties().get("client_name");
-//        log.info("received :"+msg+" from :"+client_name);
-        if(client_name.equals("controller")){
-            if(!msg.equals("Heartbeat")){
-                sendToBrowser(msg);
+        // log.info("received :" + msg + " from :" + client_name);
+        if (client_name.equals("controller")) {
+            if (!msg.equals("Heartbeat") && !msg.equals("{\"tasks_status\": \"no task now\", \"error\": \"no error\"}")) {
+
+                // 获取线程池
+                ExecutorService executorService = Executors.newFixedThreadPool(2);
+                System.out.println("in onMessage");
+                // 提交保存心跳的任务
+                executorService.submit(() -> {
+                    System.out.println("in thread1");
+                    this.heartbeatSaveService = beanFactory.getBean(IcesEquipmentHeartbeatSaveService.class);
+                    System.out.println(msg);
+                    heartbeatSaveService.saveHeartbeat(msg);
+                });
+
+                // 提交发送消息到浏览器的任务
+                executorService.submit(() -> {
+                    System.out.println("in thread2");
+                    sendToBrowser(msg);
+                });
+
+                // 关闭线程池
+                executorService.shutdown();
             }
-        }else {
-            System.out.println(client_name+" send a message:"+msg);
+        } else {
+            System.out.println(client_name + " send a message:" + msg);
         }
     }
     private void sendToBrowser(String msg){
@@ -50,6 +85,7 @@ public class EndPoint {
                 Session session=OnlineClient1Sessions.get(session_id);
                 session.getBasicRemote().sendText(msg);
 //                System.out.println("in sendToBrowser.msg:"+msg);
+
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

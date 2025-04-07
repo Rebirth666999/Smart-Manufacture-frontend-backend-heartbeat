@@ -309,9 +309,10 @@
 
 <script>
 import { listManufactureTask, getManufactureTask, delManufactureTask, addManufactureTask, updateManufactureTask } from "@/api/system/manufactureTask";
-import { listDeviceTask, saveDeviceTasks } from "@/api/system/deviceTask";
+import { listDeviceTask, saveDeviceTasks, listDeviceTaskParam, listDeviceTaskPrev, executeDeviceTask } from "@/api/system/deviceTask";
 
 import { listArea } from "@/api/system/area";
+import { listAreaControl } from "@/api/system/areaControl";
 import { listManufacturePlan } from "@/api/system/manufacturePlan";
 import { listProcess, getBpmnXml } from "@/api/system/process";
 import { listStore } from "@/api/system/store";
@@ -321,7 +322,7 @@ import { listEquipmentOperation } from "@/api/system/equipmentOperation";
 import { listModelOperation } from "@/api/system/modelOperation";
 import { listEquipmentModel } from "@/api/system/equipmentModel";
 import { listEquipmentOperationStep } from "@/api/system/equipmentOperationStep";
-import { listEquipmentOperationStepParam } from "@/api/system/equipmentOperationStepParam";
+import { listEquipmentOperationStepParam } from "@/api/system/equipmentOperationStepParam";import { listEquipmentAtomOperation } from "@/api/system/equipmentAtomOperation";
 
 import ProcessViewer from '@/components/ProcessViewerIndustry';
 
@@ -677,8 +678,73 @@ export default {
       });
     },
     // 下发设备任务
-    handleExecuteDeviceTask(row) {
+    async handleExecuteDeviceTask(row) {
+      this.$modal.confirm('是否下发任务？').then(async () => {
+        this.loading = true
+        // manufactureTask信息
+        const productionTask = {
+          "ptId": row.mtCode,
+          "ptLatestEndtime": '',
+          "ptNum": 1,
+          "ptPriority": row.mtPriority,
+          "preemptive": false,
+        }
 
+        const areaControl = (await listAreaControl({ arCode: row.arCode })).rows
+        const equipmentAtomOperationList = (await listEquipmentAtomOperation()).rows
+
+        const deviceTask = (await listDeviceTask({ mtCode: row.mtCode })).rows
+        const deviceTaskParam = (await listDeviceTaskParam({ mtCode: row.mtCode })).rows
+        const deviceTaskPrev = (await listDeviceTaskPrev({ mtCode: row.mtCode })).rows
+        let processRoute = []
+
+        // 处理每个task
+        for (let task of deviceTask) {
+          const prev = deviceTaskPrev.filter(ele => ele.dtCodeCur === task.dtCode)
+          const equipment = this.eqList.find(ele => ele.eqCode === task.eqCode)
+          const equipmentOperationStep = this.viewerData.eosList.find(ele => ele.eoCode === task.eoCode && ele.eaoCode)
+          const equipmentAtomOperation = equipmentAtomOperationList.find(ele => ele.eaoCode === equipmentOperationStep.eaoCode)
+          const equipmentOperationStepParams = this.viewerData.eospaList.filter(ele => ele.eosCode === equipmentOperationStep.eosCode)
+          // 取出所需信息
+          let route = {
+            "prdId": task.dtCode,
+            "prePrdId": prev.map(ele => ele.dtCodePrev),
+            "eqId": task.eqCode,
+            "opId": equipmentAtomOperation.eaoCode,
+            "opParam": {}
+          }
+          // 解析参数信息
+          for (let param of deviceTaskParam) {
+            const paramInfo = equipmentOperationStepParams.find(ele => ele.eospaCode === param.eospaCode)
+            if (paramInfo) {
+              if (paramInfo.eospaType === '1')
+                route.opParam[paramInfo.eospaName] = parseInt(param.dtpaValue)
+              else if (paramInfo.eospaType === '2')
+                route.opParam[paramInfo.eospaName] = parseFloat(param.dtpaValue)
+              else
+                route.opParam[paramInfo.eospaName] = param.dtpaValue
+
+              if (route.opParam[paramInfo.eospaName] === NaN) {
+                this.$modal.msgError("参数类型不合法，请重新生成设备任务")
+                return
+              }
+            }
+          }
+
+          processRoute.push(route)
+        }
+        // 下发开始执行
+        return executeDeviceTask(areaControl[0]['acIp'], {
+          "areaControl": areaControl,
+          "productionTask": productionTask,
+          "processRoute": processRoute
+        })
+      }).then(() => {
+        this.$modal.msgSuccess("下发任务成功")
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false
+      });
     }
   }
 };

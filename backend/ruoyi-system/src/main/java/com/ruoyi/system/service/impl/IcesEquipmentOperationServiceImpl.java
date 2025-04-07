@@ -127,7 +127,15 @@ public class IcesEquipmentOperationServiceImpl extends FlowServiceFactory implem
         if(isValid){
             //TODO 做一些业务上的校验,判断是否需要校验
         }
-        return baseMapper.deleteBatchIds(ids) > 0;
+        //删除设备操作，或使用级联删除，删除操作步骤等关联表的数据，或置删除字段为1，这里使用后者
+        for (Long id : ids) {
+            final IcesEquipmentOperation icesEquipmentOperation = baseMapper.selectById(id);
+            icesEquipmentOperation.setEoDelete(1L);
+            baseMapper.updateById(icesEquipmentOperation);
+        }
+        System.out.println(ids);
+        return true;
+//        return baseMapper.deleteBatchIds(ids) > 0;
     }
 
     @Override

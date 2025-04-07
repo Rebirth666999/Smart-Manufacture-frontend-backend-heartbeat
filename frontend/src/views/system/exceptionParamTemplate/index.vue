@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="参数模板编码" prop="exptCode">
-        <el-input
-          v-model="queryParams.exptCode"
-          placeholder="请输入参数模板编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="异常" prop="exCode">
         <el-input
           v-model="queryParams.exCode"
@@ -25,14 +17,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="已删除" prop="exptDelete">
+      <!-- <el-form-item label="已删除" prop="exptDelete">
         <el-input
           v-model="queryParams.exptDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -91,8 +83,8 @@
       <el-table-column label="参数模板编码" align="center" prop="exptCode" />
       <el-table-column label="异常" align="center" prop="exCode" />
       <el-table-column label="异常源" align="center" prop="exsCode" />
-      <el-table-column label="已删除" align="center" prop="exptDelete" />
-      <el-table-column label="描述" align="center" prop="exptDesc" />
+      <!-- <el-table-column label="已删除" align="center" prop="exptDelete" /> -->
+      <!-- <el-table-column label="描述" align="center" prop="exptDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -176,7 +168,7 @@ export default {
         exptCode: undefined,
         exCode: undefined,
         exsCode: undefined,
-        exptDelete: undefined,
+        exptDelete: 0,
       },
       // 表单参数
       form: {},

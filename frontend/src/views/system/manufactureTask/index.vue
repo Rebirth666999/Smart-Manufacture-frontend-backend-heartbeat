@@ -182,6 +182,20 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:manufactureTask:remove']"
           >删除</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-finished"
+            v-show="scope.row.mtStat === '1'"
+            @click="handleSubmitReview(scope.row)"
+          >提交审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-refresh-left"
+            v-show="scope.row.mtStat === '2' || scope.row.eqStat === '7' || scope.row.eqStat === 'a'"
+            @click="handleWithdrawReview(scope.row)"
+          >撤回审核</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -587,6 +601,46 @@ export default {
       this.download('system/manufactureTask/export', {
         ...this.queryParams
       }, `manufactureTask_${new Date().getTime()}.xlsx`)
+    },
+    // 提交审核
+    handleSubmitReview(row) {
+      const mtId = row.mtId;
+      this.$modal.confirm('是否要提交审核？审核在开始之前可以撤回。').then(() => {
+        this.loading = true;
+        getManufactureTask(mtId).then(response => {
+          this.form = response.data;
+          if (this.form.mtStat === '1') this.form.mtStat = '2';
+          else if(this.form.mtStat === '7') this.form.mtStat = '8';
+          else if(this.form.mtStat === 'a') this.form.mtStat = 'b';
+        updateManufactureTask(this.form).then(response => {
+            this.$modal.msgSuccess("已提交审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 撤回审核
+    handleWithdrawReview(row) {
+      const mtId = row.mtId;
+      this.$modal.confirm('是否要撤回审核？若审核已开始即无法撤回。').then(() => {
+        this.loading = true;
+        getManufactureTask(mtId).then(response => {
+          this.form = response.data;
+          if (this.form.mtStat === '2') this.form.mtStat = '1';
+          else if(this.form.mtStat === '8') this.form.mtStat = '7';
+          else if(this.form.mtStat === 'b') this.form.mtStat = 'a';
+        updateManufactureTask(this.form).then(response => {
+            this.$modal.msgSuccess("已撤回审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
     },
     // 生成生产任务
     handleGenerateDeviceTask(row) {

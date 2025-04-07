@@ -12,18 +12,18 @@
     </el-alert>
 
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="目标产品" prop="prCode">
+      <el-form-item label="目标产品" prop="maCode">
         <el-select
-          v-model="queryParams.prCode"
+          v-model="queryParams.maCode"
           placeholder="请选择目标产品"
           clearable
           :disabled="mode === 1"
         >
           <el-option
             v-for="item in productList"
-            :key="item.prCode"
-            :label="item.prName"
-            :value="item.prCode"
+            :key="item.maCode"
+            :label="item.maName"
+            :value="item.maCode"
           >
           </el-option>
         </el-select>
@@ -100,21 +100,21 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            v-show="scope.row.procStat === '2' || scope.row.procStat === '6'"
+            v-show="scope.row.procStat === '2' || scope.row.procStat === '7'"
             @click="startReview(scope.row)"
           >开始审核</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-check"
-            v-show="scope.row.procStat === '3' || scope.row.procStat === '7'"
+            v-show="scope.row.procStat === '3' || scope.row.procStat === '8'"
             @click="passReview(scope.row)"
           >通过审核</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-close"
-            v-show="scope.row.procStat === '3' || scope.row.procStat === '7'"
+            v-show="scope.row.procStat === '3' || scope.row.procStat === '8'"
             @click="rejectReview(scope.row)"
           >驳回审核</el-button>
         </template>
@@ -229,7 +229,7 @@ export default {
         getProcess(row.procId).then(response => {
           this.form = response.data;
           if (this.form.procStat === '2') this.form.procStat = '3';
-          else this.form.procStat = '7';
+          else this.form.procStat = '8';
         updateProcess(this.form).then(response => {
             this.$modal.msgSuccess("已开始审核");
             this.getList();
@@ -247,7 +247,7 @@ export default {
         this.loading = true;
         getProcess(row.procId).then(response => {
           this.form = response.data;
-          if (this.form.procStat === '3' || this.form.procStat === '7') this.form.procStat = '4';
+          if (this.form.procStat === '3' || this.form.procStat === '8') this.form.procStat = '4';
         updateProcess(this.form).then(response => {
             this.$modal.msgSuccess("已通过审核");
             this.getList();
@@ -265,7 +265,7 @@ export default {
         this.loading = true;
         getProcess(row.procId).then(response => {
           this.form = response.data;
-          if (this.form.procStat === '3' || this.form.procStat === '7') this.form.procStat = '1';
+          if (this.form.procStat === '3' || this.form.procStat === '8') this.form.procStat = '1';
         updateProcess(this.form).then(response => {
             this.$modal.msgSuccess("已驳回审核");
             this.getList();

@@ -141,21 +141,21 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            v-show="scope.row.mpStat === '2' || scope.row.mpStat === '6'"
+            v-show="scope.row.mpStat === '2' || scope.row.mpStat === '7' || scope.row.mpStat === 'a'"
             @click="startReview(scope.row)"
           >开始审核</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-check"
-            v-show="scope.row.mpStat === '3' || scope.row.mpStat === '7'"
+            v-show="scope.row.mpStat === '3' || scope.row.mpStat === '8' || scope.row.mpStat === 'b'"
             @click="passReview(scope.row)"
           >通过审核</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-close"
-            v-show="scope.row.mpStat === '3' || scope.row.mpStat === '7'"
+            v-show="scope.row.mpStat === '3' || scope.row.mpStat === '8' || scope.row.mpStat === 'b'"
             @click="rejectReview(scope.row)"
           >驳回审核</el-button>
         </template>
@@ -293,7 +293,8 @@ export default {
         getManufacturePlan(row.mpId).then(response => {
           this.form = response.data;
           if (this.form.mpStat === '2') this.form.mpStat = '3';
-          else this.form.mpStat = '7';
+          else if (this.form.mpStat === '7') this.form.mpStat = '8';
+          else this.form.mpStat = 'b';
           updateManufacturePlan(this.form).then(response => {
             this.$modal.msgSuccess("已开始审核");
             this.getList();
@@ -311,7 +312,7 @@ export default {
         this.loading = true;
         getManufacturePlan(row.mpId).then(response => {
           this.form = response.data;
-          if (this.form.mpStat === '3' || this.form.mpStat === '7') this.form.mpStat = '4';
+          if (this.form.mpStat === '3' || this.form.mpStat === '8' || this.form.mpStat === 'b') this.form.mpStat = '4';
           updateManufacturePlan(this.form).then(response => {
             this.$modal.msgSuccess("已通过审核");
             this.getList();
@@ -329,7 +330,7 @@ export default {
         this.loading = true;
         getManufacturePlan(row.mpId).then(response => {
           this.form = response.data;
-          if (this.form.mpStat === '3' || this.form.mpStat === '7') this.form.mpStat = '1';
+          if (this.form.mpStat === '3' || this.form.mpStat === '8' || this.form.mpStat === 'b' ) this.form.mpStat = '1';
           updateManufacturePlan(this.form).then(response => {
             this.$modal.msgSuccess("已驳回审核");
             this.getList();

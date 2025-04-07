@@ -46,7 +46,7 @@
       <el-form-item label="状态" prop="mtStat">
         <el-select v-model="queryParams.mtStat" placeholder="请选择状态" clearable>
           <el-option
-            v-for="dict in dict.type.ices_order_status_review"
+            v-for="dict in dict.type.ices_manufacture_task_review"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -85,7 +85,7 @@
       </el-table-column>
       <el-table-column label="状态" align="center" prop="mtStat">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.ices_order_status_review" :value="scope.row.mtStat"/>
+          <dict-tag :options="dict.type.ices_manufacture_task_review" :value="scope.row.mtStat"/>
         </template>
       </el-table-column>
       <el-table-column label="最晚结束时间" align="center" prop="mtEndPlan" width="180">
@@ -115,8 +115,23 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            v-show="scope.row.mtStat === '2' || scope.row.mtStat === '6'"
-          >审核</el-button>
+            v-show="scope.row.mtStat === '2' || scope.row.mtStat === '7' || scope.row.mtStat === 'a'"
+            @click="startReview(scope.row)"
+          >开始审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            v-show="scope.row.mtStat === '3' || scope.row.mtStat === '8' || scope.row.mtStat === 'b'"
+            @click="passReview(scope.row)"
+          >通过审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            v-show="scope.row.mtStat === '3' || scope.row.mtStat === '8' || scope.row.mtStat === 'b'"
+            @click="rejectReview(scope.row)"
+          >驳回审核</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -132,13 +147,14 @@
 </template>
 
 <script>
-import { getManufactureTask, listReviewManufactureTask } from "@/api/system/manufactureTask";
+import { getManufactureTask, listReviewManufactureTask , updateManufactureTask} from "@/api/system/manufactureTask";
 import { listManufacturePlan } from "@/api/system/manufacturePlan";
+import { listArea } from "@/api/system/area";
 
 
 export default {
   name: "ManufactureTaskReview",
-  dicts: ['ices_order_status_review'],
+  dicts: ['ices_manufacture_task_review'],
   data() {
     return {
       // 按钮loading
@@ -186,6 +202,59 @@ export default {
     this.getList();
   },
   methods: {
+    //开始审核
+    startReview(row) {
+      this.$modal.confirm('是否要开始审核？').then(() => {
+        this.loading = true;
+        getManufactureTask(row.mtId).then(response => {
+          this.form = response.data;
+          if (this.form.mtStat === '2') this.form.mtStat = '3';
+          else if (this.form.mtStat === '7') this.form.mtStat = '8';
+          else this.form.mtStat = 'b';
+        updateManufactureTask(this.form).then(response => {
+            this.$modal.msgSuccess("已开始审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    //通过审核
+    passReview(row) {
+      this.$modal.confirm('是否要通过审核？').then(() => {
+        this.loading = true;
+        getManufactureTask(row.mtId).then(response => {
+          this.form = response.data;
+          if (this.form.mtStat === '3' ||this.form.mtStat === '7' ||this.form.mtStat === 'b') this.form.mtStat = '4';
+        updateManufactureTask(this.form).then(response => {
+            this.$modal.msgSuccess("已通过审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    //驳回审核
+    rejectReview(row) {
+      this.$modal.confirm('是否要驳回审核？').then(() => {
+        this.loading = true;
+        getManufactureTask(row.mtId).then(response => {
+          this.form = response.data;
+          if (this.form.mtStat === '3' ||this.form.mtStat === '7' ||this.form.mtStat === 'b' ) this.form.mtStat = '1';
+        updateManufactureTask(this.form).then(response => {
+            this.$modal.msgSuccess("已驳回审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
     // 查询生产计划列表
     getManufacturePlanList() {
       return listManufacturePlan().then(response => {

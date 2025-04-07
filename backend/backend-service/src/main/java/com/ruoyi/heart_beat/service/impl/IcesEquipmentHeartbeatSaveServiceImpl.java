@@ -242,7 +242,7 @@ public class IcesEquipmentHeartbeatSaveServiceImpl implements IcesEquipmentHeart
 
     }
 
-    private  void saveDB(String eqCode, String erType, String erStat, long erLevel, Date erBeginTime ,Date erEndTime,String desc){
+    private void saveDB(String eqCode, String erType, String erStat, int erLevel, Date erBeginTime ,Date erEndTime,String desc){
         IcesEquipmentRecordBo equipmentRecord = new IcesEquipmentRecordBo();
         String equipmentRecordCode = codeService.insertByType("EquipmentRecord");
         equipmentRecord.setErCode(equipmentRecordCode);

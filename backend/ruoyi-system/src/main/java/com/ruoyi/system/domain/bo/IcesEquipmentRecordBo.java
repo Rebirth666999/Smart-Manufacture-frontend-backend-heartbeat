@@ -57,8 +57,11 @@ public class IcesEquipmentRecordBo extends BaseEntity {
      */
     @NotNull(message = "发生时间不能为空", groups = { EditGroup.class })
     private Date erBegin;
+
+    /**
+     * 结束时间
+     */
     private Date erEnd;
-    private Long erLevel;
     /**
      * 已删除
      */

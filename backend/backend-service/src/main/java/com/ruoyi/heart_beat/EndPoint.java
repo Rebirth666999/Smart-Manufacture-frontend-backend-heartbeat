@@ -4,7 +4,6 @@ import javax.servlet.http.HttpSession;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 
-import com.azul.crs.client.service.HeartbeatService;
 import com.ruoyi.heart_beat.service.IcesEquipmentHeartbeatSaveService;
 import lombok.extern.slf4j.Slf4j;
 import com.ruoyi.heart_beat.config.GetHttpSessionConfig;

@@ -10,52 +10,52 @@ import java.util.Date;
 
 
 /**
- * 异常视图对象 ices_exception
+ * 异常参数模板视图对象 ices_exception_param_template
  *
  * @author ruoyi
  * @date 2025-04-07
  */
 @Data
 @ExcelIgnoreUnannotated
-public class IcesExceptionVo {
+public class IcesExceptionParamTemplateVo {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 异常ID
+     * 参数模板ID
      */
-    @ExcelProperty(value = "异常ID")
-    private Long exId;
+    @ExcelProperty(value = "参数模板ID")
+    private Long exptId;
 
     /**
-     * 异常编码
+     * 参数模板编码
      */
-    @ExcelProperty(value = "异常编码")
+    @ExcelProperty(value = "参数模板编码")
+    private String exptCode;
+
+    /**
+     * 异常
+     */
+    @ExcelProperty(value = "异常")
     private String exCode;
 
     /**
-     * 异常类型
+     * 异常源
      */
-    @ExcelProperty(value = "异常类型")
-    private String extCode;
-
-    /**
-     * 名称
-     */
-    @ExcelProperty(value = "名称")
-    private String exName;
+    @ExcelProperty(value = "异常源")
+    private String exsCode;
 
     /**
      * 已删除
      */
     @ExcelProperty(value = "已删除")
-    private Long exDelete;
+    private Long exptDelete;
 
     /**
      * 描述
      */
     @ExcelProperty(value = "描述")
-    private String exDesc;
+    private String exptDesc;
 
 
 }

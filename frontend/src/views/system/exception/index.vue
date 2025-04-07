@@ -1,21 +1,13 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="异常编码" prop="exCode">
-        <el-input
-          v-model="queryParams.exCode"
-          placeholder="请输入异常编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="异常类型" prop="etCode">
-        <el-select v-model="queryParams.etCode" placeholder="请选择异常类型" clearable>
+      <el-form-item label="异常类型" prop="extCode">
+        <el-select v-model="queryParams.extCode" placeholder="请选择异常类型" clearable>
          <el-option
           v-for="option in exceptionTypeList"
-          :key="option.etCode"
-          :label="option.etName"
-          :value="option.etCode">
+          :key="option.extCode"
+          :label="option.extName"
+          :value="option.extCode">
          </el-option>
         </el-select>
       </el-form-item>
@@ -91,7 +83,11 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="异常ID" align="center" prop="exId" v-if="true"/>
       <el-table-column label="异常编码" align="center" prop="exCode" />
-      <el-table-column label="异常类型" align="center" prop="etCode" />
+      <el-table-column label="异常类型" align="center" prop="extCode">
+        <template slot-scope="scope">
+          {{ exceptionTypeList.find(ele => ele.extCode === scope.row.extCode).extName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="名称" align="center" prop="exName" />
       <!-- <el-table-column label="已删除" align="center" prop="exDelete" /> -->
       <!-- <el-table-column label="描述" align="center" prop="exDesc" /> -->
@@ -126,13 +122,13 @@
     <!-- 添加或修改异常对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="异常类型" prop="etCode">
-          <el-select v-model="form.etCode" placeholder="请选择异常类型" clearable>
+        <el-form-item label="异常类型" prop="extCode">
+          <el-select v-model="form.extCode" placeholder="请选择异常类型" clearable>
             <el-option
               v-for="option in exceptionTypeList"
-              :key="option.etCode"
-              :label="option.etName"
-              :value="option.etCode">
+              :key="option.extCode"
+              :label="option.extName"
+              :value="option.extCode">
             </el-option>
           </el-select>
         </el-form-item>
@@ -184,9 +180,9 @@ export default {
         pageNum: 1,
         pageSize: 10,
         exCode: undefined,
-        etCode: undefined,
+        extCode: undefined,
         exName: undefined,
-        exDelete: undefined,
+        exDelete: 0,
       },
       // 表单参数
       form: {},
@@ -195,7 +191,7 @@ export default {
         exId: [
           { required: true, message: "异常ID不能为空", trigger: "blur" }
         ],
-        etCode: [
+        extCode: [
           { required: true, message: "异常类型不能为空", trigger: "blur" }
         ],
         exName: [
@@ -204,12 +200,14 @@ export default {
         exDelete: [
           { required: true, message: "已删除不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 异常类型列表
+      exceptionTypeList: []
     };
   },
   async created() {
+    await this.getExceptionTypeList();
     this.getList();
-    await this.getExceptionList();
   },
   methods: {
     //获取异常类型列表
@@ -237,7 +235,7 @@ export default {
       this.form = {
         exId: undefined,
         exCode: undefined,
-        etCode: undefined,
+        extCode: undefined,
         exName: undefined,
         exDelete: 0,
         exDesc: undefined,

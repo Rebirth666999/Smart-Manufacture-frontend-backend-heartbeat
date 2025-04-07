@@ -36,7 +36,7 @@ public class IcesExceptionBo extends BaseEntity {
      * 异常类型
      */
     @NotBlank(message = "异常类型不能为空", groups = { AddGroup.class, EditGroup.class })
-    private String etCode;
+    private String extCode;
 
     /**
      * 名称

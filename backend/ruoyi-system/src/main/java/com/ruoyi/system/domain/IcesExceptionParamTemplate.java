@@ -10,42 +10,42 @@ import java.math.BigDecimal;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
- * 异常对象 ices_exception
+ * 异常参数模板对象 ices_exception_param_template
  *
  * @author ruoyi
  * @date 2025-04-07
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("ices_exception")
-public class IcesException extends BaseEntity {
+@TableName("ices_exception_param_template")
+public class IcesExceptionParamTemplate extends BaseEntity {
 
     private static final long serialVersionUID=1L;
 
     /**
-     * 异常ID
+     * 参数模板ID
      */
-    @TableId(value = "ex_id")
-    private Long exId;
+    @TableId(value = "expt_id")
+    private Long exptId;
     /**
-     * 异常编码
+     * 参数模板编码
+     */
+    private String exptCode;
+    /**
+     * 异常
      */
     private String exCode;
     /**
-     * 异常类型
+     * 异常源
      */
-    private String extCode;
-    /**
-     * 名称
-     */
-    private String exName;
+    private String exsCode;
     /**
      * 已删除
      */
-    private Long exDelete;
+    private Long exptDelete;
     /**
      * 描述
      */
-    private String exDesc;
+    private String exptDesc;
 
 }

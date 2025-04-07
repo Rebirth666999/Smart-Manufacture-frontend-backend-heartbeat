@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="异常类型编码" prop="extCode">
-        <el-input
-          v-model="queryParams.extCode"
-          placeholder="请输入异常类型编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="110px">
       <el-form-item label="上级异常类型" prop="extCodeParent">
         <el-select v-model="queryParams.extCodeParent" placeholder="请选择上级异常类型" clearable>
             <el-option
@@ -91,7 +83,11 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="异常类型ID" align="center" prop="extId" v-if="true"/>
       <el-table-column label="异常类型编码" align="center" prop="extCode" />
-      <el-table-column label="上级异常类型" align="center" prop="extCodeParent" />
+      <el-table-column label="上级异常类型" align="center" prop="extCodeParent">
+        <template slot-scope="scope">
+          {{ scope.row.extCodeParent && exceptionTypeList.find(ele => ele.extCode === scope.row.extCodeParent).extName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="名称" align="center" prop="extName" />
       <!-- <el-table-column label="已删除" align="center" prop="extDelete" /> -->
       <!-- <el-table-column label="描述" align="center" prop="extDesc" /> -->
@@ -125,14 +121,14 @@
 
     <!-- 添加或修改异常类型对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="上级异常类型" prop="extCodeParent">
           <el-select v-model="form.extCodeParent" placeholder="请选择上级异常类型" clearable>
             <el-option
               v-for="option in exceptionTypeList"
-              :key="option.extCodeParent"
-              :label="option.extNameParent"
-              :value="option.extCodeParent">
+              :key="option.extCode"
+              :label="option.extName"
+              :value="option.extCode">
             </el-option>
           </el-select>
         </el-form-item>
@@ -188,7 +184,7 @@ export default {
         extCode: undefined,
         extCodeParent: undefined,
         extName: undefined,
-        extDelete: undefined,
+        extDelete: 0,
       },
       // 表单参数
       form: {},
@@ -196,9 +192,6 @@ export default {
       rules: {
         extId: [
           { required: true, message: "异常类型ID不能为空", trigger: "blur" }
-        ],
-        extCodeParent: [
-          { required: true, message: "上级异常类型不能为空", trigger: "blur" }
         ],
         extName: [
           { required: true, message: "名称不能为空", trigger: "blur" }

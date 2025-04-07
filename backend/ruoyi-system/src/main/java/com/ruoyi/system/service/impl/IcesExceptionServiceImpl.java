@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesExceptionBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesExceptionServiceImpl implements IIcesExceptionService {
 
     private final IcesExceptionMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询异常
@@ -62,7 +64,7 @@ public class IcesExceptionServiceImpl implements IIcesExceptionService {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesException> lqw = Wrappers.lambdaQuery();
         lqw.eq(StringUtils.isNotBlank(bo.getExCode()), IcesException::getExCode, bo.getExCode());
-        lqw.eq(StringUtils.isNotBlank(bo.getEtCode()), IcesException::getEtCode, bo.getEtCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getExtCode()), IcesException::getExtCode, bo.getExtCode());
         lqw.like(StringUtils.isNotBlank(bo.getExName()), IcesException::getExName, bo.getExName());
         lqw.eq(bo.getExDelete() != null, IcesException::getExDelete, bo.getExDelete());
         return lqw;
@@ -73,6 +75,7 @@ public class IcesExceptionServiceImpl implements IIcesExceptionService {
      */
     @Override
     public Boolean insertByBo(IcesExceptionBo bo) {
+        bo.setExCode(codeService.insertByType("Exception"));
         IcesException add = BeanUtil.toBean(bo, IcesException.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

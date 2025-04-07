@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="异常源编码" prop="exsCode">
-        <el-input
-          v-model="queryParams.exsCode"
-          placeholder="请输入异常源编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="85px">
       <el-form-item label="名称" prop="exsName">
         <el-input
           v-model="queryParams.exsName"
@@ -118,8 +110,8 @@
     />
 
     <!-- 添加或修改异常源对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="530px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="名称" prop="exsName">
           <el-input v-model="form.exsName" placeholder="请输入名称" />
         </el-form-item>

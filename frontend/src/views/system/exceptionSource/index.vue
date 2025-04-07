@@ -175,7 +175,7 @@ export default {
         pageSize: 10,
         exsCode: undefined,
         exsName: undefined,
-        exsDelete: undefined,
+        exsDelete: 0,
       },
       // 表单参数
       form: {},

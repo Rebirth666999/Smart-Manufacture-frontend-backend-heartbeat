@@ -17,14 +17,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="已删除" prop="exsDelete">
+      <!-- <el-form-item label="已删除" prop="exsDelete">
         <el-input
           v-model="queryParams.exsDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -87,8 +87,8 @@
       <el-table-column label="处理接口" align="center" prop="exsHandleUrl" />
       <el-table-column label="状态检查接口" align="center" prop="exsStateUrl" />
       <el-table-column label="预警接口" align="center" prop="exsNotifyUrl" />
-      <el-table-column label="已删除" align="center" prop="exsDelete" />
-      <el-table-column label="描述" align="center" prop="exsDesc" />
+      <!-- <el-table-column label="已删除" align="center" prop="exsDelete" /> -->
+      <!-- <el-table-column label="描述" align="center" prop="exsDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -245,7 +245,7 @@ export default {
         exsHandleUrl: undefined,
         exsStateUrl: undefined,
         exsNotifyUrl: undefined,
-        exsDelete: undefined,
+        exsDelete: 0,
         exsDesc: undefined,
         createBy: undefined,
         createTime: undefined,
@@ -337,3 +337,11 @@ export default {
   }
 };
 </script>
+<style scope>
+.el-select{
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

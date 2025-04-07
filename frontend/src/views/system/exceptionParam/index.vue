@@ -10,12 +10,14 @@
         />
       </el-form-item>
       <el-form-item label="所属异常" prop="exCode">
-        <el-input
-          v-model="queryParams.exCode"
-          placeholder="请输入所属异常"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.exCode" placeholder="请选择所属异常" clearable>
+         <el-option
+          v-for="option in exceptionList"
+          :key="option.exCode"
+          :label="option.exName"
+          :value="option.exCode">
+         </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="名称" prop="expName">
         <el-input
@@ -35,14 +37,14 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="已删除" prop="expDelete">
+      <!-- <el-form-item label="已删除" prop="expDelete">
         <el-input
           v-model="queryParams.expDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -106,7 +108,7 @@
           <dict-tag :options="dict.type.exp_type_status" :value="scope.row.expType"/>
         </template>
       </el-table-column>
-      <el-table-column label="已删除" align="center" prop="expDelete" />
+      <!-- <el-table-column label="已删除" align="center" prop="expDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -139,7 +141,14 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="所属异常" prop="exCode">
-          <el-input v-model="form.exCode" placeholder="请输入所属异常" />
+          <el-select v-model="form.etCode" placeholder="请选择异常类型" clearable>
+            <el-option
+             v-for="option in exceptionTypeList"
+             :key="option.etCode"
+             :label="option.etName"
+             :value="option.etCode">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="名称" prop="expName">
           <el-input v-model="form.expName" placeholder="请输入名称" />
@@ -165,6 +174,7 @@
 
 <script>
 import { listExceptionParam, getExceptionParam, delExceptionParam, addExceptionParam, updateExceptionParam } from "@/api/system/exceptionParam";
+import { listException } from "@/api/system/exception";
 
 export default {
   name: "ExceptionParam",
@@ -199,7 +209,7 @@ export default {
         exCode: undefined,
         expName: undefined,
         expType: undefined,
-        expDelete: undefined,
+        expDelete: 0,
       },
       // 表单参数
       form: {},
@@ -223,10 +233,17 @@ export default {
       }
     };
   },
-  created() {
+  async created() {
     this.getList();
+    await this.getExceptionList();
   },
   methods: {
+    //获取异常列表
+    getExceptionList() {
+      listException().then(response => {
+        this.exceptionList = response.rows;
+      })
+    },
     /** 查询异常参数列表 */
     getList() {
       this.loading = true;
@@ -340,3 +357,11 @@ export default {
   }
 };
 </script>
+<style scope>
+.el-select{
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

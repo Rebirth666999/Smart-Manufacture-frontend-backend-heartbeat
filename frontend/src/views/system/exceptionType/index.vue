@@ -10,12 +10,14 @@
         />
       </el-form-item>
       <el-form-item label="上级异常类型" prop="extCodeParent">
-        <el-input
-          v-model="queryParams.extCodeParent"
-          placeholder="请输入上级异常类型"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.extCodeParent" placeholder="请选择上级异常类型" clearable>
+            <el-option
+              v-for="option in exceptionTypeList"
+              :key="option.extCodeParent"
+              :label="option.extNameParent"
+              :value="option.extCodeParent">
+            </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="名称" prop="extName">
         <el-input
@@ -25,14 +27,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="已删除" prop="extDelete">
+      <!-- <el-form-item label="已删除" prop="extDelete">
         <el-input
           v-model="queryParams.extDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -91,8 +93,8 @@
       <el-table-column label="异常类型编码" align="center" prop="extCode" />
       <el-table-column label="上级异常类型" align="center" prop="extCodeParent" />
       <el-table-column label="名称" align="center" prop="extName" />
-      <el-table-column label="已删除" align="center" prop="extDelete" />
-      <el-table-column label="描述" align="center" prop="extDesc" />
+      <!-- <el-table-column label="已删除" align="center" prop="extDelete" /> -->
+      <!-- <el-table-column label="描述" align="center" prop="extDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -125,14 +127,21 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="上级异常类型" prop="extCodeParent">
-          <el-input v-model="form.extCodeParent" placeholder="请输入上级异常类型" />
+          <el-select v-model="form.extCodeParent" placeholder="请选择上级异常类型" clearable>
+            <el-option
+              v-for="option in exceptionTypeList"
+              :key="option.extCodeParent"
+              :label="option.extNameParent"
+              :value="option.extCodeParent">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="名称" prop="extName">
           <el-input v-model="form.extName" placeholder="请输入名称" />
         </el-form-item>
-        <el-form-item label="已删除" prop="extDelete">
+        <!-- <el-form-item label="已删除" prop="extDelete">
           <el-input v-model="form.extDelete" placeholder="请输入已删除" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="描述" prop="extDesc">
           <el-input v-model="form.extDesc" type="textarea" placeholder="请输入内容" />
         </el-form-item>
@@ -225,7 +234,7 @@ export default {
         extCode: undefined,
         extCodeParent: undefined,
         extName: undefined,
-        extDelete: undefined,
+        extDelete: 0,
         extDesc: undefined,
         createBy: undefined,
         createTime: undefined,
@@ -317,3 +326,11 @@ export default {
   }
 };
 </script>
+<style scope>
+.el-select{
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

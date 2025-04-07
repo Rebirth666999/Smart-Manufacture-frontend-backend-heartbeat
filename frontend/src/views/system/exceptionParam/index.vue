@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="异常参数编码" prop="expCode">
-        <el-input
-          v-model="queryParams.expCode"
-          placeholder="请输入异常参数编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="所属异常" prop="exCode">
         <el-select v-model="queryParams.exCode" placeholder="请选择所属异常" clearable>
          <el-option
@@ -101,7 +93,11 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="异常参数ID" align="center" prop="expId" v-if="true"/>
       <el-table-column label="异常参数编码" align="center" prop="expCode" />
-      <el-table-column label="所属异常" align="center" prop="exCode" />
+      <el-table-column label="所属异常" align="center" prop="exCode">
+        <template slot-scope="scope">
+          {{ exceptionList.find(ele => ele.exCode === scope.row.exCode).exName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="名称" align="center" prop="expName" />
       <el-table-column label="类型" align="center" prop="expType">
         <template slot-scope="scope">
@@ -141,12 +137,12 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="所属异常" prop="exCode">
-          <el-select v-model="form.etCode" placeholder="请选择异常类型" clearable>
+          <el-select v-model="form.exCode" placeholder="请选择异常" clearable>
             <el-option
-             v-for="option in exceptionTypeList"
-             :key="option.etCode"
-             :label="option.etName"
-             :value="option.etCode">
+             v-for="option in exceptionList"
+             :key="option.exCode"
+             :label="option.exName"
+             :value="option.exCode">
             </el-option>
           </el-select>
         </el-form-item>
@@ -230,12 +226,14 @@ export default {
         expDelete: [
           { required: true, message: "已删除不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 异常列表
+      exceptionList: []
     };
   },
   async created() {
-    this.getList();
     await this.getExceptionList();
+    this.getList();
   },
   methods: {
     //获取异常列表

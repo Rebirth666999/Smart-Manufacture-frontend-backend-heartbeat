@@ -140,21 +140,21 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            v-show="scope.row.orStat === '2' || scope.row.orStat === '6'"
+            v-show="scope.row.orStat === '2' || scope.row.orStat === '8' || scope.row.orStat === 'b'"
             @click="startReview(scope.row)"
           >开始审核</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-check"
-            v-show="scope.row.orStat === '3' || scope.row.orStat === '7'"
+            v-show="scope.row.orStat === '3' || scope.row.orStat === '9' || scope.row.orStat === 'c'"
             @click="passReview(scope.row)"
           >通过审核</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-close"
-            v-show="scope.row.orStat === '3' || scope.row.orStat === '7'"
+            v-show="scope.row.orStat === '3' || scope.row.orStat === '9' || scope.row.orStat === 'c'"
             @click="rejectReview(scope.row)"
           >驳回审核</el-button>
         </template>
@@ -267,7 +267,8 @@ export default {
         getOrder(row.orId).then(response => {
           this.form = response.data;
           if (this.form.orStat === '2') this.form.orStat = '3';
-          else this.form.orStat = '7';
+          if (this.form.orStat === '8') this.form.orStat = '9';
+          else this.form.orStat = 'c';
           updateOrder(this.form).then(response => {
             this.$modal.msgSuccess("已开始审核");
             this.getList();
@@ -285,7 +286,7 @@ export default {
         this.loading = true;
         getOrder(row.orId).then(response => {
           this.form = response.data;
-          if (this.form.orStat === '3' || this.form.orStat === '7') this.form.orStat = '4';
+          if (this.form.orStat === '3' || this.form.orStat === '9' || this.form.orStat === 'c') this.form.orStat = '4';
           updateOrder(this.form).then(response => {
             this.$modal.msgSuccess("已通过审核");
             this.getList();
@@ -303,7 +304,7 @@ export default {
         this.loading = true;
         getOrder(row.orId).then(response => {
           this.form = response.data;
-          if (this.form.orStat === '3' || this.form.orStat === '7') this.form.orStat = '1';
+          if (this.form.orStat === '3' || this.form.orStat === '9' || this.form.orStat === 'c') this.form.orStat = '1';
           updateOrder(this.form).then(response => {
             this.$modal.msgSuccess("已驳回审核");
             this.getList();

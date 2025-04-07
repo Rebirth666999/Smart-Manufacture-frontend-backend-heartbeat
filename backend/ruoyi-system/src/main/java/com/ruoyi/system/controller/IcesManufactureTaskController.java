@@ -51,6 +51,14 @@ public class IcesManufactureTaskController extends BaseController {
     }
 
     /**
+     * 审核端查询列表
+     */
+    @GetMapping("/reviewList")
+    public TableDataInfo<IcesManufactureTaskVo> reviewList(IcesManufactureTaskBo bo, PageQuery pageQuery) {
+        return iIcesManufactureTaskService.queryReviewList(bo, pageQuery);
+    }
+
+    /**
      * 导出生产任务列表
      */
     @SaCheckPermission("system:manufactureTask:export")

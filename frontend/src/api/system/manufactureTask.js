@@ -9,6 +9,15 @@ export function listManufactureTask(query) {
   })
 }
 
+// 审核端查询生产任务列表
+export function listReviewManufactureTask(query) {
+  return request({
+    url: '/system/manufactureTask/reviewList',
+    method: 'get',
+    params: query
+  })
+}
+
 // 查询生产任务详细
 export function getManufactureTask(mtId) {
   return request({

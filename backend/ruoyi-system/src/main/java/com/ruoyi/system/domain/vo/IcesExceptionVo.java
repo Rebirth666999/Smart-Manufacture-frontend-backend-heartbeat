@@ -37,7 +37,7 @@ public class IcesExceptionVo {
      * 异常类型
      */
     @ExcelProperty(value = "异常类型")
-    private String etCode;
+    private String extCode;
 
     /**
      * 名称

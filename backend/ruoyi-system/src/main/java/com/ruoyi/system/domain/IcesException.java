@@ -34,7 +34,7 @@ public class IcesException extends BaseEntity {
     /**
      * 异常类型
      */
-    private String etCode;
+    private String extCode;
     /**
      * 名称
      */

@@ -64,7 +64,7 @@ public class IcesExceptionServiceImpl implements IIcesExceptionService {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesException> lqw = Wrappers.lambdaQuery();
         lqw.eq(StringUtils.isNotBlank(bo.getExCode()), IcesException::getExCode, bo.getExCode());
-        lqw.eq(StringUtils.isNotBlank(bo.getEtCode()), IcesException::getEtCode, bo.getEtCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getExtCode()), IcesException::getExtCode, bo.getExtCode());
         lqw.like(StringUtils.isNotBlank(bo.getExName()), IcesException::getExName, bo.getExName());
         lqw.eq(bo.getExDelete() != null, IcesException::getExDelete, bo.getExDelete());
         return lqw;

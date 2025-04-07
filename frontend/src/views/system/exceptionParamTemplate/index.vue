@@ -2,20 +2,24 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="异常" prop="exCode">
-        <el-input
-          v-model="queryParams.exCode"
-          placeholder="请输入异常"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.exCode" placeholder="请选择异常" clearable>
+          <el-option
+           v-for="option in exceptionList"
+           :key="option.exCode"
+           :label="option.exName"
+           :value="option.exCode">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="异常源" prop="exsCode">
-        <el-input
-          v-model="queryParams.exsCode"
-          placeholder="请输入异常源"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.exsCode" placeholder="请选择异常源" clearable>
+          <el-option
+           v-for="option in exceptionSourceList"
+           :key="option.exsCode"
+           :label="option.exsName"
+           :value="option.exsCode">
+          </el-option>
+        </el-select>
       </el-form-item>
       <!-- <el-form-item label="已删除" prop="exptDelete">
         <el-input
@@ -81,8 +85,16 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="参数模板ID" align="center" prop="exptId" v-if="true"/>
       <el-table-column label="参数模板编码" align="center" prop="exptCode" />
-      <el-table-column label="异常" align="center" prop="exCode" />
-      <el-table-column label="异常源" align="center" prop="exsCode" />
+      <el-table-column label="异常" align="center" prop="exCode">
+        <template slot-scope="scope">
+          {{ exceptionList.find(ele => ele.exCode === scope.row.exCode).exName || '' }}
+        </template>
+      </el-table-column>
+      <el-table-column label="异常源" align="center" prop="exsCode">
+        <template slot-scope="scope">
+          {{ exceptionSourceList.find(ele => ele.exsCode === scope.row.exsCode).exsName || '' }}
+        </template>
+      </el-table-column>
       <!-- <el-table-column label="已删除" align="center" prop="exptDelete" /> -->
       <!-- <el-table-column label="描述" align="center" prop="exptDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -117,10 +129,24 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="异常" prop="exCode">
-          <el-input v-model="form.exCode" placeholder="请输入异常" />
+          <el-select v-model="form.exCode" placeholder="请选择异常" clearable>
+            <el-option
+             v-for="option in exceptionList"
+             :key="option.exCode"
+             :label="option.exName"
+             :value="option.exCode">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="异常源" prop="exsCode">
-          <el-input v-model="form.exsCode" placeholder="请输入异常源" />
+          <el-select v-model="form.exsCode" placeholder="请选择异常源" clearable>
+            <el-option
+             v-for="option in exceptionSourceList"
+             :key="option.exsCode"
+             :label="option.exsName"
+             :value="option.exsCode">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="描述" prop="exptDesc">
           <el-input v-model="form.exptDesc" type="textarea" placeholder="请输入内容" />
@@ -136,6 +162,8 @@
 
 <script>
 import { listExceptionParamTemplate, getExceptionParamTemplate, delExceptionParamTemplate, addExceptionParamTemplate, updateExceptionParamTemplate } from "@/api/system/exceptionParamTemplate";
+import { listException } from "@/api/system/exception";
+import { listExceptionSource } from "@/api/system/exceptionSource";
 
 export default {
   name: "ExceptionParamTemplate",
@@ -183,13 +211,31 @@ export default {
         exsCode: [
           { required: true, message: "异常源不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 异常列表
+      exceptionList: [],
+      // 异常源列表
+      exceptionSourceList: []
     };
   },
-  created() {
+  async created() {
+    await this.getExceptionList();
+    await this.getExceptionSourceList();
     this.getList();
   },
   methods: {
+    // 获取异常源列表
+    getExceptionSourceList() {
+      listExceptionSource().then(response => {
+        this.exceptionSourceList = response.rows;
+      })
+    },
+    // 获取异常列表
+    getExceptionList() {
+      listException().then(response => {
+        this.exceptionList = response.rows;
+      })
+    },
     /** 查询异常参数模板列表 */
     getList() {
       this.loading = true;
@@ -303,3 +349,11 @@ export default {
   }
 };
 </script>
+<style scope>
+.el-select{
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

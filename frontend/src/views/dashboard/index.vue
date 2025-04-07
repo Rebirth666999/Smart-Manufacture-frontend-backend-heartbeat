@@ -78,7 +78,11 @@
             </div>
           </template>
           <el-progress
-            :percentage="(taskStatus.task_done / taskStatus.total_tasks) * 100"
+            :percentage="
+              taskStatus.total_tasks === 0
+                ? 0
+                : (taskStatus.task_done / taskStatus.total_tasks) * 100
+            "
             :format="progressFormat"
           ></el-progress>
           <div>
@@ -132,15 +136,14 @@
           </template>
           <el-progress
             :percentage="
-              (operationStatus.op_done / operationStatus.total_operations) * 100
-            "
-            :format="
-              progressFormat(
-                (operationStatus.op_done / operationStatus.total_operations) *
+              operationStatus.total_operations === 0
+                ? 0
+                : (operationStatus.op_done / operationStatus.total_operations) *
                   100
-              )
             "
+            :format="progressFormat"
           ></el-progress>
+          <!--  format回调函数自动接收percentage的值-->
           <div>
             已完成操作: {{ operationStatus.op_done }} /
             {{ operationStatus.total_operations }}

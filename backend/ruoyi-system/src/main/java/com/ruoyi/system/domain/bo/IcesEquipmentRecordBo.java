@@ -59,6 +59,10 @@ public class IcesEquipmentRecordBo extends BaseEntity {
     private Date erBegin;
 
     /**
+     * 结束时间
+     */
+    private Date erEnd;
+    /**
      * 已删除
      */
     private Long erDelete;

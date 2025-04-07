@@ -9,8 +9,8 @@ import org.springframework.boot.context.metrics.buffering.BufferingApplicationSt
  *
  * @author ruoyi
  */
-
 @SpringBootApplication
+//@SpringBootApplication
 public class RuoYiApplication {
 
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-function listOp(info,target,key) {
+function listOp(info,target,key) {//遍历target，在info中找到target中与info中相同key的项
     let ret=[];
     for(let i=0;i<target.length;i++){
         const loc=info.findIndex((item)=>item[key]===target[i]);

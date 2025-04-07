@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesExceptionTypeBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesExceptionTypeServiceImpl implements IIcesExceptionTypeService {
 
     private final IcesExceptionTypeMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询异常类型
@@ -73,6 +75,7 @@ public class IcesExceptionTypeServiceImpl implements IIcesExceptionTypeService {
      */
     @Override
     public Boolean insertByBo(IcesExceptionTypeBo bo) {
+        bo.setExtCode(codeService.insertByType("ExceptionType"));
         IcesExceptionType add = BeanUtil.toBean(bo, IcesExceptionType.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

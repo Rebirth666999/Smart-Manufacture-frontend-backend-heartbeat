@@ -197,9 +197,6 @@ export default {
         extId: [
           { required: true, message: "异常类型ID不能为空", trigger: "blur" }
         ],
-        extCodeParent: [
-          { required: true, message: "上级异常类型不能为空", trigger: "blur" }
-        ],
         extName: [
           { required: true, message: "名称不能为空", trigger: "blur" }
         ],

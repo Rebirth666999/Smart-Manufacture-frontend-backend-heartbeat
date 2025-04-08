@@ -201,7 +201,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        emCode: this.$route.query.emCode,
+        emCode: undefined,
         moName: undefined,
         moDelete: 0,
       },

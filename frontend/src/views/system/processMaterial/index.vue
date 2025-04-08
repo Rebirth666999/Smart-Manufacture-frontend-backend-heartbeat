@@ -229,7 +229,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        procCode: this.$route.query.procCode,
+        procCode: undefined,
         maCode: undefined,
         pmDelete: 0,
       },

@@ -717,20 +717,26 @@ export default {
           for (let param of deviceTaskParam) {
             const paramInfo = equipmentOperationStepParams.find(ele => ele.eospaCode === param.eospaCode)
             if (paramInfo) {
-              if (paramInfo.eospaType === '1')
-                route.opParam[paramInfo.eospaName] = parseInt(param.dtpaValue)
-              else if (paramInfo.eospaType === '2')
-                route.opParam[paramInfo.eospaName] = parseFloat(param.dtpaValue)
-              else
-                route.opParam[paramInfo.eospaName] = param.dtpaValue
+              try {
+                if (paramInfo.eospaType === '1')
+                  route.opParam[paramInfo.eospaName] = parseInt(param.dtpaValue)
+                else if (paramInfo.eospaType === '2')
+                  route.opParam[paramInfo.eospaName] = parseFloat(param.dtpaValue)
+                else if (paramInfo.eospaType === '4')
+                  route.opParam[paramInfo.eospaName] = JSON.parse(param.dtpaValue)
+                else
+                  route.opParam[paramInfo.eospaName] = param.dtpaValue
 
-              if (route.opParam[paramInfo.eospaName] === NaN) {
+                if (route.opParam[paramInfo.eospaName] === NaN) {
+                  this.$modal.msgError("参数类型不合法，请重新生成设备任务")
+                  return
+                }
+              } catch (error) {
                 this.$modal.msgError("参数类型不合法，请重新生成设备任务")
                 return
               }
             }
           }
-
           processRoute.push(route)
         }
         // 下发开始执行

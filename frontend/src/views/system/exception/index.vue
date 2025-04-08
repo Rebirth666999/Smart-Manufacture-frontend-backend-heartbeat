@@ -209,11 +209,23 @@ export default {
     await this.getExceptionTypeList();
     this.getList();
   },
+  async activated() {
+    await this.getExceptionTypeList();
+    this.getList();
+  },
   methods: {
-    //获取异常类型列表
+    // 获取异常类型列表
     getExceptionTypeList() {
-      listExceptionType().then(response => {
-        this.exceptionTypeList = response.rows;
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listExceptionType().then(response => {
+          this.exceptionTypeList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
       })
     },
     /** 查询异常列表 */

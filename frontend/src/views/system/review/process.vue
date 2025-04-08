@@ -1,23 +1,11 @@
 <template>
   <div class="app-container">
-    <!-- 顶部提示 -->
-    <el-alert
-      v-show="hint.length > 0"
-      :title="`正在根据${hint}筛选工艺流程`"
-      type="info"
-      show-icon
-      :closable="false"
-      class="mb8"
-    >
-    </el-alert>
-
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="目标产品" prop="maCode">
         <el-select
           v-model="queryParams.maCode"
           placeholder="请选择目标产品"
           clearable
-          :disabled="mode === 1"
         >
           <el-option
             v-for="item in productList"
@@ -174,7 +162,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        prCode: this.$route.query.prCode,
+        prCode: undefined,
         procName: undefined,
         procStat: undefined,
         procDelete: 0,
@@ -190,31 +178,35 @@ export default {
         index: undefined,
         bpmnXml: ''
       },
-      // 1-根据产品管理
-      mode: 0,
-      // 页面顶部提示
-      hint: '',
       // 表单数据
       form: {}
     };
   },
   async created() {
-    // 检查来源
-    if (this.$route.query.prCode) {
-      this.mode = 1
-    }
+    await this.getProductList();
+    this.getList();
+  },
+  async activated() {
     await this.getProductList();
     this.getList();
   },
   methods: {
- // 查询产品列表
- getProductList() {
-      listMaterial({ maType: '2' }).then(response => {
-        this.productList = response.rows
+    // 查询产品列表
+    getProductList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listMaterial({ maType: '2' }).then(response => {
+          this.productList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
       })
     },
-       /** 查询工艺流程列表 */
-       getList() {
+    /** 查询工艺流程列表 */
+    getList() {
       this.loading = true;
       listReviewProcess(this.queryParams).then(response => {
         this.processList = response.rows;

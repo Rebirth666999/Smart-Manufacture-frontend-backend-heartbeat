@@ -230,7 +230,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        maCode: this.$route.query.maCode,
+        maCode: undefined,
         clCode: undefined,
         orName: undefined,
         orStat: undefined,
@@ -255,6 +255,15 @@ export default {
     // 检查来源
     if (this.$route.query.maCode) {
       this.mode = 1
+    }
+    await this.getProductList();
+    this.getList();
+  },
+  async created() {
+    if (this.$route.query.maCode) {
+      this.mode = 1
+    } else {
+      this.mode = 0
     }
     await this.getProductList();
     this.getList();
@@ -318,19 +327,26 @@ export default {
     
     // 查询产品列表
     getProductList() {
-      return listMaterial({ maType: '2' }).then(response => {
-        this.productList = response.rows || [];
-        if (this.mode === 1 && this.productList.length > 0) {
-          const product = this.productList.find(ele => ele.maCode === this.$route.query.maCode);
-          if (product) {
-            this.hint = "产品 " + product.maName;
-          } else {
-            this.hint = "产品 " + this.$route.query.maCode;
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listMaterial({ maType: '2' }).then(response => {
+          this.productList = response.rows || []
+          if (this.mode === 1) {
+            let product = this.productList.find(ele => ele.maCode === this.$route.query.maCode)
+            // 构造提示文本
+            this.hint = "产品 "
+            this.hint += product.maName
+            this.hint += " "
+            // 设置筛选
+            this.queryParams.maCode = product.maCode
           }
-        }
-      }).catch(() => {
-        this.productList = [];
-      });
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false;
+        })
+      })
     },
     
     /** 查询订单列表 */

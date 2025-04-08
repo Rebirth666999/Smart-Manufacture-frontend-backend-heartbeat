@@ -411,17 +411,38 @@ export default {
     await this.getClientLevelList();
     this.getList();
   },
+  async activated() {
+    await this.getUserList();
+    await this.getClientLevelList();
+    this.getList();
+  },
   methods: {
     // 获取客户等级列表
     getClientLevelList() {
-      listClientLevel().then(response => {
-        this.clientLevelList = response.rows;
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listClientLevel().then(response => {
+          this.clientLevelList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
       })
     },
     // 获取用户列表用于业务员字段
     getUserList() {
-      listUser().then(response => {
-        this.userList = response.rows;
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listUser().then(response => {
+          this.userList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
       })
     },
     /** 查询客户基本信息列表 */

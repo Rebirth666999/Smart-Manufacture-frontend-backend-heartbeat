@@ -202,11 +202,23 @@ export default {
     await this.getExceptionList();
     this.getList();
   },
+  async activated() {
+    await this.getExceptionList();
+    this.getList();
+  },
   methods: {
     // 获取异常列表
     getExceptionList() {
-      listException().then(response => {
-        this.exceptionList = response.rows;
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listException().then(response => {
+          this.exceptionList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
       })
     },
     /** 查询异常生命周期列表 */

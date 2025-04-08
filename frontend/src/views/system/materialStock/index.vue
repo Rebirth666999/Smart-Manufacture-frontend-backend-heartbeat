@@ -213,8 +213,8 @@ export default {
         pageNum: 1,
         pageSize: 10,
         msCode: undefined,
-        stCode: this.$route.query.stCode,
-        maCode: this.$route.query.maCode,
+        stCode: undefined,
+        maCode: undefined,
         msDelete:0,
       },
       // 表单参数
@@ -252,32 +252,70 @@ export default {
     } else if (this.$route.query.stCode) {
       this.mode = 2
     }
-    this.getList();
     await this.getMaterialList();
     await this.getStoreList();
+    this.getList();
+  },
+  async activated() {
+    if (this.$route.query.maCode) {
+      this.mode = 1
+    } else if (this.$route.query.stCode) {
+      this.mode = 2
+    } else {
+      this.mode = 0
+    }
+    await this.getMaterialList();
+    await this.getStoreList();
+    this.getList();
   },
   methods: {
     //查询库存列表
     getStoreList(){
-      listStore().then(response => {
-        this.storeList = response.rows;
-        if (this.mode === 2) {
-          this.hint = "仓库 "
-          this.hint += response.rows.find(ele => ele.stCode === this.$route.query.stCode).stName
-          this.hint += " "
-        }
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listStore().then(response => {
+          this.storeList = response.rows
+          if (this.mode === 2) {
+            let store = response.rows.find(ele => ele.stCode === this.$route.query.stCode)
+            // 构造提示文本
+            this.hint = "仓库 "
+            this.hint += store.stName
+            this.hint += " "
+            // 设置筛选
+            this.queryParams.stCode = store.stCode
+            this.queryParams.maCode = undefined
+          }
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false;
+        })
+      })
     },
     //查询台账列表
-    getMaterialList(){
-      listMaterial().then(response => {
-        this.materialList = response.rows;
-        if (this.mode === 1) {
-          this.hint = "物料 "
-          this.hint += response.rows.find(ele => ele.maCode === this.$route.query.maCode).maName
-          this.hint += " "
-        }
-      });
+    getMaterialList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listMaterial().then(response => {
+          this.materialList = response.rows
+          if (this.mode === 1) {
+            let material = response.rows.find(ele => ele.maCode === this.$route.query.maCode)
+            // 构造提示文本
+            this.hint = "物料 "
+            this.hint += material.maName
+            this.hint += " "
+            // 设置筛选
+            this.queryParams.maCode = material.maCode
+            this.queryParams.stCode = undefined
+          }
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false;
+        })
+      })
     },
     /** 查询原料库存列表 */
     getList() {

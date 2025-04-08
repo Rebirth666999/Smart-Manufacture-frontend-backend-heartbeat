@@ -162,7 +162,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        emtCode: this.$route.query.emtCode,
+        emtCode: undefined,
         emName: undefined,
         emStat: undefined,
         emDelete: 0,
@@ -179,6 +179,15 @@ export default {
     // 检查来源
     if (this.$route.query.emtCode) {
       this.mode = 1
+    }
+    await this.getEquipmentModelTypeList();
+    this.getList();
+  },
+  async activated() {
+    if (this.$route.query.emtCode) {
+      this.mode = 1
+    } else {
+      this.mode = 0
     }
     await this.getEquipmentModelTypeList();
     this.getList();
@@ -238,15 +247,27 @@ export default {
     },
     // 查询模型类型列表
     getEquipmentModelTypeList() {
-      // 完整列表
-      listEquipmentModelType().then(response => {
-        this.equipmentModelTypeListFull = response.rows;
-        if (this.mode === 1) {
-          this.hint = "设备模型类型 "
-          this.hint += response.rows.find(ele => ele.emtCode === this.$route.query.emtCode).emtName
-          this.hint += " "
-        }
-      });
+      
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listEquipmentModelType().then(response => {
+          this.equipmentModelTypeListFull = response.rows
+          if (this.mode === 1) {
+            let modelType = response.rows.find(ele => ele.emtCode === this.$route.query.emtCode)
+            // 构造提示文本
+            this.hint = "设备模型类型 "
+            this.hint += modelType.emtName
+            this.hint += " "
+            // 设置筛选
+            this.queryParams.emtCode = modelType.emtCode
+          }
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false;
+        })
+      })
     },
     /** 查询设备模型列表 */
     getList() {

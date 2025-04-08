@@ -201,7 +201,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         ctCode: undefined,
-        clCode: this.$route.query.clCode,
+        clCode: undefined,
         ctDelete: 0
       },
       // 表单参数
@@ -239,26 +239,45 @@ export default {
     if (this.$route.query.clCode) {
       this.mode = 1
     }
-    this.getList();
     await this.getClientList();
+    this.getList();
+  },
+  async activated() {
+    if (this.$route.query.clCode) {
+      this.mode = 1
+    } else {
+      this.mode = 0
+    }
+    await this.getClientList();
+    this.getList();
   },
   methods: {
     //客户贸易信息列表
     getClientList() {
-      listClient().then(response =>{
-        this.clientList = response.rows;
-        if (this.mode === 1) {
-          let client = response.rows.find(ele => ele.clCode === this.$route.query.clCode)
-          // 构建筛选提示文本
-          this.hint = "客户 "
-          this.hint += client.clName
-          this.hint += " "
-          // 检查状态
-          if (client.clStat !== '1') {
-            this.mode = 2
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listClient().then(response => {
+          this.clientList = response.rows;
+          if (this.mode === 1) {
+            let client = response.rows.find(ele => ele.clCode === this.$route.query.clCode)
+            // 构造提示文本
+            this.hint = "客户 "
+            this.hint += client.clName
+            this.hint += " "
+            // 设置筛选
+            this.queryParams.clCode = client.clCode
+            // 检查状态
+            if (client.clStat !== '1') {
+              this.mode = 2
+            }
           }
-        }
-      });
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false;
+        })
+      })
     },
     /** 查询客户列表 */
     getList() {

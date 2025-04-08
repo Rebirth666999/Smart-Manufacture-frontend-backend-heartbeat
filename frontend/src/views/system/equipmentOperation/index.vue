@@ -272,7 +272,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         moCode: undefined,
-        eqCode: this.$route.query.eqCode,
+        eqCode: undefined,
         eoDelete: 0,
       },
       // 表单参数
@@ -335,9 +335,20 @@ export default {
     }
     this.getExtraList();
   },
+  activated() {
+    if (this.$route.query.eqCode) {
+      this.mode = 1;
+    } else {
+      this.mode = 0;
+      this.$modal.msgError("请重新进入此页面");
+      this.$router.back();
+    }
+    this.getExtraList();
+  },
   methods: {
     // 查询列表
     getExtraList() {
+      this.loading = true;
       listEquipment().then(response => {
         this.equipmentList = response.rows;
         let equipment = response.rows.find(ele => ele.eqCode === this.$route.query.eqCode)
@@ -359,6 +370,8 @@ export default {
           if (equipment.eqStat !== '1') {
             this.mode = 2
           }
+          // 设置筛选
+          this.queryParams.eqCode = equipment.eqCode
         }
       });
     },

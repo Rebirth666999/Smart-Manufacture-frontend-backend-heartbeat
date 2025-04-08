@@ -177,7 +177,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        mpCode: this.$route.query.mpCode,
+        mpCode: undefined,
         arCode: undefined,
         mtStat: undefined,
         mtDelete: 0,
@@ -196,6 +196,16 @@ export default {
     // 检查来源
     if (this.$route.query.mpCode) {
       this.mode = 1
+    }
+    await this.getManufacturePlanList();
+    await this.getAreaList();
+    this.getList();
+  },
+  async activated() {
+    if (this.$route.query.mpCode) {
+      this.mode = 1
+    } else {
+      this.mode = 0
     }
     await this.getManufacturePlanList();
     await this.getAreaList();
@@ -257,20 +267,39 @@ export default {
     },
     // 查询生产计划列表
     getManufacturePlanList() {
-      return listManufacturePlan().then(response => {
-        this.manufacturePlanList = response.rows;
-        if (this.mode === 1) {
-          this.hint = "生产计划 "
-          this.hint += this.$route.query.mpCode
-          this.hint += " "
-        }
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listManufacturePlan().then(response => {
+          this.manufacturePlanList = response.rows
+          if (this.mode === 1) {
+            // 构造提示文本
+            this.hint = "生产计划 "
+            this.hint += this.$route.query.mpCode
+            this.hint += " "
+            // 设置筛选
+            this.queryParams.mpCode = this.$route.query.mpCode
+          }
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false;
+        })
+      })
     },
     // 获取车间列表
     getAreaList() {
-      return listArea().then(response => {
-        this.areaList = response.rows;
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listArea().then(response => {
+          this.areaList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
     /** 查询生产任务审核列表 */
     getList() {

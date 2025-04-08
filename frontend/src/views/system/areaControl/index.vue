@@ -212,7 +212,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        arCode: this.$route.query.arCode,
+        arCode: undefined,
         acName: undefined,
         acIp: undefined,
         acDelete: 0,
@@ -250,17 +250,38 @@ export default {
     await this.getAreaList();
     this.getList();
   },
+  async activated() {
+    if (this.$route.query.arCode) {
+      this.mode = 1
+    } else {
+      this.mode = 0
+    }
+    await this.getAreaList();
+    this.getList();
+  },
   methods: {
     // 获取车间列表
     getAreaList() {
-      listArea().then(response => {
-        this.areaList = response.rows;
-        if (this.mode === 1) {
-          this.hint = "车间 "
-          this.hint += response.rows.find(ele => ele.arCode === this.$route.query.arCode).arName
-          this.hint += " "
-        }
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listArea().then(response => {
+          this.areaList = response.rows;
+          if (this.mode === 1) {
+            let area = response.rows.find(ele => ele.arCode === this.$route.query.arCode)
+            // 构造提示文本
+            this.hint = "车间 "
+            this.hint += area.arName
+            this.hint += " "
+            // 设置筛选
+            this.queryParams.arCode = area.arCode
+          }
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false;
+        })
+      })
     },
     /** 查询主控节点列表 */
     getList() {

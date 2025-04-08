@@ -225,7 +225,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        eqCode: this.$route.query.eqCode,
+        eqCode: undefined,
         erType: undefined,
         erStat: undefined,
         erBegin: undefined,
@@ -270,17 +270,38 @@ export default {
     await this.getEquipmentList();
     this.getList();
   },
+  async activated() {
+    if (this.$route.query.eqCode) {
+      this.mode = 1
+    } else {
+      this.mode = 0
+    }
+    await this.getEquipmentList();
+    this.getList();
+  },
   methods: {
     // 查询设备列表
     getEquipmentList() {
-      listEquipment().then(response => {
-        this.equipmentList = response.rows;
-        if (this.mode === 1) {
-          this.hint = "设备 "
-          this.hint += response.rows.find(ele => ele.eqCode === this.$route.query.eqCode).eqName
-          this.hint += " "
-        }
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listEquipment().then(response => {
+          this.equipmentList = response.rows;
+          if (this.mode === 1) {
+            let equipment = response.rows.find(ele => ele.eqCode === this.$route.query.eqCode)
+            // 构造提示文本
+            this.hint = "设备 "
+            this.hint += equipment.eqName
+            this.hint += " "
+            // 设置筛选
+            this.queryParams.eqCode = equipment.eqCode
+          }
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false;
+        })
+      })
     },
     /** 查询设备事件日志列表 */
     getList() {

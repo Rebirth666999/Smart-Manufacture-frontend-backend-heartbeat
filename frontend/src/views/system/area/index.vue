@@ -187,6 +187,10 @@ export default {
   created() {
     this.getList();
   },
+  activated() {
+    // 切换回此标签页需要重新加载数据
+    this.getList();
+  },
   methods: {
     /** 查询车间列表 */
     getList() {

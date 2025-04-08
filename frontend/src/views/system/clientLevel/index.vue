@@ -197,6 +197,9 @@ export default {
   created() {
     this.getList();
   },
+  activated() {
+    this.getList();
+  },
   methods: {
     /** 查询客户等级列表 */
     getList() {

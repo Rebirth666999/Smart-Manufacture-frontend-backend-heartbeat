@@ -205,6 +205,9 @@ export default {
   created() {
     this.getList();
   },
+  activated() {
+    this.getList();
+  },
   methods: {
     /** 查询异常类型列表 */
     getList() {

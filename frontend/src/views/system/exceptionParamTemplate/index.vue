@@ -223,17 +223,38 @@ export default {
     await this.getExceptionSourceList();
     this.getList();
   },
+  async activated() {
+    await this.getExceptionList();
+    await this.getExceptionSourceList();
+    this.getList();
+  },
   methods: {
     // 获取异常源列表
     getExceptionSourceList() {
-      listExceptionSource().then(response => {
-        this.exceptionSourceList = response.rows;
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listExceptionSource().then(response => {
+          this.exceptionSourceList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
       })
     },
     // 获取异常列表
     getExceptionList() {
-      listException().then(response => {
-        this.exceptionList = response.rows;
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listException().then(response => {
+          this.exceptionList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
       })
     },
     /** 查询异常参数模板列表 */

@@ -2,12 +2,14 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="110px">
       <el-form-item label="所属生命周期" prop="exlCode">
-        <el-input
-          v-model="queryParams.exlCode"
-          placeholder="请输入所属生命周期"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.exlCode" placeholder="请选择异常生命周期" clearable>
+          <el-option
+           v-for="option in exceptionLifecycleList"
+           :key="option.exlCode"
+           :label="option.exlCode"
+           :value="option.exlCode">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="版本名称" prop="exlvName">
         <el-input
@@ -118,7 +120,14 @@
     <el-dialog :title="title" :visible.sync="open" width="520px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="所属生命周期" prop="exlCode">
-          <el-input v-model="form.exlCode" placeholder="请输入所属生命周期" />
+          <el-select v-model="form.exlCode" placeholder="请选择异常生命周期">
+            <el-option
+             v-for="option in exceptionLifecycleList"
+             :key="option.exlCode"
+             :label="option.exlCode"
+             :value="option.exlCode">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="版本名称" prop="exlvName">
           <el-input v-model="form.exlvName" placeholder="请输入版本名称" />
@@ -140,6 +149,7 @@
 
 <script>
 import { listExceptionLifecycleVersion, getExceptionLifecycleVersion, delExceptionLifecycleVersion, addExceptionLifecycleVersion, updateExceptionLifecycleVersion } from "@/api/system/exceptionLifecycleVersion";
+import { listExceptionLifecycle } from "@/api/system/exceptionLifecycle";
 
 export default {
   name: "ExceptionLifecycleVersion",
@@ -190,13 +200,22 @@ export default {
         exlvName: [
           { required: true, message: "版本名称不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 异常生命周期列表
+      exceptionLifecycleList: [],
     };
   },
-  created() {
+  async created() {
+    await this.getExceptionLifecycleList();
     this.getList();
   },
   methods: {
+    // 获取异常生命周期列表
+    getExceptionLifecycleList() {
+      listExceptionLifecycle().then(response => {
+        this.exceptionLifecycleList = response.rows;
+      })
+    },
     /** 查询异常生命周期版本列表 */
     getList() {
       this.loading = true;

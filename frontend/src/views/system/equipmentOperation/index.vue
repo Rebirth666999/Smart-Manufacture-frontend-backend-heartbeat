@@ -342,7 +342,7 @@ export default {
         this.equipmentList = response.rows;
         let equipment = response.rows.find(ele => ele.eqCode === this.$route.query.eqCode)
         // 获取设备所属设备模型的模型操作
-        listModelOperation({ emId: equipment.emId, moDelete: 0 }).then(response => {
+        listModelOperation({ emCode: equipment.emCode, moDelete: 0 }).then(response => {
           this.modelOperationList = response.rows;
           // 获取设备的原子操作
           listEquipmentAtomOperation({ eqCode: equipment.eqCode, moDelete: 0 }).then(response => {

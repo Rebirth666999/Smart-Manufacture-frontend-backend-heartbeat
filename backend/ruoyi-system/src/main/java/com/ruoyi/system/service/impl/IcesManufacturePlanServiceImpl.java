@@ -10,9 +10,11 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ruoyi.system.domain.IcesEquipmentModel;
 import com.ruoyi.system.domain.bo.IcesDeviceTaskBo;
 import com.ruoyi.system.domain.bo.IcesManufactureTaskBo;
+import com.ruoyi.system.domain.bo.IcesOrderBo;
 import com.ruoyi.system.domain.vo.IcesEquipmentModelVo;
 import com.ruoyi.system.domain.vo.IcesManufactureTaskVo;
 import com.ruoyi.system.service.IIcesCodeService;
+import com.ruoyi.system.service.IIcesOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesManufacturePlanBo;
@@ -38,6 +40,7 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
 
     private final IcesManufacturePlanMapper baseMapper;
     private final IIcesCodeService codeService;
+    private final IIcesOrderService orderService;
 
     /**
      * 查询生产计划
@@ -113,6 +116,25 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
     public Boolean updateByBo(IcesManufacturePlanBo bo) {
         IcesManufacturePlan update = BeanUtil.toBean(bo, IcesManufacturePlan.class);
         validEntityBeforeSave(update);
+        //判断状态是否为已完成
+        if (bo.getMpStat().equals("6")) {
+            IcesManufacturePlanBo icesManufacturePlanBo = new IcesManufacturePlanBo();
+            icesManufacturePlanBo.setMpCode(update.getMpCode());
+            List<IcesManufacturePlanVo> OtherVos = queryList(icesManufacturePlanBo);
+            int done = 1;
+            for (IcesManufacturePlanVo otherVo : OtherVos) {
+                if(!otherVo.getMpStat().equals("6")) {
+                    //证明还有未完成
+                    done = 0;
+                    break;
+                }
+            }
+            if (done == 1)
+            {
+                //所有的都已完成
+                orderService.updateStatus(bo);
+            }
+        }
         return baseMapper.updateById(update) > 0;
     }
 

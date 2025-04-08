@@ -1,6 +1,7 @@
 package com.ruoyi.system.service;
 
 import com.ruoyi.system.domain.IcesOrder;
+import com.ruoyi.system.domain.bo.IcesManufacturePlanBo;
 import com.ruoyi.system.domain.vo.IcesOrderVo;
 import com.ruoyi.system.domain.bo.IcesOrderBo;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -53,4 +54,5 @@ public interface IIcesOrderService {
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
 
+    void updateStatus(IcesManufacturePlanBo icesManufacturePlanBo);
 }

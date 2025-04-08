@@ -7,6 +7,8 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import com.ruoyi.common.annotation.ExcelDictFormat;
 import com.ruoyi.common.convert.ExcelDictConvert;
 import lombok.Data;
+import lombok.Getter;
+
 import java.util.Date;
 
 
@@ -44,6 +46,7 @@ public class IcesDeviceTaskVo {
     /**
      * 所属生产任务
      */
+    @Getter
     @ExcelProperty(value = "所属生产任务")
     private String mtCode;
 
@@ -56,6 +59,7 @@ public class IcesDeviceTaskVo {
     /**
      * 状态代码
      */
+    @Getter
     @ExcelProperty(value = "状态代码", converter = ExcelDictConvert.class)
     @ExcelDictFormat(dictType = "ices_manufacture_task_status")
     private String dtStat;

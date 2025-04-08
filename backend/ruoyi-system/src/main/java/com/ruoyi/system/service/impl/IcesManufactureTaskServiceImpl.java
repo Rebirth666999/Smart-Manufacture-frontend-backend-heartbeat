@@ -8,8 +8,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ruoyi.system.domain.IcesManufacturePlan;
+import com.ruoyi.system.domain.bo.IcesDeviceTaskBo;
+import com.ruoyi.system.domain.vo.IcesDeviceTaskVo;
 import com.ruoyi.system.domain.vo.IcesManufacturePlanVo;
+import com.ruoyi.system.mapper.IcesDeviceTaskMapper;
 import com.ruoyi.system.service.IIcesCodeService;
+import com.ruoyi.system.service.IIcesManufacturePlanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesManufactureTaskBo;
@@ -18,10 +22,7 @@ import com.ruoyi.system.domain.IcesManufactureTask;
 import com.ruoyi.system.mapper.IcesManufactureTaskMapper;
 import com.ruoyi.system.service.IIcesManufactureTaskService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Collection;
+import java.util.*;
 
 /**
  * 生产任务Service业务层处理
@@ -35,7 +36,7 @@ public class IcesManufactureTaskServiceImpl implements IIcesManufactureTaskServi
 
     private final IcesManufactureTaskMapper baseMapper;
     private final IIcesCodeService codeService;
-
+    private final IIcesManufacturePlanService icesManufacturePlanService;
     /**
      * 查询生产任务
      */
@@ -97,6 +98,22 @@ public class IcesManufactureTaskServiceImpl implements IIcesManufactureTaskServi
     public Boolean updateByBo(IcesManufactureTaskBo bo) {
         IcesManufactureTask update = BeanUtil.toBean(bo, IcesManufactureTask.class);
         validEntityBeforeSave(update);
+        // bo是否已完成
+        if(Objects.equals(bo.getMtCode(),"6")){
+            IcesManufactureTaskBo icesManufactureTaskBo = new IcesManufactureTaskBo();
+            icesManufactureTaskBo.setMtCode(bo.getMtCode());
+            List<IcesManufactureTaskVo> otherVo=queryList(bo);
+            int done=1;
+            for(IcesManufactureTaskVo vo:otherVo){
+                if(!vo.getMtStat().equals(bo.getMtStat())){
+                    done=0;
+                    break;
+                }
+            }
+            if(done==1){//任务已经全部完成
+                icesManufacturePlanService.updateStatus(bo);
+            }
+        }
         return baseMapper.updateById(update) > 0;
     }
 
@@ -116,5 +133,14 @@ public class IcesManufactureTaskServiceImpl implements IIcesManufactureTaskServi
             //TODO 做一些业务上的校验,判断是否需要校验
         }
         return baseMapper.deleteBatchIds(ids) > 0;
+    }
+
+    @Override
+    public void updateStatus(IcesDeviceTaskBo deviceTaskBo) {
+        IcesManufactureTaskBo bo = new IcesManufactureTaskBo();
+        bo.setMtCode(deviceTaskBo.getMtCode());
+        List<IcesManufactureTaskVo> icesManufactureTaskVos = queryList(bo);
+        bo.setMtId(icesManufactureTaskVos.get(0).getMtId());
+        updateByBo(bo);
     }
 }

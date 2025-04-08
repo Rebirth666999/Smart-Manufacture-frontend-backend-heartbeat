@@ -42,6 +42,7 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
     private final FlowServiceFactory flowServiceFactory;
     private final IIcesDeviceTaskParamService deviceTaskParamService;
     private final IIcesDeviceTaskPrevService deviceTaskPrevService;
+    private final IIcesManufactureTaskService manufactureTaskService;
 
     /**
      * 查询设备任务
@@ -104,6 +105,24 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
     public Boolean updateByBo(IcesDeviceTaskBo bo) {
         IcesDeviceTask update = BeanUtil.toBean(bo, IcesDeviceTask.class);
         validEntityBeforeSave(update);
+
+        // bo是否已完成
+        if(Objects.equals(bo.getDtStat(), "4")){
+            IcesDeviceTaskBo icesDeviceTaskBo = new IcesDeviceTaskBo();
+            icesDeviceTaskBo.setMtCode(bo.getMtCode());
+            List<IcesDeviceTaskVo> otherBos=queryList(bo);
+            int done=1;
+            for(IcesDeviceTaskVo vo:otherBos){
+                if(!vo.getMtCode().equals("4")){
+                    done=0;
+                    break;
+                }
+            }
+            if(done==1){
+                System.out.println("任务已经全部完成");
+                manufactureTaskService.updateStatus(bo);
+            }
+        }
         return baseMapper.updateById(update) > 0;
     }
 

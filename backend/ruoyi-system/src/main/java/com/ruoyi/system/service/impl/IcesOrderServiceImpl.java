@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ruoyi.system.domain.IcesEquipmentModel;
+import com.ruoyi.system.domain.bo.IcesManufacturePlanBo;
 import com.ruoyi.system.domain.vo.IcesEquipmentModelVo;
 import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
@@ -135,5 +136,14 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
             //TODO 做一些业务上的校验,判断是否需要校验
         }
         return baseMapper.deleteBatchIds(ids) > 0;
+    }
+
+    @Override
+    public void updateStatus(IcesManufacturePlanBo icesManufacturePlanBo) {
+        IcesOrderBo bo = new IcesOrderBo();
+        bo.setOrCode(icesManufacturePlanBo.getMpCode());
+        List<IcesOrderVo> icesOrderVos = queryList(bo);
+        icesManufacturePlanBo.setMpId(icesOrderVos.get(0).getOrId());
+        updateByBo(bo);
     }
 }

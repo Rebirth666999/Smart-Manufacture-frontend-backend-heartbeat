@@ -270,7 +270,8 @@ export default {
             this.hint += clientLevel.cllLabel
             this.hint += " "
             // 设置筛选
-            this.queryParams.cllCode = clientLevel.arCode
+            this.queryParams.cllCode = clientLevel.cllCode
+            this.queryParams.cpCode = undefined
           }
           resolve()
         }).catch(() => {
@@ -294,6 +295,7 @@ export default {
             this.hint += " "
             // 设置筛选
             this.queryParams.cpCode = clientLevel.cpCode
+            this.queryParams.cllCode = undefined
           }
           resolve()
         }).catch(() => {
@@ -340,6 +342,8 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams.cpCode = this.$route.query.cpCode
+      this.queryParams.cllCode = this.$route.query.cllCode
       this.handleQuery();
     },
     // 多选框选中数据

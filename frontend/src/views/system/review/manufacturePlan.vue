@@ -368,6 +368,7 @@ export default {
             this.hint += " "
             // 设置筛选
             this.queryParams.procCode = proc.procCode
+            this.queryParams.orCode = undefined
           }
           resolve()
         }).catch(() => {
@@ -391,6 +392,7 @@ export default {
             this.hint += " "
             // 设置筛选
             this.queryParams.orCode = order.orCode
+            this.queryParams.procCode = undefined
           }
           resolve()
         }).catch(() => {
@@ -417,6 +419,8 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams.orCode = this.$route.query.orCode
+      this.queryParams.procCode = this.$route.query.procCode
       this.handleQuery();
     },
     // 多选框选中数据

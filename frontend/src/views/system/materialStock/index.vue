@@ -355,6 +355,8 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams.maCode = this.$route.query.maCode
+      this.queryParams.stCode = this.$route.query.stCode
       this.handleQuery();
     },
     // 多选框选中数据

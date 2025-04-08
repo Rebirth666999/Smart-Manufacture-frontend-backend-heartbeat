@@ -414,6 +414,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams.eqCode = this.$route.query.eqCode
       this.handleQuery();
     },
     // 多选框选中数据

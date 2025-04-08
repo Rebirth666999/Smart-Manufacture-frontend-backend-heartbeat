@@ -377,6 +377,7 @@ export default {
     resetQuery() {
       this.daterangeOrDeadline = [];
       this.resetForm("queryForm");
+      this.queryParams.maCode = this.$route.query.maCode
       this.handleQuery();
     },
     // 多选框选中数据

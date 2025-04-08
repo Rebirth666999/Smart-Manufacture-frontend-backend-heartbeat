@@ -350,6 +350,7 @@ export default {
     resetQuery() {
       this.daterangeErBegin = [];
       this.resetForm("queryForm");
+      this.queryParams.eqCode = this.$route.query.eqCode
       this.handleQuery();
     },
     // 多选框选中数据

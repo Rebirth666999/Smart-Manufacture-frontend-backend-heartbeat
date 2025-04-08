@@ -2,12 +2,14 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="所属异常" prop="exCode">
-        <el-input
-          v-model="queryParams.exCode"
-          placeholder="请输入所属异常"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.exCode" placeholder="请选择所属异常" clearable>
+          <el-option
+           v-for="option in exceptionList"
+           :key="option.exCode"
+           :label="option.exName"
+           :value="option.exCode">
+          </el-option>
+        </el-select>
       </el-form-item>
       <!-- <el-form-item label="已删除" prop="exlDelete">
         <el-input
@@ -73,7 +75,11 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="生命周期ID" align="center" prop="exlId" v-if="true"/>
       <el-table-column label="生命周期编码" align="center" prop="exlCode" />
-      <el-table-column label="所属异常" align="center" prop="exCode" />
+      <el-table-column label="所属异常" align="center" prop="exCode">
+        <template slot-scope="scope">
+          {{ exceptionList.find(ele => ele.exCode === scope.row.exCode).exName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="缩略图" align="center" prop="exlSnapshot" />
       <el-table-column label="模型ID" align="center" prop="exlModelId" />
       <el-table-column label="模型key" align="center" prop="exlModelKey" />
@@ -111,7 +117,14 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="所属异常" prop="exCode">
-          <el-input v-model="form.exCode" placeholder="请输入所属异常" />
+          <el-select v-model="form.exCode" placeholder="请选择异常" clearable>
+            <el-option
+             v-for="option in exceptionList"
+             :key="option.exCode"
+             :label="option.exName"
+             :value="option.exCode">
+            </el-option>
+          </el-select>
         </el-form-item>
         <!-- <el-form-item label="缩略图" prop="exlSnapshot">
           <el-input v-model="form.exlSnapshot" type="textarea" placeholder="请输入内容" />
@@ -136,6 +149,7 @@
 
 <script>
 import { listExceptionLifecycle, getExceptionLifecycle, delExceptionLifecycle, addExceptionLifecycle, updateExceptionLifecycle } from "@/api/system/exceptionLifecycle";
+import { listException } from "@/api/system/exception";
 
 export default {
   name: "ExceptionLifecycle",
@@ -179,13 +193,22 @@ export default {
         exCode: [
           { required: true, message: "所属异常不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 异常列表
+      exceptionList: []
     };
   },
-  created() {
+  async created() {
+    await this.getExceptionList();
     this.getList();
   },
   methods: {
+    // 获取异常列表
+    getExceptionList() {
+      listException().then(response => {
+        this.exceptionList = response.rows;
+      })
+    },
     /** 查询异常生命周期列表 */
     getList() {
       this.loading = true;

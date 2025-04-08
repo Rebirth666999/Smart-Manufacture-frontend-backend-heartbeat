@@ -75,7 +75,7 @@ public class IcesExceptionLifecycleVersionServiceImpl implements IIcesExceptionL
      */
     @Override
     public Boolean insertByBo(IcesExceptionLifecycleVersionBo bo) {
-        bo.setExlCode(codeService.insertByType("ExceptionLifecycleVersion"));
+        bo.setExlvCode(codeService.insertByType("ExceptionLifecycleVersion"));
         IcesExceptionLifecycleVersion add = BeanUtil.toBean(bo, IcesExceptionLifecycleVersion.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

@@ -30,7 +30,6 @@ public class IcesExceptionLifecycleVersionBo extends BaseEntity {
     /**
      * 生命周期版本编码
      */
-    @NotBlank(message = "生命周期版本编码不能为空", groups = { AddGroup.class, EditGroup.class })
     private String exlvCode;
 
     /**

@@ -8,7 +8,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ruoyi.system.domain.IcesEquipmentModel;
+import com.ruoyi.system.domain.bo.IcesDeviceTaskBo;
+import com.ruoyi.system.domain.bo.IcesManufactureTaskBo;
 import com.ruoyi.system.domain.vo.IcesEquipmentModelVo;
+import com.ruoyi.system.domain.vo.IcesManufactureTaskVo;
 import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -130,4 +133,13 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
         }
         return baseMapper.deleteBatchIds(ids) > 0;
     }
+    @Override
+    public void updateStatus(IcesManufactureTaskBo icesManufactureTaskBo) {
+        IcesManufacturePlanBo bo = new IcesManufacturePlanBo();
+        bo.setMpCode(icesManufactureTaskBo.getMtCode());
+        List<IcesManufacturePlanVo> icesManufacturePlanVos = queryList(bo);
+        bo.setMpId(icesManufacturePlanVos.get(0).getMpId());
+        updateByBo(bo);
+    }
+
 }

@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="生命周期编码" prop="exlCode">
-        <el-input
-          v-model="queryParams.exlCode"
-          placeholder="请输入生命周期编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="所属异常" prop="exCode">
         <el-input
           v-model="queryParams.exCode"
@@ -17,14 +9,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="已删除" prop="exlDelete">
+      <!-- <el-form-item label="已删除" prop="exlDelete">
         <el-input
           v-model="queryParams.exlDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -85,8 +77,8 @@
       <el-table-column label="缩略图" align="center" prop="exlSnapshot" />
       <el-table-column label="模型ID" align="center" prop="exlModelId" />
       <el-table-column label="模型key" align="center" prop="exlModelKey" />
-      <el-table-column label="已删除" align="center" prop="exlDelete" />
-      <el-table-column label="描述" align="center" prop="exlDesc" />
+      <!-- <el-table-column label="已删除" align="center" prop="exlDelete" /> -->
+      <!-- <el-table-column label="描述" align="center" prop="exlDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -121,7 +113,7 @@
         <el-form-item label="所属异常" prop="exCode">
           <el-input v-model="form.exCode" placeholder="请输入所属异常" />
         </el-form-item>
-        <el-form-item label="缩略图" prop="exlSnapshot">
+        <!-- <el-form-item label="缩略图" prop="exlSnapshot">
           <el-input v-model="form.exlSnapshot" type="textarea" placeholder="请输入内容" />
         </el-form-item>
         <el-form-item label="模型ID" prop="exlModelId">
@@ -129,7 +121,7 @@
         </el-form-item>
         <el-form-item label="模型key" prop="exlModelKey">
           <el-input v-model="form.exlModelKey" placeholder="请输入模型key" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="描述" prop="exlDesc">
           <el-input v-model="form.exlDesc" type="textarea" placeholder="请输入内容" />
         </el-form-item>
@@ -175,7 +167,7 @@ export default {
         pageSize: 10,
         exlCode: undefined,
         exCode: undefined,
-        exlDelete: undefined,
+        exlDelete: 0,
       },
       // 表单参数
       form: {},
@@ -309,3 +301,11 @@ export default {
   }
 };
 </script>
+<style scope>
+.el-select{
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

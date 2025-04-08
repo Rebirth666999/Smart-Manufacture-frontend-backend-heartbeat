@@ -263,7 +263,7 @@ export default {
               this.mode = 2
             }
             // 设置筛选
-            this.queryParams.emCode = area.emCode
+            this.queryParams.emCode = model.emCode
           }
           resolve()
         }).catch(() => {

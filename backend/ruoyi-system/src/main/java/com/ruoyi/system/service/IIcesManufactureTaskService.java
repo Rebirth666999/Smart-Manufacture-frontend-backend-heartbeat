@@ -3,6 +3,7 @@ package com.ruoyi.system.service;
 import com.ruoyi.system.domain.IcesManufactureTask;
 import com.ruoyi.system.domain.bo.IcesManufacturePlanBo;
 import com.ruoyi.system.domain.vo.IcesManufacturePlanVo;
+import com.ruoyi.system.domain.bo.IcesDeviceTaskBo;
 import com.ruoyi.system.domain.vo.IcesManufactureTaskVo;
 import com.ruoyi.system.domain.bo.IcesManufactureTaskBo;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -54,5 +55,8 @@ public interface IIcesManufactureTaskService {
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
-
+    /**
+     * 更改任务状态
+     */
+    void updateStatus(IcesDeviceTaskBo deviceTaskBo);
 }

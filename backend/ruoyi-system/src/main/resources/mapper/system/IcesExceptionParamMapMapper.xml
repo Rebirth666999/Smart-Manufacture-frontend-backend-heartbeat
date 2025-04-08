@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.IcesExceptionParamMapMapper">
+
+    <resultMap type="com.ruoyi.system.domain.IcesExceptionParamMap" id="IcesExceptionParamMapResult">
+        <result property="expmId" column="expm_id"/>
+        <result property="expmCode" column="expm_code"/>
+        <result property="exptCode" column="expt_code"/>
+        <result property="expmNameOrgn" column="expm_name_orgn"/>
+        <result property="expmCodeOrgn" column="expm_code_orgn"/>
+        <result property="expName" column="exp_name"/>
+        <result property="expCode" column="exp_code"/>
+        <result property="expmDefault" column="expm_default"/>
+        <result property="expmFormula" column="expm_formula"/>
+        <result property="expmDelete" column="expm_delete"/>
+        <result property="expmDesc" column="expm_desc"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

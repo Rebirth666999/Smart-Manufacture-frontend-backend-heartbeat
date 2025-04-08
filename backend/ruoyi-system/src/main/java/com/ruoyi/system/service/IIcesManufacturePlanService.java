@@ -1,6 +1,9 @@
 package com.ruoyi.system.service;
 
 import com.ruoyi.system.domain.IcesManufacturePlan;
+import com.ruoyi.system.domain.IcesManufactureTask;
+import com.ruoyi.system.domain.bo.IcesDeviceTaskBo;
+import com.ruoyi.system.domain.bo.IcesManufactureTaskBo;
 import com.ruoyi.system.domain.vo.IcesManufacturePlanVo;
 import com.ruoyi.system.domain.bo.IcesManufacturePlanBo;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -52,5 +55,9 @@ public interface IIcesManufacturePlanService {
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
-
+    /**
+     *更新状态
+     * @param icesManufactureTaskBo
+     */
+    void updateStatus(IcesManufactureTaskBo icesManufactureTaskBo);
 }

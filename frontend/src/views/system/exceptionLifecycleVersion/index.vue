@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="生命周期版本编码" prop="exlvCode">
-        <el-input
-          v-model="queryParams.exlvCode"
-          placeholder="请输入生命周期版本编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="110px">
       <el-form-item label="所属生命周期" prop="exlCode">
         <el-input
           v-model="queryParams.exlCode"
@@ -25,14 +17,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="已删除" prop="exlvDelete">
+      <!-- <el-form-item label="已删除" prop="exlvDelete">
         <el-input
           v-model="queryParams.exlvDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -93,7 +85,7 @@
       <el-table-column label="版本名称" align="center" prop="exlvName" />
       <el-table-column label="模型定义ID" align="center" prop="exlvDefId" />
       <el-table-column label="模型文件ID" align="center" prop="exlvGeId" />
-      <el-table-column label="已删除" align="center" prop="exlvDelete" />
+      <!-- <el-table-column label="已删除" align="center" prop="exlvDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -123,23 +115,20 @@
     />
 
     <!-- 添加或修改异常生命周期版本对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="生命周期版本编码" prop="exlvCode">
-          <el-input v-model="form.exlvCode" placeholder="请输入生命周期版本编码" />
-        </el-form-item>
+    <el-dialog :title="title" :visible.sync="open" width="520px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="所属生命周期" prop="exlCode">
           <el-input v-model="form.exlCode" placeholder="请输入所属生命周期" />
         </el-form-item>
         <el-form-item label="版本名称" prop="exlvName">
           <el-input v-model="form.exlvName" placeholder="请输入版本名称" />
         </el-form-item>
-        <el-form-item label="模型定义ID" prop="exlvDefId">
+        <!-- <el-form-item label="模型定义ID" prop="exlvDefId">
           <el-input v-model="form.exlvDefId" placeholder="请输入模型定义ID" />
         </el-form-item>
         <el-form-item label="模型文件ID" prop="exlvGeId">
           <el-input v-model="form.exlvGeId" placeholder="请输入模型文件ID" />
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
@@ -183,7 +172,7 @@ export default {
         exlvCode: undefined,
         exlCode: undefined,
         exlvName: undefined,
-        exlvDelete: undefined,
+        exlvDelete: 0,
       },
       // 表单参数
       form: {},
@@ -322,3 +311,11 @@ export default {
   }
 };
 </script>
+<style scope>
+.el-select{
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

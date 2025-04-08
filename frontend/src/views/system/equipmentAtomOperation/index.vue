@@ -214,7 +214,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        eqCode: this.$route.query.eqCode,
+        eqCode: undefined,
         eaoDelete: 0,
       },
       // 表单参数
@@ -257,23 +257,42 @@ export default {
     await this.getEquipmentList();
     this.getList();
   },
+  async activated() {
+    if (this.$route.query.eqCode) {
+      this.mode = 1
+    } else {
+      this.mode = 0
+    }
+    await this.getEquipmentList();
+    this.getList();
+  },
   methods: {
     // 查询设备列表
     getEquipmentList() {
-      listEquipment().then(response => {
-        this.equipmentList = response.rows;
-        if (this.mode === 1) {
-          let equipment = response.rows.find(ele => ele.eqCode === this.$route.query.eqCode)
-          // 构建筛选提示文本
-          this.hint = "设备 "
-          this.hint += equipment.eqName
-          this.hint += " "
-          // 检查状态
-          if (equipment.eqStat !== '1') {
-            this.mode = 2
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listEquipment().then(response => {
+          this.equipmentList = response.rows
+          if (this.mode === 1) {
+            let equipment = response.rows.find(ele => ele.eqCode === this.$route.query.eqCode)
+            // 构造提示文本
+            this.hint = "设备 "
+            this.hint += equipment.eqName
+            this.hint += " "
+            // 设置筛选
+            this.queryParams.eqCode = equipment.eqCode
+            // 检查状态
+            if (equipment.eqStat !== '1') {
+              this.mode = 2
+            }
           }
-        }
-      });
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false;
+        })
+      })
     },
     /** 查询设备原子操作列表 */
     getList() {
@@ -316,6 +335,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams.eqCode = this.$route.query.eqCode
       this.handleQuery();
     },
     // 多选框选中数据

@@ -187,6 +187,9 @@ export default {
   created() {
     this.getList();
   },
+  activated() {
+    this.getList();
+  },
   methods: {
     /** 查询设备模型类型列表 */
     getList() {

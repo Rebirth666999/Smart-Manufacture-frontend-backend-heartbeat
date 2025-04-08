@@ -330,26 +330,51 @@ export default {
         ],
       },
       // 确认台账模式
-      confirmFlag: false
+      confirmFlag: false,
+      // 原料列表
+      materialList: [],
+      // 仓库列表
+      storeList: []
     };
   },
   async created() {
-    this.getList();
     await this.getMaterialList();
     await this.getStoreList();
+    this.getList();
+  },
+  async activated() {
+    await this.getMaterialList();
+    await this.getStoreList();
+    this.getList();
   },
   methods: {
-    //查询库存列表
+    // 查询库存列表
     getStoreList(){
-      listStore().then(response => {
-        this.storeList = response.rows;
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listStore().then(response => {
+          this.storeList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
-    //查询台账列表
+    // 查询台账列表
     getMaterialList(){
-      listMaterial().then(response => {
-        this.materialList = response.rows;
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listMaterial().then(response => {
+          this.materialList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
     /** 查询物料台账列表 */
     getList() {

@@ -209,11 +209,23 @@ export default {
     await this.getExceptionLifecycleList();
     this.getList();
   },
+  async activated() {
+    await this.getExceptionLifecycleList();
+    this.getList();
+  },
   methods: {
     // 获取异常生命周期列表
     getExceptionLifecycleList() {
-      listExceptionLifecycle().then(response => {
-        this.exceptionLifecycleList = response.rows;
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listExceptionLifecycle().then(response => {
+          this.exceptionLifecycleList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
       })
     },
     /** 查询异常生命周期版本列表 */

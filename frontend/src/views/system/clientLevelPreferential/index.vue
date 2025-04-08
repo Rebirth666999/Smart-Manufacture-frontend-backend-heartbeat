@@ -205,8 +205,8 @@ export default {
         pageNum: 1,
         pageSize: 10,
         clpCode: undefined,
-        cllCode: this.$route.query.cllCode,
-        cpCode: this.$route.query.cpCode,
+        cllCode: undefined,
+        cpCode: undefined,
         clpDelete: 0,
       },
       // 表单参数
@@ -240,32 +240,70 @@ export default {
     } else if (this.$route.query.cpCode) {
       this.mode = 2
     }
-    this.getList();
     await this.getClientLevelList();
     await this.getClientPreferentialList();
+    this.getList();
+  },
+  async activated() {
+    if (this.$route.query.cllCode) {
+      this.mode = 1
+    } else if (this.$route.query.cpCode) {
+      this.mode = 2
+    } else {
+      this.mode = 0
+    }
+    await this.getClientLevelList();
+    await this.getClientPreferentialList();
+    this.getList();
   },
   methods: {
-    //查询客户列表
+    // 查询客户等级列表
     getClientLevelList() {
-      listClientLevel().then(response => {
-        this.clientLevelList = response.rows;
-        if (this.mode === 1) {
-          this.hint = "客户等级 "
-          this.hint += response.rows.find(ele => ele.cllCode === this.$route.query.cllCode).cllLabel
-          this.hint += " "
-        }
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listClientLevel().then(response => {
+          this.clientLevelList = response.rows;
+          if (this.mode === 1) {
+            let clientLevel = response.rows.find(ele => ele.cllCode === this.$route.query.cllCode)
+            // 构造提示文本
+            this.hint = "客户等级 "
+            this.hint += clientLevel.cllLabel
+            this.hint += " "
+            // 设置筛选
+            this.queryParams.cllCode = clientLevel.cllCode
+            this.queryParams.cpCode = undefined
+          }
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false;
+        })
+      })
     },
-    //查询优惠政策列表
+    // 查询优惠政策列表
     getClientPreferentialList() {
-      listClientPreferential().then(response => {
-        this.clientPreferentialList = response.rows;
-        if (this.mode === 2) {
-          this.hint = "优惠策略 "
-          this.hint += response.rows.find(ele => ele.cpCode === this.$route.query.cpCode).cpName
-          this.hint += " "
-        }
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listClientPreferential().then(response => {
+          this.clientPreferentialList = response.rows;
+          if (this.mode === 2) {
+            let clientPreferential = response.rows.find(ele => ele.cpCode === this.$route.query.cpCode)
+            // 构造提示文本
+            this.hint = "优惠策略 "
+            this.hint += clientPreferential.cpName
+            this.hint += " "
+            // 设置筛选
+            this.queryParams.cpCode = clientLevel.cpCode
+            this.queryParams.cllCode = undefined
+          }
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false;
+        })
+      })
     },
     /** 查询关联-客户等级对应的优惠策略列表 */
     getList() {
@@ -304,6 +342,8 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams.cpCode = this.$route.query.cpCode
+      this.queryParams.cllCode = this.$route.query.cllCode
       this.handleQuery();
     },
     // 多选框选中数据

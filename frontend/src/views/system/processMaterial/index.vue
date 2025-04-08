@@ -229,7 +229,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        procCode: this.$route.query.procCode,
+        procCode: undefined,
         maCode: undefined,
         pmDelete: 0,
       },
@@ -270,27 +270,55 @@ export default {
     await this.getMaterialList();
     this.getList();
   },
+  async activated() {
+    if (this.$route.query.procCode) {
+      this.mode = 1
+    } else {
+      this.mode = 0
+    }
+    await this.getProcessList();
+    await this.getMaterialList();
+    this.getList();
+  },
   methods: {
     // 查询工艺流程列表
     getProcessList() {
-      listProcess().then(response => {
-        this.processList = response.rows
-        if (this.mode === 1) {
-          let process = response.rows.find(ele => ele.procCode === this.$route.query.procCode)
-          this.hint = "工艺流程 "
-          this.hint += process.procName
-          this.hint += " "
-          // 检查状态
-          if (process.procStat !== '1') {
-            this.mode = 2
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listProcess().then(response => {
+          this.processList = response.rows
+          if (this.mode === 1) {
+            let process = response.rows.find(ele => ele.procCode === this.$route.query.procCode)
+            this.hint = "工艺流程 "
+            this.hint += process.procName
+            this.hint += " "
+            // 检查状态
+            if (process.procStat !== '1') {
+              this.mode = 2
+            }
+            // 设置筛选
+            this.queryParams.procCode = process.procCode
           }
-        }
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false;
+        })
       })
     },
     // 查询原料列表
     getMaterialList() {
-      listMaterial({ maType: '1' }).then(response => {
-        this.materialList = response.rows
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listMaterial({ maType: '1' }).then(response => {
+          this.materialList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
       })
     },
     /** 查询工艺流程原料需求列表 */
@@ -330,6 +358,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams.procCode = this.$route.query.procCode
       this.handleQuery();
     },
     // 多选框选中数据

@@ -325,21 +325,42 @@ export default {
     await this.getOrderList();
     this.getList();
   },
+  async activated() {
+    await this.getProcessList();
+    await this.getOrderList();
+    this.getList();
+  },
   methods: {
     // 查询工艺流程列表
     getProcessList() {
-      listProcess().then(response => {
-        this.processListFull = response.rows;
-        for (let item of response.rows) {
-          if (item.procStat === '5') this.processList.push(item)
-        }
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listProcess().then(response => {
+          // 全列表
+          this.processListFull = response.rows
+          // 已发布列表
+          this.processList = response.rows.filter(ele => ele.procStat === "5")
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
     // 查询产品列表
     getOrderList() {
-      listOrder().then(response => {
-        this.orderList = response.rows;
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listOrder().then(response => {
+          this.orderList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
     /** 查询生产计划列表 */
     getList() {

@@ -255,17 +255,38 @@ export default {
     await this.getExceptionParamList();
     this.getList();
   },
+  async activated() {
+    await this.getExceptionParamTemplateList();
+    await this.getExceptionParamList();
+    this.getList();
+  },
   methods: {
     // 获取异常参数列表
     getExceptionParamList() {
-      listExceptionParam().then(response => {
-        this.exceptionParamList = response.rows;
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listExceptionParam().then(response => {
+          this.exceptionParamList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
       })
     },
     // 获取异常参数模板列表
     getExceptionParamTemplateList() {
-      listExceptionParamTemplate().then(response => {
-        this.exceptionParamTemplateList = response.rows;
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listExceptionParamTemplate().then(response => {
+          this.exceptionParamTemplateList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
       })
     },
     /** 查询异常参数模板条目列表 */

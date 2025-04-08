@@ -2,12 +2,14 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="110px">
       <el-form-item label="异常参数模板" prop="exptCode">
-        <el-input
-          v-model="queryParams.exptCode"
-          placeholder="请输入异常参数模板"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.exptCode" placeholder="请选择异常参数模板" clearable>
+          <el-option
+           v-for="option in exceptionParamTemplateList"
+           :key="option.exptCode"
+           :label="option.exptCode"
+           :value="option.exptCode">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="源字段名" prop="expmNameOrgn">
         <el-input
@@ -93,7 +95,11 @@
       <el-table-column label="源字段名" align="center" prop="expmNameOrgn" />
       <el-table-column label="源字段编码" align="center" prop="expmCodeOrgn" />
       <el-table-column label="目标字段名" align="center" prop="expName" />
-      <el-table-column label="目标字段编码" align="center" prop="expCode" />
+      <el-table-column label="目标字段" align="center" prop="expCode">
+        <template slot-scope="scope">
+          {{ exceptionParamList.find(ele => ele.expCode === scope.row.expCode).expName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="默认值" align="center" prop="expmDefault" />
       <el-table-column label="转换公式" align="center" prop="expmFormula" />
       <!-- <el-table-column label="已删除" align="center" prop="expmDelete" /> -->
@@ -130,7 +136,14 @@
     <el-dialog :title="title" :visible.sync="open" width="520px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="异常参数模板" prop="exptCode">
-          <el-input v-model="form.exptCode" placeholder="请输入异常参数模板" />
+          <el-select v-model="form.exptCode" placeholder="请选择异常参数模板">
+            <el-option
+             v-for="option in exceptionParamTemplateList"
+             :key="option.exptCode"
+             :label="option.exptCode"
+             :value="option.exptCode">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="源字段名" prop="expmNameOrgn">
           <el-input v-model="form.expmNameOrgn" placeholder="请输入源字段名" />
@@ -141,8 +154,15 @@
         <el-form-item label="目标字段名" prop="expName">
           <el-input v-model="form.expName" placeholder="请输入目标字段名" />
         </el-form-item>
-        <el-form-item label="目标字段编码" prop="expCode">
-          <el-input v-model="form.expCode" placeholder="请输入目标字段编码" />
+        <el-form-item label="目标字段" prop="expCode">
+          <el-select v-model="form.expCode" placeholder="请选择目标字段">
+            <el-option
+             v-for="option in exceptionParamList"
+             :key="option.expCode"
+             :label="option.expName"
+             :value="option.expCode">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="默认值" prop="expmDefault">
           <el-input v-model="form.expmDefault" placeholder="请输入默认值" />
@@ -164,6 +184,8 @@
 
 <script>
 import { listExceptionParamMap, getExceptionParamMap, delExceptionParamMap, addExceptionParamMap, updateExceptionParamMap } from "@/api/system/exceptionParamMap";
+import { listExceptionParamTemplate } from "@/api/system/exceptionParamTemplate";
+import { listExceptionParam } from "@/api/system/exceptionParam";
 
 export default {
   name: "ExceptionParamMap",
@@ -221,13 +243,31 @@ export default {
         expCode: [
           { required: true, message: "目标字段编码不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 异常参数模板列表
+      exceptionParamTemplateList: [],
+      // 异常参数列表
+      exceptionParamList: []
     };
   },
-  created() {
+  async created() {
+    await this.getExceptionParamTemplateList();
+    await this.getExceptionParamList();
     this.getList();
   },
   methods: {
+    // 获取异常参数列表
+    getExceptionParamList() {
+      listExceptionParam().then(response => {
+        this.exceptionParamList = response.rows;
+      })
+    },
+    // 获取异常参数模板列表
+    getExceptionParamTemplateList() {
+      listExceptionParamTemplate().then(response => {
+        this.exceptionParamTemplateList = response.rows;
+      })
+    },
     /** 查询异常参数模板条目列表 */
     getList() {
       this.loading = true;

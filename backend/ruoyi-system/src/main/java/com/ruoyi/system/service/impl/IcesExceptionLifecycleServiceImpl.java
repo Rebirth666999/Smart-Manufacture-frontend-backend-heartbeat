@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesExceptionLifecycleBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesExceptionLifecycleServiceImpl implements IIcesExceptionLifecycleService {
 
     private final IcesExceptionLifecycleMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询异常生命周期
@@ -72,6 +74,7 @@ public class IcesExceptionLifecycleServiceImpl implements IIcesExceptionLifecycl
      */
     @Override
     public Boolean insertByBo(IcesExceptionLifecycleBo bo) {
+        bo.setExlCode(codeService.insertByType("ExceptionLifecycle"));
         IcesExceptionLifecycle add = BeanUtil.toBean(bo, IcesExceptionLifecycle.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

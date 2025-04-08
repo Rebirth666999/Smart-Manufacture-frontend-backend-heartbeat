@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="模板条目编码" prop="expmCode">
-        <el-input
-          v-model="queryParams.expmCode"
-          placeholder="请输入模板条目编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="110px">
       <el-form-item label="异常参数模板" prop="exptCode">
         <el-input
           v-model="queryParams.exptCode"
@@ -33,14 +25,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="已删除" prop="expmDelete">
+      <!-- <el-form-item label="已删除" prop="expmDelete">
         <el-input
           v-model="queryParams.expmDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -104,8 +96,8 @@
       <el-table-column label="目标字段编码" align="center" prop="expCode" />
       <el-table-column label="默认值" align="center" prop="expmDefault" />
       <el-table-column label="转换公式" align="center" prop="expmFormula" />
-      <el-table-column label="已删除" align="center" prop="expmDelete" />
-      <el-table-column label="描述" align="center" prop="expmDesc" />
+      <!-- <el-table-column label="已删除" align="center" prop="expmDelete" /> -->
+      <!-- <el-table-column label="描述" align="center" prop="expmDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -135,8 +127,8 @@
     />
 
     <!-- 添加或修改异常参数模板条目对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="520px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="异常参数模板" prop="exptCode">
           <el-input v-model="form.exptCode" placeholder="请输入异常参数模板" />
         </el-form-item>
@@ -205,7 +197,7 @@ export default {
         exptCode: undefined,
         expmNameOrgn: undefined,
         expName: undefined,
-        expmDelete: undefined,
+        expmDelete: 0,
       },
       // 表单参数
       form: {},
@@ -354,3 +346,11 @@ export default {
   }
 };
 </script>
+<style scope>
+.el-select{
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

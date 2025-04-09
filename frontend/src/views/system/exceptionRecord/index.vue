@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="异常记录编码" prop="exrCode">
-        <el-input
-          v-model="queryParams.exrCode"
-          placeholder="请输入异常记录编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="异常源" prop="excCode">
         <el-input
           v-model="queryParams.excCode"
@@ -45,14 +37,14 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="已删除" prop="exrDelete">
+      <!-- <el-form-item label="已删除" prop="exrDelete">
         <el-input
           v-model="queryParams.exrDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -130,7 +122,7 @@
       <el-table-column label="持续时间" align="center" prop="exrDuration" />
       <el-table-column label="影响因子" align="center" prop="exrImpactFactor" />
       <el-table-column label="影响等级" align="center" prop="exrImpactLevel" />
-      <el-table-column label="已删除" align="center" prop="exrDelete" />
+      <!-- <el-table-column label="已删除" align="center" prop="exrDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -160,61 +152,87 @@
     />
 
     <!-- 添加或修改异常记录对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="异常源" prop="excCode">
-          <el-input v-model="form.excCode" placeholder="请输入异常源" />
-        </el-form-item>
-        <el-form-item label="异常" prop="exCode">
-          <el-input v-model="form.exCode" placeholder="请输入异常" />
-        </el-form-item>
-        <el-form-item label="描述" prop="exrDesc">
-          <el-input v-model="form.exrDesc" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="参数" prop="exrParam">
-          <el-input v-model="form.exrParam" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="状态" prop="exrStat">
-          <el-select v-model="form.exrStat" placeholder="请选择状态">
-            <el-option
-              v-for="dict in dict.type.ices_exception_record_status"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="等级" prop="exrLevel">
-          <el-select v-model="form.exrLevel" placeholder="请选择等级">
-            <el-option
-              v-for="dict in dict.type.ices_exception_record_level"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="异常上报人" prop="exrUserReport">
-          <el-input v-model="form.exrUserReport" placeholder="请输入异常上报人" />
-        </el-form-item>
-        <el-form-item label="当前处理人" prop="exrUserHandle">
-          <el-input v-model="form.exrUserHandle" placeholder="请输入当前处理人" />
-        </el-form-item>
-        <el-form-item label="异常解除人" prop="exrUserFinish">
-          <el-input v-model="form.exrUserFinish" placeholder="请输入异常解除人" />
-        </el-form-item>
-        <el-form-item label="异常责任人" prop="exrUserResp">
-          <el-input v-model="form.exrUserResp" placeholder="请输入异常责任人" />
-        </el-form-item>
-        <el-form-item label="持续时间" prop="exrDuration">
-          <el-input v-model="form.exrDuration" placeholder="请输入持续时间" />
-        </el-form-item>
-        <el-form-item label="影响因子" prop="exrImpactFactor">
-          <el-input v-model="form.exrImpactFactor" placeholder="请输入影响因子" />
-        </el-form-item>
-        <el-form-item label="影响等级" prop="exrImpactLevel">
-          <el-input v-model="form.exrImpactLevel" placeholder="请输入影响等级" />
-        </el-form-item>
+    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="90px">
+        <el-col :span="12">
+          <el-form-item label="异常源" prop="excCode">
+            <el-input v-model="form.excCode" placeholder="请输入异常源" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="异常" prop="exCode">
+            <el-input v-model="form.exCode" placeholder="请输入异常" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="描述" prop="exrDesc">
+            <el-input v-model="form.exrDesc" type="textarea" placeholder="请输入内容" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="参数" prop="exrParam">
+            <el-input v-model="form.exrParam" type="textarea" placeholder="请输入内容" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="状态" prop="exrStat">
+            <el-select v-model="form.exrStat" placeholder="请选择状态">
+              <el-option
+                v-for="dict in dict.type.ices_exception_record_status"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="等级" prop="exrLevel">
+            <el-select v-model="form.exrLevel" placeholder="请选择等级">
+              <el-option
+                v-for="dict in dict.type.ices_exception_record_level"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="异常上报人" prop="exrUserReport">
+            <el-input v-model="form.exrUserReport" placeholder="请输入异常上报人" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="当前处理人" prop="exrUserHandle">
+            <el-input v-model="form.exrUserHandle" placeholder="请输入当前处理人" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="异常解除人" prop="exrUserFinish">
+            <el-input v-model="form.exrUserFinish" placeholder="请输入异常解除人" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="异常责任人" prop="exrUserResp">
+            <el-input v-model="form.exrUserResp" placeholder="请输入异常责任人" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="持续时间" prop="exrDuration">
+            <el-input v-model="form.exrDuration" placeholder="请输入持续时间" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="影响因子" prop="exrImpactFactor">
+            <el-input v-model="form.exrImpactFactor" placeholder="请输入影响因子" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="影响等级" prop="exrImpactLevel">
+            <el-input v-model="form.exrImpactLevel" placeholder="请输入影响等级" />
+          </el-form-item>
+        </el-col>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
@@ -261,7 +279,7 @@ export default {
         exCode: undefined,
         exrStat: undefined,
         exrLevel: undefined,
-        exrDelete: undefined,
+        exrDelete: 0,
       },
       // 表单参数
       form: {},
@@ -427,3 +445,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

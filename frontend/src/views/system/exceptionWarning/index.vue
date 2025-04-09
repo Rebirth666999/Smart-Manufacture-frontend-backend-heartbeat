@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="预警配置编码" prop="exwCode">
-        <el-input
-          v-model="queryParams.exwCode"
-          placeholder="请输入预警配置编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="异常" prop="exCode">
         <el-input
           v-model="queryParams.exCode"
@@ -25,34 +17,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="是否触发源系统预警" prop="exwWarningOrgn">
-        <el-select v-model="queryParams.exwWarningOrgn" placeholder="请选择是否触发源系统预警" clearable>
-          <el-option
-            v-for="dict in dict.type.ices_yn"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="是否触发源系统处理" prop="exwHandleOrgn">
-        <el-select v-model="queryParams.exwHandleOrgn" placeholder="请选择是否触发源系统处理" clearable>
-          <el-option
-            v-for="dict in dict.type.ices_yn"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="已删除" prop="exwDelete">
+      <!-- <el-form-item label="已删除" prop="exwDelete">
         <el-input
           v-model="queryParams.exwDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -125,7 +97,7 @@
           <dict-tag :options="dict.type.ices_yn" :value="scope.row.exwHandleOrgn"/>
         </template>
       </el-table-column>
-      <el-table-column label="已删除" align="center" prop="exwDelete" />
+      <!-- <el-table-column label="已删除" align="center" prop="exwDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -155,8 +127,8 @@
     />
 
     <!-- 添加或修改异常预警配置对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="550px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
         <el-form-item label="异常" prop="exCode">
           <el-input v-model="form.exCode" placeholder="请输入异常" />
         </el-form-item>
@@ -241,7 +213,7 @@ export default {
         exsCode: undefined,
         exwWarningOrgn: undefined,
         exwHandleOrgn: undefined,
-        exwDelete: undefined,
+        exwDelete: 0,
       },
       // 表单参数
       form: {},
@@ -399,3 +371,11 @@ export default {
   }
 };
 </script>
+<style scope>
+.el-select{
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

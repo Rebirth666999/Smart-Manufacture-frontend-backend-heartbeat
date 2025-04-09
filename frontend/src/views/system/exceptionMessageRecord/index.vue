@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="消息记录编码" prop="exmrCode">
-        <el-input
-          v-model="queryParams.exmrCode"
-          placeholder="请输入消息记录编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="预警配置" prop="exwCode">
         <el-input
           v-model="queryParams.exwCode"
@@ -25,7 +17,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="消息发送结果" prop="exmrResult">
+      <el-form-item label="发送结果" prop="exmrResult">
         <el-select v-model="queryParams.exmrResult" placeholder="请选择消息发送结果" clearable>
           <el-option
             v-for="dict in dict.type.ices_exception_message_result"
@@ -35,14 +27,14 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="已删除" prop="exmrDelete">
+      <!-- <el-form-item label="已删除" prop="exmrDelete">
         <el-input
           v-model="queryParams.exmrDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -109,7 +101,7 @@
           <dict-tag :options="dict.type.ices_exception_message_result" :value="scope.row.exmrResult"/>
         </template>
       </el-table-column>
-      <el-table-column label="已删除" align="center" prop="exmrDelete" />
+      <!-- <el-table-column label="已删除" align="center" prop="exmrDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -140,9 +132,9 @@
 
     <!-- 添加或修改异常消息记录对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="预警配置" prop="exwCode">
-          <el-input v-model="form.exwCode" placeholder="请输入预警配置" />
+          <el-input v-model="form.exwCode" placeholder="请输入预警配置" disabled/>
         </el-form-item>
         <el-form-item label="预警记录" prop="exwrCode">
           <el-input v-model="form.exwrCode" placeholder="请输入预警记录" />
@@ -211,7 +203,7 @@ export default {
         exwCode: undefined,
         exwrCode: undefined,
         exmrResult: undefined,
-        exmrDelete: undefined,
+        exmrDelete: 0,
       },
       // 表单参数
       form: {},
@@ -361,3 +353,11 @@ export default {
   }
 };
 </script>
+<style scope>
+.el-select{
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

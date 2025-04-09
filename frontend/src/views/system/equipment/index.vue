@@ -382,21 +382,40 @@ export default {
     await this.getEquipmentModelList();
     this.getList();
   },
+  async activated() {
+    await this.getAreaList();
+    await this.getEquipmentModelList();
+    this.getList();
+  },
   methods: {
     // 获取车间列表
     getAreaList() {
-      listArea().then(response => {
-        this.areaList = response.rows;
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listArea().then(response => {
+          this.areaList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
     // 查询设备模型列表
     getEquipmentModelList() {
-      listEquipmentModel().then(response => {
-        this.equipmentModelListFull = response.rows;
-      });
-      listEquipmentModel({ emStat: "4" }).then(response => {
-        this.equipmentModelList = response.rows;
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listEquipmentModel().then(response => {
+          this.equipmentModelListFull = response.rows
+          this.equipmentModelList = response.rows.filter(ele => ele.emStat === "4")
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
     /** 查询设备列表 */
     getList() {

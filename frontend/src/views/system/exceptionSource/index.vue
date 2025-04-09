@@ -211,6 +211,9 @@ export default {
   created() {
     this.getList();
   },
+  activated() {
+    this.getList();
+  },
   methods: {
     /** 查询异常源列表 */
     getList() {

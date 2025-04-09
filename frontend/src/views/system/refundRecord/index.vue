@@ -264,13 +264,18 @@ export default {
     };
   },
   async created() {
-    this.getList();
     await this.getOrderList();
     await this.getMaterialList();
     await this.getClientList();
+    this.getList();
+  },
+  async activated() {
+    await this.getOrderList();
+    await this.getMaterialList();
+    await this.getClientList();
+    this.getList();
   },
   methods: {
-
     // 根据订单获取对应的产品
     getMaterialByOrder(orCode) {
       const order = this.orderList.find(item => item.orCode === orCode);
@@ -279,7 +284,7 @@ export default {
       }
       return [];
     },
-// 根据订单获取对应的客户
+    // 根据订单获取对应的客户
     getClientByOrder(orCode) {
       const order = this.orderList.find(item => item.orCode === orCode);
       if (order) {
@@ -300,23 +305,47 @@ export default {
           this.form.clCode = undefined;
         }
     },
-    //查询订单
+    // 查询订单
     getOrderList() {
-      listOrder().then(response => {
-        this.orderList = response.rows;
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listOrder().then(response => {
+          this.orderList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
-    //查询产品
+    // 查询产品
     getMaterialList() {
-      listMaterial().then(response =>{
-      this.materialList = response.rows.filter(item => String(item.maType) === '2');
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listMaterial({ maType: '2' }).then(response => {
+          this.materialList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
-    //查询用户
+    // 查询用户
     getClientList(){
-      listClient().then(response =>{
-        this.clientList = response.rows;
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listClient().then(response => {
+          this.clientList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
     /** 查询退货记录列表 */
     getList() {

@@ -388,17 +388,38 @@ export default {
     await this.getClientList();
     this.getList();
   },
+  async activated() {
+    await this.getProductList();
+    await this.getClientList();
+    this.getList();
+  },
   methods: {
     // 查询客户列表
     getClientList() {
-      listClient().then(response => {
-        this.clientList = response.rows
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listClient().then(response => {
+          this.clientList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
       })
     },
     // 查询产品列表
     getProductList() {
-      listMaterial({ maType: '2' }).then(response => {
-        this.productList = response.rows
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listMaterial({ maType: '2' }).then(response => {
+          this.productList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
       })
     },
     /** 查询订单列表 */

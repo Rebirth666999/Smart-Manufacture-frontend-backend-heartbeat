@@ -241,18 +241,39 @@ export default {
     await this.getEquipmentOperationList();
     this.getList();
   },
+  async activated() {
+    await this.getManufactureTaskList();
+    await this.getEquipmentOperationList();
+    this.getList();
+  },
   methods: {
     // 获取设备操作列表
     getEquipmentOperationList() {
-      listEquipmentOperation().then(response => {
-        this.equipmentOperationList = response.rows;
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listEquipmentOperation().then(response => {
+          this.equipmentOperationList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
     // 获取生产任务列表
     getManufactureTaskList() {
-      listManufactureTask().then(response => {
-        this.manufactureTaskList = response.rows;
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listManufactureTask().then(response => {
+          this.manufactureTaskList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
     /** 查询设备任务列表 */
     getList() {

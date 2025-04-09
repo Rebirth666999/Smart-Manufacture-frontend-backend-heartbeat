@@ -272,7 +272,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         moCode: undefined,
-        eqCode: this.$route.query.eqCode,
+        eqCode: undefined,
         eoDelete: 0,
       },
       // 表单参数
@@ -335,14 +335,25 @@ export default {
     }
     this.getExtraList();
   },
+  activated() {
+    if (this.$route.query.eqCode) {
+      this.mode = 1;
+    } else {
+      this.mode = 0;
+      this.$modal.msgError("请重新进入此页面");
+      this.$router.back();
+    }
+    this.getExtraList();
+  },
   methods: {
     // 查询列表
     getExtraList() {
+      this.loading = true;
       listEquipment().then(response => {
         this.equipmentList = response.rows;
         let equipment = response.rows.find(ele => ele.eqCode === this.$route.query.eqCode)
         // 获取设备所属设备模型的模型操作
-        listModelOperation({ emId: equipment.emId, moDelete: 0 }).then(response => {
+        listModelOperation({ emCode: equipment.emCode, moDelete: 0 }).then(response => {
           this.modelOperationList = response.rows;
           // 获取设备的原子操作
           listEquipmentAtomOperation({ eqCode: equipment.eqCode, moDelete: 0 }).then(response => {
@@ -359,6 +370,8 @@ export default {
           if (equipment.eqStat !== '1') {
             this.mode = 2
           }
+          // 设置筛选
+          this.queryParams.eqCode = equipment.eqCode
         }
       });
     },
@@ -401,6 +414,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams.eqCode = this.$route.query.eqCode
       this.handleQuery();
     },
     // 多选框选中数据

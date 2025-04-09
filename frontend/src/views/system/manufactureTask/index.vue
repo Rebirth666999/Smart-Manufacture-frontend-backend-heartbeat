@@ -432,55 +432,89 @@ export default {
     await this.getReferenceList();
     this.getList();
   },
+  async activated() {
+    await this.getAreaList();
+    await this.getManufacturePlanList();
+    await this.getProcessList();
+    await this.getStoreList();
+    await this.getReferenceList();
+    this.getList();
+  },
   methods: {
     // 获取流程信息参照所需的列表
     // 设备模型、模型操作、设备操作、设备
     getReferenceList() {
-      listEquipmentModel().then(response => {
-        this.viewerData.emList = response.rows;
-      });
-      listModelOperation().then(response => {
-        this.viewerData.moList = response.rows;
-      });
-      listEquipmentOperation().then(response => {
-        this.viewerData.eoList = response.rows;
-      });
-      listEquipment().then(response => {
-        this.eqList = response.rows;
-      });
-      listEquipmentOperationStep().then(response => {
-        this.viewerData.eosList = response.rows;
-      });
-      listEquipmentOperationStepParam().then(response => {
-        this.viewerData.eospaList = response.rows;
-      });
+      return new Promise(async (resolve, reject) => {
+        this.loading = true
+        try {
+          this.viewerData.emList = (await listEquipmentModel()).rows
+          this.viewerData.moList = (await listModelOperation()).rows
+          this.viewerData.eoList = (await listEquipmentOperation()).rows
+          this.eqList = (await listEquipment()).rows
+          this.viewerData.eosList = (await listEquipmentOperationStep()).rows
+          this.viewerData.eospaList = (await listEquipmentOperationStepParam()).rows
+        } catch (err) {
+          reject()
+        }
+        this.loading = false
+        resolve()
+      })
     },
     // 获取仓库列表
     getStoreList() {
-      listStore({ stType: '1' }).then(response => {
-        this.materialStoreList = response.rows;
-      });
-      listStore({ stType: '2' }).then(response => {
-        this.productStoreList = response.rows;
-      });
+      return new Promise(async (resolve, reject) => {
+        this.loading = true
+        try {
+          this.materialStoreList = (await listStore({ stType: '1' })).rows
+          this.productStoreList = (await listStore({ stType: '2' })).rows
+        } catch (err) {
+          reject()
+        }
+        this.loading = false
+        resolve()
+      })
     },
     // 获取工艺流程列表
     getProcessList() {
-      listProcess().then(response => {
-        this.processList = response.rows;
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listProcess().then(response => {
+          this.processList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
     // 获取生产计划列表
     getManufacturePlanList() {
-      listManufacturePlan().then(response => {
-        this.manufacturePlanList = response.rows;
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listManufacturePlan().then(response => {
+          this.manufacturePlanList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
     // 获取车间列表
     getAreaList() {
-      listArea().then(response => {
-        this.areaList = response.rows;
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listArea().then(response => {
+          this.areaList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
     /** 查询生产任务列表 */
     getList() {
@@ -717,20 +751,26 @@ export default {
           for (let param of deviceTaskParam) {
             const paramInfo = equipmentOperationStepParams.find(ele => ele.eospaCode === param.eospaCode)
             if (paramInfo) {
-              if (paramInfo.eospaType === '1')
-                route.opParam[paramInfo.eospaName] = parseInt(param.dtpaValue)
-              else if (paramInfo.eospaType === '2')
-                route.opParam[paramInfo.eospaName] = parseFloat(param.dtpaValue)
-              else
-                route.opParam[paramInfo.eospaName] = param.dtpaValue
+              try {
+                if (paramInfo.eospaType === '1')
+                  route.opParam[paramInfo.eospaName] = parseInt(param.dtpaValue)
+                else if (paramInfo.eospaType === '2')
+                  route.opParam[paramInfo.eospaName] = parseFloat(param.dtpaValue)
+                else if (paramInfo.eospaType === '4')
+                  route.opParam[paramInfo.eospaName] = JSON.parse(param.dtpaValue)
+                else
+                  route.opParam[paramInfo.eospaName] = param.dtpaValue
 
-              if (route.opParam[paramInfo.eospaName] === NaN) {
+                if (route.opParam[paramInfo.eospaName] === NaN) {
+                  this.$modal.msgError("参数类型不合法，请重新生成设备任务")
+                  return
+                }
+              } catch (error) {
                 this.$modal.msgError("参数类型不合法，请重新生成设备任务")
                 return
               }
             }
           }
-
           processRoute.push(route)
         }
         // 下发开始执行

@@ -350,24 +350,54 @@ export default {
     await this.getModelOperationList();
     this.getList();
   },
+  async activated() {
+    await this.getProductList();
+    await this.getEquipmentModelList();
+    await this.getModelOperationList();
+    this.getList();
+  },
   methods: {
     // 查询产品列表
     getProductList() {
-      listMaterial({ maType: '2' }).then(response => {
-        this.productList = response.rows
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listMaterial({ maType: '2' }).then(response => {
+          this.productList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
       })
     },
     // 查询设备模型列表
     getEquipmentModelList() {
-      listEquipmentModel().then(response => {
-        this.equipmentModelList = response.rows;
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listEquipmentModel().then(response => {
+          this.equipmentModelList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
     // 查询模型操作列表
     getModelOperationList() {
-      listModelOperation().then(response => {
-        this.modelOperationList = response.rows;
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listModelOperation().then(response => {
+          this.modelOperationList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
     /** 查询工艺流程列表 */
     getList() {

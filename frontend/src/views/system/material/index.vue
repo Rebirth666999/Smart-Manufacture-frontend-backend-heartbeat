@@ -215,6 +215,9 @@ export default {
   created() {
     this.getList();
   },
+  activated() {
+    this.getList();
+  },
   methods: {
     /** 查询物料列表 */
     getList() {

@@ -222,6 +222,9 @@ export default {
   created() {
     this.getList();
   },
+  activated() {
+    this.getList();
+  },
   methods: {
     /** 查询仓库列表 */
     getList() {

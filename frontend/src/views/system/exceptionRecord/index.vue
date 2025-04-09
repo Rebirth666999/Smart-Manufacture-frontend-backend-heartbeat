@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="异常源" prop="excCode">
+      <el-form-item label="异常源" prop="exsCode">
         <el-select v-model="queryParams.exsCode" placeholder="请选择异常源" clearable>
           <el-option
            v-for="option in exceptionSourceList"
@@ -105,8 +105,16 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="异常记录ID" align="center" prop="exrId" v-if="true"/>
       <el-table-column label="异常记录编码" align="center" prop="exrCode" />
-      <el-table-column label="异常源" align="center" prop="excCode" />
-      <el-table-column label="异常" align="center" prop="exCode" />
+      <el-table-column label="异常源" align="center" prop="exsCode">
+        <template slot-scope="scope">
+          {{ exceptionSourceList.find(ele => ele.exsCode === scope.row.exsCode).exsName || '' }}
+        </template>
+      </el-table-column>
+      <el-table-column label="异常" align="center" prop="exCode">
+        <template slot-scope="scope">
+          {{ exceptionList.find(ele => ele.exCode === scope.row.exCode).exName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="描述" align="center" prop="exrDesc" />
       <el-table-column label="参数" align="center" prop="exrParam" />
       <el-table-column label="状态" align="center" prop="exrStat">
@@ -119,13 +127,33 @@
           <dict-tag :options="dict.type.ices_exception_record_level" :value="scope.row.exrLevel"/>
         </template>
       </el-table-column>
-      <el-table-column label="异常上报人" align="center" prop="exrUserReport" />
-      <el-table-column label="当前处理人" align="center" prop="exrUserHandle" />
-      <el-table-column label="异常解除人" align="center" prop="exrUserFinish" />
-      <el-table-column label="异常责任人" align="center" prop="exrUserResp" />
+      <el-table-column label="异常上报人" align="center" prop="exrUserReport">
+        <template slot-scope="scope">
+          {{ scope.row.exrUserReport && (userList.find(ele => ele.userId === scope.row.exrUserReport).userName || '') }}
+        </template>
+      </el-table-column>
+      <el-table-column label="当前处理人" align="center" prop="exrUserHandle">
+        <template slot-scope="scope">
+          {{ scope.row.exrUserHandle && (userList.find(ele => ele.userId === scope.row.exrUserHandle).userName || '') }}
+        </template>
+      </el-table-column>
+      <el-table-column label="异常解除人" align="center" prop="exrUserFinish">
+        <template slot-scope="scope">
+          {{ scope.row.exrUserFinish && (userList.find(ele => ele.userId === scope.row.exrUserFinish).userName || '') }}
+        </template>
+      </el-table-column>
+      <el-table-column label="异常责任人" align="center" prop="exrUserResp">
+        <template slot-scope="scope">
+          {{ scope.row.exrUserResp && (userList.find(ele => ele.userId === scope.row.exrUserResp).userName || '') }}
+        </template>
+      </el-table-column>
       <el-table-column label="持续时间" align="center" prop="exrDuration" />
       <el-table-column label="影响因子" align="center" prop="exrImpactFactor" />
-      <el-table-column label="影响等级" align="center" prop="exrImpactLevel" />
+      <el-table-column label="影响等级" align="center" prop="exrImpactLevel">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.ices_exception_record_impact_level" :value="scope.row.exrImpactLevel"/>
+        </template>
+      </el-table-column>
       <!-- <el-table-column label="已删除" align="center" prop="exrDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -159,7 +187,7 @@
     <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="90px">
         <el-col :span="12">
-          <el-form-item label="异常源" prop="excCode">
+          <el-form-item label="异常源" prop="exsCode">
             <el-select v-model="form.exsCode" placeholder="请选择异常源">
               <el-option
                v-for="option in exceptionSourceList"
@@ -218,22 +246,70 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="异常上报人" prop="exrUserReport">
-            <el-input v-model="form.exrUserReport" placeholder="请输入异常上报人" />
+            <el-select
+              v-model="form.exrUserReport"
+              placeholder="请选择异常上报人"
+              clearable
+            >
+              <el-option
+                v-for="item in userList"
+                :key="item.userId"
+                :label="item.userName"
+                :value="item.userId"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="当前处理人" prop="exrUserHandle">
-            <el-input v-model="form.exrUserHandle" placeholder="请输入当前处理人" />
+            <el-select
+              v-model="form.exrUserHandle"
+              placeholder="请选择当前处理人"
+              clearable
+            >
+              <el-option
+                v-for="item in userList"
+                :key="item.userId"
+                :label="item.userName"
+                :value="item.userId"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="异常解除人" prop="exrUserFinish">
-            <el-input v-model="form.exrUserFinish" placeholder="请输入异常解除人" />
+            <el-select
+              v-model="form.exrUserFinish"
+              placeholder="请选择异常解除人"
+              clearable
+            >
+              <el-option
+                v-for="item in userList"
+                :key="item.userId"
+                :label="item.userName"
+                :value="item.userId"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="异常责任人" prop="exrUserResp">
-            <el-input v-model="form.exrUserResp" placeholder="请输入异常责任人" />
+            <el-select
+              v-model="form.exrUserResp"
+              placeholder="请选择异常责任人"
+              clearable
+            >
+              <el-option
+                v-for="item in userList"
+                :key="item.userId"
+                :label="item.userName"
+                :value="item.userId"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -248,7 +324,14 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="影响等级" prop="exrImpactLevel">
-            <el-input v-model="form.exrImpactLevel" placeholder="请输入影响等级" />
+            <el-select v-model="form.exrImpactLevel" placeholder="请选择影响等级">
+              <el-option
+                v-for="dict in dict.type.ices_exception_record_impact_level"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
+              ></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
       </el-form>
@@ -262,12 +345,13 @@
 
 <script>
 import { listExceptionRecord, getExceptionRecord, delExceptionRecord, addExceptionRecord, updateExceptionRecord } from "@/api/system/exceptionRecord";
+import { listUser } from "@/api/system/user";
 import { listException } from "@/api/system/exception";
 import { listExceptionSource } from "@/api/system/exceptionSource";
 
 export default {
   name: "ExceptionRecord",
-  dicts: ['ices_exception_record_status', 'ices_exception_record_level'],
+  dicts: ['ices_exception_record_status', 'ices_exception_record_level', 'ices_exception_record_impact_level'],
   data() {
     return {
       // 按钮loading
@@ -295,7 +379,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         exrCode: undefined,
-        excCode: undefined,
+        exsCode: undefined,
         exCode: undefined,
         exrStat: undefined,
         exrLevel: undefined,
@@ -308,7 +392,7 @@ export default {
         exrId: [
           { required: true, message: "异常记录ID不能为空", trigger: "blur" }
         ],
-        excCode: [
+        exsCode: [
           { required: true, message: "异常源不能为空", trigger: "blur" }
         ],
         exCode: [
@@ -339,20 +423,38 @@ export default {
       // 异常列表
       exceptionList: [],
       // 异常源列表
-      exceptionSourceList: []
+      exceptionSourceList: [],
+      // 用户列表
+      userList: []
     };
   },
   async created() {
+    await this.getUserList();
     await this.getExceptionList();
     await this.getExceptionSourceList();
     this.getList();
   },
   async activated() {
+    await this.getUserList();
     await this.getExceptionList();
     await this.getExceptionSourceList();
     this.getList();
   },
   methods: {
+    // 获取用户列表
+    getUserList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listUser().then(response => {
+          this.userList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     // 获取异常源列表
     getExceptionSourceList() {
       return new Promise((resolve, reject) => {
@@ -400,7 +502,7 @@ export default {
       this.form = {
         exrId: undefined,
         exrCode: undefined,
-        excCode: undefined,
+        exsCode: undefined,
         exCode: undefined,
         exrDesc: undefined,
         exrParam: undefined,

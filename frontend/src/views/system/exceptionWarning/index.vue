@@ -21,9 +21,9 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <!-- <el-form-item label="已删除" prop="exptDelete">
+      <!-- <el-form-item label="已删除" prop="exwDelete">
         <el-input
-          v-model="queryParams.exptDelete"
+          v-model="queryParams.exwDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
@@ -43,7 +43,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:exceptionParamTemplate:add']"
+          v-hasPermi="['system:exceptionWarning:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -54,7 +54,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['system:exceptionParamTemplate:edit']"
+          v-hasPermi="['system:exceptionWarning:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -65,7 +65,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['system:exceptionParamTemplate:remove']"
+          v-hasPermi="['system:exceptionWarning:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -75,16 +75,16 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['system:exceptionParamTemplate:export']"
+          v-hasPermi="['system:exceptionWarning:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="exceptionParamTemplateList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="exceptionWarningList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="参数模板ID" align="center" prop="exptId" v-if="true"/>
-      <el-table-column label="参数模板编码" align="center" prop="exptCode" />
+      <el-table-column label="预警配置ID" align="center" prop="exwId" v-if="true"/>
+      <el-table-column label="预警配置编码" align="center" prop="exwCode" />
       <el-table-column label="异常" align="center" prop="exCode">
         <template slot-scope="scope">
           {{ exceptionList.find(ele => ele.exCode === scope.row.exCode).exName || '' }}
@@ -95,8 +95,25 @@
           {{ exceptionSourceList.find(ele => ele.exsCode === scope.row.exsCode).exsName || '' }}
         </template>
       </el-table-column>
-      <!-- <el-table-column label="已删除" align="center" prop="exptDelete" /> -->
-      <!-- <el-table-column label="描述" align="center" prop="exptDesc" /> -->
+      <el-table-column label="时间表达式" align="center" prop="exwFormula" />
+      <el-table-column label="消息接收人" align="center" prop="exwRecv">
+        <template slot-scope="scope">
+          {{ scope.row.exwRecv && (userList.find(ele => ele.userId === scope.row.exwRecv).userName || '') }}
+        </template>
+      </el-table-column>
+      <el-table-column label="消息通道" align="center" prop="exwTunnel" />
+      <el-table-column label="消息模板" align="center" prop="exwTemplate" />
+      <el-table-column label="是否触发源系统预警" align="center" prop="exwWarningOrgn">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.ices_yn" :value="scope.row.exwWarningOrgn"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="是否触发源系统处理" align="center" prop="exwHandleOrgn">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.ices_yn" :value="scope.row.exwHandleOrgn"/>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column label="已删除" align="center" prop="exwDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -104,20 +121,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:exceptionParamTemplate:edit']"
+            v-hasPermi="['system:exceptionWarning:edit']"
           >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-document"
-            @click="handleMap(scope.row)"
-          >详情</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:exceptionParamTemplate:remove']"
+            v-hasPermi="['system:exceptionWarning:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -131,11 +142,11 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改异常参数模板对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <!-- 添加或修改异常预警配置对话框 -->
+    <el-dialog :title="title" :visible.sync="open" width="550px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
         <el-form-item label="异常" prop="exCode">
-          <el-select v-model="form.exCode" placeholder="请选择异常" clearable>
+          <el-select v-model="form.exCode" placeholder="请选择异常">
             <el-option
              v-for="option in exceptionList"
              :key="option.exCode"
@@ -145,7 +156,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="异常源" prop="exsCode">
-          <el-select v-model="form.exsCode" placeholder="请选择异常源" clearable>
+          <el-select v-model="form.exsCode" placeholder="请选择异常源">
             <el-option
              v-for="option in exceptionSourceList"
              :key="option.exsCode"
@@ -154,8 +165,48 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="描述" prop="exptDesc">
-          <el-input v-model="form.exptDesc" type="textarea" placeholder="请输入内容" />
+        <el-form-item label="时间表达式" prop="exwFormula">
+          <el-input v-model="form.exwFormula" placeholder="请输入时间表达式" />
+        </el-form-item>
+        <el-form-item label="消息接收人" prop="exwRecv">
+          <el-select
+            v-model="form.exwRecv"
+            placeholder="请选择消息接收人"
+          >
+            <el-option
+              v-for="item in userList"
+              :key="item.userId"
+              :label="item.userName"
+              :value="item.userId"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="消息通道" prop="exwTunnel">
+          <el-input v-model="form.exwTunnel" placeholder="请输入消息通道" />
+        </el-form-item>
+        <el-form-item label="消息模板" prop="exwTemplate">
+          <el-input v-model="form.exwTemplate" type="textarea" placeholder="请输入内容" />
+        </el-form-item>
+        <el-form-item label="是否触发源系统预警" prop="exwWarningOrgn">
+          <el-select v-model="form.exwWarningOrgn" placeholder="请选择是否触发源系统预警">
+            <el-option
+              v-for="dict in dict.type.ices_yn"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="是否触发源系统处理" prop="exwHandleOrgn">
+          <el-select v-model="form.exwHandleOrgn" placeholder="请选择是否触发源系统处理">
+            <el-option
+              v-for="dict in dict.type.ices_yn"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -167,12 +218,14 @@
 </template>
 
 <script>
-import { listExceptionParamTemplate, getExceptionParamTemplate, delExceptionParamTemplate, addExceptionParamTemplate, updateExceptionParamTemplate } from "@/api/system/exceptionParamTemplate";
+import { listExceptionWarning, getExceptionWarning, delExceptionWarning, addExceptionWarning, updateExceptionWarning } from "@/api/system/exceptionWarning";
+import { listUser } from "@/api/system/user";
 import { listException } from "@/api/system/exception";
 import { listExceptionSource } from "@/api/system/exceptionSource";
 
 export default {
-  name: "ExceptionParamTemplate",
+  name: "ExceptionWarning",
+  dicts: ['ices_yn'],
   data() {
     return {
       // 按钮loading
@@ -189,8 +242,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 异常参数模板表格数据
-      exceptionParamTemplateList: [],
+      // 异常预警配置表格数据
+      exceptionWarningList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -199,17 +252,19 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        exptCode: undefined,
+        exwCode: undefined,
         exCode: undefined,
         exsCode: undefined,
-        exptDelete: 0,
+        exwWarningOrgn: undefined,
+        exwHandleOrgn: undefined,
+        exwDelete: 0,
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        exptId: [
-          { required: true, message: "参数模板ID不能为空", trigger: "blur" }
+        exwId: [
+          { required: true, message: "预警配置ID不能为空", trigger: "blur" }
         ],
         exCode: [
           { required: true, message: "异常不能为空", trigger: "blur" }
@@ -217,24 +272,60 @@ export default {
         exsCode: [
           { required: true, message: "异常源不能为空", trigger: "blur" }
         ],
+        exwFormula: [
+          { required: true, message: "时间表达式不能为空", trigger: "blur" }
+        ],
+        exwRecv: [
+          { required: true, message: "消息接收人不能为空", trigger: "blur" }
+        ],
+        exwTunnel: [
+          { required: true, message: "消息通道不能为空", trigger: "blur" }
+        ],
+        exwTemplate: [
+          { required: true, message: "消息模板不能为空", trigger: "blur" }
+        ],
+        exwWarningOrgn: [
+          { required: true, message: "是否触发源系统预警不能为空", trigger: "change" }
+        ],
+        exwHandleOrgn: [
+          { required: true, message: "是否触发源系统处理不能为空", trigger: "change" }
+        ],
       },
       // 异常列表
       exceptionList: [],
       // 异常源列表
-      exceptionSourceList: []
+      exceptionSourceList: [],
+      // 用户列表
+      userList: []
     };
   },
   async created() {
+    await this.getUserList();
     await this.getExceptionList();
     await this.getExceptionSourceList();
     this.getList();
   },
   async activated() {
+    await this.getUserList();
     await this.getExceptionList();
     await this.getExceptionSourceList();
     this.getList();
   },
   methods: {
+    // 获取用户列表
+    getUserList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listUser().then(response => {
+          this.userList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     // 获取异常源列表
     getExceptionSourceList() {
       return new Promise((resolve, reject) => {
@@ -263,11 +354,11 @@ export default {
         })
       })
     },
-    /** 查询异常参数模板列表 */
+    /** 查询异常预警配置列表 */
     getList() {
       this.loading = true;
-      listExceptionParamTemplate(this.queryParams).then(response => {
-        this.exceptionParamTemplateList = response.rows;
+      listExceptionWarning(this.queryParams).then(response => {
+        this.exceptionWarningList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -280,12 +371,17 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        exptId: undefined,
-        exptCode: undefined,
+        exwId: undefined,
+        exwCode: undefined,
         exCode: undefined,
         exsCode: undefined,
-        exptDelete: undefined,
-        exptDesc: undefined,
+        exwFormula: undefined,
+        exwRecv: undefined,
+        exwTunnel: undefined,
+        exwTemplate: undefined,
+        exwWarningOrgn: undefined,
+        exwHandleOrgn: undefined,
+        exwDelete: undefined,
         createBy: undefined,
         createTime: undefined,
         updateBy: undefined,
@@ -305,7 +401,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.exptId)
+      this.ids = selection.map(item => item.exwId)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -313,18 +409,18 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加异常参数模板";
+      this.title = "添加异常预警配置";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.loading = true;
       this.reset();
-      const exptId = row.exptId || this.ids
-      getExceptionParamTemplate(exptId).then(response => {
+      const exwId = row.exwId || this.ids
+      getExceptionWarning(exwId).then(response => {
         this.loading = false;
         this.form = response.data;
         this.open = true;
-        this.title = "修改异常参数模板";
+        this.title = "修改异常预警配置";
       });
     },
     /** 提交按钮 */
@@ -332,8 +428,8 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           this.buttonLoading = true;
-          if (this.form.exptId != null) {
-            updateExceptionParamTemplate(this.form).then(response => {
+          if (this.form.exwId != null) {
+            updateExceptionWarning(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
@@ -341,7 +437,7 @@ export default {
               this.buttonLoading = false;
             });
           } else {
-            addExceptionParamTemplate(this.form).then(response => {
+            addExceptionWarning(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -354,10 +450,10 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const exptIds = row.exptId || this.ids;
-      this.$modal.confirm('是否确认删除异常参数模板编号为"' + exptIds + '"的数据项？').then(() => {
+      const exwIds = row.exwId || this.ids;
+      this.$modal.confirm('是否确认删除异常预警配置编号为"' + exwIds + '"的数据项？').then(() => {
         this.loading = true;
-        return delExceptionParamTemplate(exptIds);
+        return delExceptionWarning(exwIds);
       }).then(() => {
         this.loading = false;
         this.getList();
@@ -369,13 +465,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('system/exceptionParamTemplate/export', {
+      this.download('system/exceptionWarning/export', {
         ...this.queryParams
-      }, `exceptionParamTemplate_${new Date().getTime()}.xlsx`)
-    },
-    // 查看模板条目
-    handleMap(row) {
-      this.$router.push(`/exception/exceptionParamMap?exptCode=${row.exptCode}`)
+      }, `exceptionWarning_${new Date().getTime()}.xlsx`)
     }
   }
 };

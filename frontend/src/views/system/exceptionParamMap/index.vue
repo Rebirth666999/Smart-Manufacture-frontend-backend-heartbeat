@@ -1,8 +1,19 @@
 <template>
   <div class="app-container">
+    <!-- 顶部提示 -->
+    <el-alert
+      v-show="hint.length > 0"
+      :title="`正在根据${hint}筛选`"
+      type="info"
+      show-icon
+      :closable="false"
+      class="mb8"
+    >
+    </el-alert>
+
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="110px">
       <el-form-item label="异常参数模板" prop="exptCode">
-        <el-select v-model="queryParams.exptCode" placeholder="请选择异常参数模板" clearable>
+        <el-select v-model="queryParams.exptCode" placeholder="请选择异常参数模板" :disabled="mode === 1" clearable>
           <el-option
            v-for="option in exceptionParamTemplateList"
            :key="option.exptCode"
@@ -136,7 +147,7 @@
     <el-dialog :title="title" :visible.sync="open" width="520px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="异常参数模板" prop="exptCode">
-          <el-select v-model="form.exptCode" placeholder="请选择异常参数模板">
+          <el-select v-model="form.exptCode" placeholder="请选择异常参数模板" :disabled="mode === 1">
             <el-option
              v-for="option in exceptionParamTemplateList"
              :key="option.exptCode"
@@ -247,15 +258,27 @@ export default {
       // 异常参数模板列表
       exceptionParamTemplateList: [],
       // 异常参数列表
-      exceptionParamList: []
+      exceptionParamList: [],
+      // 1-按模板查看
+      mode: 0,
+      // 页面顶部提示
+      hint: ''
     };
   },
   async created() {
+    if (this.$route.query.exptCode) {
+      this.mode = 1
+    }
     await this.getExceptionParamTemplateList();
     await this.getExceptionParamList();
     this.getList();
   },
   async activated() {
+    if (this.$route.query.exptCode) {
+      this.mode = 1
+    } else {
+      this.mode = 0
+    }
     await this.getExceptionParamTemplateList();
     await this.getExceptionParamList();
     this.getList();
@@ -281,6 +304,15 @@ export default {
         this.loading = true;
         listExceptionParamTemplate().then(response => {
           this.exceptionParamTemplateList = response.rows
+          if (this.mode === 1) {
+            let expt = response.rows.find(ele => ele.exptCode === this.$route.query.exptCode)
+            // 构造提示文本
+            this.hint = "异常参数模板 "
+            this.hint += expt.exptCode
+            this.hint += " "
+            // 设置筛选
+            this.queryParams.exptCode = expt.exptCode
+          }
           resolve()
         }).catch(() => {
           reject()
@@ -332,6 +364,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams.exptCode = this.$route.query.exptCode
       this.handleQuery();
     },
     // 多选框选中数据
@@ -343,6 +376,9 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      if (this.mode === 1) {
+        this.form.exptCode = this.$route.query.exptCode
+      }
       this.open = true;
       this.title = "添加异常参数模板条目";
     },

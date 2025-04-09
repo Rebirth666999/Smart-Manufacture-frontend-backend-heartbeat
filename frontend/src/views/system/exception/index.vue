@@ -103,6 +103,18 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-document"
+            @click="handleParam(scope.row)"
+          >异常参数</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-s-help"
+            @click="handleLifecycle(scope.row)"
+          >生命周期</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:exception:remove']"
@@ -337,6 +349,14 @@ export default {
       this.download('system/exception/export', {
         ...this.queryParams
       }, `exception_${new Date().getTime()}.xlsx`)
+    },
+    // 查看异常参数
+    handleParam(row) {
+      this.$router.push(`/exception/exceptionParam?exCode=${row.exCode}`)
+    },
+    // 查看生命周期
+    handleLifecycle(row) {
+      this.$router.push(`/exception/exceptionLifecycle?exCode=${row.exCode}`)
     }
   }
 };

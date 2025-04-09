@@ -105,7 +105,7 @@ public class IcesExceptionRecordVo {
      * 影响因子
      */
     @ExcelProperty(value = "影响因子")
-    private Long exrImpactFactor;
+    private Float exrImpactFactor;
 
     /**
      * 影响等级

@@ -127,10 +127,26 @@
           <dict-tag :options="dict.type.ices_exception_record_level" :value="scope.row.exrLevel"/>
         </template>
       </el-table-column>
-      <el-table-column label="异常上报人" align="center" prop="exrUserReport" />
-      <el-table-column label="当前处理人" align="center" prop="exrUserHandle" />
-      <el-table-column label="异常解除人" align="center" prop="exrUserFinish" />
-      <el-table-column label="异常责任人" align="center" prop="exrUserResp" />
+      <el-table-column label="异常上报人" align="center" prop="exrUserReport">
+        <template slot-scope="scope">
+          {{ scope.row.exrUserReport && (userList.find(ele => ele.userId === scope.row.exrUserReport).userName || '') }}
+        </template>
+      </el-table-column>
+      <el-table-column label="当前处理人" align="center" prop="exrUserHandle">
+        <template slot-scope="scope">
+          {{ scope.row.exrUserHandle && (userList.find(ele => ele.userId === scope.row.exrUserHandle).userName || '') }}
+        </template>
+      </el-table-column>
+      <el-table-column label="异常解除人" align="center" prop="exrUserFinish">
+        <template slot-scope="scope">
+          {{ scope.row.exrUserFinish && (userList.find(ele => ele.userId === scope.row.exrUserFinish).userName || '') }}
+        </template>
+      </el-table-column>
+      <el-table-column label="异常责任人" align="center" prop="exrUserResp">
+        <template slot-scope="scope">
+          {{ scope.row.exrUserResp && (userList.find(ele => ele.userId === scope.row.exrUserResp).userName || '') }}
+        </template>
+      </el-table-column>
       <el-table-column label="持续时间" align="center" prop="exrDuration" />
       <el-table-column label="影响因子" align="center" prop="exrImpactFactor" />
       <el-table-column label="影响等级" align="center" prop="exrImpactLevel">

@@ -96,7 +96,11 @@
         </template>
       </el-table-column>
       <el-table-column label="时间表达式" align="center" prop="exwFormula" />
-      <el-table-column label="消息接收人" align="center" prop="exwRecv" />
+      <el-table-column label="消息接收人" align="center" prop="exwRecv">
+        <template slot-scope="scope">
+          {{ scope.row.exwRecv && (userList.find(ele => ele.userId === scope.row.exwRecv).userName || '') }}
+        </template>
+      </el-table-column>
       <el-table-column label="消息通道" align="center" prop="exwTunnel" />
       <el-table-column label="消息模板" align="center" prop="exwTemplate" />
       <el-table-column label="是否触发源系统预警" align="center" prop="exwWarningOrgn">

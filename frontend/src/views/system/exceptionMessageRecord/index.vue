@@ -97,7 +97,11 @@
       <el-table-column label="消息记录编码" align="center" prop="exmrCode" />
       <el-table-column label="预警配置" align="center" prop="exwCode" />
       <el-table-column label="预警记录" align="center" prop="exwrCode" />
-      <el-table-column label="消息接收人" align="center" prop="exmrRecv" />
+      <el-table-column label="消息接收人" align="center" prop="exmrRecv">
+        <template slot-scope="scope">
+          {{ scope.row.exmrRecv && (userList.find(ele => ele.userId === scope.row.exmrRecv).userName || '') }}
+        </template>
+      </el-table-column>
       <el-table-column label="内容描述" align="center" prop="exmrDesc" />
       <el-table-column label="消息发送时间" align="center" prop="exmrTime" />
       <el-table-column label="消息发送结果" align="center" prop="exmrResult">

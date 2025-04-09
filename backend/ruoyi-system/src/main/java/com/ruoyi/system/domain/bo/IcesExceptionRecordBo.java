@@ -98,7 +98,7 @@ public class IcesExceptionRecordBo extends BaseEntity {
      * 影响因子
      */
     @NotNull(message = "影响因子不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long exrImpactFactor;
+    private Float exrImpactFactor;
 
     /**
      * 影响等级

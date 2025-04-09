@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="异常源" prop="excCode">
+      <el-form-item label="异常源" prop="exsCode">
         <el-select v-model="queryParams.exsCode" placeholder="请选择异常源" clearable>
           <el-option
            v-for="option in exceptionSourceList"
@@ -171,7 +171,7 @@
     <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="90px">
         <el-col :span="12">
-          <el-form-item label="异常源" prop="excCode">
+          <el-form-item label="异常源" prop="exsCode">
             <el-select v-model="form.exsCode" placeholder="请选择异常源">
               <el-option
                v-for="option in exceptionSourceList"
@@ -363,7 +363,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         exrCode: undefined,
-        excCode: undefined,
+        exsCode: undefined,
         exCode: undefined,
         exrStat: undefined,
         exrLevel: undefined,
@@ -376,7 +376,7 @@ export default {
         exrId: [
           { required: true, message: "异常记录ID不能为空", trigger: "blur" }
         ],
-        excCode: [
+        exsCode: [
           { required: true, message: "异常源不能为空", trigger: "blur" }
         ],
         exCode: [
@@ -486,7 +486,7 @@ export default {
       this.form = {
         exrId: undefined,
         exrCode: undefined,
-        excCode: undefined,
+        exsCode: undefined,
         exCode: undefined,
         exrDesc: undefined,
         exrParam: undefined,

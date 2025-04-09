@@ -2,20 +2,24 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="异常源" prop="excCode">
-        <el-input
-          v-model="queryParams.excCode"
-          placeholder="请输入异常源"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.exsCode" placeholder="请选择异常源" clearable>
+          <el-option
+           v-for="option in exceptionSourceList"
+           :key="option.exsCode"
+           :label="option.exsName"
+           :value="option.exsCode">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="异常" prop="exCode">
-        <el-input
-          v-model="queryParams.exCode"
-          placeholder="请输入异常"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.exCode" placeholder="请选择异常" clearable>
+          <el-option
+           v-for="option in exceptionList"
+           :key="option.exCode"
+           :label="option.exName"
+           :value="option.exCode">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="状态" prop="exrStat">
         <el-select v-model="queryParams.exrStat" placeholder="请选择状态" clearable>
@@ -156,12 +160,26 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="90px">
         <el-col :span="12">
           <el-form-item label="异常源" prop="excCode">
-            <el-input v-model="form.excCode" placeholder="请输入异常源" />
+            <el-select v-model="form.exsCode" placeholder="请选择异常源">
+              <el-option
+               v-for="option in exceptionSourceList"
+               :key="option.exsCode"
+               :label="option.exsName"
+               :value="option.exsCode">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="异常" prop="exCode">
-            <el-input v-model="form.exCode" placeholder="请输入异常" />
+            <el-select v-model="form.exCode" placeholder="请选择异常">
+              <el-option
+               v-for="option in exceptionList"
+               :key="option.exCode"
+               :label="option.exName"
+               :value="option.exCode">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -244,6 +262,8 @@
 
 <script>
 import { listExceptionRecord, getExceptionRecord, delExceptionRecord, addExceptionRecord, updateExceptionRecord } from "@/api/system/exceptionRecord";
+import { listException } from "@/api/system/exception";
+import { listExceptionSource } from "@/api/system/exceptionSource";
 
 export default {
   name: "ExceptionRecord",
@@ -315,13 +335,52 @@ export default {
         exrImpactLevel: [
           { required: true, message: "影响等级不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 异常列表
+      exceptionList: [],
+      // 异常源列表
+      exceptionSourceList: []
     };
   },
-  created() {
+  async created() {
+    await this.getExceptionList();
+    await this.getExceptionSourceList();
+    this.getList();
+  },
+  async activated() {
+    await this.getExceptionList();
+    await this.getExceptionSourceList();
     this.getList();
   },
   methods: {
+    // 获取异常源列表
+    getExceptionSourceList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listExceptionSource().then(response => {
+          this.exceptionSourceList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
+    // 获取异常列表
+    getExceptionList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listException().then(response => {
+          this.exceptionList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     /** 查询异常记录列表 */
     getList() {
       this.loading = true;

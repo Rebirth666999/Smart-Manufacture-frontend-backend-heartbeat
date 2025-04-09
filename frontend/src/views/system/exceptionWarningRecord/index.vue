@@ -221,7 +221,7 @@ export default {
     this.getList();
   },
   methods: {
-    // 获取用户列表
+    // 获取预警配置列表
     getexceptionWarningList() {
       return new Promise((resolve, reject) => {
         this.loading = true;

@@ -2,20 +2,24 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="预警配置" prop="exwCode">
-        <el-input
-          v-model="queryParams.exwCode"
-          placeholder="请输入预警配置"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.exwCode" placeholder="请选择预警配置" clearable>
+          <el-option
+           v-for="option in exceptionWarningList"
+           :key="option.exwCode"
+           :label="option.exwCode"
+           :value="option.exwCode">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="预警记录" prop="exwrCode">
-        <el-input
-          v-model="queryParams.exwrCode"
-          placeholder="请输入预警记录"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.exwrCode" placeholder="请选择预警记录" clearable>
+          <el-option
+           v-for="option in exceptionWarningRecordList"
+           :key="option.exwrCode"
+           :label="option.exwrCode"
+           :value="option.exwrCode">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="发送结果" prop="exmrResult">
         <el-select v-model="queryParams.exmrResult" placeholder="请选择消息发送结果" clearable>
@@ -134,13 +138,38 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="预警配置" prop="exwCode">
-          <el-input v-model="form.exwCode" placeholder="请输入预警配置" disabled/>
+          <el-select v-model="form.exwCode" placeholder="请选择预警配置" disabled>
+            <el-option
+             v-for="option in exceptionWarningList"
+             :key="option.exwCode"
+             :label="option.exwCode"
+             :value="option.exwCode">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="预警记录" prop="exwrCode">
-          <el-input v-model="form.exwrCode" placeholder="请输入预警记录" />
+          <el-select v-model="form.exwrCode" placeholder="请选择预警记录" @change="handleSelectExwr" >
+            <el-option
+             v-for="option in exceptionWarningRecordList"
+             :key="option.exwrCode"
+             :label="option.exwrCode"
+             :value="option.exwrCode">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="消息接收人" prop="exmrRecv">
-          <el-input v-model="form.exmrRecv" placeholder="请输入消息接收人" />
+          <el-select
+            v-model="form.exmrRecv"
+            placeholder="请选择消息接收人"
+          >
+            <el-option
+              v-for="item in userList"
+              :key="item.userId"
+              :label="item.userName"
+              :value="item.userId"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="内容描述" prop="exmrDesc">
           <el-input v-model="form.exmrDesc" type="textarea" placeholder="请输入内容" />
@@ -169,6 +198,9 @@
 
 <script>
 import { listExceptionMessageRecord, getExceptionMessageRecord, delExceptionMessageRecord, addExceptionMessageRecord, updateExceptionMessageRecord } from "@/api/system/exceptionMessageRecord";
+import { listExceptionWarning } from "@/api/system/exceptionWarning";
+import { listExceptionWarningRecord } from "@/api/system/exceptionWarningRecord";
+import { listUser } from "@/api/system/user";
 
 export default {
   name: "ExceptionMessageRecord",
@@ -230,13 +262,70 @@ export default {
         exmrResult: [
           { required: true, message: "消息发送结果不能为空", trigger: "change" }
         ],
-      }
+      },
+      // 预警配置列表
+      exceptionWarningList: [],
+      // 异常预警记录列表
+      exceptionWarningRecordList: [],
+      // 用户列表
+      userList: []
     };
   },
-  created() {
+  async created() {
+    await this.getUserList();
+    await this.getexceptionWarningList();
+    await this.getexceptionWarningRecordList();
+    this.getList();
+  },
+  async activated() {
+    await this.getUserList();
+    await this.getexceptionWarningList();
+    await this.getexceptionWarningRecordList();
     this.getList();
   },
   methods: {
+    // 获取用户列表
+    getUserList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listUser().then(response => {
+          this.userList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
+    // 获取异常预警记录列表
+    getexceptionWarningRecordList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listExceptionWarningRecord().then(response => {
+          this.exceptionWarningRecordList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
+    // 获取预警配置列表
+    getexceptionWarningList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listExceptionWarning().then(response => {
+          this.exceptionWarningList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     /** 查询异常消息记录列表 */
     getList() {
       this.loading = true;
@@ -349,6 +438,14 @@ export default {
       this.download('system/exceptionMessageRecord/export', {
         ...this.queryParams
       }, `exceptionMessageRecord_${new Date().getTime()}.xlsx`)
+    },
+    // 监听选中的预警记录变化
+    handleSelectExwr(event) {
+      let exwr = this.exceptionWarningRecordList.find(ele => ele.exwrCode === event)
+      if (exwr) {
+        // 自动填入预警配置
+        this.form.exwCode = exwr.exwCode
+      }
     }
   }
 };

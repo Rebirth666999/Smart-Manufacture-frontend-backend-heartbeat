@@ -1,15 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="处理日志编码" prop="exrlCode">
-        <el-input
-          v-model="queryParams.exrlCode"
-          placeholder="请输入处理日志编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="所属异常记录" prop="exrCode">
+      <el-form-item label="异常记录" prop="exrCode">
         <el-input
           v-model="queryParams.exrCode"
           placeholder="请输入所属异常记录"
@@ -17,14 +9,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="已删除" prop="exrlDelete">
+      <!-- <el-form-item label="已删除" prop="exrlDelete">
         <el-input
           v-model="queryParams.exrlDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -85,7 +77,7 @@
       <el-table-column label="处理人" align="center" prop="exrlUserHandle" />
       <el-table-column label="处理时间" align="center" prop="exrlTime" />
       <el-table-column label="处理意见" align="center" prop="exrlResult" />
-      <el-table-column label="已删除" align="center" prop="exrlDelete" />
+      <!-- <el-table-column label="已删除" align="center" prop="exrlDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -117,7 +109,7 @@
     <!-- 添加或修改异常处理日志对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="所属异常记录" prop="exrCode">
+        <el-form-item label="异常记录" prop="exrCode">
           <el-input v-model="form.exrCode" placeholder="请输入所属异常记录" />
         </el-form-item>
         <el-form-item label="处理人" prop="exrlUserHandle">
@@ -171,7 +163,7 @@ export default {
         pageSize: 10,
         exrlCode: undefined,
         exrCode: undefined,
-        exrlDelete: undefined,
+        exrlDelete: 0,
       },
       // 表单参数
       form: {},
@@ -313,3 +305,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

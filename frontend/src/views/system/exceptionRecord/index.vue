@@ -105,8 +105,16 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="异常记录ID" align="center" prop="exrId" v-if="true"/>
       <el-table-column label="异常记录编码" align="center" prop="exrCode" />
-      <el-table-column label="异常源" align="center" prop="excCode" />
-      <el-table-column label="异常" align="center" prop="exCode" />
+      <el-table-column label="异常源" align="center" prop="exsCode">
+        <template slot-scope="scope">
+          {{ exceptionSourceList.find(ele => ele.exsCode === scope.row.exsCode).exsName || '' }}
+        </template>
+      </el-table-column>
+      <el-table-column label="异常" align="center" prop="exCode">
+        <template slot-scope="scope">
+          {{ exceptionList.find(ele => ele.exCode === scope.row.exCode).exName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="描述" align="center" prop="exrDesc" />
       <el-table-column label="参数" align="center" prop="exrParam" />
       <el-table-column label="状态" align="center" prop="exrStat">

@@ -75,7 +75,7 @@ public class IcesExceptionWarningRecordServiceImpl implements IIcesExceptionWarn
      */
     @Override
     public Boolean insertByBo(IcesExceptionWarningRecordBo bo) {
-        bo.setExwCode(codeService.insertByType("ExceptionWarningRecord"));
+        bo.setExwrCode(codeService.insertByType("ExceptionWarningRecord"));
         IcesExceptionWarningRecord add = BeanUtil.toBean(bo, IcesExceptionWarningRecord.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

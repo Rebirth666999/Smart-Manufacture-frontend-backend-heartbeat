@@ -2,12 +2,14 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="预警配置" prop="exwCode">
-        <el-input
-          v-model="queryParams.exwCode"
-          placeholder="请输入预警配置"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.exwCode" placeholder="请选择预警配置" clearable>
+          <el-option
+           v-for="option in exceptionWarningList"
+           :key="option.exwCode"
+           :label="option.exwCode"
+           :value="option.exwCode">
+          </el-option>
+        </el-select>
       </el-form-item>
       <!-- <el-form-item label="已删除" prop="exwrDelete">
         <el-input
@@ -114,7 +116,14 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="预警配置" prop="exwCode">
-          <el-input v-model="form.exwCode" placeholder="请输入预警配置" />
+          <el-select v-model="form.exwCode" placeholder="请选择预警配置">
+            <el-option
+             v-for="option in exceptionWarningList"
+             :key="option.exwCode"
+             :label="option.exwCode"
+             :value="option.exwCode">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="检查时间" prop="exwrTime">
           <el-input v-model="form.exwrTime" placeholder="请输入检查时间" />
@@ -143,6 +152,7 @@
 
 <script>
 import { listExceptionWarningRecord, getExceptionWarningRecord, delExceptionWarningRecord, addExceptionWarningRecord, updateExceptionWarningRecord } from "@/api/system/exceptionWarningRecord";
+import { listExceptionWarning } from "@/api/system/exceptionWarning";
 
 export default {
   name: "ExceptionWarningRecord",
@@ -197,13 +207,34 @@ export default {
         exwrWarning: [
           { required: true, message: "是否产生预警不能为空", trigger: "change" }
         ],
-      }
+      },
+      // 预警配置列表
+      exceptionWarningList: []
     };
   },
-  created() {
+  async created() {
+    await this.getexceptionWarningList();
+    this.getList();
+  },
+  async activated() {
+    await this.getexceptionWarningList();
     this.getList();
   },
   methods: {
+    // 获取用户列表
+    getexceptionWarningList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listExceptionWarning().then(response => {
+          this.exceptionWarningList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     /** 查询异常预警记录列表 */
     getList() {
       this.loading = true;

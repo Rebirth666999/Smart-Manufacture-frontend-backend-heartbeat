@@ -2,12 +2,14 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="异常记录" prop="exrCode">
-        <el-input
-          v-model="queryParams.exrCode"
-          placeholder="请输入所属异常记录"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.exrCode" placeholder="请选择所属异常记录" clearable>
+          <el-option
+           v-for="option in exceptionRecordList"
+           :key="option.exrCode"
+           :label="option.exrCode"
+           :value="option.exrCode">
+          </el-option>
+        </el-select>
       </el-form-item>
       <!-- <el-form-item label="已删除" prop="exrlDelete">
         <el-input
@@ -110,10 +112,29 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="异常记录" prop="exrCode">
-          <el-input v-model="form.exrCode" placeholder="请输入所属异常记录" />
+          <el-select v-model="form.exrCode" placeholder="请选择所属异常记录">
+            <el-option
+             v-for="option in exceptionRecordList"
+             :key="option.exrCode"
+             :label="option.exrCode"
+             :value="option.exrCode">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="处理人" prop="exrlUserHandle">
-          <el-input v-model="form.exrlUserHandle" placeholder="请输入处理人" />
+          <el-select
+              v-model="form.exrlUserHandle"
+              placeholder="请选择处理人"
+              clearable
+            >
+              <el-option
+                v-for="item in userList"
+                :key="item.userId"
+                :label="item.userName"
+                :value="item.userId"
+              >
+              </el-option>
+            </el-select>
         </el-form-item>
         <el-form-item label="处理时间" prop="exrlTime">
           <el-input v-model="form.exrlTime" placeholder="请输入处理时间" />
@@ -131,7 +152,8 @@
 </template>
 
 <script>
-import { listExceptionRecordLog, getExceptionRecordLog, delExceptionRecordLog, addExceptionRecordLog, updateExceptionRecordLog } from "@/api/system/exceptionRecordLog";
+import { listExceptionRecordLog, getExceptionRecordLog, delExceptionRecordLog, addExceptionRecordLog, updateExceptionRecordLog } from "@/api/system/exceptionRecordLog";import { listExceptionRecord } from "@/api/system/exceptionRecord";
+import { listUser } from "@/api/system/user";
 
 export default {
   name: "ExceptionRecordLog",
@@ -184,13 +206,52 @@ export default {
         exrlResult: [
           { required: true, message: "处理意见不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 异常记录列表
+      exceptionRecordList: [],
+      // 用户列表
+      userList: []
     };
   },
-  created() {
+  async created() {
+    await this.getUserList();
+    await this.getExceptionRecordList();
+    this.getList();
+  },
+  async activated() {
+    await this.getUserList();
+    await this.getExceptionRecordList();
     this.getList();
   },
   methods: {
+    // 获取用户列表
+    getUserList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listUser().then(response => {
+          this.userList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
+    // 获取异常记录列表
+    getExceptionRecordList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listExceptionRecord().then(response => {
+          this.exceptionRecordList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     /** 查询异常处理日志列表 */
     getList() {
       this.loading = true;

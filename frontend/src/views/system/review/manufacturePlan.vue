@@ -312,7 +312,9 @@ export default {
         this.loading = true;
         getManufacturePlan(row.mpId).then(response => {
           this.form = response.data;
-          if (this.form.mpStat === '3' || this.form.mpStat === '8' || this.form.mpStat === 'b') this.form.mpStat = '4';
+          if (this.form.mpStat === '3') this.form.mpStat = '4';
+          else if (this.form.mpStat === '8') this.form.mpStat = '6';
+          else this.form.mpStat = '9';
           updateManufacturePlan(this.form).then(response => {
             this.$modal.msgSuccess("已通过审核");
             this.getList();
@@ -330,7 +332,8 @@ export default {
         this.loading = true;
         getManufacturePlan(row.mpId).then(response => {
           this.form = response.data;
-          if (this.form.mpStat === '3' || this.form.mpStat === '8' || this.form.mpStat === 'b' ) this.form.mpStat = '1';
+          if (this.form.mpStat === '3') this.form.mpStat = '1';
+          else if (this.form.mpStat === '8' || this.form.mpStat === 'b') this.form.mpStat = '4';
           updateManufacturePlan(this.form).then(response => {
             this.$modal.msgSuccess("已驳回审核");
             this.getList();

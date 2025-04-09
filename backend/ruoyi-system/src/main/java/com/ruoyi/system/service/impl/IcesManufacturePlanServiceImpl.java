@@ -65,6 +65,8 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
         stats.add("3");  // 审核中
         stats.add("a");  // 待审核（弃用）
         stats.add("b");  // 审核中（弃用）
+        stats.add("7");  // 待审核（修改）
+        stats.add("8");  // 待审核（修改）
         lqw.in(IcesManufacturePlan::getMpStat, stats);
         Page<IcesManufacturePlanVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
         return TableDataInfo.build(result);

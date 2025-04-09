@@ -167,6 +167,12 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-document"
+            @click="handleRecordLog(scope.row)"
+          >处理日志</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:exceptionRecord:remove']"
@@ -602,6 +608,10 @@ export default {
       this.download('system/exceptionRecord/export', {
         ...this.queryParams
       }, `exceptionRecord_${new Date().getTime()}.xlsx`)
+    },
+    // 查看处理日志
+    handleRecordLog(row) {
+      this.$router.push(`/exception/exceptionRecordLog?exrCode=${row.exrCode}`)
     }
   }
 };

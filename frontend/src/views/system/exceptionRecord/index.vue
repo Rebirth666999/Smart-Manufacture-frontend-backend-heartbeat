@@ -125,7 +125,11 @@
       <el-table-column label="异常责任人" align="center" prop="exrUserResp" />
       <el-table-column label="持续时间" align="center" prop="exrDuration" />
       <el-table-column label="影响因子" align="center" prop="exrImpactFactor" />
-      <el-table-column label="影响等级" align="center" prop="exrImpactLevel" />
+      <el-table-column label="影响等级" align="center" prop="exrImpactLevel">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.ices_exception_record_impact_level" :value="scope.row.exrImpactLevel"/>
+        </template>
+      </el-table-column>
       <!-- <el-table-column label="已删除" align="center" prop="exrDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -248,7 +252,14 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="影响等级" prop="exrImpactLevel">
-            <el-input v-model="form.exrImpactLevel" placeholder="请输入影响等级" />
+            <el-select v-model="form.exrImpactLevel" placeholder="请选择影响等级">
+              <el-option
+                v-for="dict in dict.type.ices_exception_record_impact_level"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
+              ></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
       </el-form>
@@ -267,7 +278,7 @@ import { listExceptionSource } from "@/api/system/exceptionSource";
 
 export default {
   name: "ExceptionRecord",
-  dicts: ['ices_exception_record_status', 'ices_exception_record_level'],
+  dicts: ['ices_exception_record_status', 'ices_exception_record_level', 'ices_exception_record_impact_level'],
   data() {
     return {
       // 按钮loading

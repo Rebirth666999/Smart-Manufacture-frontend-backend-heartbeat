@@ -1,8 +1,19 @@
 <template>
   <div class="app-container">
+    <!-- 顶部提示 -->
+    <el-alert
+      v-show="hint.length > 0"
+      :title="`正在根据${hint}筛选异常参数`"
+      type="info"
+      show-icon
+      :closable="false"
+      class="mb8"
+    >
+    </el-alert>
+
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="所属异常" prop="exCode">
-        <el-select v-model="queryParams.exCode" placeholder="请选择所属异常" clearable>
+        <el-select v-model="queryParams.exCode" placeholder="请选择所属异常" :disabled="mode === 1" clearable>
          <el-option
           v-for="option in exceptionList"
           :key="option.exCode"
@@ -137,7 +148,7 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="所属异常" prop="exCode">
-          <el-select v-model="form.exCode" placeholder="请选择异常" clearable>
+          <el-select v-model="form.exCode" placeholder="请选择异常" :disabled="mode === 1" clearable>
             <el-option
              v-for="option in exceptionList"
              :key="option.exCode"
@@ -228,14 +239,26 @@ export default {
         ],
       },
       // 异常列表
-      exceptionList: []
+      exceptionList: [],
+      // 1-按照异常筛选参数
+      mode: 0,
+      // 页面顶部提示
+      hint: ''
     };
   },
   async created() {
+    if (this.$route.query.exCode) {
+      this.mode = 1
+    }
     await this.getExceptionList();
     this.getList();
   },
   async activated() {
+    if (this.$route.query.exCode) {
+      this.mode = 1
+    } else {
+      this.mode = 0
+    }
     await this.getExceptionList();
     this.getList();
   },
@@ -246,6 +269,15 @@ export default {
         this.loading = true;
         listException().then(response => {
           this.exceptionList = response.rows
+          if (this.mode === 1) {
+            let exception = response.rows.find(ele => ele.exCode === this.$route.query.exCode)
+            // 构造提示文本
+            this.hint = "异常 "
+            this.hint += exception.exName
+            this.hint += " "
+            // 设置筛选
+            this.queryParams.exCode = exception.exCode
+          }
           resolve()
         }).catch(() => {
           reject()
@@ -292,6 +324,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams.exCode = this.$route.query.exCode
       this.handleQuery();
     },
     // 多选框选中数据
@@ -303,6 +336,9 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      if (this.mode === 1) {
+        this.form.exCode = this.$route.query.exCode
+      }
       this.open = true;
       this.title = "添加异常参数";
     },

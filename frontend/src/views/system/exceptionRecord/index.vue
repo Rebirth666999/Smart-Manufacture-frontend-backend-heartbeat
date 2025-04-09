@@ -230,22 +230,70 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="异常上报人" prop="exrUserReport">
-            <el-input v-model="form.exrUserReport" placeholder="请输入异常上报人" />
+            <el-select
+              v-model="form.exrUserReport"
+              placeholder="请选择异常上报人"
+              clearable
+            >
+              <el-option
+                v-for="item in userList"
+                :key="item.userId"
+                :label="item.userName"
+                :value="item.userId"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="当前处理人" prop="exrUserHandle">
-            <el-input v-model="form.exrUserHandle" placeholder="请输入当前处理人" />
+            <el-select
+              v-model="form.exrUserHandle"
+              placeholder="请选择当前处理人"
+              clearable
+            >
+              <el-option
+                v-for="item in userList"
+                :key="item.userId"
+                :label="item.userName"
+                :value="item.userId"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="异常解除人" prop="exrUserFinish">
-            <el-input v-model="form.exrUserFinish" placeholder="请输入异常解除人" />
+            <el-select
+              v-model="form.exrUserFinish"
+              placeholder="请选择异常解除人"
+              clearable
+            >
+              <el-option
+                v-for="item in userList"
+                :key="item.userId"
+                :label="item.userName"
+                :value="item.userId"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="异常责任人" prop="exrUserResp">
-            <el-input v-model="form.exrUserResp" placeholder="请输入异常责任人" />
+            <el-select
+              v-model="form.exrUserResp"
+              placeholder="请选择异常责任人"
+              clearable
+            >
+              <el-option
+                v-for="item in userList"
+                :key="item.userId"
+                :label="item.userName"
+                :value="item.userId"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -281,6 +329,7 @@
 
 <script>
 import { listExceptionRecord, getExceptionRecord, delExceptionRecord, addExceptionRecord, updateExceptionRecord } from "@/api/system/exceptionRecord";
+import { listUser } from "@/api/system/user";
 import { listException } from "@/api/system/exception";
 import { listExceptionSource } from "@/api/system/exceptionSource";
 
@@ -358,20 +407,38 @@ export default {
       // 异常列表
       exceptionList: [],
       // 异常源列表
-      exceptionSourceList: []
+      exceptionSourceList: [],
+      // 用户列表
+      userList: []
     };
   },
   async created() {
+    await this.getUserList();
     await this.getExceptionList();
     await this.getExceptionSourceList();
     this.getList();
   },
   async activated() {
+    await this.getUserList();
     await this.getExceptionList();
     await this.getExceptionSourceList();
     this.getList();
   },
   methods: {
+    // 获取用户列表
+    getUserList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listUser().then(response => {
+          this.userList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     // 获取异常源列表
     getExceptionSourceList() {
       return new Promise((resolve, reject) => {

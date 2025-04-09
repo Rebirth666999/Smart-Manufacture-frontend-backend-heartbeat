@@ -109,6 +109,12 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-document"
+            @click="handleMap(scope.row)"
+          >详情</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:exceptionParamTemplate:remove']"
@@ -366,6 +372,10 @@ export default {
       this.download('system/exceptionParamTemplate/export', {
         ...this.queryParams
       }, `exceptionParamTemplate_${new Date().getTime()}.xlsx`)
+    },
+    // 查看模板条目
+    handleMap(row) {
+      this.$router.push(`/exception/exceptionParamMap?exptCode=${row.exptCode}`)
     }
   }
 };

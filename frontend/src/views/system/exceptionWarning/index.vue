@@ -2,20 +2,24 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="异常" prop="exCode">
-        <el-input
-          v-model="queryParams.exCode"
-          placeholder="请输入异常"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.exCode" placeholder="请选择异常" clearable>
+          <el-option
+           v-for="option in exceptionList"
+           :key="option.exCode"
+           :label="option.exName"
+           :value="option.exCode">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="异常源" prop="exsCode">
-        <el-input
-          v-model="queryParams.exsCode"
-          placeholder="请输入异常源"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.exsCode" placeholder="请选择异常源" clearable>
+          <el-option
+           v-for="option in exceptionSourceList"
+           :key="option.exsCode"
+           :label="option.exsName"
+           :value="option.exsCode">
+          </el-option>
+        </el-select>
       </el-form-item>
       <!-- <el-form-item label="已删除" prop="exwDelete">
         <el-input
@@ -81,8 +85,16 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="预警配置ID" align="center" prop="exwId" v-if="true"/>
       <el-table-column label="预警配置编码" align="center" prop="exwCode" />
-      <el-table-column label="异常" align="center" prop="exCode" />
-      <el-table-column label="异常源" align="center" prop="exsCode" />
+      <el-table-column label="异常" align="center" prop="exCode">
+        <template slot-scope="scope">
+          {{ exceptionList.find(ele => ele.exCode === scope.row.exCode).exName || '' }}
+        </template>
+      </el-table-column>
+      <el-table-column label="异常源" align="center" prop="exsCode">
+        <template slot-scope="scope">
+          {{ exceptionSourceList.find(ele => ele.exsCode === scope.row.exsCode).exsName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="时间表达式" align="center" prop="exwFormula" />
       <el-table-column label="消息接收人" align="center" prop="exwRecv" />
       <el-table-column label="消息通道" align="center" prop="exwTunnel" />
@@ -130,16 +142,41 @@
     <el-dialog :title="title" :visible.sync="open" width="550px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
         <el-form-item label="异常" prop="exCode">
-          <el-input v-model="form.exCode" placeholder="请输入异常" />
+          <el-select v-model="form.exCode" placeholder="请选择异常">
+            <el-option
+             v-for="option in exceptionList"
+             :key="option.exCode"
+             :label="option.exName"
+             :value="option.exCode">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="异常源" prop="exsCode">
-          <el-input v-model="form.exsCode" placeholder="请输入异常源" />
+          <el-select v-model="form.exsCode" placeholder="请选择异常源">
+            <el-option
+             v-for="option in exceptionSourceList"
+             :key="option.exsCode"
+             :label="option.exsName"
+             :value="option.exsCode">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="时间表达式" prop="exwFormula">
           <el-input v-model="form.exwFormula" placeholder="请输入时间表达式" />
         </el-form-item>
         <el-form-item label="消息接收人" prop="exwRecv">
-          <el-input v-model="form.exwRecv" placeholder="请输入消息接收人" />
+          <el-select
+            v-model="form.exwRecv"
+            placeholder="请选择消息接收人"
+          >
+            <el-option
+              v-for="item in userList"
+              :key="item.userId"
+              :label="item.userName"
+              :value="item.userId"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="消息通道" prop="exwTunnel">
           <el-input v-model="form.exwTunnel" placeholder="请输入消息通道" />
@@ -178,6 +215,9 @@
 
 <script>
 import { listExceptionWarning, getExceptionWarning, delExceptionWarning, addExceptionWarning, updateExceptionWarning } from "@/api/system/exceptionWarning";
+import { listUser } from "@/api/system/user";
+import { listException } from "@/api/system/exception";
+import { listExceptionSource } from "@/api/system/exceptionSource";
 
 export default {
   name: "ExceptionWarning",
@@ -246,13 +286,70 @@ export default {
         exwHandleOrgn: [
           { required: true, message: "是否触发源系统处理不能为空", trigger: "change" }
         ],
-      }
+      },
+      // 异常列表
+      exceptionList: [],
+      // 异常源列表
+      exceptionSourceList: [],
+      // 用户列表
+      userList: []
     };
   },
-  created() {
+  async created() {
+    await this.getUserList();
+    await this.getExceptionList();
+    await this.getExceptionSourceList();
+    this.getList();
+  },
+  async activated() {
+    await this.getUserList();
+    await this.getExceptionList();
+    await this.getExceptionSourceList();
     this.getList();
   },
   methods: {
+    // 获取用户列表
+    getUserList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listUser().then(response => {
+          this.userList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
+    // 获取异常源列表
+    getExceptionSourceList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listExceptionSource().then(response => {
+          this.exceptionSourceList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
+    // 获取异常列表
+    getExceptionList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listException().then(response => {
+          this.exceptionList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     /** 查询异常预警配置列表 */
     getList() {
       this.loading = true;

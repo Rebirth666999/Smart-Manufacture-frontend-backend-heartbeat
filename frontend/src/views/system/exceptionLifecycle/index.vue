@@ -108,6 +108,12 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-document"
+            @click="handleVersion(scope.row)"
+          >版本</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:exceptionLifecycle:remove']"
@@ -368,6 +374,10 @@ export default {
       this.download('system/exceptionLifecycle/export', {
         ...this.queryParams
       }, `exceptionLifecycle_${new Date().getTime()}.xlsx`)
+    },
+    // 查看生命周期版本
+    handleVersion(row) {
+      this.$router.push(`/exception/exceptionLifecycleVersion?exlCode=${row.exlCode}`)
     }
   }
 };

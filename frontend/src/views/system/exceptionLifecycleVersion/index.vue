@@ -1,8 +1,19 @@
 <template>
   <div class="app-container">
+    <!-- 顶部提示 -->
+    <el-alert
+      v-show="hint.length > 0"
+      :title="`正在根据${hint}筛选异常生命周期版本`"
+      type="info"
+      show-icon
+      :closable="false"
+      class="mb8"
+    >
+    </el-alert>
+
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="110px">
       <el-form-item label="所属生命周期" prop="exlCode">
-        <el-select v-model="queryParams.exlCode" placeholder="请选择异常生命周期" clearable>
+        <el-select v-model="queryParams.exlCode" placeholder="请选择异常生命周期" :disabled="mode === 1" clearable>
           <el-option
            v-for="option in exceptionLifecycleList"
            :key="option.exlCode"
@@ -120,7 +131,7 @@
     <el-dialog :title="title" :visible.sync="open" width="520px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="所属生命周期" prop="exlCode">
-          <el-select v-model="form.exlCode" placeholder="请选择异常生命周期">
+          <el-select v-model="form.exlCode" placeholder="请选择异常生命周期" :disabled="mode === 1">
             <el-option
              v-for="option in exceptionLifecycleList"
              :key="option.exlCode"
@@ -203,13 +214,25 @@ export default {
       },
       // 异常生命周期列表
       exceptionLifecycleList: [],
+      // 1-按生命周期筛选版本
+      mode: 0,
+      // 页面顶部提示
+      hint: ''
     };
   },
   async created() {
+    if (this.$route.query.exlCode) {
+      this.mode = 1
+    }
     await this.getExceptionLifecycleList();
     this.getList();
   },
   async activated() {
+    if (this.$route.query.exlCode) {
+      this.mode = 1
+    } else {
+      this.mode = 0
+    }
     await this.getExceptionLifecycleList();
     this.getList();
   },
@@ -220,6 +243,15 @@ export default {
         this.loading = true;
         listExceptionLifecycle().then(response => {
           this.exceptionLifecycleList = response.rows
+          if (this.mode === 1) {
+            let exl = response.rows.find(ele => ele.exlCode === this.$route.query.exlCode)
+            // 构造提示文本
+            this.hint = "异常生命周期 "
+            this.hint += exl.exlCode
+            this.hint += " "
+            // 设置筛选
+            this.queryParams.exlCode = exl.exlCode
+          }
           resolve()
         }).catch(() => {
           reject()
@@ -267,6 +299,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams.exlCode = this.$route.query.exlCode
       this.handleQuery();
     },
     // 多选框选中数据
@@ -278,6 +311,9 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      if (this.mode === 1) {
+        this.form.exlCode = this.$route.query.exlCode
+      }
       this.open = true;
       this.title = "添加异常生命周期版本";
     },

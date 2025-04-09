@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="com.ruoyi.system.domain.IcesExceptionRecord" id="IcesExceptionRecordResult">
         <result property="exrId" column="exr_id"/>
         <result property="exrCode" column="exr_code"/>
-        <result property="excCode" column="exc_code"/>
+        <result property="exsCode" column="exs_code"/>
         <result property="exCode" column="ex_code"/>
         <result property="exrDesc" column="exr_desc"/>
         <result property="exrParam" column="exr_param"/>

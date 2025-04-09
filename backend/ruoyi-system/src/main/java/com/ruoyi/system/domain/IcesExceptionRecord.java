@@ -34,7 +34,7 @@ public class IcesExceptionRecord extends BaseEntity {
     /**
      * 异常源
      */
-    private String excCode;
+    private String exsCode;
     /**
      * 异常
      */

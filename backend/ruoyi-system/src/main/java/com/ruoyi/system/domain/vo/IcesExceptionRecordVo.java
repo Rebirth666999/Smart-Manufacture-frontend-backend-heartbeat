@@ -37,7 +37,7 @@ public class IcesExceptionRecordVo {
      * 异常源
      */
     @ExcelProperty(value = "异常源")
-    private String excCode;
+    private String exsCode;
 
     /**
      * 异常

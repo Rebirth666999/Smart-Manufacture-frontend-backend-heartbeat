@@ -36,7 +36,7 @@ public class IcesExceptionRecordBo extends BaseEntity {
      * 异常源
      */
     @NotBlank(message = "异常源不能为空", groups = { AddGroup.class, EditGroup.class })
-    private String excCode;
+    private String exsCode;
 
     /**
      * 异常

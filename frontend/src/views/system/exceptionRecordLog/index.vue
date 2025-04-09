@@ -1,8 +1,19 @@
 <template>
   <div class="app-container">
+    <!-- 顶部提示 -->
+    <el-alert
+      v-show="hint.length > 0"
+      :title="`正在根据${hint}筛选异常处理日志`"
+      type="info"
+      show-icon
+      :closable="false"
+      class="mb8"
+    >
+    </el-alert>
+
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="异常记录" prop="exrCode">
-        <el-select v-model="queryParams.exrCode" placeholder="请选择所属异常记录" clearable>
+        <el-select v-model="queryParams.exrCode" placeholder="请选择所属异常记录" :disabled="mode === 1" clearable>
           <el-option
            v-for="option in exceptionRecordList"
            :key="option.exrCode"
@@ -116,7 +127,7 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="异常记录" prop="exrCode">
-          <el-select v-model="form.exrCode" placeholder="请选择所属异常记录">
+          <el-select v-model="form.exrCode" placeholder="请选择所属异常记录" :disabled="mode === 1">
             <el-option
              v-for="option in exceptionRecordList"
              :key="option.exrCode"
@@ -214,15 +225,27 @@ export default {
       // 异常记录列表
       exceptionRecordList: [],
       // 用户列表
-      userList: []
+      userList: [],
+      // 1-按照异常记录筛选处理日志
+      mode: 0,
+      // 页面顶部提示
+      hint: ''
     };
   },
   async created() {
+    if (this.$route.query.exrCode) {
+      this.mode = 1
+    }
     await this.getUserList();
     await this.getExceptionRecordList();
     this.getList();
   },
   async activated() {
+    if (this.$route.query.exrCode) {
+      this.mode = 1
+    } else {
+      this.mode = 0
+    }
     await this.getUserList();
     await this.getExceptionRecordList();
     this.getList();
@@ -248,6 +271,15 @@ export default {
         this.loading = true;
         listExceptionRecord().then(response => {
           this.exceptionRecordList = response.rows
+          if (this.mode === 1) {
+            let exr = response.rows.find(ele => ele.exrCode === this.$route.query.exrCode)
+            // 构造提示文本
+            this.hint = "异常记录 "
+            this.hint += exr.exrCode
+            this.hint += " "
+            // 设置筛选
+            this.queryParams.exrCode = exr.exrCode
+          }
           resolve()
         }).catch(() => {
           reject()
@@ -295,6 +327,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams.exrCode = this.$route.query.exrCode
       this.handleQuery();
     },
     // 多选框选中数据
@@ -306,6 +339,9 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      if (this.mode === 1) {
+        this.form.exrCode = this.$route.query.exrCode
+      }
       this.open = true;
       this.title = "添加异常处理日志";
     },

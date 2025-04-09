@@ -93,6 +93,12 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-s-operation"
+            @click="handleParamTemplate(scope.row)"
+          >参数模板</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:exceptionSource:remove']"
@@ -328,7 +334,11 @@ export default {
       this.download('system/exceptionSource/export', {
         ...this.queryParams
       }, `exceptionSource_${new Date().getTime()}.xlsx`)
-    }
+    },
+    // 查看异常参数模板
+    handleParamTemplate(row) {
+      this.$router.push(`/exception/exceptionParamTemplate?exsCode=${row.exsCode}`)
+    },
   }
 };
 </script>

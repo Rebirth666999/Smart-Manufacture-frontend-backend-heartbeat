@@ -109,6 +109,12 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-s-operation"
+            @click="handleParamTemplate(scope.row)"
+          >参数模板</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-s-help"
             @click="handleLifecycle(scope.row)"
           >生命周期</el-button>
@@ -357,7 +363,11 @@ export default {
     // 查看生命周期
     handleLifecycle(row) {
       this.$router.push(`/exception/exceptionLifecycle?exCode=${row.exCode}`)
-    }
+    },
+    // 查看参数模板
+    handleParamTemplate(row) {
+      this.$router.push(`/exception/exceptionParamTemplate?exCode=${row.exCode}`)
+    },
   }
 };
 </script>

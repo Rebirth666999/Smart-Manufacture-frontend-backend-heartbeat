@@ -34,7 +34,7 @@
       <el-form-item label="状态" prop="mtStat">
         <el-select v-model="queryParams.mtStat" placeholder="请选择状态" clearable>
           <el-option
-            v-for="dict in dict.type.ices_order_status"
+            v-for="dict in dict.type.ices_manufacture_task_status"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -131,7 +131,7 @@
       </el-table-column>
       <el-table-column label="状态" align="center" prop="mtStat">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.ices_order_status" :value="scope.row.mtStat"/>
+          <dict-tag :options="dict.type.ices_manufacture_task_status" :value="scope.row.mtStat"/>
         </template>
       </el-table-column>
       <el-table-column label="实际开始时间" align="center" prop="mtBegin" width="100">
@@ -160,6 +160,7 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
+            v-show="scope.row.mtStat==='1' || scope.row.mtStat==='4' || scope.row.mtStat==='d'"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:manufactureTask:edit']"
           >修改</el-button>
@@ -167,12 +168,14 @@
             size="mini"
             type="text"
             icon="el-icon-download"
+            v-show="scope.row.mtStat==='4'"
             @click="handleGenerateDeviceTask(scope.row)"
           >生成设备任务</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-files"
+            v-show="scope.row.mtStat==='d'"
             @click="handleExecuteDeviceTask(scope.row)"
           >下发设备任务</el-button>
           <el-button
@@ -180,6 +183,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
+            v-show="scope.row.mtStat==='1'"
             v-hasPermi="['system:manufactureTask:remove']"
           >删除</el-button>
           <el-button
@@ -193,9 +197,16 @@
             size="mini"
             type="text"
             icon="el-icon-refresh-left"
-            v-show="scope.row.mtStat === '2' || scope.row.eqStat === '7' || scope.row.eqStat === 'a'"
+            v-show="scope.row.mtStat === '2' || scope.row.mtStat === '7' || scope.row.mtStat === 'a'"
             @click="handleWithdrawReview(scope.row)"
           >撤回审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-finished"
+            v-show="scope.row.mtStat==='4' || scope.row.mtStat==='d'"
+            @click="handleDeprecated(scope.row)"          
+          >弃用</el-button>      
         </template>
       </el-table-column>
     </el-table>
@@ -331,7 +342,7 @@ export default {
   components: {
     ProcessViewer,
   },
-  dicts: ['ices_order_status'],
+  dicts: ['ices_manufacture_task_status'],
   data() {
     return {
       // 按钮loading
@@ -421,7 +432,7 @@ export default {
       // 设备列表（全）
       eqList: [],
       // 当前选中的生成任务
-      currentManufactureTask: null
+      currentManufactureTask: null,
     };
   },
   async created() {
@@ -441,6 +452,48 @@ export default {
     this.getList();
   },
   methods: {
+    //弃用
+    handleDeprecated(row) {
+      const mtId = row.mtId;
+      this.$modal.confirm('是否确认弃用该生产计划？').then(() => {
+    this.loading = true;
+    getManufactureTask(mtId).then(response => {
+      this.form = response.data;
+      const desc = this.form.mtDesc || '';
+      if (this.form.mtStat === '4' || this.form.mtStat === 'd') {
+        if (!desc.includes('已发布') && !desc.includes('已生成')) {
+          this.$prompt('请在描述中手动输入原状态（已发布或已生成）信息', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            inputValue: desc
+          }).then(({ value }) => {
+            this.form.mtDesc = value;
+            this.form.mtStat = 'a';
+            updateManufactureTask(this.form).then(response => {
+              this.$modal.msgSuccess("已弃用");
+              this.getList();
+            }).finally(() => {
+              this.loading = false;
+            });
+          }).catch(() => {
+            this.loading = false;
+          });
+        } else {
+          this.form.mtStat = 'a';
+          updateManufactureTask(this.form).then(response => {
+            this.$modal.msgSuccess("已弃用");
+            this.getList();
+          }).finally(() => {
+            this.loading = false;
+          });
+        }
+      }
+    });
+  }).catch(() => {
+  }).finally(() => {
+    this.loading = false;
+  });
+},
     // 获取流程信息参照所需的列表
     // 设备模型、模型操作、设备操作、设备
     getReferenceList() {
@@ -594,6 +647,22 @@ export default {
         if (valid) {
           this.buttonLoading = true;
           if (this.form.mtId != null) {
+            const desc = this.form.mtDesc || '';
+            if (this.form.mtStat === '4' || this.form.mtStat === 'd') {
+              if (!desc.includes('已发布') && !desc.includes('已生成')) {
+                this.$message.warning('请在描述中手动输入原状态（已发布或已生成）信息');
+                this.buttonLoading = false;
+                return;
+              }
+               this.form.mtStat = '7';
+              }
+              if (this.form.mtStat === '7' || this.form.mtStat === 'a') {
+              if (!desc.includes('已发布') && !desc.includes('已生成')) {
+                this.$message.warning('请在描述中手动输入原状态（已发布或已生成）信息');
+                this.buttonLoading = false;
+                return;
+              }
+              }
             updateManufactureTask(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
@@ -644,8 +713,6 @@ export default {
         getManufactureTask(mtId).then(response => {
           this.form = response.data;
           if (this.form.mtStat === '1') this.form.mtStat = '2';
-          else if(this.form.mtStat === '7') this.form.mtStat = '8';
-          else if(this.form.mtStat === 'a') this.form.mtStat = 'b';
         updateManufactureTask(this.form).then(response => {
             this.$modal.msgSuccess("已提交审核");
             this.getList();
@@ -658,17 +725,24 @@ export default {
     },
     // 撤回审核
     handleWithdrawReview(row) {
-      const mtId = row.mtId;
-      this.$modal.confirm('是否要撤回审核？若审核已开始即无法撤回。').then(() => {
-        this.loading = true;
-        getManufactureTask(mtId).then(response => {
-          this.form = response.data;
-          if (this.form.mtStat === '2') this.form.mtStat = '1';
-          else if(this.form.mtStat === '8') this.form.mtStat = '7';
-          else if(this.form.mtStat === 'b') this.form.mtStat = 'a';
-        updateManufactureTask(this.form).then(response => {
-            this.$modal.msgSuccess("已撤回审核");
-            this.getList();
+       const mtId = row.mtId;
+       this.$modal.confirm('是否要撤回审核？若审核已开始即无法撤回。').then(() => {
+         this.loading = true;
+      getManufactureTask(mtId).then(response => {
+        this.form = response.data;
+        const desc = this.form.mtDesc || '';
+        if (this.form.mtStat === '2') {
+          this.form.mtStat = '1'; 
+        } else if (this.form.mtStat === '7' || this.form.mtStat === 'a') {
+          if (desc.includes('已发布')) {
+            this.form.mtStat = '4';
+          } else if (desc.includes('已生成')) {
+            this.form.mtStat = 'd';
+          }
+        }
+      updateManufactureTask(this.form).then(response => {
+          this.$modal.msgSuccess("已撤回审核");
+          this.getList();
           })
         });
       }).catch(() => {
@@ -698,19 +772,27 @@ export default {
     // 确认生成设备任务
     onSaveTask(steps) {
       this.$modal.confirm('是否生成设备任务？').then(() => {
-        this.viewerData.loading = true
+        this.viewerData.loading = true;
         return saveDeviceTasks({
           manufactureTask: this.currentManufactureTask,
           deviceTask: steps
-        })
-      }).then(() => {
-        this.$modal.msgSuccess("生成设备任务成功")
-        this.viewerOpen = false
-      }).catch(() => {
-      }).finally(() => {
-        this.viewerData.loading = false
-      });
-    },
+        });
+        }).then(() => {
+          this.$modal.msgSuccess("生成设备任务成功");
+          const mtId = this.currentManufactureTask.mtId;
+          return getManufactureTask(mtId);
+          }).then(response => {
+          const task = response.data;
+          task.mtStat = 'd';
+          return updateManufactureTask(task);
+          }).then(() => {
+            this.getList(); 
+            this.viewerOpen = false;
+        }).catch(() => {
+        }).finally(() => {
+          this.viewerData.loading = false;
+        });
+      },
     // 下发设备任务
     async handleExecuteDeviceTask(row) {
       this.$modal.confirm('是否下发任务？').then(async () => {
@@ -780,14 +862,25 @@ export default {
           "processRoute": processRoute
         })
       }).then(() => {
-        this.$modal.msgSuccess("下发任务成功")
-      }).catch(() => {
-      }).finally(() => {
-        this.loading = false
-      });
-    }
-  }
-};
+        const mtId = row.mtId;
+        // 先获取完整的生产任务信息
+        return getManufactureTask(mtId);
+        }).then(response => {
+          const task = response.data;
+          // 更新状态为进行中
+          task.mtStat = '5';
+          // 提交更新请求
+          return updateManufactureTask(task);
+          }).then(() => {
+            this.getList();
+            this.$modal.msgSuccess("下发任务成功");
+            }).catch(() => {
+            }).finally(() => {
+              this.loading = false;
+            });
+         }
+       }
+      };
 </script>
 <style scoped>
 .el-select {

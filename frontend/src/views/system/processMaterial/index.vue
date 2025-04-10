@@ -203,6 +203,12 @@ import { listMaterial } from "@/api/system/material";
 
 export default {
   name: "ProcessMaterial",
+  props: {
+    viewMode: {
+      type: Number,
+      default: 0
+    }
+  },
   data() {
     return {
       // 按钮loading
@@ -293,7 +299,7 @@ export default {
             this.hint += process.procName
             this.hint += " "
             // 检查状态
-            if (process.procStat !== '1') {
+            if (process.procStat !== '1' || this.viewMode === 2) {
               this.mode = 2
             }
             // 设置筛选

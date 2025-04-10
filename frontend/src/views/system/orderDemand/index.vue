@@ -2,20 +2,24 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="订单" prop="orCode">
-        <el-input
-          v-model="queryParams.orCode"
-          placeholder="请输入订单"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.orCode" placeholder="请选择订单" clearable>
+          <el-option
+            v-for="option in orderList"
+            :key="option.orCode"
+            :label="option.orName"
+            :value="option.orCode">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="所需产品" prop="maCode">
-        <el-input
-          v-model="queryParams.maCode"
-          placeholder="请输入所需产品"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.maCode" placeholder="请选择产品" clearable>
+          <el-option
+           v-for="option in materialList"
+           :key="option.maCode"
+           :label="option.maName"
+           :value="option.maCode">
+          </el-option>
+        </el-select>
       </el-form-item>
       <!-- <el-form-item label="已删除" prop="odDelete">
         <el-input
@@ -81,8 +85,16 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="所需产品ID" align="center" prop="odId" v-if="true"/>
       <el-table-column label="所需产品编码" align="center" prop="odCode" />
-      <el-table-column label="订单" align="center" prop="orCode" />
-      <el-table-column label="所需产品" align="center" prop="maCode" />
+      <el-table-column label="订单" align="center" prop="orCode">
+        <template slot-scope="scope">
+          {{ orderList.find(ele => ele.orCode === scope.row.orCode).orName || '' }}
+      </template>
+        </el-table-column>
+      <el-table-column label="所需产品" align="center" prop="maCode">
+        <template slot-scope="scope">
+          {{ materialList.find(ele => ele.maCode === scope.row.maCode).maName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="数量" align="center" prop="odDemand" />
       <!-- <el-table-column label="已删除" align="center" prop="odDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -117,10 +129,24 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="订单" prop="orCode">
-          <el-input v-model="form.orCode" placeholder="请输入订单" />
+          <el-select v-model="form.orCode" placeholder="请选择订单">
+            <el-option
+              v-for="option in orderList"
+              :key="option.orCode"
+              :label="option.orName"
+              :value="option.orCode">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="所需产品" prop="maCode">
-          <el-input v-model="form.maCode" placeholder="请输入所需产品" />
+          <el-select v-model="form.maCode" placeholder="请选择产品" clearable>
+            <el-option
+             v-for="option in materialList"
+             :key="option.maCode"
+             :label="option.maName"
+             :value="option.maCode">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="数量" prop="odDemand">
           <el-input v-model="form.odDemand" placeholder="请输入所需产品数量" />
@@ -136,6 +162,8 @@
 
 <script>
 import { listOrderDemand, getOrderDemand, delOrderDemand, addOrderDemand, updateOrderDemand } from "@/api/system/orderDemand";
+import { listMaterial } from "@/api/system/material";
+import { listOrder } from "@/api/system/order";
 
 export default {
   name: "OrderDemand",
@@ -187,13 +215,52 @@ export default {
         odDemand: [
           { required: true, message: "所需产品数量不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 产品列表
+      materialList: [],
+      // 订单列表
+      orderList: []
     };
   },
-  created() {
+  async created() {
+    await this.getOrderList();
+    await this.getMaterialList();
+    this.getList();
+  },
+  async activated() {
+    await this.getOrderList();
+    await this.getMaterialList();
     this.getList();
   },
   methods: {
+    // 查询订单
+    getOrderList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listOrder().then(response => {
+          this.orderList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
+    // 查询产品
+    getMaterialList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listMaterial({ maType: '2' }).then(response => {
+          this.materialList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     /** 查询订单所需产品关联列表 */
     getList() {
       this.loading = true;

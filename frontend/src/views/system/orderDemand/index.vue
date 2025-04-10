@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="所需产品编码" prop="odCode">
+      <el-form-item label="订单" prop="orCode">
         <el-input
-          v-model="queryParams.odCode"
-          placeholder="请输入所需产品编码"
+          v-model="queryParams.orCode"
+          placeholder="请输入订单"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -17,30 +17,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="订单" prop="orCode">
-        <el-input
-          v-model="queryParams.orCode"
-          placeholder="请输入订单"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="所需产品数量" prop="odDemand">
-        <el-input
-          v-model="queryParams.odDemand"
-          placeholder="请输入所需产品数量"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="已删除" prop="odDelete">
+      <!-- <el-form-item label="已删除" prop="odDelete">
         <el-input
           v-model="queryParams.odDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -97,10 +81,10 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="所需产品ID" align="center" prop="odId" v-if="true"/>
       <el-table-column label="所需产品编码" align="center" prop="odCode" />
-      <el-table-column label="所需产品" align="center" prop="maCode" />
       <el-table-column label="订单" align="center" prop="orCode" />
-      <el-table-column label="所需产品数量" align="center" prop="odDemand" />
-      <el-table-column label="已删除" align="center" prop="odDelete" />
+      <el-table-column label="所需产品" align="center" prop="maCode" />
+      <el-table-column label="数量" align="center" prop="odDemand" />
+      <!-- <el-table-column label="已删除" align="center" prop="odDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -132,13 +116,13 @@
     <!-- 添加或修改订单所需产品关联对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="所需产品" prop="maCode">
-          <el-input v-model="form.maCode" placeholder="请输入所需产品" />
-        </el-form-item>
         <el-form-item label="订单" prop="orCode">
           <el-input v-model="form.orCode" placeholder="请输入订单" />
         </el-form-item>
-        <el-form-item label="所需产品数量" prop="odDemand">
+        <el-form-item label="所需产品" prop="maCode">
+          <el-input v-model="form.maCode" placeholder="请输入所需产品" />
+        </el-form-item>
+        <el-form-item label="数量" prop="odDemand">
           <el-input v-model="form.odDemand" placeholder="请输入所需产品数量" />
         </el-form-item>
       </el-form>
@@ -185,7 +169,7 @@ export default {
         maCode: undefined,
         orCode: undefined,
         odDemand: undefined,
-        odDelete: undefined,
+        odDelete: 0,
       },
       // 表单参数
       form: {},
@@ -323,3 +307,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

@@ -263,15 +263,22 @@ export default {
       if (order) {
         const demands = this.orderDemandList.filter(ele => ele.orCode === order.orCode)
         this.productList = this.productListFull.filter(ele => demands.findIndex(demand => demand.maCode === ele.maCode) !== -1)
+        this.form.maCode = undefined
+        this.form.procCode = undefined
+        this.form.mpQtyPlan = undefined
       } else {
         this.productList = []
       }
     },
     // 选择产品的监听函数
     selectProduct(row) {
+      const order = this.orderList.find(ele => ele.orCode === this.form.orCode)
       const product = this.productListFull.find(ele => ele.maCode === row)
       if (product) {
+        const demand = this.orderDemandList.find(ele => ele.orCode === order.orCode && ele.maCode === product.maCode)
         this.processList = this.processListFull.filter(ele => ele.maCode === product.maCode && ele.procStat === "5")
+        this.form.mpQtyPlan = demand.odDemand
+        this.form.procCode = undefined
       } else {
         this.processList = []
       }

@@ -36,12 +36,6 @@ public class IcesOrderVo {
     private String orCode;
 
     /**
-     * 所需产品
-     */
-    @ExcelProperty(value = "所需产品")
-    private String maCode;
-
-    /**
      * 客户
      */
     @ExcelProperty(value = "客户")
@@ -59,12 +53,6 @@ public class IcesOrderVo {
     @ExcelProperty(value = "状态代码", converter = ExcelDictConvert.class)
     @ExcelDictFormat(dictType = "ices_order_status")
     private String orStat;
-
-    /**
-     * 所需产品数量
-     */
-    @ExcelProperty(value = "所需产品数量")
-    private Float orDemand;
 
     /**
      * 订单优先级

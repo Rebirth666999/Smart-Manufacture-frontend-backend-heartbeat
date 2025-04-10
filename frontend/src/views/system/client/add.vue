@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form ref="form" :model="form" :rules="rules" label-width="110px" :loading="loading">
+    <el-form ref="form" :model="form" :rules="rules" label-width="110px" v-loading="loading">
       <el-col :span="6">
         <el-form-item label="客户等级" prop="cllCode">
           <el-select v-model="form.cllCode" placeholder="请选择客户等级">

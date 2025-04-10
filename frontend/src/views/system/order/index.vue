@@ -186,73 +186,6 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-
-    <!-- 添加或修改订单对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-col :span="12">
-          <el-form-item label="客户" prop="clCode">
-            <el-select
-              v-model="form.clCode"
-              placeholder="请选择客户"
-              clearable
-            >
-              <el-option
-                v-for="item in clientList"
-                :key="item.clCode"
-                :label="item.clName"
-                :value="item.clCode"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="订单名称" prop="orName">
-            <el-input v-model="form.orName" placeholder="请输入订单名称" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="订单优先级" prop="orPriority">
-            <el-input v-model="form.orPriority" placeholder="请输入订单优先级" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="截止时间" prop="orDeadline">
-            <el-date-picker clearable
-              v-model="form.orDeadline"
-              type="datetime"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              placeholder="请选择截止时间">
-            </el-date-picker>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="总价" prop="orPrice">
-            <el-input v-model="form.orPrice" placeholder="请输入总价" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="收货人" prop="orRecv">
-            <el-input v-model="form.orRecv" placeholder="请输入收货人" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="收货地址" prop="orAddr">
-            <el-input v-model="form.orAddr" type="textarea" placeholder="请输入收货地址" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="描述" prop="orDesc">
-            <el-input v-model="form.orDesc" type="textarea" placeholder="请输入内容" />
-          </el-form-item>
-        </el-col>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -266,8 +199,6 @@ export default {
   dicts: ['ices_order_status'],
   data() {
     return {
-      // 按钮loading
-      buttonLoading: false,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -282,10 +213,6 @@ export default {
       total: 0,
       // 订单表格数据
       orderList: [],
-      // 弹出层标题
-      title: "",
-      // 是否显示弹出层
-      open: false,
       // 描述时间范围
       daterangeOrDeadline: [],
       // 查询参数
@@ -299,35 +226,6 @@ export default {
         orPriority: undefined,
         orDeadline: undefined,
         orDelete: 0,
-      },
-      // 表单参数
-      form: {},
-      // 表单校验
-      rules: {
-        orId: [
-          { required: true, message: "订单ID不能为空", trigger: "blur" }
-        ],
-        clCode: [
-          { required: true, message: "客户不能为空", trigger: "blur" }
-        ],
-        orName: [
-          { required: true, message: "订单名称不能为空", trigger: "blur" }
-        ],
-        orPriority: [
-          { required: true, message: "订单优先级不能为空", trigger: "blur" }
-        ],
-        orDeadline: [
-          { required: true, message: "截止时间不能为空", trigger: "blur" }
-        ],
-        orPrice: [
-          { required: true, message: "总价不能为空", trigger: "blur" }
-        ],
-        orRecv: [
-          { required: true, message: "收货人不能为空", trigger: "blur" }
-        ],
-        orAddr: [
-          { required: true, message: "收货地址不能为空", trigger: "blur" }
-        ],
       },
       // 产品列表
       productList: [],
@@ -388,34 +286,6 @@ export default {
         this.loading = false;
       });
     },
-    // 取消按钮
-    cancel() {
-      this.open = false;
-      this.reset();
-    },
-    // 表单重置
-    reset() {
-      this.form = {
-        orId: undefined,
-        maCode: undefined,
-        clCode: undefined,
-        orName: undefined,
-        orStat: undefined,
-        orDemand: undefined,
-        orPriority: undefined,
-        orDeadline: undefined,
-        orPrice: undefined,
-        orRecv: undefined,
-        orAddr: undefined,
-        orDelete: undefined,
-        orDesc: undefined,
-        createBy: undefined,
-        updateBy: undefined,
-        createTime: undefined,
-        updateTime: undefined
-      };
-      this.resetForm("form");
-    },
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
@@ -435,48 +305,12 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加订单";
+      this.$router.push(`/order/add`)
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.loading = true;
-      this.reset();
       const orId = row.orId || this.ids
-      getOrder(orId).then(response => {
-        this.loading = false;
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改订单";
-      });
-    },
-    /** 提交按钮 */
-    submitForm() {
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          this.buttonLoading = true;
-          if (this.form.orId != null) {
-            updateOrder(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            }).finally(() => {
-              this.buttonLoading = false;
-            });
-          } else {
-            // 新增订单的默认状态
-            this.form.orStat = '1'
-            addOrder(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            }).finally(() => {
-              this.buttonLoading = false;
-            });
-          }
-        }
-      });
+      this.$router.push(`/order/add?orId=${orId}`)
     },
     /** 删除按钮操作 */
     handleDelete(row) {

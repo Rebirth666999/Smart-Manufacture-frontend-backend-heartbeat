@@ -1,21 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="所需产品" prop="maCode">
-        <el-select
-          v-model="queryParams.maCode"
-          placeholder="请选择产品"
-          clearable
-        >
-          <el-option
-            v-for="item in productList"
-            :key="item.maCode"
-            :label="item.maName"
-            :value="item.maCode"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
       <el-form-item label="客户" prop="clCode">
         <el-select
           v-model="queryParams.clCode"
@@ -133,11 +118,6 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="订单ID" align="center" prop="orId" v-if="true"/>
       <el-table-column label="订单编码" align="center" prop="orCode" />
-      <el-table-column label="所需产品" align="center" prop="maCode">
-        <template slot-scope="scope">
-          {{ productList.find(ele => ele.maCode === scope.row.maCode).maName || '' }}
-        </template>
-      </el-table-column>
       <el-table-column label="客户" align="center" prop="clCode">
         <template slot-scope="scope">
           {{ clientList.find(ele => ele.clCode === scope.row.clCode).clName || '' }}
@@ -149,7 +129,6 @@
           <dict-tag :options="dict.type.ices_order_status" :value="scope.row.orStat"/>
         </template>
       </el-table-column>
-      <el-table-column label="所需产品数量" align="center" prop="orDemand" />
       <el-table-column label="订单优先级" align="center" prop="orPriority" />
       <el-table-column label="截止时间" align="center" prop="orDeadline" width="180">
         <template slot-scope="scope">
@@ -212,22 +191,6 @@
     <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-col :span="12">
-          <el-form-item label="所需产品" prop="maCode">
-            <el-select
-              v-model="form.maCode"
-              placeholder="请选择产品"
-            >
-              <el-option
-                v-for="item in productList"
-                :key="item.maCode"
-                :label="item.maName"
-                :value="item.maCode"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
           <el-form-item label="客户" prop="clCode">
             <el-select
               v-model="form.clCode"
@@ -247,11 +210,6 @@
         <el-col :span="12">
           <el-form-item label="订单名称" prop="orName">
             <el-input v-model="form.orName" placeholder="请输入订单名称" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="所需产品数量" prop="orDemand">
-            <el-input v-model="form.orDemand" placeholder="请输入所需产品数量" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -349,17 +307,11 @@ export default {
         orId: [
           { required: true, message: "订单ID不能为空", trigger: "blur" }
         ],
-        maCode: [
-          { required: true, message: "所需产品不能为空", trigger: "blur" }
-        ],
         clCode: [
           { required: true, message: "客户不能为空", trigger: "blur" }
         ],
         orName: [
           { required: true, message: "订单名称不能为空", trigger: "blur" }
-        ],
-        orDemand: [
-          { required: true, message: "所需产品数量不能为空", trigger: "blur" }
         ],
         orPriority: [
           { required: true, message: "订单优先级不能为空", trigger: "blur" }

@@ -1,52 +1,76 @@
 <template>
   <div class="app-container" v-loading="loading">
-    <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-      <el-col :span="12">
-        <el-form-item label="客户" prop="clCode">
-          <el-select v-model="form.clCode" placeholder="请选择客户" clearable>
-            <el-option v-for="item in clientList" :key="item.clCode" :label="item.clName" :value="item.clCode">
-            </el-option>
-          </el-select>
-        </el-form-item>
-      </el-col>
-      <el-col :span="12">
-        <el-form-item label="订单名称" prop="orName">
-          <el-input v-model="form.orName" placeholder="请输入订单名称" />
-        </el-form-item>
-      </el-col>
-      <el-col :span="12">
-        <el-form-item label="订单优先级" prop="orPriority">
-          <el-input v-model="form.orPriority" placeholder="请输入订单优先级" />
-        </el-form-item>
-      </el-col>
-      <el-col :span="12">
-        <el-form-item label="截止时间" prop="orDeadline">
-          <el-date-picker clearable v-model="form.orDeadline" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="请选择截止时间">
-          </el-date-picker>
-        </el-form-item>
-      </el-col>
-      <el-col :span="12">
-        <el-form-item label="总价" prop="orPrice">
-          <el-input v-model="form.orPrice" placeholder="请输入总价" />
-        </el-form-item>
-      </el-col>
-      <el-col :span="12">
-        <el-form-item label="收货人" prop="orRecv">
-          <el-input v-model="form.orRecv" placeholder="请输入收货人" />
-        </el-form-item>
-      </el-col>
-      <el-col :span="12">
-        <el-form-item label="收货地址" prop="orAddr">
-          <el-input v-model="form.orAddr" type="textarea" placeholder="请输入收货地址" />
-        </el-form-item>
-      </el-col>
-      <el-col :span="12">
-        <el-form-item label="描述" prop="orDesc">
-          <el-input v-model="form.orDesc" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-      </el-col>
-    </el-form>
+    <el-card header="订单基本信息" shadow="never" class="mb8">
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+        <el-col :span="12">
+          <el-form-item label="客户" prop="clCode">
+            <el-select v-model="form.clCode" placeholder="请选择客户" clearable>
+              <el-option v-for="item in clientList" :key="item.clCode" :label="item.clName" :value="item.clCode">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="订单名称" prop="orName">
+            <el-input v-model="form.orName" placeholder="请输入订单名称" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="订单优先级" prop="orPriority">
+            <el-input v-model="form.orPriority" placeholder="请输入订单优先级" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="截止时间" prop="orDeadline">
+            <el-date-picker clearable v-model="form.orDeadline" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
+              placeholder="请选择截止时间">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="总价" prop="orPrice">
+            <el-input v-model="form.orPrice" placeholder="请输入总价" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="描述" prop="orDesc">
+            <el-input v-model="form.orDesc" type="textarea" placeholder="请输入内容" />
+          </el-form-item>
+        </el-col>
+      </el-form>
+    </el-card>
+    <el-card header="订单物流信息" shadow="never" class="mb8">
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+        <el-col :span="24">
+          <el-form-item prop="ctCode">
+            <span slot="label">
+              <el-tooltip placement="top">
+                <div slot="content">
+                  <div>选择客户贸易信息后，将自动填充收货人和收货地址</div>
+                  <div>须先选择客户，才能够加载贸易信息</div>
+                </div>
+                <i class="el-icon-question"></i>
+              </el-tooltip>
+              客户贸易信息
+            </span>
+            <el-select v-model="form.ctCode" placeholder="请选择客户贸易信息" clearable @change="selectClientTrade">
+              <el-option v-for="item in clientTradeList.filter(ele => ele.clCode === form.clCode)" :key="item.ctCode" :label="`【${item.ctName}】${item.ctAddr}`" :value="item.ctCode">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="收货人" prop="orRecv">
+            <el-input v-model="form.orRecv" placeholder="请输入收货人" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="收货地址" prop="orAddr">
+            <el-input v-model="form.orAddr" type="textarea" placeholder="请输入收货地址" />
+          </el-form-item>
+        </el-col>
+      </el-form>
+    </el-card>
     <div>
       <el-button :loading="buttonLoading" type="primary" @click="submitForm">保 存</el-button>
       <el-button @click="cancel">返 回</el-button>
@@ -58,6 +82,7 @@
 import { listOrder, getOrder, delOrder, addOrder, updateOrder } from "@/api/system/order";
 import { listMaterial } from "@/api/system/material";
 import { listClient } from "@/api/system/client";
+import { listClientTrade } from "@/api/system/clientTrade";
 
 export default {
   name: "Order",
@@ -110,13 +135,16 @@ export default {
       // 产品列表
       productList: [],
       // 客户列表
-      clientList: []
+      clientList: [],
+      // 客户贸易信息列表
+      clientTradeList: []
     };
   },
   async created() {
     this.loading = true;
     await this.getProductList();
     await this.getClientList();
+    await this.getClientTradeList();
     this.reset();
     if (this.$route.query.orId) {
       getOrder(this.$route.query.orId).then(response => {
@@ -131,6 +159,7 @@ export default {
     this.loading = true;
     await this.getProductList();
     await this.getClientList();
+    await this.getClientTradeList();
     this.reset();
     if (this.$route.query.orId) {
       getOrder(this.$route.query.orId).then(response => {
@@ -142,6 +171,20 @@ export default {
     }
   },
   methods: {
+    // 查询客户贸易信息列表
+    getClientTradeList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listClientTrade().then(response => {
+          this.clientTradeList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     // 查询客户列表
     getClientList() {
       return new Promise((resolve, reject) => {
@@ -226,6 +269,14 @@ export default {
     close() {
       const obj = { path: "/order" };
       this.$tab.closeOpenPage(obj);
+    },
+    // 监听选中的贸易信息变化
+    selectClientTrade(ctCode) {
+      const ct = this.clientTradeList.find(ele => ele.ctCode === ctCode)
+      if (ct) {
+        this.form.orRecv = ct.ctName
+        this.form.orAddr = ct.ctAddr
+      }
     }
   }
 };

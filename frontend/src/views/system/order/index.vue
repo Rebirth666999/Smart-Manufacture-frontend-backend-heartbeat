@@ -150,6 +150,12 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-box"
+            @click="handleDemand(scope.row)"
+          >所需产品</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-finished"
             v-if="scope.row.orStat==='1'"
             @click="handleSubmitReview(scope.row)"
@@ -387,6 +393,10 @@ export default {
       }).finally(() => {
         this.loading = false;
       });
+    },
+    // 查看订单产品需求 
+    handleDemand(row) {
+      this.$router.push(`/orderDemand?orCode=${row.orCode}`)
     }
   }
 };

@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesOrderDemandBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesOrderDemandServiceImpl implements IIcesOrderDemandService {
 
     private final IcesOrderDemandMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询订单所需产品关联
@@ -74,6 +76,7 @@ public class IcesOrderDemandServiceImpl implements IIcesOrderDemandService {
      */
     @Override
     public Boolean insertByBo(IcesOrderDemandBo bo) {
+        bo.setOdCode(codeService.insertByType("OrderDemand"));
         IcesOrderDemand add = BeanUtil.toBean(bo, IcesOrderDemand.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

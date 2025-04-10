@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-tabs v-model="activeName">
+    <el-tabs v-model="activeName" v-loading="loading">
       <el-tab-pane label="基本信息" name="basic">
         <el-descriptions :column="1" border>
           <el-descriptions-item label="工艺流程ID">
@@ -23,7 +23,7 @@
       <el-tab-pane label="原料需求" name="material">
         <ProcessMaterial :viewMode="2" style="width: 100%;"/>
       </el-tab-pane>
-      <el-tab-pane label="流程" name="process">
+      <el-tab-pane label="流程查看" name="process">
         <process-viewer v-loading="viewerData.loading" :key="`designer-${viewerData.index}`" :xml="viewerData.bpmnXml"
           :style="{ height: 'calc(100vh - 180px)' }" :mode="2"
           :extraList="{ emList: equipmentModelList, moList: modelOperationList }" />
@@ -62,16 +62,12 @@ export default {
       },
       // 显示标签页
       activeName: 'basic',
-      // 工艺流程列表
-      processList: [],
       // 产品列表
       productList: [],
       // 设备模型列表
       equipmentModelList: [],
       // 模型操作列表
       modelOperationList: [],
-      // 原料需求列表
-      processMaterialList: [],
       // 当前工艺流程
       current: null,
     };

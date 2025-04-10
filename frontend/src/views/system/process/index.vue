@@ -517,24 +517,25 @@ export default {
     },
     /** 设计按钮操作 */
     handleDesigner(row) {
-      this.designerData.title = "工艺流程设计 - " + row.procName;
-      this.designerData.modelId = "model_" + row.procId;
-      this.designerData.form = {
-        processName: row.procName,
-        processKey: "process_" + row.procId
-      }
-      // 读取已设计的流程
-      if (row.procModel) {
-        this.designerData.loading = true;
-        getBpmnXml(row.procModel).then(response => {
-          this.designerData.bpmnXml = response.data || '';
-          this.designerData.loading = false;
-          this.designerOpen = true;
-        })
-      } else {
-        this.designerData.bpmnXml = '';
-        this.designerOpen = true;
-      }
+      this.$router.push(`/process/design?procId=${row.procId}&procCode=${row.procCode}`)
+      // this.designerData.title = "工艺流程设计 - " + row.procName;
+      // this.designerData.modelId = "model_" + row.procId;
+      // this.designerData.form = {
+      //   processName: row.procName,
+      //   processKey: "process_" + row.procId
+      // }
+      // // 读取已设计的流程
+      // if (row.procModel) {
+      //   this.designerData.loading = true;
+      //   getBpmnXml(row.procModel).then(response => {
+      //     this.designerData.bpmnXml = response.data || '';
+      //     this.designerData.loading = false;
+      //     this.designerOpen = true;
+      //   })
+      // } else {
+      //   this.designerData.bpmnXml = '';
+      //   this.designerOpen = true;
+      // }
     },
     // 保存流程按钮操作
     onSaveDesigner(bpmnXml) {

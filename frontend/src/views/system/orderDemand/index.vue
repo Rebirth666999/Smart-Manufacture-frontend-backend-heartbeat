@@ -3,7 +3,7 @@
     <!-- 顶部提示 -->
     <el-alert
       v-show="hint.length > 0"
-      :title="`正在根据${hint}筛选工艺流程原料需求`"
+      :title="`正在根据${hint}筛选异常参数`"
       type="info"
       show-icon
       :closable="false"
@@ -12,40 +12,29 @@
     </el-alert>
 
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="工艺流程" prop="procCode">
-        <el-select
-          v-model="queryParams.procCode"
-          placeholder="请选择工艺流程"
-          clearable
-          :disabled="mode !== 0"
-        >
+      <el-form-item label="订单" prop="orCode">
+        <el-select v-model="queryParams.orCode" placeholder="请选择订单" :disabled="mode === 1" clearable>
           <el-option
-            v-for="item in processList"
-            :key="item.procCode"
-            :label="item.procName"
-            :value="item.procCode"
-          >
+            v-for="option in orderList"
+            :key="option.orCode"
+            :label="option.orName"
+            :value="option.orCode">
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="原料" prop="maCode">
-        <el-select
-          v-model="queryParams.maCode"
-          placeholder="请选择原料"
-          clearable
-        >
+      <el-form-item label="所需产品" prop="maCode">
+        <el-select v-model="queryParams.maCode" placeholder="请选择产品" clearable>
           <el-option
-            v-for="item in materialList"
-            :key="item.maCode"
-            :label="item.maName"
-            :value="item.maCode"
-          >
+           v-for="option in materialList"
+           :key="option.maCode"
+           :label="option.maName"
+           :value="option.maCode">
           </el-option>
         </el-select>
       </el-form-item>
-      <!-- <el-form-item label="已删除" prop="pmDelete">
+      <!-- <el-form-item label="已删除" prop="odDelete">
         <el-input
-          v-model="queryParams.pmDelete"
+          v-model="queryParams.odDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
@@ -65,8 +54,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:processMaterial:add']"
-          v-if="mode !== 2"
+          v-hasPermi="['system:orderDemand:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -77,8 +65,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['system:processMaterial:edit']"
-          v-if="mode !== 2"
+          v-hasPermi="['system:orderDemand:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -89,8 +76,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['system:processMaterial:remove']"
-          v-if="mode !== 2"
+          v-hasPermi="['system:orderDemand:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -100,43 +86,43 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['system:processMaterial:export']"
+          v-hasPermi="['system:orderDemand:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="processMaterialList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="orderDemandList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="原料需求ID" align="center" prop="pmId" v-if="true"/>
-      <el-table-column label="原料需求编码" align="center" prop="pmCode" />
-      <el-table-column label="所属工艺流程" align="center" prop="procCode">
+      <el-table-column label="所需产品ID" align="center" prop="odId" v-if="true"/>
+      <el-table-column label="所需产品编码" align="center" prop="odCode" />
+      <el-table-column label="订单" align="center" prop="orCode">
         <template slot-scope="scope">
-          {{ processList.find(ele => ele.procCode === scope.row.procCode).procName || '' }}
-        </template>
-      </el-table-column>
-      <el-table-column label="所用原料" align="center" prop="maCode">
+          {{ orderList.find(ele => ele.orCode === scope.row.orCode).orName || '' }}
+      </template>
+        </el-table-column>
+      <el-table-column label="所需产品" align="center" prop="maCode">
         <template slot-scope="scope">
           {{ materialList.find(ele => ele.maCode === scope.row.maCode).maName || '' }}
         </template>
       </el-table-column>
-      <el-table-column label="所需原料数量" align="center" prop="pmDemand" />
-      <!-- <el-table-column label="已删除" align="center" prop="pmDelete" /> -->
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="mode !== 2">
+      <el-table-column label="数量" align="center" prop="odDemand" />
+      <!-- <el-table-column label="已删除" align="center" prop="odDelete" /> -->
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:processMaterial:edit']"
+            v-hasPermi="['system:orderDemand:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:processMaterial:remove']"
+            v-hasPermi="['system:orderDemand:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -150,42 +136,31 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改工艺流程原料需求对话框 -->
+    <!-- 添加或修改订单所需产品关联对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
-        <el-form-item label="所属工艺流程" prop="procCode">
-          <el-select
-            v-model="form.procCode"
-            placeholder="请选择工艺流程"
-            clearable
-            :disabled="mode === 1"
-          >
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="订单" prop="orCode">
+          <el-select v-model="form.orCode" placeholder="请选择订单" :disabled="mode === 1">
             <el-option
-              v-for="item in processList"
-              :key="item.procCode"
-              :label="item.procName"
-              :value="item.procCode"
-            >
+              v-for="option in orderList"
+              :key="option.orCode"
+              :label="option.orName"
+              :value="option.orCode">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="所用原料" prop="maCode">
-          <el-select
-            v-model="form.maCode"
-            placeholder="请选择原料"
-            clearable
-          >
+        <el-form-item label="所需产品" prop="maCode">
+          <el-select v-model="form.maCode" placeholder="请选择产品">
             <el-option
-              v-for="item in materialList"
-              :key="item.maCode"
-              :label="item.maName"
-              :value="item.maCode"
-            >
+             v-for="option in materialList"
+             :key="option.maCode"
+             :label="option.maName"
+             :value="option.maCode">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="所需原料数量" prop="pmDemand">
-          <el-input v-model="form.pmDemand" placeholder="请输入所需原料数量" />
+        <el-form-item label="数量" prop="odDemand">
+          <el-input v-model="form.odDemand" placeholder="请输入所需产品数量" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -197,18 +172,12 @@
 </template>
 
 <script>
-import { listProcessMaterial, getProcessMaterial, delProcessMaterial, addProcessMaterial, updateProcessMaterial } from "@/api/system/processMaterial";
-import { listProcess } from "@/api/system/process";
+import { listOrderDemand, getOrderDemand, delOrderDemand, addOrderDemand, updateOrderDemand } from "@/api/system/orderDemand";
 import { listMaterial } from "@/api/system/material";
+import { listOrder } from "@/api/system/order";
 
 export default {
-  name: "ProcessMaterial",
-  props: {
-    viewMode: {
-      type: Number,
-      default: 0
-    }
-  },
+  name: "OrderDemand",
   data() {
     return {
       // 按钮loading
@@ -225,8 +194,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 工艺流程原料需求表格数据
-      processMaterialList: [],
+      // 订单所需产品关联表格数据
+      orderDemandList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -235,89 +204,86 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        procCode: undefined,
+        odCode: undefined,
         maCode: undefined,
-        pmDelete: 0,
+        orCode: undefined,
+        odDemand: undefined,
+        odDelete: 0,
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        pmId: [
-          { required: true, message: "原料需求ID不能为空", trigger: "blur" }
-        ],
-        procCode: [
-          { required: true, message: "所属工艺流程不能为空", trigger: "blur" }
+        odId: [
+          { required: true, message: "所需产品ID不能为空", trigger: "blur" }
         ],
         maCode: [
-          { required: true, message: "所用原料不能为空", trigger: "blur" }
+          { required: true, message: "所需产品不能为空", trigger: "blur" }
         ],
-        pmDemand: [
-          { required: true, message: "所需原料数量不能为空", trigger: "blur" }
+        orCode: [
+          { required: true, message: "订单不能为空", trigger: "blur" }
+        ],
+        odDemand: [
+          { required: true, message: "所需产品数量不能为空", trigger: "blur" }
         ],
       },
-      // 工艺流程列表
-      processList: [],
-      // 原料列表
+      // 产品列表
       materialList: [],
-      // 1-按工艺流程查看原料需求
-      // 2-按工艺流程查看原料需求（不可修改）
+      // 订单列表
+      orderList: [],
+      // 1-按照订单查看产品需求
       mode: 0,
-      // 筛选提示文本
+      // 页面顶部提示
       hint: ''
     };
   },
   async created() {
-    // 检查来源
-    if (this.$route.query.procCode) {
+    if (this.$route.query.orCode) {
       this.mode = 1
     }
-    await this.getProcessList();
+    await this.getOrderList();
     await this.getMaterialList();
     this.getList();
   },
   async activated() {
-    if (this.$route.query.procCode) {
+    if (this.$route.query.orCode) {
       this.mode = 1
     } else {
       this.mode = 0
     }
-    await this.getProcessList();
+    await this.getOrderList();
     await this.getMaterialList();
     this.getList();
   },
   methods: {
-    // 查询工艺流程列表
-    getProcessList() {
+    // 查询订单
+    getOrderList() {
       return new Promise((resolve, reject) => {
         this.loading = true;
-        listProcess().then(response => {
-          this.processList = response.rows
+        listOrder().then(response => {
+          this.orderList = response.rows
           if (this.mode === 1) {
-            let process = response.rows.find(ele => ele.procCode === this.$route.query.procCode)
-            this.hint = "工艺流程 "
-            this.hint += process.procName
+            let order = response.rows.find(ele => ele.orCode === this.$route.query.orCode)
+            // 构造提示文本
+            this.hint = "订单 "
+            this.hint += order.orName
             this.hint += " "
-            // 检查状态
-            if (process.procStat !== '1' || this.viewMode === 2) {
-              this.mode = 2
-            }
             // 设置筛选
-            this.queryParams.procCode = process.procCode
+            this.queryParams.orCode = order.orCode
           }
           resolve()
         }).catch(() => {
           reject()
         }).finally(() => {
-          this.loading = false;
+          this.loading = false
         })
       })
     },
-    // 查询原料列表
+    // 查询产品
     getMaterialList() {
       return new Promise((resolve, reject) => {
         this.loading = true;
-        listMaterial({ maType: '1' }).then(response => {
+        listMaterial({ maType: '2' }).then(response => {
           this.materialList = response.rows
           resolve()
         }).catch(() => {
@@ -327,11 +293,11 @@ export default {
         })
       })
     },
-    /** 查询工艺流程原料需求列表 */
+    /** 查询订单所需产品关联列表 */
     getList() {
       this.loading = true;
-      listProcessMaterial(this.queryParams).then(response => {
-        this.processMaterialList = response.rows;
+      listOrderDemand(this.queryParams).then(response => {
+        this.orderDemandList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -344,14 +310,15 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        pmId: undefined,
-        procCode: undefined,
+        odId: undefined,
+        odCode: undefined,
         maCode: undefined,
-        pmDemand: undefined,
-        pmDelete: undefined,
+        orCode: undefined,
+        odDemand: undefined,
+        odDelete: undefined,
         createBy: undefined,
-        updateBy: undefined,
         createTime: undefined,
+        updateBy: undefined,
         updateTime: undefined
       };
       this.resetForm("form");
@@ -364,12 +331,12 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
-      this.queryParams.procCode = this.$route.query.procCode
+      this.queryParams.orCode = this.$route.query.orCode
       this.handleQuery();
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.pmId)
+      this.ids = selection.map(item => item.odId)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -377,21 +344,21 @@ export default {
     handleAdd() {
       this.reset();
       if (this.mode === 1) {
-        this.form.procCode = this.$route.query.procCode
+        this.form.orCode = this.$route.query.orCode
       }
       this.open = true;
-      this.title = "添加工艺流程原料需求";
+      this.title = "添加订单所需产品关联";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.loading = true;
       this.reset();
-      const pmId = row.pmId || this.ids
-      getProcessMaterial(pmId).then(response => {
+      const odId = row.odId || this.ids
+      getOrderDemand(odId).then(response => {
         this.loading = false;
         this.form = response.data;
         this.open = true;
-        this.title = "修改工艺流程原料需求";
+        this.title = "修改订单所需产品关联";
       });
     },
     /** 提交按钮 */
@@ -399,8 +366,8 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           this.buttonLoading = true;
-          if (this.form.pmId != null) {
-            updateProcessMaterial(this.form).then(response => {
+          if (this.form.odId != null) {
+            updateOrderDemand(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
@@ -408,7 +375,7 @@ export default {
               this.buttonLoading = false;
             });
           } else {
-            addProcessMaterial(this.form).then(response => {
+            addOrderDemand(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -421,10 +388,10 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const pmIds = row.pmId || this.ids;
-      this.$modal.confirm('是否确认删除工艺流程原料需求编号为"' + pmIds + '"的数据项？').then(() => {
+      const odIds = row.odId || this.ids;
+      this.$modal.confirm('是否确认删除订单所需产品关联编号为"' + odIds + '"的数据项？').then(() => {
         this.loading = true;
-        return delProcessMaterial(pmIds);
+        return delOrderDemand(odIds);
       }).then(() => {
         this.loading = false;
         this.getList();
@@ -436,9 +403,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('system/processMaterial/export', {
+      this.download('system/orderDemand/export', {
         ...this.queryParams
-      }, `processMaterial_${new Date().getTime()}.xlsx`)
+      }, `orderDemand_${new Date().getTime()}.xlsx`)
     }
   }
 };

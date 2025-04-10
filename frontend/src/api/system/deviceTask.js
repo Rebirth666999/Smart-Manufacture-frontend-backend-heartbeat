@@ -48,7 +48,8 @@ export function saveDeviceTasks(data) {
   return request({
     url: '/system/deviceTask/saveTasks',
     method: 'post',
-    data: data
+    data: data,
+    timeout: 90000
   })
 }
 

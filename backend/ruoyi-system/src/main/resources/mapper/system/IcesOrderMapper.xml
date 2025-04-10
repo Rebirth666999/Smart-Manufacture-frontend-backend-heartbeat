@@ -7,11 +7,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="com.ruoyi.system.domain.IcesOrder" id="IcesOrderResult">
         <result property="orId" column="or_id"/>
         <result property="orCode" column="or_code"/>
-        <result property="maCode" column="ma_code"/>
         <result property="clCode" column="cl_code"/>
         <result property="orName" column="or_name"/>
         <result property="orStat" column="or_stat"/>
-        <result property="orDemand" column="or_demand"/>
         <result property="orPriority" column="or_priority"/>
         <result property="orDeadline" column="or_deadline"/>
         <result property="orPrice" column="or_price"/>

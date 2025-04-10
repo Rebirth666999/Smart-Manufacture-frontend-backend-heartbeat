@@ -68,7 +68,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['system:process:edit']"
-        >修改</el-button>
+        >设计</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -116,30 +116,17 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:process:edit']"
-            v-show="scope.row.procStat === '1'"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-box"
-            @click="handleProcessMaterialView(scope.row)"
-          >原料需求</el-button>
-          <el-button
-            size="mini"
-            type="text"
             icon="el-icon-brush"
             v-show="scope.row.procStat === '1'"
-            @click="handleDesigner(scope.row)"
+            v-hasPermi="['system:process:edit']"
+            @click="handleDesign(scope.row)"
           >设计</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-search"
             @click="handleViewer(scope.row)"
-          >查看流程</el-button>
+          >查看</el-button>
           <el-button
             size="mini"
             type="text"
@@ -195,7 +182,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改工艺流程对话框 -->
+    <!-- 添加工艺流程对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="目标产品" prop="maCode">
@@ -223,33 +210,6 @@
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
-    </el-dialog>
-
-    <!-- 流程设计对话框 -->
-    <el-dialog :title="designerData.title" :visible.sync="designerOpen" append-to-body fullscreen>
-      <process-designer
-        :key="designerOpen"
-        style="border:1px solid rgba(0, 0, 0, 0.1);"
-        ref="modelDesigner"
-        v-loading="designerData.loading"
-        :bpmnXml="designerData.bpmnXml"
-        :designerForm="designerData.form"
-        :mode="2"
-        :extraList="{emList: equipmentModelList, moList: modelOperationList}"
-        @save="onSaveDesigner"
-      />
-    </el-dialog>
-
-    <!-- 查看流程对话框 -->
-    <el-dialog :title="viewerData.title" :visible.sync="viewerOpen" append-to-body fullscreen>
-      <process-viewer
-        v-loading="viewerData.loading"
-        :key="`designer-${viewerData.index}`"
-        :xml="viewerData.bpmnXml"
-        :style="{height: 'calc(100vh - 124.5px)'}"
-        :mode="2"
-        :extraList="{emList: equipmentModelList, moList: modelOperationList}"
-      />
     </el-dialog>
   </div>
 </template>
@@ -317,27 +277,6 @@ export default {
       },
       // 产品列表
       productList: [],
-      // 设计窗口是否打开
-      designerOpen: false,
-      // 设计器相关数据
-      designerData: {
-        loading: false,
-        bpmnXml: '',
-        modelId: null,
-        form: {
-          processName: null,
-          processKey: null
-        }
-      },
-      // 查看窗口是否打开
-      viewerOpen: false,
-      // 查看器相关数据
-      viewerData: {
-        title: '',
-        loading: false,
-        index: undefined,
-        bpmnXml: ''
-      },
       // 设备模型列表
       equipmentModelList: [],
       // 模型操作列表
@@ -451,17 +390,20 @@ export default {
       this.open = true;
       this.title = "添加工艺流程";
     },
-    /** 修改按钮操作 */
-    handleUpdate(row) {
-      this.loading = true;
-      this.reset();
-      const procId = row.procId || this.ids
-      getProcess(procId).then(response => {
-        this.loading = false;
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改工艺流程";
-      });
+    /** 顶部设计按钮操作 */
+    handleUpdate(event) {
+      const row = this.processList.find(ele => ele.procId === this.ids[0])
+      if (row) {
+        this.handleDesign(row)
+      }
+    },
+    /** 行内设计按钮操作 */
+    handleDesign(row) {
+      this.$router.push(`/process/design?procId=${row.procId}&procCode=${row.procCode}`)
+    },
+    /** 查看按钮操作 */
+    handleViewer(row) {
+      this.$router.push(`/process/view?procId=${row.procId}&procCode=${row.procCode}`)
     },
     /** 提交按钮 */
     submitForm() {
@@ -510,60 +452,6 @@ export default {
       this.download('system/process/export', {
         ...this.queryParams
       }, `process_${new Date().getTime()}.xlsx`)
-    },
-    // 查看工艺流程的原料需求
-    handleProcessMaterialView(row) {
-      this.$router.push(`/processFlow/processMaterial?procCode=${row.procCode}`)
-    },
-    /** 设计按钮操作 */
-    handleDesigner(row) {
-      this.designerData.title = "工艺流程设计 - " + row.procName;
-      this.designerData.modelId = "model_" + row.procId;
-      this.designerData.form = {
-        processName: row.procName,
-        processKey: "process_" + row.procId
-      }
-      // 读取已设计的流程
-      if (row.procModel) {
-        this.designerData.loading = true;
-        getBpmnXml(row.procModel).then(response => {
-          this.designerData.bpmnXml = response.data || '';
-          this.designerData.loading = false;
-          this.designerOpen = true;
-        })
-      } else {
-        this.designerData.bpmnXml = '';
-        this.designerOpen = true;
-      }
-    },
-    // 保存流程按钮操作
-    onSaveDesigner(bpmnXml) {
-      this.$confirm("是否保存工艺流程？", "提示", {
-        distinguishCancelAndClose: true,
-        confirmButtonText: '是',
-        cancelButtonText: '否'
-      }).then(() => {
-        this.designerData.loading = true;
-        saveModel(bpmnXml).then(response => {
-          this.designerOpen = false
-          this.getList();
-          this.$modal.msgSuccess("保存成功");
-        }).finally(() => {
-          this.designerData.loading = false;
-        })
-      }).catch(action => {
-      })
-    },
-    /** 查看流程按钮操作 */
-    handleViewer(row) {
-      this.viewerData.loading = true
-      this.viewerData.title = "查看流程 - " + row.procName
-      this.viewerData.index = row.procModel
-      this.viewerOpen = true
-      getBpmnXml(row.procModel).then(response => {
-        this.viewerData.bpmnXml = response.data || ''
-        this.viewerData.loading = false
-      })
     },
     // 提交审核
     handleSubmitReview(row) {

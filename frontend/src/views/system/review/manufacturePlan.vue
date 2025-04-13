@@ -141,21 +141,21 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            v-show="scope.row.mpStat === '2' || scope.row.mpStat === '6'"
+            v-show="scope.row.mpStat === '2' || scope.row.mpStat === '7' || scope.row.mpStat === 'a'"
             @click="startReview(scope.row)"
           >开始审核</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-check"
-            v-show="scope.row.mpStat === '3' || scope.row.mpStat === '7'"
+            v-show="scope.row.mpStat === '3' || scope.row.mpStat === '8' || scope.row.mpStat === 'b'"
             @click="passReview(scope.row)"
           >通过审核</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-close"
-            v-show="scope.row.mpStat === '3' || scope.row.mpStat === '7'"
+            v-show="scope.row.mpStat === '3' || scope.row.mpStat === '8' || scope.row.mpStat === 'b'"
             @click="rejectReview(scope.row)"
           >驳回审核</el-button>
         </template>
@@ -237,8 +237,8 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        orCode: this.$route.query.orCode,
-        procCode: this.$route.query.procCode,
+        orCode: undefined,
+        procCode: undefined,
         mpStat: undefined,
         mpPriority: undefined,
         mpDelete: 0,
@@ -262,6 +262,18 @@ export default {
       this.mode = 1
     } else if (this.$route.query.procCode) {
       this.mode = 2
+    }
+    await this.getProcessList();
+    await this.getOrderList();
+    this.getList();
+  },
+  async activated() {
+    if (this.$route.query.orCode) {
+      this.mode = 1
+    } else if (this.$route.query.procCode) {
+      this.mode = 2
+    } else {
+      this.mode = 0
     }
     await this.getProcessList();
     await this.getOrderList();
@@ -293,7 +305,8 @@ export default {
         getManufacturePlan(row.mpId).then(response => {
           this.form = response.data;
           if (this.form.mpStat === '2') this.form.mpStat = '3';
-          else this.form.mpStat = '7';
+          else if (this.form.mpStat === '7') this.form.mpStat = '8';
+          else this.form.mpStat = 'b';
           updateManufacturePlan(this.form).then(response => {
             this.$modal.msgSuccess("已开始审核");
             this.getList();
@@ -311,7 +324,9 @@ export default {
         this.loading = true;
         getManufacturePlan(row.mpId).then(response => {
           this.form = response.data;
-          if (this.form.mpStat === '3' || this.form.mpStat === '7') this.form.mpStat = '4';
+          if (this.form.mpStat === '3') this.form.mpStat = '4';
+          else if (this.form.mpStat === '8') this.form.mpStat = '6';
+          else this.form.mpStat = '9';
           updateManufacturePlan(this.form).then(response => {
             this.$modal.msgSuccess("已通过审核");
             this.getList();
@@ -329,7 +344,8 @@ export default {
         this.loading = true;
         getManufacturePlan(row.mpId).then(response => {
           this.form = response.data;
-          if (this.form.mpStat === '3' || this.form.mpStat === '7') this.form.mpStat = '1';
+          if (this.form.mpStat === '3') this.form.mpStat = '1';
+          else if (this.form.mpStat === '8' || this.form.mpStat === 'b') this.form.mpStat = '4';
           updateManufacturePlan(this.form).then(response => {
             this.$modal.msgSuccess("已驳回审核");
             this.getList();
@@ -343,35 +359,51 @@ export default {
 
     // 查询工艺流程列表
     getProcessList() {
-      return listProcess().then(response => {
-        this.processListFull = response.rows || [];
-        if (this.mode === 2 && this.processListFull.length > 0) {
-          const proc = this.processListFull.find(ele => ele.procCode === this.$route.query.procCode);
-          if (proc) {
-            this.hint = "工艺流程 " + proc.procName;
-          } else {
-            this.hint = "工艺流程 " + this.$route.query.procCode;
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listProcess().then(response => {
+          this.processListFull = response.rows || []
+          if (this.mode === 2) {
+            let proc = this.processListFull.find(ele => ele.procCode === this.$route.query.procCode)
+            // 构造提示文本
+            this.hint = "工艺流程 "
+            this.hint += proc.procName
+            this.hint += " "
+            // 设置筛选
+            this.queryParams.procCode = proc.procCode
+            this.queryParams.orCode = undefined
           }
-        }
-      }).catch(() => {
-        this.processListFull = [];
-      });
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false;
+        })
+      })
     },
     // 查询订单列表
     getOrderList() {
-      return listOrder().then(response => {
-        this.orderList = response.rows || [];
-        if (this.mode === 1 && this.orderList.length > 0) {
-          const order = this.orderList.find(ele => ele.orCode === this.$route.query.orCode);
-          if (order) {
-            this.hint = "订单 " + order.orName;
-          } else {
-            this.hint = "订单 " + this.$route.query.orCode;
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listOrder().then(response => {
+          this.orderList = response.rows || []
+          if (this.mode === 1) {
+            let order = this.orderList.find(ele => ele.orCode === this.$route.query.orCode)
+            // 构造提示文本
+            this.hint = "订单 "
+            this.hint += order.orName
+            this.hint += " "
+            // 设置筛选
+            this.queryParams.orCode = order.orCode
+            this.queryParams.procCode = undefined
           }
-        }
-      }).catch(() => {
-        this.orderList = [];
-      });
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false;
+        })
+      })
     },
     /** 查询生产计划列表 */
     getList() {
@@ -390,6 +422,8 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams.orCode = this.$route.query.orCode
+      this.queryParams.procCode = this.$route.query.procCode
       this.handleQuery();
     },
     // 多选框选中数据

@@ -7,9 +7,9 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.ruoyi.system.domain.IcesEquipmentModel;
-import com.ruoyi.system.domain.vo.IcesEquipmentModelVo;
+import com.ruoyi.system.domain.bo.IcesManufactureTaskBo;
 import com.ruoyi.system.service.IIcesCodeService;
+import com.ruoyi.system.service.IIcesOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesManufacturePlanBo;
@@ -35,6 +35,7 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
 
     private final IcesManufacturePlanMapper baseMapper;
     private final IIcesCodeService codeService;
+    private final IIcesOrderService orderService;
 
     /**
      * 查询生产计划
@@ -62,6 +63,8 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
         stats.add("3");  // 审核中
         stats.add("a");  // 待审核（弃用）
         stats.add("b");  // 审核中（弃用）
+        stats.add("7");  // 待审核（修改）
+        stats.add("8");  // 待审核（修改）
         lqw.in(IcesManufacturePlan::getMpStat, stats);
         Page<IcesManufacturePlanVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
         return TableDataInfo.build(result);
@@ -92,7 +95,7 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
      * 新增生产计划
      */
     @Override
-    public Boolean insertByBo(IcesManufacturePlanBo bo) {
+    public IcesManufacturePlanVo insertByBo(IcesManufacturePlanBo bo) {
         bo.setMpCode(codeService.insertByType("ManufacturePlan"));
         IcesManufacturePlan add = BeanUtil.toBean(bo, IcesManufacturePlan.class);
         validEntityBeforeSave(add);
@@ -100,7 +103,7 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
         if (flag) {
             bo.setMpId(add.getMpId());
         }
-        return flag;
+        return queryById(add.getMpId());
     }
 
     /**
@@ -110,6 +113,25 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
     public Boolean updateByBo(IcesManufacturePlanBo bo) {
         IcesManufacturePlan update = BeanUtil.toBean(bo, IcesManufacturePlan.class);
         validEntityBeforeSave(update);
+        //判断状态是否为已完成
+        if (bo.getMpStat().equals("6")) {
+            IcesManufacturePlanBo icesManufacturePlanBo = new IcesManufacturePlanBo();
+            icesManufacturePlanBo.setMpCode(update.getMpCode());
+            List<IcesManufacturePlanVo> OtherVos = queryList(icesManufacturePlanBo);
+            int done = 1;
+            for (IcesManufacturePlanVo otherVo : OtherVos) {
+                if(!otherVo.getMpStat().equals("6")) {
+                    //证明还有未完成
+                    done = 0;
+                    break;
+                }
+            }
+            if (done == 1)
+            {
+                //所有的都已完成
+                orderService.updateStatus(bo);
+            }
+        }
         return baseMapper.updateById(update) > 0;
     }
 
@@ -130,4 +152,13 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
         }
         return baseMapper.deleteBatchIds(ids) > 0;
     }
+    @Override
+    public void updateStatus(IcesManufactureTaskBo icesManufactureTaskBo) {
+        IcesManufacturePlanBo bo = new IcesManufacturePlanBo();
+        bo.setMpCode(icesManufactureTaskBo.getMtCode());
+        List<IcesManufacturePlanVo> icesManufacturePlanVos = queryList(bo);
+        bo.setMpId(icesManufacturePlanVos.get(0).getMpId());
+        updateByBo(bo);
+    }
+
 }

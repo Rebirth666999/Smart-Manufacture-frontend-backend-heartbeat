@@ -48,6 +48,34 @@ export function saveDeviceTasks(data) {
   return request({
     url: '/system/deviceTask/saveTasks',
     method: 'post',
+    data: data,
+    timeout: 90000
+  })
+}
+
+// 查询设备任务参数列表
+export function listDeviceTaskParam(query) {
+  return request({
+    url: '/system/deviceTaskParam/list',
+    method: 'get',
+    params: query
+  })
+}
+
+// 查询设备任务前序列表
+export function listDeviceTaskPrev(query) {
+  return request({
+    url: '/system/deviceTaskPrev/list',
+    method: 'get',
+    params: query
+  })
+}
+
+export function executeDeviceTask(url, data) {
+  return request({
+    baseURL: '',
+    url: url,
+    method: 'post',
     data: data
   })
 }

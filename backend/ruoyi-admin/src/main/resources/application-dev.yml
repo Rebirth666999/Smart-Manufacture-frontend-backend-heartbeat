@@ -49,9 +49,12 @@ spring:
           driverClassName: com.mysql.cj.jdbc.Driver
           # jdbc 所有参数配置参考 https://lionli.blog.csdn.net/article/details/122018562
           # rewriteBatchedStatements=true 批处理优化 大幅提升批量插入更新删除性能(对数据库有性能损耗 使用批量操作应考虑性能问题)
-          url: jdbc:mysql://124.221.52.73:3306/industry_dev?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&nullCatalogMeansCurrent=true
-          username: chy
-          password: hit415ices@
+          url: jdbc:mysql://192.168.1.110:3306/industry_dev?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&nullCatalogMeansCurrent=true
+          username: ices
+          password: ices
+#          url: jdbc:mysql://124.221.52.73:3306/industry_dev?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&nullCatalogMeansCurrent=true
+#          username: chy
+#          password: hit415ices@
         # 从库数据源
         slave:
           lazy: true
@@ -82,9 +85,9 @@ spring:
 #          password: root
       hikari:
         # 最大连接池数量
-        maxPoolSize: 20
+        maxPoolSize: 100
         # 最小空闲线程数量
-        minIdle: 10
+        minIdle: 40
         # 配置获取连接等待超时的时间
         connectionTimeout: 30000
         # 校验超时时间

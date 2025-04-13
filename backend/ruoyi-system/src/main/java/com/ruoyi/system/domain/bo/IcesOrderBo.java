@@ -35,12 +35,6 @@ public class IcesOrderBo extends BaseEntity {
     private String orCode;
 
     /**
-     * 所需产品
-     */
-    @NotBlank(message = "所需产品不能为空", groups = { AddGroup.class, EditGroup.class })
-    private String maCode;
-
-    /**
      * 客户
      */
     @NotBlank(message = "客户不能为空", groups = { AddGroup.class, EditGroup.class })
@@ -56,12 +50,6 @@ public class IcesOrderBo extends BaseEntity {
      * 状态代码
      */
     private String orStat;
-
-    /**
-     * 所需产品数量
-     */
-    @NotNull(message = "所需产品数量不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Float orDemand;
 
     /**
      * 订单优先级

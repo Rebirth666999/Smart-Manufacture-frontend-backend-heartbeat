@@ -9,42 +9,48 @@
         'element.click',
         'connection.added',
         'connection.removed',
-        'connection.changed'
+        'connection.changed',
       ]"
       @element-click="elementClick"
       @init-finished="initModeler"
       @event="handlerEvent"
       @save="onSaveProcess"
     />
-    <bmpn-process-penal :bpmn-modeler="modeler" :prefix="controlForm.prefix" :mode="mode" :extraList='extraList' class="process-panel" />
+    <bmpn-process-penal
+      :bpmn-modeler="modeler"
+      :prefix="controlForm.prefix"
+      :mode="mode"
+      :extraList="extraList"
+      class="process-panel"
+    />
   </div>
 </template>
 
 <script>
-import Vue from 'vue';
-import '@/plugins/package/theme/index.scss';
-import { BpmnProcessDesigner, BmpnProcessPenal } from '@/plugins/package/index';
+import Vue from "vue";
+import "@/plugins/package/theme/index.scss";
+import { BpmnProcessDesigner, BmpnProcessPenal } from "@/plugins/package/index";
 // 自定义元素选中时的弹出菜单（修改 默认任务 为 用户任务）
-import RuoyiContentPadProvider from '@/plugins/package/designer/plugins/content-pad/ruoyi';
-import IndustryContentPadProvider from '@/plugins/package/designer/plugins/content-pad/industry';
+import RuoyiContentPadProvider from "@/plugins/package/designer/plugins/content-pad/ruoyi";
+import IndustryContentPadProvider from "@/plugins/package/designer/plugins/content-pad/industry";
 // 自定义左侧菜单（修改 默认任务 为 用户任务）
-import RuoyiPaletteProvider from '@/plugins/package/designer/plugins/palette/ruoyi';
-import EquipmentOperationPaletteProvider from '@/plugins/package/designer/plugins/palette/equipmentOperation'
-import ProcessPaletteProvider from '@/plugins/package/designer/plugins/palette/process'
-import { vuePlugin } from '@/plugins/package/highlight';
-import 'highlight.js/styles/atom-one-dark-reasonable.css';
+import RuoyiPaletteProvider from "@/plugins/package/designer/plugins/palette/ruoyi";
+import EquipmentOperationPaletteProvider from "@/plugins/package/designer/plugins/palette/equipmentOperation";
+import ProcessPaletteProvider from "@/plugins/package/designer/plugins/palette/process";
+import { vuePlugin } from "@/plugins/package/highlight";
+import "highlight.js/styles/atom-one-dark-reasonable.css";
 Vue.use(vuePlugin);
 
 export default {
-  name: 'ProcessDesigner',
+  name: "ProcessDesigner",
   props: {
     bpmnXml: {
       type: String,
-      required: true
+      required: true,
     },
     designerForm: {
       type: Object,
-      required: true
+      required: true,
     },
     // mode代表设计器职能，决定可以添加的操作类型
     // 0-ruoyi原先的表单审批流程
@@ -52,62 +58,61 @@ export default {
     // 2-产品工艺流程
     mode: {
       type: Number,
-      required: true
+      required: true,
     },
     extraList: {
       type: Object,
-      required: false
-    }
+      required: false,
+    },
   },
   components: {
     BpmnProcessDesigner,
-    BmpnProcessPenal
+    BmpnProcessPenal,
   },
-  data () {
+  data() {
     return {
       height: document.documentElement.clientHeight - 94.5 + "px;",
       xmlString: this.bpmnXml,
       modeler: null,
       controlForm: {
-        processId: this.designerForm.processKey || '',
-        processName: this.designerForm.processName || '',
+        processId: this.designerForm.processKey || "",
+        processName: this.designerForm.processName || "",
         simulation: false,
         labelEditing: false,
         labelVisible: false,
-        prefix: 'flowable',
-        headerButtonSize: 'small',
-        additionalModel: []
-      }
-    }
+        prefix: "flowable",
+        headerButtonSize: "small",
+        additionalModel: [],
+      },
+    };
   },
   created() {
     if (this.mode === 0) {
-      this.controlForm.additionalModel.push(RuoyiContentPadProvider)
-      this.controlForm.additionalModel.push(RuoyiPaletteProvider)
+      this.controlForm.additionalModel.push(RuoyiContentPadProvider);
+      this.controlForm.additionalModel.push(RuoyiPaletteProvider);
     } else if (this.mode === 1) {
-      this.controlForm.additionalModel.push(IndustryContentPadProvider)
-      this.controlForm.additionalModel.push(EquipmentOperationPaletteProvider)
+      this.controlForm.additionalModel.push(IndustryContentPadProvider);
+      this.controlForm.additionalModel.push(EquipmentOperationPaletteProvider);
     } else {
-      this.controlForm.additionalModel.push(IndustryContentPadProvider)
-      this.controlForm.additionalModel.push(ProcessPaletteProvider)
+      this.controlForm.additionalModel.push(IndustryContentPadProvider);
+      this.controlForm.additionalModel.push(ProcessPaletteProvider);
     }
   },
   methods: {
-    elementClick (element) {
+    elementClick(element) {
       this.element = element;
     },
-    initModeler (modeler) {
+    initModeler(modeler) {
       setTimeout(() => {
         this.modeler = modeler;
       }, 10);
     },
-    handlerEvent (eventName, element) {
+    handlerEvent(eventName, element) {},
+    onSaveProcess(saveData) {
+      this.$emit("save", saveData);
     },
-    onSaveProcess (saveData) {
-      this.$emit('save', saveData);
-    }
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss">

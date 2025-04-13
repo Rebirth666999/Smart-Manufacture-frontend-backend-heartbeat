@@ -6,6 +6,7 @@
           v-model="queryParams.mpCode"
           placeholder="请选择生产计划"
           clearable
+          disabled
         >
           <el-option
             v-for="item in manufacturePlanList"
@@ -34,7 +35,7 @@
       <el-form-item label="状态" prop="mtStat">
         <el-select v-model="queryParams.mtStat" placeholder="请选择状态" clearable>
           <el-option
-            v-for="dict in dict.type.ices_order_status"
+            v-for="dict in dict.type.ices_manufacture_task_status"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -131,20 +132,20 @@
       </el-table-column>
       <el-table-column label="状态" align="center" prop="mtStat">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.ices_order_status" :value="scope.row.mtStat"/>
+          <dict-tag :options="dict.type.ices_manufacture_task_status" :value="scope.row.mtStat"/>
         </template>
       </el-table-column>
-      <el-table-column label="实际开始时间" align="center" prop="mtBegin" width="100">
+      <el-table-column label="实际开始时间" align="center" prop="mtBegin">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.mtBegin, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="最晚结束时间" align="center" prop="mtEndPlan" width="100">
+      <el-table-column label="最晚结束时间" align="center" prop="mtEndPlan">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.mtEndPlan, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="实际结束时间" align="center" prop="mtEndReal" width="100">
+      <el-table-column label="实际结束时间" align="center" prop="mtEndReal">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.mtEndReal, '{y}-{m}-{d}') }}</span>
         </template>
@@ -160,6 +161,7 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
+            v-show="scope.row.mtStat==='1' || scope.row.mtStat==='4' || scope.row.mtStat==='d'"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:manufactureTask:edit']"
           >修改</el-button>
@@ -167,12 +169,14 @@
             size="mini"
             type="text"
             icon="el-icon-download"
+            v-show="scope.row.mtStat==='4'"
             @click="handleGenerateDeviceTask(scope.row)"
           >生成设备任务</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-files"
+            v-show="scope.row.mtStat==='d'"
             @click="handleExecuteDeviceTask(scope.row)"
           >下发设备任务</el-button>
           <el-button
@@ -180,8 +184,30 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
+            v-show="scope.row.mtStat==='1'"
             v-hasPermi="['system:manufactureTask:remove']"
           >删除</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-finished"
+            v-show="scope.row.mtStat === '1'"
+            @click="handleSubmitReview(scope.row)"
+          >提交审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-refresh-left"
+            v-show="scope.row.mtStat === '2' || scope.row.mtStat === '7' || scope.row.mtStat === 'a'"
+            @click="handleWithdrawReview(scope.row)"
+          >撤回审核</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            v-show="scope.row.mtStat==='4' || scope.row.mtStat==='d'"
+            @click="handleDeprecated(scope.row)"
+          >弃用</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -201,7 +227,7 @@
           <el-select
             v-model="form.mpCode"
             placeholder="请选择生产计划"
-            clearable
+            disabled
           >
             <el-option
               v-for="item in manufacturePlanList"
@@ -295,9 +321,10 @@
 
 <script>
 import { listManufactureTask, getManufactureTask, delManufactureTask, addManufactureTask, updateManufactureTask } from "@/api/system/manufactureTask";
-import { listDeviceTask, saveDeviceTasks } from "@/api/system/deviceTask";
+import { listDeviceTask, saveDeviceTasks, listDeviceTaskParam, listDeviceTaskPrev, executeDeviceTask } from "@/api/system/deviceTask";
 
 import { listArea } from "@/api/system/area";
+import { listAreaControl } from "@/api/system/areaControl";
 import { listManufacturePlan } from "@/api/system/manufacturePlan";
 import { listProcess, getBpmnXml } from "@/api/system/process";
 import { listStore } from "@/api/system/store";
@@ -307,7 +334,7 @@ import { listEquipmentOperation } from "@/api/system/equipmentOperation";
 import { listModelOperation } from "@/api/system/modelOperation";
 import { listEquipmentModel } from "@/api/system/equipmentModel";
 import { listEquipmentOperationStep } from "@/api/system/equipmentOperationStep";
-import { listEquipmentOperationStepParam } from "@/api/system/equipmentOperationStepParam";
+import { listEquipmentOperationStepParam } from "@/api/system/equipmentOperationStepParam";import { listEquipmentAtomOperation } from "@/api/system/equipmentAtomOperation";
 
 import ProcessViewer from '@/components/ProcessViewerIndustry';
 
@@ -316,7 +343,12 @@ export default {
   components: {
     ProcessViewer,
   },
-  dicts: ['ices_order_status'],
+  props: {
+    mpCode: {
+      required: false
+    }
+  },
+  dicts: ['ices_manufacture_task_status'],
   data() {
     return {
       // 按钮loading
@@ -405,8 +437,8 @@ export default {
       },
       // 设备列表（全）
       eqList: [],
-      // 当前选中的生成任务
-      currentManufactureTask: null
+      // 当前选中的生产任务
+      currentManufactureTask: null,
     };
   },
   async created() {
@@ -415,57 +447,139 @@ export default {
     await this.getProcessList();
     await this.getStoreList();
     await this.getReferenceList();
+    if (this.mpCode) {
+      this.queryParams.mpCode = this.mpCode
+    }
+    this.getList();
+  },
+  async activated() {
+    await this.getAreaList();
+    await this.getManufacturePlanList();
+    await this.getProcessList();
+    await this.getStoreList();
+    await this.getReferenceList();
+    if (this.mpCode) {
+      this.queryParams.mpCode = this.mpCode
+    }
     this.getList();
   },
   methods: {
+    // 弃用
+    handleDeprecated(row) {
+      const mtId = row.mtId;
+      this.$modal.confirm('是否确认弃用该生产计划？').then(() => {
+      this.loading = true;
+      getManufactureTask(mtId).then(response => {
+        this.form = response.data;
+        const desc = this.form.mtDesc || '';
+        if (this.form.mtStat === '4' || this.form.mtStat === 'd') {
+          if (!desc.includes('已发布') && !desc.includes('已生成')) {
+            this.$prompt('请在描述中手动输入原状态（已发布或已生成）信息', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              inputValue: desc
+            }).then(({ value }) => {
+              this.form.mtDesc = value;
+              this.form.mtStat = 'a';
+              updateManufactureTask(this.form).then(response => {
+                this.$modal.msgSuccess("已弃用");
+                this.getList();
+              }).finally(() => {
+                this.loading = false;
+              });
+            }).catch(() => {
+              this.loading = false;
+            });
+          } else {
+            this.form.mtStat = 'a';
+            updateManufactureTask(this.form).then(response => {
+              this.$modal.msgSuccess("已弃用");
+              this.getList();
+            }).finally(() => {
+              this.loading = false;
+            });
+          }
+        }
+      });
+  }).catch(() => {
+  }).finally(() => {
+    this.loading = false;
+  });
+},
     // 获取流程信息参照所需的列表
     // 设备模型、模型操作、设备操作、设备
     getReferenceList() {
-      listEquipmentModel().then(response => {
-        this.viewerData.emList = response.rows;
-      });
-      listModelOperation().then(response => {
-        this.viewerData.moList = response.rows;
-      });
-      listEquipmentOperation().then(response => {
-        this.viewerData.eoList = response.rows;
-      });
-      listEquipment().then(response => {
-        this.eqList = response.rows;
-      });
-      listEquipmentOperationStep().then(response => {
-        this.viewerData.eosList = response.rows;
-      });
-      listEquipmentOperationStepParam().then(response => {
-        this.viewerData.eospaList = response.rows;
-      });
+      return new Promise(async (resolve, reject) => {
+        this.loading = true
+        try {
+          this.viewerData.emList = (await listEquipmentModel()).rows
+          this.viewerData.moList = (await listModelOperation()).rows
+          this.viewerData.eoList = (await listEquipmentOperation()).rows
+          this.eqList = (await listEquipment()).rows
+          this.viewerData.eosList = (await listEquipmentOperationStep()).rows
+          this.viewerData.eospaList = (await listEquipmentOperationStepParam()).rows
+        } catch (err) {
+          reject()
+        }
+        this.loading = false
+        resolve()
+      })
     },
     // 获取仓库列表
     getStoreList() {
-      listStore({ stType: '1' }).then(response => {
-        this.materialStoreList = response.rows;
-      });
-      listStore({ stType: '2' }).then(response => {
-        this.productStoreList = response.rows;
-      });
+      return new Promise(async (resolve, reject) => {
+        this.loading = true
+        try {
+          this.materialStoreList = (await listStore({ stType: '1' })).rows
+          this.productStoreList = (await listStore({ stType: '2' })).rows
+        } catch (err) {
+          reject()
+        }
+        this.loading = false
+        resolve()
+      })
     },
     // 获取工艺流程列表
     getProcessList() {
-      listProcess().then(response => {
-        this.processList = response.rows;
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listProcess().then(response => {
+          this.processList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
     // 获取生产计划列表
     getManufacturePlanList() {
-      listManufacturePlan().then(response => {
-        this.manufacturePlanList = response.rows;
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listManufacturePlan().then(response => {
+          this.manufacturePlanList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
     // 获取车间列表
     getAreaList() {
-      listArea().then(response => {
-        this.areaList = response.rows;
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listArea().then(response => {
+          this.areaList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
     /** 查询生产任务列表 */
     getList() {
@@ -513,6 +627,9 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      if (this.mpCode) {
+        this.queryParams.mpCode = this.mpCode
+      }
       this.handleQuery();
     },
     // 多选框选中数据
@@ -524,6 +641,9 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      if (this.mpCode) {
+        this.form.mpCode = this.mpCode
+      }
       this.open = true;
       this.title = "添加生产任务";
     },
@@ -545,6 +665,22 @@ export default {
         if (valid) {
           this.buttonLoading = true;
           if (this.form.mtId != null) {
+            const desc = this.form.mtDesc || '';
+            if (this.form.mtStat === '4' || this.form.mtStat === 'd') {
+              if (!desc.includes('已发布') && !desc.includes('已生成')) {
+                this.$message.warning('请在描述中手动输入原状态（已发布或已生成）信息');
+                this.buttonLoading = false;
+                return;
+              }
+               this.form.mtStat = '7';
+              }
+              if (this.form.mtStat === '7' || this.form.mtStat === 'a') {
+              if (!desc.includes('已发布') && !desc.includes('已生成')) {
+                this.$message.warning('请在描述中手动输入原状态（已发布或已生成）信息');
+                this.buttonLoading = false;
+                return;
+              }
+              }
             updateManufactureTask(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
@@ -587,6 +723,51 @@ export default {
         ...this.queryParams
       }, `manufactureTask_${new Date().getTime()}.xlsx`)
     },
+    // 提交审核
+    handleSubmitReview(row) {
+      const mtId = row.mtId;
+      this.$modal.confirm('是否要提交审核？审核在开始之前可以撤回。').then(() => {
+        this.loading = true;
+        getManufactureTask(mtId).then(response => {
+          this.form = response.data;
+          if (this.form.mtStat === '1') this.form.mtStat = '2';
+        updateManufactureTask(this.form).then(response => {
+            this.$modal.msgSuccess("已提交审核");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    // 撤回审核
+    handleWithdrawReview(row) {
+       const mtId = row.mtId;
+       this.$modal.confirm('是否要撤回审核？若审核已开始即无法撤回。').then(() => {
+         this.loading = true;
+      getManufactureTask(mtId).then(response => {
+        this.form = response.data;
+        const desc = this.form.mtDesc || '';
+        if (this.form.mtStat === '2') {
+          this.form.mtStat = '1';
+        } else if (this.form.mtStat === '7' || this.form.mtStat === 'a') {
+          if (desc.includes('已发布')) {
+            this.form.mtStat = '4';
+          } else if (desc.includes('已生成')) {
+            this.form.mtStat = 'd';
+          }
+        }
+      updateManufactureTask(this.form).then(response => {
+          this.$modal.msgSuccess("已撤回审核");
+          this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
     // 生成生产任务
     handleGenerateDeviceTask(row) {
       this.currentManufactureTask = row
@@ -613,21 +794,111 @@ export default {
         return saveDeviceTasks({
           manufactureTask: this.currentManufactureTask,
           deviceTask: steps
+        });
+        }).then(() => {
+          this.$modal.msgSuccess("生成设备任务成功");
+          const mtId = this.currentManufactureTask.mtId;
+          return getManufactureTask(mtId);
+          }).then(response => {
+          const task = response.data;
+          task.mtStat = 'd';
+          return updateManufactureTask(task);
+          }).then(() => {
+            this.getList();
+            this.viewerOpen = false;
+        }).catch(() => {
+        }).finally(() => {
+          this.viewerData.loading = false;
+        });
+      },
+    // 下发设备任务
+    async handleExecuteDeviceTask(row) {
+      this.$modal.confirm('是否下发任务？').then(async () => {
+        this.loading = true
+        // manufactureTask信息
+        const productionTask = {
+          "ptId": row.mtCode,
+          "ptLatestEndtime": '',
+          "ptNum": 1,
+          "ptPriority": row.mtPriority,
+          "preemptive": false,
+        }
+
+        const areaControl = (await listAreaControl({ arCode: row.arCode })).rows
+        const equipmentAtomOperationList = (await listEquipmentAtomOperation()).rows
+
+        const deviceTask = (await listDeviceTask({ mtCode: row.mtCode })).rows
+        const deviceTaskParam = (await listDeviceTaskParam({ mtCode: row.mtCode })).rows
+        const deviceTaskPrev = (await listDeviceTaskPrev({ mtCode: row.mtCode })).rows
+        let processRoute = []
+
+        // 处理每个task
+        for (let task of deviceTask) {
+          const prev = deviceTaskPrev.filter(ele => ele.dtCodeCur === task.dtCode)
+          const equipment = this.eqList.find(ele => ele.eqCode === task.eqCode)
+          const equipmentOperationStep = this.viewerData.eosList.find(ele => ele.eoCode === task.eoCode && ele.eaoCode)
+          const equipmentAtomOperation = equipmentAtomOperationList.find(ele => ele.eaoCode === equipmentOperationStep.eaoCode)
+          const equipmentOperationStepParams = this.viewerData.eospaList.filter(ele => ele.eosCode === equipmentOperationStep.eosCode)
+          // 取出所需信息
+          let route = {
+            "prdId": task.dtCode,
+            "prePrdId": prev.map(ele => ele.dtCodePrev),
+            "eqId": task.eqCode,
+            "opId": equipmentAtomOperation.eaoCode,
+            "opParam": {}
+          }
+          // 解析参数信息
+          for (let param of deviceTaskParam) {
+            const paramInfo = equipmentOperationStepParams.find(ele => ele.eospaCode === param.eospaCode)
+            if (paramInfo) {
+              try {
+                if (paramInfo.eospaType === '1')
+                  route.opParam[paramInfo.eospaName] = parseInt(param.dtpaValue)
+                else if (paramInfo.eospaType === '2')
+                  route.opParam[paramInfo.eospaName] = parseFloat(param.dtpaValue)
+                else if (paramInfo.eospaType === '4')
+                  route.opParam[paramInfo.eospaName] = JSON.parse(param.dtpaValue)
+                else
+                  route.opParam[paramInfo.eospaName] = param.dtpaValue
+
+                if (route.opParam[paramInfo.eospaName] === NaN) {
+                  this.$modal.msgError("参数类型不合法，请重新生成设备任务")
+                  return
+                }
+              } catch (error) {
+                this.$modal.msgError("参数类型不合法，请重新生成设备任务")
+                return
+              }
+            }
+          }
+          processRoute.push(route)
+        }
+        // 下发开始执行
+        return executeDeviceTask(areaControl[0]['acIp'], {
+          "areaControl": areaControl,
+          "productionTask": productionTask,
+          "processRoute": processRoute
         })
       }).then(() => {
-        this.$modal.msgSuccess("生成设备任务成功")
-        this.viewerOpen = false
-      }).catch(() => {
-      }).finally(() => {
-        this.viewerData.loading = false
-      });
-    },
-    // 下发设备任务
-    handleExecuteDeviceTask(row) {
-
-    }
-  }
-};
+        const mtId = row.mtId;
+        // 先获取完整的生产任务信息
+        return getManufactureTask(mtId);
+        }).then(response => {
+          const task = response.data;
+          // 更新状态为进行中
+          task.mtStat = '5';
+          // 提交更新请求
+          return updateManufactureTask(task);
+          }).then(() => {
+            this.getList();
+            this.$modal.msgSuccess("下发任务成功");
+            }).catch(() => {
+            }).finally(() => {
+              this.loading = false;
+            });
+         }
+       }
+      };
 </script>
 <style scoped>
 .el-select {

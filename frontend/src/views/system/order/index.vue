@@ -1,236 +1,16 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="所需产品" prop="maCode">
-        <el-select
-          v-model="queryParams.maCode"
-          placeholder="请选择产品"
-          clearable
-        >
-          <el-option
-            v-for="item in productList"
-            :key="item.maCode"
-            :label="item.maName"
-            :value="item.maCode"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="客户" prop="clCode">
-        <el-select
-          v-model="queryParams.clCode"
-          placeholder="请选择客户"
-          clearable
-        >
-          <el-option
-            v-for="item in clientList"
-            :key="item.clCode"
-            :label="item.clName"
-            :value="item.clCode"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="订单名称" prop="orName">
-        <el-input
-          v-model="queryParams.orName"
-          placeholder="请输入订单名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="状态" prop="orStat">
-        <el-select v-model="queryParams.orStat" placeholder="请选择状态" clearable>
-          <el-option
-            v-for="dict in dict.type.ices_order_status"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="优先级" prop="orPriority">
-        <el-input
-          v-model="queryParams.orPriority"
-          placeholder="请输入订单优先级"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="截止时间">
-        <el-date-picker
-          v-model="daterangeOrDeadline"
-          style="width: 240px"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          type="daterange"
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          :default-time="['00:00:00', '23:59:59']"
-        ></el-date-picker>
-      </el-form-item>
-      <!-- <el-form-item label="已删除" prop="orDelete">
-        <el-input
-          v-model="queryParams.orDelete"
-          placeholder="请输入已删除"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item> -->
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
-
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['system:order:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:order:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:order:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:order:export']"
-        >导出</el-button>
-      </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
-
-    <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="订单ID" align="center" prop="orId" v-if="true"/>
-      <el-table-column label="订单编码" align="center" prop="orCode" />
-      <el-table-column label="所需产品" align="center" prop="maCode">
-        <template slot-scope="scope">
-          {{ productList.find(ele => ele.maCode === scope.row.maCode).maName || '' }}
-        </template>
-      </el-table-column>
-      <el-table-column label="客户" align="center" prop="clCode">
-        <template slot-scope="scope">
-          {{ clientList.find(ele => ele.clCode === scope.row.clCode).clName || '' }}
-        </template>
-      </el-table-column>
-      <el-table-column label="订单名称" align="center" prop="orName" />
-      <el-table-column label="状态" align="center" prop="orStat">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.ices_order_status" :value="scope.row.orStat"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="所需产品数量" align="center" prop="orDemand" />
-      <el-table-column label="订单优先级" align="center" prop="orPriority" />
-      <el-table-column label="截止时间" align="center" prop="orDeadline" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.orDeadline, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="总价" align="center" prop="orPrice" />
-      <!-- <el-table-column label="已删除" align="center" prop="orDelete" /> -->
-      <el-table-column label="描述" align="center" prop="orDesc" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:order:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-finished"
-            v-if="scope.row.orStat==='1'"
-            @click="handleSubmitReview(scope.row)"
-          >提交审核</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-refresh-left"
-            v-show="scope.row.orStat === '2' || scope.row.orStat === 'b'"
-            @click="handleWithdrawReview(scope.row)"
-          >撤回审核</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            v-show="scope.row.orStat === '4'"
-            @click="handleDepreciateReview(scope.row)"
-          >弃用</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:order:remove']"
-          >删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
-
-    <!-- 添加或修改订单对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-col :span="12">
-          <el-form-item label="所需产品" prop="maCode">
-            <el-select
-              v-model="form.maCode"
-              placeholder="请选择产品"
-            >
-              <el-option
-                v-for="item in productList"
-                :key="item.maCode"
-                :label="item.maName"
-                :value="item.maCode"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
+    <el-card class="view-card">
+      <div slot="header">
+        <div class="card-header">
+          <div>订单信息</div>
+        </div>
+      </div>
+      <div>
+        <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
           <el-form-item label="客户" prop="clCode">
             <el-select
-              v-model="form.clCode"
+              v-model="queryParams.clCode"
               placeholder="请选择客户"
               clearable
             >
@@ -243,58 +23,197 @@
               </el-option>
             </el-select>
           </el-form-item>
-        </el-col>
-        <el-col :span="12">
           <el-form-item label="订单名称" prop="orName">
-            <el-input v-model="form.orName" placeholder="请输入订单名称" />
+            <el-input
+              v-model="queryParams.orName"
+              placeholder="请输入订单名称"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
           </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="所需产品数量" prop="orDemand">
-            <el-input v-model="form.orDemand" placeholder="请输入所需产品数量" />
+          <el-form-item label="状态" prop="orStat">
+            <el-select v-model="queryParams.orStat" placeholder="请选择状态" clearable>
+              <el-option
+                v-for="dict in dict.type.ices_order_status"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
+              />
+            </el-select>
           </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="订单优先级" prop="orPriority">
-            <el-input v-model="form.orPriority" placeholder="请输入订单优先级" />
+          <el-form-item label="优先级" prop="orPriority">
+            <el-input
+              v-model="queryParams.orPriority"
+              placeholder="请输入订单优先级"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
           </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="截止时间" prop="orDeadline">
-            <el-date-picker clearable
-              v-model="form.orDeadline"
-              type="datetime"
+          <el-form-item label="截止时间">
+            <el-date-picker
+              v-model="daterangeOrDeadline"
+              style="width: 240px"
               value-format="yyyy-MM-dd HH:mm:ss"
-              placeholder="请选择截止时间">
-            </el-date-picker>
+              type="daterange"
+              range-separator="-"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              :default-time="['00:00:00', '23:59:59']"
+            ></el-date-picker>
           </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="总价" prop="orPrice">
-            <el-input v-model="form.orPrice" placeholder="请输入总价" />
+          <!-- <el-form-item label="已删除" prop="orDelete">
+            <el-input
+              v-model="queryParams.orDelete"
+              placeholder="请输入已删除"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item> -->
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
           </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="收货人" prop="orRecv">
-            <el-input v-model="form.orRecv" placeholder="请输入收货人" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="收货地址" prop="orAddr">
-            <el-input v-model="form.orAddr" type="textarea" placeholder="请输入收货地址" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="描述" prop="orDesc">
-            <el-input v-model="form.orDesc" type="textarea" placeholder="请输入内容" />
-          </el-form-item>
-        </el-col>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        </el-form>
+    
+        <el-row :gutter="10" class="mb8">
+          <el-col :span="1.5">
+            <el-button
+              type="primary"
+              plain
+              icon="el-icon-plus"
+              size="mini"
+              @click="handleAdd"
+              v-hasPermi="['system:order:add']"
+            >新增</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="success"
+              plain
+              icon="el-icon-edit"
+              size="mini"
+              :disabled="single"
+              @click="handleUpdate"
+              v-hasPermi="['system:order:edit']"
+            >修改</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="danger"
+              plain
+              icon="el-icon-delete"
+              size="mini"
+              :disabled="multiple"
+              @click="handleDelete"
+              v-hasPermi="['system:order:remove']"
+            >删除</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="warning"
+              plain
+              icon="el-icon-download"
+              size="mini"
+              @click="handleExport"
+              v-hasPermi="['system:order:export']"
+            >导出</el-button>
+          </el-col>
+          <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+        </el-row>
+    
+        <el-table
+          v-loading="loading"
+          :data="orderList"
+          @current-change="handleCurrentChange"
+          highlight-current-row
+          max-height="240"
+        >
+          <el-table-column label="选择" width="55" align="center">
+            <template slot-scope="scope">
+              <el-radio :value="scope.row.orId === idSelect" :label="true" />
+            </template>
+          </el-table-column>
+          <el-table-column label="订单ID" align="center" prop="orId" v-if="true"/>
+          <el-table-column label="订单编码" align="center" prop="orCode" />
+          <el-table-column label="客户" align="center" prop="clCode">
+            <template slot-scope="scope">
+              {{ clientList.find(ele => ele.clCode === scope.row.clCode).clName || '' }}
+            </template>
+          </el-table-column>
+          <el-table-column label="订单名称" align="center" prop="orName" />
+          <el-table-column label="状态" align="center" prop="orStat">
+            <template slot-scope="scope">
+              <dict-tag :options="dict.type.ices_order_status" :value="scope.row.orStat"/>
+            </template>
+          </el-table-column>
+          <el-table-column label="订单优先级" align="center" prop="orPriority" />
+          <el-table-column label="截止时间" align="center" prop="orDeadline" width="180">
+            <template slot-scope="scope">
+              <span>{{ parseTime(scope.row.orDeadline, '{y}-{m}-{d}') }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="总价" align="center" prop="orPrice" />
+          <!-- <el-table-column label="已删除" align="center" prop="orDelete" /> -->
+          <el-table-column label="描述" align="center" prop="orDesc" />
+          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-edit"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['system:order:edit']"
+              >修改</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-finished"
+                v-if="scope.row.orStat==='1'"
+                @click="handleSubmitReview(scope.row)"
+              >提交审核</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-refresh-left"
+                v-show="scope.row.orStat === '2' || scope.row.orStat === 'b'"
+                @click="handleWithdrawReview(scope.row)"
+              >撤回审核</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-delete"
+                v-show="scope.row.orStat === '4'"
+                @click="handleDepreciateReview(scope.row)"
+              >弃用</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-delete"
+                @click="handleDelete(scope.row)"
+                v-hasPermi="['system:order:remove']"
+              >删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+    
+        <pagination
+          v-show="total>0"
+          :total="total"
+          :page.sync="queryParams.pageNum"
+          :limit.sync="queryParams.pageSize"
+          @pagination="getList"
+        />
       </div>
-    </el-dialog>
+    </el-card>
+    <el-card class="controlled-card">
+      <div slot="header">
+        <div class="card-header">
+          <div>订单产品信息</div>
+        </div>
+      </div>
+      <order-demand v-if='idSelect' :key="idSelect" :orCode="codeSelect" />
+      <el-empty v-else description="选中订单后即可管理订单产品" />
+    </el-card>
   </div>
 </template>
 
@@ -302,18 +221,22 @@
 import { listOrder, getOrder, delOrder, addOrder, updateOrder } from "@/api/system/order";
 import { listMaterial } from "@/api/system/material";
 import { listClient } from "@/api/system/client";
+import orderDemand from '@/views/system/orderDemand';
 
 export default {
   name: "Order",
+  components: {
+    orderDemand
+  },
   dicts: ['ices_order_status'],
   data() {
     return {
-      // 按钮loading
-      buttonLoading: false,
       // 遮罩层
       loading: true,
-      // 选中数组
-      ids: [],
+      // 选中内容
+      idSelect: undefined,
+      // 选中code
+      codeSelect: undefined,
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -324,10 +247,6 @@ export default {
       total: 0,
       // 订单表格数据
       orderList: [],
-      // 弹出层标题
-      title: "",
-      // 是否显示弹出层
-      open: false,
       // 描述时间范围
       daterangeOrDeadline: [],
       // 查询参数
@@ -342,41 +261,6 @@ export default {
         orDeadline: undefined,
         orDelete: 0,
       },
-      // 表单参数
-      form: {},
-      // 表单校验
-      rules: {
-        orId: [
-          { required: true, message: "订单ID不能为空", trigger: "blur" }
-        ],
-        maCode: [
-          { required: true, message: "所需产品不能为空", trigger: "blur" }
-        ],
-        clCode: [
-          { required: true, message: "客户不能为空", trigger: "blur" }
-        ],
-        orName: [
-          { required: true, message: "订单名称不能为空", trigger: "blur" }
-        ],
-        orDemand: [
-          { required: true, message: "所需产品数量不能为空", trigger: "blur" }
-        ],
-        orPriority: [
-          { required: true, message: "订单优先级不能为空", trigger: "blur" }
-        ],
-        orDeadline: [
-          { required: true, message: "截止时间不能为空", trigger: "blur" }
-        ],
-        orPrice: [
-          { required: true, message: "总价不能为空", trigger: "blur" }
-        ],
-        orRecv: [
-          { required: true, message: "收货人不能为空", trigger: "blur" }
-        ],
-        orAddr: [
-          { required: true, message: "收货地址不能为空", trigger: "blur" }
-        ],
-      },
       // 产品列表
       productList: [],
       // 客户列表
@@ -388,17 +272,38 @@ export default {
     await this.getClientList();
     this.getList();
   },
+  async activated() {
+    await this.getProductList();
+    await this.getClientList();
+    this.getList();
+  },
   methods: {
     // 查询客户列表
     getClientList() {
-      listClient().then(response => {
-        this.clientList = response.rows
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listClient().then(response => {
+          this.clientList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
       })
     },
     // 查询产品列表
     getProductList() {
-      listMaterial({ maType: '2' }).then(response => {
-        this.productList = response.rows
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listMaterial({ maType: '2' }).then(response => {
+          this.productList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
       })
     },
     /** 查询订单列表 */
@@ -415,105 +320,46 @@ export default {
         this.loading = false;
       });
     },
-    // 取消按钮
-    cancel() {
-      this.open = false;
-      this.reset();
-    },
-    // 表单重置
-    reset() {
-      this.form = {
-        orId: undefined,
-        maCode: undefined,
-        clCode: undefined,
-        orName: undefined,
-        orStat: undefined,
-        orDemand: undefined,
-        orPriority: undefined,
-        orDeadline: undefined,
-        orPrice: undefined,
-        orRecv: undefined,
-        orAddr: undefined,
-        orDelete: undefined,
-        orDesc: undefined,
-        createBy: undefined,
-        updateBy: undefined,
-        createTime: undefined,
-        updateTime: undefined
-      };
-      this.resetForm("form");
-    },
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
+      this.idSelect = undefined
+      this.codeSelect = undefined
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
       this.daterangeOrDeadline = [];
       this.resetForm("queryForm");
+      this.idSelect = undefined
+      this.codeSelect = undefined
       this.handleQuery();
     },
-    // 多选框选中数据
-    handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.orId)
-      this.single = selection.length!==1
-      this.multiple = !selection.length
+    // 选中数据条目
+    handleCurrentChange(current, old) {
+      this.idSelect = current.orId
+      this.codeSelect = current.orCode
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加订单";
+      this.$router.push(`/order/add`)
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.loading = true;
-      this.reset();
-      const orId = row.orId || this.ids
-      getOrder(orId).then(response => {
-        this.loading = false;
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改订单";
-      });
-    },
-    /** 提交按钮 */
-    submitForm() {
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          this.buttonLoading = true;
-          if (this.form.orId != null) {
-            updateOrder(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            }).finally(() => {
-              this.buttonLoading = false;
-            });
-          } else {
-            // 新增订单的默认状态
-            this.form.orStat = '1'
-            addOrder(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            }).finally(() => {
-              this.buttonLoading = false;
-            });
-          }
-        }
-      });
+      const orId = row.orId || this.idSelect
+      this.$router.push(`/order/add?orId=${orId}`)
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const orIds = row.orId || this.ids;
+      const orIds = row.orId || this.idSelect;
       this.$modal.confirm('是否确认删除订单编号为"' + orIds + '"的数据项？').then(() => {
         this.loading = true;
         return delOrder(orIds);
       }).then(() => {
         this.loading = false;
         this.getList();
+        this.idSelect = undefined
+        this.codeSelect = undefined
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {
       }).finally(() => {
@@ -580,7 +426,7 @@ export default {
       }).finally(() => {
         this.loading = false;
       });
-    }
+    },
   }
 };
 </script>
@@ -590,5 +436,21 @@ export default {
 }
 .el-date-editor{
   width: 100%;
+}
+::v-deep .el-radio span.el-radio__label {
+  display: none;
+}
+.view-card {
+  max-height: 50vh;
+  overflow: scroll;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 17px;
+}
+.controlled-card {
+  margin-top: 10px;
 }
 </style>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.IcesExceptionWarningMapper">
+
+    <resultMap type="com.ruoyi.system.domain.IcesExceptionWarning" id="IcesExceptionWarningResult">
+        <result property="exwId" column="exw_id"/>
+        <result property="exwCode" column="exw_code"/>
+        <result property="exCode" column="ex_code"/>
+        <result property="exsCode" column="exs_code"/>
+        <result property="exwFormula" column="exw_formula"/>
+        <result property="exwRecv" column="exw_recv"/>
+        <result property="exwTunnel" column="exw_tunnel"/>
+        <result property="exwTemplate" column="exw_template"/>
+        <result property="exwWarningOrgn" column="exw_warning_orgn"/>
+        <result property="exwHandleOrgn" column="exw_handle_orgn"/>
+        <result property="exwDelete" column="exw_delete"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

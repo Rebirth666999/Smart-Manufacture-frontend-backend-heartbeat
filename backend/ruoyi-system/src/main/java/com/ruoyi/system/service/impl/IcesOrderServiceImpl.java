@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ruoyi.system.domain.IcesEquipmentModel;
+import com.ruoyi.system.domain.bo.IcesManufacturePlanBo;
 import com.ruoyi.system.domain.vo.IcesEquipmentModelVo;
 import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
@@ -83,7 +84,6 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesOrder> lqw = Wrappers.lambdaQuery();
         lqw.eq(StringUtils.isNotBlank(bo.getOrCode()), IcesOrder::getOrCode, bo.getOrCode());
-        lqw.eq(StringUtils.isNotBlank(bo.getMaCode()), IcesOrder::getMaCode, bo.getMaCode());
         lqw.eq(StringUtils.isNotBlank(bo.getClCode()), IcesOrder::getClCode, bo.getClCode());
         lqw.like(StringUtils.isNotBlank(bo.getOrName()), IcesOrder::getOrName, bo.getOrName());
         lqw.eq(StringUtils.isNotBlank(bo.getOrStat()), IcesOrder::getOrStat, bo.getOrStat());
@@ -98,7 +98,7 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
      * 新增订单
      */
     @Override
-    public Boolean insertByBo(IcesOrderBo bo) {
+    public IcesOrderVo insertByBo(IcesOrderBo bo) {
         bo.setOrCode(codeService.insertByType("Order"));
         IcesOrder add = BeanUtil.toBean(bo, IcesOrder.class);
         validEntityBeforeSave(add);
@@ -106,7 +106,7 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
         if (flag) {
             bo.setOrId(add.getOrId());
         }
-        return flag;
+        return queryById(add.getOrId());
     }
 
     /**
@@ -135,5 +135,14 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
             //TODO 做一些业务上的校验,判断是否需要校验
         }
         return baseMapper.deleteBatchIds(ids) > 0;
+    }
+
+    @Override
+    public void updateStatus(IcesManufacturePlanBo icesManufacturePlanBo) {
+        IcesOrderBo bo = new IcesOrderBo();
+        bo.setOrCode(icesManufacturePlanBo.getMpCode());
+        List<IcesOrderVo> icesOrderVos = queryList(bo);
+        icesManufacturePlanBo.setMpId(icesOrderVos.get(0).getOrId());
+        updateByBo(bo);
     }
 }

@@ -1,6 +1,7 @@
 package com.ruoyi.system.service;
 
 import com.ruoyi.system.domain.IcesOrder;
+import com.ruoyi.system.domain.bo.IcesManufacturePlanBo;
 import com.ruoyi.system.domain.vo.IcesOrderVo;
 import com.ruoyi.system.domain.bo.IcesOrderBo;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -40,7 +41,7 @@ public interface IIcesOrderService {
     /**
      * 新增订单
      */
-    Boolean insertByBo(IcesOrderBo bo);
+    IcesOrderVo insertByBo(IcesOrderBo bo);
 
     /**
      * 修改订单
@@ -53,4 +54,5 @@ public interface IIcesOrderService {
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
 
+    void updateStatus(IcesManufacturePlanBo icesManufacturePlanBo);
 }

@@ -25,7 +25,8 @@ public interface IIcesEquipmentService {
      * @return 设备信息
      */
     IcesEquipmentVo queryById(Long eqId);
-
+    IcesEquipment selectByEqCode(String eqCode);
+    boolean update(IcesEquipment icesEquipment);
     /**
      * 分页查询设备列表
      *

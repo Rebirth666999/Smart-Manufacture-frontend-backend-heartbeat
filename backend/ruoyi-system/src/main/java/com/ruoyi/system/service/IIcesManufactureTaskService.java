@@ -1,6 +1,9 @@
 package com.ruoyi.system.service;
 
 import com.ruoyi.system.domain.IcesManufactureTask;
+import com.ruoyi.system.domain.bo.IcesManufacturePlanBo;
+import com.ruoyi.system.domain.vo.IcesManufacturePlanVo;
+import com.ruoyi.system.domain.bo.IcesDeviceTaskBo;
 import com.ruoyi.system.domain.vo.IcesManufactureTaskVo;
 import com.ruoyi.system.domain.bo.IcesManufactureTaskBo;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -28,6 +31,11 @@ public interface IIcesManufactureTaskService {
     TableDataInfo<IcesManufactureTaskVo> queryPageList(IcesManufactureTaskBo bo, PageQuery pageQuery);
 
     /**
+     * 查询审核状态
+     */
+    TableDataInfo<IcesManufactureTaskVo> queryReviewList(IcesManufactureTaskBo bo, PageQuery pageQuery);
+
+    /**
      * 查询生产任务列表
      */
     List<IcesManufactureTaskVo> queryList(IcesManufactureTaskBo bo);
@@ -47,5 +55,8 @@ public interface IIcesManufactureTaskService {
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
-
+    /**
+     * 更改任务状态
+     */
+    void updateStatus(IcesDeviceTaskBo deviceTaskBo);
 }

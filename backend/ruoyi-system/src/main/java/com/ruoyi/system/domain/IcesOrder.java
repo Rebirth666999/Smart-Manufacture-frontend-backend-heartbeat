@@ -34,10 +34,6 @@ public class IcesOrder extends BaseEntity {
      */
     private String orCode;
     /**
-     * 所需产品
-     */
-    private String maCode;
-    /**
      * 客户
      */
     private String clCode;
@@ -49,10 +45,6 @@ public class IcesOrder extends BaseEntity {
      * 状态代码
      */
     private String orStat;
-    /**
-     * 所需产品数量
-     */
-    private Float orDemand;
     /**
      * 订单优先级
      */

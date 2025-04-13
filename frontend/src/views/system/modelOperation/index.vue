@@ -201,7 +201,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        emCode: this.$route.query.emCode,
+        emCode: undefined,
         moName: undefined,
         moDelete: 0,
       },
@@ -236,23 +236,42 @@ export default {
     await this.getEquipmentModelList();
     this.getList();
   },
+  async activated() {
+    if (this.$route.query.emCode) {
+      this.mode = 1
+    } else {
+      this.mode = 0
+    }
+    await this.getEquipmentModelList();
+    this.getList();
+  },
   methods: {
     // 查询设备模型列表
     getEquipmentModelList() {
-      listEquipmentModel().then(response => {
-        this.equipmentModelList = response.rows;
-        if (this.mode === 1) {
-          let model = response.rows.find(ele => ele.emCode === this.$route.query.emCode)
-          // 构建筛选提示文本
-          this.hint = "设备模型 "
-          this.hint += model.emName
-          this.hint += " "
-          // 检查模型状态
-          if (model.emStat !== '1') {
-            this.mode = 2
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listEquipmentModel().then(response => {
+          this.equipmentModelList = response.rows
+          if (this.mode === 1) {
+            let model = response.rows.find(ele => ele.emCode === this.$route.query.emCode)
+            // 构建筛选提示文本
+            this.hint = "设备模型 "
+            this.hint += model.emName
+            this.hint += " "
+            // 检查模型状态
+            if (model.emStat !== '1') {
+              this.mode = 2
+            }
+            // 设置筛选
+            this.queryParams.emCode = model.emCode
           }
-        }
-      });
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false;
+        })
+      })
     },
     /** 查询设备模型操作列表 */
     getList() {
@@ -291,6 +310,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams.emCode = this.$route.query.emCode
       this.handleQuery();
     },
     // 多选框选中数据

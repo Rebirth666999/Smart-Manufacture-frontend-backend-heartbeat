@@ -7,12 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.ruoyi.system.domain.IcesEquipmentModel;
-import com.ruoyi.system.domain.bo.IcesDeviceTaskBo;
 import com.ruoyi.system.domain.bo.IcesManufactureTaskBo;
-import com.ruoyi.system.domain.bo.IcesOrderBo;
-import com.ruoyi.system.domain.vo.IcesEquipmentModelVo;
-import com.ruoyi.system.domain.vo.IcesManufactureTaskVo;
 import com.ruoyi.system.service.IIcesCodeService;
 import com.ruoyi.system.service.IIcesOrderService;
 import lombok.RequiredArgsConstructor;
@@ -98,7 +93,7 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
      * 新增生产计划
      */
     @Override
-    public Boolean insertByBo(IcesManufacturePlanBo bo) {
+    public IcesManufacturePlanVo insertByBo(IcesManufacturePlanBo bo) {
         bo.setMpCode(codeService.insertByType("ManufacturePlan"));
         IcesManufacturePlan add = BeanUtil.toBean(bo, IcesManufacturePlan.class);
         validEntityBeforeSave(add);
@@ -106,7 +101,7 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
         if (flag) {
             bo.setMpId(add.getMpId());
         }
-        return flag;
+        return queryById(add.getMpId());
     }
 
     /**

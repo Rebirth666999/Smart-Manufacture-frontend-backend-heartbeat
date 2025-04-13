@@ -6,6 +6,7 @@
           v-model="queryParams.mpCode"
           placeholder="请选择生产计划"
           clearable
+          disabled
         >
           <el-option
             v-for="item in manufacturePlanList"
@@ -215,7 +216,7 @@
           <el-select
             v-model="form.mpCode"
             placeholder="请选择生产计划"
-            clearable
+            disabled
           >
             <el-option
               v-for="item in manufacturePlanList"
@@ -331,6 +332,11 @@ export default {
   components: {
     ProcessViewer,
   },
+  props: {
+    mpCode: {
+      required: false
+    }
+  },
   dicts: ['ices_order_status'],
   data() {
     return {
@@ -430,6 +436,9 @@ export default {
     await this.getProcessList();
     await this.getStoreList();
     await this.getReferenceList();
+    if (this.mpCode) {
+      this.queryParams.mpCode = this.mpCode
+    }
     this.getList();
   },
   async activated() {
@@ -438,6 +447,9 @@ export default {
     await this.getProcessList();
     await this.getStoreList();
     await this.getReferenceList();
+    if (this.mpCode) {
+      this.queryParams.mpCode = this.mpCode
+    }
     this.getList();
   },
   methods: {
@@ -562,6 +574,9 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      if (this.mpCode) {
+        this.queryParams.mpCode = this.mpCode
+      }
       this.handleQuery();
     },
     // 多选框选中数据
@@ -573,6 +588,9 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      if (this.mpCode) {
+        this.form.mpCode = this.mpCode
+      }
       this.open = true;
       this.title = "添加生产任务";
     },

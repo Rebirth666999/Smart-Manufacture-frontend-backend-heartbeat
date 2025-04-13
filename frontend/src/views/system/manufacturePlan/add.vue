@@ -1,61 +1,98 @@
 <template>
   <div class="app-container">
-    <el-form ref="form" :model="form" :rules="rules" label-width="110px">
-      <el-form-item label="所属订单" prop="orCode">
-        <el-select v-model="form.orCode" placeholder="请选择订单" @change="selectOrder">
-          <el-option v-for="item in orderList" :key="item.orCode" :label="item.orName" :value="item.orCode">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item prop="maCode">
-        <span slot="label">
-          <el-tooltip placement="top">
-            <div slot="content">
-              <div>须先选择订单，才能够加载订单的产品需求</div>
-            </div>
-            <i class="el-icon-question"></i>
-          </el-tooltip>
-          产品
-        </span>
-        <el-select v-model="form.maCode" placeholder="请选择产品" @change="selectProduct">
-          <el-option v-for="item in productList" :key="item.maCode" :label="item.maName" :value="item.maCode">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item prop="procCode">
-        <span slot="label">
-          <el-tooltip placement="top">
-            <div slot="content">
-              <div>须先选择产品，才能够加载产品的工艺流程</div>
-            </div>
-            <i class="el-icon-question"></i>
-          </el-tooltip>
-          工艺流程
-        </span>
-        <el-select v-model="form.procCode" placeholder="请选择工艺流程">
-          <el-option v-for="item in processList" :key="item.procCode" :label="item.procName" :value="item.procCode">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="最晚结束时间" prop="mpEndPlan">
-        <el-date-picker clearable v-model="form.mpEndPlan" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
-          placeholder="请选择最晚结束时间">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="优先级" prop="mpPriority">
-        <el-input v-model="form.mpPriority" placeholder="请输入优先级" />
-      </el-form-item>
-      <el-form-item label="计划产品数量" prop="mpQtyPlan">
-        <el-input v-model="form.mpQtyPlan" placeholder="请输入计划产品数量" />
-      </el-form-item>
-      <el-form-item label="描述" prop="mpDesc">
-        <el-input v-model="form.mpDesc" type="textarea" placeholder="请输入内容" />
-      </el-form-item>
-    </el-form>
-    <div>
-      <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
-      <el-button @click="cancel">取 消</el-button>
-    </div>
+    <el-card>
+      <div slot="header">
+        <div class="card-header">
+          <div>生产计划信息</div>
+          <div>
+            <el-button
+              :loading="buttonLoading"
+              type="primary"
+              @click="submitForm"
+            >保 存</el-button>
+            <el-button
+              :loading="buttonLoading"
+              @click="resetPage"
+            >重 置</el-button>
+          </div>
+        </div>
+      </div>
+      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
+        <el-col :span="8">
+          <el-form-item label="所属订单" prop="orCode">
+            <el-select v-model="form.orCode" placeholder="请选择订单" @change="selectOrder">
+              <el-option v-for="item in orderList" :key="item.orCode" :label="item.orName" :value="item.orCode">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item prop="maCode">
+            <span slot="label">
+              <el-tooltip placement="top">
+                <div slot="content">
+                  <div>须先选择订单，才能够加载订单的产品需求</div>
+                </div>
+                <i class="el-icon-question"></i>
+              </el-tooltip>
+              产品
+            </span>
+            <el-select v-model="form.maCode" placeholder="请选择产品" @change="selectProduct">
+              <el-option v-for="item in productList" :key="item.maCode" :label="item.maName" :value="item.maCode">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item prop="procCode">
+            <span slot="label">
+              <el-tooltip placement="top">
+                <div slot="content">
+                  <div>须先选择产品，才能够加载产品的工艺流程</div>
+                </div>
+                <i class="el-icon-question"></i>
+              </el-tooltip>
+              工艺流程
+            </span>
+            <el-select v-model="form.procCode" placeholder="请选择工艺流程">
+              <el-option v-for="item in processList" :key="item.procCode" :label="item.procName" :value="item.procCode">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="最晚结束时间" prop="mpEndPlan">
+            <el-date-picker clearable v-model="form.mpEndPlan" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
+              placeholder="请选择最晚结束时间">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="优先级" prop="mpPriority">
+            <el-input v-model="form.mpPriority" placeholder="请输入优先级" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="计划产品数量" prop="mpQtyPlan">
+            <el-input v-model="form.mpQtyPlan" placeholder="请输入计划产品数量" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="描述" prop="mpDesc">
+            <el-input v-model="form.mpDesc" type="textarea" placeholder="请输入内容" />
+          </el-form-item>
+        </el-col>
+      </el-form>
+    </el-card>
+    <el-card class="controlled-card">
+      <div slot="header">
+        <div class="card-header">
+          <div>生产任务信息</div>
+        </div>
+      </div>
+      <manufacture-task v-if='form.mpCode' :mpCode="form.mpCode" />
+      <el-empty v-else description="保存生产计划后即可管理下属生产任务" />
+    </el-card>
   </div>
 </template>
 
@@ -65,9 +102,13 @@ import { listProcess } from "@/api/system/process";
 import { listOrder } from "@/api/system/order";
 import { listMaterial } from "@/api/system/material";
 import { listOrderDemand } from "@/api/system/orderDemand";
+import manufactureTask from '@/views/system/manufactureTask';
 
 export default {
   name: "ManufacturePlan",
+  components: {
+    manufactureTask
+  },
   dicts: ['ices_manufacture_plan_status'],
   data() {
     return {
@@ -123,7 +164,7 @@ export default {
       this.processList = this.processListFull
       getManufacturePlan(this.$route.query.mpId).then(response => {
         this.form = response.data;
-        this.selectOrder(this.form.orCode)
+        this.selectOrder(this.form.orCode, 0)
         this.loading = false;
       });
     } else {
@@ -141,7 +182,7 @@ export default {
       this.processList = this.processListFull
       getManufacturePlan(this.$route.query.mpId).then(response => {
         this.form = response.data;
-        this.selectOrder(this.form.orCode)
+        this.selectOrder(this.form.orCode, 0)
         this.loading = false;
       });
     } else {
@@ -232,6 +273,11 @@ export default {
       };
       this.resetForm("form");
     },
+    // 重置页面
+    resetPage() {
+      this.$router.replace(`/manufacture/manufacturePlan/add`)
+      this.reset()
+    },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
@@ -240,7 +286,6 @@ export default {
           if (this.form.mpId != null) {
             updateManufacturePlan(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
-              this.close();
             }).finally(() => {
               this.buttonLoading = false;
             });
@@ -249,7 +294,8 @@ export default {
             this.form.mpStat = '1'
             addManufacturePlan(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
-              this.close();
+              this.$router.replace(`/manufacture/manufacturePlan/add?mpId=${response.data.mpId}`)
+              this.form = response.data
             }).finally(() => {
               this.buttonLoading = false;
             });
@@ -258,14 +304,18 @@ export default {
       });
     },
     // 选择所属订单的监听函数
-    selectOrder(row) {
+    selectOrder(row, flag=1) {
       const order = this.orderList.find(ele => ele.orCode === row)
       if (order) {
         const demands = this.orderDemandList.filter(ele => ele.orCode === order.orCode)
         this.productList = this.productListFull.filter(ele => demands.findIndex(demand => demand.maCode === ele.maCode) !== -1)
-        this.form.maCode = undefined
-        this.form.procCode = undefined
-        this.form.mpQtyPlan = undefined
+        if (flag) {
+          // flag=1用户主动选择
+          // flag=0系统自动更新
+          this.form.maCode = undefined
+          this.form.procCode = undefined
+          this.form.mpQtyPlan = undefined
+        }
       } else {
         this.productList = []
       }
@@ -298,5 +348,16 @@ export default {
 
 .el-date-editor {
   width: 100%;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 17px;
+}
+
+.controlled-card {
+  margin-top: 10px;
 }
 </style>

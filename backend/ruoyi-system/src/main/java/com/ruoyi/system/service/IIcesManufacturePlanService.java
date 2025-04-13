@@ -1,8 +1,5 @@
 package com.ruoyi.system.service;
 
-import com.ruoyi.system.domain.IcesManufacturePlan;
-import com.ruoyi.system.domain.IcesManufactureTask;
-import com.ruoyi.system.domain.bo.IcesDeviceTaskBo;
 import com.ruoyi.system.domain.bo.IcesManufactureTaskBo;
 import com.ruoyi.system.domain.vo.IcesManufacturePlanVo;
 import com.ruoyi.system.domain.bo.IcesManufacturePlanBo;
@@ -43,7 +40,7 @@ public interface IIcesManufacturePlanService {
     /**
      * 新增生产计划
      */
-    Boolean insertByBo(IcesManufacturePlanBo bo);
+    IcesManufacturePlanVo insertByBo(IcesManufacturePlanBo bo);
 
     /**
      * 修改生产计划

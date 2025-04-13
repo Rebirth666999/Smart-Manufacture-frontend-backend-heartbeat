@@ -69,7 +69,7 @@
             <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
           </el-form-item>
         </el-form>
-    
+
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
             <el-button
@@ -115,7 +115,7 @@
           </el-col>
           <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
         </el-row>
-    
+
         <el-table
           v-loading="loading"
           :data="manufacturePlanList"
@@ -172,14 +172,15 @@
                 type="text"
                 icon="el-icon-edit"
                 @click="handleUpdate(scope.row)"
+                v-show="scope.row.mpStat==='1' || scope.row.mpStat==='4' || scope.row.mpStat==='5'"
                 v-hasPermi="['system:manufacturePlan:edit']"
               >修改</el-button>
               <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-finished"
-                v-if="scope.row.mpStat==='1'"
-                @click="handleSubmitReview(scope.row)"          
+                v-show="scope.row.mpStat==='1'"
+                @click="handleSubmitReview(scope.row)"
               >提交审核</el-button>
               <el-button
                 size="mini"
@@ -187,18 +188,26 @@
                 icon="el-icon-refresh-left"
                 v-show="scope.row.mpStat === '2'"
                 @click="handleWithdrawReview(scope.row)"
-              >撤回审核</el-button>          
+              >撤回审核</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-finished"
+                v-show="scope.row.mpStat==='4' || scope.row.mpStat==='5'"
+                @click="handleDeprecated(scope.row)"
+              >弃用</el-button>
               <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-delete"
                 @click="handleDelete(scope.row)"
                 v-hasPermi="['system:manufacturePlan:remove']"
+                v-show="scope.row.mpStat === '1'"
               >删除</el-button>
             </template>
           </el-table-column>
         </el-table>
-    
+
         <pagination
           v-show="total>0"
           :total="total"
@@ -277,6 +286,24 @@ export default {
     this.getList();
   },
   methods: {
+    //弃用
+    handleDeprecated(row) {
+    const mpId = row.mpId;
+    this.$modal.confirm('是否确认弃用该生产计划？').then(() => {
+      this.loading = true;
+      getManufacturePlan(mpId).then(response => {
+        this.form = response.data;
+        this.form.mpStat = "a";
+        updateManufacturePlan(this.form).then(response => {
+          this.$modal.msgSuccess("已弃用");
+          this.getList();
+        })
+      });
+     }).catch(() => {
+     }).finally(() => {
+      this.loading = false;
+     });
+    },
     // 查询工艺流程列表
     getProcessList() {
       return new Promise((resolve, reject) => {
@@ -391,7 +418,8 @@ export default {
         this.loading = true;
         getManufacturePlan(mpId).then(response => {
           this.form = response.data;
-          this.form.mpStat = "1";
+          if(this.form.mpStat === '2') this.form.mpStat = '1';
+          else if(this.form.mpStat === '7' || this.form.mpStat === 'a') this.form.mpStat = '4';
           updateManufacturePlan(this.form).then(response => {
             this.$modal.msgSuccess("已撤回审核");
             this.getList();

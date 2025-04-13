@@ -192,7 +192,7 @@
               <el-button
                 size="mini"
                 type="text"
-                icon="el-icon-finished"
+                icon="el-icon-delete"
                 v-show="scope.row.mpStat==='4' || scope.row.mpStat==='5'"
                 @click="handleDeprecated(scope.row)"
               >弃用</el-button>

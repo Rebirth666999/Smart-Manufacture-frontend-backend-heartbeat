@@ -121,14 +121,14 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-edit"
+            icon="el-icon-check"
             v-show="scope.row.mtStat === '3' || scope.row.mtStat === '8' || scope.row.mtStat === 'b'"
             @click="passReview(scope.row)"
           >通过审核</el-button>
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-edit"
+            icon="el-icon-close"
             v-show="scope.row.mtStat === '3' || scope.row.mtStat === '8' || scope.row.mtStat === 'b'"
             @click="rejectReview(scope.row)"
           >驳回审核</el-button>

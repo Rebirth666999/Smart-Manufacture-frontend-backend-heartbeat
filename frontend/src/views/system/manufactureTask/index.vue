@@ -204,7 +204,7 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-finished"
+            icon="el-icon-delete"
             v-show="scope.row.mtStat==='4' || scope.row.mtStat==='d'"
             @click="handleDeprecated(scope.row)"
           >弃用</el-button>

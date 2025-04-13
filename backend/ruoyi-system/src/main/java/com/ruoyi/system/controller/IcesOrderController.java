@@ -87,8 +87,8 @@ public class IcesOrderController extends BaseController {
     @Log(title = "订单", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody IcesOrderBo bo) {
-        return toAjax(iIcesOrderService.insertByBo(bo));
+    public R<IcesOrderVo> add(@Validated(AddGroup.class) @RequestBody IcesOrderBo bo) {
+        return R.ok(iIcesOrderService.insertByBo(bo));
     }
 
     /**

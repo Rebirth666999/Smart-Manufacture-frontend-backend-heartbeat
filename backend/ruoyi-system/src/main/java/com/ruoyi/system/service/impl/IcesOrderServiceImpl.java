@@ -98,7 +98,7 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
      * 新增订单
      */
     @Override
-    public Boolean insertByBo(IcesOrderBo bo) {
+    public IcesOrderVo insertByBo(IcesOrderBo bo) {
         bo.setOrCode(codeService.insertByType("Order"));
         IcesOrder add = BeanUtil.toBean(bo, IcesOrder.class);
         validEntityBeforeSave(add);
@@ -106,7 +106,7 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
         if (flag) {
             bo.setOrId(add.getOrId());
         }
-        return flag;
+        return queryById(add.getOrId());
     }
 
     /**

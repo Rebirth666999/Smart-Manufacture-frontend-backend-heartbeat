@@ -33,6 +33,12 @@ public class IcesProcessMaterialBo extends BaseEntity {
     private String pmCode;
 
     /**
+     * 所属工艺流程
+     */
+    @NotBlank(message = "所属工艺流程不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String procCode;
+
+    /**
      * 所属工艺步骤
      */
     @NotBlank(message = "所属工艺步骤不能为空", groups = { AddGroup.class, EditGroup.class })

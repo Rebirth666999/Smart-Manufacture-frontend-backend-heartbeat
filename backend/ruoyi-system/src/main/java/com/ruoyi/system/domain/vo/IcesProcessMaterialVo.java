@@ -34,6 +34,12 @@ public class IcesProcessMaterialVo {
     private String pmCode;
 
     /**
+     * 所属工艺流程
+     */
+    @ExcelProperty(value = "所属工艺流程")
+    private String procCode;
+
+    /**
      * 所属工艺步骤
      */
     @ExcelProperty(value = "所属工艺步骤")

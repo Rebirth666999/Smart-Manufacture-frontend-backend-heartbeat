@@ -28,9 +28,6 @@
           <el-button :loading="buttonLoading" type="primary" @click="submitForm">更 新</el-button>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="原料需求" name="material">
-        <ProcessMaterial :viewMode="0" style="width: 100%;"/>
-      </el-tab-pane>
       <el-tab-pane label="流程设计" name="process">
         <process-designer
           :key="designerOpen"
@@ -40,7 +37,7 @@
           :bpmnXml="designerData.bpmnXml"
           :designerForm="designerData.form"
           :mode="2"
-          :extraList="{emList: equipmentModelList, moList: modelOperationList}"
+          :extraList="{emList: equipmentModelList, moList: modelOperationList, maList: materialList}"
           @save="onSaveDesigner"
         />
       </el-tab-pane>
@@ -102,6 +99,8 @@ export default {
       activeName: 'basic',
       // 产品列表
       productList: [],
+      // 原料列表
+      materialList: [],
       // 当前工艺流程
       current: null,
       // 设备模型列表
@@ -183,8 +182,9 @@ export default {
     getProductList() {
       return new Promise((resolve, reject) => {
         this.loading = true;
-        listMaterial({ maType: '2' }).then(response => {
-          this.productList = response.rows
+        listMaterial().then(response => {
+          this.productList = response.rows.filter(ele => ele.maType === '2')
+          this.materialList = response.rows.filter(ele => ele.maType === '1')
           resolve()
         }).catch(() => {
           reject()

@@ -32,6 +32,10 @@ public class IcesProcessMaterial extends BaseEntity {
      */
     private String pmCode;
     /**
+     * 所属工艺流程
+     */
+    private String procCode;
+    /**
      * 所属工艺步骤
      */
     private String psCode;

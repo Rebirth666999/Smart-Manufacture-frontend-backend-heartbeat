@@ -1,6 +1,22 @@
 <template>
   <div class="app-container" v-loading="loading">
-    <el-card header="订单基本信息" shadow="never" class="mb8">
+    <el-card>
+      <div slot="header">
+        <div class="card-header">
+          <div>订单信息</div>
+          <div>
+            <el-button
+              :loading="buttonLoading"
+              type="primary"
+              @click="submitForm"
+            >保 存</el-button>
+            <el-button
+              :loading="buttonLoading"
+              @click="resetPage"
+            >重 置</el-button>
+          </div>
+        </div>
+      </div>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-col :span="12">
           <el-form-item label="客户" prop="clCode">
@@ -33,15 +49,6 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="描述" prop="orDesc">
-            <el-input v-model="form.orDesc" type="textarea" placeholder="请输入内容" />
-          </el-form-item>
-        </el-col>
-      </el-form>
-    </el-card>
-    <el-card header="订单物流信息" shadow="never" class="mb8">
-      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-col :span="24">
           <el-form-item prop="ctCode">
             <span slot="label">
               <el-tooltip placement="top">
@@ -59,22 +66,23 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="24">
+        <el-col :span="8">
           <el-form-item label="收货人" prop="orRecv">
             <el-input v-model="form.orRecv" placeholder="请输入收货人" />
           </el-form-item>
         </el-col>
-        <el-col :span="24">
+        <el-col :span="8">
           <el-form-item label="收货地址" prop="orAddr">
             <el-input v-model="form.orAddr" type="textarea" placeholder="请输入收货地址" />
           </el-form-item>
         </el-col>
+        <el-col :span="8">
+          <el-form-item label="描述" prop="orDesc">
+            <el-input v-model="form.orDesc" type="textarea" placeholder="请输入内容" />
+          </el-form-item>
+        </el-col>
       </el-form>
     </el-card>
-    <div>
-      <el-button :loading="buttonLoading" type="primary" @click="submitForm">保 存</el-button>
-      <el-button @click="cancel">返 回</el-button>
-    </div>
   </div>
 </template>
 
@@ -213,9 +221,10 @@ export default {
         })
       })
     },
-    // 取消按钮
-    cancel() {
-      this.close();
+    // 重置页面
+    resetPage() {
+      this.$router.replace(`/order/add`)
+      this.reset()
     },
     // 表单重置
     reset() {
@@ -248,7 +257,6 @@ export default {
           if (this.form.orId != null) {
             updateOrder(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
-              this.close();
             }).finally(() => {
               this.buttonLoading = false;
             });
@@ -257,7 +265,8 @@ export default {
             this.form.orStat = '1'
             addOrder(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
-              this.close();
+              this.$router.replace(`/order/add?orId=${response.data.orId}`)
+              this.form = response.data
             }).finally(() => {
               this.buttonLoading = false;
             });
@@ -288,5 +297,16 @@ export default {
 
 .el-date-editor {
   width: 100%;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 17px;
+}
+
+.controlled-card {
+  margin-top: 10px;
 }
 </style>

@@ -1,19 +1,8 @@
 <template>
   <div class="app-container">
-    <!-- 顶部提示 -->
-    <el-alert
-      v-show="hint.length > 0"
-      :title="`正在根据${hint}筛选异常参数`"
-      type="info"
-      show-icon
-      :closable="false"
-      class="mb8"
-    >
-    </el-alert>
-
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="订单" prop="orCode">
-        <el-select v-model="queryParams.orCode" placeholder="请选择订单" :disabled="mode === 1" clearable>
+        <el-select v-model="queryParams.orCode" placeholder="请选择订单" disabled clearable>
           <el-option
             v-for="option in orderList"
             :key="option.orCode"
@@ -140,7 +129,7 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="订单" prop="orCode">
-          <el-select v-model="form.orCode" placeholder="请选择订单" :disabled="mode === 1">
+          <el-select v-model="form.orCode" placeholder="请选择订单" disabled>
             <el-option
               v-for="option in orderList"
               :key="option.orCode"
@@ -178,6 +167,11 @@ import { listOrder } from "@/api/system/order";
 
 export default {
   name: "OrderDemand",
+  props: {
+    orCode: {
+      required: false
+    }
+  },
   data() {
     return {
       // 按钮loading
@@ -231,25 +225,19 @@ export default {
       materialList: [],
       // 订单列表
       orderList: [],
-      // 1-按照订单查看产品需求
-      mode: 0,
-      // 页面顶部提示
-      hint: ''
     };
   },
   async created() {
-    if (this.$route.query.orCode) {
-      this.mode = 1
+    if (this.orCode) {
+      this.queryParams.orCode = this.orCode
     }
     await this.getOrderList();
     await this.getMaterialList();
     this.getList();
   },
   async activated() {
-    if (this.$route.query.orCode) {
-      this.mode = 1
-    } else {
-      this.mode = 0
+    if (this.orCode) {
+      this.queryParams.orCode = this.orCode
     }
     await this.getOrderList();
     await this.getMaterialList();
@@ -262,15 +250,6 @@ export default {
         this.loading = true;
         listOrder().then(response => {
           this.orderList = response.rows
-          if (this.mode === 1) {
-            let order = response.rows.find(ele => ele.orCode === this.$route.query.orCode)
-            // 构造提示文本
-            this.hint = "订单 "
-            this.hint += order.orName
-            this.hint += " "
-            // 设置筛选
-            this.queryParams.orCode = order.orCode
-          }
           resolve()
         }).catch(() => {
           reject()
@@ -331,7 +310,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
-      this.queryParams.orCode = this.$route.query.orCode
+      this.queryParams.orCode = this.orCode
       this.handleQuery();
     },
     // 多选框选中数据
@@ -343,8 +322,8 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
-      if (this.mode === 1) {
-        this.form.orCode = this.$route.query.orCode
+      if (this.orCode) {
+        this.form.orCode = this.orCode
       }
       this.open = true;
       this.title = "添加订单所需产品关联";

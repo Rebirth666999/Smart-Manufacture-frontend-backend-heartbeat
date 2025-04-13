@@ -41,7 +41,7 @@ public interface IIcesOrderService {
     /**
      * 新增订单
      */
-    Boolean insertByBo(IcesOrderBo bo);
+    IcesOrderVo insertByBo(IcesOrderBo bo);
 
     /**
      * 修改订单

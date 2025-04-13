@@ -248,10 +248,6 @@ export default {
       total: 0,
       // 工艺流程表格数据
       processList: [],
-      // 弹出层标题
-      title: "",
-      // 是否显示弹出层
-      open: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -263,18 +259,6 @@ export default {
       },
       // 表单参数
       form: {},
-      // 表单校验
-      rules: {
-        procId: [
-          { required: true, message: "工艺流程ID不能为空", trigger: "blur" }
-        ],
-        maCode: [
-          { required: true, message: "目标产品不能为空", trigger: "blur" }
-        ],
-        procName: [
-          { required: true, message: "工艺流程名称不能为空", trigger: "blur" }
-        ],
-      },
       // 查看器相关数据
       viewerData: {
         loading: false,
@@ -354,27 +338,6 @@ export default {
         this.total = response.total;
         this.loading = false;
       });
-    },
-    // 取消按钮
-    cancel() {
-      this.open = false;
-      this.reset();
-    },
-    // 表单重置
-    reset() {
-      this.form = {
-        procId: undefined,
-        maCode: undefined,
-        procName: undefined,
-        procStat: undefined,
-        procDelete: undefined,
-        procDesc: undefined,
-        createBy: undefined,
-        updateBy: undefined,
-        createTime: undefined,
-        updateTime: undefined
-      };
-      this.resetForm("form");
     },
     /** 搜索按钮操作 */
     handleQuery() {

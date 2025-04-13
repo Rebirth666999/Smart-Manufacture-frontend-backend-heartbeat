@@ -269,6 +269,8 @@ export default {
         mpPriority: undefined,
         mpDelete: 0,
       },
+      // 用于编辑属性的表单
+      form: {},
       // 所有工艺流程
       processListFull: [],
       // 订单列表

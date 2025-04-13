@@ -261,6 +261,8 @@ export default {
         orDeadline: undefined,
         orDelete: 0,
       },
+      // 用于编辑属性的表单
+      form: {},
       // 产品列表
       productList: [],
       // 客户列表

@@ -12,7 +12,7 @@
       </el-descriptions-item>
       <el-descriptions-item label="跨轮次前序步骤">
         <div v-for="item in elements.filter(ele => prev.indexOf(ele.businessObject.id) !== -1)">
-          {{ item.businessObject.name }}
+          {{ `[${item.businessObject.id}] ${item.businessObject.name}` }}
         </div>
       </el-descriptions-item>
     </el-descriptions>

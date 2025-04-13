@@ -1,7 +1,6 @@
 package com.ruoyi.system.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ruoyi.system.domain.IcesProcess;
 import com.ruoyi.system.domain.vo.IcesProcessVo;
 import com.ruoyi.system.domain.bo.IcesProcessBo;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -42,7 +41,7 @@ public interface IIcesProcessService {
     /**
      * 新增工艺流程
      */
-    Boolean insertByBo(IcesProcessBo bo);
+    IcesProcessVo insertByBo(IcesProcessBo bo);
 
     /**
      * 修改工艺流程

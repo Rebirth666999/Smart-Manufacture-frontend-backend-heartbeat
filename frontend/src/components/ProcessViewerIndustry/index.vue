@@ -16,7 +16,7 @@
     </div>
     <!-- 右侧边栏显示属性信息 -->
     <div class="viewer-penal">
-      <el-collapse>
+      <el-collapse v-model="activeTab">
         <!-- 设备操作流程 -->
         <el-collapse-item
           name="eosBasic"
@@ -70,6 +70,16 @@
           </div>
           <proc-properties :element="element" :emList="extraList.emList" :moList="extraList.moList" />
         </el-collapse-item>
+        <el-collapse-item
+          name="procMaterial"
+          v-if="(mode === 2 || mode === 3) && element.type === 'bpmn:ServiceTask'"
+          key="procMaterial"
+        >
+          <div slot="title" class="panel-tab__title">
+            <i class="el-icon-box"></i>原料需求
+          </div>
+          <proc-material :element="element" :maList="extraList.maList" />
+        </el-collapse-item>
 
         <!-- 分配设备给对应步骤 -->
         <el-collapse-item
@@ -105,6 +115,7 @@ import BpmnViewer from 'bpmn-js/lib/Viewer';
 import MoveCanvasModule from 'diagram-js/lib/navigation/movecanvas';
 import ProcBaseInfo from "@/plugins/package/penal/base/IndustryBaseInfoView";
 import ProcProperties from "@/plugins/package/penal/properties/ProcessPropertiesView";
+import ProcMaterial from "@/plugins/package/penal/other/ProcessMaterialView";
 import EosBaseInfo from "@/plugins/package/penal/base/IndustryBaseInfoView";
 import EosProperties from "@/plugins/package/penal/properties/EquipmentOperationStepPropertiesView";
 import EosParam from "@/plugins/package/penal/param/EquipmentOperationStepParamView";
@@ -120,7 +131,8 @@ export default {
     EosProperties,
     EosParam,
     ProcDeviceTask,
-    ProcDeviceTaskParam
+    ProcDeviceTaskParam,
+    ProcMaterial
   },
   props: {
     xml: {
@@ -150,7 +162,9 @@ export default {
         type: null
       },
       // mode = 3时，维护步骤对应的设备和设备操作
-      taskList: []
+      taskList: [],
+      // 默认展开的页签
+      activeTab: []
     }
   },
   watch: {
@@ -165,6 +179,11 @@ export default {
     this.$nextTick(() => {
       this.importXML(this.xml)
     })
+    if (this.mode === 1) {
+      this.activeTab = ['eosBasic', 'eosProperties', 'eosParam']
+    } else if (this.mode === 2 || mode === 3) {
+      this.activeTab = ['procBasic', 'procProperties', 'procMaterial']
+    }
   },
   methods: {
     processReZoom() {

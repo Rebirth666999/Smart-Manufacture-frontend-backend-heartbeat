@@ -11,8 +11,6 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.ruoyi.system.domain.IcesEquipmentModel;
-import com.ruoyi.system.domain.IcesProcessMaterial;
 import com.ruoyi.system.domain.bo.*;
 import com.ruoyi.system.domain.vo.*;
 import com.ruoyi.system.service.*;
@@ -30,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.io.ByteArrayInputStream;
-import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -107,7 +104,7 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
      * 新增工艺流程
      */
     @Override
-    public Boolean insertByBo(IcesProcessBo bo) {
+    public IcesProcessVo insertByBo(IcesProcessBo bo) {
         bo.setProcCode(codeService.insertByType("Process"));
         IcesProcess add = BeanUtil.toBean(bo, IcesProcess.class);
         validEntityBeforeSave(add);
@@ -115,7 +112,7 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
         if (flag) {
             bo.setProcId(add.getProcId());
         }
-        return flag;
+        return queryById(add.getProcId());
     }
 
     /**

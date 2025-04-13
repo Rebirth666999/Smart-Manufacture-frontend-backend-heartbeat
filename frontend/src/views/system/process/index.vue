@@ -386,9 +386,7 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加工艺流程";
+      this.$router.push(`/process/design`)
     },
     /** 顶部设计按钮操作 */
     handleUpdate(event) {
@@ -399,7 +397,7 @@ export default {
     },
     /** 行内设计按钮操作 */
     handleDesign(row) {
-      this.$router.push(`/process/design?procId=${row.procId}&procCode=${row.procCode}`)
+      this.$router.push(`/process/design?procId=${row.procId}`)
     },
     /** 查看按钮操作 */
     handleViewer(row) {
@@ -413,8 +411,6 @@ export default {
           if (this.form.procId != null) {
             updateProcess(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
             }).finally(() => {
               this.buttonLoading = false;
             });
@@ -423,8 +419,8 @@ export default {
             this.form.procStat = '1'
             addProcess(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
+              this.$router.replace(`/process/design?procId=${response.data.procId}`)
+              this.form = response.data
             }).finally(() => {
               this.buttonLoading = false;
             });

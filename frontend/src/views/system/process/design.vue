@@ -1,47 +1,55 @@
 <template>
   <div class="app-container">
-    <el-tabs v-model="activeName" v-loading="loading">
-      <el-tab-pane label="基本信息" name="basic">
-        <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-card>
+      <div slot="header">
+        <div class="card-header">
+          <div>工艺流程信息</div>
+          <div>
+            <el-button :loading="buttonLoading" type="primary" @click="submitForm">保 存</el-button>
+            <el-button :loading="buttonLoading" @click="resetPage">重 置</el-button>
+          </div>
+        </div>
+      </div>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-col :span="8">
           <el-form-item label="目标产品" prop="maCode">
-            <el-select
-              v-model="form.maCode"
-              placeholder="请选择目标产品"
-            >
-              <el-option
-                v-for="item in productList"
-                :key="item.maCode"
-                :label="item.maName"
-                :value="item.maCode"
-              >
+            <el-select v-model="form.maCode" placeholder="请选择目标产品">
+              <el-option v-for="item in productList" :key="item.maCode" :label="item.maName" :value="item.maCode">
               </el-option>
             </el-select>
           </el-form-item>
+        </el-col>
+        <el-col :span="8">
           <el-form-item label="名称" prop="procName">
             <el-input v-model="form.procName" placeholder="请输入工艺流程名称" />
           </el-form-item>
+        </el-col>
+        <el-col :span="8">
           <el-form-item label="描述" prop="procDesc">
             <el-input v-model="form.procDesc" type="textarea" placeholder="请输入内容" />
           </el-form-item>
-        </el-form>
-        <div>
-          <el-button :loading="buttonLoading" type="primary" @click="submitForm">更 新</el-button>
+        </el-col>
+      </el-form>
+    </el-card>
+    <el-card class="controlled-card">
+      <div slot="header">
+        <div class="card-header">
+          <div>工艺流程设计</div>
         </div>
-      </el-tab-pane>
-      <el-tab-pane label="流程设计" name="process">
-        <process-designer
-          :key="designerOpen"
-          :style="{height: 'calc(100vh - 180px)'}"
-          ref="modelDesigner"
-          v-loading="designerData.loading"
-          :bpmnXml="designerData.bpmnXml"
-          :designerForm="designerData.form"
-          :mode="2"
-          :extraList="{emList: equipmentModelList, moList: modelOperationList, maList: materialList}"
-          @save="onSaveDesigner"
-        />
-      </el-tab-pane>
-    </el-tabs>
+      </div>
+      <process-designer
+        v-if='designerOpen'
+        :key="designerOpen"
+        :style="{ height: 'calc(100vh - 370px)' }"
+        ref="modelDesigner"
+        v-loading="designerData.loading"
+        :bpmnXml="designerData.bpmnXml"
+        :designerForm="designerData.form" :mode="2"
+        :extraList="{ emList: equipmentModelList, moList: modelOperationList, maList: materialList }"
+        @save="onSaveDesigner"
+      />
+      <el-empty v-else description="保存工艺流程后即可进行设计" />
+    </el-card>
   </div>
 </template>
 
@@ -95,8 +103,6 @@ export default {
           processKey: null
         }
       },
-      // 显示标签页
-      activeName: 'basic',
       // 产品列表
       productList: [],
       // 原料列表
@@ -110,11 +116,10 @@ export default {
     };
   },
   async created() {
+    await this.getProductList();
+    await this.getEquipmentModelList();
+    await this.getModelOperationList();
     if (this.$route.query.procId) {
-      this.activeName = 'basic'
-      await this.getProductList();
-      await this.getEquipmentModelList();
-      await this.getModelOperationList();
       this.designerData.loading = true
       getProcess(this.$route.query.procId).then(response => {
         const row = response.data
@@ -135,20 +140,17 @@ export default {
           })
         } else {
           this.designerData.bpmnXml = '';
+          this.designerData.loading = false;
           this.designerOpen = true;
         }
       })
-    } else {
-      this.$modal.msgError("请重新进入此页面");
-      this.$router.back();
     }
   },
   async activated() {
+    await this.getProductList();
+    await this.getEquipmentModelList();
+    await this.getModelOperationList();
     if (this.$route.query.procId) {
-      this.activeName = 'basic'
-      await this.getProductList();
-      await this.getEquipmentModelList();
-      await this.getModelOperationList();
       this.designerData.loading = true
       getProcess(this.$route.query.procId).then(response => {
         const row = response.data
@@ -169,12 +171,10 @@ export default {
           })
         } else {
           this.designerData.bpmnXml = '';
+          this.designerData.loading = false;
           this.designerOpen = true;
         }
       })
-    } else {
-      this.$modal.msgError("请重新进入此页面");
-      this.$router.back();
     }
   },
   methods: {
@@ -237,6 +237,12 @@ export default {
       };
       this.resetForm("form");
     },
+    // 重置按钮
+    resetPage() {
+      this.$router.replace(`/process/design`)
+      this.designerOpen = false
+      this.reset()
+    },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
@@ -253,6 +259,11 @@ export default {
             this.form.procStat = '1'
             addProcess(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
+              this.$router.replace(`/process/design?procId=${response.data.procId}`)
+              this.form = response.data
+              // 初始化设计器
+              this.designerData.bpmnXml = ''
+              this.designerOpen = true
             }).finally(() => {
               this.buttonLoading = false;
             });
@@ -283,7 +294,19 @@ export default {
 .el-select {
   width: 100%;
 }
-.el-date-editor{
+
+.el-date-editor {
   width: 100%;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 17px;
+}
+
+.controlled-card {
+  margin-top: 10px;
 }
 </style>

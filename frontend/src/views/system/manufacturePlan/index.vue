@@ -145,17 +145,17 @@
               <dict-tag :options="dict.type.ices_manufacture_plan_status" :value="scope.row.mpStat"/>
             </template>
           </el-table-column>
-          <el-table-column label="实际开始时间" align="center" prop="mpBegin" width="180">
+          <el-table-column label="实际开始时间" align="center" prop="mpBegin">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.mpBegin, '{y}-{m}-{d}') }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="最晚结束时间" align="center" prop="mpEndPlan" width="180">
+          <el-table-column label="最晚结束时间" align="center" prop="mpEndPlan">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.mpEndPlan, '{y}-{m}-{d}') }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="实际结束时间" align="center" prop="mpEndReal" width="180">
+          <el-table-column label="实际结束时间" align="center" prop="mpEndReal">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.mpEndReal, '{y}-{m}-{d}') }}</span>
             </template>

@@ -83,6 +83,15 @@
         </el-col>
       </el-form>
     </el-card>
+    <el-card class="controlled-card">
+      <div slot="header">
+        <div class="card-header">
+          <div>订单产品信息</div>
+        </div>
+      </div>
+      <order-demand v-if='form.orCode' :orCode="form.orCode" />
+      <el-empty v-else description="保存订单后即可管理订单产品" />
+    </el-card>
   </div>
 </template>
 
@@ -91,9 +100,13 @@ import { listOrder, getOrder, delOrder, addOrder, updateOrder } from "@/api/syst
 import { listMaterial } from "@/api/system/material";
 import { listClient } from "@/api/system/client";
 import { listClientTrade } from "@/api/system/clientTrade";
+import orderDemand from '@/views/system/orderDemand';
 
 export default {
   name: "Order",
+  components: {
+    orderDemand
+  },
   dicts: ['ices_order_status'],
   data() {
     return {

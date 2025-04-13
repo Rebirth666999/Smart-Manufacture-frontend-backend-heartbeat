@@ -173,7 +173,7 @@ export default {
   },
   data() {
     return {
-      activeTab: "base",
+      activeTab: ["base"],
       elementId: "",
       elementType: "",
       elementBusinessObject: {}, // 元素 businessObject 镜像，提供给需要做判断的组件使用
@@ -184,7 +184,13 @@ export default {
   watch: {
     elementId: {
       handler() {
-        this.activeTab = "base";
+        if (this.mode === 0) {
+          this.activeTab = ["base"];
+        } else if (this.mode === 1) {
+          this.activeTab = ["eosBasic", "eosProperties", "eosParam"];
+        } else if (this.mode === 2) {
+          this.activeTab = ["procBasic", "procProperties"];
+        }
       }
     }
   },

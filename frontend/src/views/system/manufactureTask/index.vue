@@ -175,6 +175,13 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-search"
+            v-show="scope.row.mtStat!=='1' && scope.row.mtStat!=='2' && scope.row.mtStat!=='3' && scope.row.mtStat!=='4'"
+            @click="handleViewDeviceTask(scope.row)"
+          >查看设备任务</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-files"
             v-show="scope.row.mtStat==='d'"
             @click="handleExecuteDeviceTask(scope.row)"
@@ -304,14 +311,14 @@
       </div>
     </el-dialog>
 
-    <!-- 分配设备任务对话框 -->
+    <!-- 分配/查看设备任务对话框 -->
     <el-dialog :title="viewerData.title" :visible.sync="viewerOpen" append-to-body fullscreen>
       <process-viewer
         v-loading="viewerData.loading"
         :key="`designer-${viewerData.index}`"
         :xml="viewerData.bpmnXml"
         :style="{height: 'calc(100vh - 124.5px)'}"
-        :mode="3"
+        :mode="viewerData.mode"
         :extraList="{ emList: viewerData.emList, moList: viewerData.moList, eqList: viewerData.eqList, eoList: viewerData.eoList, eosList: viewerData.eosList, eospaList: viewerData.eospaList }"
         @saveTask="onSaveTask"
       />
@@ -424,6 +431,7 @@ export default {
       viewerOpen: false,
       // 查看器相关数据
       viewerData: {
+        mode: 3, // 3分配，4查看
         title: '',
         loading: false,
         index: undefined,
@@ -779,6 +787,7 @@ export default {
       this.viewerData.eqList = this.eqList.filter(ele => ele.arCode === row.arCode)
       // 打开流程
       this.viewerData.loading = true
+      this.viewerData.mode = 3
       this.viewerData.title = "分配设备任务"
       this.viewerData.index = process.procModel
       this.viewerOpen = true
@@ -883,22 +892,26 @@ export default {
         const mtId = row.mtId;
         // 先获取完整的生产任务信息
         return getManufactureTask(mtId);
-        }).then(response => {
-          const task = response.data;
-          // 更新状态为进行中
-          task.mtStat = '5';
-          // 提交更新请求
-          return updateManufactureTask(task);
-          }).then(() => {
-            this.getList();
-            this.$modal.msgSuccess("下发任务成功");
-            }).catch(() => {
-            }).finally(() => {
-              this.loading = false;
-            });
-         }
-       }
-      };
+      }).then(response => {
+        const task = response.data;
+        // 更新状态为进行中
+        task.mtStat = '5';
+        // 提交更新请求
+        return updateManufactureTask(task);
+      }).then(() => {
+        this.getList();
+        this.$modal.msgSuccess("下发任务成功");
+        }).catch(() => {
+        }).finally(() => {
+          this.loading = false;
+      });
+    },
+    // 查看设备任务
+    async handleViewDeviceTask(row) {
+      
+    }
+  }
+};
 </script>
 <style scoped>
 .el-select {

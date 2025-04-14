@@ -42,6 +42,10 @@ public class IcesDeviceTask extends BaseEntity {
      */
     private String mtCode;
     /**
+     * 图元ID
+     */
+    private String dtModel;
+    /**
      * 设备操作
      */
     private String eoCode;

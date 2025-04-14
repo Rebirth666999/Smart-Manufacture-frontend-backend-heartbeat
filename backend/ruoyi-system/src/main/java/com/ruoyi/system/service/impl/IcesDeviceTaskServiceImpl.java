@@ -217,6 +217,7 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
                 deviceTask.setMtCode(mtCode);
                 deviceTask.setEqCode(task.get("eqCode").toString());
                 deviceTask.setEoCode(task.get("eoCode").toString());
+                deviceTask.setDtModel(task.get("dtModel").toString());
                 deviceTask.setDtStat("1");
                 deviceTask.setDtDelete(0L);
                 deviceTask.setDtCode(codeService.insertByType("DeviceTask"));

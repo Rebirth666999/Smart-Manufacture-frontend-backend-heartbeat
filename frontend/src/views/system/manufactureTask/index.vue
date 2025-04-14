@@ -319,7 +319,7 @@
         :xml="viewerData.bpmnXml"
         :style="{height: 'calc(100vh - 124.5px)'}"
         :mode="viewerData.mode"
-        :extraList="{ emList: viewerData.emList, moList: viewerData.moList, eqList: viewerData.eqList, eoList: viewerData.eoList, eosList: viewerData.eosList, eospaList: viewerData.eospaList }"
+        :extraList="{ emList: viewerData.emList, moList: viewerData.moList, eqList: viewerData.eqList, eoList: viewerData.eoList, eosList: viewerData.eosList, eospaList: viewerData.eospaList, dtList: viewerData.dtList, dtpaList: viewerData.dtpaList }"
         @saveTask="onSaveTask"
       />
     </el-dialog>
@@ -442,6 +442,8 @@ export default {
         eoList: [],     // 设备操作列表
         eosList: [],    // 设备操作步骤列表
         eospaList: [],  // 设备操作步骤参数列表
+        dtList: [],     // 设备任务列表
+        dtpaList: []    // 设备任务参数列表
       },
       // 设备列表（全）
       eqList: [],
@@ -908,7 +910,26 @@ export default {
     },
     // 查看设备任务
     async handleViewDeviceTask(row) {
-      
+      this.currentManufactureTask = row
+      // 找到生产计划
+      const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpCode === row.mpCode)
+      // 找到工艺流程
+      const process = this.processList.find(ele => ele.procCode === manufacturePlan.procCode)
+      // 找到已生成的设备任务
+      this.viewerData.dtList = (await listDeviceTask({ mtCode: row.mtCode })).rows
+      this.viewerData.dtpaList = (await listDeviceTaskParam({ mtCode: row.mtCode })).rows
+      // 找到设备
+      this.viewerData.eqList = this.eqList.filter(ele => ele.arCode === row.arCode)
+      // 打开流程
+      this.viewerData.loading = true
+      this.viewerData.mode = 4
+      this.viewerData.title = "查看设备任务"
+      this.viewerData.index = process.procModel
+      this.viewerOpen = true
+      getBpmnXml(process.procModel).then(response => {
+        this.viewerData.bpmnXml = response.data || ''
+        this.viewerData.loading = false
+      })
     }
   }
 };

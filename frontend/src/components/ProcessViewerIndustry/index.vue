@@ -181,7 +181,7 @@ export default {
     })
     if (this.mode === 1) {
       this.activeTab = ['eosBasic', 'eosProperties', 'eosParam']
-    } else if (this.mode === 2 || mode === 3) {
+    } else if (this.mode === 2 || this.mode === 3) {
       this.activeTab = ['procBasic', 'procProperties', 'procMaterial']
     }
   },

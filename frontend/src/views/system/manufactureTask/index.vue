@@ -169,7 +169,7 @@
             size="mini"
             type="text"
             icon="el-icon-download"
-            v-show="scope.row.mtStat==='4'"
+            v-show="scope.row.mtStat==='4' || scope.row.mtStat==='d'"
             @click="handleGenerateDeviceTask(scope.row)"
           >生成设备任务</el-button>
           <el-button

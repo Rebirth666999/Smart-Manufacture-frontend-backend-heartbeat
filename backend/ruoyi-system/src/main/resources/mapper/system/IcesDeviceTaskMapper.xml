@@ -9,6 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="dtCode" column="dt_code"/>
         <result property="eqCode" column="eq_code"/>
         <result property="mtCode" column="mt_code"/>
+        <result property="psCode" column="ps_code"/>
         <result property="eoCode" column="eo_code"/>
         <result property="dtStat" column="dt_stat"/>
         <result property="dtBegin" column="dt_begin"/>

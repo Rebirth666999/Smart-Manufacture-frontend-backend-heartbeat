@@ -13,6 +13,20 @@
           <slot />
         </el-button-group>
       </el-row>
+      <el-card shadow="never" header="图例" v-if="mode === 4">
+        <el-col :span="8" class="legend">
+          <div>当前轮次<br/>已完成</div>
+          <div class="legend-box green-box"></div>
+        </el-col>
+        <el-col :span="8" class="legend">
+          <div>当前轮次<br/>进行中</div>
+          <div class="legend-box blue-box"></div>
+        </el-col>
+        <el-col :span="8" class="legend">
+          <div>当前轮次<br/>未开始</div>
+          <div class="legend-box white-box"></div>
+        </el-col>
+      </el-card>
     </div>
     <!-- 右侧边栏显示属性信息 -->
     <div class="viewer-penal">
@@ -375,5 +389,30 @@ export default {
     font-size: 1.2em;
   }
 }
-
+.legend {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-bottom: 20px;
+}
+.legend-box {
+  width: 49px;
+  height: 40px;
+  border: 3px solid;
+  border-radius: 20%;
+  margin-top: 5px;
+}
+.green-box {
+  background-color: #e3f4db;
+  border-color: #4eb819;
+}
+.blue-box {
+  background-color: #e2f1ff;
+  border-color: #409eff;
+}
+.white-box {
+  background-color: #fff;
+  border-color: #000;
+}
 </style>

@@ -78,8 +78,8 @@ public class IcesClientController extends BaseController {
     @Log(title = "客户基本信息", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody IcesClientBo bo) {
-        return toAjax(iIcesClientService.insertByBo(bo));
+    public R<IcesClientVo> add(@Validated(AddGroup.class) @RequestBody IcesClientBo bo) {
+        return R.ok(iIcesClientService.insertByBo(bo));
     }
 
     /**

@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.domain.vo.IcesManufacturePlanVo;
 import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -75,7 +76,7 @@ public class IcesClientServiceImpl implements IIcesClientService {
      * 新增客户基本信息
      */
     @Override
-    public Boolean insertByBo(IcesClientBo bo) {
+    public IcesClientVo insertByBo(IcesClientBo bo) {
         bo.setClCode(codeService.insertByType("Client"));
         IcesClient add = BeanUtil.toBean(bo, IcesClient.class);
         validEntityBeforeSave(add);
@@ -83,7 +84,7 @@ public class IcesClientServiceImpl implements IIcesClientService {
         if (flag) {
             bo.setClId(add.getClId());
         }
-        return flag;
+        return queryById(add.getClId());
     }
 
     /**

@@ -12,6 +12,8 @@
         <el-select
           v-model="queryParams.cllCode"
           placeholder="请选择客户等级"
+          clearable
+          @keyup.enter.native="handleQuery"
         >
           <el-option
             v-for="item in clientLevelList"
@@ -26,6 +28,8 @@
         <el-select
           v-model="queryParams.clOperator"
           placeholder="请选择业务员"
+          clearable
+          @keyup.enter.native="handleQuery"
         >
           <el-option
             v-for="item in userList"

@@ -1,5 +1,22 @@
 <template>
   <div class="app-container">
+   <el-card>
+    <div slot="header">
+      <div class="card-header">
+        <div>客户录入信息</div>
+        <div>
+          <el-button
+            :loading="buttonLoading"
+            type="primary"
+            @click="submitForm"
+          >保存</el-button>
+          <el-button
+            :loading="buttonLoading"
+            @click="resetPage"
+          >重置</el-button>
+        </div>
+      </div>
+    </div>
     <el-form ref="form" :model="form" :rules="rules" label-width="110px" v-loading="loading">
       <el-col :span="6">
         <el-form-item label="客户等级" prop="cllCode">
@@ -123,10 +140,16 @@
         </el-form-item>
       </el-col>
     </el-form>
-    <div>
-      <el-button :loading="buttonLoading" type="primary" @click="submitForm">提 交</el-button>
-      <el-button @click="cancel">取 消</el-button>
-    </div>
+   </el-card>
+    <el-card class="controlled-card">
+      <div slot="header">
+        <div class="card-header">
+          <div>客户贸易信息</div>
+        </div>
+      </div>
+      <client-trade v-if='form.clCode' :clCode="form.clCode" />
+      <el-empty v-else description="保存客户信息后即可管理下属贸易信息" />
+    </el-card>
   </div>
 </template>
 
@@ -134,9 +157,14 @@
 import { listClient, getClient, delClient, addClient, updateClient } from "@/api/system/client";
 import { listUser } from "@/api/system/user";
 import { listClientLevel } from "@/api/system/clientLevel";
+import clientTrade from '@/views/system/clientTrade';
+
 
 export default {
   name: "Client",
+  components: {
+     clientTrade
+  },
   dicts: ['ices_client_status'],
   data() {
     return {
@@ -179,6 +207,7 @@ export default {
     if (this.$route.query.clId) {
       getClient(this.$route.query.clId).then(response => {
         this.form = response.data;
+        this.selectClientLevel(this.form.cllCode,0);
         this.loading = false;
       });
     } else {
@@ -193,6 +222,7 @@ export default {
     if (this.$route.query.clId) {
       getClient(this.$route.query.clId).then(response => {
         this.form = response.data;
+        this.selectClientLevel(this.form.cllCode,0);
         this.loading = false;
       });
     } else {
@@ -267,28 +297,62 @@ export default {
       };
       this.resetForm("form");
     },
+    //重置页面
+    resetPage(){
+      resetPage() 
+      this.$router.replace(`/client/add`)
+      this.reset()
+    },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
           this.buttonLoading = true;
-          if (this.form.clId != null) {
+          if (this.form && this.form.clId != null) {
             updateClient(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
-              this.close();
             }).finally(() => {
               this.buttonLoading = false;
             });
           } else {
+            this.form.clStat = '1'
             addClient(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
-              this.close();
+              this.$router.replace(`/client/add?clId=${response.data.clId}`)
+              this.form = response.data
             }).finally(() => {
               this.buttonLoading = false;
             });
           }
         }
       });
+    },
+    // 选择客户等级的监听函数
+    selectClientLevel(row, flag=1) {
+      const clientLevel = this.clientLevelList.find(ele => ele.cllCode === row)
+      if (clientLevel) {
+        if (flag) {
+          // flag=1用户主动选择
+          // flag=0系统自动更新
+          this.form.cllLabel = undefined;
+          this.form.cllName = undefined;
+          this.form.cllDesc = undefined;
+        }
+      } else {
+        this.clientLevelList = []
+      }
+    },
+    // 选择业务员的监听函数
+    selectUser(row) {
+    if (row) {
+        // 更新表单中的归属部门
+        this.form.deptId = row.deptId;
+        // 更新表单中的手机号码
+        this.form.phonenumber = row.phonenumber;
+        // 你可以根据需求添加更多的更新逻辑，例如更新用户昵称、邮箱等
+        this.form.nickName = row.nickName;
+        this.form.email = row.email;
+      }
     },
     // 关闭本页，返回到客户关系管理
     close() {
@@ -305,5 +369,15 @@ export default {
 
 .el-date-editor {
   width: 100%;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 17px;
+}
+
+.controlled-card {
+  margin-top: 10px;
 }
 </style>

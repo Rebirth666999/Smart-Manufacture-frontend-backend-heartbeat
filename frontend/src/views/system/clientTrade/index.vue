@@ -21,7 +21,7 @@
         />
       </el-form-item> -->
       <el-form-item label="客户" prop="clCode">
-       <el-select v-model="queryParams.clCode" placeholder="请选择客户" :disabled="mode !== 0" clearable>
+       <el-select v-model="queryParams.clCode" placeholder="请选择客户" :disabled="mode !== 0" disabled>
         <el-option
         v-for="option in clientList"
         :key="option.clCode"
@@ -133,7 +133,7 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="客户" prop="clCode">
-          <el-select v-model="form.clCode" placeholder="请选择客户" clearable>
+          <el-select v-model="form.clCode" placeholder="请选择客户" disabled>
            <el-option
             v-for="option in clientList"
            :key="option.clCode"
@@ -172,6 +172,11 @@ import { listClient } from "@/api/system/client";
 
 export default {
   name: "ClientTrade",
+  props: {
+    clCode: {
+      required: false
+    }
+  },
   data() {
     return {
       // 按钮loading
@@ -240,6 +245,9 @@ export default {
       this.mode = 1
     }
     await this.getClientList();
+    if (this.clCode) {
+      this.queryParams.clCode = this.clCode
+    }
     this.getList();
   },
   async activated() {
@@ -249,6 +257,9 @@ export default {
       this.mode = 0
     }
     await this.getClientList();
+    if (this.clCode) {
+      this.queryParams.clCode = this.clCode
+    }
     this.getList();
   },
   methods: {
@@ -320,6 +331,9 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      if (this.clCode) {
+      this.queryParams.clCode = this.clCode
+    }
       this.queryParams.clCode = this.$route.query.clCode
       this.handleQuery();
     },
@@ -342,6 +356,9 @@ export default {
     handleUpdate(row) {
       this.loading = true;
       this.reset();
+      if (this.clCode) {
+      this.queryParams.clCode = this.clCode
+    }
       const ctId = row.ctId || this.ids
       getClientTrade(ctId).then(response => {
         this.loading = false;

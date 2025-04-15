@@ -3,7 +3,7 @@
    <el-card>
     <div slot="header">
       <div class="card-header">
-        <div>客户录入信息</div>
+        <div>客户基本信息</div>
         <div>
           <el-button
             :loading="buttonLoading"
@@ -148,7 +148,7 @@
         </div>
       </div>
       <client-trade v-if='form.clCode' :clCode="form.clCode" />
-      <el-empty v-else description="保存客户信息后即可管理下属贸易信息" />
+      <el-empty v-else description="保存客户信息后即可管理客户贸易信息" />
     </el-card>
   </div>
 </template>
@@ -311,6 +311,11 @@ export default {
           if (this.form && this.form.clId != null) {
             updateClient(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
+              let code = this.form.clCode
+              this.form.clCode = ''
+              setTimeout(() => {
+                this.form.clCode = code
+              }, 100)
             }).finally(() => {
               this.buttonLoading = false;
             });

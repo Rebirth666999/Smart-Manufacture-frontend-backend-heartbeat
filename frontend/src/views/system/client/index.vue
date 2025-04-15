@@ -3,7 +3,7 @@
     <el-card class="view-card">
       <div slot="header">
         <div class="card-header">
-          <div>客户录入信息</div>
+          <div>客户基本信息</div>
         </div>
       </div>
       <div>
@@ -12,7 +12,6 @@
         <el-select
           v-model="queryParams.cllCode"
           placeholder="请选择客户等级"
-          disabled
         >
           <el-option
             v-for="item in clientLevelList"
@@ -27,7 +26,6 @@
         <el-select
           v-model="queryParams.clOperator"
           placeholder="请选择业务员"
-          disabled
         >
           <el-option
             v-for="item in userList"
@@ -210,8 +208,8 @@
           <div>客户贸易信息</div>
         </div>
       </div>
-      <client-trade v-if='idSelect' :key="idSelect" :mpCode="codeSelect" />
-      <el-empty v-else description="选中客户信息后即可管理下属贸易信息" />
+      <client-trade v-if='idSelect' :key="idSelect" :clCode="codeSelect" />
+      <el-empty v-else description="选中客户信息后即可管理客户贸易信息" />
     </el-card>
   </div>
 </template>

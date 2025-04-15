@@ -240,26 +240,21 @@ export default {
     };
   },
   async created() {
-    // 检查来源
-    if (this.$route.query.clCode) {
+    if (this.clCode) {
+      this.queryParams.clCode = this.clCode
       this.mode = 1
     }
     await this.getClientList();
-    if (this.clCode) {
-      this.queryParams.clCode = this.clCode
-    }
     this.getList();
   },
   async activated() {
-    if (this.$route.query.clCode) {
+    if (this.clCode) {
+      this.queryParams.clCode = this.clCode
       this.mode = 1
     } else {
       this.mode = 0
     }
     await this.getClientList();
-    if (this.clCode) {
-      this.queryParams.clCode = this.clCode
-    }
     this.getList();
   },
   methods: {
@@ -270,13 +265,7 @@ export default {
         listClient().then(response => {
           this.clientList = response.rows;
           if (this.mode === 1) {
-            let client = response.rows.find(ele => ele.clCode === this.$route.query.clCode)
-            // 构造提示文本
-            this.hint = "客户 "
-            this.hint += client.clName
-            this.hint += " "
-            // 设置筛选
-            this.queryParams.clCode = client.clCode
+            let client = response.rows.find(ele => ele.clCode === this.clCode)
             // 检查状态
             if (client.clStat !== '1') {
               this.mode = 2
@@ -326,15 +315,15 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
+      this.queryParams.clCode = this.clCode
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
       if (this.clCode) {
-      this.queryParams.clCode = this.clCode
-    }
-      this.queryParams.clCode = this.$route.query.clCode
+        this.queryParams.clCode = this.clCode
+      }
       this.handleQuery();
     },
     // 多选框选中数据
@@ -347,7 +336,7 @@ export default {
     handleAdd() {
       this.reset();
       if (this.mode === 1) {
-        this.form.clCode = this.$route.query.clCode
+        this.form.clCode = this.clCode
       }
       this.open = true;
       this.title = "添加客户贸易信息";

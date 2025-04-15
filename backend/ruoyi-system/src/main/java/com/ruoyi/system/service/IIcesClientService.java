@@ -5,6 +5,7 @@ import com.ruoyi.system.domain.vo.IcesClientVo;
 import com.ruoyi.system.domain.bo.IcesClientBo;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
+import com.ruoyi.system.domain.vo.IcesManufacturePlanVo;
 
 import java.util.Collection;
 import java.util.List;
@@ -35,7 +36,7 @@ public interface IIcesClientService {
     /**
      * 新增客户基本信息
      */
-    Boolean insertByBo(IcesClientBo bo);
+    IcesClientVo insertByBo(IcesClientBo bo);
 
     /**
      * 修改客户基本信息

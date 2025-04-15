@@ -1,11 +1,19 @@
 <template>
   <div class="app-container">
+    <el-card class="view-card">
+      <div slot="header">
+        <div class="card-header">
+          <div>客户基本信息</div>
+        </div>
+      </div>
+      <div>
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="客户等级" prop="cllCode">
         <el-select
           v-model="queryParams.cllCode"
           placeholder="请选择客户等级"
           clearable
+          @keyup.enter.native="handleQuery"
         >
           <el-option
             v-for="item in clientLevelList"
@@ -21,6 +29,7 @@
           v-model="queryParams.clOperator"
           placeholder="请选择业务员"
           clearable
+          @keyup.enter.native="handleQuery"
         >
           <el-option
             v-for="item in userList"
@@ -109,8 +118,18 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="clientList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
+    <el-table
+          v-loading="loading"
+          :data="clientList"
+          @current-change="handleCurrentChange"
+          highlight-current-row
+          max-height="240"
+        >
+          <el-table-column label="选择" width="55" align="center">
+            <template slot-scope="scope">
+              <el-radio :value="scope.row.clId === idSelect" :label="true" />
+            </template>
+          </el-table-column>
       <el-table-column label="基本信息ID" align="center" prop="clId" v-if="true"/>
       <el-table-column label="客户编码" align="center" prop="clCode" />
       <el-table-column label="客户等级" align="center" prop="cllCode">
@@ -186,22 +205,39 @@
       @pagination="getList"
     />
   </div>
+    </el-card>
+    <el-card class="controlled-card">
+      <div slot="header">
+        <div class="card-header">
+          <div>客户贸易信息</div>
+        </div>
+      </div>
+      <client-trade v-if='idSelect' :key="idSelect" :clCode="codeSelect" />
+      <el-empty v-else description="选中客户信息后即可管理客户贸易信息" />
+    </el-card>
+  </div>
 </template>
 
 <script>
 import { listClient, getClient, delClient, addClient, updateClient } from "@/api/system/client";
 import { listUser } from "@/api/system/user";
 import { listClientLevel } from "@/api/system/clientLevel";
+import clientTrade from '@/views/system/clientTrade';
 
 export default {
   name: "Client",
+  components: {
+    clientTrade
+  },
   dicts: ['ices_client_status'],
   data() {
     return {
       // 遮罩层
       loading: true,
-      // 选中数组
-      ids: [],
+      // 选中内容
+      idSelect: undefined,
+      // 选中code
+      codeSelect: undefined,
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -283,18 +319,21 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
+      this.idSelect = undefined
+      this.codeSelect = undefined
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.idSelect = undefined
+      this.codeSelect = undefined
       this.handleQuery();
     },
-    // 多选框选中数据
-    handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.clId)
-      this.single = selection.length!==1
-      this.multiple = !selection.length
+    // 选中数据条目
+    handleCurrentChange(current, old) {
+      this.idSelect = current.clId
+      this.codeSelect = current.clCode
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -302,18 +341,20 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      const clId = row.clId || this.ids
+      const clId = row.clId || this.idSelect
       this.$router.push(`/client/add?clId=${clId}`)
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const clIds = row.clId || this.ids;
+      const clIds = row.clId || this.idSelect;
       this.$modal.confirm('是否确认删除客户信息编号为"' + clIds + '"的数据项？').then(() => {
         this.loading = true;
         return delClient(clIds);
       }).then(() => {
         this.loading = false;
         this.getList();
+        this.idSelect = undefined
+        this.codeSelect = undefined
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {
       }).finally(() => {
@@ -339,5 +380,21 @@ export default {
 }
 .el-date-editor{
   width: 100%;
+}
+::v-deep .el-radio span.el-radio__label {
+  display: none;
+}
+.view-card {
+  max-height: 50vh;
+  overflow: scroll;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 17px;
+}
+.controlled-card {
+  margin-top: 10px;
 }
 </style>

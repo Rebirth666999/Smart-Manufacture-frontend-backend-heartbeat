@@ -6,7 +6,6 @@
     :style="{height: 'calc(100vh - 124.5px)', margin: '15px'}"
     :mode="4"
     :extraList="{ emList: viewerData.emList, moList: viewerData.moList, eqList: viewerData.eqList, eoList: viewerData.eoList, eosList: viewerData.eosList, eospaList: viewerData.eospaList, dtList: viewerData.dtList, dtpaList: viewerData.dtpaList }"
-    @saveTask="onSaveTask"
   />
 </template>
 <script>

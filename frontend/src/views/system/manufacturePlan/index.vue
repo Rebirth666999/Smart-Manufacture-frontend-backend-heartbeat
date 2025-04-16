@@ -360,8 +360,10 @@ export default {
     },
     // 选中数据条目
     handleCurrentChange(current, old) {
-      this.idSelect = current.mpId
-      this.codeSelect = current.mpCode
+      if (current) {
+        this.idSelect = current.mpId
+        this.codeSelect = current.mpCode
+      }
     },
     /** 新增按钮操作 */
     handleAdd() {

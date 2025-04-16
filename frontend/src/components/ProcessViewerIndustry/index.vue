@@ -14,18 +14,18 @@
         </el-button-group>
       </el-row>
       <el-card shadow="never" header="图例" v-if="mode === 4">
-        <el-col :span="8" class="legend">
+        <div class="legend">
           <div>当前轮次<br/>已完成</div>
           <div class="legend-box green-box"></div>
-        </el-col>
-        <el-col :span="8" class="legend">
+        </div>
+        <div class="legend">
           <div>当前轮次<br/>进行中</div>
           <div class="legend-box blue-box"></div>
-        </el-col>
-        <el-col :span="8" class="legend">
+        </div>
+        <div class="legend">
           <div>当前轮次<br/>未开始</div>
           <div class="legend-box white-box"></div>
-        </el-col>
+        </div>
       </el-card>
     </div>
     <!-- 右侧边栏显示属性信息 -->
@@ -391,16 +391,17 @@ export default {
 }
 .legend {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   text-align: center;
-  padding-bottom: 20px;
+  font-size: 120%;
 }
 .legend-box {
-  width: 49px;
-  height: 40px;
-  border: 3px solid;
-  border-radius: 20%;
+  width: 102px;
+  height: 82px;
+  border: 2.9px solid;
+  border-radius: 10%;
   margin-top: 5px;
 }
 .green-box {

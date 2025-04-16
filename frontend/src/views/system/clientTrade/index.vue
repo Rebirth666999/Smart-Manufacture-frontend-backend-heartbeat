@@ -146,7 +146,7 @@
           <el-input v-model="form.ctName" placeholder="请输入收货人" />
         </el-form-item>
         <el-form-item label="收货地址" prop="ctAddr">
-          <el-input v-model="form.ctAddr" placeholder="请输入收货地址" />
+          <el-input v-model="form.ctAddr" type="textarea" placeholder="请输入收货地址" />
         </el-form-item>
         <el-form-item label="收货电话" prop="ctPhone">
           <el-input v-model="form.ctPhone" placeholder="请输入收货电话" />

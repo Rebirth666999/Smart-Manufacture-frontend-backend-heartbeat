@@ -353,17 +353,18 @@ export default {
     },
     // 选中数据条目
     handleCurrentChange(current, old) {
-      this.idSelect = current.procId
-      if (current.procModel) {
-        this.viewerData.loading = true
-        getBpmnXml(current.procModel).then(response => {
-          this.viewerData.bpmnXml = response.data || ''
-          this.viewerData.loading = false
-        })
-      } else {
-        this.viewerData.bpmnXml = ''
+      if (current) {
+        this.idSelect = current.procId
+        if (current.procModel) {
+          this.viewerData.loading = true
+          getBpmnXml(current.procModel).then(response => {
+            this.viewerData.bpmnXml = response.data || ''
+            this.viewerData.loading = false
+          })
+        } else {
+          this.viewerData.bpmnXml = ''
+        }
       }
-      
     },
     /** 新增按钮操作 */
     handleAdd() {

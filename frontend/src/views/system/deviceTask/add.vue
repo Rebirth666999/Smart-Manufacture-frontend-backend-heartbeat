@@ -5,7 +5,7 @@
     :xml="viewerData.bpmnXml"
     :style="{height: 'calc(100vh - 124.5px)', margin: '15px'}"
     :mode="3"
-    :extraList="{ emList: viewerData.emList, moList: viewerData.moList, eqList: viewerData.eqList, eoList: viewerData.eoList, eosList: viewerData.eosList, eospaList: viewerData.eospaList, dtList: viewerData.dtList, dtpaList: viewerData.dtpaList }"
+    :extraList="{ emList: viewerData.emList, moList: viewerData.moList, eqList: viewerData.eqList, eoList: viewerData.eoList, eosList: viewerData.eosList, eospaList: viewerData.eospaList, dtList: viewerData.dtList, dtpaList: viewerData.dtpaList, maList: viewerData.maList }"
     @saveTask="onSaveTask"
   />
 </template>
@@ -15,6 +15,7 @@ import { listDeviceTask, saveDeviceTasks, listDeviceTaskParam, listDeviceTaskPre
 
 import { listArea } from "@/api/system/area";
 import { listAreaControl } from "@/api/system/areaControl";
+import { listMaterial } from "@/api/system/material";
 import { listManufacturePlan } from "@/api/system/manufacturePlan";
 import { listProcess, getBpmnXml } from "@/api/system/process";
 import { listStore } from "@/api/system/store";
@@ -59,7 +60,8 @@ export default {
         eosList: [],    // 设备操作步骤列表
         eospaList: [],  // 设备操作步骤参数列表
         dtList: [],     // 设备任务列表
-        dtpaList: []    // 设备任务参数列表
+        dtpaList: [],   // 设备任务参数列表
+        maList: []      // 原料列表
       },
       // 设备列表（全）
       eqList: [],
@@ -70,6 +72,7 @@ export default {
   async created() {
     this.viewerData.loading = true
     await this.getAreaList()
+    await this.getMaterialList()
     await this.getManufacturePlanList()
     await this.getProcessList()
     await this.getStoreList()
@@ -93,6 +96,7 @@ export default {
     this.viewerData.index = ''
     this.viewerData.loading = true
     await this.getAreaList()
+    await this.getMaterialList()
     await this.getManufacturePlanList()
     await this.getProcessList()
     await this.getStoreList()
@@ -175,6 +179,20 @@ export default {
         }).catch(() => {
           reject()
         }).finally(() => {
+        })
+      })
+    },
+    // 查询产品列表
+    getMaterialList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listMaterial().then(response => {
+          this.viewerData.maList = response.rows.filter(ele => ele.maType === '1')
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
         })
       })
     },

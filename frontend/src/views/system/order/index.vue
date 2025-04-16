@@ -339,8 +339,10 @@ export default {
     },
     // 选中数据条目
     handleCurrentChange(current, old) {
-      this.idSelect = current.orId
-      this.codeSelect = current.orCode
+      if (current) {
+        this.idSelect = current.orId
+        this.codeSelect = current.orCode
+      }
     },
     /** 新增按钮操作 */
     handleAdd() {

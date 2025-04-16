@@ -332,8 +332,10 @@ export default {
     },
     // 选中数据条目
     handleCurrentChange(current, old) {
-      this.idSelect = current.clId
-      this.codeSelect = current.clCode
+      if (current) {
+        this.idSelect = current.clId
+        this.codeSelect = current.clCode
+      }
     },
     /** 新增按钮操作 */
     handleAdd() {

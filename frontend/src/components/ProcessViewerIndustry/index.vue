@@ -18,11 +18,11 @@
           <div>当前轮次<br/>已完成</div>
           <div class="legend-box green-box"></div>
         </div>
-        <div :span="8" class="legend">
+        <div class="legend">
           <div>当前轮次<br/>进行中</div>
           <div class="legend-box blue-box"></div>
         </div>
-        <div :span="8" class="legend">
+        <div class="legend">
           <div>当前轮次<br/>未开始</div>
           <div class="legend-box white-box"></div>
         </div>

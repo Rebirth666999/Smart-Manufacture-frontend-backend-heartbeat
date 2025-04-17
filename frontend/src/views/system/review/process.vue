@@ -131,7 +131,7 @@
 
 <script>
 import { getProcess, listProcess, getBpmnXml, updateProcess ,listReviewProcess} from "@/api/system/process";
-import { listMaterial } from "@/api/system/material";
+import { listProduct } from "@/api/system/product";
 import ProcessViewer from '@/components/ProcessViewer';
 
 export default {
@@ -195,7 +195,7 @@ export default {
     getProductList() {
       return new Promise((resolve, reject) => {
         this.loading = true;
-        listMaterial({ maType: '2' }).then(response => {
+        listProduct().then(response => {
           this.productList = response.rows
           resolve()
         }).catch(() => {

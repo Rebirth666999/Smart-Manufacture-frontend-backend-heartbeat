@@ -217,6 +217,7 @@
 <script>
 import { listProcess, getProcess, delProcess, addProcess, updateProcess, saveModel, getBpmnXml } from "@/api/system/process";
 import { listMaterial } from "@/api/system/material";
+import { listProduct } from "@/api/system/product";
 import { listEquipmentModel } from "@/api/system/equipmentModel";
 import { listModelOperation } from "@/api/system/modelOperation";
 import ProcessDesigner from '@/components/ProcessDesigner';
@@ -275,25 +276,40 @@ export default {
     };
   },
   async created() {
+    await this.getMaterialList();
     await this.getProductList();
     await this.getEquipmentModelList();
     await this.getModelOperationList();
     this.getList();
   },
   async activated() {
+    await this.getMaterialList();
     await this.getProductList();
     await this.getEquipmentModelList();
     await this.getModelOperationList();
     this.getList();
   },
   methods: {
+    // 查询原料列表
+    getMaterialList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listMaterial().then(response => {
+          this.materialList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     // 查询产品列表
     getProductList() {
       return new Promise((resolve, reject) => {
         this.loading = true;
-        listMaterial().then(response => {
-          this.materialList = response.rows.filter(ele => ele.maType === '1')
-          this.productList = response.rows.filter(ele => ele.maType === '2')
+        listProduct().then(response => {
+          this.productList = response.rows
           resolve()
         }).catch(() => {
           reject()

@@ -100,7 +100,7 @@
 import { listManufacturePlan, getManufacturePlan, delManufacturePlan, addManufacturePlan, updateManufacturePlan } from "@/api/system/manufacturePlan";
 import { listProcess } from "@/api/system/process";
 import { listOrder } from "@/api/system/order";
-import { listMaterial } from "@/api/system/material";
+import { listProduct } from "@/api/system/product";
 import { listOrderDemand } from "@/api/system/orderDemand";
 import manufactureTask from '@/views/system/manufactureTask';
 
@@ -208,7 +208,7 @@ export default {
     getProductList() {
       return new Promise((resolve, reject) => {
         this.loading = true;
-        listMaterial({ maType: '2' }).then(response => {
+        listProduct().then(response => {
           this.productListFull = response.rows
           resolve()
         }).catch(() => {

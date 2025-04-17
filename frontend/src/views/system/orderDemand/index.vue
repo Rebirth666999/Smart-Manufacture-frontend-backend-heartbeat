@@ -162,7 +162,7 @@
 
 <script>
 import { listOrderDemand, getOrderDemand, delOrderDemand, addOrderDemand, updateOrderDemand } from "@/api/system/orderDemand";
-import { listMaterial } from "@/api/system/material";
+import { listProduct } from "@/api/system/product";
 import { listOrder } from "@/api/system/order";
 
 export default {
@@ -262,7 +262,7 @@ export default {
     getMaterialList() {
       return new Promise((resolve, reject) => {
         this.loading = true;
-        listMaterial({ maType: '2' }).then(response => {
+        listProduct().then(response => {
           this.materialList = response.rows
           resolve()
         }).catch(() => {

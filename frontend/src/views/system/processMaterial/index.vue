@@ -317,7 +317,7 @@ export default {
     getMaterialList() {
       return new Promise((resolve, reject) => {
         this.loading = true;
-        listMaterial({ maType: '1' }).then(response => {
+        listMaterial().then(response => {
           this.materialList = response.rows
           resolve()
         }).catch(() => {

@@ -18,7 +18,8 @@ import { listAreaControl } from "@/api/system/areaControl";
 import { listMaterial } from "@/api/system/material";
 import { listManufacturePlan } from "@/api/system/manufacturePlan";
 import { listProcess, getBpmnXml } from "@/api/system/process";
-import { listStore } from "@/api/system/store";
+import { listMaterialStore } from "@/api/system/materialStore";
+import { listProductStore } from "@/api/system/productStore";
 
 import { listEquipment } from "@/api/system/equipment";
 import { listEquipmentOperation } from "@/api/system/equipmentOperation";
@@ -138,8 +139,8 @@ export default {
     getStoreList() {
       return new Promise(async (resolve, reject) => {
         try {
-          this.materialStoreList = (await listStore({ stType: '1' })).rows
-          this.productStoreList = (await listStore({ stType: '2' })).rows
+          this.materialStoreList = (await listMaterialStore()).rows
+          this.productStoreList = (await listProductStore()).rows
         } catch (err) {
           reject()
         }
@@ -187,7 +188,7 @@ export default {
       return new Promise((resolve, reject) => {
         this.loading = true;
         listMaterial().then(response => {
-          this.viewerData.maList = response.rows.filter(ele => ele.maType === '1')
+          this.viewerData.maList = response.rows
           resolve()
         }).catch(() => {
           reject()

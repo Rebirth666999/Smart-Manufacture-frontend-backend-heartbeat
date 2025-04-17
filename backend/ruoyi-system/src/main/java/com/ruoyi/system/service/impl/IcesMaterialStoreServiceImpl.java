@@ -65,10 +65,6 @@ public class IcesMaterialStoreServiceImpl implements IIcesMaterialStoreService {
         LambdaQueryWrapper<IcesMaterialStore> lqw = Wrappers.lambdaQuery();
         lqw.eq(StringUtils.isNotBlank(bo.getMsCode()), IcesMaterialStore::getMsCode, bo.getMsCode());
         lqw.like(StringUtils.isNotBlank(bo.getMsName()), IcesMaterialStore::getMsName, bo.getMsName());
-        lqw.between(params.get("beginMsSpace") != null && params.get("endMsSpace") != null,
-            IcesMaterialStore::getMsSpace ,params.get("beginMsSpace"), params.get("endMsSpace"));
-        lqw.between(params.get("beginMsFree") != null && params.get("endMsFree") != null,
-            IcesMaterialStore::getMsFree ,params.get("beginMsFree"), params.get("endMsFree"));
         lqw.eq(bo.getMsDelete() != null, IcesMaterialStore::getMsDelete, bo.getMsDelete());
         return lqw;
     }

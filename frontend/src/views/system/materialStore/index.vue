@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="原料仓库编码" prop="msCode">
-        <el-input
-          v-model="queryParams.msCode"
-          placeholder="请输入原料仓库编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
       <el-form-item label="仓库名称" prop="msName">
         <el-input
           v-model="queryParams.msName"
@@ -17,30 +9,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="货位数量" prop="msSpace">
-        <el-input
-          v-model="queryParams.msSpace"
-          placeholder="请输入货位数量"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="空闲货位数量" prop="msFree">
-        <el-input
-          v-model="queryParams.msFree"
-          placeholder="请输入空闲货位数量"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="已删除" prop="msDelete">
+      <!-- <el-form-item label="已删除" prop="msDelete">
         <el-input
           v-model="queryParams.msDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -100,8 +76,8 @@
       <el-table-column label="仓库名称" align="center" prop="msName" />
       <el-table-column label="货位数量" align="center" prop="msSpace" />
       <el-table-column label="空闲货位数量" align="center" prop="msFree" />
-      <el-table-column label="已删除" align="center" prop="msDelete" />
-      <el-table-column label="描述" align="center" prop="msDesc" />
+      <!-- <el-table-column label="已删除" align="center" prop="msDelete" /> -->
+      <!-- <el-table-column label="描述" align="center" prop="msDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -131,8 +107,8 @@
     />
 
     <!-- 添加或修改原料仓库对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="550px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="仓库名称" prop="msName">
           <el-input v-model="form.msName" placeholder="请输入仓库名称" />
         </el-form-item>
@@ -189,7 +165,7 @@ export default {
         msName: undefined,
         msSpace: undefined,
         msFree: undefined,
-        msDelete: undefined,
+        msDelete: 0,
       },
       // 表单参数
       form: {},
@@ -328,3 +304,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

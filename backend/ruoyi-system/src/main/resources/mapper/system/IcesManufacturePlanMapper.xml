@@ -8,6 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="mpId" column="mp_id"/>
         <result property="mpCode" column="mp_code"/>
         <result property="orCode" column="or_code"/>
+        <result property="odCode" column="od_code"/>
         <result property="mpStat" column="mp_stat"/>
         <result property="mpBegin" column="mp_begin"/>
         <result property="mpEndPlan" column="mp_end_plan"/>

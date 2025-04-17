@@ -42,6 +42,12 @@ public class IcesManufacturePlanVo {
     private String orCode;
 
     /**
+     * 产品需求
+     */
+    @ExcelProperty(value = "产品需求")
+    private String odCode;
+
+    /**
      * 状态代码
      */
     @ExcelProperty(value = "状态代码", converter = ExcelDictConvert.class)

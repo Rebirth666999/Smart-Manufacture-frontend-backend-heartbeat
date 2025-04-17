@@ -38,6 +38,10 @@ public class IcesManufacturePlan extends BaseEntity {
      */
     private String orCode;
     /**
+     * 产品需求
+     */
+    private String odCode;
+    /**
      * 状态代码
      */
     private String mpStat;

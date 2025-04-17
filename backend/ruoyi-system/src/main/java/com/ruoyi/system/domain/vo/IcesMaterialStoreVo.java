@@ -43,13 +43,13 @@ public class IcesMaterialStoreVo {
      * 货位数量
      */
     @ExcelProperty(value = "货位数量")
-    private Long msSpace;
+    private Float msSpace;
 
     /**
      * 空闲货位数量
      */
     @ExcelProperty(value = "空闲货位数量")
-    private Long msFree;
+    private Float msFree;
 
     /**
      * 已删除

@@ -42,13 +42,13 @@ public class IcesMaterialStoreBo extends BaseEntity {
      * 货位数量
      */
     @NotNull(message = "货位数量不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long msSpace;
+    private Float msSpace;
 
     /**
      * 空闲货位数量
      */
     @NotNull(message = "空闲货位数量不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long msFree;
+    private Float msFree;
 
     /**
      * 已删除

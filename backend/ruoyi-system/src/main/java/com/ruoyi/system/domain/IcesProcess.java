@@ -34,7 +34,7 @@ public class IcesProcess extends BaseEntity {
     /**
      * 目标产品
      */
-    private String maCode;
+    private String prCode;
     /**
      * 工艺流程名称
      */

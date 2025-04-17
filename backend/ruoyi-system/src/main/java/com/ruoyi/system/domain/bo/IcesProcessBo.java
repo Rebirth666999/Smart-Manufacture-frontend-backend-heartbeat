@@ -36,7 +36,7 @@ public class IcesProcessBo extends BaseEntity {
      * 目标产品
      */
     @NotBlank(message = "目标产品不能为空", groups = { AddGroup.class, EditGroup.class })
-    private String maCode;
+    private String prCode;
 
     /**
      * 工艺流程名称

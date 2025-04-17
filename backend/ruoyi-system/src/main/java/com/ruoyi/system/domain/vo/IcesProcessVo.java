@@ -37,7 +37,7 @@ public class IcesProcessVo {
      * 目标产品
      */
     @ExcelProperty(value = "目标产品")
-    private String maCode;
+    private String prCode;
 
     /**
      * 工艺流程名称

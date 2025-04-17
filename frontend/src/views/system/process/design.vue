@@ -12,9 +12,9 @@
       </div>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-col :span="8">
-          <el-form-item label="目标产品" prop="maCode">
-            <el-select v-model="form.maCode" placeholder="请选择目标产品">
-              <el-option v-for="item in productList" :key="item.maCode" :label="item.maName" :value="item.maCode">
+          <el-form-item label="目标产品" prop="prCode">
+            <el-select v-model="form.prCode" placeholder="请选择目标产品">
+              <el-option v-for="item in productList" :key="item.prCode" :label="item.prName" :value="item.prCode">
               </el-option>
             </el-select>
           </el-form-item>
@@ -85,7 +85,7 @@ export default {
         procId: [
           { required: true, message: "工艺流程ID不能为空", trigger: "blur" }
         ],
-        maCode: [
+        prCode: [
           { required: true, message: "目标产品不能为空", trigger: "blur" }
         ],
         procName: [
@@ -241,7 +241,7 @@ export default {
     reset() {
       this.form = {
         procId: undefined,
-        maCode: undefined,
+        prCode: undefined,
         procName: undefined,
         procStat: undefined,
         procDelete: undefined,

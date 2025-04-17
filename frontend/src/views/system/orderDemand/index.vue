@@ -11,13 +11,13 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="所需产品" prop="maCode">
-        <el-select v-model="queryParams.maCode" placeholder="请选择产品" clearable>
+      <el-form-item label="所需产品" prop="prCode">
+        <el-select v-model="queryParams.prCode" placeholder="请选择产品" clearable>
           <el-option
-           v-for="option in materialList"
-           :key="option.maCode"
-           :label="option.maName"
-           :value="option.maCode">
+           v-for="option in productList"
+           :key="option.prCode"
+           :label="option.prName"
+           :value="option.prCode">
           </el-option>
         </el-select>
       </el-form-item>
@@ -90,12 +90,13 @@
           {{ orderList.find(ele => ele.orCode === scope.row.orCode).orName || '' }}
       </template>
         </el-table-column>
-      <el-table-column label="所需产品" align="center" prop="maCode">
+      <el-table-column label="所需产品" align="center" prop="prCode">
         <template slot-scope="scope">
-          {{ materialList.find(ele => ele.maCode === scope.row.maCode).maName || '' }}
+          {{ productList.find(ele => ele.prCode === scope.row.prCode).prName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="数量" align="center" prop="odDemand" />
+      <el-table-column label="金额小计" align="center" prop="odPrice" />
       <!-- <el-table-column label="已删除" align="center" prop="odDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -138,18 +139,24 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="所需产品" prop="maCode">
-          <el-select v-model="form.maCode" placeholder="请选择产品">
+        <el-form-item label="所需产品" prop="prCode">
+          <el-select v-model="form.prCode" placeholder="请选择产品">
             <el-option
-             v-for="option in materialList"
-             :key="option.maCode"
-             :label="option.maName"
-             :value="option.maCode">
+             v-for="option in productList"
+             :key="option.prCode"
+             :label="option.prName"
+             :value="option.prCode">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="数量" prop="odDemand">
           <el-input v-model="form.odDemand" placeholder="请输入所需产品数量" />
+        </el-form-item>
+        <el-form-item label="金额小计" prop="odPrice">
+          <el-input v-model="form.odPrice" placeholder="请输入金额小计" />
+        </el-form-item>
+        <el-form-item label="定制详情" prop="odCust">
+          <el-input v-model="form.odCust" type="textarea" placeholder="请输入定制详情" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -199,9 +206,11 @@ export default {
         pageNum: 1,
         pageSize: 10,
         odCode: undefined,
-        maCode: undefined,
+        prCode: undefined,
         orCode: undefined,
         odDemand: undefined,
+        odPrice: undefined,
+        odCust: undefined,
         odDelete: 0,
       },
       // 表单参数
@@ -211,7 +220,7 @@ export default {
         odId: [
           { required: true, message: "所需产品ID不能为空", trigger: "blur" }
         ],
-        maCode: [
+        prCode: [
           { required: true, message: "所需产品不能为空", trigger: "blur" }
         ],
         orCode: [
@@ -220,9 +229,12 @@ export default {
         odDemand: [
           { required: true, message: "所需产品数量不能为空", trigger: "blur" }
         ],
+        odPrice: [
+          { required: true, message: "金额小计不能为空", trigger: "blur" }
+        ],
       },
       // 产品列表
-      materialList: [],
+      productList: [],
       // 订单列表
       orderList: [],
     };
@@ -263,7 +275,7 @@ export default {
       return new Promise((resolve, reject) => {
         this.loading = true;
         listProduct().then(response => {
-          this.materialList = response.rows
+          this.productList = response.rows
           resolve()
         }).catch(() => {
           reject()
@@ -291,9 +303,11 @@ export default {
       this.form = {
         odId: undefined,
         odCode: undefined,
-        maCode: undefined,
+        prCode: undefined,
         orCode: undefined,
         odDemand: undefined,
+        odPrice: undefined,
+        odCust: undefined,
         odDelete: undefined,
         createBy: undefined,
         createTime: undefined,

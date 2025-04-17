@@ -23,21 +23,6 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="工艺流程" prop="procCode">
-            <el-select
-              v-model="queryParams.procCode"
-              placeholder="请选择工艺流程"
-              clearable
-            >
-              <el-option
-                v-for="item in processListFull"
-                :key="item.procCode"
-                :label="item.procName"
-                :value="item.procCode"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
           <el-form-item label="状态" prop="mpStat">
             <el-select v-model="queryParams.mpStat" placeholder="请选择状态" clearable>
               <el-option
@@ -135,11 +120,6 @@
               {{ orderList.find(ele => ele.orCode === scope.row.orCode).orName || '' }}
             </template>
           </el-table-column>
-          <el-table-column label="工艺流程" align="center" prop="procCode">
-            <template slot-scope="scope">
-              {{ processListFull.find(ele => ele.procCode === scope.row.procCode).procName || '' }}
-            </template>
-          </el-table-column>
           <el-table-column label="状态" align="center" prop="mpStat">
             <template slot-scope="scope">
               <dict-tag :options="dict.type.ices_manufacture_plan_status" :value="scope.row.mpStat"/>
@@ -231,7 +211,6 @@
 
 <script>
 import { listManufacturePlan, getManufacturePlan, delManufacturePlan, addManufacturePlan, updateManufacturePlan } from "@/api/system/manufacturePlan";
-import { listProcess } from "@/api/system/process";
 import { listOrder } from "@/api/system/order";
 import manufactureTask from '@/views/system/manufactureTask';
 
@@ -278,12 +257,10 @@ export default {
     };
   },
   async created() {
-    await this.getProcessList();
     await this.getOrderList();
     this.getList();
   },
   async activated() {
-    await this.getProcessList();
     await this.getOrderList();
     this.getList();
   },
@@ -305,21 +282,6 @@ export default {
      }).finally(() => {
       this.loading = false;
      });
-    },
-    // 查询工艺流程列表
-    getProcessList() {
-      return new Promise((resolve, reject) => {
-        this.loading = true;
-        listProcess().then(response => {
-          // 全列表
-          this.processListFull = response.rows
-          resolve()
-        }).catch(() => {
-          reject()
-        }).finally(() => {
-          this.loading = false
-        })
-      })
     },
     // 查询产品列表
     getOrderList() {

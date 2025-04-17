@@ -18,7 +18,7 @@
         </div>
       </div>
       <el-form ref="form" :model="form" :rules="rules" label-width="110px">
-        <el-col :span="8">
+        <el-col :span="12">
           <el-form-item label="所属订单" prop="orCode">
             <el-select v-model="form.orCode" placeholder="请选择订单" @change="selectOrder">
               <el-option v-for="item in orderList" :key="item.orCode" :label="item.orName" :value="item.orCode">
@@ -26,8 +26,8 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
-          <el-form-item prop="maCode">
+        <el-col :span="12">
+          <el-form-item prop="prCode">
             <span slot="label">
               <el-tooltip placement="top">
                 <div slot="content">
@@ -37,25 +37,8 @@
               </el-tooltip>
               产品
             </span>
-            <el-select v-model="form.maCode" placeholder="请选择产品" @change="selectProduct">
-              <el-option v-for="item in productList" :key="item.maCode" :label="item.maName" :value="item.maCode">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item prop="procCode">
-            <span slot="label">
-              <el-tooltip placement="top">
-                <div slot="content">
-                  <div>须先选择产品，才能够加载产品的工艺流程</div>
-                </div>
-                <i class="el-icon-question"></i>
-              </el-tooltip>
-              工艺流程
-            </span>
-            <el-select v-model="form.procCode" placeholder="请选择工艺流程">
-              <el-option v-for="item in processList" :key="item.procCode" :label="item.procName" :value="item.procCode">
+            <el-select v-model="form.prCode" placeholder="请选择产品" @change="selectProduct">
+              <el-option v-for="item in productList" :key="item.prCode" :label="item.maName" :value="item.prCode">
               </el-option>
             </el-select>
           </el-form-item>
@@ -98,7 +81,6 @@
 
 <script>
 import { listManufacturePlan, getManufacturePlan, delManufacturePlan, addManufacturePlan, updateManufacturePlan } from "@/api/system/manufacturePlan";
-import { listProcess } from "@/api/system/process";
 import { listOrder } from "@/api/system/order";
 import { listProduct } from "@/api/system/product";
 import { listOrderDemand } from "@/api/system/orderDemand";
@@ -155,7 +137,6 @@ export default {
   },
   async created() {
     this.loading = true;
-    await this.getProcessList();
     await this.getOrderList();
     await this.getProductList();
     await this.getOrderDemandList();
@@ -173,7 +154,6 @@ export default {
   },
   async activated() {
     this.loading = true;
-    await this.getProcessList();
     await this.getOrderList();
     await this.getProductList();
     await this.getOrderDemandList();
@@ -210,21 +190,6 @@ export default {
         this.loading = true;
         listProduct().then(response => {
           this.productListFull = response.rows
-          resolve()
-        }).catch(() => {
-          reject()
-        }).finally(() => {
-          this.loading = false
-        })
-      })
-    },
-    // 查询工艺流程列表
-    getProcessList() {
-      return new Promise((resolve, reject) => {
-        this.loading = true;
-        listProcess().then(response => {
-          // 全列表
-          this.processListFull = response.rows
           resolve()
         }).catch(() => {
           reject()
@@ -308,11 +273,11 @@ export default {
       const order = this.orderList.find(ele => ele.orCode === row)
       if (order) {
         const demands = this.orderDemandList.filter(ele => ele.orCode === order.orCode)
-        this.productList = this.productListFull.filter(ele => demands.findIndex(demand => demand.maCode === ele.maCode) !== -1)
+        this.productList = this.productListFull.filter(ele => demands.findIndex(demand => demand.prCode === ele.prCode) !== -1)
         if (flag) {
           // flag=1用户主动选择
           // flag=0系统自动更新
-          this.form.maCode = undefined
+          this.form.prCode = undefined
           this.form.procCode = undefined
           this.form.mpQtyPlan = undefined
         }
@@ -323,10 +288,10 @@ export default {
     // 选择产品的监听函数
     selectProduct(row) {
       const order = this.orderList.find(ele => ele.orCode === this.form.orCode)
-      const product = this.productListFull.find(ele => ele.maCode === row)
+      const product = this.productListFull.find(ele => ele.prCode === row)
       if (product) {
-        const demand = this.orderDemandList.find(ele => ele.orCode === order.orCode && ele.maCode === product.maCode)
-        this.processList = this.processListFull.filter(ele => ele.maCode === product.maCode && ele.procStat === "5")
+        const demand = this.orderDemandList.find(ele => ele.orCode === order.orCode && ele.prCode === product.prCode)
+        this.processList = this.processListFull.filter(ele => ele.prCode === product.prCode && ele.procStat === "5")
         this.form.mpQtyPlan = demand.odDemand
         this.form.procCode = undefined
       } else {

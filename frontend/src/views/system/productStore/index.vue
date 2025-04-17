@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="产品仓库编码" prop="prsCode">
-        <el-input
-          v-model="queryParams.prsCode"
-          placeholder="请输入产品仓库编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="仓库名称" prop="prsName">
         <el-input
           v-model="queryParams.prsName"
@@ -17,14 +9,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="已删除" prop="prsDelete">
+      <!-- <el-form-item label="已删除" prop="prsDelete">
         <el-input
           v-model="queryParams.prsDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -84,8 +76,8 @@
       <el-table-column label="仓库名称" align="center" prop="prsName" />
       <el-table-column label="货位数量" align="center" prop="prsSpace" />
       <el-table-column label="空闲货位数量" align="center" prop="prsFree" />
-      <el-table-column label="已删除" align="center" prop="prsDelete" />
-      <el-table-column label="描述" align="center" prop="prsDesc" />
+      <!-- <el-table-column label="已删除" align="center" prop="prsDelete" /> -->
+      <!-- <el-table-column label="描述" align="center" prop="prsDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -115,8 +107,8 @@
     />
 
     <!-- 添加或修改产品仓库对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="550px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="仓库名称" prop="prsName">
           <el-input v-model="form.prsName" placeholder="请输入仓库名称" />
         </el-form-item>
@@ -171,7 +163,7 @@ export default {
         pageSize: 10,
         prsCode: undefined,
         prsName: undefined,
-        prsDelete: undefined,
+        prsDelete: 0,
       },
       // 表单参数
       form: {},

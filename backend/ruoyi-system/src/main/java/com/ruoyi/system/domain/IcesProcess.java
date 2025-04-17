@@ -55,4 +55,28 @@ public class IcesProcess extends BaseEntity {
      * 描述
      */
     private String procDesc;
+    /**
+     * 创建人
+     */
+    private String procCman;
+    /**
+     * 创建时间
+     */
+    private String procCdate;
+    /**
+     * 发布人
+     */
+    private String procRman;
+    /**
+     * 发布时间
+     */
+    private String procRdate;
+    /**
+     * 修改人
+     */
+    private String procMman;
+    /**
+     * 修改时间
+     */
+    private String procMdate;
 }

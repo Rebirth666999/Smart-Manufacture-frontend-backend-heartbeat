@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="原料编码" prop="maCode">
-        <el-input
-          v-model="queryParams.maCode"
-          placeholder="请输入原料编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="原料名称" prop="maName">
         <el-input
           v-model="queryParams.maName"
@@ -17,14 +9,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="已删除" prop="maDelete">
+      <!-- <el-form-item label="已删除" prop="maDelete">
         <el-input
           v-model="queryParams.maDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -84,8 +76,8 @@
       <el-table-column label="原料名称" align="center" prop="maName" />
       <el-table-column label="占用货位数量" align="center" prop="maOccupy" />
       <el-table-column label="单位" align="center" prop="maUnit" />
-      <el-table-column label="已删除" align="center" prop="maDelete" />
-      <el-table-column label="描述" align="center" prop="maDesc" />
+      <!-- <el-table-column label="已删除" align="center" prop="maDelete" /> -->
+      <!-- <el-table-column label="描述" align="center" prop="maDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -115,8 +107,8 @@
     />
 
     <!-- 添加或修改原料对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="550px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="原料名称" prop="maName">
           <el-input v-model="form.maName" placeholder="请输入原料名称" />
         </el-form-item>
@@ -171,7 +163,7 @@ export default {
         pageSize: 10,
         maCode: undefined,
         maName: undefined,
-        maDelete: undefined,
+        maDelete: 0,
       },
       // 表单参数
       form: {},
@@ -310,3 +302,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

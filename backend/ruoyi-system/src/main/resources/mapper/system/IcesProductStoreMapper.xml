@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.IcesProductStoreMapper">
+
+    <resultMap type="com.ruoyi.system.domain.IcesProductStore" id="IcesProductStoreResult">
+        <result property="prsId" column="prs_id"/>
+        <result property="prsCode" column="prs_code"/>
+        <result property="prsName" column="prs_name"/>
+        <result property="prsSpace" column="prs_space"/>
+        <result property="prsFree" column="prs_free"/>
+        <result property="prsDelete" column="prs_delete"/>
+        <result property="prsDesc" column="prs_desc"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

@@ -1,32 +1,30 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="物料名称" prop="maName">
+      <el-form-item label="原料编码" prop="maCode">
         <el-input
-          v-model="queryParams.maName"
-          placeholder="请输入物料名称"
+          v-model="queryParams.maCode"
+          placeholder="请输入原料编码"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="物料类型" prop="maType">
-        <el-select v-model="queryParams.maType" placeholder="请选择物料类型" clearable>
-          <el-option
-            v-for="dict in dict.type.ices_material_type"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
+      <el-form-item label="原料名称" prop="maName">
+        <el-input
+          v-model="queryParams.maName"
+          placeholder="请输入原料名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
-      <!-- <el-form-item label="已删除" prop="maDelete">
+      <el-form-item label="已删除" prop="maDelete">
         <el-input
           v-model="queryParams.maDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -81,17 +79,13 @@
 
     <el-table v-loading="loading" :data="materialList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="物料ID" align="center" prop="maId" v-if="true"/>
-      <el-table-column label="物料编码" align="center" prop="maCode" />
-      <el-table-column label="物料名称" align="center" prop="maName" />
-      <el-table-column label="物料类型" align="center" prop="maType">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.ices_material_type" :value="scope.row.maType"/>
-        </template>
-      </el-table-column>
+      <el-table-column label="原料ID" align="center" prop="maId" v-if="true"/>
+      <el-table-column label="原料编码" align="center" prop="maCode" />
+      <el-table-column label="原料名称" align="center" prop="maName" />
       <el-table-column label="占用货位数量" align="center" prop="maOccupy" />
-      <!-- <el-table-column label="已删除" align="center" prop="maDelete" /> -->
-      <!-- <el-table-column label="描述" align="center" prop="maDesc" /> -->
+      <el-table-column label="单位" align="center" prop="maUnit" />
+      <el-table-column label="已删除" align="center" prop="maDelete" />
+      <el-table-column label="描述" align="center" prop="maDesc" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -101,12 +95,6 @@
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:material:edit']"
           >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-box"
-            @click="handleMaterialStock(scope.row)"
-          >库存</el-button>
           <el-button
             size="mini"
             type="text"
@@ -126,24 +114,17 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改物料对话框 -->
+    <!-- 添加或修改原料对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
-        <el-form-item label="物料名称" prop="maName">
-          <el-input v-model="form.maName" placeholder="请输入物料名称" />
-        </el-form-item>
-        <el-form-item label="物料类型" prop="maType">
-          <el-select v-model="form.maType" placeholder="请选择物料类型">
-            <el-option
-              v-for="dict in dict.type.ices_material_type"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
-          </el-select>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="原料名称" prop="maName">
+          <el-input v-model="form.maName" placeholder="请输入原料名称" />
         </el-form-item>
         <el-form-item label="占用货位数量" prop="maOccupy">
           <el-input v-model="form.maOccupy" placeholder="请输入占用货位数量" />
+        </el-form-item>
+        <el-form-item label="单位" prop="maUnit">
+          <el-input v-model="form.maUnit" placeholder="请输入单位" />
         </el-form-item>
         <el-form-item label="描述" prop="maDesc">
           <el-input v-model="form.maDesc" type="textarea" placeholder="请输入内容" />
@@ -162,7 +143,6 @@ import { listMaterial, getMaterial, delMaterial, addMaterial, updateMaterial } f
 
 export default {
   name: "Material",
-  dicts: ['ices_material_type'],
   data() {
     return {
       // 按钮loading
@@ -179,7 +159,7 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 物料表格数据
+      // 原料表格数据
       materialList: [],
       // 弹出层标题
       title: "",
@@ -189,25 +169,25 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        maCode: undefined,
         maName: undefined,
-        maType: undefined,
-        maDelete: 0,
+        maDelete: undefined,
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
         maId: [
-          { required: true, message: "物料ID不能为空", trigger: "blur" }
+          { required: true, message: "原料ID不能为空", trigger: "blur" }
         ],
         maName: [
-          { required: true, message: "物料名称不能为空", trigger: "blur" }
-        ],
-        maType: [
-          { required: true, message: "物料类型不能为空", trigger: "change" }
+          { required: true, message: "原料名称不能为空", trigger: "blur" }
         ],
         maOccupy: [
           { required: true, message: "占用货位数量不能为空", trigger: "blur" }
+        ],
+        maUnit: [
+          { required: true, message: "单位不能为空", trigger: "blur" }
         ],
       }
     };
@@ -215,11 +195,8 @@ export default {
   created() {
     this.getList();
   },
-  activated() {
-    this.getList();
-  },
   methods: {
-    /** 查询物料列表 */
+    /** 查询原料列表 */
     getList() {
       this.loading = true;
       listMaterial(this.queryParams).then(response => {
@@ -239,8 +216,8 @@ export default {
         maId: undefined,
         maCode: undefined,
         maName: undefined,
-        maType: undefined,
         maOccupy: undefined,
+        maUnit: undefined,
         maDelete: undefined,
         maDesc: undefined,
         createBy: undefined,
@@ -270,7 +247,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加物料";
+      this.title = "添加原料";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -281,7 +258,7 @@ export default {
         this.loading = false;
         this.form = response.data;
         this.open = true;
-        this.title = "修改物料";
+        this.title = "修改原料";
       });
     },
     /** 提交按钮 */
@@ -312,7 +289,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const maIds = row.maId || this.ids;
-      this.$modal.confirm('是否确认删除物料编号为"' + maIds + '"的数据项？').then(() => {
+      this.$modal.confirm('是否确认删除原料编号为"' + maIds + '"的数据项？').then(() => {
         this.loading = true;
         return delMaterial(maIds);
       }).then(() => {
@@ -329,20 +306,7 @@ export default {
       this.download('system/material/export', {
         ...this.queryParams
       }, `material_${new Date().getTime()}.xlsx`)
-    },
-    // 查看物料库存
-    handleMaterialStock(row) {
-      this.$router.push(`/assets/materialStock?maCode=${row.maCode}`)
     }
   }
 };
 </script>
-
-<style scoped>
-.el-select {
-  width: 100%;
-}
-.el-date-editor{
-  width: 100%;
-}
-</style>

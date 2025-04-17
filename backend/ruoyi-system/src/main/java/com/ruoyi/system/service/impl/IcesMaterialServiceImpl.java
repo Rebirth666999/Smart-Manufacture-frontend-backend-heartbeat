@@ -21,10 +21,10 @@ import java.util.Map;
 import java.util.Collection;
 
 /**
- * 物料Service业务层处理
+ * 原料Service业务层处理
  *
  * @author ruoyi
- * @date 2025-03-26
+ * @date 2025-04-17
  */
 @RequiredArgsConstructor
 @Service
@@ -34,7 +34,7 @@ public class IcesMaterialServiceImpl implements IIcesMaterialService {
     private final IIcesCodeService codeService;
 
     /**
-     * 查询物料
+     * 查询原料
      */
     @Override
     public IcesMaterialVo queryById(Long maId){
@@ -42,7 +42,7 @@ public class IcesMaterialServiceImpl implements IIcesMaterialService {
     }
 
     /**
-     * 查询物料列表
+     * 查询原料列表
      */
     @Override
     public TableDataInfo<IcesMaterialVo> queryPageList(IcesMaterialBo bo, PageQuery pageQuery) {
@@ -52,7 +52,7 @@ public class IcesMaterialServiceImpl implements IIcesMaterialService {
     }
 
     /**
-     * 查询物料列表
+     * 查询原料列表
      */
     @Override
     public List<IcesMaterialVo> queryList(IcesMaterialBo bo) {
@@ -65,13 +65,12 @@ public class IcesMaterialServiceImpl implements IIcesMaterialService {
         LambdaQueryWrapper<IcesMaterial> lqw = Wrappers.lambdaQuery();
         lqw.eq(StringUtils.isNotBlank(bo.getMaCode()), IcesMaterial::getMaCode, bo.getMaCode());
         lqw.like(StringUtils.isNotBlank(bo.getMaName()), IcesMaterial::getMaName, bo.getMaName());
-        lqw.eq(StringUtils.isNotBlank(bo.getMaType()), IcesMaterial::getMaType, bo.getMaType());
         lqw.eq(bo.getMaDelete() != null, IcesMaterial::getMaDelete, bo.getMaDelete());
         return lqw;
     }
 
     /**
-     * 新增物料
+     * 新增原料
      */
     @Override
     public Boolean insertByBo(IcesMaterialBo bo) {
@@ -86,7 +85,7 @@ public class IcesMaterialServiceImpl implements IIcesMaterialService {
     }
 
     /**
-     * 修改物料
+     * 修改原料
      */
     @Override
     public Boolean updateByBo(IcesMaterialBo bo) {
@@ -103,7 +102,7 @@ public class IcesMaterialServiceImpl implements IIcesMaterialService {
     }
 
     /**
-     * 批量删除物料
+     * 批量删除原料
      */
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {

@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="产品编码" prop="prCode">
-        <el-input
-          v-model="queryParams.prCode"
-          placeholder="请输入产品编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="产品名称" prop="prName">
         <el-input
           v-model="queryParams.prName"
@@ -17,14 +9,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="已删除" prop="prDelete">
+      <!-- <el-form-item label="已删除" prop="prDelete">
         <el-input
           v-model="queryParams.prDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -84,8 +76,8 @@
       <el-table-column label="产品名称" align="center" prop="prName" />
       <el-table-column label="占用货位数量" align="center" prop="prOccupy" />
       <el-table-column label="定制详情" align="center" prop="prCust" />
-      <el-table-column label="已删除" align="center" prop="prDelete" />
-      <el-table-column label="描述" align="center" prop="prDesc" />
+      <!-- <el-table-column label="已删除" align="center" prop="prDelete" /> -->
+      <!-- <el-table-column label="描述" align="center" prop="prDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -115,8 +107,8 @@
     />
 
     <!-- 添加或修改产品对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="550px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="产品名称" prop="prName">
           <el-input v-model="form.prName" placeholder="请输入产品名称" />
         </el-form-item>
@@ -171,7 +163,7 @@ export default {
         pageSize: 10,
         prCode: undefined,
         prName: undefined,
-        prDelete: undefined,
+        prDelete: 0,
       },
       // 表单参数
       form: {},
@@ -307,3 +299,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

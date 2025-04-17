@@ -38,7 +38,7 @@ public class IcesProduct extends BaseEntity {
     /**
      * 占用货位数量
      */
-    private Long prOccupy;
+    private Float prOccupy;
     /**
      * 定制详情
      */

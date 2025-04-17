@@ -43,7 +43,7 @@ public class IcesProductVo {
      * 占用货位数量
      */
     @ExcelProperty(value = "占用货位数量")
-    private Long prOccupy;
+    private Float prOccupy;
 
     /**
      * 定制详情

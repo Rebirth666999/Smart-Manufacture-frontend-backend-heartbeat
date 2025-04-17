@@ -42,10 +42,10 @@ public class IcesManufacturePlanVo {
     private String orCode;
 
     /**
-     * 产品需求
+     * 产品
      */
-    @ExcelProperty(value = "产品需求")
-    private String odCode;
+    @ExcelProperty(value = "产品")
+    private String prCode;
 
     /**
      * 状态代码

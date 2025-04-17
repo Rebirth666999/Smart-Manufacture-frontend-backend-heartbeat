@@ -283,7 +283,7 @@ export default {
       this.loading = false;
      });
     },
-    // 查询产品列表
+    // 查询订单列表
     getOrderList() {
       return new Promise((resolve, reject) => {
         this.loading = true;

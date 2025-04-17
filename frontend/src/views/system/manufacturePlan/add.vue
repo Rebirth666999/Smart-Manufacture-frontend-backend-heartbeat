@@ -38,7 +38,7 @@
               产品
             </span>
             <el-select v-model="form.prCode" placeholder="请选择产品" @change="selectProduct">
-              <el-option v-for="item in productList" :key="item.prCode" :label="item.maName" :value="item.prCode">
+              <el-option v-for="item in productList" :key="item.prCode" :label="item.prName" :value="item.prCode">
               </el-option>
             </el-select>
           </el-form-item>
@@ -221,6 +221,7 @@ export default {
       this.form = {
         mpId: undefined,
         orCode: undefined,
+        prCode: undefined,
         procCode: undefined,
         mpStat: undefined,
         mpBegin: undefined,

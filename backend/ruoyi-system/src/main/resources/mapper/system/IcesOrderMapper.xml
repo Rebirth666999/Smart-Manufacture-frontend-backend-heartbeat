@@ -21,6 +21,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy" column="update_by"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
+        <result property="orCman" column="or_cman"/>
+        <result property="orCdate" column="or_cdate"/>
+        <result property="orMman" column="or_mman"/>
+        <result property="orMdate" column="or_mdate"/>
     </resultMap>
 
 

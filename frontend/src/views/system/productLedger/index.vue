@@ -133,9 +133,6 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="库存量" prop="plStock">
-          <el-input v-model="form.plStock" placeholder="请输入库存量" />
-        </el-form-item>
         <el-form-item label="描述" prop="plDesc">
           <el-input v-model="form.plDesc" type="textarea" placeholder="请输入内容" />
         </el-form-item>
@@ -301,6 +298,7 @@ export default {
               this.buttonLoading = false;
             });
           } else {
+            this.form.plStock = 0
             addProductLedger(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;

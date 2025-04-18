@@ -42,7 +42,7 @@ public class IcesMaterialLedgerBo extends BaseEntity {
      * 库存量
      */
     @NotNull(message = "库存量不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long mlStock;
+    private Float mlStock;
 
     /**
      * 已删除

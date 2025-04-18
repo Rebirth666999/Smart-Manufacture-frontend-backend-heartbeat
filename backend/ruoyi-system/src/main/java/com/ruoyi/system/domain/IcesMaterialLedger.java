@@ -38,7 +38,7 @@ public class IcesMaterialLedger extends BaseEntity {
     /**
      * 库存量
      */
-    private Long mlStock;
+    private Float mlStock;
     /**
      * 已删除
      */

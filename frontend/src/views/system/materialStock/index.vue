@@ -20,7 +20,7 @@
         <el-select
           v-model="queryParams.maCode"
           placeholder="请选择原料"
-          clearable
+          disabled
         >
           <el-option
             v-for="item in materialList"
@@ -156,6 +156,7 @@
           <el-select
             v-model="form.maCode"
             placeholder="请选择原料"
+            disabled
           >
             <el-option
               v-for="item in materialList"
@@ -185,6 +186,11 @@ import { listMaterialStore } from "@/api/system/materialStore";
 
 export default {
   name: "MaterialStock",
+  props: {
+    maCode: {
+      required: false
+    }
+  },
   data() {
     return {
       // 按钮loading
@@ -239,11 +245,17 @@ export default {
   async created() {
     await this.getMaterialStoreList();
     await this.getMaterialList();
+    if (this.maCode) {
+      this.queryParams.maCode = this.maCode
+    }
     this.getList();
   },
   async activated() {
     await this.getMaterialStoreList();
     await this.getMaterialList();
+    if (this.maCode) {
+      this.queryParams.maCode = this.maCode
+    }
     this.getList();
   },
   methods: {
@@ -309,6 +321,9 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      if (this.maCode) {
+        this.queryParams.maCode = this.maCode
+      }
       this.handleQuery();
     },
     // 多选框选中数据
@@ -320,6 +335,9 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      if (this.maCode) {
+        this.form.maCode = this.maCode
+      }
       this.open = true;
       this.title = "添加仓库原料库存";
     },

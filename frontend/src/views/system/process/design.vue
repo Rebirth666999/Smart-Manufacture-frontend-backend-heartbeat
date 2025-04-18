@@ -61,15 +61,13 @@ import { listEquipmentModel } from "@/api/system/equipmentModel";
 import { listModelOperation } from "@/api/system/modelOperation";
 import ProcessDesigner from '@/components/ProcessDesigner';
 import ProcessViewer from '@/components/ProcessViewerIndustry';
-import ProcessMaterial from '@/views/system/processMaterial';
 
 
 export default {
   name: "Process",
   components: {
     ProcessDesigner,
-    ProcessViewer,
-    ProcessMaterial
+    ProcessViewer
   },
   dicts: ['ices_process_status'],
   data() {

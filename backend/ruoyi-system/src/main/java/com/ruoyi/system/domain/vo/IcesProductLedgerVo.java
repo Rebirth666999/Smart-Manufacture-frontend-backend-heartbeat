@@ -43,7 +43,7 @@ public class IcesProductLedgerVo {
      * 库存量
      */
     @ExcelProperty(value = "库存量")
-    private Long plStock;
+    private Float plStock;
 
     /**
      * 已删除

@@ -50,17 +50,6 @@
           </el-col>
           <el-col :span="1.5">
             <el-button
-              type="success"
-              plain
-              icon="el-icon-edit"
-              size="mini"
-              :disabled="single"
-              @click="handleUpdate"
-              v-hasPermi="['system:materialLedger:edit']"
-            >修改</el-button>
-          </el-col>
-          <el-col :span="1.5">
-            <el-button
               type="danger"
               plain
               icon="el-icon-delete"
@@ -110,13 +99,6 @@
               <el-button
                 size="mini"
                 type="text"
-                icon="el-icon-edit"
-                @click="handleUpdate(scope.row)"
-                v-hasPermi="['system:materialLedger:edit']"
-              >修改</el-button>
-              <el-button
-                size="mini"
-                type="text"
                 icon="el-icon-delete"
                 @click="handleDelete(scope.row)"
                 v-hasPermi="['system:materialLedger:remove']"
@@ -160,9 +142,6 @@
             >
             </el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item label="库存量" prop="mlStock">
-          <el-input v-model="form.mlStock" placeholder="请输入库存量" />
         </el-form-item>
         <el-form-item label="描述" prop="mlDesc">
           <el-input v-model="form.mlDesc" type="textarea" placeholder="请输入内容" />
@@ -340,6 +319,7 @@ export default {
               this.buttonLoading = false;
             });
           } else {
+            this.form.mlStock = 0
             addMaterialLedger(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;

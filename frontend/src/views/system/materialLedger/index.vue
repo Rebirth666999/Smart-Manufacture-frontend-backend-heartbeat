@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="台账编码" prop="mlCode">
-        <el-input
-          v-model="queryParams.mlCode"
-          placeholder="请输入台账编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="原料" prop="maCode">
         <el-input
           v-model="queryParams.maCode"
@@ -17,14 +9,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="已删除" prop="mlDelete">
+      <!-- <el-form-item label="已删除" prop="mlDelete">
         <el-input
           v-model="queryParams.mlDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -83,8 +75,8 @@
       <el-table-column label="台账编码" align="center" prop="mlCode" />
       <el-table-column label="原料" align="center" prop="maCode" />
       <el-table-column label="库存量" align="center" prop="mlStock" />
-      <el-table-column label="已删除" align="center" prop="mlDelete" />
-      <el-table-column label="描述" align="center" prop="mlDesc" />
+      <!-- <el-table-column label="已删除" align="center" prop="mlDelete" /> -->
+      <!-- <el-table-column label="描述" align="center" prop="mlDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -167,7 +159,7 @@ export default {
         pageSize: 10,
         mlCode: undefined,
         maCode: undefined,
-        mlDelete: undefined,
+        mlDelete: 0,
       },
       // 表单参数
       form: {},
@@ -302,3 +294,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

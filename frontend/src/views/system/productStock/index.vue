@@ -1,38 +1,44 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="仓库产品库存编码" prop="pssCode">
-        <el-input
-          v-model="queryParams.pssCode"
-          placeholder="请输入仓库产品库存编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="仓库" prop="prsCode">
-        <el-input
+        <el-select
           v-model="queryParams.prsCode"
-          placeholder="请输入仓库"
+          placeholder="请选择仓库"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="item in productStoreList"
+            :key="item.prsCode"
+            :label="item.prsName"
+            :value="item.prsCode"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="产品" prop="prCode">
-        <el-input
+        <el-select
           v-model="queryParams.prCode"
-          placeholder="请输入产品"
+          placeholder="请选择产品"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="item in productList"
+            :key="item.prCode"
+            :label="item.prName"
+            :value="item.prCode"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
-      <el-form-item label="已删除" prop="pssDelete">
+      <!-- <el-form-item label="已删除" prop="pssDelete">
         <el-input
           v-model="queryParams.pssDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -89,10 +95,18 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="仓库产品库存ID" align="center" prop="pssId" v-if="true"/>
       <el-table-column label="仓库产品库存编码" align="center" prop="pssCode" />
-      <el-table-column label="仓库" align="center" prop="prsCode" />
-      <el-table-column label="产品" align="center" prop="prCode" />
+      <el-table-column label="仓库" align="center" prop="prsCode">
+        <template slot-scope="scope">
+          {{ productStoreList.find(ele => ele.prsCode === scope.row.prsCode).prsName || '' }}
+        </template>
+      </el-table-column>
+      <el-table-column label="产品" align="center" prop="prCode">
+        <template slot-scope="scope">
+          {{ productList.find(ele => ele.prCode === scope.row.prCode).prName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="库存量" align="center" prop="pssStock" />
-      <el-table-column label="已删除" align="center" prop="pssDelete" />
+      <!-- <el-table-column label="已删除" align="center" prop="pssDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -125,10 +139,32 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="仓库" prop="prsCode">
-          <el-input v-model="form.prsCode" placeholder="请输入仓库" />
+          <el-select
+            v-model="form.prsCode"
+            placeholder="请选择仓库"
+          >
+            <el-option
+              v-for="item in productStoreList"
+              :key="item.prsCode"
+              :label="item.prsName"
+              :value="item.prsCode"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="产品" prop="prCode">
-          <el-input v-model="form.prCode" placeholder="请输入产品" />
+          <el-select
+            v-model="form.prCode"
+            placeholder="请选择产品"
+          >
+            <el-option
+              v-for="item in productList"
+              :key="item.prCode"
+              :label="item.prName"
+              :value="item.prCode"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="库存量" prop="pssStock">
           <el-input v-model="form.pssStock" placeholder="请输入库存量" />
@@ -144,6 +180,8 @@
 
 <script>
 import { listProductStock, getProductStock, delProductStock, addProductStock, updateProductStock } from "@/api/system/productStock";
+import { listProduct } from "@/api/system/product";
+import { listProductStore } from "@/api/system/productStore";
 
 export default {
   name: "ProductStock",
@@ -176,7 +214,7 @@ export default {
         pssCode: undefined,
         prsCode: undefined,
         prCode: undefined,
-        pssDelete: undefined,
+        pssDelete: 0,
       },
       // 表单参数
       form: {},
@@ -194,13 +232,48 @@ export default {
         pssStock: [
           { required: true, message: "库存量不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 产品列表
+      productList: [],
+      // 产品仓库列表
+      productStoreList: []
     };
   },
-  created() {
+  async created() {
+    await this.getProductStoreList();
+    await this.getProductList();
+    this.getList();
+  },
+  async activated() {
+    await this.getProductStoreList();
+    await this.getProductList();
     this.getList();
   },
   methods: {
+    // 查询产品列表
+    getProductList() {
+      return new Promise((resolve, reject) => {
+        listProduct().then(response => {
+          this.productList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+        })
+      })
+    },
+    // 查询仓库列表
+    getProductStoreList() {
+      return new Promise((resolve, reject) => {
+        listProductStore().then(response => {
+          this.productStoreList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+        })
+      })
+    },
     /** 查询仓库产品库存列表 */
     getList() {
       this.loading = true;
@@ -314,3 +387,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

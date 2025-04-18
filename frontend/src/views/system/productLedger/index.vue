@@ -1,30 +1,29 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="台账编码" prop="plCode">
-        <el-input
-          v-model="queryParams.plCode"
-          placeholder="请输入台账编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="产品" prop="prCode">
-        <el-input
+        <el-select
           v-model="queryParams.prCode"
-          placeholder="请输入产品"
+          placeholder="请选择产品"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="item in productList"
+            :key="item.prCode"
+            :label="item.prName"
+            :value="item.prCode"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
-      <el-form-item label="已删除" prop="plDelete">
+      <!-- <el-form-item label="已删除" prop="plDelete">
         <el-input
           v-model="queryParams.plDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -81,10 +80,14 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="台账ID" align="center" prop="plId" v-if="true"/>
       <el-table-column label="台账编码" align="center" prop="plCode" />
-      <el-table-column label="产品" align="center" prop="prCode" />
+      <el-table-column label="产品" align="center" prop="prCode">
+        <template slot-scope="scope">
+          {{ productList.find(ele => ele.prCode === scope.row.prCode).prName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="库存量" align="center" prop="plStock" />
-      <el-table-column label="已删除" align="center" prop="plDelete" />
-      <el-table-column label="描述" align="center" prop="plDesc" />
+      <!-- <el-table-column label="已删除" align="center" prop="plDelete" /> -->
+      <!-- <el-table-column label="描述" align="center" prop="plDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -117,7 +120,18 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="产品" prop="prCode">
-          <el-input v-model="form.prCode" placeholder="请输入产品" />
+          <el-select
+            v-model="form.prCode"
+            placeholder="请选择产品"
+          >
+            <el-option
+              v-for="item in productList"
+              :key="item.prCode"
+              :label="item.prName"
+              :value="item.prCode"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="库存量" prop="plStock">
           <el-input v-model="form.plStock" placeholder="请输入库存量" />
@@ -136,6 +150,7 @@
 
 <script>
 import { listProductLedger, getProductLedger, delProductLedger, addProductLedger, updateProductLedger } from "@/api/system/productLedger";
+import { listProduct } from "@/api/system/product";
 
 export default {
   name: "ProductLedger",
@@ -167,7 +182,7 @@ export default {
         pageSize: 10,
         plCode: undefined,
         prCode: undefined,
-        plDelete: undefined,
+        plDelete: 0,
       },
       // 表单参数
       form: {},
@@ -182,13 +197,32 @@ export default {
         plStock: [
           { required: true, message: "库存量不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 产品列表
+      productList: [],
     };
   },
-  created() {
+  async created() {
+    await this.getProductList();
+    this.getList();
+  },
+  async activated() {
+    await this.getProductList();
     this.getList();
   },
   methods: {
+    // 查询产品列表
+    getProductList() {
+      return new Promise((resolve, reject) => {
+        listProduct().then(response => {
+          this.productList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+        })
+      })
+    },
     /** 查询产品台账列表 */
     getList() {
       this.loading = true;
@@ -302,3 +336,27 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+::v-deep .el-radio span.el-radio__label {
+  display: none;
+}
+.view-card {
+  max-height: 50vh;
+  overflow: scroll;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 17px;
+}
+.controlled-card {
+  margin-top: 10px;
+}
+</style>

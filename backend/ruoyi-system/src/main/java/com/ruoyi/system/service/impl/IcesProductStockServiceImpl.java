@@ -7,9 +7,14 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.domain.bo.IcesMaterialLedgerBo;
 import com.ruoyi.system.domain.bo.IcesMaterialStockBo;
+import com.ruoyi.system.domain.bo.IcesProductLedgerBo;
+import com.ruoyi.system.domain.vo.IcesMaterialLedgerVo;
 import com.ruoyi.system.domain.vo.IcesMaterialStockVo;
+import com.ruoyi.system.domain.vo.IcesProductLedgerVo;
 import com.ruoyi.system.service.IIcesCodeService;
+import com.ruoyi.system.service.IIcesProductLedgerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesProductStockBo;
@@ -34,6 +39,7 @@ public class IcesProductStockServiceImpl implements IIcesProductStockService {
 
     private final IcesProductStockMapper baseMapper;
     private final IIcesCodeService codeService;
+    private final IIcesProductLedgerService ledgerService;
 
     /**
      * 查询仓库产品库存
@@ -83,6 +89,16 @@ public class IcesProductStockServiceImpl implements IIcesProductStockService {
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
             bo.setPssId(add.getPssId());
+            // 找到台账
+            IcesProductLedgerBo ledgerBo = new IcesProductLedgerBo();
+            ledgerBo.setPrCode(add.getPrCode());
+            List<IcesProductLedgerVo> ledgerVos = ledgerService.queryList(ledgerBo);
+            assert (ledgerVos != null && !ledgerVos.isEmpty());
+            ledgerBo.setPlId(ledgerVos.get(0).getPlId());
+            ledgerBo.setPlCode(ledgerVos.get(0).getPlCode());
+            // 修改库存量
+            ledgerBo.setPlStock(ledgerVos.get(0).getPlStock() + add.getPssStock());
+            ledgerService.updateByBo(ledgerBo);
         }
         return flag;
     }
@@ -94,6 +110,18 @@ public class IcesProductStockServiceImpl implements IIcesProductStockService {
     public Boolean updateByBo(IcesProductStockBo bo) {
         IcesProductStock update = BeanUtil.toBean(bo, IcesProductStock.class);
         validEntityBeforeSave(update);
+        // 找到原先记录
+        IcesProductStockVo vo = queryById(update.getPssId());
+        // 找到台账
+        IcesProductLedgerBo ledgerBo = new IcesProductLedgerBo();
+        ledgerBo.setPrCode(update.getPrCode());
+        List<IcesProductLedgerVo> ledgerVos = ledgerService.queryList(ledgerBo);
+        assert (ledgerVos != null && !ledgerVos.isEmpty());
+        ledgerBo.setPlId(ledgerVos.get(0).getPlId());
+        ledgerBo.setPlCode(ledgerVos.get(0).getPlCode());
+        // 修改库存量
+        ledgerBo.setPlStock(ledgerVos.get(0).getPlStock() - vo.getPssStock() + update.getPssStock());
+        ledgerService.updateByBo(ledgerBo);
         return baseMapper.updateById(update) > 0;
     }
 
@@ -123,6 +151,20 @@ public class IcesProductStockServiceImpl implements IIcesProductStockService {
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
         if(isValid){
             //TODO 做一些业务上的校验,判断是否需要校验
+        }
+        for (Long id : ids) {
+            // 找到记录
+            IcesProductStockVo vo = queryById(id);
+            // 找到台账
+            IcesProductLedgerBo ledgerBo = new IcesProductLedgerBo();
+            ledgerBo.setPrCode(vo.getPrCode());
+            List<IcesProductLedgerVo> ledgerVos = ledgerService.queryList(ledgerBo);
+            assert (ledgerVos != null && !ledgerVos.isEmpty());
+            ledgerBo.setPlId(ledgerVos.get(0).getPlId());
+            ledgerBo.setPlCode(ledgerVos.get(0).getPlCode());
+            // 修改库存量
+            ledgerBo.setPlStock(ledgerVos.get(0).getPlStock() - vo.getPssStock());
+            ledgerService.updateByBo(ledgerBo);
         }
         return baseMapper.deleteBatchIds(ids) > 0;
     }

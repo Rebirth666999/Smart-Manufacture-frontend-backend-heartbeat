@@ -2,20 +2,34 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="仓库" prop="msCode">
-        <el-input
+        <el-select
           v-model="queryParams.msCode"
-          placeholder="请输入仓库"
+          placeholder="请选择仓库"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="item in materialStoreList"
+            :key="item.msCode"
+            :label="item.msName"
+            :value="item.msCode"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="原料" prop="maCode">
-        <el-input
+        <el-select
           v-model="queryParams.maCode"
-          placeholder="请输入原料"
+          placeholder="请选择原料"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="item in materialList"
+            :key="item.maCode"
+            :label="item.maName"
+            :value="item.maCode"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <!-- <el-form-item label="已删除" prop="mssDelete">
         <el-input
@@ -81,8 +95,16 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="仓库原料库存ID" align="center" prop="mssId" v-if="true"/>
       <el-table-column label="仓库原料库存编码" align="center" prop="mssCode" />
-      <el-table-column label="仓库" align="center" prop="msCode" />
-      <el-table-column label="原料" align="center" prop="maCode" />
+      <el-table-column label="仓库" align="center" prop="msCode">
+        <template slot-scope="scope">
+          {{ materialStoreList.find(ele => ele.msCode === scope.row.msCode).msName || '' }}
+        </template>
+      </el-table-column>
+      <el-table-column label="原料" align="center" prop="maCode">
+        <template slot-scope="scope">
+          {{ materialList.find(ele => ele.maCode === scope.row.maCode).maName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="库存" align="center" prop="mssStock" />
       <!-- <el-table-column label="已删除" align="center" prop="mssDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -117,10 +139,32 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="仓库" prop="msCode">
-          <el-input v-model="form.msCode" placeholder="请输入仓库" />
+          <el-select
+            v-model="form.msCode"
+            placeholder="请选择仓库"
+          >
+            <el-option
+              v-for="item in materialStoreList"
+              :key="item.msCode"
+              :label="item.msName"
+              :value="item.msCode"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="原料" prop="maCode">
-          <el-input v-model="form.maCode" placeholder="请输入原料" />
+          <el-select
+            v-model="form.maCode"
+            placeholder="请选择原料"
+          >
+            <el-option
+              v-for="item in materialList"
+              :key="item.maCode"
+              :label="item.maName"
+              :value="item.maCode"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="库存" prop="mssStock">
           <el-input v-model="form.mssStock" placeholder="请输入库存" />
@@ -136,6 +180,8 @@
 
 <script>
 import { listMaterialStock, getMaterialStock, delMaterialStock, addMaterialStock, updateMaterialStock } from "@/api/system/materialStock";
+import { listMaterial } from "@/api/system/material";
+import { listMaterialStore } from "@/api/system/materialStore";
 
 export default {
   name: "MaterialStock",
@@ -183,13 +229,48 @@ export default {
         maCode: [
           { required: true, message: "原料不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 原料列表
+      materialList: [],
+      // 原料仓库列表
+      materialStoreList: []
     };
   },
-  created() {
+  async created() {
+    await this.getMaterialStoreList();
+    await this.getMaterialList();
+    this.getList();
+  },
+  async activated() {
+    await this.getMaterialStoreList();
+    await this.getMaterialList();
     this.getList();
   },
   methods: {
+    // 查询原料列表
+    getMaterialList() {
+      return new Promise((resolve, reject) => {
+        listMaterial().then(response => {
+          this.materialList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+        })
+      })
+    },
+    // 查询仓库列表
+    getMaterialStoreList() {
+      return new Promise((resolve, reject) => {
+        listMaterialStore().then(response => {
+          this.materialStoreList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+        })
+      })
+    },
     /** 查询仓库原料库存列表 */
     getList() {
       this.loading = true;

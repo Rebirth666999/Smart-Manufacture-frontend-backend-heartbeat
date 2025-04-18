@@ -235,6 +235,9 @@ export default {
         maCode: [
           { required: true, message: "原料不能为空", trigger: "blur" }
         ],
+        mssStock: [
+          { required: true, message: "库存不能为空", trigger: "blur" }
+        ],
       },
       // 原料列表
       materialList: [],

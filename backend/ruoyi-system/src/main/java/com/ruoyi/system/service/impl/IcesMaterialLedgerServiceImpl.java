@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesMaterialLedgerBo;
 import com.ruoyi.system.domain.vo.IcesMaterialLedgerVo;
@@ -98,7 +99,13 @@ public class IcesMaterialLedgerServiceImpl implements IIcesMaterialLedgerService
      * 保存前的数据校验
      */
     private void validEntityBeforeSave(IcesMaterialLedger entity){
-        //TODO 做一些数据校验,如唯一约束
+        // 需要保证原料字段没有出现过
+        IcesMaterialLedgerBo bo = new IcesMaterialLedgerBo();
+        bo.setMaCode(entity.getMaCode());
+        List<IcesMaterialLedgerVo> vos = queryList(bo);
+        if (!vos.isEmpty()){
+            throw new RuntimeException("新增台账的原料字段不能与已有重复");
+        }
     }
 
     /**

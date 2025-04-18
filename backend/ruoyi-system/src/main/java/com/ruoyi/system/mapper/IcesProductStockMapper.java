@@ -1,0 +1,15 @@
+package com.ruoyi.system.mapper;
+
+import com.ruoyi.system.domain.IcesProductStock;
+import com.ruoyi.system.domain.vo.IcesProductStockVo;
+import com.ruoyi.common.core.mapper.BaseMapperPlus;
+
+/**
+ * 仓库产品库存Mapper接口
+ *
+ * @author ruoyi
+ * @date 2025-04-18
+ */
+public interface IcesProductStockMapper extends BaseMapperPlus<IcesProductStockMapper, IcesProductStock, IcesProductStockVo> {
+
+}

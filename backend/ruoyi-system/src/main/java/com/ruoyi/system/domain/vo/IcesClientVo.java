@@ -174,5 +174,35 @@ public class IcesClientVo {
     @ExcelProperty(value = "描述")
     private String clDesc;
 
+    /**
+     * 创建人
+     */
+    @ExcelProperty(value = "创建人")
+    private String clCman;
+    /**
+     * 创建时间
+     */
+    @ExcelProperty(value = "创建时间")
+    private String clCdate;
+    /**
+     * 发布人
+     */
+    @ExcelProperty(value = "发布人")
+    private String clRman;
+    /**
+     * 发布时间
+     */
+    @ExcelProperty(value = "发布时间")
+    private String clRdate;
+    /**
+     * 修改人
+     */
+    @ExcelProperty(value = "修改人")
+    private String clMman;
+    /**
+     * 修改时间
+     */
+    @ExcelProperty(value = "修改时间")
+    private String clMdate;
 
 }

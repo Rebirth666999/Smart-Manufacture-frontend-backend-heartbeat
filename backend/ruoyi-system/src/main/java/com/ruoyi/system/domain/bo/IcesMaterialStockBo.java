@@ -47,7 +47,7 @@ public class IcesMaterialStockBo extends BaseEntity {
     /**
      * 库存
      */
-    private Long mssStock;
+    private Float mssStock;
 
     /**
      * 已删除

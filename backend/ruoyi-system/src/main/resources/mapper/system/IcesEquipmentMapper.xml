@@ -20,6 +20,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy" column="update_by"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
+        <result property="eqCman" column="eq_cman"/>
+        <result property="eqCdate" column="eq_cdate"/>
+        <result property="eqRman" column="eq_rman"/>
+        <result property="eqRdate" column="eq_rdate"/>
+        <result property="eqMman" column="eq_mman"/>
+        <result property="eqMdate" column="eq_mdate"/>
     </resultMap>
 
 

@@ -96,5 +96,25 @@ public class IcesOrderVo {
     @ExcelProperty(value = "描述")
     private String orDesc;
 
+    /**
+     * 创建人
+     */
+    @ExcelProperty(value = "创建人")
+    private String orCman;
+    /**
+     * 创建时间
+     */
+    @ExcelProperty(value = "创建时间")
+    private String orCdate;
+    /**
+     * 修改人
+     */
+    @ExcelProperty(value = "修改人")
+    private String orMman;
+    /**
+     * 修改时间
+     */
+    @ExcelProperty(value = "修改时间")
+    private String orMdate;
 
 }

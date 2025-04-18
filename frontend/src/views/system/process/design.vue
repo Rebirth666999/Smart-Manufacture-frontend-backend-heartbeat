@@ -12,9 +12,9 @@
       </div>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-col :span="8">
-          <el-form-item label="目标产品" prop="maCode">
-            <el-select v-model="form.maCode" placeholder="请选择目标产品">
-              <el-option v-for="item in productList" :key="item.maCode" :label="item.maName" :value="item.maCode">
+          <el-form-item label="目标产品" prop="prCode">
+            <el-select v-model="form.prCode" placeholder="请选择目标产品">
+              <el-option v-for="item in productList" :key="item.prCode" :label="item.prName" :value="item.prCode">
               </el-option>
             </el-select>
           </el-form-item>
@@ -56,19 +56,18 @@
 <script>
 import { listProcess, getProcess, delProcess, addProcess, updateProcess, saveModel, getBpmnXml } from "@/api/system/process";
 import { listMaterial } from "@/api/system/material";
+import { listProduct } from "@/api/system/product";
 import { listEquipmentModel } from "@/api/system/equipmentModel";
 import { listModelOperation } from "@/api/system/modelOperation";
 import ProcessDesigner from '@/components/ProcessDesigner';
 import ProcessViewer from '@/components/ProcessViewerIndustry';
-import ProcessMaterial from '@/views/system/processMaterial';
 
 
 export default {
   name: "Process",
   components: {
     ProcessDesigner,
-    ProcessViewer,
-    ProcessMaterial
+    ProcessViewer
   },
   dicts: ['ices_process_status'],
   data() {
@@ -84,7 +83,7 @@ export default {
         procId: [
           { required: true, message: "工艺流程ID不能为空", trigger: "blur" }
         ],
-        maCode: [
+        prCode: [
           { required: true, message: "目标产品不能为空", trigger: "blur" }
         ],
         procName: [
@@ -116,6 +115,7 @@ export default {
     };
   },
   async created() {
+    await this.getMaterialList();
     await this.getProductList();
     await this.getEquipmentModelList();
     await this.getModelOperationList();
@@ -147,6 +147,7 @@ export default {
     }
   },
   async activated() {
+    await this.getMaterialList();
     await this.getProductList();
     await this.getEquipmentModelList();
     await this.getModelOperationList();
@@ -178,13 +179,26 @@ export default {
     }
   },
   methods: {
+    // 查询原料列表
+    getMaterialList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listMaterial().then(response => {
+          this.materialList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     // 查询产品列表
     getProductList() {
       return new Promise((resolve, reject) => {
         this.loading = true;
-        listMaterial().then(response => {
-          this.productList = response.rows.filter(ele => ele.maType === '2')
-          this.materialList = response.rows.filter(ele => ele.maType === '1')
+        listProduct().then(response => {
+          this.productList = response.rows
           resolve()
         }).catch(() => {
           reject()
@@ -225,7 +239,7 @@ export default {
     reset() {
       this.form = {
         procId: undefined,
-        maCode: undefined,
+        prCode: undefined,
         procName: undefined,
         procStat: undefined,
         procDelete: undefined,

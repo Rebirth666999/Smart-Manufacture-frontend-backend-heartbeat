@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询关联-车间原料库存列表
+// 查询仓库原料库存列表
 export function listMaterialStock(query) {
   return request({
     url: '/system/materialStock/list',
@@ -9,15 +9,15 @@ export function listMaterialStock(query) {
   })
 }
 
-// 查询关联-车间原料库存详细
-export function getMaterialStock(msId) {
+// 查询仓库原料库存详细
+export function getMaterialStock(mssId) {
   return request({
-    url: '/system/materialStock/' + msId,
+    url: '/system/materialStock/' + mssId,
     method: 'get'
   })
 }
 
-// 新增关联-车间原料库存
+// 新增仓库原料库存
 export function addMaterialStock(data) {
   return request({
     url: '/system/materialStock',
@@ -26,7 +26,7 @@ export function addMaterialStock(data) {
   })
 }
 
-// 修改关联-车间原料库存
+// 修改仓库原料库存
 export function updateMaterialStock(data) {
   return request({
     url: '/system/materialStock',
@@ -35,10 +35,10 @@ export function updateMaterialStock(data) {
   })
 }
 
-// 删除关联-车间原料库存
-export function delMaterialStock(msId) {
+// 删除仓库原料库存
+export function delMaterialStock(mssId) {
   return request({
-    url: '/system/materialStock/' + msId,
+    url: '/system/materialStock/' + mssId,
     method: 'delete'
   })
 }

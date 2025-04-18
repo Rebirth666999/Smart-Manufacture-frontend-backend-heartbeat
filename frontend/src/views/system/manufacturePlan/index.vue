@@ -23,21 +23,6 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="工艺流程" prop="procCode">
-            <el-select
-              v-model="queryParams.procCode"
-              placeholder="请选择工艺流程"
-              clearable
-            >
-              <el-option
-                v-for="item in processListFull"
-                :key="item.procCode"
-                :label="item.procName"
-                :value="item.procCode"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
           <el-form-item label="状态" prop="mpStat">
             <el-select v-model="queryParams.mpStat" placeholder="请选择状态" clearable>
               <el-option
@@ -135,9 +120,9 @@
               {{ orderList.find(ele => ele.orCode === scope.row.orCode).orName || '' }}
             </template>
           </el-table-column>
-          <el-table-column label="工艺流程" align="center" prop="procCode">
+          <el-table-column label="产品" align="center" prop="prCode">
             <template slot-scope="scope">
-              {{ processListFull.find(ele => ele.procCode === scope.row.procCode).procName || '' }}
+              {{ productList.find(ele => ele.prCode === scope.row.prCode).prName || '' }}
             </template>
           </el-table-column>
           <el-table-column label="状态" align="center" prop="mpStat">
@@ -231,8 +216,8 @@
 
 <script>
 import { listManufacturePlan, getManufacturePlan, delManufacturePlan, addManufacturePlan, updateManufacturePlan } from "@/api/system/manufacturePlan";
-import { listProcess } from "@/api/system/process";
 import { listOrder } from "@/api/system/order";
+import { listProduct } from "@/api/system/product";
 import manufactureTask from '@/views/system/manufactureTask';
 
 export default {
@@ -271,48 +256,47 @@ export default {
       },
       // 用于编辑属性的表单
       form: {},
-      // 所有工艺流程
-      processListFull: [],
       // 订单列表
-      orderList: []
+      orderList: [],
+      // 产品列表
+      productList: []
     };
   },
   async created() {
-    await this.getProcessList();
+    await this.getProductList();
     await this.getOrderList();
     this.getList();
   },
   async activated() {
-    await this.getProcessList();
+    await this.getProductList();
     await this.getOrderList();
     this.getList();
   },
   methods: {
     //弃用
     handleDeprecated(row) {
-    const mpId = row.mpId;
-    this.$modal.confirm('是否确认弃用该生产计划？').then(() => {
-      this.loading = true;
-      getManufacturePlan(mpId).then(response => {
-        this.form = response.data;
-        this.form.mpStat = "a";
-        updateManufacturePlan(this.form).then(response => {
-          this.$modal.msgSuccess("已弃用");
-          this.getList();
-        })
+      const mpId = row.mpId;
+      this.$modal.confirm('是否确认弃用该生产计划？').then(() => {
+        this.loading = true;
+        getManufacturePlan(mpId).then(response => {
+          this.form = response.data;
+          this.form.mpStat = "a";
+          updateManufacturePlan(this.form).then(response => {
+            this.$modal.msgSuccess("已弃用");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
       });
-     }).catch(() => {
-     }).finally(() => {
-      this.loading = false;
-     });
     },
-    // 查询工艺流程列表
-    getProcessList() {
+    // 查询产品列表
+    getProductList() {
       return new Promise((resolve, reject) => {
         this.loading = true;
-        listProcess().then(response => {
-          // 全列表
-          this.processListFull = response.rows
+        listProduct().then(response => {
+          this.productList = response.rows
           resolve()
         }).catch(() => {
           reject()
@@ -321,7 +305,7 @@ export default {
         })
       })
     },
-    // 查询产品列表
+    // 查询订单列表
     getOrderList() {
       return new Promise((resolve, reject) => {
         this.loading = true;

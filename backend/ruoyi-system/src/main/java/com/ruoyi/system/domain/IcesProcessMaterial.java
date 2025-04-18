@@ -48,6 +48,10 @@ public class IcesProcessMaterial extends BaseEntity {
      */
     private Float pmDemand;
     /**
+     * 单位
+     */
+    private String pmUnit;
+    /**
      * 已删除
      */
     private Long pmDelete;

@@ -8,6 +8,7 @@
         </template>
       </el-table-column>
       <el-table-column label="数量" prop="pmDemand" show-overflow-tooltip />
+      <el-table-column label="单位" prop="pmUnit" show-overflow-tooltip />
     </el-table>
   </div>
 </template>

@@ -126,4 +126,28 @@ public class IcesClient extends BaseEntity {
      */
     private String clDesc;
 
+    /**
+     * 创建人
+     */
+    private String clCman;
+    /**
+     * 创建时间
+     */
+    private String clCdate;
+    /**
+     * 发布人
+     */
+    private String clRman;
+    /**
+     * 发布时间
+     */
+    private String clRdate;
+    /**
+     * 修改人
+     */
+    private String clMman;
+    /**
+     * 修改时间
+     */
+    private String clMdate;
 }

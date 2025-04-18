@@ -79,5 +79,30 @@ public class IcesEquipmentBo extends BaseEntity {
      */
     private String eqDesc;
 
+    /**
+     * 创建人
+     */
+    private String eqCman;
+    /**
+     * 创建时间
+     */
+    private String eqCdate;
+    /**
+     * 发布人
+     */
+    private String eqRman;
+    /**
+     * 发布时间
+     */
+    private String eqRdate;
+    /**
+     * 修改人
+     */
+    private String eqMman;
+    /**
+     * 修改时间
+     */
+    private String eqMdate;
+
 
 }

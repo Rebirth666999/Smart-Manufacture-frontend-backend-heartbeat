@@ -201,7 +201,7 @@
 
 <script>
 import { getOrder, listReviewOrder, updateOrder } from "@/api/system/order";
-import { listMaterial } from "@/api/system/material";
+import { listProduct } from "@/api/system/product";
 
 export default {
   name: "OrderReview",
@@ -329,7 +329,7 @@ export default {
     getProductList() {
       return new Promise((resolve, reject) => {
         this.loading = true;
-        listMaterial({ maType: '2' }).then(response => {
+        listProduct().then(response => {
           this.productList = response.rows || []
           if (this.mode === 1) {
             let product = this.productList.find(ele => ele.maCode === this.$route.query.maCode)

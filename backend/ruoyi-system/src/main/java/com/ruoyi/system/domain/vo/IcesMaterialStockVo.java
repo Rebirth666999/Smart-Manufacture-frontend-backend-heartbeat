@@ -10,10 +10,10 @@ import java.util.Date;
 
 
 /**
- * 关联-车间原料库存视图对象 ices_material_stock
+ * 仓库原料库存视图对象 ices_material_stock
  *
  * @author ruoyi
- * @date 2025-04-01
+ * @date 2025-04-18
  */
 @Data
 @ExcelIgnoreUnannotated
@@ -22,22 +22,22 @@ public class IcesMaterialStockVo {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 车间原料库存ID
+     * 仓库原料库存ID
      */
-    @ExcelProperty(value = "车间原料库存ID")
-    private Long msId;
+    @ExcelProperty(value = "仓库原料库存ID")
+    private Long mssId;
 
     /**
      * 仓库原料库存编码
      */
     @ExcelProperty(value = "仓库原料库存编码")
-    private String msCode;
+    private String mssCode;
 
     /**
      * 仓库
      */
     @ExcelProperty(value = "仓库")
-    private String stCode;
+    private String msCode;
 
     /**
      * 物料
@@ -49,13 +49,13 @@ public class IcesMaterialStockVo {
      * 库存
      */
     @ExcelProperty(value = "库存")
-    private Long msStock;
+    private Float mssStock;
 
     /**
      * 已删除
      */
     @ExcelProperty(value = "已删除")
-    private Long msDelete;
+    private Long mssDelete;
 
 
 }

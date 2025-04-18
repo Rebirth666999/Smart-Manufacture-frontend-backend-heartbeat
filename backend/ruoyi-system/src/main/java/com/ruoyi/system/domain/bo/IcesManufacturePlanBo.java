@@ -39,12 +39,11 @@ public class IcesManufacturePlanBo extends BaseEntity {
      */
     @NotBlank(message = "所属订单不能为空", groups = { AddGroup.class, EditGroup.class })
     private String orCode;
-
     /**
-     * 采用工艺流程
+     * 产品
      */
-    @NotBlank(message = "采用工艺流程不能为空", groups = { AddGroup.class, EditGroup.class })
-    private String procCode;
+    @NotBlank(message = "产品不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String prCode;
 
     /**
      * 状态代码
@@ -94,5 +93,29 @@ public class IcesManufacturePlanBo extends BaseEntity {
      */
     private String mpDesc;
 
+    /**
+     * 创建人
+     */
+    private String mpCman;
+    /**
+     * 创建时间
+     */
+    private String mpCdate;
+    /**
+     * 发布人
+     */
+    private String mpRman;
+    /**
+     * 发布时间
+     */
+    private String mpRdate;
+    /**
+     * 修改人
+     */
+    private String mpMman;
+    /**
+     * 修改时间
+     */
+    private String mpMdate;
 
 }

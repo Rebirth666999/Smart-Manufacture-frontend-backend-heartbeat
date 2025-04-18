@@ -36,7 +36,7 @@ public class IcesOrderDemandBo extends BaseEntity {
      * 所需产品
      */
     @NotBlank(message = "所需产品不能为空", groups = { AddGroup.class, EditGroup.class })
-    private String maCode;
+    private String prCode;
 
     /**
      * 订单
@@ -48,7 +48,17 @@ public class IcesOrderDemandBo extends BaseEntity {
      * 所需产品数量
      */
     @NotNull(message = "所需产品数量不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long odDemand;
+    private Float odDemand;
+
+    /**
+     * 金额小计
+     */
+    @NotNull(message = "金额小计不能为空", groups = { AddGroup.class, EditGroup.class })
+    private Float odPrice;
+    /**
+     * 定制详情
+     */
+    private String odCust;
 
     /**
      * 已删除

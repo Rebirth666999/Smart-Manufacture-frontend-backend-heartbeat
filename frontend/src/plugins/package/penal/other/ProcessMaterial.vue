@@ -8,6 +8,7 @@
         </template>
       </el-table-column>
       <el-table-column label="数量" prop="pmDemand" show-overflow-tooltip />
+      <el-table-column label="单位" prop="pmUnit" show-overflow-tooltip />
       <el-table-column label="操作" width="90px">
         <template slot-scope="{ row, $index }">
           <el-button size="mini" type="text" @click="editDemand(row, $index)">编辑</el-button>
@@ -36,6 +37,9 @@
         <el-form-item label="数量：" prop="pmDemand">
           <el-input v-model="form.pmDemand" placeholder="请输入数量" clearable />
         </el-form-item>
+        <el-form-item label="单位：" prop="pmUnit">
+          <el-input v-model="form.pmUnit" placeholder="请输入单位" clearable />
+        </el-form-item>
       </el-form>
       <template slot="footer">
         <el-button size="mini" @click="cancel">取 消</el-button>
@@ -61,7 +65,8 @@ export default {
       // 原料需求表单
       form: {
         maCode: undefined,
-        pmDemand: undefined
+        pmDemand: undefined,
+        pmUnit: undefined
       },
       // 校验规则
       rules: {
@@ -70,6 +75,9 @@ export default {
         ],
         pmDemand: [
           { required: true, message: "数量不能为空", trigger: "blur" }
+        ],
+        pmUnit: [
+          { required: true, message: "单位不能为空", trigger: "blur" }
         ],
       },
       // 正在编辑的条目下标
@@ -96,6 +104,7 @@ export default {
       this.editIndex = -1
       this.form.maCode = undefined
       this.form.pmDemand = undefined
+      this.form.pmUnit = undefined
       this.editOpen = true
     },
     // 编辑原料需求
@@ -103,6 +112,7 @@ export default {
       this.editIndex = idx
       this.form.maCode = row.maCode
       this.form.pmDemand = row.pmDemand
+      this.form.pmUnit = row.pmUnit
       this.editOpen = true
     },
     // 删除原料需求
@@ -132,6 +142,7 @@ export default {
             // 修改
             this.demandList[this.editIndex].maCode = this.form.maCode
             this.demandList[this.editIndex].pmDemand = this.form.pmDemand
+            this.demandList[this.editIndex].pmUnit = this.form.pmUnit
           } else {
             if (this.demandList.filter(ele => ele.maCode === this.form.maCode).length > 0) {
               // 如果已存在对应原料的需求，则拒绝更新
@@ -141,7 +152,8 @@ export default {
             // 添加
             this.demandList.push({
               maCode: this.form.maCode,
-              pmDemand: this.form.pmDemand
+              pmDemand: this.form.pmDemand,
+              pmUnit: this.form.pmUnit
             })
           }
           this.updateDemand()

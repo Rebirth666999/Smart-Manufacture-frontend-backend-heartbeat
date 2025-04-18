@@ -7,10 +7,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="com.ruoyi.system.domain.IcesManufactureTask" id="IcesManufactureTaskResult">
         <result property="mtId" column="mt_id"/>
         <result property="mtCode" column="mt_code"/>
-        <result property="mpCode" column="mp_code"/>
+        <result property="mpCode" column="mt_code"/>
+        <result property="procCode" column="proc_code"/>
         <result property="arCode" column="ar_code"/>
-        <result property="stCodeMa" column="st_code_ma"/>
-        <result property="stCodePr" column="st_code_pr"/>
+        <result property="msCode" column="ms_code"/>
+        <result property="prsCode" column="prs_code"/>
         <result property="mtStat" column="mt_stat"/>
         <result property="mtBegin" column="mt_begin"/>
         <result property="mtEndPlan" column="mt_end_plan"/>
@@ -24,6 +25,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy" column="update_by"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
+        <result property="mtCman" column="mt_cman"/>
+        <result property="mtCdate" column="mt_cdate"/>
+        <result property="mtRman" column="mt_rman"/>
+        <result property="mtRdate" column="mt_rdate"/>
+        <result property="mtMman" column="mt_mman"/>
+        <result property="mtMdate" column="mt_mdate"/>
     </resultMap>
 
 

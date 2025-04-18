@@ -34,7 +34,7 @@ public class IcesOrderDemand extends BaseEntity {
     /**
      * 所需产品
      */
-    private String maCode;
+    private String prCode;
     /**
      * 订单
      */
@@ -42,7 +42,15 @@ public class IcesOrderDemand extends BaseEntity {
     /**
      * 所需产品数量
      */
-    private Long odDemand;
+    private Float odDemand;
+    /**
+     * 金额小计
+     */
+    private Float odPrice;
+    /**
+     * 定制详情
+     */
+    private String odCust;
     /**
      * 已删除
      */

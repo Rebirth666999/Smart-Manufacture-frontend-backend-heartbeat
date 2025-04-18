@@ -90,5 +90,35 @@ public class IcesEquipmentVo {
     @ExcelProperty(value = "描述")
     private String eqDesc;
 
+    /**
+     * 创建人
+     */
+    @ExcelProperty(value = "创建人")
+    private String eqCman;
+    /**
+     * 创建时间
+     */
+    @ExcelProperty(value = "创建时间")
+    private String eqCdate;
+    /**
+     * 发布人
+     */
+    @ExcelProperty(value = "发布人")
+    private String eqRman;
+    /**
+     * 发布时间
+     */
+    @ExcelProperty(value = "发布时间")
+    private String eqRdate;
+    /**
+     * 修改人
+     */
+    @ExcelProperty(value = "修改人")
+    private String eqMman;
+    /**
+     * 修改时间
+     */
+    @ExcelProperty(value = "修改时间")
+    private String eqMdate;
 
 }

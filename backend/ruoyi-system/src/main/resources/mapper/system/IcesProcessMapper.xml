@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="com.ruoyi.system.domain.IcesProcess" id="IcesProcessResult">
         <result property="procId" column="proc_id"/>
         <result property="procCode" column="proc_code"/>
-        <result property="maCode" column="ma_code"/>
+        <result property="prCode" column="pr_code"/>
         <result property="procName" column="proc_name"/>
         <result property="procModel" column="proc_model"/>
         <result property="procStat" column="proc_stat"/>
@@ -17,6 +17,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy" column="update_by"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
+        <result property="procCman" column="proc_cman"/>
+        <result property="procCdate" column="proc_cdate"/>
+        <result property="procRman" column="proc_rman"/>
+        <result property="procRdate" column="proc_rdate"/>
+        <result property="procMman" column="proc_mman"/>
+        <result property="procMdate" column="proc_mdate"/>
     </resultMap>
 
 

@@ -10,40 +10,40 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * 关联-车间原料库存Service接口
+ * 仓库原料库存Service接口
  *
  * @author ruoyi
- * @date 2025-04-01
+ * @date 2025-04-18
  */
 public interface IIcesMaterialStockService {
 
     /**
-     * 查询关联-车间原料库存
+     * 查询仓库原料库存
      */
-    IcesMaterialStockVo queryById(Long msId);
+    IcesMaterialStockVo queryById(Long mssId);
 
     /**
-     * 查询关联-车间原料库存列表
+     * 查询仓库原料库存列表
      */
     TableDataInfo<IcesMaterialStockVo> queryPageList(IcesMaterialStockBo bo, PageQuery pageQuery);
 
     /**
-     * 查询关联-车间原料库存列表
+     * 查询仓库原料库存列表
      */
     List<IcesMaterialStockVo> queryList(IcesMaterialStockBo bo);
 
     /**
-     * 新增关联-车间原料库存
+     * 新增仓库原料库存
      */
     Boolean insertByBo(IcesMaterialStockBo bo);
 
     /**
-     * 修改关联-车间原料库存
+     * 修改仓库原料库存
      */
     Boolean updateByBo(IcesMaterialStockBo bo);
 
     /**
-     * 校验并批量删除关联-车间原料库存信息
+     * 校验并批量删除仓库原料库存信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 }

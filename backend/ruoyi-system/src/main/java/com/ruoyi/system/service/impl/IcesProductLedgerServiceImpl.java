@@ -7,6 +7,8 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.domain.bo.IcesMaterialLedgerBo;
+import com.ruoyi.system.domain.vo.IcesMaterialLedgerVo;
 import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -98,7 +100,18 @@ public class IcesProductLedgerServiceImpl implements IIcesProductLedgerService {
      * 保存前的数据校验
      */
     private void validEntityBeforeSave(IcesProductLedger entity){
-        //TODO 做一些数据校验,如唯一约束
+        // 需要保证产品字段没有出现过
+        IcesProductLedgerBo bo = new IcesProductLedgerBo();
+        bo.setPrCode(entity.getPrCode());
+        List<IcesProductLedgerVo> vos = queryList(bo);
+        if (!vos.isEmpty()){
+            // 只找到一个
+            if (vos.size() == 1) {
+                // ID一样，则校验通过
+                if (vos.get(0).getPlId().equals(entity.getPlId())) return;
+            }
+            throw new RuntimeException("台账的产品字段不能与已有重复");
+        }
     }
 
     /**

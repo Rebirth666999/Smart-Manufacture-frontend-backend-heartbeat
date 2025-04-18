@@ -7,6 +7,8 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.domain.bo.IcesMaterialStockBo;
+import com.ruoyi.system.domain.vo.IcesMaterialStockVo;
 import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -99,7 +101,19 @@ public class IcesProductStockServiceImpl implements IIcesProductStockService {
      * 保存前的数据校验
      */
     private void validEntityBeforeSave(IcesProductStock entity){
-        //TODO 做一些数据校验,如唯一约束
+        // 需要确保产品库存组合没有重复出现
+        IcesProductStockBo bo = new IcesProductStockBo();
+        bo.setPrCode(entity.getPrCode());
+        bo.setPrsCode(entity.getPrsCode());
+        List<IcesProductStockVo> vos = queryList(bo);
+        if (!vos.isEmpty()) {
+            // 只找到一个
+            if (vos.size() == 1) {
+                // ID一样，则校验通过
+                if (vos.get(0).getPssId().equals(entity.getPssId())) return;
+            }
+            throw new RuntimeException("产品库存不能与已有重复");
+        }
     }
 
     /**

@@ -104,7 +104,12 @@ public class IcesMaterialLedgerServiceImpl implements IIcesMaterialLedgerService
         bo.setMaCode(entity.getMaCode());
         List<IcesMaterialLedgerVo> vos = queryList(bo);
         if (!vos.isEmpty()){
-            throw new RuntimeException("新增台账的原料字段不能与已有重复");
+            // 只找到一个
+            if (vos.size() == 1) {
+                // ID一样，则校验通过
+                if (vos.get(0).getMlId().equals(entity.getMlId())) return;
+            }
+            throw new RuntimeException("台账的原料字段不能与已有重复");
         }
     }
 

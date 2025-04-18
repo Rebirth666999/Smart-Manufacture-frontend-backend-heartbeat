@@ -122,7 +122,7 @@
           <div>库存信息</div>
         </div>
       </div>
-      <material-stock v-if='idSelect' :key="idSelect" :maCode="codeSelect" />
+      <material-stock v-if='idSelect' :key="idSelect" :maCode="codeSelect" @update="getList" />
       <el-empty v-else description="选中台账后即可管理库存情况" />
     </el-card>
 

@@ -362,6 +362,7 @@ export default {
             updateMaterialStock(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
+              this.$emit('update');
               this.getList();
             }).finally(() => {
               this.buttonLoading = false;
@@ -370,6 +371,7 @@ export default {
             addMaterialStock(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
+              this.$emit('update');
               this.getList();
             }).finally(() => {
               this.buttonLoading = false;
@@ -387,6 +389,7 @@ export default {
       }).then(() => {
         this.loading = false;
         this.getList();
+        this.$emit('update');
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {
       }).finally(() => {

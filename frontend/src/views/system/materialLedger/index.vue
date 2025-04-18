@@ -2,12 +2,19 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="原料" prop="maCode">
-        <el-input
+        <el-select
           v-model="queryParams.maCode"
-          placeholder="请输入原料"
+          placeholder="请选择原料"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="item in materialList"
+            :key="item.maCode"
+            :label="item.maName"
+            :value="item.maCode"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <!-- <el-form-item label="已删除" prop="mlDelete">
         <el-input
@@ -73,7 +80,11 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="台账ID" align="center" prop="mlId" v-if="true"/>
       <el-table-column label="台账编码" align="center" prop="mlCode" />
-      <el-table-column label="原料" align="center" prop="maCode" />
+      <el-table-column label="原料" align="center" prop="maCode">
+        <template slot-scope="scope">
+          {{ materialList.find(ele => ele.maCode === scope.row.maCode).maName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="库存量" align="center" prop="mlStock" />
       <!-- <el-table-column label="已删除" align="center" prop="mlDelete" /> -->
       <!-- <el-table-column label="描述" align="center" prop="mlDesc" /> -->
@@ -109,7 +120,18 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="原料" prop="maCode">
-          <el-input v-model="form.maCode" placeholder="请输入原料" />
+          <el-select
+            v-model="form.maCode"
+            placeholder="请选择原料"
+          >
+            <el-option
+              v-for="item in materialList"
+              :key="item.maCode"
+              :label="item.maName"
+              :value="item.maCode"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="库存量" prop="mlStock">
           <el-input v-model="form.mlStock" placeholder="请输入库存量" />
@@ -128,6 +150,7 @@
 
 <script>
 import { listMaterialLedger, getMaterialLedger, delMaterialLedger, addMaterialLedger, updateMaterialLedger } from "@/api/system/materialLedger";
+import { listMaterial } from "@/api/system/material";
 
 export default {
   name: "MaterialLedger",
@@ -174,13 +197,32 @@ export default {
         mlStock: [
           { required: true, message: "库存量不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 原料列表
+      materialList: [],
     };
   },
-  created() {
+  async created() {
+    await this.getMaterialList();
+    this.getList();
+  },
+  async activated() {
+    await this.getMaterialList();
     this.getList();
   },
   methods: {
+    // 查询原料列表
+    getMaterialList() {
+      return new Promise((resolve, reject) => {
+        listMaterial().then(response => {
+          this.materialList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+        })
+      })
+    },
     /** 查询原料台账列表 */
     getList() {
       this.loading = true;

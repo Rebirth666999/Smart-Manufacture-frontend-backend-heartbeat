@@ -169,9 +169,16 @@
             size="mini"
             type="text"
             icon="el-icon-download"
-            v-show="scope.row.mtStat==='4'"
+            v-show="scope.row.mtStat==='4' || scope.row.mtStat==='d'"
             @click="handleGenerateDeviceTask(scope.row)"
           >生成设备任务</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-search"
+            v-show="scope.row.mtStat!=='1' && scope.row.mtStat!=='2' && scope.row.mtStat!=='3' && scope.row.mtStat!=='4'"
+            @click="handleViewDeviceTask(scope.row)"
+          >查看设备任务</el-button>
           <el-button
             size="mini"
             type="text"
@@ -303,19 +310,6 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
-
-    <!-- 分配设备任务对话框 -->
-    <el-dialog :title="viewerData.title" :visible.sync="viewerOpen" append-to-body fullscreen>
-      <process-viewer
-        v-loading="viewerData.loading"
-        :key="`designer-${viewerData.index}`"
-        :xml="viewerData.bpmnXml"
-        :style="{height: 'calc(100vh - 124.5px)'}"
-        :mode="3"
-        :extraList="{ emList: viewerData.emList, moList: viewerData.moList, eqList: viewerData.eqList, eoList: viewerData.eoList, eosList: viewerData.eosList, eospaList: viewerData.eospaList }"
-        @saveTask="onSaveTask"
-      />
-    </el-dialog>
   </div>
 </template>
 
@@ -420,21 +414,20 @@ export default {
       materialStoreList: [],
       // 产品仓库列表
       productStoreList: [],
-      // 查看窗口是否打开
-      viewerOpen: false,
-      // 查看器相关数据
-      viewerData: {
-        title: '',
-        loading: false,
-        index: undefined,
-        bpmnXml: '',
-        emList: [],     // 设备模型列表
-        moList: [],     // 模型操作列表
-        eqList: [],     // 设备列表（满足在对应的车间）
-        eoList: [],     // 设备操作列表
-        eosList: [],    // 设备操作步骤列表
-        eospaList: [],  // 设备操作步骤参数列表
-      },
+      // 设备模型列表
+      emList: [],
+      // 模型操作列表
+      moList: [],
+      // 设备操作列表
+      eoList: [],
+      // 设备操作步骤列表
+      eosList: [],
+      // 设备操作步骤参数列表
+      eospaList: [],
+      // 设备任务列表
+      dtList: [],
+      // 设备任务参数列表
+      dtpaList: [],    
       // 设备列表（全）
       eqList: [],
       // 当前选中的生产任务
@@ -468,18 +461,29 @@ export default {
     handleDeprecated(row) {
       const mtId = row.mtId;
       this.$modal.confirm('是否确认弃用该生产计划？').then(() => {
-      this.loading = true;
-      getManufactureTask(mtId).then(response => {
-        this.form = response.data;
-        const desc = this.form.mtDesc || '';
-        if (this.form.mtStat === '4' || this.form.mtStat === 'd') {
-          if (!desc.includes('已发布') && !desc.includes('已生成')) {
-            this.$prompt('请在描述中手动输入原状态（已发布或已生成）信息', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              inputValue: desc
-            }).then(({ value }) => {
-              this.form.mtDesc = value;
+        this.loading = true;
+        getManufactureTask(mtId).then(response => {
+          this.form = response.data;
+          const desc = this.form.mtDesc || '';
+          if (this.form.mtStat === '4' || this.form.mtStat === 'd') {
+            if (!desc.includes('已发布') && !desc.includes('已生成')) {
+              this.$prompt('请在描述中手动输入原状态（已发布或已生成）信息', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                inputValue: desc
+              }).then(({ value }) => {
+                this.form.mtDesc = value;
+                this.form.mtStat = 'a';
+                updateManufactureTask(this.form).then(response => {
+                  this.$modal.msgSuccess("已弃用");
+                  this.getList();
+                }).finally(() => {
+                  this.loading = false;
+                });
+              }).catch(() => {
+                this.loading = false;
+              });
+            } else {
               this.form.mtStat = 'a';
               updateManufactureTask(this.form).then(response => {
                 this.$modal.msgSuccess("已弃用");
@@ -487,37 +491,26 @@ export default {
               }).finally(() => {
                 this.loading = false;
               });
-            }).catch(() => {
-              this.loading = false;
-            });
-          } else {
-            this.form.mtStat = 'a';
-            updateManufactureTask(this.form).then(response => {
-              this.$modal.msgSuccess("已弃用");
-              this.getList();
-            }).finally(() => {
-              this.loading = false;
-            });
+            }
           }
-        }
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
       });
-  }).catch(() => {
-  }).finally(() => {
-    this.loading = false;
-  });
-},
+    },
     // 获取流程信息参照所需的列表
     // 设备模型、模型操作、设备操作、设备
     getReferenceList() {
       return new Promise(async (resolve, reject) => {
         this.loading = true
         try {
-          this.viewerData.emList = (await listEquipmentModel()).rows
-          this.viewerData.moList = (await listModelOperation()).rows
-          this.viewerData.eoList = (await listEquipmentOperation()).rows
+          this.emList = (await listEquipmentModel()).rows
+          this.moList = (await listModelOperation()).rows
+          this.eoList = (await listEquipmentOperation()).rows
           this.eqList = (await listEquipment()).rows
-          this.viewerData.eosList = (await listEquipmentOperationStep()).rows
-          this.viewerData.eospaList = (await listEquipmentOperationStepParam()).rows
+          this.eosList = (await listEquipmentOperationStep()).rows
+          this.eospaList = (await listEquipmentOperationStepParam()).rows
         } catch (err) {
           reject()
         }
@@ -770,47 +763,8 @@ export default {
     },
     // 生成生产任务
     handleGenerateDeviceTask(row) {
-      this.currentManufactureTask = row
-      // 找到生产计划
-      const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpCode === row.mpCode)
-      // 找到工艺流程
-      const process = this.processList.find(ele => ele.procCode === manufacturePlan.procCode)
-      // 找到可分配的设备
-      this.viewerData.eqList = this.eqList.filter(ele => ele.arCode === row.arCode)
-      // 打开流程
-      this.viewerData.loading = true
-      this.viewerData.title = "分配设备任务"
-      this.viewerData.index = process.procModel
-      this.viewerOpen = true
-      getBpmnXml(process.procModel).then(response => {
-        this.viewerData.bpmnXml = response.data || ''
-        this.viewerData.loading = false
-      })
+      this.$router.push(`/manufacture/deviceTask/add?mtId=${row.mtId}`)
     },
-    // 确认生成设备任务
-    onSaveTask(steps) {
-      this.$modal.confirm('是否生成设备任务？').then(() => {
-        this.viewerData.loading = true
-        return saveDeviceTasks({
-          manufactureTask: this.currentManufactureTask,
-          deviceTask: steps
-        });
-        }).then(() => {
-          this.$modal.msgSuccess("生成设备任务成功");
-          const mtId = this.currentManufactureTask.mtId;
-          return getManufactureTask(mtId);
-          }).then(response => {
-          const task = response.data;
-          task.mtStat = 'd';
-          return updateManufactureTask(task);
-          }).then(() => {
-            this.getList();
-            this.viewerOpen = false;
-        }).catch(() => {
-        }).finally(() => {
-          this.viewerData.loading = false;
-        });
-      },
     // 下发设备任务
     async handleExecuteDeviceTask(row) {
       this.$modal.confirm('是否下发任务？').then(async () => {
@@ -836,9 +790,9 @@ export default {
         for (let task of deviceTask) {
           const prev = deviceTaskPrev.filter(ele => ele.dtCodeCur === task.dtCode)
           const equipment = this.eqList.find(ele => ele.eqCode === task.eqCode)
-          const equipmentOperationStep = this.viewerData.eosList.find(ele => ele.eoCode === task.eoCode && ele.eaoCode)
+          const equipmentOperationStep = this.eosList.find(ele => ele.eoCode === task.eoCode && ele.eaoCode)
           const equipmentAtomOperation = equipmentAtomOperationList.find(ele => ele.eaoCode === equipmentOperationStep.eaoCode)
-          const equipmentOperationStepParams = this.viewerData.eospaList.filter(ele => ele.eosCode === equipmentOperationStep.eosCode)
+          const equipmentOperationStepParams = this.eospaList.filter(ele => ele.eosCode === equipmentOperationStep.eosCode)
           // 取出所需信息
           let route = {
             "prdId": task.dtCode,
@@ -883,22 +837,26 @@ export default {
         const mtId = row.mtId;
         // 先获取完整的生产任务信息
         return getManufactureTask(mtId);
-        }).then(response => {
-          const task = response.data;
-          // 更新状态为进行中
-          task.mtStat = '5';
-          // 提交更新请求
-          return updateManufactureTask(task);
-          }).then(() => {
-            this.getList();
-            this.$modal.msgSuccess("下发任务成功");
-            }).catch(() => {
-            }).finally(() => {
-              this.loading = false;
-            });
-         }
-       }
-      };
+      }).then(response => {
+        const task = response.data;
+        // 更新状态为进行中
+        task.mtStat = '5';
+        // 提交更新请求
+        return updateManufactureTask(task);
+      }).then(() => {
+        this.getList();
+        this.$modal.msgSuccess("下发任务成功");
+        }).catch(() => {
+        }).finally(() => {
+          this.loading = false;
+      });
+    },
+    // 查看设备任务
+    async handleViewDeviceTask(row) {
+      this.$router.push(`/manufacture/deviceTask/view?mtId=${row.mtId}`)
+    }
+  }
+};
 </script>
 <style scoped>
 .el-select {

@@ -13,10 +13,24 @@
           <slot />
         </el-button-group>
       </el-row>
+      <el-card shadow="never" header="图例" v-if="mode === 4">
+        <div class="legend">
+          <div>当前轮次<br/>已完成</div>
+          <div class="legend-box green-box"></div>
+        </div>
+        <div class="legend">
+          <div>当前轮次<br/>进行中</div>
+          <div class="legend-box blue-box"></div>
+        </div>
+        <div class="legend">
+          <div>当前轮次<br/>未开始</div>
+          <div class="legend-box white-box"></div>
+        </div>
+      </el-card>
     </div>
     <!-- 右侧边栏显示属性信息 -->
     <div class="viewer-penal">
-      <el-collapse>
+      <el-collapse v-model="activeTab">
         <!-- 设备操作流程 -->
         <el-collapse-item
           name="eosBasic"
@@ -52,7 +66,7 @@
         <!-- 产品工艺流程 -->
         <el-collapse-item
           name="procBasic"
-          v-if="mode === 2 || mode === 3"
+          v-if="mode === 2 || mode === 3 || mode === 4"
           key="procBasic"
         >
           <div slot="title" class="panel-tab__title">
@@ -62,13 +76,23 @@
         </el-collapse-item>
         <el-collapse-item
           name="procProperties"
-          v-if="(mode === 2 || mode === 3) && element.type === 'bpmn:ServiceTask'"
+          v-if="(mode === 2 || mode === 3 || mode === 4) && element.type === 'bpmn:ServiceTask'"
           key="procProperties"
         >
           <div slot="title" class="panel-tab__title">
             <i class="el-icon-s-promotion"></i>步骤属性
           </div>
           <proc-properties :element="element" :emList="extraList.emList" :moList="extraList.moList" />
+        </el-collapse-item>
+        <el-collapse-item
+          name="procMaterial"
+          v-if="(mode === 2 || mode === 3 || mode === 4) && element.type === 'bpmn:ServiceTask'"
+          key="procMaterial"
+        >
+          <div slot="title" class="panel-tab__title">
+            <i class="el-icon-box"></i>原料需求
+          </div>
+          <proc-material :element="element" :maList="extraList.maList" />
         </el-collapse-item>
 
         <!-- 分配设备给对应步骤 -->
@@ -94,6 +118,29 @@
           </div>
           <proc-device-task-param @updateTask="updateTask" :element="element" :eosList="extraList.eosList" :eospaList="extraList.eospaList" :taskList="taskList" />
         </el-collapse-item>
+
+        <!-- 查看设备任务基本信息 -->
+        <el-collapse-item
+          name="deviceTaskView"
+          v-if="mode === 4 && element.type === 'bpmn:ServiceTask'"
+          key="deviceTaskView"
+        >
+          <div slot="title" class="panel-tab__title">
+            <i class="el-icon-link"></i>设备任务
+          </div>
+          <proc-device-task-view :element="element" :eqList="extraList.eqList" :eoList="extraList.eoList" :dtList="extraList.dtList" />
+        </el-collapse-item>
+        <!-- 查看设备任务操作参数 -->
+        <el-collapse-item
+          name="deviceTaskParamView"
+          v-if="mode === 4 && element.type === 'bpmn:ServiceTask'"
+          key="deviceTaskParamView"
+        >
+          <div slot="title" class="panel-tab__title">
+            <i class="el-icon-s-operation"></i>操作参数
+          </div>
+          <proc-device-task-param-view @updateTask="updateTask" :element="element" :eosList="extraList.eosList" :eospaList="extraList.eospaList" :dtList="extraList.dtList" :dtpaList="extraList.dtpaList" />
+        </el-collapse-item>
       </el-collapse>
     </div>
   </div>
@@ -105,11 +152,14 @@ import BpmnViewer from 'bpmn-js/lib/Viewer';
 import MoveCanvasModule from 'diagram-js/lib/navigation/movecanvas';
 import ProcBaseInfo from "@/plugins/package/penal/base/IndustryBaseInfoView";
 import ProcProperties from "@/plugins/package/penal/properties/ProcessPropertiesView";
+import ProcMaterial from "@/plugins/package/penal/other/ProcessMaterialView";
 import EosBaseInfo from "@/plugins/package/penal/base/IndustryBaseInfoView";
 import EosProperties from "@/plugins/package/penal/properties/EquipmentOperationStepPropertiesView";
 import EosParam from "@/plugins/package/penal/param/EquipmentOperationStepParamView";
 import ProcDeviceTask from "@/plugins/package/penal/task/DeviceTask";
+import ProcDeviceTaskView from "@/plugins/package/penal/task/DeviceTaskView";
 import ProcDeviceTaskParam from "@/plugins/package/penal/param/DeviceTaskParam";
+import ProcDeviceTaskParamView from "@/plugins/package/penal/param/DeviceTaskParamView";
 
 export default {
   name: 'ProcessViewerIndustry',
@@ -120,7 +170,10 @@ export default {
     EosProperties,
     EosParam,
     ProcDeviceTask,
-    ProcDeviceTaskParam
+    ProcDeviceTaskView,
+    ProcDeviceTaskParam,
+    ProcDeviceTaskParamView,
+    ProcMaterial
   },
   props: {
     xml: {
@@ -130,6 +183,7 @@ export default {
     // 1-设备操作流程查看
     // 2-产品工艺流程查看
     // 3-分配设备任务
+    // 4-查看设备任务
     mode: {
       type: Number
     },
@@ -150,7 +204,9 @@ export default {
         type: null
       },
       // mode = 3时，维护步骤对应的设备和设备操作
-      taskList: []
+      taskList: [],
+      // 默认展开的页签
+      activeTab: []
     }
   },
   watch: {
@@ -165,6 +221,13 @@ export default {
     this.$nextTick(() => {
       this.importXML(this.xml)
     })
+    if (this.mode === 1) {
+      this.activeTab = ['eosBasic', 'eosProperties', 'eosParam']
+    } else if (this.mode === 2 || this.mode === 3) {
+      this.activeTab = ['procBasic', 'procProperties', 'procMaterial']
+    } else if (this.mode === 4) {
+      this.activeTab = ['procBasic', 'procProperties', 'procMaterial']
+    }
   },
   methods: {
     processReZoom() {
@@ -224,10 +287,59 @@ export default {
           this.clearViewer();
         } finally {
           this.isLoading = false;
+          if (this.mode === 4) {
+            this.paint()
+          }
         }
       }
     },
-
+    // 根据任务完成情况，给节点染色
+    paint() {
+      const canvas = this.bpmnViewer.get('canvas')
+      // primary, success, warning, danger
+      const nodes = []
+      this.extraList.dtList.forEach(element => {
+        if (element.dtStat === '4') {
+          // 已完成
+          let idx = nodes.findIndex(ele => ele.dtModel === element.dtModel)
+          if (idx === -1) {
+            nodes.push({
+              dtModel: element.dtModel,
+              cnt: 1,
+              progress: false
+            })
+          } else {
+            nodes[idx].cnt += 1
+          }
+        } else if (element.dtStat === '3') {
+          // 进行中
+          let idx = nodes.findIndex(ele => ele.dtModel === element.dtModel)
+          if (idx === -1) {
+            nodes.push({
+              dtModel: element.dtModel,
+              cnt: 0,
+              progress: true
+            })
+          } else {
+            nodes[idx].progress = true
+          }
+        }
+      })
+      let minimum = -1
+      // 算基准完成任务数
+      nodes.forEach(element => {
+        if (minimum === -1) minimum = element.cnt
+        else minimum = minimum < element.cnt ? minimum : element.cnt
+      })
+      // 染色
+      nodes.forEach(element => {
+        if (element.progress) {
+          canvas.addMarker(element.dtModel, 'primary')
+        } else if (element.cnt > minimum) {
+          canvas.addMarker(element.dtModel, 'success')
+        }
+      })
+    },
     // 更新已经暂存的任务
     updateTask(data) {
       const idx = this.taskList.findIndex(ele => ele.id === data.id)
@@ -277,5 +389,31 @@ export default {
     font-size: 1.2em;
   }
 }
-
+.legend {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  font-size: 120%;
+}
+.legend-box {
+  width: 102px;
+  height: 82px;
+  border: 2.9px solid;
+  border-radius: 10%;
+  margin-top: 5px;
+}
+.green-box {
+  background-color: #e3f4db;
+  border-color: #4eb819;
+}
+.blue-box {
+  background-color: #e2f1ff;
+  border-color: #409eff;
+}
+.white-box {
+  background-color: #fff;
+  border-color: #000;
+}
 </style>

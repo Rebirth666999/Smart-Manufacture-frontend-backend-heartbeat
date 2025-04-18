@@ -49,6 +49,12 @@ public class IcesDeviceTaskVo {
     private String mtCode;
 
     /**
+     * 图元ID
+     */
+    @ExcelProperty(value = "图元ID")
+    private String dtModel;
+
+    /**
      * 设备操作
      */
     @ExcelProperty(value = "设备操作")

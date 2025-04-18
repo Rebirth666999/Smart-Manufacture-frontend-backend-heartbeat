@@ -96,6 +96,16 @@
         </div>
         <proc-properties :id="elementId" :emList="extraList.emList" :moList="extraList.moList" />
       </el-collapse-item>
+      <el-collapse-item
+        name="procMaterial"
+        v-if="mode === 2 && elementType === 'ServiceTask'"
+        key="procMaterial"
+      >
+        <div slot="title" class="panel-tab__title">
+          <i class="el-icon-box"></i>原料需求
+        </div>
+        <proc-material :id="elementId" :maList="extraList.maList" />
+      </el-collapse-item>
     </el-collapse>
   </div>
 </template>
@@ -115,6 +125,7 @@ import ProcProperties from "./properties/ProcessProperties";
 import ElementForm from "./form/ElementForm";
 import UserTaskListeners from "./listeners/UserTaskListeners";
 import EosParam from "./param/EquipmentOperationStepParam";
+import ProcMaterial from "./other/ProcessMaterial";
 /**
  * 自定义bpmn画图侧边栏
  */
@@ -135,7 +146,8 @@ export default {
     EosProperties,
     EosParam,
     ProcBaseInfo,
-    ProcProperties
+    ProcProperties,
+    ProcMaterial
   },
   componentName: "BpmnPropertiesPanel",
   props: {
@@ -173,7 +185,7 @@ export default {
   },
   data() {
     return {
-      activeTab: "base",
+      activeTab: ["base"],
       elementId: "",
       elementType: "",
       elementBusinessObject: {}, // 元素 businessObject 镜像，提供给需要做判断的组件使用
@@ -184,7 +196,13 @@ export default {
   watch: {
     elementId: {
       handler() {
-        this.activeTab = "base";
+        if (this.mode === 0) {
+          this.activeTab = ["base"];
+        } else if (this.mode === 1) {
+          this.activeTab = ["eosBasic", "eosProperties", "eosParam"];
+        } else if (this.mode === 2) {
+          this.activeTab = ["procBasic", "procProperties", "procMaterial"];
+        }
       }
     }
   },
@@ -264,9 +282,6 @@ export default {
           activatedElement.source.type.indexOf("StartEvent") === -1
         );
         this.formVisible = this.elementType === "UserTask" || this.elementType ===  "StartEvent";
-      } else if (this.mode === 1) {
-        // 设备操作流程相关
-        // console.log(this.extraList)
       }
     },
     beforeDestroy() {

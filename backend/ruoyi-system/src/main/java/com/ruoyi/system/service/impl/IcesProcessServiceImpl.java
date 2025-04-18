@@ -11,7 +11,6 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.ruoyi.system.domain.IcesEquipmentModel;
 import com.ruoyi.system.domain.bo.*;
 import com.ruoyi.system.domain.vo.*;
 import com.ruoyi.system.service.*;
@@ -29,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.io.ByteArrayInputStream;
-import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -49,6 +47,7 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
     private final IIcesProcessStepService processStepService;
     private final IIcesProcessStepPrevService stepPrevService;
     private final IIcesProcessStepPrevRoundService prevRoundService;
+    private final IIcesProcessMaterialService processMaterialService;
 
     /**
      * 查询工艺流程
@@ -105,7 +104,7 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
      * 新增工艺流程
      */
     @Override
-    public Boolean insertByBo(IcesProcessBo bo) {
+    public IcesProcessVo insertByBo(IcesProcessBo bo) {
         bo.setProcCode(codeService.insertByType("Process"));
         IcesProcess add = BeanUtil.toBean(bo, IcesProcess.class);
         validEntityBeforeSave(add);
@@ -113,7 +112,7 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
         if (flag) {
             bo.setProcId(add.getProcId());
         }
-        return flag;
+        return queryById(add.getProcId());
     }
 
     /**
@@ -210,6 +209,8 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
         Map<String, IcesProcessStepPrevVo> existingFlows = new HashMap<>();
         // 现有跨轮次流程关系映射(源步骤编码->目标步骤编码 -> 关系实体)
         Map<String, IcesProcessStepPrevRoundVo> existingRoundFlows = new HashMap<>();
+        // 现有原料需求关系映射(maCode -> 关系实体)
+        Map<String, IcesProcessMaterialVo> existingProcessMaterials = new HashMap<>();
 
         // 如果不是新建模型，需要获取现有数据用于增量比较
         if (newModelFlag == 0) {
@@ -233,6 +234,13 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
             List<IcesProcessStepPrevRoundVo> roundFlowList = prevRoundService.queryList(prevRoundBo);
             // 以"源步骤编码->目标步骤编码"为key缓存关系
             roundFlowList.forEach(flow -> existingRoundFlows.put(flow.getPsCodePrev() + "->" + flow.getPsCodeCur(), flow));
+
+            // 2.4 查询并缓存现有的原料需求关系
+            IcesProcessMaterialBo processMaterialBo = new IcesProcessMaterialBo();
+            processMaterialBo.setProcCode(procCode);
+            List<IcesProcessMaterialVo> processMaterialList = processMaterialService.queryList(processMaterialBo);
+            // 以maCode(原料种类)为key缓存步骤
+            processMaterialList.forEach(processMaterial -> existingProcessMaterials.put(processMaterial.getMaCode(), processMaterial));
         }
 
         // ========== 3. 解析XML中的节点 ==========
@@ -375,9 +383,46 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
             }
         }
 
-        // ========== 7. 清理不再使用的数据 ==========
+        // ========== 7. 处理步骤的原料需求 - 增量更新 ==========
 
-        // 7.1 删除不再使用的普通流程关系
+        for (Element task : tasks) {
+            // 获取任务的demand属性(JSON格式)
+            String demandJson = task.attributeValue("demand");
+            if (StringUtils.isNotBlank(demandJson)) {
+                // 解析JSON为bo对象
+                IcesProcessMaterialBo[] processMaterialBos = new ObjectMapper().readValue(demandJson, IcesProcessMaterialBo[].class);
+                String currentId = task.attributeValue("id");
+
+                // 确保当前任务存在
+                if (stepMap.containsKey(currentId)) {
+                    String currentCode = stepMap.get(currentId).getPsCode();
+
+                    // 处理当前任务的所有原料需求
+                    for (IcesProcessMaterialBo processMaterialBo : processMaterialBos) {
+                        // 设置原料需求业务对象
+                        processMaterialBo.setPsCode(currentCode);
+                        processMaterialBo.setProcCode(procCode);
+
+                        // 7.1 如果关系已存在，则更新
+                        if (existingProcessMaterials.containsKey(processMaterialBo.getMaCode())) {
+                            IcesProcessMaterialVo existing = existingProcessMaterials.get(processMaterialBo.getMaCode());
+                            processMaterialBo.setPmId(existing.getPmId());
+                            processMaterialService.updateByBo(processMaterialBo);
+                            existingProcessMaterials.remove(processMaterialBo.getMaCode());
+                        }
+                        // 7.2 如果关系不存在，则新增
+                        else {
+                            processMaterialService.insertByBo(processMaterialBo);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        // ========== 8. 清理不再使用的数据 ==========
+
+        // 8.1 删除不再使用的普通流程关系
         if (!existingFlows.isEmpty()) {
             List<Long> flowIdsToDelete = existingFlows.values().stream()
                 .map(IcesProcessStepPrevVo::getPspId)
@@ -385,7 +430,7 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
             stepPrevService.deleteWithValidByIds(flowIdsToDelete, false);
         }
 
-        // 7.2 删除不再使用的跨轮次流程关系
+        // 8.2 删除不再使用的跨轮次流程关系
         if (!existingRoundFlows.isEmpty()) {
             List<Long> roundFlowIdsToDelete = existingRoundFlows.values().stream()
                 .map(IcesProcessStepPrevRoundVo::getPsprId)
@@ -393,7 +438,15 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
             prevRoundService.deleteWithValidByIds(roundFlowIdsToDelete, false);
         }
 
-        // 7.3 删除不再使用的步骤
+        // 8.3 删除不再使用的原料需求
+        if (!existingProcessMaterials.isEmpty()) {
+            List<Long> pmIdsToDelete = existingProcessMaterials.values().stream()
+                .map(IcesProcessMaterialVo::getPmId)
+                .collect(Collectors.toList());
+            processMaterialService.deleteWithValidByIds(pmIdsToDelete, false);
+        }
+
+        // 8.4 删除不再使用的步骤
         if (!existingSteps.isEmpty()) {
             List<Long> stepIdsToDelete = existingSteps.values().stream()
                 .map(IcesProcessStepVo::getPsId)

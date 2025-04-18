@@ -269,6 +269,8 @@ export default {
         mpPriority: undefined,
         mpDelete: 0,
       },
+      // 用于编辑属性的表单
+      form: {},
       // 所有工艺流程
       processListFull: [],
       // 订单列表
@@ -358,8 +360,10 @@ export default {
     },
     // 选中数据条目
     handleCurrentChange(current, old) {
-      this.idSelect = current.mpId
-      this.codeSelect = current.mpCode
+      if (current) {
+        this.idSelect = current.mpId
+        this.codeSelect = current.mpCode
+      }
     },
     /** 新增按钮操作 */
     handleAdd() {

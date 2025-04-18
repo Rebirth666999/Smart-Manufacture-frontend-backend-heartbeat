@@ -30,10 +30,10 @@
     <el-dialog :visible.sync="propertyFormModelVisible" title="参数配置" width="600px" append-to-body destroy-on-close>
       <el-form :model="propertyForm" label-width="130px" size="mini" ref="attributeFormRef" @submit.native.prevent :rules="rules">
         <el-form-item label="参数名称：" prop="eospaName">
-          <el-input v-model="propertyForm.eospaName" clearable />
+          <el-input v-model="propertyForm.eospaName" placeholder="请输入参数名称" clearable />
         </el-form-item>
         <el-form-item label="父级参数序号：" prop="eospaCodeParent">
-          <el-input v-model="propertyForm.eospaCodeParent" clearable />
+          <el-input v-model="propertyForm.eospaCodeParent" placeholder="请输入父级参数的序号" clearable />
         </el-form-item>
         <el-form-item label="参数类型：" prop="eospaType">
           <el-select v-model="propertyForm.eospaType" placeholder="请选择参数类型" style="width: 100%;">
@@ -56,7 +56,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="默认值：" prop="eospaValue">
-          <el-input v-model="propertyForm.eospaValue" clearable />
+          <el-input v-model="propertyForm.eospaValue" placeholder="请输入参数默认值" clearable />
         </el-form-item>
       </el-form>
       <template slot="footer">

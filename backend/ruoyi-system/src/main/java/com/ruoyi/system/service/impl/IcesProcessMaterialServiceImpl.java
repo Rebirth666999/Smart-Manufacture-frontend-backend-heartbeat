@@ -64,7 +64,7 @@ public class IcesProcessMaterialServiceImpl implements IIcesProcessMaterialServi
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesProcessMaterial> lqw = Wrappers.lambdaQuery();
         lqw.eq(StringUtils.isNotBlank(bo.getPmCode()), IcesProcessMaterial::getPmCode, bo.getPmCode());
-        lqw.eq(StringUtils.isNotBlank(bo.getProcCode()), IcesProcessMaterial::getProcCode, bo.getProcCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getPsCode()), IcesProcessMaterial::getPsCode, bo.getPsCode());
         lqw.eq(StringUtils.isNotBlank(bo.getMaCode()), IcesProcessMaterial::getMaCode, bo.getMaCode());
         lqw.eq(bo.getPmDelete() != null, IcesProcessMaterial::getPmDelete, bo.getPmDelete());
         return lqw;

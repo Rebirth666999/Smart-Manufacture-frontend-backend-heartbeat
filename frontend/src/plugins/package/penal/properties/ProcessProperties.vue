@@ -63,7 +63,7 @@
           <el-option
             v-for="item in elements"
             :key="item.businessObject.id"
-            :label="item.businessObject.name"
+            :label="`[${item.businessObject.id}] ${item.businessObject.name}`"
             :value="item.businessObject.id"
           ></el-option>
         </el-select>

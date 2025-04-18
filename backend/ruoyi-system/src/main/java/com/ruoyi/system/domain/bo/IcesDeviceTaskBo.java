@@ -47,6 +47,11 @@ public class IcesDeviceTaskBo extends BaseEntity {
     private String mtCode;
 
     /**
+     * 图元ID
+     */
+    private String dtModel;
+
+    /**
      * 设备操作
      */
     @NotBlank(message = "设备操作不能为空", groups = { AddGroup.class, EditGroup.class })

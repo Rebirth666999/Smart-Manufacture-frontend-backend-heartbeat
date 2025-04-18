@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="仓库原料库存编码" prop="mssCode">
-        <el-input
-          v-model="queryParams.mssCode"
-          placeholder="请输入仓库原料库存编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="仓库" prop="msCode">
         <el-input
           v-model="queryParams.msCode"
@@ -17,22 +9,22 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="物料" prop="maCode">
+      <el-form-item label="原料" prop="maCode">
         <el-input
           v-model="queryParams.maCode"
-          placeholder="请输入物料"
+          placeholder="请输入原料"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="已删除" prop="mssDelete">
+      <!-- <el-form-item label="已删除" prop="mssDelete">
         <el-input
           v-model="queryParams.mssDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -90,9 +82,9 @@
       <el-table-column label="仓库原料库存ID" align="center" prop="mssId" v-if="true"/>
       <el-table-column label="仓库原料库存编码" align="center" prop="mssCode" />
       <el-table-column label="仓库" align="center" prop="msCode" />
-      <el-table-column label="物料" align="center" prop="maCode" />
+      <el-table-column label="原料" align="center" prop="maCode" />
       <el-table-column label="库存" align="center" prop="mssStock" />
-      <el-table-column label="已删除" align="center" prop="mssDelete" />
+      <!-- <el-table-column label="已删除" align="center" prop="mssDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -127,8 +119,8 @@
         <el-form-item label="仓库" prop="msCode">
           <el-input v-model="form.msCode" placeholder="请输入仓库" />
         </el-form-item>
-        <el-form-item label="物料" prop="maCode">
-          <el-input v-model="form.maCode" placeholder="请输入物料" />
+        <el-form-item label="原料" prop="maCode">
+          <el-input v-model="form.maCode" placeholder="请输入原料" />
         </el-form-item>
         <el-form-item label="库存" prop="mssStock">
           <el-input v-model="form.mssStock" placeholder="请输入库存" />
@@ -176,7 +168,7 @@ export default {
         mssCode: undefined,
         msCode: undefined,
         maCode: undefined,
-        mssDelete: undefined,
+        mssDelete: 0,
       },
       // 表单参数
       form: {},
@@ -189,7 +181,7 @@ export default {
           { required: true, message: "仓库不能为空", trigger: "blur" }
         ],
         maCode: [
-          { required: true, message: "物料不能为空", trigger: "blur" }
+          { required: true, message: "原料不能为空", trigger: "blur" }
         ],
       }
     };
@@ -311,3 +303,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

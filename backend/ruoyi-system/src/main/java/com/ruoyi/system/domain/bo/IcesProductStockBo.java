@@ -48,7 +48,7 @@ public class IcesProductStockBo extends BaseEntity {
      * 库存量
      */
     @NotNull(message = "库存量不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long pssStock;
+    private Float pssStock;
 
     /**
      * 已删除

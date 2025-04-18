@@ -42,7 +42,7 @@ public class IcesProductStock extends BaseEntity {
     /**
      * 库存量
      */
-    private Long pssStock;
+    private Float pssStock;
     /**
      * 已删除
      */

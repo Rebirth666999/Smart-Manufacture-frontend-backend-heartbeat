@@ -1,6 +1,21 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="产品" prop="prCode">
+        <el-select
+          v-model="queryParams.prCode"
+          placeholder="请选择产品"
+          disabled
+        >
+          <el-option
+            v-for="item in productList"
+            :key="item.prCode"
+            :label="item.prName"
+            :value="item.prCode"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="仓库" prop="prsCode">
         <el-select
           v-model="queryParams.prsCode"
@@ -12,21 +27,6 @@
             :key="item.prsCode"
             :label="item.prsName"
             :value="item.prsCode"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="产品" prop="prCode">
-        <el-select
-          v-model="queryParams.prCode"
-          placeholder="请选择产品"
-          clearable
-        >
-          <el-option
-            v-for="item in productList"
-            :key="item.prCode"
-            :label="item.prName"
-            :value="item.prCode"
           >
           </el-option>
         </el-select>
@@ -95,14 +95,14 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="仓库产品库存ID" align="center" prop="pssId" v-if="true"/>
       <el-table-column label="仓库产品库存编码" align="center" prop="pssCode" />
-      <el-table-column label="仓库" align="center" prop="prsCode">
-        <template slot-scope="scope">
-          {{ productStoreList.find(ele => ele.prsCode === scope.row.prsCode).prsName || '' }}
-        </template>
-      </el-table-column>
       <el-table-column label="产品" align="center" prop="prCode">
         <template slot-scope="scope">
           {{ productList.find(ele => ele.prCode === scope.row.prCode).prName || '' }}
+        </template>
+      </el-table-column>
+      <el-table-column label="仓库" align="center" prop="prsCode">
+        <template slot-scope="scope">
+          {{ productStoreList.find(ele => ele.prsCode === scope.row.prsCode).prsName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="库存量" align="center" prop="pssStock" />
@@ -138,6 +138,21 @@
     <!-- 添加或修改仓库产品库存对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="产品" prop="prCode">
+          <el-select
+            v-model="form.prCode"
+            placeholder="请选择产品"
+            disabled
+          >
+            <el-option
+              v-for="item in productList"
+              :key="item.prCode"
+              :label="item.prName"
+              :value="item.prCode"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="仓库" prop="prsCode">
           <el-select
             v-model="form.prsCode"
@@ -148,20 +163,6 @@
               :key="item.prsCode"
               :label="item.prsName"
               :value="item.prsCode"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="产品" prop="prCode">
-          <el-select
-            v-model="form.prCode"
-            placeholder="请选择产品"
-          >
-            <el-option
-              v-for="item in productList"
-              :key="item.prCode"
-              :label="item.prName"
-              :value="item.prCode"
             >
             </el-option>
           </el-select>
@@ -185,6 +186,11 @@ import { listProductStore } from "@/api/system/productStore";
 
 export default {
   name: "ProductStock",
+  props: {
+    prCode: {
+      required: false
+    }
+  },
   data() {
     return {
       // 按钮loading
@@ -242,11 +248,17 @@ export default {
   async created() {
     await this.getProductStoreList();
     await this.getProductList();
+    if (this.prCode) {
+      this.queryParams.prCode = this.prCode
+    }
     this.getList();
   },
   async activated() {
     await this.getProductStoreList();
     await this.getProductList();
+    if (this.prCode) {
+      this.queryParams.prCode = this.prCode
+    }
     this.getList();
   },
   methods: {
@@ -312,6 +324,9 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      if (this.prCode) {
+        this.queryParams.prCode = this.prCode
+      }
       this.handleQuery();
     },
     // 多选框选中数据
@@ -323,6 +338,9 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      if (this.prCode) {
+        this.form.prCode = this.prCode
+      }
       this.open = true;
       this.title = "添加仓库产品库存";
     },
@@ -348,6 +366,7 @@ export default {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
+              this.$emit('update');
             }).finally(() => {
               this.buttonLoading = false;
             });
@@ -356,6 +375,7 @@ export default {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
+              this.$emit('update');
             }).finally(() => {
               this.buttonLoading = false;
             });
@@ -372,6 +392,7 @@ export default {
       }).then(() => {
         this.loading = false;
         this.getList();
+        this.$emit('update');
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {
       }).finally(() => {

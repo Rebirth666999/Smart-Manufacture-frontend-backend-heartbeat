@@ -16,7 +16,6 @@ import { listDeviceTask, saveDeviceTasks, listDeviceTaskParam, listDeviceTaskPre
 import { listArea } from "@/api/system/area";
 import { listAreaControl } from "@/api/system/areaControl";
 import { listMaterial } from "@/api/system/material";
-import { listManufacturePlan } from "@/api/system/manufacturePlan";
 import { listProcess, getBpmnXml } from "@/api/system/process";
 import { listMaterialStore } from "@/api/system/materialStore";
 import { listProductStore } from "@/api/system/productStore";
@@ -41,8 +40,6 @@ export default {
     return {
       // 车间列表
       areaList: [],
-      // 生产计划列表
-      manufacturePlanList: [],
       // 工艺流程列表
       processList: [],
       // 原料仓库列表
@@ -74,16 +71,13 @@ export default {
     this.viewerData.loading = true
     await this.getAreaList()
     await this.getMaterialList()
-    await this.getManufacturePlanList()
     await this.getProcessList()
     await this.getStoreList()
     await this.getReferenceList()
     const row = (await getManufactureTask(this.$route.query.mtId)).data
     this.currentManufactureTask = row
-    // 找到生产计划
-    const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpCode === row.mpCode)
     // 找到工艺流程
-    const process = this.processList.find(ele => ele.procCode === manufacturePlan.procCode)
+    const process = this.processList.find(ele => ele.procCode === row.procCode)
     // 找到可分配的设备
     this.viewerData.eqList = this.eqList.filter(ele => ele.arCode === row.arCode)
     // 打开流程
@@ -98,16 +92,13 @@ export default {
     this.viewerData.loading = true
     await this.getAreaList()
     await this.getMaterialList()
-    await this.getManufacturePlanList()
     await this.getProcessList()
     await this.getStoreList()
     await this.getReferenceList()
     const row = (await getManufactureTask(this.$route.query.mtId)).data
     this.currentManufactureTask = row
-    // 找到生产计划
-    const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpCode === row.mpCode)
     // 找到工艺流程
-    const process = this.processList.find(ele => ele.procCode === manufacturePlan.procCode)
+    const process = this.processList.find(ele => ele.procCode === row.procCode)
     // 找到可分配的设备
     this.viewerData.eqList = this.eqList.filter(ele => ele.arCode === row.arCode)
     // 打开流程
@@ -152,18 +143,6 @@ export default {
       return new Promise((resolve, reject) => {
         listProcess().then(response => {
           this.processList = response.rows
-          resolve()
-        }).catch(() => {
-          reject()
-        }).finally(() => {
-        })
-      })
-    },
-    // 获取生产计划列表
-    getManufacturePlanList() {
-      return new Promise((resolve, reject) => {
-        listManufacturePlan().then(response => {
-          this.manufacturePlanList = response.rows
           resolve()
         }).catch(() => {
           reject()

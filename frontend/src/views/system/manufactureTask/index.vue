@@ -17,6 +17,21 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="工艺流程" prop="procCode">
+        <el-select
+          v-model="queryParams.procCode"
+          placeholder="请选择工艺流程"
+          clearable
+        >
+          <el-option
+            v-for="item in processList"
+            :key="item.procCode"
+            :label="item.procName"
+            :value="item.procCode"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="目标车间" prop="arCode">
         <el-select
           v-model="queryParams.arCode"
@@ -115,6 +130,11 @@
       <el-table-column label="生产任务ID" align="center" prop="mtId" v-if="true"/>
       <el-table-column label="生产任务编码" align="center" prop="mtCode" />
       <el-table-column label="所属生产计划" align="center" prop="mpCode" />
+      <el-table-column label="工艺流程" align="center" prop="procCode">
+        <template slot-scope="scope">
+          {{ processList.find(ele => ele.procCode === scope.row.procCode).procName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="目标车间" align="center" prop="arCode">
         <template slot-scope="scope">
           {{ areaList.find(ele => ele.arCode === scope.row.arCode).arName || '' }}

@@ -7,7 +7,6 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesMaterialStockBo;
@@ -21,28 +20,27 @@ import java.util.Map;
 import java.util.Collection;
 
 /**
- * 关联-车间原料库存Service业务层处理
+ * 仓库原料库存Service业务层处理
  *
  * @author ruoyi
- * @date 2025-04-01
+ * @date 2025-04-18
  */
 @RequiredArgsConstructor
 @Service
 public class IcesMaterialStockServiceImpl implements IIcesMaterialStockService {
 
-    private final IIcesCodeService codeService;
     private final IcesMaterialStockMapper baseMapper;
 
     /**
-     * 查询关联-车间原料库存
+     * 查询仓库原料库存
      */
     @Override
-    public IcesMaterialStockVo queryById(Long msId){
-        return baseMapper.selectVoById(msId);
+    public IcesMaterialStockVo queryById(Long mssId){
+        return baseMapper.selectVoById(mssId);
     }
 
     /**
-     * 查询关联-车间原料库存列表
+     * 查询仓库原料库存列表
      */
     @Override
     public TableDataInfo<IcesMaterialStockVo> queryPageList(IcesMaterialStockBo bo, PageQuery pageQuery) {
@@ -52,7 +50,7 @@ public class IcesMaterialStockServiceImpl implements IIcesMaterialStockService {
     }
 
     /**
-     * 查询关联-车间原料库存列表
+     * 查询仓库原料库存列表
      */
     @Override
     public List<IcesMaterialStockVo> queryList(IcesMaterialStockBo bo) {
@@ -63,30 +61,29 @@ public class IcesMaterialStockServiceImpl implements IIcesMaterialStockService {
     private LambdaQueryWrapper<IcesMaterialStock> buildQueryWrapper(IcesMaterialStockBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesMaterialStock> lqw = Wrappers.lambdaQuery();
+        lqw.eq(StringUtils.isNotBlank(bo.getMssCode()), IcesMaterialStock::getMssCode, bo.getMssCode());
         lqw.eq(StringUtils.isNotBlank(bo.getMsCode()), IcesMaterialStock::getMsCode, bo.getMsCode());
-        lqw.eq(StringUtils.isNotBlank(bo.getStCode()), IcesMaterialStock::getStCode, bo.getStCode());
         lqw.eq(StringUtils.isNotBlank(bo.getMaCode()), IcesMaterialStock::getMaCode, bo.getMaCode());
-        lqw.eq(bo.getMsDelete() != null, IcesMaterialStock::getMsDelete, bo.getMsDelete());
+        lqw.eq(bo.getMssDelete() != null, IcesMaterialStock::getMssDelete, bo.getMssDelete());
         return lqw;
     }
 
     /**
-     * 新增关联-车间原料库存
+     * 新增仓库原料库存
      */
     @Override
     public Boolean insertByBo(IcesMaterialStockBo bo) {
-        bo.setMsCode(codeService.insertByType("MaterialStock"));
         IcesMaterialStock add = BeanUtil.toBean(bo, IcesMaterialStock.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
-            bo.setMsId(add.getMsId());
+            bo.setMssId(add.getMssId());
         }
         return flag;
     }
 
     /**
-     * 修改关联-车间原料库存
+     * 修改仓库原料库存
      */
     @Override
     public Boolean updateByBo(IcesMaterialStockBo bo) {
@@ -103,7 +100,7 @@ public class IcesMaterialStockServiceImpl implements IIcesMaterialStockService {
     }
 
     /**
-     * 批量删除关联-车间原料库存
+     * 批量删除仓库原料库存
      */
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {

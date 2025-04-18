@@ -26,10 +26,10 @@ import com.ruoyi.system.service.IIcesMaterialStockService;
 import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
- * 关联-车间原料库存
+ * 仓库原料库存
  *
  * @author ruoyi
- * @date 2025-04-01
+ * @date 2025-04-18
  */
 @Validated
 @RequiredArgsConstructor
@@ -40,7 +40,7 @@ public class IcesMaterialStockController extends BaseController {
     private final IIcesMaterialStockService iIcesMaterialStockService;
 
     /**
-     * 查询关联-车间原料库存列表
+     * 查询仓库原料库存列表
      */
     @SaCheckPermission("system:materialStock:list")
     @GetMapping("/list")
@@ -49,33 +49,33 @@ public class IcesMaterialStockController extends BaseController {
     }
 
     /**
-     * 导出关联-车间原料库存列表
+     * 导出仓库原料库存列表
      */
     @SaCheckPermission("system:materialStock:export")
-    @Log(title = "关联-车间原料库存", businessType = BusinessType.EXPORT)
+    @Log(title = "仓库原料库存", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(IcesMaterialStockBo bo, HttpServletResponse response) {
         List<IcesMaterialStockVo> list = iIcesMaterialStockService.queryList(bo);
-        ExcelUtil.exportExcel(list, "关联-车间原料库存", IcesMaterialStockVo.class, response);
+        ExcelUtil.exportExcel(list, "仓库原料库存", IcesMaterialStockVo.class, response);
     }
 
     /**
-     * 获取关联-车间原料库存详细信息
+     * 获取仓库原料库存详细信息
      *
-     * @param msId 主键
+     * @param mssId 主键
      */
     @SaCheckPermission("system:materialStock:query")
-    @GetMapping("/{msId}")
+    @GetMapping("/{mssId}")
     public R<IcesMaterialStockVo> getInfo(@NotNull(message = "主键不能为空")
-                                     @PathVariable Long msId) {
-        return R.ok(iIcesMaterialStockService.queryById(msId));
+                                     @PathVariable Long mssId) {
+        return R.ok(iIcesMaterialStockService.queryById(mssId));
     }
 
     /**
-     * 新增关联-车间原料库存
+     * 新增仓库原料库存
      */
     @SaCheckPermission("system:materialStock:add")
-    @Log(title = "关联-车间原料库存", businessType = BusinessType.INSERT)
+    @Log(title = "仓库原料库存", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody IcesMaterialStockBo bo) {
@@ -83,10 +83,10 @@ public class IcesMaterialStockController extends BaseController {
     }
 
     /**
-     * 修改关联-车间原料库存
+     * 修改仓库原料库存
      */
     @SaCheckPermission("system:materialStock:edit")
-    @Log(title = "关联-车间原料库存", businessType = BusinessType.UPDATE)
+    @Log(title = "仓库原料库存", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody IcesMaterialStockBo bo) {
@@ -94,15 +94,15 @@ public class IcesMaterialStockController extends BaseController {
     }
 
     /**
-     * 删除关联-车间原料库存
+     * 删除仓库原料库存
      *
-     * @param msIds 主键串
+     * @param mssIds 主键串
      */
     @SaCheckPermission("system:materialStock:remove")
-    @Log(title = "关联-车间原料库存", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{msIds}")
+    @Log(title = "仓库原料库存", businessType = BusinessType.DELETE)
+    @DeleteMapping("/{mssIds}")
     public R<Void> remove(@NotEmpty(message = "主键不能为空")
-                          @PathVariable Long[] msIds) {
-        return toAjax(iIcesMaterialStockService.deleteWithValidByIds(Arrays.asList(msIds), true));
+                          @PathVariable Long[] mssIds) {
+        return toAjax(iIcesMaterialStockService.deleteWithValidByIds(Arrays.asList(mssIds), true));
     }
 }

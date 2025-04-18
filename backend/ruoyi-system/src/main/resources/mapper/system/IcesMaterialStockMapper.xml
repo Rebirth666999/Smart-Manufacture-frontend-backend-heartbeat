@@ -5,12 +5,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.ruoyi.system.mapper.IcesMaterialStockMapper">
 
     <resultMap type="com.ruoyi.system.domain.IcesMaterialStock" id="IcesMaterialStockResult">
-        <result property="msId" column="ms_id"/>
+        <result property="mssId" column="mss_id"/>
+        <result property="mssCode" column="mss_code"/>
         <result property="msCode" column="ms_code"/>
-        <result property="stCode" column="st_code"/>
         <result property="maCode" column="ma_code"/>
-        <result property="msStock" column="ms_stock"/>
-        <result property="msDelete" column="ms_delete"/>
+        <result property="mssStock" column="mss_stock"/>
+        <result property="mssDelete" column="mss_delete"/>
         <result property="createBy" column="create_by"/>
         <result property="updateBy" column="update_by"/>
         <result property="createTime" column="create_time"/>

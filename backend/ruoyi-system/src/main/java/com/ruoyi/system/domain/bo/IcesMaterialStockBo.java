@@ -11,10 +11,10 @@ import java.util.Date;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
- * 关联-车间原料库存业务对象 ices_material_stock
+ * 仓库原料库存业务对象 ices_material_stock
  *
  * @author ruoyi
- * @date 2025-04-01
+ * @date 2025-04-18
  */
 
 @Data
@@ -22,21 +22,21 @@ import com.ruoyi.common.core.domain.BaseEntity;
 public class IcesMaterialStockBo extends BaseEntity {
 
     /**
-     * 车间原料库存ID
+     * 仓库原料库存ID
      */
-    @NotNull(message = "车间原料库存ID不能为空", groups = { EditGroup.class })
-    private Long msId;
+    @NotNull(message = "仓库原料库存ID不能为空", groups = { EditGroup.class })
+    private Long mssId;
 
     /**
      * 仓库原料库存编码
      */
-    private String msCode;
+    private String mssCode;
 
     /**
      * 仓库
      */
     @NotBlank(message = "仓库不能为空", groups = { AddGroup.class, EditGroup.class })
-    private String stCode;
+    private String msCode;
 
     /**
      * 物料
@@ -47,13 +47,12 @@ public class IcesMaterialStockBo extends BaseEntity {
     /**
      * 库存
      */
-    @NotNull(message = "库存不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long msStock;
+    private Long mssStock;
 
     /**
      * 已删除
      */
-    private Long msDelete;
+    private Long mssDelete;
 
 
 }

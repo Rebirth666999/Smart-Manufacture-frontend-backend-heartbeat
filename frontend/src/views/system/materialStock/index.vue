@@ -1,21 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="仓库" prop="msCode">
-        <el-select
-          v-model="queryParams.msCode"
-          placeholder="请选择仓库"
-          clearable
-        >
-          <el-option
-            v-for="item in materialStoreList"
-            :key="item.msCode"
-            :label="item.msName"
-            :value="item.msCode"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
       <el-form-item label="原料" prop="maCode">
         <el-select
           v-model="queryParams.maCode"
@@ -27,6 +12,21 @@
             :key="item.maCode"
             :label="item.maName"
             :value="item.maCode"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="仓库" prop="msCode">
+        <el-select
+          v-model="queryParams.msCode"
+          placeholder="请选择仓库"
+          clearable
+        >
+          <el-option
+            v-for="item in materialStoreList"
+            :key="item.msCode"
+            :label="item.msName"
+            :value="item.msCode"
           >
           </el-option>
         </el-select>
@@ -95,14 +95,14 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="仓库原料库存ID" align="center" prop="mssId" v-if="true"/>
       <el-table-column label="仓库原料库存编码" align="center" prop="mssCode" />
-      <el-table-column label="仓库" align="center" prop="msCode">
-        <template slot-scope="scope">
-          {{ materialStoreList.find(ele => ele.msCode === scope.row.msCode).msName || '' }}
-        </template>
-      </el-table-column>
       <el-table-column label="原料" align="center" prop="maCode">
         <template slot-scope="scope">
           {{ materialList.find(ele => ele.maCode === scope.row.maCode).maName || '' }}
+        </template>
+      </el-table-column>
+      <el-table-column label="仓库" align="center" prop="msCode">
+        <template slot-scope="scope">
+          {{ materialStoreList.find(ele => ele.msCode === scope.row.msCode).msName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="库存" align="center" prop="mssStock" />
@@ -138,20 +138,6 @@
     <!-- 添加或修改仓库原料库存对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="仓库" prop="msCode">
-          <el-select
-            v-model="form.msCode"
-            placeholder="请选择仓库"
-          >
-            <el-option
-              v-for="item in materialStoreList"
-              :key="item.msCode"
-              :label="item.msName"
-              :value="item.msCode"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="原料" prop="maCode">
           <el-select
             v-model="form.maCode"
@@ -163,6 +149,20 @@
               :key="item.maCode"
               :label="item.maName"
               :value="item.maCode"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="仓库" prop="msCode">
+          <el-select
+            v-model="form.msCode"
+            placeholder="请选择仓库"
+          >
+            <el-option
+              v-for="item in materialStoreList"
+              :key="item.msCode"
+              :label="item.msName"
+              :value="item.msCode"
             >
             </el-option>
           </el-select>

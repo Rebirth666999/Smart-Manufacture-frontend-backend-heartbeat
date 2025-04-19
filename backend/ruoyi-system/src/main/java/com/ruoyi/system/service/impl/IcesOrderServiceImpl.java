@@ -1,6 +1,9 @@
 package com.ruoyi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.helper.LoginHelper;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
@@ -9,6 +12,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ruoyi.system.domain.IcesEquipmentModel;
 import com.ruoyi.system.domain.bo.IcesManufacturePlanBo;
+import com.ruoyi.system.domain.vo.IcesClientVo;
 import com.ruoyi.system.domain.vo.IcesEquipmentModelVo;
 import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +23,8 @@ import com.ruoyi.system.domain.IcesOrder;
 import com.ruoyi.system.mapper.IcesOrderMapper;
 import com.ruoyi.system.service.IIcesOrderService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Collection;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 订单Service业务层处理
@@ -100,6 +102,11 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
     @Override
     public IcesOrderVo insertByBo(IcesOrderBo bo) {
         bo.setOrCode(codeService.insertByType("Order"));
+        String cMan = getLoginUsername();
+        String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        // 填入创建信息
+        bo.setOrCman(cMan);
+        bo.setOrCdate(cDate);
         IcesOrder add = BeanUtil.toBean(bo, IcesOrder.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
@@ -114,9 +121,28 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
      */
     @Override
     public Boolean updateByBo(IcesOrderBo bo) {
+        String mMan = getLoginUsername();
+        String mDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        // 填入修改信息
+        bo.setOrMman(mMan);
+        bo.setOrMdate(mDate);
         IcesOrder update = BeanUtil.toBean(bo, IcesOrder.class);
         validEntityBeforeSave(update);
         return baseMapper.updateById(update) > 0;
+    }
+
+    /**
+     * 获取当前用户名称
+     * @return 用户名
+     */
+    private String getLoginUsername() {
+        LoginUser loginUser;
+        try {
+            loginUser = LoginHelper.getLoginUser();
+        } catch (Exception e) {
+            return null;
+        }
+        return ObjectUtil.isNotNull(loginUser) ? loginUser.getUsername() : null;
     }
 
     /**

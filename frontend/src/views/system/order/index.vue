@@ -153,8 +153,12 @@
             </template>
           </el-table-column>
           <el-table-column label="总价" align="center" prop="orPrice" />
+          <el-table-column label="创建人" align="center" prop="orCman" />
+          <el-table-column label="创建时间" align="center" prop="orCdate" />
+          <el-table-column label="修改人" align="center" prop="orMman" />
+          <el-table-column label="修改时间" align="center" prop="orMdate" />
           <!-- <el-table-column label="已删除" align="center" prop="orDelete" /> -->
-          <el-table-column label="描述" align="center" prop="orDesc" />
+          <!-- <el-table-column label="描述" align="center" prop="orDesc" /> -->
           <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template slot-scope="scope">
               <el-button
@@ -211,7 +215,7 @@
           <div>订单产品信息</div>
         </div>
       </div>
-      <order-demand v-if='idSelect' :key="idSelect" :orCode="codeSelect" />
+      <order-demand v-if='idSelect' :key="idSelect" :orCode="codeSelect" @update="getList"/>
       <el-empty v-else description="选中订单后即可管理订单产品" />
     </el-card>
   </div>

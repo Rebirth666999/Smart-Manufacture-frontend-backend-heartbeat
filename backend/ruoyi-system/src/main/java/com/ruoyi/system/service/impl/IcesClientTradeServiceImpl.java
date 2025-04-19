@@ -125,20 +125,6 @@ public class IcesClientTradeServiceImpl implements IIcesClientTradeService {
     }
 
     /**
-     * 获取当前用户名称
-     * @return 用户名
-     */
-    private String getLoginUsername() {
-        LoginUser loginUser;
-        try {
-            loginUser = LoginHelper.getLoginUser();
-        } catch (Exception e) {
-            return null;
-        }
-        return ObjectUtil.isNotNull(loginUser) ? loginUser.getUsername() : null;
-    }
-
-    /**
      * 保存前的数据校验
      */
     private void validEntityBeforeSave(IcesClientTrade entity){

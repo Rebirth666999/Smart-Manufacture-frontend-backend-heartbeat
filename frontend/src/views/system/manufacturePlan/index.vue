@@ -150,6 +150,12 @@
           <el-table-column label="已完成产品数量" align="center" prop="mpQtyReal" />
           <!-- <el-table-column label="已删除" align="center" prop="mpDelete" /> -->
           <!-- <el-table-column label="描述" align="center" prop="mpDesc" /> -->
+          <el-table-column label="创建人" align="center" prop="mpCman" />
+          <el-table-column label="创建时间" align="center" prop="mpCdate" />
+          <el-table-column label="发布人" align="center" prop="mpRman" />
+          <el-table-column label="发布时间" align="center" prop="mpRdate" />
+          <el-table-column label="修改人" align="center" prop="mpMman" />
+          <el-table-column label="修改时间" align="center" prop="mpMdate" />
           <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template slot-scope="scope">
               <el-button
@@ -208,7 +214,7 @@
           <div>生产任务信息</div>
         </div>
       </div>
-      <manufacture-task v-if='idSelect' :key="idSelect" :mpCode="codeSelect" />
+      <manufacture-task v-if='idSelect' :key="idSelect" :mpCode="codeSelect" @update="getList" />
       <el-empty v-else description="选中生产计划后即可管理下属生产任务" />
     </el-card>
   </div>

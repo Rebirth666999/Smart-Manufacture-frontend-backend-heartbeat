@@ -1,6 +1,9 @@
 package com.ruoyi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.helper.LoginHelper;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
@@ -8,21 +11,22 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ruoyi.system.domain.IcesManufacturePlan;
-import com.ruoyi.system.domain.bo.IcesDeviceTaskBo;
+import com.ruoyi.system.domain.bo.*;
 import com.ruoyi.system.domain.vo.IcesDeviceTaskVo;
-import com.ruoyi.system.domain.bo.IcesManufacturePlanBo;
 import com.ruoyi.system.domain.vo.IcesManufacturePlanVo;
+import com.ruoyi.system.domain.vo.IcesOrderVo;
 import com.ruoyi.system.mapper.IcesDeviceTaskMapper;
+import com.ruoyi.system.mapper.IcesManufacturePlanMapper;
 import com.ruoyi.system.service.IIcesCodeService;
 import com.ruoyi.system.service.IIcesManufacturePlanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.ruoyi.system.domain.bo.IcesManufactureTaskBo;
 import com.ruoyi.system.domain.vo.IcesManufactureTaskVo;
 import com.ruoyi.system.domain.IcesManufactureTask;
 import com.ruoyi.system.mapper.IcesManufactureTaskMapper;
 import com.ruoyi.system.service.IIcesManufactureTaskService;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -38,6 +42,7 @@ public class IcesManufactureTaskServiceImpl implements IIcesManufactureTaskServi
     private final IcesManufactureTaskMapper baseMapper;
     private final IIcesCodeService codeService;
     private final IIcesManufacturePlanService icesManufacturePlanService;
+
     /**
      * 查询生产任务
      */
@@ -100,6 +105,7 @@ public class IcesManufactureTaskServiceImpl implements IIcesManufactureTaskServi
     @Override
     public Boolean insertByBo(IcesManufactureTaskBo bo) {
         bo.setMtCode(codeService.insertByType("ManufactureTask"));
+        updateManufacturePlan(bo);
         IcesManufactureTask add = BeanUtil.toBean(bo, IcesManufactureTask.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
@@ -133,6 +139,41 @@ public class IcesManufactureTaskServiceImpl implements IIcesManufactureTaskServi
             }
         }
         return baseMapper.updateById(update) > 0;
+    }
+
+    /**
+     * 新增生产任务算作下发生产计划
+     */
+    private void updateManufacturePlan(IcesManufactureTaskBo bo) {
+        // 搜索条件
+        String mpCode = bo.getMpCode();
+        IcesManufacturePlanBo manufacturePlanBo = new IcesManufacturePlanBo();
+        manufacturePlanBo.setMpCode(mpCode);
+        // 查找列表
+        List<IcesManufacturePlanVo> vos = icesManufacturePlanService.queryList(manufacturePlanBo);
+        assert vos != null && vos.size() == 1;
+        // 调用更新
+        String rMan = getLoginUsername();
+        String rDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        manufacturePlanBo.setMpCode(null);
+        manufacturePlanBo.setMpId(vos.get(0).getMpId());
+        manufacturePlanBo.setMpRman(rMan);
+        manufacturePlanBo.setMpRdate(rDate);
+        icesManufacturePlanService.updateByBo(manufacturePlanBo);
+    }
+
+    /**
+     * 获取当前用户名称
+     * @return 用户名
+     */
+    private String getLoginUsername() {
+        LoginUser loginUser;
+        try {
+            loginUser = LoginHelper.getLoginUser();
+        } catch (Exception e) {
+            return null;
+        }
+        return ObjectUtil.isNotNull(loginUser) ? loginUser.getUsername() : null;
     }
 
     /**

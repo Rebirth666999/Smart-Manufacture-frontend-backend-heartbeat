@@ -593,7 +593,7 @@ export default {
       return new Promise((resolve, reject) => {
         this.loading = true;
         listProcess().then(response => {
-          this.processList = response.rows
+          this.processList = response.rows.filter(ele => ele.prCode === this.currentManufactureTask.prCode)
           resolve()
         }).catch(() => {
           reject()
@@ -608,6 +608,7 @@ export default {
         this.loading = true;
         listManufacturePlan().then(response => {
           this.manufacturePlanList = response.rows
+          this.currentManufactureTask = response.rows.find(ele => ele.mpCode === this.mpCode)
           resolve()
         }).catch(() => {
           reject()
@@ -734,6 +735,7 @@ export default {
             updateManufactureTask(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
+              this.$emit('update')
               this.getList();
             }).finally(() => {
               this.buttonLoading = false;
@@ -744,6 +746,7 @@ export default {
             addManufactureTask(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
+              this.$emit('update')
               this.getList();
             }).finally(() => {
               this.buttonLoading = false;
@@ -760,6 +763,7 @@ export default {
         return delManufactureTask(mtIds);
       }).then(() => {
         this.loading = false;
+        this.$emit('update')
         this.getList();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {

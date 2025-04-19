@@ -1,6 +1,9 @@
 package com.ruoyi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.helper.LoginHelper;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
@@ -17,6 +20,8 @@ import com.ruoyi.system.domain.IcesClient;
 import com.ruoyi.system.mapper.IcesClientMapper;
 import com.ruoyi.system.service.IIcesClientService;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Collection;
@@ -64,6 +69,7 @@ public class IcesClientServiceImpl implements IIcesClientService {
     private LambdaQueryWrapper<IcesClient> buildQueryWrapper(IcesClientBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesClient> lqw = Wrappers.lambdaQuery();
+        lqw.eq(StringUtils.isNotBlank(bo.getClCode()), IcesClient::getClCode, bo.getClCode());
         lqw.eq(StringUtils.isNotBlank(bo.getCllCode()), IcesClient::getCllCode, bo.getCllCode());
         lqw.eq(bo.getClOperator() != null, IcesClient::getClOperator, bo.getClOperator());
         lqw.like(StringUtils.isNotBlank(bo.getClName()), IcesClient::getClName, bo.getClName());
@@ -78,6 +84,16 @@ public class IcesClientServiceImpl implements IIcesClientService {
     @Override
     public IcesClientVo insertByBo(IcesClientBo bo) {
         bo.setClCode(codeService.insertByType("Client"));
+        String cMan = getLoginUsername();
+        String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        // 填入创建信息
+        bo.setClCman(cMan);
+        bo.setClCdate(cDate);
+        if (bo.getClStat().equals("2")) {
+            // 若已启用则填入发布信息
+            bo.setClRman(cMan);
+            bo.setClRdate(cDate);
+        }
         IcesClient add = BeanUtil.toBean(bo, IcesClient.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
@@ -92,9 +108,35 @@ public class IcesClientServiceImpl implements IIcesClientService {
      */
     @Override
     public Boolean updateByBo(IcesClientBo bo) {
+        String mMan = getLoginUsername();
+        String mDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        // 获取原先记录
+        IcesClientVo vo = queryById(bo.getClId());
+        // 如果原先未启用，现在已启用，则填入发布信息
+        if (vo.getClStat() != null && vo.getClStat().equals("1") && bo.getClStat().equals("2")) {
+            bo.setClRman(mMan);
+            bo.setClRdate(mDate);
+        }
+        // 填入修改信息
+        bo.setClMman(mMan);
+        bo.setClMdate(mDate);
         IcesClient update = BeanUtil.toBean(bo, IcesClient.class);
         validEntityBeforeSave(update);
         return baseMapper.updateById(update) > 0;
+    }
+
+    /**
+     * 获取当前用户名称
+     * @return 用户名
+     */
+    private String getLoginUsername() {
+        LoginUser loginUser;
+        try {
+            loginUser = LoginHelper.getLoginUser();
+        } catch (Exception e) {
+            return null;
+        }
+        return ObjectUtil.isNotNull(loginUser) ? loginUser.getUsername() : null;
     }
 
     /**

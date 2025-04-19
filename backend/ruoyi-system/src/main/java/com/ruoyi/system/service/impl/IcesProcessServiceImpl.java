@@ -453,6 +453,12 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
             }
         }
 
+        // 更新流程信息
+        IcesProcessBo bo = new IcesProcessBo();
+        bo.setProcId(procId);
+        bo.setProcStat(icesProcess.getProcStat());
+        updateByBo(bo);
+
 
         // ========== 8. 清理不再使用的数据 ==========
 

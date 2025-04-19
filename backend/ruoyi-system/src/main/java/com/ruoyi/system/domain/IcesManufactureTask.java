@@ -38,17 +38,21 @@ public class IcesManufactureTask extends BaseEntity {
      */
     private String mpCode;
     /**
+     * 工艺流程
+     */
+    private String procCode;
+    /**
      * 目标车间
      */
     private String arCode;
     /**
      * 原料仓库
      */
-    private String stCodeMa;
+    private String msCode;
     /**
      * 产品仓库
      */
-    private String stCodePr;
+    private String prsCode;
     /**
      * 状态代码
      */
@@ -86,4 +90,28 @@ public class IcesManufactureTask extends BaseEntity {
      */
     private String mtDesc;
 
+    /**
+     * 创建人
+     */
+    private String mtCman;
+    /**
+     * 创建时间
+     */
+    private String mtCdate;
+    /**
+     * 发布人
+     */
+    private String mtRman;
+    /**
+     * 发布时间
+     */
+    private String mtRdate;
+    /**
+     * 修改人
+     */
+    private String mtMman;
+    /**
+     * 修改时间
+     */
+    private String mtMdate;
 }

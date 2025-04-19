@@ -8,17 +8,17 @@
       </div>
       <div>
         <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-          <el-form-item label="目标产品" prop="maCode">
+          <el-form-item label="目标产品" prop="prCode">
             <el-select
-              v-model="queryParams.maCode"
+              v-model="queryParams.prCode"
               placeholder="请选择目标产品"
               clearable
             >
               <el-option
                 v-for="item in productList"
-                :key="item.maCode"
-                :label="item.maName"
-                :value="item.maCode"
+                :key="item.prCode"
+                :label="item.prName"
+                :value="item.prCode"
               >
               </el-option>
             </el-select>
@@ -115,9 +115,9 @@
           </el-table-column>
           <el-table-column label="工艺流程ID" align="center" prop="procId" v-if="true"/>
           <el-table-column label="工艺流程编码" align="center" prop="procCode" />
-          <el-table-column label="目标产品" align="center" prop="maCode">
+          <el-table-column label="目标产品" align="center" prop="prCode">
             <template slot-scope="scope">
-              {{ productList.find(ele => ele.maCode === scope.row.maCode).maName || '' }}
+              {{ productList.find(ele => ele.prCode === scope.row.prCode).prName || '' }}
             </template>
           </el-table-column>
           <el-table-column label="工艺流程名称" align="center" prop="procName" />
@@ -217,6 +217,7 @@
 <script>
 import { listProcess, getProcess, delProcess, addProcess, updateProcess, saveModel, getBpmnXml } from "@/api/system/process";
 import { listMaterial } from "@/api/system/material";
+import { listProduct } from "@/api/system/product";
 import { listEquipmentModel } from "@/api/system/equipmentModel";
 import { listModelOperation } from "@/api/system/modelOperation";
 import ProcessDesigner from '@/components/ProcessDesigner';
@@ -252,7 +253,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        maCode: undefined,
+        prCode: undefined,
         procName: undefined,
         procStat: undefined,
         procDelete: 0,
@@ -275,25 +276,40 @@ export default {
     };
   },
   async created() {
+    await this.getMaterialList();
     await this.getProductList();
     await this.getEquipmentModelList();
     await this.getModelOperationList();
     this.getList();
   },
   async activated() {
+    await this.getMaterialList();
     await this.getProductList();
     await this.getEquipmentModelList();
     await this.getModelOperationList();
     this.getList();
   },
   methods: {
+    // 查询原料列表
+    getMaterialList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listMaterial().then(response => {
+          this.materialList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     // 查询产品列表
     getProductList() {
       return new Promise((resolve, reject) => {
         this.loading = true;
-        listMaterial().then(response => {
-          this.materialList = response.rows.filter(ele => ele.maType === '1')
-          this.productList = response.rows.filter(ele => ele.maType === '2')
+        listProduct().then(response => {
+          this.productList = response.rows
           resolve()
         }).catch(() => {
           reject()

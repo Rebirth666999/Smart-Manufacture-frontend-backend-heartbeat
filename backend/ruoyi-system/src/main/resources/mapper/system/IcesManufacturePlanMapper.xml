@@ -8,7 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="mpId" column="mp_id"/>
         <result property="mpCode" column="mp_code"/>
         <result property="orCode" column="or_code"/>
-        <result property="procCode" column="proc_code"/>
+        <result property="prCode" column="pr_code"/>
         <result property="mpStat" column="mp_stat"/>
         <result property="mpBegin" column="mp_begin"/>
         <result property="mpEndPlan" column="mp_end_plan"/>
@@ -22,6 +22,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy" column="update_by"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
+        <result property="mpCman" column="mp_cman"/>
+        <result property="mpCdate" column="mp_cdate"/>
+        <result property="mpRman" column="mp_rman"/>
+        <result property="mpRdate" column="mp_rdate"/>
+        <result property="mpMman" column="mp_mman"/>
+        <result property="mpMdate" column="mp_mdate"/>
     </resultMap>
 
 

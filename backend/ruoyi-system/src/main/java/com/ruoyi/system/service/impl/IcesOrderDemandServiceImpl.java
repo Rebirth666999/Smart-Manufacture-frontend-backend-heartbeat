@@ -64,7 +64,7 @@ public class IcesOrderDemandServiceImpl implements IIcesOrderDemandService {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesOrderDemand> lqw = Wrappers.lambdaQuery();
         lqw.eq(StringUtils.isNotBlank(bo.getOdCode()), IcesOrderDemand::getOdCode, bo.getOdCode());
-        lqw.eq(StringUtils.isNotBlank(bo.getMaCode()), IcesOrderDemand::getMaCode, bo.getMaCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getPrCode()), IcesOrderDemand::getPrCode, bo.getPrCode());
         lqw.eq(StringUtils.isNotBlank(bo.getOrCode()), IcesOrderDemand::getOrCode, bo.getOrCode());
         lqw.eq(bo.getOdDemand() != null, IcesOrderDemand::getOdDemand, bo.getOdDemand());
         lqw.eq(bo.getOdDelete() != null, IcesOrderDemand::getOdDelete, bo.getOdDelete());

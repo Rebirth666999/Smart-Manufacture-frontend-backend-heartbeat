@@ -58,6 +58,12 @@ public class IcesProcessMaterialVo {
     private Float pmDemand;
 
     /**
+     * 单位
+     */
+    @ExcelProperty(value = "单位")
+    private String pmUnit;
+
+    /**
      * 已删除
      */
     @ExcelProperty(value = "已删除")

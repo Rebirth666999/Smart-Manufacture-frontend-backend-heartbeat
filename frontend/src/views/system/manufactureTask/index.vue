@@ -17,6 +17,21 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="工艺流程" prop="procCode">
+        <el-select
+          v-model="queryParams.procCode"
+          placeholder="请选择工艺流程"
+          clearable
+        >
+          <el-option
+            v-for="item in processList"
+            :key="item.procCode"
+            :label="item.procName"
+            :value="item.procCode"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="目标车间" prop="arCode">
         <el-select
           v-model="queryParams.arCode"
@@ -115,19 +130,24 @@
       <el-table-column label="生产任务ID" align="center" prop="mtId" v-if="true"/>
       <el-table-column label="生产任务编码" align="center" prop="mtCode" />
       <el-table-column label="所属生产计划" align="center" prop="mpCode" />
+      <el-table-column label="工艺流程" align="center" prop="procCode">
+        <template slot-scope="scope">
+          {{ processList.find(ele => ele.procCode === scope.row.procCode).procName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="目标车间" align="center" prop="arCode">
         <template slot-scope="scope">
           {{ areaList.find(ele => ele.arCode === scope.row.arCode).arName || '' }}
         </template>
       </el-table-column>
-      <el-table-column label="原料仓库" align="center" prop="stCodeMa">
+      <el-table-column label="原料仓库" align="center" prop="msCode">
         <template slot-scope="scope">
-          {{ materialStoreList.find(ele => ele.stCode === scope.row.stCodeMa).stName || '' }}
+          {{ materialStoreList.find(ele => ele.msCode === scope.row.msCode).msName || '' }}
         </template>
       </el-table-column>
-      <el-table-column label="产品仓库" align="center" prop="stCodePr">
+      <el-table-column label="产品仓库" align="center" prop="prsCode">
         <template slot-scope="scope">
-          {{ productStoreList.find(ele => ele.stCode === scope.row.stCodePr).stName || '' }}
+          {{ productStoreList.find(ele => ele.prsCode === scope.row.prsCode).prsName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center" prop="mtStat">
@@ -228,82 +248,114 @@
     />
 
     <!-- 添加或修改生产任务对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="540px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
-        <el-form-item label="所属生产计划" prop="mpCode">
-          <el-select
-            v-model="form.mpCode"
-            placeholder="请选择生产计划"
-            disabled
-          >
-            <el-option
-              v-for="item in manufacturePlanList"
-              :key="item.mpCode"
-              :label="item.mpCode"
-              :value="item.mpCode"
+    <el-dialog :title="title" :visible.sync="open" width="900px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+        <el-col :span="12">
+          <el-form-item label="所属生产计划" prop="mpCode">
+            <el-select
+              v-model="form.mpCode"
+              placeholder="请选择生产计划"
+              disabled
             >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="目标车间" prop="arCode">
-          <el-select
-            v-model="form.arCode"
-            placeholder="请选择车间"
-          >
-            <el-option
-              v-for="item in areaList"
-              :key="item.arCode"
-              :label="item.arName"
-              :value="item.arCode"
+              <el-option
+                v-for="item in manufacturePlanList"
+                :key="item.mpCode"
+                :label="item.mpCode"
+                :value="item.mpCode"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="工艺流程" prop="procCode">
+            <el-select
+              v-model="form.procCode"
+              placeholder="请选择工艺流程"
             >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="原料仓库" prop="stCodeMa">
-          <el-select
-            v-model="form.stCodeMa"
-            placeholder="请选择原料仓库"
-          >
-            <el-option
-              v-for="item in materialStoreList"
-              :key="item.stCode"
-              :label="item.stName"
-              :value="item.stCode"
+              <el-option
+                v-for="item in processList"
+                :key="item.procCode"
+                :label="item.procName"
+                :value="item.procCode"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="目标车间" prop="arCode">
+            <el-select
+              v-model="form.arCode"
+              placeholder="请选择车间"
             >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="产品仓库" prop="stCodePr">
-          <el-select
-            v-model="form.stCodePr"
-            placeholder="请选择产品仓库"
-          >
-            <el-option
-              v-for="item in productStoreList"
-              :key="item.stCode"
-              :label="item.stName"
-              :value="item.stCode"
+              <el-option
+                v-for="item in areaList"
+                :key="item.arCode"
+                :label="item.arName"
+                :value="item.arCode"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="原料仓库" prop="msCode">
+            <el-select
+              v-model="form.msCode"
+              placeholder="请选择原料仓库"
             >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="最晚结束时间" prop="mtEndPlan">
-          <el-date-picker clearable
-            v-model="form.mtEndPlan"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="请选择最晚结束时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="优先级" prop="mtPriority">
-          <el-input v-model="form.mtPriority" placeholder="请输入任务优先级" />
-        </el-form-item>
-        <el-form-item label="计划产品数量" prop="mtQtyPlan">
-          <el-input v-model="form.mtQtyPlan" placeholder="请输入计划产品数量" />
-        </el-form-item>
-        <el-form-item label="描述" prop="mtDesc">
-          <el-input v-model="form.mtDesc" placeholder="请输入描述" />
-        </el-form-item>
+              <el-option
+                v-for="item in materialStoreList"
+                :key="item.msCode"
+                :label="item.msName"
+                :value="item.msCode"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="产品仓库" prop="prsCode">
+            <el-select
+              v-model="form.prsCode"
+              placeholder="请选择产品仓库"
+            >
+              <el-option
+                v-for="item in productStoreList"
+                :key="item.prsCode"
+                :label="item.prsName"
+                :value="item.prsCode"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="最晚结束时间" prop="mtEndPlan">
+            <el-date-picker clearable
+              v-model="form.mtEndPlan"
+              type="datetime"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              placeholder="请选择最晚结束时间">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="优先级" prop="mtPriority">
+            <el-input v-model="form.mtPriority" placeholder="请输入任务优先级" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="计划产品数量" prop="mtQtyPlan">
+            <el-input v-model="form.mtQtyPlan" placeholder="请输入计划产品数量" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="描述" prop="mtDesc">
+            <el-input v-model="form.mtDesc" type="textarea" placeholder="请输入描述" />
+          </el-form-item>
+        </el-col>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
@@ -321,7 +373,8 @@ import { listArea } from "@/api/system/area";
 import { listAreaControl } from "@/api/system/areaControl";
 import { listManufacturePlan } from "@/api/system/manufacturePlan";
 import { listProcess, getBpmnXml } from "@/api/system/process";
-import { listStore } from "@/api/system/store";
+import { listMaterialStore } from "@/api/system/materialStore";
+import { listProductStore } from "@/api/system/productStore";
 
 import { listEquipment } from "@/api/system/equipment";
 import { listEquipmentOperation } from "@/api/system/equipmentOperation";
@@ -385,13 +438,16 @@ export default {
         mpCode: [
           { required: true, message: "所属生产计划不能为空", trigger: "blur" }
         ],
+        procCode: [
+          { required: true, message: "工艺流程不能为空", trigger: "blur" }
+        ],
         arCode: [
           { required: true, message: "目标车间不能为空", trigger: "blur" }
         ],
-        stCodeMa: [
+        msCode: [
           { required: true, message: "原料仓库不能为空", trigger: "blur" }
         ],
-        stCodePr: [
+        prsCode: [
           { required: true, message: "产品仓库不能为空", trigger: "blur" }
         ],
         mtEndPlan: [
@@ -523,8 +579,8 @@ export default {
       return new Promise(async (resolve, reject) => {
         this.loading = true
         try {
-          this.materialStoreList = (await listStore({ stType: '1' })).rows
-          this.productStoreList = (await listStore({ stType: '2' })).rows
+          this.materialStoreList = (await listMaterialStore()).rows
+          this.productStoreList = (await listProductStore()).rows
         } catch (err) {
           reject()
         }
@@ -593,9 +649,10 @@ export default {
       this.form = {
         mtId: undefined,
         mpCode: undefined,
+        procCode: undefined,
         arCode: undefined,
-        stCodeMa: undefined,
-        stCodePr: undefined,
+        msCode: undefined,
+        prsCode: undefined,
         mtStat: undefined,
         mtBegin: undefined,
         mtEndPlan: undefined,

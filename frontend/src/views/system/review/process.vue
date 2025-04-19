@@ -75,12 +75,6 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-box"
-            @click="handleProcessMaterialView(scope.row)"
-          >原料需求</el-button>
-          <el-button
-            size="mini"
-            type="text"
             icon="el-icon-search"
             @click="handleViewer(scope.row)"
           >查看流程</el-button>
@@ -131,7 +125,7 @@
 
 <script>
 import { getProcess, listProcess, getBpmnXml, updateProcess ,listReviewProcess} from "@/api/system/process";
-import { listMaterial } from "@/api/system/material";
+import { listProduct } from "@/api/system/product";
 import ProcessViewer from '@/components/ProcessViewer';
 
 export default {
@@ -195,7 +189,7 @@ export default {
     getProductList() {
       return new Promise((resolve, reject) => {
         this.loading = true;
-        listMaterial({ maType: '2' }).then(response => {
+        listProduct().then(response => {
           this.productList = response.rows
           resolve()
         }).catch(() => {
@@ -293,10 +287,6 @@ export default {
       this.download('system/process/export', {
         ...this.queryParams
       }, `process_${new Date().getTime()}.xlsx`)
-    },
-    // 查看工艺流程的原料需求
-    handleProcessMaterialView(row) {
-      this.$router.push(`/processFlow/processMaterial?procCode=${row.procCode}`)
     },
     /** 查看流程按钮操作 */
     handleViewer(row) {

@@ -10,10 +10,10 @@ import java.math.BigDecimal;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
- * 关联-车间原料库存对象 ices_material_stock
+ * 仓库原料库存对象 ices_material_stock
  *
  * @author ruoyi
- * @date 2025-04-01
+ * @date 2025-04-18
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -23,18 +23,18 @@ public class IcesMaterialStock extends BaseEntity {
     private static final long serialVersionUID=1L;
 
     /**
-     * 车间原料库存ID
+     * 仓库原料库存ID
      */
-    @TableId(value = "ms_id")
-    private Long msId;
+    @TableId(value = "mss_id")
+    private Long mssId;
     /**
      * 仓库原料库存编码
      */
-    private String msCode;
+    private String mssCode;
     /**
      * 仓库
      */
-    private String stCode;
+    private String msCode;
     /**
      * 物料
      */
@@ -42,10 +42,10 @@ public class IcesMaterialStock extends BaseEntity {
     /**
      * 库存
      */
-    private Long msStock;
+    private Float mssStock;
     /**
      * 已删除
      */
-    private Long msDelete;
+    private Long mssDelete;
 
 }

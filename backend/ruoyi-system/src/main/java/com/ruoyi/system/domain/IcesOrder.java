@@ -74,4 +74,20 @@ public class IcesOrder extends BaseEntity {
      */
     private String orDesc;
 
+    /**
+     * 创建人
+     */
+    private String orCman;
+    /**
+     * 创建时间
+     */
+    private String orCdate;
+    /**
+     * 修改人
+     */
+    private String orMman;
+    /**
+     * 修改时间
+     */
+    private String orMdate;
 }

@@ -8,8 +8,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="pmId" column="pm_id"/>
         <result property="pmCode" column="pm_code"/>
         <result property="procCode" column="proc_code"/>
+        <result property="psCode" column="ps_code"/>
         <result property="maCode" column="ma_code"/>
         <result property="pmDemand" column="pm_demand"/>
+        <result property="pmUnit" column="pm_unit"/>
         <result property="pmDelete" column="pm_delete"/>
         <result property="createBy" column="create_by"/>
         <result property="updateBy" column="update_by"/>

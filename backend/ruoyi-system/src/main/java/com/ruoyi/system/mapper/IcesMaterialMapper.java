@@ -6,10 +6,10 @@ import com.ruoyi.common.core.mapper.BaseMapperPlus;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 物料Mapper接口
+ * 原料Mapper接口
  *
  * @author ruoyi
- * @date 2025-03-26
+ * @date 2025-04-17
  */
 @Mapper
 public interface IcesMaterialMapper extends BaseMapperPlus<IcesMaterialMapper, IcesMaterial, IcesMaterialVo> {

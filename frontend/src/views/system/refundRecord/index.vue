@@ -22,7 +22,7 @@
       <el-form-item label="产品" prop="maCode">
         <el-select v-model="queryParams.maCode" placeholder="请选择产品" clearable>
           <el-option
-           v-for="option in materialList"
+           v-for="option in productList"
            :key="option.maCode"
            :label="option.maName"
            :value="option.maCode">
@@ -110,7 +110,7 @@
       </el-table-column>
       <el-table-column label="产品" align="center" prop="maCode" >
         <template slot-scope="scope">
-         {{ materialList.find(ele => ele.maCode === scope.row.maCode).maName || '' }}
+         {{ productList.find(ele => ele.maCode === scope.row.maCode).maName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="客户" align="center" prop="clCode" >
@@ -200,7 +200,7 @@
 <script>
 import { listRefundRecord, getRefundRecord, delRefundRecord, addRefundRecord, updateRefundRecord } from "@/api/system/refundRecord";
 import { listOrder } from "@/api/system/order"
-import { listMaterial } from "@/api/system/material"
+import { listProduct } from "@/api/system/product";
 import { listClient } from "@/api/system/client"
 
 export default {
@@ -226,7 +226,7 @@ export default {
       //订单数据
       orderList: [],
       //产品数据
-      materialList: [],
+      productList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -280,7 +280,7 @@ export default {
     getMaterialByOrder(orCode) {
       const order = this.orderList.find(item => item.orCode === orCode);
       if (order) {
-        return this.materialList.filter(item => item.maCode === order.maCode);
+        return this.productList.filter(item => item.maCode === order.maCode);
       }
       return [];
     },
@@ -323,8 +323,8 @@ export default {
     getMaterialList() {
       return new Promise((resolve, reject) => {
         this.loading = true;
-        listMaterial({ maType: '2' }).then(response => {
-          this.materialList = response.rows
+        listProduct().then(response => {
+          this.productList = response.rows
           resolve()
         }).catch(() => {
           reject()

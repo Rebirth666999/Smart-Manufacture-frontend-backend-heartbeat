@@ -57,6 +57,12 @@ public class IcesProcessMaterialBo extends BaseEntity {
     private Float pmDemand;
 
     /**
+     * 单位
+     */
+    @NotNull(message = "单位不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String pmUnit;
+
+    /**
      * 已删除
      */
     private Long pmDelete;

@@ -93,7 +93,7 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesProcess> lqw = Wrappers.lambdaQuery();
         lqw.eq(StringUtils.isNotBlank(bo.getProcCode()), IcesProcess::getProcCode, bo.getProcCode());
-        lqw.eq(StringUtils.isNotBlank(bo.getMaCode()), IcesProcess::getMaCode, bo.getMaCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getPrCode()), IcesProcess::getPrCode, bo.getPrCode());
         lqw.like(StringUtils.isNotBlank(bo.getProcName()), IcesProcess::getProcName, bo.getProcName());
         lqw.eq(StringUtils.isNotBlank(bo.getProcStat()), IcesProcess::getProcStat, bo.getProcStat());
         lqw.eq(bo.getProcDelete() != null, IcesProcess::getProcDelete, bo.getProcDelete());

@@ -113,7 +113,7 @@ public class IcesClientServiceImpl implements IIcesClientService {
         // 获取原先记录
         IcesClientVo vo = queryById(bo.getClId());
         // 如果原先未启用，现在已启用，则填入发布信息
-        if (vo.getClStat() != null && vo.getClStat().equals("1") && bo.getClStat().equals("2")) {
+        if (bo.getClStat() != null && vo.getClStat().equals("1") && bo.getClStat().equals("2")) {
             bo.setClRman(mMan);
             bo.setClRdate(mDate);
         }

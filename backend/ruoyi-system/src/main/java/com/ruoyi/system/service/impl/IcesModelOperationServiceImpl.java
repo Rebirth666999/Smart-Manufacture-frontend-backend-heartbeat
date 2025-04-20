@@ -7,10 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.ruoyi.system.domain.bo.IcesClientBo;
-import com.ruoyi.system.domain.bo.IcesClientTradeBo;
 import com.ruoyi.system.domain.bo.IcesEquipmentModelBo;
-import com.ruoyi.system.domain.vo.IcesClientVo;
 import com.ruoyi.system.domain.vo.IcesEquipmentModelVo;
 import com.ruoyi.system.service.IIcesCodeService;
 import com.ruoyi.system.service.IIcesEquipmentModelService;
@@ -85,7 +82,7 @@ public class IcesModelOperationServiceImpl implements IIcesModelOperationService
         bo.setMoCode(codeService.insertByType("ModelOperation"));
         IcesModelOperation add = BeanUtil.toBean(bo, IcesModelOperation.class);
         validEntityBeforeSave(add);
-        updateClient(bo);
+        updateEquipmentModel(bo);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
             bo.setMoId(add.getMoId());
@@ -100,7 +97,7 @@ public class IcesModelOperationServiceImpl implements IIcesModelOperationService
     public Boolean updateByBo(IcesModelOperationBo bo) {
         IcesModelOperation update = BeanUtil.toBean(bo, IcesModelOperation.class);
         validEntityBeforeSave(update);
-        updateClient(bo);
+        updateEquipmentModel(bo);
         return baseMapper.updateById(update) > 0;
     }
 
@@ -108,7 +105,7 @@ public class IcesModelOperationServiceImpl implements IIcesModelOperationService
      * 新增/修改模型操作算作对设备模型的修改
      * 需要更新设备模型的修改人、修改时间字段
      */
-    private void updateClient(IcesModelOperationBo bo) {
+    private void updateEquipmentModel(IcesModelOperationBo bo) {
         // 搜索条件
         String emCode = bo.getEmCode();
         IcesEquipmentModelBo equipmentModelBo = new IcesEquipmentModelBo();

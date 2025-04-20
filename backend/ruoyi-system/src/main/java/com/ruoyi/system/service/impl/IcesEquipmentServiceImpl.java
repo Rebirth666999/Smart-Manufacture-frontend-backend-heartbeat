@@ -1,6 +1,9 @@
 package com.ruoyi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.helper.LoginHelper;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
@@ -9,6 +12,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ruoyi.system.domain.IcesCode;
 import com.ruoyi.system.domain.bo.IcesEquipmentModelBo;
+import com.ruoyi.system.domain.vo.IcesClientVo;
 import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,10 +22,8 @@ import com.ruoyi.system.domain.IcesEquipment;
 import com.ruoyi.system.mapper.IcesEquipmentMapper;
 import com.ruoyi.system.service.IIcesEquipmentService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Collection;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 设备Service业务层处理
@@ -109,6 +111,11 @@ public class IcesEquipmentServiceImpl implements IIcesEquipmentService {
     @Override
     public Boolean insertByBo(IcesEquipmentBo bo) {
         bo.setEqCode(codeService.insertByType("Equipment"));
+        String cMan = getLoginUsername();
+        String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        // 填入创建信息
+        bo.setEqCman(cMan);
+        bo.setEqCdate(cDate);
         IcesEquipment add = BeanUtil.toBean(bo, IcesEquipment.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
@@ -123,9 +130,33 @@ public class IcesEquipmentServiceImpl implements IIcesEquipmentService {
      */
     @Override
     public Boolean updateByBo(IcesEquipmentBo bo) {
+        String mMan = getLoginUsername();
+        String mDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        // 现在是已发布状态，则填入发布信息
+        if (bo.getEqStat() != null && bo.getEqStat().equals("4")) {
+            bo.setEqRman(mMan);
+            bo.setEqRdate(mDate);
+        }
+        // 填入修改信息
+        bo.setEqMman(mMan);
+        bo.setEqMdate(mDate);
         IcesEquipment update = BeanUtil.toBean(bo, IcesEquipment.class);
         validEntityBeforeSave(update);
         return baseMapper.updateById(update) > 0;
+    }
+
+    /**
+     * 获取当前用户名称
+     * @return 用户名
+     */
+    private String getLoginUsername() {
+        LoginUser loginUser;
+        try {
+            loginUser = LoginHelper.getLoginUser();
+        } catch (Exception e) {
+            return null;
+        }
+        return ObjectUtil.isNotNull(loginUser) ? loginUser.getUsername() : null;
     }
 
     /**

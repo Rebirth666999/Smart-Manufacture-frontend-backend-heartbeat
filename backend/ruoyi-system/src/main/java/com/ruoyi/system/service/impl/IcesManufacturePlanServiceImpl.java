@@ -1,6 +1,9 @@
 package com.ruoyi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.helper.LoginHelper;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
@@ -18,10 +21,8 @@ import com.ruoyi.system.domain.IcesManufacturePlan;
 import com.ruoyi.system.mapper.IcesManufacturePlanMapper;
 import com.ruoyi.system.service.IIcesManufacturePlanService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Collection;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 生产计划Service业务层处理
@@ -97,6 +98,11 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
     @Override
     public IcesManufacturePlanVo insertByBo(IcesManufacturePlanBo bo) {
         bo.setMpCode(codeService.insertByType("ManufacturePlan"));
+        String cMan = getLoginUsername();
+        String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        // 填入创建信息
+        bo.setMpCman(cMan);
+        bo.setMpCdate(cDate);
         IcesManufacturePlan add = BeanUtil.toBean(bo, IcesManufacturePlan.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
@@ -111,10 +117,15 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
      */
     @Override
     public Boolean updateByBo(IcesManufacturePlanBo bo) {
+        String mMan = getLoginUsername();
+        String mDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        // 填入修改信息
+        bo.setMpMman(mMan);
+        bo.setMpMdate(mDate);
         IcesManufacturePlan update = BeanUtil.toBean(bo, IcesManufacturePlan.class);
         validEntityBeforeSave(update);
         //判断状态是否为已完成
-        if (bo.getMpStat().equals("6")) {
+        if (bo.getMpStat() != null && bo.getMpStat().equals("6")) {
             IcesManufacturePlanBo icesManufacturePlanBo = new IcesManufacturePlanBo();
             icesManufacturePlanBo.setMpCode(update.getMpCode());
             List<IcesManufacturePlanVo> OtherVos = queryList(icesManufacturePlanBo);
@@ -133,6 +144,20 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
             }
         }
         return baseMapper.updateById(update) > 0;
+    }
+
+    /**
+     * 获取当前用户名称
+     * @return 用户名
+     */
+    private String getLoginUsername() {
+        LoginUser loginUser;
+        try {
+            loginUser = LoginHelper.getLoginUser();
+        } catch (Exception e) {
+            return null;
+        }
+        return ObjectUtil.isNotNull(loginUser) ? loginUser.getUsername() : null;
     }
 
     /**

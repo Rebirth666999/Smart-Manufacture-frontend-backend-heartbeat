@@ -1,12 +1,18 @@
 package com.ruoyi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.helper.LoginHelper;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.domain.bo.IcesClientBo;
+import com.ruoyi.system.domain.vo.IcesClientVo;
+import com.ruoyi.system.service.IIcesClientService;
 import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +22,8 @@ import com.ruoyi.system.domain.IcesClientTrade;
 import com.ruoyi.system.mapper.IcesClientTradeMapper;
 import com.ruoyi.system.service.IIcesClientTradeService;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Collection;
@@ -32,6 +40,7 @@ public class IcesClientTradeServiceImpl implements IIcesClientTradeService {
 
     private final IcesClientTradeMapper baseMapper;
     private final IIcesCodeService codeService;
+    private final IIcesClientService clientService;
 
     /**
      * 查询客户贸易信息
@@ -77,6 +86,7 @@ public class IcesClientTradeServiceImpl implements IIcesClientTradeService {
         bo.setCtCode(codeService.insertByType("ClientTrade"));
         IcesClientTrade add = BeanUtil.toBean(bo, IcesClientTrade.class);
         validEntityBeforeSave(add);
+        updateClient(bo);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
             bo.setCtId(add.getCtId());
@@ -91,7 +101,27 @@ public class IcesClientTradeServiceImpl implements IIcesClientTradeService {
     public Boolean updateByBo(IcesClientTradeBo bo) {
         IcesClientTrade update = BeanUtil.toBean(bo, IcesClientTrade.class);
         validEntityBeforeSave(update);
+        updateClient(bo);
         return baseMapper.updateById(update) > 0;
+    }
+
+    /**
+     * 新增/修改贸易信息算作对客户信息的修改
+     * 需要更新客户信息的修改人、修改时间字段
+     */
+    private void updateClient(IcesClientTradeBo bo) {
+        // 搜索条件
+        String clCode = bo.getClCode();
+        IcesClientBo clientBo = new IcesClientBo();
+        clientBo.setClCode(clCode);
+        // 查找列表
+        List<IcesClientVo> vos = clientService.queryList(clientBo);
+        assert vos != null && vos.size() == 1;
+        // 调用更新（设置字段在目标方法进行）
+        clientBo.setClCode(null);
+        clientBo.setClId(vos.get(0).getClId());
+        clientBo.setClStat(vos.get(0).getClStat());
+        clientService.updateByBo(clientBo);
     }
 
     /**

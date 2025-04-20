@@ -126,6 +126,12 @@
               <dict-tag :options="dict.type.ices_process_status" :value="scope.row.procStat"/>
             </template>
           </el-table-column>
+          <el-table-column label="创建人" align="center" prop="procCman" />
+          <el-table-column label="创建时间" align="center" prop="procCdate" />
+          <el-table-column label="激活人" align="center" prop="procRman" />
+          <el-table-column label="激活时间" align="center" prop="procRdate" />
+          <el-table-column label="修改人" align="center" prop="procMman" />
+          <el-table-column label="修改时间" align="center" prop="procMdate" />
           <!-- <el-table-column label="已删除" align="center" prop="procDelete" /> -->
           <!-- <el-table-column label="描述" align="center" prop="procDesc" /> -->
           <el-table-column label="操作" align="center" class-name="small-padding fixed-width">

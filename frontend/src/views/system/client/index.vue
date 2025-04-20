@@ -171,6 +171,12 @@
       </el-table-column>
       <!-- <el-table-column label="已删除" align="center" prop="clDelete" /> -->
       <!-- <el-table-column label="描述" align="center" prop="clDesc" /> -->
+      <el-table-column label="创建人" align="center" prop="clCman" />
+      <el-table-column label="创建时间" align="center" prop="clCdate" />
+      <el-table-column label="发布人" align="center" prop="clRman" />
+      <el-table-column label="发布时间" align="center" prop="clRdate" />
+      <el-table-column label="修改人" align="center" prop="clMman" />
+      <el-table-column label="修改时间" align="center" prop="clMdate" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -212,7 +218,7 @@
           <div>客户贸易信息</div>
         </div>
       </div>
-      <client-trade v-if='idSelect' :key="idSelect" :clCode="codeSelect" />
+      <client-trade v-if='idSelect' :key="idSelect" :clCode="codeSelect" @update="getList" />
       <el-empty v-else description="选中客户信息后即可管理客户贸易信息" />
     </el-card>
   </div>

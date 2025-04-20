@@ -365,6 +365,7 @@ export default {
             updateClientTrade(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
+              this.$emit('update')
               this.getList();
             }).finally(() => {
               this.buttonLoading = false;
@@ -373,6 +374,7 @@ export default {
             addClientTrade(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
+              this.$emit('update')
               this.getList();
             }).finally(() => {
               this.buttonLoading = false;
@@ -389,6 +391,7 @@ export default {
         return delClientTrade(ctIds);
       }).then(() => {
         this.loading = false;
+        this.$emit('update')
         this.getList();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {

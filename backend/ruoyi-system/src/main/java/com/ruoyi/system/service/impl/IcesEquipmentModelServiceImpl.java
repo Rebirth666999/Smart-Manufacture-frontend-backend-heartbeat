@@ -1,6 +1,9 @@
 package com.ruoyi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.helper.LoginHelper;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
@@ -16,10 +19,8 @@ import com.ruoyi.system.domain.IcesEquipmentModel;
 import com.ruoyi.system.mapper.IcesEquipmentModelMapper;
 import com.ruoyi.system.service.IIcesEquipmentModelService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Collection;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 设备模型Service业务层处理
@@ -94,6 +95,11 @@ public class IcesEquipmentModelServiceImpl implements IIcesEquipmentModelService
     @Override
     public Boolean insertByBo(IcesEquipmentModelBo bo) {
         bo.setEmCode(codeService.insertByType("EquipmentModel"));
+        String cMan = getLoginUsername();
+        String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        // 填入创建信息
+        bo.setEmCman(cMan);
+        bo.setEmCdate(cDate);
         IcesEquipmentModel add = BeanUtil.toBean(bo, IcesEquipmentModel.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
@@ -108,9 +114,28 @@ public class IcesEquipmentModelServiceImpl implements IIcesEquipmentModelService
      */
     @Override
     public Boolean updateByBo(IcesEquipmentModelBo bo) {
+        String mMan = getLoginUsername();
+        String mDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        // 填入修改信息
+        bo.setEmMman(mMan);
+        bo.setEmMdate(mDate);
         IcesEquipmentModel update = BeanUtil.toBean(bo, IcesEquipmentModel.class);
         validEntityBeforeSave(update);
         return baseMapper.updateById(update) > 0;
+    }
+
+    /**
+     * 获取当前用户名称
+     * @return 用户名
+     */
+    private String getLoginUsername() {
+        LoginUser loginUser;
+        try {
+            loginUser = LoginHelper.getLoginUser();
+        } catch (Exception e) {
+            return null;
+        }
+        return ObjectUtil.isNotNull(loginUser) ? loginUser.getUsername() : null;
     }
 
     /**

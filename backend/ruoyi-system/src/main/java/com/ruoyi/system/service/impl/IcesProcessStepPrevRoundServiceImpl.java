@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.domain.IcesProcess;
 import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -66,6 +67,7 @@ public class IcesProcessStepPrevRoundServiceImpl implements IIcesProcessStepPrev
     private LambdaQueryWrapper<IcesProcessStepPrevRound> buildQueryWrapper(IcesProcessStepPrevRoundBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesProcessStepPrevRound> lqw = Wrappers.lambdaQuery();
+        lqw.eq(com.ruoyi.common.utils.StringUtils.isNotBlank(bo.getProcCode()), IcesProcessStepPrevRound::getProcCode, bo.getProcCode());
         lqw.eq(StringUtils.isNotBlank(bo.getPsprCode()), IcesProcessStepPrevRound::getPsprCode, bo.getPsprCode());
         lqw.eq(StringUtils.isNotBlank(bo.getPsCodePrev()), IcesProcessStepPrevRound::getPsCodePrev, bo.getPsCodePrev());
         lqw.eq(StringUtils.isNotBlank(bo.getPsCodeCur()), IcesProcessStepPrevRound::getPsCodeCur, bo.getPsCodeCur());

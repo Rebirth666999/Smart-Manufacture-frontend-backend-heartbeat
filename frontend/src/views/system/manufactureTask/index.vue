@@ -839,20 +839,28 @@ export default {
           "preemptive": false,
         }
 
+        // 对应车间主控节点
         const areaControl = (await listAreaControl({ arCode: row.arCode })).rows
+        // 所有的设备原子操作
         const equipmentAtomOperationList = (await listEquipmentAtomOperation()).rows
-
+        // 当前生产任务的所有设备任务
         const deviceTask = (await listDeviceTask({ mtCode: row.mtCode })).rows
+        // 当前生产任务的所有任务参数
         const deviceTaskParam = (await listDeviceTaskParam({ mtCode: row.mtCode })).rows
+        // 当前生产任务的所有设备任务前序关系
         const deviceTaskPrev = (await listDeviceTaskPrev({ mtCode: row.mtCode })).rows
         let processRoute = []
 
         // 处理每个task
         for (let task of deviceTask) {
+          // 当前task的前序
           const prev = deviceTaskPrev.filter(ele => ele.dtCodeCur === task.dtCode)
-          const equipment = this.eqList.find(ele => ele.eqCode === task.eqCode)
+          // 当前task的设备操作步骤
+          // 排除开始和结束两个步骤
           const equipmentOperationStep = this.eosList.find(ele => ele.eoCode === task.eoCode && ele.eaoCode)
+          // 当前task的原子操作
           const equipmentAtomOperation = equipmentAtomOperationList.find(ele => ele.eaoCode === equipmentOperationStep.eaoCode)
+          // 当前task的所有操作参数（模板）
           const equipmentOperationStepParams = this.eospaList.filter(ele => ele.eosCode === equipmentOperationStep.eosCode)
           // 取出所需信息
           let route = {
@@ -863,8 +871,11 @@ export default {
             "opParam": {}
           }
           // 解析参数信息
-          for (let param of deviceTaskParam) {
+          // 遍历当前任务的所有实际参数
+          for (let param of deviceTaskParam.filter(ele => ele.dtCode === task.dtCode)) {
+            // 找到参数模板
             const paramInfo = equipmentOperationStepParams.find(ele => ele.eospaCode === param.eospaCode)
+            // 解析参数
             if (paramInfo) {
               try {
                 if (paramInfo.eospaType === '1')
@@ -881,6 +892,7 @@ export default {
                   return
                 }
               } catch (error) {
+                console.error("参数解析出错", error)
                 this.$modal.msgError("参数类型不合法，请重新生成设备任务")
                 return
               }

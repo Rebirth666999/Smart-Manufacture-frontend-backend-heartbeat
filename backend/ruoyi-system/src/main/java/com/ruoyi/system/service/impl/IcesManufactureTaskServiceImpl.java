@@ -105,7 +105,13 @@ public class IcesManufactureTaskServiceImpl implements IIcesManufactureTaskServi
     @Override
     public Boolean insertByBo(IcesManufactureTaskBo bo) {
         bo.setMtCode(codeService.insertByType("ManufactureTask"));
+        // 生产计划下发人、下发时间信息更新
         updateManufacturePlan(bo);
+        // 更新生产任务创建人、创建时间信息
+        String cMan = getLoginUsername();
+        String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        bo.setMtCman(cMan);
+        bo.setMtCdate(cDate);
         IcesManufactureTask add = BeanUtil.toBean(bo, IcesManufactureTask.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
@@ -120,6 +126,19 @@ public class IcesManufactureTaskServiceImpl implements IIcesManufactureTaskServi
      */
     @Override
     public Boolean updateByBo(IcesManufactureTaskBo bo) {
+        String mMan = getLoginUsername();
+        String mDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        // 填入修改信息
+        bo.setMtMman(mMan);
+        bo.setMtMdate(mDate);
+        // 如果状态是由已生成任务4变为进行中5，则说明进行了下发
+        // 需要填入下发人、下发时间
+        // 先找到原先的bo
+        IcesManufactureTaskVo old = queryById(bo.getMtId());
+        if (bo.getMtStat() != null && old.getMtStat().equals("4") && bo.getMtStat().equals("5")) {
+            bo.setMtRman(mMan);
+            bo.setMtRdate(mDate);
+        }
         IcesManufactureTask update = BeanUtil.toBean(bo, IcesManufactureTask.class);
         validEntityBeforeSave(update);
         // bo是否已完成
@@ -143,6 +162,7 @@ public class IcesManufactureTaskServiceImpl implements IIcesManufactureTaskServi
 
     /**
      * 新增生产任务算作下发生产计划
+     * 更新生产计划下发人、下发时间
      */
     private void updateManufacturePlan(IcesManufactureTaskBo bo) {
         // 搜索条件

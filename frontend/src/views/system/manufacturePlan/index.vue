@@ -152,8 +152,8 @@
           <!-- <el-table-column label="描述" align="center" prop="mpDesc" /> -->
           <el-table-column label="创建人" align="center" prop="mpCman" />
           <el-table-column label="创建时间" align="center" prop="mpCdate" />
-          <el-table-column label="发布人" align="center" prop="mpRman" />
-          <el-table-column label="发布时间" align="center" prop="mpRdate" />
+          <el-table-column label="下发人" align="center" prop="mpRman" />
+          <el-table-column label="下发时间" align="center" prop="mpRdate" />
           <el-table-column label="修改人" align="center" prop="mpMman" />
           <el-table-column label="修改时间" align="center" prop="mpMdate" />
           <el-table-column label="操作" align="center" class-name="small-padding fixed-width">

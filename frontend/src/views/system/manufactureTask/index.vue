@@ -173,8 +173,14 @@
       <el-table-column label="优先级" align="center" prop="mtPriority" />
       <el-table-column label="计划产品数量" align="center" prop="mtQtyPlan" />
       <el-table-column label="已完成产品数量" align="center" prop="mtQtyReal" />
+      <el-table-column label="创建人" align="center" prop="mtCman" />
+      <el-table-column label="创建时间" align="center" prop="mtCdate" />
+      <el-table-column label="下发人" align="center" prop="mtRman" />
+      <el-table-column label="下发时间" align="center" prop="mtRdate" />
+      <el-table-column label="修改人" align="center" prop="mtMman" />
+      <el-table-column label="修改时间" align="center" prop="mtMdate" />
       <!-- <el-table-column label="已删除" align="center" prop="mtDelete" /> -->
-      <el-table-column label="描述" align="center" prop="mtDesc" />
+      <!-- <el-table-column label="描述" align="center" prop="mtDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

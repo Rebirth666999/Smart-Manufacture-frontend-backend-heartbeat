@@ -10,7 +10,13 @@
       class="mb8"
     >
     </el-alert>
-
+    <el-card class="view-card">
+      <div slot="header">
+        <div class="card-header">
+          <div>订单审核信息</div>
+        </div>
+      </div>
+      <div>
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="所需产品" prop="maCode">
         <el-select
@@ -94,8 +100,18 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
+    <el-table
+          v-loading="loading"
+          :data="orderList"
+          @current-change="handleCurrentChange"
+          highlight-current-row
+          max-height="240"
+        >
+          <el-table-column label="选择" width="55" align="center">
+            <template slot-scope="scope">
+              <el-radio :value="scope.row.orId === idSelect" :label="true" />
+            </template>
+          </el-table-column> 
       <el-table-column label="订单ID" align="center" prop="orCode" v-if="true"/>
       <el-table-column label="所需产品" align="center" prop="maCode">
         <template slot-scope="scope">
@@ -196,15 +212,30 @@
         </el-descriptions-item>
       </el-descriptions>
     </el-dialog>
+    </div>
+    </el-card>
+    <el-card class="controlled-card">
+      <div slot="header">
+        <div class="card-header">
+          <div>订单产品信息</div>
+        </div>
+      </div>
+      <order-demand v-if='idSelect' :key="idSelect" :orCode="codeSelect" />
+      <el-empty v-else description="选中订单后即可管理订单产品" />
+    </el-card>
   </div>
 </template>
 
 <script>
 import { getOrder, listReviewOrder, updateOrder } from "@/api/system/order";
 import { listProduct } from "@/api/system/product";
+import orderDemand from "@/views/system/orderDemand";
 
 export default {
   name: "OrderReview",
+  components: {
+    orderDemand
+  },
   dicts: ['ices_order_status_review'],
   data() {
     return {
@@ -212,8 +243,10 @@ export default {
       buttonLoading: false,
       // 遮罩层
       loading: true,
-      // 选中数组
-      ids: [],
+      // 选中内容
+      idSelect: undefined,
+      // 选中code
+      codeSelect: undefined,
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -371,20 +404,23 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
+      this.idSelect = undefined
+      this.codeSelect = undefined
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
       this.daterangeOrDeadline = [];
       this.resetForm("queryForm");
+      this.idSelect = undefined
+      this.codeSelect = undefined
       this.queryParams.maCode = this.$route.query.maCode
       this.handleQuery();
     },
-    // 多选框选中数据
-    handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.orCode)
-      this.single = selection.length!==1
-      this.multiple = !selection.length
+    // 选中数据条目
+    handleCurrentChange(current, old) {
+      this.idSelect = current.orId
+      this.codeSelect = current.orCode
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -415,3 +451,27 @@ export default {
   }
 };
 </script> 
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+::v-deep .el-radio span.el-radio__label {
+  display: none;
+}
+.view-card {
+  max-height: 50vh;
+  overflow: scroll;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 17px;
+}
+.controlled-card {
+  margin-top: 10px;
+}
+</style>

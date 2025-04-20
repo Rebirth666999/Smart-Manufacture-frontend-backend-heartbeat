@@ -14,7 +14,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 退货记录业务对象 ices_refund_record
  *
  * @author ruoyi
- * @date 2025-03-28
+ * @date 2025-04-19
  */
 
 @Data
@@ -30,7 +30,6 @@ public class IcesRefundRecordBo extends BaseEntity {
     /**
      * 退货记录编码
      */
-    @NotBlank(message = "退货记录编码不能为空", groups = { EditGroup.class })
     private String rrCode;
 
     /**
@@ -42,11 +41,13 @@ public class IcesRefundRecordBo extends BaseEntity {
     /**
      * 产品
      */
-    private String maCode;
+    @NotBlank(message = "产品不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String prCode;
 
     /**
      * 客户
      */
+    @NotBlank(message = "客户不能为空", groups = { AddGroup.class, EditGroup.class })
     private String clCode;
 
     /**
@@ -58,13 +59,24 @@ public class IcesRefundRecordBo extends BaseEntity {
     /**
      * 已删除
      */
-    @NotNull(message = "已删除不能为空", groups = { EditGroup.class })
     private Long rrDelete;
 
     /**
      * 描述
      */
     private String rrDesc;
+
+    /**
+     * 办理人
+     */
+    @NotBlank(message = "办理人不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String rrMan;
+
+    /**
+     * 办理日期
+     */
+    @NotBlank(message = "办理日期不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String rrDate;
 
 
 }

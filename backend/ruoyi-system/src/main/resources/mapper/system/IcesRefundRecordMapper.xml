@@ -8,7 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="rrId" column="rr_id"/>
         <result property="rrCode" column="rr_code"/>
         <result property="orCode" column="or_code"/>
-        <result property="maCode" column="ma_code"/>
+        <result property="prCode" column="pr_code"/>
         <result property="clCode" column="cl_code"/>
         <result property="rrCount" column="rr_count"/>
         <result property="rrDelete" column="rr_delete"/>
@@ -17,6 +17,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy" column="update_by"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
+        <result property="rrMan" column="rr_man"/>
+        <result property="rrDate" column="rr_date"/>
     </resultMap>
 
 

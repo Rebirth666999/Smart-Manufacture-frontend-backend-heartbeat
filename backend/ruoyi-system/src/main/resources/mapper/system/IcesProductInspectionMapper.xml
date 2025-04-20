@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.IcesProductInspectionMapper">
+
+    <resultMap type="com.ruoyi.system.domain.IcesProductInspection" id="IcesProductInspectionResult">
+        <result property="piId" column="pi_id"/>
+        <result property="piCode" column="pi_code"/>
+        <result property="pbCode" column="pb_code"/>
+        <result property="piMan" column="pi_man"/>
+        <result property="piSdate" column="pi_sdate"/>
+        <result property="piDept" column="pi_dept"/>
+        <result property="piEdate" column="pi_edate"/>
+        <result property="piDelete" column="pi_delete"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

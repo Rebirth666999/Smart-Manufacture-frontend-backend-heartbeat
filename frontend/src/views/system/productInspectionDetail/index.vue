@@ -8,23 +8,9 @@
         >
           <el-option
             v-for="item in productInspectionList"
-            :key="item.piiCode"
-            :label="item.piiName"
-            :value="item.piiCode"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="产品类型" prop="prCode">
-        <el-select
-          v-model="queryParams.prCode"
-          placeholder="请选择产品类型"
-        >
-          <el-option
-            v-for="item in productList"
-            :key="item.prCode"
-            :label="item.prName"
-            :value="item.prCode"
+            :key="item.piCode"
+            :label="item.piCode"
+            :value="item.piCode"
           >
           </el-option>
         </el-select>
@@ -215,6 +201,9 @@ import { listProductInspection } from "@/api/system/productInspection";
 export default {
   name: "ProductInspectionDetail",
   dicts: ['ices_yn'],
+  props: {
+    piCode: String
+  },
   data() {
     return {
       // 按钮loading

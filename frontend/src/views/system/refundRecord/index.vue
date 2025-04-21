@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="退货记录编码" prop="rrCode">
-        <el-input
-          v-model="queryParams.rrCode"
-          placeholder="请输入退货记录编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="订单" prop="orCode">
         <el-select
           v-model="queryParams.orCode"
@@ -59,7 +51,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item> -->
-      <el-form-item label="办理人" prop="rrMan">
+      <!-- <el-form-item label="办理人" prop="rrMan">
         <el-input
           v-model="queryParams.rrMan"
           placeholder="请输入办理人"
@@ -74,7 +66,7 @@
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -168,7 +160,7 @@
     />
 
     <!-- 添加或修改退货记录对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="520px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="订单" prop="orCode">
           <el-select
@@ -217,12 +209,6 @@
         </el-form-item>
         <el-form-item label="描述" prop="rrDesc">
           <el-input v-model="form.rrDesc" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="办理人" prop="rrMan">
-          <el-input v-model="form.rrMan" placeholder="请输入办理人" />
-        </el-form-item>
-        <el-form-item label="办理日期" prop="rrDate">
-          <el-input v-model="form.rrDate" placeholder="请输入办理日期" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -300,12 +286,6 @@ export default {
         ],
         rrCount: [
           { required: true, message: "数量不能为空", trigger: "blur" }
-        ],
-        rrMan: [
-          { required: true, message: "办理人不能为空", trigger: "blur" }
-        ],
-        rrDate: [
-          { required: true, message: "办理日期不能为空", trigger: "blur" }
         ]
       }
     };

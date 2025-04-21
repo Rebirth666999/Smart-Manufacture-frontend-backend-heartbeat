@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="质检单明细编码" prop="pidCode">
-        <el-input
-          v-model="queryParams.pidCode"
-          placeholder="请输入质检单明细编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="85px">
       <el-form-item label="所属质检单" prop="piCode">
         <el-select
           v-model="queryParams.piCode"
@@ -150,8 +142,8 @@
     />
 
     <!-- 添加或修改产品质检单明细对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="550px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="92px">
         <el-form-item label="所属质检单" prop="piCode">
           <el-select
           v-model="form.piCode"
@@ -184,7 +176,7 @@
           <el-input v-model="form.pidBatchNum" placeholder="请输入产品编码" />
         </el-form-item>
         <el-form-item label="质检结果" prop="pidResult">
-          <el-input v-model="form.pidResult" placeholder="请输入质检结果" />
+          <el-input v-model="form.pidResult" type="textarea" placeholder="请输入质检结果" />
         </el-form-item>
         <el-form-item label="合格标志" prop="pidFlag">
           <el-input v-model="form.pidFlag" placeholder="请输入合格标志" />

@@ -30,12 +30,18 @@
         </el-select>
       </el-form-item>
       <el-form-item label="合格标志" prop="pidFlag">
-        <el-input
+        <el-select
           v-model="queryParams.pidFlag"
-          placeholder="请输入合格标志"
+          placeholder="请选择是否合格"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="dict in dict.type.ices_yn"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          ></el-option>
+        </el-select>
       </el-form-item>
       <!-- <el-form-item label="已删除" prop="pidDelete">
         <el-input
@@ -179,7 +185,18 @@
           <el-input v-model="form.pidResult" type="textarea" placeholder="请输入质检结果" />
         </el-form-item>
         <el-form-item label="合格标志" prop="pidFlag">
-          <el-input v-model="form.pidFlag" placeholder="请输入合格标志" />
+          <el-select
+            v-model="form.pidFlag"
+            placeholder="请选择是否合格"
+            clearable
+          >
+            <el-option
+              v-for="dict in dict.type.ices_yn"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -197,6 +214,7 @@ import { listProductInspection } from "@/api/system/productInspection";
 
 export default {
   name: "ProductInspectionDetail",
+  dicts: ['ices_yn'],
   data() {
     return {
       // 按钮loading

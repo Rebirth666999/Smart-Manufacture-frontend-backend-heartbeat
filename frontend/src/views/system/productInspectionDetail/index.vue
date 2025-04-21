@@ -95,7 +95,11 @@
       <el-table-column label="质检单明细ID" align="center" prop="pidId" v-if="true"/>
       <el-table-column label="质检单明细编码" align="center" prop="pidCode" />
       <el-table-column label="所属质检单" align="center" prop="piCode" />
-      <el-table-column label="产品类型" align="center" prop="prCode" />
+      <el-table-column label="产品类型" align="center" prop="prCode">
+        <template slot-scope="scope">
+          {{ productList[0].prName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="产品编码" align="center" prop="pidBatchNum" />
       <el-table-column label="质检结果" align="center" prop="pidResult" />
       <el-table-column label="合格标志" align="center" prop="pidFlag">

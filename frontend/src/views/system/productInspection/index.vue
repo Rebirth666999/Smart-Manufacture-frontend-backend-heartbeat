@@ -58,7 +58,11 @@
           </el-table-column>
           <el-table-column label="质检单ID" align="center" prop="piId" v-if="true" />
           <el-table-column label="质检单编码" align="center" prop="piCode" />
-          <el-table-column label="批次" align="center" prop="pbCode" />
+          <el-table-column label="批次" align="center" prop="pbCode">
+            <template slot-scope="scope">
+              {{ productBatchList.find(ele => ele.pbCode === scope.row.pbCode).pbBatch || '' }}
+            </template>
+          </el-table-column>
           <el-table-column label="负责人" align="center" prop="piMan" />
           <el-table-column label="开始日期" align="center" prop="piSdate" />
           <el-table-column label="部门" align="center" prop="piDept" />

@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
  * 退货记录Mapper接口
  *
  * @author ruoyi
- * @date 2025-03-28
+ * @date 2025-04-19
  */
 @Mapper
 public interface IcesRefundRecordMapper extends BaseMapperPlus<IcesRefundRecordMapper, IcesRefundRecord, IcesRefundRecordVo> {

@@ -13,7 +13,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 退货记录对象 ices_refund_record
  *
  * @author ruoyi
- * @date 2025-03-28
+ * @date 2025-04-19
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -38,7 +38,7 @@ public class IcesRefundRecord extends BaseEntity {
     /**
      * 产品
      */
-    private String maCode;
+    private String prCode;
     /**
      * 客户
      */
@@ -55,5 +55,13 @@ public class IcesRefundRecord extends BaseEntity {
      * 描述
      */
     private String rrDesc;
+    /**
+     * 办理人
+     */
+    private String rrMan;
+    /**
+     * 办理日期
+     */
+    private String rrDate;
 
 }

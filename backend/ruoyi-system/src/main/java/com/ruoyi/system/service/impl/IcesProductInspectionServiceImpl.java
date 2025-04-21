@@ -1,6 +1,9 @@
 package com.ruoyi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.helper.LoginHelper;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
@@ -16,9 +19,8 @@ import com.ruoyi.system.domain.IcesProductInspection;
 import com.ruoyi.system.mapper.IcesProductInspectionMapper;
 import com.ruoyi.system.service.IIcesProductInspectionService;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Collection;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 产品质检单Service业务层处理
@@ -75,6 +77,14 @@ public class IcesProductInspectionServiceImpl implements IIcesProductInspectionS
     @Override
     public Boolean insertByBo(IcesProductInspectionBo bo) {
         bo.setPiCode(codeService.insertByType("ProductInspection"));
+        // 自动填写负责人，部门，开始日期
+        String[] cInfo = getLoginUsername();
+        String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        if (cInfo != null) {
+            bo.setPiMan(cInfo[0]);
+            bo.setPiDept(cInfo[1]);
+        }
+        bo.setPiSdate(cDate);
         IcesProductInspection add = BeanUtil.toBean(bo, IcesProductInspection.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
@@ -93,6 +103,28 @@ public class IcesProductInspectionServiceImpl implements IIcesProductInspectionS
         validEntityBeforeSave(update);
         return baseMapper.updateById(update) > 0;
     }
+
+    /**
+     * 获取当前用户信息
+     * @return 包含用户名和部门名的数组
+     */
+    private String[] getLoginUsername() {
+        LoginUser loginUser;
+        try {
+            loginUser = LoginHelper.getLoginUser();
+        } catch (Exception e) {
+            return null;
+        }
+        if (ObjectUtil.isNotNull(loginUser)) {
+            String[] info = new String[2];
+            info[0] = loginUser.getUsername();
+            info[1] = loginUser.getDeptName();
+            return info;
+        } else {
+            return null;
+        }
+    }
+
 
     /**
      * 保存前的数据校验

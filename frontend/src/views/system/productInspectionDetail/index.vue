@@ -5,6 +5,7 @@
         <el-select
           v-model="queryParams.piCode"
           placeholder="请选择所属质检单"
+          disabled
         >
           <el-option
             v-for="item in productInspectionList"
@@ -140,6 +141,7 @@
           <el-select
           v-model="form.piCode"
           placeholder="请选择所属质检单"
+          disabled
         >
           <el-option
             v-for="item in productInspectionList"
@@ -260,21 +262,48 @@ export default {
     };
   },
   async created() {
-    this.getList();
+    if (this.piCode) {
+      this.queryParams.piCode = this.piCode
+    }
     await this.getProductInspectionList();
     await this.getProductList();
+    this.getList();
+  },
+  async activated() {
+    if (this.piCode) {
+      this.queryParams.piCode = this.piCode
+    }
+    await this.getProductInspectionList();
+    await this.getProductList();
+    this.getList();
   },
   methods: {
-    //查询质检单列表
+    // 查询质检单列表
     getProductInspectionList() {
-      listProductInspection().then(response => {
-        this.productInspectionList = response.rows;
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listProductInspection().then(response => {
+          this.productInspectionList = response.rows;
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
       })
     },
-    //查询产品列表
+    // 查询产品列表
     getProductList() {
-      listProduct().then(response => {
-        this.productList = response.rows;
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listProduct().then(response => {
+          this.productList = response.rows;
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
       })
     },
     /** 查询产品质检单明细列表 */
@@ -319,6 +348,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams.piCode = this.piCode
       this.handleQuery();
     },
     // 多选框选中数据
@@ -330,6 +360,9 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      if (this.piCode) {
+        this.form.piCode = this.piCode
+      }
       this.open = true;
       this.title = "添加产品质检单明细";
     },

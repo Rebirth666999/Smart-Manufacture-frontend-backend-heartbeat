@@ -88,8 +88,8 @@
       <el-table-column label="订单" align="center" prop="orCode">
         <template slot-scope="scope">
           {{ orderList.find(ele => ele.orCode === scope.row.orCode).orName || '' }}
-      </template>
-        </el-table-column>
+        </template>
+      </el-table-column>
       <el-table-column label="所需产品" align="center" prop="prCode">
         <template slot-scope="scope">
           {{ productList.find(ele => ele.prCode === scope.row.prCode).prName || '' }}

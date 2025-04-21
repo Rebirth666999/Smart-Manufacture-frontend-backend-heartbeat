@@ -42,3 +42,12 @@ export function delProductInspectionDetail(pidId) {
     method: 'delete'
   })
 }
+
+// 新增产品质检单明细
+export function listInspectionProduct(data) {
+  return request({
+    url: '/system/productInspectionDetail/getProduct',
+    method: 'post',
+    data: data
+  })
+}

@@ -156,6 +156,7 @@
           <el-select
           v-model="form.prCode"
           placeholder="请选择产品类型"
+          disabled
         >
           <el-option
             v-for="item in productList"
@@ -196,8 +197,7 @@
 </template>
 
 <script>
-import { listProductInspectionDetail, getProductInspectionDetail, delProductInspectionDetail, addProductInspectionDetail, updateProductInspectionDetail } from "@/api/system/productInspectionDetail";
-import { listProduct } from "@/api/system/product";
+import { listProductInspectionDetail, getProductInspectionDetail, delProductInspectionDetail, addProductInspectionDetail, updateProductInspectionDetail, listInspectionProduct } from "@/api/system/productInspectionDetail";
 import { listProductInspection } from "@/api/system/productInspection";
 
 export default {
@@ -258,7 +258,8 @@ export default {
         pidBatchNum: [
           { required: true, message: "产品编码不能为空", trigger: "blur" }
         ],
-      }
+      },
+      currentProductInspection: null
     };
   },
   async created() {
@@ -284,6 +285,9 @@ export default {
         this.loading = true;
         listProductInspection().then(response => {
           this.productInspectionList = response.rows;
+          if (this.piCode) {
+            this.currentProductInspection = this.productInspectionList.find(ele => ele.piCode === this.piCode)
+          }
           resolve()
         }).catch(() => {
           reject()
@@ -296,8 +300,11 @@ export default {
     getProductList() {
       return new Promise((resolve, reject) => {
         this.loading = true;
-        listProduct().then(response => {
-          this.productList = response.rows;
+        listInspectionProduct(this.currentProductInspection).then(response => {
+          this.productList = [response];
+          if (this.piCode) {
+            this.form.prCode = this.productList[0].prCode
+          }
           resolve()
         }).catch(() => {
           reject()
@@ -362,6 +369,7 @@ export default {
       this.reset();
       if (this.piCode) {
         this.form.piCode = this.piCode
+        this.form.prCode = this.productList[0].prCode
       }
       this.open = true;
       this.title = "添加产品质检单明细";

@@ -7,14 +7,13 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.ruoyi.system.service.IIcesCodeService;
+import com.ruoyi.system.domain.bo.*;
+import com.ruoyi.system.domain.vo.*;
+import com.ruoyi.system.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.ruoyi.system.domain.bo.IcesProductInspectionDetailBo;
-import com.ruoyi.system.domain.vo.IcesProductInspectionDetailVo;
 import com.ruoyi.system.domain.IcesProductInspectionDetail;
 import com.ruoyi.system.mapper.IcesProductInspectionDetailMapper;
-import com.ruoyi.system.service.IIcesProductInspectionDetailService;
 
 import java.util.List;
 import java.util.Map;
@@ -32,6 +31,10 @@ public class IcesProductInspectionDetailServiceImpl implements IIcesProductInspe
 
     private final IcesProductInspectionDetailMapper baseMapper;
     private final IIcesCodeService codeService;
+    private final IIcesProductInspectionService productInspectionService;
+    private final IIcesProductBatchService productBatchService;
+    private final IIcesOrderDemandService orderDemandService;
+    private final IIcesProductService productService;
 
     /**
      * 查询产品质检单明细
@@ -94,6 +97,26 @@ public class IcesProductInspectionDetailServiceImpl implements IIcesProductInspe
         IcesProductInspectionDetail update = BeanUtil.toBean(bo, IcesProductInspectionDetail.class);
         validEntityBeforeSave(update);
         return baseMapper.updateById(update) > 0;
+    }
+
+    @Override
+    public IcesProductVo getProduct(IcesProductInspectionBo bo) {
+        // 找到批次
+        IcesProductBatchBo pbBo = new IcesProductBatchBo();
+        pbBo.setPbCode(bo.getPbCode());
+        List<IcesProductBatchVo> pbVos = productBatchService.queryList(pbBo);
+        assert pbVos != null && pbVos.size() == 1;
+        // 找到产品需求
+        IcesOrderDemandBo odBo = new IcesOrderDemandBo();
+        odBo.setOdCode(pbVos.get(0).getOdCode());
+        List<IcesOrderDemandVo> odVos = orderDemandService.queryList(odBo);
+        assert odVos != null && odVos.size() == 1;
+        // 找到产品
+        IcesProductBo prBo = new IcesProductBo();
+        prBo.setPrCode(odVos.get(0).getPrCode());
+        List<IcesProductVo> prVos = productService.queryList(prBo);
+        assert prVos != null && prVos.size() == 1;
+        return prVos.get(0);
     }
 
     /**

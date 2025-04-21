@@ -44,11 +44,16 @@
           <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
         </el-row>
 
-        <el-table v-loading="loading" :data="productInspectionList" @current-change="handleCurrentChange"
-          highlight-current-row max-height="240">
+        <el-table
+          v-loading="loading"
+          :data="productInspectionList"
+          @current-change="handleCurrentChange"
+          highlight-current-row
+          max-height="240"
+        >
           <el-table-column label="选择" width="55" align="center">
             <template slot-scope="scope">
-              <el-radio :value="scope.row.orId === idSelect" :label="true" />
+              <el-radio :value="scope.row.piId === idSelect" :label="true" />
             </template>
           </el-table-column>
           <el-table-column label="质检单ID" align="center" prop="piId" v-if="true" />
@@ -96,7 +101,7 @@
           <div>产品质检单明细</div>
         </div>
       </div>
-      <order-demand v-if='idSelect' :key="idSelect" :orCode="codeSelect" />
+      <product-inspection-detail v-if='idSelect' :key="idSelect" :piCode="codeSelect" />
       <el-empty v-else description="选中质检单后即可管理质检单明细" />
     </el-card>
   </div>
@@ -218,8 +223,8 @@ export default {
     },
     // 选中数据条目
     handleCurrentChange(current, old) {
-      this.idSelect = current.orId
-      this.codeSelect = current.orCode
+      this.idSelect = current.piId
+      this.codeSelect = current.piCode
     },
     /** 新增按钮操作 */
     handleAdd() {

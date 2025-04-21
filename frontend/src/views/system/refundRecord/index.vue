@@ -73,9 +73,21 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="退货记录ID" align="center" prop="rrId" v-if="true" />
       <el-table-column label="退货记录编码" align="center" prop="rrCode" />
-      <el-table-column label="订单" align="center" prop="orCode" />
-      <el-table-column label="产品" align="center" prop="prCode" />
-      <el-table-column label="客户" align="center" prop="clCode" />
+      <el-table-column label="订单" align="center" prop="orCode">
+        <template slot-scope="scope">
+          {{ orderList.find(ele => ele.orCode === scope.row.orCode).orName || '' }}
+        </template>
+      </el-table-column>
+      <el-table-column label="产品" align="center" prop="prCode">
+        <template slot-scope="scope">
+          {{ productList.find(ele => ele.prCode === scope.row.prCode).prName || '' }}
+        </template>
+      </el-table-column>
+      <el-table-column label="客户" align="center" prop="clCode">
+        <template slot-scope="scope">
+          {{ clientList.find(ele => ele.clCode === scope.row.clCode).clName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="数量" align="center" prop="rrCount" />
       <!-- <el-table-column label="已删除" align="center" prop="rrDelete" />
       <el-table-column label="描述" align="center" prop="rrDesc" /> -->

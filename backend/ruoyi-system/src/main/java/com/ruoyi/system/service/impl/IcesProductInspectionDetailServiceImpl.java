@@ -1,6 +1,9 @@
 package com.ruoyi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.helper.LoginHelper;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
@@ -15,6 +18,8 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.IcesProductInspectionDetail;
 import com.ruoyi.system.mapper.IcesProductInspectionDetailMapper;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Collection;
@@ -80,6 +85,13 @@ public class IcesProductInspectionDetailServiceImpl implements IIcesProductInspe
     @Override
     public Boolean insertByBo(IcesProductInspectionDetailBo bo) {
         bo.setPidCode(codeService.insertByType("ProductInspectionDetail"));
+        if (StringUtils.isNotBlank(bo.getPidFlag())) {
+            // 创建时已有合格标志，则填入质检人信息
+            String cMan = getLoginUsername();
+            String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+            bo.setPidMan(cMan);
+            bo.setPidDate(cDate);
+        }
         IcesProductInspectionDetail add = BeanUtil.toBean(bo, IcesProductInspectionDetail.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
@@ -94,6 +106,15 @@ public class IcesProductInspectionDetailServiceImpl implements IIcesProductInspe
      */
     @Override
     public Boolean updateByBo(IcesProductInspectionDetailBo bo) {
+        // 找到原先的内容
+        IcesProductInspectionDetailVo vo = queryById(bo.getPidId());
+        if (StringUtils.isBlank(vo.getPidFlag()) && StringUtils.isNotBlank(bo.getPidFlag())) {
+            // 之前没有合格标志，现在有合格标志，则填入质检人信息
+            String mMan = getLoginUsername();
+            String mDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+            bo.setPidMan(mMan);
+            bo.setPidDate(mDate);
+        }
         IcesProductInspectionDetail update = BeanUtil.toBean(bo, IcesProductInspectionDetail.class);
         validEntityBeforeSave(update);
         return baseMapper.updateById(update) > 0;
@@ -117,6 +138,20 @@ public class IcesProductInspectionDetailServiceImpl implements IIcesProductInspe
         List<IcesProductVo> prVos = productService.queryList(prBo);
         assert prVos != null && prVos.size() == 1;
         return prVos.get(0);
+    }
+
+    /**
+     * 获取当前用户名称
+     * @return 用户名
+     */
+    private String getLoginUsername() {
+        LoginUser loginUser;
+        try {
+            loginUser = LoginHelper.getLoginUser();
+        } catch (Exception e) {
+            return null;
+        }
+        return ObjectUtil.isNotNull(loginUser) ? loginUser.getUsername() : null;
     }
 
     /**

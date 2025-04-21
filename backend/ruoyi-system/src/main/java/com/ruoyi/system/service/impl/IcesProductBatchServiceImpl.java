@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesProductBatchBo;
@@ -30,6 +31,7 @@ import java.util.Collection;
 public class IcesProductBatchServiceImpl implements IIcesProductBatchService {
 
     private final IcesProductBatchMapper baseMapper;
+    private final IIcesCodeService codeService;
 
     /**
      * 查询实际产品批次编码
@@ -73,6 +75,7 @@ public class IcesProductBatchServiceImpl implements IIcesProductBatchService {
      */
     @Override
     public Boolean insertByBo(IcesProductBatchBo bo) {
+        bo.setPbCode(codeService.insertByType("ProductBatch"));
         IcesProductBatch add = BeanUtil.toBean(bo, IcesProductBatch.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

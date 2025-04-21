@@ -13,7 +13,7 @@ import java.util.Date;
  * 退货记录视图对象 ices_refund_record
  *
  * @author ruoyi
- * @date 2025-03-28
+ * @date 2025-04-19
  */
 @Data
 @ExcelIgnoreUnannotated
@@ -43,7 +43,7 @@ public class IcesRefundRecordVo {
      * 产品
      */
     @ExcelProperty(value = "产品")
-    private String maCode;
+    private String prCode;
 
     /**
      * 客户
@@ -68,6 +68,18 @@ public class IcesRefundRecordVo {
      */
     @ExcelProperty(value = "描述")
     private String rrDesc;
+
+    /**
+     * 办理人
+     */
+    @ExcelProperty(value = "办理人")
+    private String rrMan;
+
+    /**
+     * 办理日期
+     */
+    @ExcelProperty(value = "办理日期")
+    private String rrDate;
 
 
 }

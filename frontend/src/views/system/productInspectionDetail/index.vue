@@ -1,32 +1,32 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="退货记录编码" prop="rrCode">
+      <el-form-item label="质检单明细编码" prop="pidCode">
         <el-input
-          v-model="queryParams.rrCode"
-          placeholder="请输入退货记录编码"
+          v-model="queryParams.pidCode"
+          placeholder="请输入质检单明细编码"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="订单" prop="orCode">
+      <el-form-item label="所属质检单" prop="piCode">
         <el-select
-          v-model="queryParams.orCode"
-          placeholder="请选择订单"
+          v-model="queryParams.piCode"
+          placeholder="请选择所属质检单"
         >
           <el-option
-            v-for="item in orderList"
-            :key="item.orCode"
-            :label="item.orName"
-            :value="item.orCode"
+            v-for="item in productInspectionList"
+            :key="item.piiCode"
+            :label="item.piiName"
+            :value="item.piiCode"
           >
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="产品" prop="prCode">
+      <el-form-item label="产品类型" prop="prCode">
         <el-select
           v-model="queryParams.prCode"
-          placeholder="请选择产品"
+          placeholder="请选择产品类型"
         >
           <el-option
             v-for="item in productList"
@@ -37,44 +37,22 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="客户" prop="clCode">
-        <el-select
-          v-model="queryParams.clCode"
-          placeholder="请选择客户"
-        >
-          <el-option
-            v-for="item in clientList"
-            :key="item.clCode"
-            :label="item.clName"
-            :value="item.clCode"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <!-- <el-form-item label="已删除" prop="rrDelete">
+      <el-form-item label="合格标志" prop="pidFlag">
         <el-input
-          v-model="queryParams.rrDelete"
+          v-model="queryParams.pidFlag"
+          placeholder="请输入合格标志"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <!-- <el-form-item label="已删除" prop="pidDelete">
+        <el-input
+          v-model="queryParams.pidDelete"
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item> -->
-      <el-form-item label="办理人" prop="rrMan">
-        <el-input
-          v-model="queryParams.rrMan"
-          placeholder="请输入办理人"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="办理日期" prop="rrDate">
-        <el-input
-          v-model="queryParams.rrDate"
-          placeholder="请输入办理日期"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -89,7 +67,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:refundRecord:add']"
+          v-hasPermi="['system:productInspectionDetail:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -100,7 +78,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['system:refundRecord:edit']"
+          v-hasPermi="['system:productInspectionDetail:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -111,7 +89,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['system:refundRecord:remove']"
+          v-hasPermi="['system:productInspectionDetail:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -121,24 +99,28 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['system:refundRecord:export']"
+          v-hasPermi="['system:productInspectionDetail:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="refundRecordList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="productInspectionDetailList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="退货记录ID" align="center" prop="rrId" v-if="true"/>
-      <el-table-column label="退货记录编码" align="center" prop="rrCode" />
-      <el-table-column label="订单" align="center" prop="orCode" />
-      <el-table-column label="产品" align="center" prop="prCode" />
-      <el-table-column label="客户" align="center" prop="clCode" />
-      <el-table-column label="数量" align="center" prop="rrCount" />
-      <!-- <el-table-column label="已删除" align="center" prop="rrDelete" />
-      <el-table-column label="描述" align="center" prop="rrDesc" /> -->
-      <el-table-column label="办理人" align="center" prop="rrMan" />
-      <el-table-column label="办理日期" align="center" prop="rrDate" />
+      <el-table-column label="质检单明细ID" align="center" prop="pidId" v-if="true"/>
+      <el-table-column label="质检单明细编码" align="center" prop="pidCode" />
+      <el-table-column label="所属质检单" align="center" prop="piCode" />
+      <el-table-column label="产品类型" align="center" prop="prCode" />
+      <el-table-column label="产品编码" align="center" prop="pidBatchNum" />
+      <el-table-column label="质检结果" align="center" prop="pidResult" />
+      <el-table-column label="合格标志" align="center" prop="pidFlag">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.ices_yn" :value="scope.row.pidFlag"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="质检人" align="center" prop="pidMan" />
+      <el-table-column label="质检日期" align="center" prop="pidDate" />
+      <!-- <el-table-column label="已删除" align="center" prop="pidDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -146,14 +128,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:refundRecord:edit']"
+            v-hasPermi="['system:productInspectionDetail:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:refundRecord:remove']"
+            v-hasPermi="['system:productInspectionDetail:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -167,27 +149,27 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改退货记录对话框 -->
+    <!-- 添加或修改产品质检单明细对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="订单" prop="orCode">
+        <el-form-item label="所属质检单" prop="piCode">
           <el-select
-          v-model="form.orCode"
-          placeholder="请选择订单"
+          v-model="form.piCode"
+          placeholder="请选择所属质检单"
         >
           <el-option
-            v-for="item in orderList"
-            :key="item.orCode"
-            :label="item.orName"
-            :value="item.orCode"
+            v-for="item in productInspectionList"
+            :key="item.piCode"
+            :label="item.piName"
+            :value="item.piCode"
           >
           </el-option>
         </el-select>
         </el-form-item>
-        <el-form-item label="产品" prop="prCode">
+        <el-form-item label="产品类型" prop="prCode">
           <el-select
-          v-model="queryParams.prCode"
-          placeholder="请选择产品"
+          v-model="form.prCode"
+          placeholder="请选择产品类型"
         >
           <el-option
             v-for="item in productList"
@@ -198,31 +180,14 @@
           </el-option>
         </el-select>
         </el-form-item>
-        <el-form-item label="客户" prop="clCode">
-          <el-select
-          v-model="queryParams.clCode"
-          placeholder="请选择客户"
-        >
-          <el-option
-            v-for="item in clientList"
-            :key="item.clCode"
-            :label="item.clName"
-            :value="item.clCode"
-          >
-          </el-option>
-        </el-select>
+        <el-form-item label="产品编码" prop="pidBatchNum">
+          <el-input v-model="form.pidBatchNum" placeholder="请输入产品编码" />
         </el-form-item>
-        <el-form-item label="数量" prop="rrCount">
-          <el-input v-model="form.rrCount" placeholder="请输入数量" />
+        <el-form-item label="质检结果" prop="pidResult">
+          <el-input v-model="form.pidResult" placeholder="请输入质检结果" />
         </el-form-item>
-        <el-form-item label="描述" prop="rrDesc">
-          <el-input v-model="form.rrDesc" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="办理人" prop="rrMan">
-          <el-input v-model="form.rrMan" placeholder="请输入办理人" />
-        </el-form-item>
-        <el-form-item label="办理日期" prop="rrDate">
-          <el-input v-model="form.rrDate" placeholder="请输入办理日期" />
+        <el-form-item label="合格标志" prop="pidFlag">
+          <el-input v-model="form.pidFlag" placeholder="请输入合格标志" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -234,14 +199,12 @@
 </template>
 
 <script>
-import { listRefundRecord, getRefundRecord, delRefundRecord, addRefundRecord, updateRefundRecord } from "@/api/system/refundRecord";
-import { listOrder } from "@/api/system/order";
+import { listProductInspectionDetail, getProductInspectionDetail, delProductInspectionDetail, addProductInspectionDetail, updateProductInspectionDetail } from "@/api/system/productInspectionDetail";
 import { listProduct } from "@/api/system/product";
-import { listClient } from "@/api/system/client";
-
+import { listProductInspection } from "@/api/system/productInspection";
 
 export default {
-  name: "RefundRecord",
+  name: "ProductInspectionDetail",
   data() {
     return {
       // 按钮loading
@@ -258,13 +221,11 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 退货记录表格数据
-      refundRecordList: [],
-      //订单列表
-      orderList: [],
-      //客户列表
-      clientList: [],
-      //产品列表
+      // 产品质检单明细表格数据
+      productInspectionDetailList: [],
+      //所属质检单列表
+      productInspectionList: [],
+      //产品类型列表
       productList: [],
       // 弹出层标题
       title: "",
@@ -274,53 +235,41 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        rrCode: undefined,
-        orCode: undefined,
+        pidCode: undefined,
+        piCode: undefined,
         prCode: undefined,
-        clCode: undefined,
-        rrDelete: undefined,
-        rrMan: undefined,
-        rrDate: undefined
+        pidFlag: undefined,
+        pidDelete: undefined,
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        rrId: [
-          { required: true, message: "退货记录ID不能为空", trigger: "blur" }
+        pidId: [
+          { required: true, message: "质检单明细ID不能为空", trigger: "blur" }
         ],
-        orCode: [
-          { required: true, message: "订单不能为空", trigger: "blur" }
+        piCode: [
+          { required: true, message: "所属质检单不能为空", trigger: "blur" }
         ],
         prCode: [
-          { required: true, message: "产品不能为空", trigger: "blur" }
+          { required: true, message: "产品类型不能为空", trigger: "blur" }
         ],
-        clCode: [
-          { required: true, message: "客户不能为空", trigger: "blur" }
+        pidBatchNum: [
+          { required: true, message: "产品编码不能为空", trigger: "blur" }
         ],
-        rrCount: [
-          { required: true, message: "数量不能为空", trigger: "blur" }
-        ],
-        rrMan: [
-          { required: true, message: "办理人不能为空", trigger: "blur" }
-        ],
-        rrDate: [
-          { required: true, message: "办理日期不能为空", trigger: "blur" }
-        ]
       }
     };
   },
   async created() {
     this.getList();
-    await this.getOrderList();
+    await this.getProductInspectionList();
     await this.getProductList();
-    await this.getClientList();
   },
   methods: {
-    //查询订单列表
-    getOrderList() {
-      listOrder().then(response => {
-        this.orderList = response.rows;
+    //查询质检单列表
+    getProductInspectionList() {
+      listProductInspection().then(response => {
+        this.productInspectionList = response.rows;
       })
     },
     //查询产品列表
@@ -329,17 +278,11 @@ export default {
         this.productList = response.rows;
       })
     },
-    //查询客户列表
-    getClientList() {
-      listClient().then(response => {
-        this.clientList = response.rows;
-      })
-    },
-    /** 查询退货记录列表 */
+    /** 查询产品质检单明细列表 */
     getList() {
       this.loading = true;
-      listRefundRecord(this.queryParams).then(response => {
-        this.refundRecordList = response.rows;
+      listProductInspectionDetail(this.queryParams).then(response => {
+        this.productInspectionDetailList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -352,20 +295,20 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        rrId: undefined,
-        rrCode: undefined,
-        orCode: undefined,
+        pidId: undefined,
+        pidCode: undefined,
+        piCode: undefined,
         prCode: undefined,
-        clCode: undefined,
-        rrCount: undefined,
-        rrDelete: 0,
-        rrDesc: undefined,
+        pidBatchNum: undefined,
+        pidResult: undefined,
+        pidFlag: undefined,
+        pidMan: undefined,
+        pidDate: undefined,
+        pidDelete: undefined,
         createBy: undefined,
         updateBy: undefined,
         createTime: undefined,
-        updateTime: undefined,
-        rrMan: undefined,
-        rrDate: undefined
+        updateTime: undefined
       };
       this.resetForm("form");
     },
@@ -381,7 +324,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.rrId)
+      this.ids = selection.map(item => item.pidId)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -389,18 +332,18 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加退货记录";
+      this.title = "添加产品质检单明细";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.loading = true;
       this.reset();
-      const rrId = row.rrId || this.ids
-      getRefundRecord(rrId).then(response => {
+      const pidId = row.pidId || this.ids
+      getProductInspectionDetail(pidId).then(response => {
         this.loading = false;
         this.form = response.data;
         this.open = true;
-        this.title = "修改退货记录";
+        this.title = "修改产品质检单明细";
       });
     },
     /** 提交按钮 */
@@ -408,8 +351,8 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           this.buttonLoading = true;
-          if (this.form.rrId != null) {
-            updateRefundRecord(this.form).then(response => {
+          if (this.form.pidId != null) {
+            updateProductInspectionDetail(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
@@ -417,7 +360,7 @@ export default {
               this.buttonLoading = false;
             });
           } else {
-            addRefundRecord(this.form).then(response => {
+            addProductInspectionDetail(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -430,10 +373,10 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const rrIds = row.rrId || this.ids;
-      this.$modal.confirm('是否确认删除退货记录编号为"' + rrIds + '"的数据项？').then(() => {
+      const pidIds = row.pidId || this.ids;
+      this.$modal.confirm('是否确认删除产品质检单明细编号为"' + pidIds + '"的数据项？').then(() => {
         this.loading = true;
-        return delRefundRecord(rrIds);
+        return delProductInspectionDetail(pidIds);
       }).then(() => {
         this.loading = false;
         this.getList();
@@ -445,13 +388,14 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('system/refundRecord/export', {
+      this.download('system/productInspectionDetail/export', {
         ...this.queryParams
-      }, `refundRecord_${new Date().getTime()}.xlsx`)
+      }, `productInspectionDetail_${new Date().getTime()}.xlsx`)
     }
   }
 };
 </script>
+
 <style scoped>
 .el-select {
   width: 100%;

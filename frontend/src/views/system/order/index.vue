@@ -23,14 +23,6 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="订单名称" prop="orName">
-            <el-input
-              v-model="queryParams.orName"
-              placeholder="请输入订单名称"
-              clearable
-              @keyup.enter.native="handleQuery"
-            />
-          </el-form-item>
           <el-form-item label="状态" prop="orStat">
             <el-select v-model="queryParams.orStat" placeholder="请选择状态" clearable>
               <el-option
@@ -139,7 +131,6 @@
               {{ clientList.find(ele => ele.clCode === scope.row.clCode).clName || '' }}
             </template>
           </el-table-column>
-          <el-table-column label="订单名称" align="center" prop="orName" />
           <el-table-column label="状态" align="center" prop="orStat">
             <template slot-scope="scope">
               <dict-tag :options="dict.type.ices_order_status" :value="scope.row.orStat"/>

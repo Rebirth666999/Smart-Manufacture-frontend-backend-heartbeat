@@ -6,7 +6,7 @@
           <el-option
             v-for="option in orderList"
             :key="option.orCode"
-            :label="option.orName"
+            :label="option.orCode"
             :value="option.orCode">
           </el-option>
         </el-select>
@@ -85,11 +85,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="所需产品ID" align="center" prop="odId" v-if="true"/>
       <el-table-column label="所需产品编码" align="center" prop="odCode" />
-      <el-table-column label="订单" align="center" prop="orCode">
-        <template slot-scope="scope">
-          {{ orderList.find(ele => ele.orCode === scope.row.orCode).orName || '' }}
-        </template>
-      </el-table-column>
+      <el-table-column label="订单" align="center" prop="orCode" />
       <el-table-column label="所需产品" align="center" prop="prCode">
         <template slot-scope="scope">
           {{ productList.find(ele => ele.prCode === scope.row.prCode).prName || '' }}
@@ -134,7 +130,7 @@
             <el-option
               v-for="option in orderList"
               :key="option.orCode"
-              :label="option.orName"
+              :label="option.orCode"
               :value="option.orCode">
             </el-option>
           </el-select>

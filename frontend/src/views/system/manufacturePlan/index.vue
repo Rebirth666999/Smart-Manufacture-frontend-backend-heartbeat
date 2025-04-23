@@ -17,7 +17,7 @@
               <el-option
                 v-for="item in orderList"
                 :key="item.orCode"
-                :label="item.orName"
+                :label="item.orCode"
                 :value="item.orCode"
               >
               </el-option>
@@ -114,11 +114,7 @@
           </el-table-column>
           <el-table-column label="生产计划ID" align="center" prop="mpId" v-if="true"/>
           <el-table-column label="生产计划编码" align="center" prop="mpCode" />
-          <el-table-column label="所属订单" align="center" prop="orCode">
-            <template slot-scope="scope">
-              {{ orderList.find(ele => ele.orCode === scope.row.orCode).orName || '' }}
-            </template>
-          </el-table-column>
+          <el-table-column label="所属订单" align="center" prop="orCode" />
           <el-table-column label="产品" align="center" prop="prCode">
             <template slot-scope="scope">
               {{ productList.find(ele => ele.prCode === scope.row.prCode).prName || '' }}

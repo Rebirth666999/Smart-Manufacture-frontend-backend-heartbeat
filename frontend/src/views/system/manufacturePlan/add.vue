@@ -21,7 +21,7 @@
         <el-col :span="12">
           <el-form-item label="所属订单" prop="orCode">
             <el-select v-model="form.orCode" placeholder="请选择订单" @change="selectOrder">
-              <el-option v-for="item in orderList" :key="item.orCode" :label="item.orName" :value="item.orCode">
+              <el-option v-for="item in orderList" :key="item.orCode" :label="item.orCode" :value="item.orCode">
               </el-option>
             </el-select>
           </el-form-item>

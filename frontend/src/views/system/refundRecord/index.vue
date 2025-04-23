@@ -3,7 +3,7 @@
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="订单" prop="orCode">
         <el-select v-model="queryParams.orCode" placeholder="请选择订单">
-          <el-option v-for="item in orderList" :key="item.orCode" :label="item.orName" :value="item.orCode">
+          <el-option v-for="item in orderList" :key="item.orCode" :label="item.orCode" :value="item.orCode">
           </el-option>
         </el-select>
       </el-form-item>
@@ -73,11 +73,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="退货记录ID" align="center" prop="rrId" v-if="true" />
       <el-table-column label="退货记录编码" align="center" prop="rrCode" />
-      <el-table-column label="订单" align="center" prop="orCode">
-        <template slot-scope="scope">
-          {{ orderList.find(ele => ele.orCode === scope.row.orCode).orName || '' }}
-        </template>
-      </el-table-column>
+      <el-table-column label="订单" align="center" prop="orCode" />
       <el-table-column label="产品" align="center" prop="prCode">
         <template slot-scope="scope">
           {{ productList.find(ele => ele.prCode === scope.row.prCode).prName || '' }}
@@ -111,7 +107,7 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="订单" prop="orCode">
           <el-select v-model="form.orCode" placeholder="请选择订单" @change="selectOrder">
-            <el-option v-for="item in orderList" :key="item.orCode" :label="item.orName" :value="item.orCode">
+            <el-option v-for="item in orderList" :key="item.orCode" :label="item.orCode" :value="item.orCode">
             </el-option>
           </el-select>
         </el-form-item>

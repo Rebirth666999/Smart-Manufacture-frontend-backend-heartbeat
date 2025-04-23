@@ -9,7 +9,7 @@
           <el-option
             v-for="item in orderDemandList"
             :key="item.odCode"
-            :label="`【${item.orName}】${item.prName}`"
+            :label="`【${item.orCode}】${item.prName}`"
             :value="item.odCode"
           >
           </el-option>
@@ -135,7 +135,7 @@
           <el-option
             v-for="item in orderDemandList"
             :key="item.odCode"
-            :label="`【${item.orName}】${item.prName}`"
+            :label="`【${item.orCode}】${item.prName}`"
             :value="item.odCode"
           >
           </el-option>
@@ -278,7 +278,6 @@ export default {
           response.rows.forEach(demand => {
             this.orderDemandList.push({
               ...demand,
-              orName: this.orderList.find(ele => ele.orCode === demand.orCode).orName,
               prName: this.productList.find(ele => ele.prCode === demand.prCode).prName
             })
           });
@@ -406,7 +405,7 @@ export default {
     parseOdCode(odCode) {
       const demand = this.orderDemandList.find(ele => ele.odCode === odCode)
       if (demand) {
-        return `【${demand.orName}】${demand.prName}`
+        return `【${demand.orCode}】${demand.prName}`
       } else return ''
     }
   }

@@ -382,10 +382,6 @@ import { listProcess, getBpmnXml } from "@/api/system/process";
 import { listMaterialStore } from "@/api/system/materialStore";
 import { listProductStore } from "@/api/system/productStore";
 
-import { listEquipment } from "@/api/system/equipment";
-import { listEquipmentOperation } from "@/api/system/equipmentOperation";
-import { listModelOperation } from "@/api/system/modelOperation";
-import { listEquipmentModel } from "@/api/system/equipmentModel";
 import { listEquipmentOperationStep } from "@/api/system/equipmentOperationStep";
 import { listEquipmentOperationStepParam } from "@/api/system/equipmentOperationStepParam";import { listEquipmentAtomOperation } from "@/api/system/equipmentAtomOperation";
 
@@ -476,12 +472,6 @@ export default {
       materialStoreList: [],
       // 产品仓库列表
       productStoreList: [],
-      // 设备模型列表
-      emList: [],
-      // 模型操作列表
-      moList: [],
-      // 设备操作列表
-      eoList: [],
       // 设备操作步骤列表
       eosList: [],
       // 设备操作步骤参数列表
@@ -525,10 +515,6 @@ export default {
       return new Promise(async (resolve, reject) => {
         this.loading = true
         try {
-          this.emList = (await listEquipmentModel()).rows
-          this.moList = (await listModelOperation()).rows
-          this.eoList = (await listEquipmentOperation()).rows
-          this.eqList = (await listEquipment()).rows
           this.eosList = (await listEquipmentOperationStep()).rows
           this.eospaList = (await listEquipmentOperationStepParam()).rows
         } catch (err) {

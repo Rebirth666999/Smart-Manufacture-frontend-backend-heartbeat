@@ -275,7 +275,10 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          this.parseCustObject()
+          if (!this.parseCustObject()) {
+            this.$modal.msgWarning("请完整填写定制详情");
+            return
+          }
           this.buttonLoading = true;
           if (this.form.prId != null) {
             updateProduct(this.form).then(response => {
@@ -358,19 +361,26 @@ export default {
     },
     /**
      * 定制详情List转换为JSON
+     * @returns 是否存在不合法记录
      * @author YangZY
      * @date 20250423
      */
     parseCustObject() {
       const result = {}
+      let success = true
       this.custList.forEach(cust => {
-        if (cust.custKey in result) {
-          result[cust.custKey].push(cust.custVal)
+        if (cust.custKey.length > 0 && cust.custVal.length > 0) {
+          if (cust.custKey in result) {
+            result[cust.custKey].push(cust.custVal)
+          } else {
+            result[cust.custKey] = [cust.custVal]
+          }
         } else {
-          result[cust.custKey] = [cust.custVal]
+          success = false
         }
       })
       this.form.prCust = JSON.stringify(result)
+      return success
     }
   }
 };

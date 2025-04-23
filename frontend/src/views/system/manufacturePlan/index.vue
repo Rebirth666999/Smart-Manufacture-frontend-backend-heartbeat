@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-card class="view-card">
+    <el-card shadow="never">
       <div slot="header">
         <div class="card-header">
           <div>生产计划信息</div>
@@ -208,7 +208,7 @@
         />
       </div>
     </el-card>
-    <el-card class="controlled-card">
+    <el-card shadow="never" class="controlled-card">
       <div slot="header">
         <div class="card-header">
           <div>生产任务信息</div>
@@ -436,10 +436,6 @@ export default {
 }
 ::v-deep .el-radio span.el-radio__label {
   display: none;
-}
-.view-card {
-  max-height: 50vh;
-  overflow: scroll;
 }
 .card-header {
   display: flex;

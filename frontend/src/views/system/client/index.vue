@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-card class="view-card">
+    <el-card shadow="never">
       <div slot="header">
         <div class="card-header">
           <div>客户基本信息</div>
@@ -119,17 +119,16 @@
     </el-row>
 
     <el-table
-          v-loading="loading"
-          :data="clientList"
-          @current-change="handleCurrentChange"
-          highlight-current-row
-          max-height="240"
-        >
-          <el-table-column label="选择" width="55" align="center">
-            <template slot-scope="scope">
-              <el-radio :value="scope.row.clId === idSelect" :label="true" />
-            </template>
-          </el-table-column>
+      v-loading="loading"
+      :data="clientList"
+      @current-change="handleCurrentChange"
+      highlight-current-row
+    >
+      <el-table-column label="选择" width="55" align="center">
+        <template slot-scope="scope">
+          <el-radio :value="scope.row.clId === idSelect" :label="true" />
+        </template>
+      </el-table-column>
       <el-table-column label="基本信息ID" align="center" prop="clId" v-if="true"/>
       <el-table-column label="客户编码" align="center" prop="clCode" />
       <el-table-column label="客户等级" align="center" prop="cllCode">
@@ -212,7 +211,7 @@
     />
   </div>
     </el-card>
-    <el-card class="controlled-card">
+    <el-card shadow="never" class="controlled-card">
       <div slot="header">
         <div class="card-header">
           <div>客户贸易信息</div>
@@ -391,10 +390,6 @@ export default {
 }
 ::v-deep .el-radio span.el-radio__label {
   display: none;
-}
-.view-card {
-  max-height: 50vh;
-  overflow: scroll;
 }
 .card-header {
   display: flex;

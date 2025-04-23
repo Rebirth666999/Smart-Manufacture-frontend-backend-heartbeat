@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-card class="view-card">
+    <el-card shadow="never">
       <div slot="header">
         <div class="card-header">
           <div>产品质检单信息</div>
@@ -99,7 +99,7 @@
         </el-dialog>
       </div>
     </el-card>
-    <el-card class="controlled-card">
+    <el-card shadow="never" class="controlled-card">
       <div slot="header">
         <div class="card-header">
           <div>产品质检单明细</div>

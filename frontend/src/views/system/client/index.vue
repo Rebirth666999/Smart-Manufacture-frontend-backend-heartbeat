@@ -188,12 +188,6 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-location-information"
-            @click="handleClientTrade(scope.row)"
-          >贸易信息</el-button>
-          <el-button
-            size="mini"
-            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:client:remove']"
@@ -373,10 +367,6 @@ export default {
       this.download('system/client/export', {
         ...this.queryParams
       }, `client_${new Date().getTime()}.xlsx`)
-    },
-    // 查看客户贸易信息
-    handleClientTrade(row) {
-      this.$router.push(`/clientTrade?clCode=${row.clCode}`)
     }
   }
 };

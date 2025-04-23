@@ -277,6 +277,11 @@ export default {
               this.form = response.data
               // 初始化设计器
               this.designerData.bpmnXml = ''
+              this.designerData.modelId = "model_" + this.form.procId;
+              this.designerData.form = {
+                processName: this.form.procName,
+                processKey: "process_" + this.form.procId
+              }
               this.designerOpen = true
             }).finally(() => {
               this.buttonLoading = false;

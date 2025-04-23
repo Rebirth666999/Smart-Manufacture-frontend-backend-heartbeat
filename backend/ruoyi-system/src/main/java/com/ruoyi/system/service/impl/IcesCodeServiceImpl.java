@@ -1,23 +1,14 @@
 package com.ruoyi.system.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.common.core.page.TableDataInfo;
-import com.ruoyi.common.core.domain.PageQuery;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.ruoyi.system.domain.bo.IcesCodeBo;
-import com.ruoyi.system.domain.vo.IcesCodeVo;
 import com.ruoyi.system.domain.IcesCode;
 import com.ruoyi.system.mapper.IcesCodeMapper;
 import com.ruoyi.system.service.IIcesCodeService;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Collection;
 
 /**
  * 业务编码Service业务层处理
@@ -31,7 +22,13 @@ public class IcesCodeServiceImpl implements IIcesCodeService {
 
     private final IcesCodeMapper baseMapper;
 
-    // 按类型新增业务编码
+    /**
+     * 按类型新增编码
+     * @param type 类型字符串
+     * @return 编码字符串
+     * @author YangZY
+     * @time 20250423
+     */
     @Override
     public String insertByType(String type) {
         // 筛选此类型的所有编码
@@ -49,5 +46,35 @@ public class IcesCodeServiceImpl implements IIcesCodeService {
         baseMapper.insert(code);
         // 构造字符串返回
         return code.getCoType() + "-" + String.format("%05d", code.getCoNum());
+    }
+
+    /**
+     * 检查编码是否合法
+     *
+     * @param type 类型
+     * @param code 编码
+     * @author YangZY
+     * @date 20250423
+     */
+    @Override
+    public void checkCode(String type, String code) {
+        String pattern = "^" + type + "-\\d{5}$";
+        if (!code.matches(pattern)) {
+            throw new RuntimeException("编码格式错误");
+        } else {
+            // 查找编码是否存在
+            IcesCode query = new IcesCode();
+            query.setCoType(type);
+            query.setCoNum(Long.parseLong(code.split("-")[1]));
+            LambdaQueryWrapper<IcesCode> lqw = Wrappers.lambdaQuery();
+            lqw.eq(query.getCoType() != null, IcesCode::getCoType, query.getCoType());
+            lqw.eq(query.getCoNum() != null, IcesCode::getCoNum, query.getCoNum());
+            List<IcesCode> codeList = baseMapper.selectList(lqw);
+            if (codeList.isEmpty()) {
+                baseMapper.insert(query);
+            } else {
+                throw new RuntimeException("编码已存在");
+            }
+        }
     }
 }

@@ -77,7 +77,6 @@
           :data="materialLedgerList"
           @current-change="handleCurrentChange"
           highlight-current-row
-          max-height="240"
         >
         <el-table-column label="选择" width="55" align="center">
           <template slot-scope="scope">

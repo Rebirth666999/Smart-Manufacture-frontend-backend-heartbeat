@@ -36,14 +36,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="IP地址" prop="acIp">
-        <el-input
-          v-model="queryParams.acIp"
-          placeholder="请输入IP地址"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <!-- <el-form-item label="已删除" prop="acDelete">
         <el-input
           v-model="queryParams.acDelete"
@@ -114,7 +106,7 @@
         </template>
       </el-table-column>
       <el-table-column label="名称" align="center" prop="acName" />
-      <el-table-column label="IP地址" align="center" prop="acIp" />
+      <el-table-column label="任务下发URL" align="center" prop="acIp" />
       <!-- <el-table-column label="已删除" align="center" prop="acDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -145,8 +137,8 @@
     />
 
     <!-- 添加或修改主控节点对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="140px">
         <el-form-item label="车间" prop="arCode">
           <el-select
             v-model="form.arCode"
@@ -165,8 +157,17 @@
         <el-form-item label="名称" prop="acName">
           <el-input v-model="form.acName" placeholder="请输入名称" />
         </el-form-item>
-        <el-form-item label="IP地址" prop="acIp">
-          <el-input v-model="form.acIp" placeholder="请输入IP地址" />
+        <el-form-item prop="acIp">
+          <span slot="label">
+            <el-tooltip placement="top">
+              <div slot="content">
+                <div>任务下发URL需包括协议、IP地址、端口号</div>
+              </div>
+              <i class="el-icon-question"></i>
+            </el-tooltip>
+            任务下发URL
+          </span>
+          <el-input v-model="form.acIp" type="textarea" placeholder="请输入URL" />
         </el-form-item>
         <el-form-item label="描述" prop="acDesc">
           <el-input v-model="form.acDesc" type="textarea" placeholder="请输入内容" />

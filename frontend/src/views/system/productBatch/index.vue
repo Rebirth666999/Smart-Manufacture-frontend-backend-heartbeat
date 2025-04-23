@@ -1,14 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="产品批次编码" prop="pbCode">
-        <el-input
-          v-model="queryParams.pbCode"
-          placeholder="请输入产品批次编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
       <el-form-item label="订单产品需求" prop="odCode">
         <el-select
           v-model="queryParams.odCode"
@@ -17,7 +9,7 @@
           <el-option
             v-for="item in orderDemandList"
             :key="item.odCode"
-            :label="item.odName"
+            :label="`【${item.orCode}】${item.prName}`"
             :value="item.odCode"
           >
           </el-option>
@@ -95,7 +87,11 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="产品批次ID" align="center" prop="pbId" v-if="true"/>
       <el-table-column label="产品批次编码" align="center" prop="pbCode" />
-      <el-table-column label="订单产品需求" align="center" prop="odCode" />
+      <el-table-column label="订单产品需求" align="center" prop="odCode">
+        <template slot-scope="scope">
+          {{ parseOdCode(scope.row.odCode) }}
+        </template>
+      </el-table-column>
       <el-table-column label="批次编号" align="center" prop="pbBatch" />
       <el-table-column label="起始号码" align="center" prop="pbStart" />
       <el-table-column label="终止号码" align="center" prop="pbEnd" />
@@ -129,8 +125,8 @@
     />
 
     <!-- 添加或修改实际产品批次编码对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="550px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="订单产品需求" prop="odCode">
           <el-select
           v-model="form.odCode"
@@ -139,7 +135,7 @@
           <el-option
             v-for="item in orderDemandList"
             :key="item.odCode"
-            :label="item.odName"
+            :label="`【${item.orCode}】${item.prName}`"
             :value="item.odCode"
           >
           </el-option>
@@ -165,7 +161,9 @@
 
 <script>
 import { listProductBatch, getProductBatch, delProductBatch, addProductBatch, updateProductBatch } from "@/api/system/productBatch";
+import { listOrder } from "@/api/system/order";
 import { listOrderDemand } from "@/api/system/orderDemand";
+import { listProduct } from "@/api/system/product";
 
 export default {
   name: "ProductBatch",
@@ -221,14 +219,77 @@ export default {
         pbEnd: [
           { required: true, message: "终止号码不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 订单列表
+      orderList: [],
+      // 订单产品需求列表
+      orderDemandList: [],
+      // 产品列表
+      productList: [],
     };
   },
   async created() {
-    this.getList();
+    await this.getOrderList();
+    await this.getProductList();
     await this.getOrderDemandList();
+    this.getList();
+  },
+  async activated() {
+    await this.getOrderList();
+    await this.getProductList();
+    await this.getOrderDemandList();
+    this.getList();
   },
   methods: {
+    // 查询订单
+    getOrderList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listOrder().then(response => {
+          this.orderList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
+    // 查询产品
+    getProductList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listProduct().then(response => {
+          this.productList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
+    // 查询订单产品需求
+    getOrderDemandList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listOrderDemand().then(response => {
+          this.orderDemandList = []
+          response.rows.forEach(demand => {
+            this.orderDemandList.push({
+              ...demand,
+              prName: this.productList.find(ele => ele.prCode === demand.prCode).prName
+            })
+          });
+          console.log(this.orderDemandList)
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     /** 查询实际产品批次编码列表 */
     getList() {
       this.loading = true;
@@ -259,12 +320,6 @@ export default {
         updateTime: undefined
       };
       this.resetForm("form");
-    },
-    //订单查询列表
-    getOrderDemandList(){
-      listOrderDemand().then(response => {
-        this.orderDemandList = response.rows;
-      })
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -345,6 +400,13 @@ export default {
       this.download('system/productBatch/export', {
         ...this.queryParams
       }, `productBatch_${new Date().getTime()}.xlsx`)
+    },
+    // 解析odCode为显示格式
+    parseOdCode(odCode) {
+      const demand = this.orderDemandList.find(ele => ele.odCode === odCode)
+      if (demand) {
+        return `【${demand.orCode}】${demand.prName}`
+      } else return ''
     }
   }
 };

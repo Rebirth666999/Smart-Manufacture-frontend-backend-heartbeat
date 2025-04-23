@@ -7,10 +7,13 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.domain.bo.*;
+import com.ruoyi.system.domain.vo.IcesClientVo;
+import com.ruoyi.system.domain.vo.IcesEquipmentVo;
 import com.ruoyi.system.service.IIcesCodeService;
+import com.ruoyi.system.service.IIcesEquipmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.ruoyi.system.domain.bo.IcesEquipmentAtomOperationBo;
 import com.ruoyi.system.domain.vo.IcesEquipmentAtomOperationVo;
 import com.ruoyi.system.domain.IcesEquipmentAtomOperation;
 import com.ruoyi.system.mapper.IcesEquipmentAtomOperationMapper;
@@ -32,6 +35,7 @@ public class IcesEquipmentAtomOperationServiceImpl implements IIcesEquipmentAtom
 
     private final IcesEquipmentAtomOperationMapper baseMapper;
     private final IIcesCodeService codeService;
+    private final IIcesEquipmentService equipmentService;
 
     /**
      * 查询设备原子操作
@@ -77,6 +81,7 @@ public class IcesEquipmentAtomOperationServiceImpl implements IIcesEquipmentAtom
         bo.setEaoCode(codeService.insertByType("EquipmentAtomOperation"));
         IcesEquipmentAtomOperation add = BeanUtil.toBean(bo, IcesEquipmentAtomOperation.class);
         validEntityBeforeSave(add);
+        updateEquipment(bo);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
             bo.setEaoId(add.getEaoId());
@@ -91,7 +96,27 @@ public class IcesEquipmentAtomOperationServiceImpl implements IIcesEquipmentAtom
     public Boolean updateByBo(IcesEquipmentAtomOperationBo bo) {
         IcesEquipmentAtomOperation update = BeanUtil.toBean(bo, IcesEquipmentAtomOperation.class);
         validEntityBeforeSave(update);
+        updateEquipment(bo);
         return baseMapper.updateById(update) > 0;
+    }
+
+    /**
+     * 新增/修改原子操作算作对设备的修改
+     * 需要更新设备的修改人、修改时间字段
+     */
+    private void updateEquipment(IcesEquipmentAtomOperationBo bo) {
+        // 搜索条件
+        String eqCode = bo.getEqCode();
+        IcesEquipmentBo equipmentBo = new IcesEquipmentBo();
+        equipmentBo.setEqCode(eqCode);
+        // 查找列表
+        List<IcesEquipmentVo> vos = equipmentService.queryList(equipmentBo);
+        assert vos != null && vos.size() == 1;
+        // 调用更新（设置字段在目标方法进行）
+        equipmentBo.setEqCode(null);
+        equipmentBo.setEqId(vos.get(0).getEqId());
+        equipmentBo.setEqStat(vos.get(0).getEqStat());
+        equipmentService.updateByBo(equipmentBo);
     }
 
     /**

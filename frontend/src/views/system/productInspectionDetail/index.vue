@@ -1,49 +1,34 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="质检单明细编码" prop="pidCode">
-        <el-input
-          v-model="queryParams.pidCode"
-          placeholder="请输入质检单明细编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="85px">
       <el-form-item label="所属质检单" prop="piCode">
         <el-select
           v-model="queryParams.piCode"
           placeholder="请选择所属质检单"
+          disabled
         >
           <el-option
             v-for="item in productInspectionList"
-            :key="item.piiCode"
-            :label="item.piiName"
-            :value="item.piiCode"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="产品类型" prop="prCode">
-        <el-select
-          v-model="queryParams.prCode"
-          placeholder="请选择产品类型"
-        >
-          <el-option
-            v-for="item in productList"
-            :key="item.prCode"
-            :label="item.prName"
-            :value="item.prCode"
+            :key="item.piCode"
+            :label="item.piCode"
+            :value="item.piCode"
           >
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="合格标志" prop="pidFlag">
-        <el-input
+        <el-select
           v-model="queryParams.pidFlag"
-          placeholder="请输入合格标志"
+          placeholder="请选择是否合格"
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="dict in dict.type.ices_yn"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          ></el-option>
+        </el-select>
       </el-form-item>
       <!-- <el-form-item label="已删除" prop="pidDelete">
         <el-input
@@ -110,7 +95,11 @@
       <el-table-column label="质检单明细ID" align="center" prop="pidId" v-if="true"/>
       <el-table-column label="质检单明细编码" align="center" prop="pidCode" />
       <el-table-column label="所属质检单" align="center" prop="piCode" />
-      <el-table-column label="产品类型" align="center" prop="prCode" />
+      <el-table-column label="产品类型" align="center" prop="prCode">
+        <template slot-scope="scope">
+          {{ productList[0].prName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="产品编码" align="center" prop="pidBatchNum" />
       <el-table-column label="质检结果" align="center" prop="pidResult" />
       <el-table-column label="合格标志" align="center" prop="pidFlag">
@@ -150,12 +139,13 @@
     />
 
     <!-- 添加或修改产品质检单明细对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="550px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="92px">
         <el-form-item label="所属质检单" prop="piCode">
           <el-select
           v-model="form.piCode"
           placeholder="请选择所属质检单"
+          disabled
         >
           <el-option
             v-for="item in productInspectionList"
@@ -170,6 +160,7 @@
           <el-select
           v-model="form.prCode"
           placeholder="请选择产品类型"
+          disabled
         >
           <el-option
             v-for="item in productList"
@@ -184,10 +175,21 @@
           <el-input v-model="form.pidBatchNum" placeholder="请输入产品编码" />
         </el-form-item>
         <el-form-item label="质检结果" prop="pidResult">
-          <el-input v-model="form.pidResult" placeholder="请输入质检结果" />
+          <el-input v-model="form.pidResult" type="textarea" placeholder="请输入质检结果" />
         </el-form-item>
         <el-form-item label="合格标志" prop="pidFlag">
-          <el-input v-model="form.pidFlag" placeholder="请输入合格标志" />
+          <el-select
+            v-model="form.pidFlag"
+            placeholder="请选择是否合格"
+            clearable
+          >
+            <el-option
+              v-for="dict in dict.type.ices_yn"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -199,12 +201,15 @@
 </template>
 
 <script>
-import { listProductInspectionDetail, getProductInspectionDetail, delProductInspectionDetail, addProductInspectionDetail, updateProductInspectionDetail } from "@/api/system/productInspectionDetail";
-import { listProduct } from "@/api/system/product";
+import { listProductInspectionDetail, getProductInspectionDetail, delProductInspectionDetail, addProductInspectionDetail, updateProductInspectionDetail, listInspectionProduct } from "@/api/system/productInspectionDetail";
 import { listProductInspection } from "@/api/system/productInspection";
 
 export default {
   name: "ProductInspectionDetail",
+  dicts: ['ices_yn'],
+  props: {
+    piCode: String
+  },
   data() {
     return {
       // 按钮loading
@@ -257,25 +262,59 @@ export default {
         pidBatchNum: [
           { required: true, message: "产品编码不能为空", trigger: "blur" }
         ],
-      }
+      },
+      currentProductInspection: null
     };
   },
   async created() {
-    this.getList();
+    if (this.piCode) {
+      this.queryParams.piCode = this.piCode
+    }
     await this.getProductInspectionList();
     await this.getProductList();
+    this.getList();
+  },
+  async activated() {
+    if (this.piCode) {
+      this.queryParams.piCode = this.piCode
+    }
+    await this.getProductInspectionList();
+    await this.getProductList();
+    this.getList();
   },
   methods: {
-    //查询质检单列表
+    // 查询质检单列表
     getProductInspectionList() {
-      listProductInspection().then(response => {
-        this.productInspectionList = response.rows;
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listProductInspection().then(response => {
+          this.productInspectionList = response.rows;
+          if (this.piCode) {
+            this.currentProductInspection = this.productInspectionList.find(ele => ele.piCode === this.piCode)
+          }
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
       })
     },
-    //查询产品列表
+    // 查询产品列表
     getProductList() {
-      listProduct().then(response => {
-        this.productList = response.rows;
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listInspectionProduct(this.currentProductInspection).then(response => {
+          this.productList = [response];
+          if (this.piCode) {
+            this.form.prCode = this.productList[0].prCode
+          }
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
       })
     },
     /** 查询产品质检单明细列表 */
@@ -320,6 +359,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams.piCode = this.piCode
       this.handleQuery();
     },
     // 多选框选中数据
@@ -331,6 +371,10 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      if (this.piCode) {
+        this.form.piCode = this.piCode
+        this.form.prCode = this.productList[0].prCode
+      }
       this.open = true;
       this.title = "添加产品质检单明细";
     },

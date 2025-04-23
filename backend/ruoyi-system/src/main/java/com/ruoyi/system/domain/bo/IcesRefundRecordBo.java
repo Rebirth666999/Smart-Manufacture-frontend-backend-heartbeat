@@ -69,13 +69,11 @@ public class IcesRefundRecordBo extends BaseEntity {
     /**
      * 办理人
      */
-    @NotBlank(message = "办理人不能为空", groups = { AddGroup.class, EditGroup.class })
     private String rrMan;
 
     /**
      * 办理日期
      */
-    @NotBlank(message = "办理日期不能为空", groups = { AddGroup.class, EditGroup.class })
     private String rrDate;
 
 

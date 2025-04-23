@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+import com.ruoyi.system.domain.bo.IcesProductInspectionBo;
+import com.ruoyi.system.domain.vo.IcesProductVo;
 import lombok.RequiredArgsConstructor;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.*;
@@ -46,6 +48,14 @@ public class IcesProductInspectionDetailController extends BaseController {
     @GetMapping("/list")
     public TableDataInfo<IcesProductInspectionDetailVo> list(IcesProductInspectionDetailBo bo, PageQuery pageQuery) {
         return iIcesProductInspectionDetailService.queryPageList(bo, pageQuery);
+    }
+
+    /**
+     * 根据质检单获取产品
+     */
+    @PostMapping("/getProduct")
+    public IcesProductVo list(IcesProductInspectionBo bo) {
+        return iIcesProductInspectionDetailService.getProduct(bo);
     }
 
     /**

@@ -5,6 +5,8 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.helper.LoginHelper;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
@@ -29,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -93,7 +96,7 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesProcess> lqw = Wrappers.lambdaQuery();
         lqw.eq(StringUtils.isNotBlank(bo.getProcCode()), IcesProcess::getProcCode, bo.getProcCode());
-        lqw.eq(StringUtils.isNotBlank(bo.getPrCode()), IcesProcess::getPrCode, bo.getPrCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getOdCode()), IcesProcess::getOdCode, bo.getOdCode());
         lqw.like(StringUtils.isNotBlank(bo.getProcName()), IcesProcess::getProcName, bo.getProcName());
         lqw.eq(StringUtils.isNotBlank(bo.getProcStat()), IcesProcess::getProcStat, bo.getProcStat());
         lqw.eq(bo.getProcDelete() != null, IcesProcess::getProcDelete, bo.getProcDelete());
@@ -106,6 +109,11 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
     @Override
     public IcesProcessVo insertByBo(IcesProcessBo bo) {
         bo.setProcCode(codeService.insertByType("Process"));
+        String cMan = getLoginUsername();
+        String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        // 填入创建信息
+        bo.setProcCman(cMan);
+        bo.setProcCdate(cDate);
         IcesProcess add = BeanUtil.toBean(bo, IcesProcess.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
@@ -120,9 +128,35 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
      */
     @Override
     public Boolean updateByBo(IcesProcessBo bo) {
+        String mMan = getLoginUsername();
+        String mDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        // 获取原先记录
+        IcesProcessVo vo = queryById(bo.getProcId());
+        // 如果原先未激活，现在已激活，则填入发布信息
+        if (bo.getProcStat() != null && vo.getProcStat().equals("4") && bo.getProcStat().equals("5")) {
+            bo.setProcRman(mMan);
+            bo.setProcRdate(mDate);
+        }
+        // 填入修改信息
+        bo.setProcMman(mMan);
+        bo.setProcMdate(mDate);
         IcesProcess update = BeanUtil.toBean(bo, IcesProcess.class);
         validEntityBeforeSave(update);
         return baseMapper.updateById(update) > 0;
+    }
+
+    /**
+     * 获取当前用户名称
+     * @return 用户名
+     */
+    private String getLoginUsername() {
+        LoginUser loginUser;
+        try {
+            loginUser = LoginHelper.getLoginUser();
+        } catch (Exception e) {
+            return null;
+        }
+        return ObjectUtil.isNotNull(loginUser) ? loginUser.getUsername() : null;
     }
 
     /**
@@ -418,6 +452,12 @@ public class IcesProcessServiceImpl extends FlowServiceFactory implements IIcesP
                 }
             }
         }
+
+        // 更新流程信息
+        IcesProcessBo bo = new IcesProcessBo();
+        bo.setProcId(procId);
+        bo.setProcStat(icesProcess.getProcStat());
+        updateByBo(bo);
 
 
         // ========== 8. 清理不再使用的数据 ==========

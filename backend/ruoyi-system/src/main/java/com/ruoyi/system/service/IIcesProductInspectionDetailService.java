@@ -1,10 +1,12 @@
 package com.ruoyi.system.service;
 
 import com.ruoyi.system.domain.IcesProductInspectionDetail;
+import com.ruoyi.system.domain.bo.IcesProductInspectionBo;
 import com.ruoyi.system.domain.vo.IcesProductInspectionDetailVo;
 import com.ruoyi.system.domain.bo.IcesProductInspectionDetailBo;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
+import com.ruoyi.system.domain.vo.IcesProductVo;
 
 import java.util.Collection;
 import java.util.List;
@@ -41,6 +43,8 @@ public interface IIcesProductInspectionDetailService {
      * 修改产品质检单明细
      */
     Boolean updateByBo(IcesProductInspectionDetailBo bo);
+
+    IcesProductVo getProduct(IcesProductInspectionBo bo);
 
     /**
      * 校验并批量删除产品质检单明细信息

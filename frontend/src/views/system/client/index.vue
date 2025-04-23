@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-card class="view-card">
+    <el-card shadow="never">
       <div slot="header">
         <div class="card-header">
           <div>客户基本信息</div>
@@ -119,17 +119,16 @@
     </el-row>
 
     <el-table
-          v-loading="loading"
-          :data="clientList"
-          @current-change="handleCurrentChange"
-          highlight-current-row
-          max-height="240"
-        >
-          <el-table-column label="选择" width="55" align="center">
-            <template slot-scope="scope">
-              <el-radio :value="scope.row.clId === idSelect" :label="true" />
-            </template>
-          </el-table-column>
+      v-loading="loading"
+      :data="clientList"
+      @current-change="handleCurrentChange"
+      highlight-current-row
+    >
+      <el-table-column label="选择" width="55" align="center">
+        <template slot-scope="scope">
+          <el-radio :value="scope.row.clId === idSelect" :label="true" />
+        </template>
+      </el-table-column>
       <el-table-column label="基本信息ID" align="center" prop="clId" v-if="true"/>
       <el-table-column label="客户编码" align="center" prop="clCode" />
       <el-table-column label="客户等级" align="center" prop="cllCode">
@@ -171,6 +170,12 @@
       </el-table-column>
       <!-- <el-table-column label="已删除" align="center" prop="clDelete" /> -->
       <!-- <el-table-column label="描述" align="center" prop="clDesc" /> -->
+      <el-table-column label="创建人" align="center" prop="clCman" />
+      <el-table-column label="创建时间" align="center" prop="clCdate" />
+      <el-table-column label="发布人" align="center" prop="clRman" />
+      <el-table-column label="发布时间" align="center" prop="clRdate" />
+      <el-table-column label="修改人" align="center" prop="clMman" />
+      <el-table-column label="修改时间" align="center" prop="clMdate" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -180,12 +185,6 @@
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:client:edit']"
           >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-location-information"
-            @click="handleClientTrade(scope.row)"
-          >贸易信息</el-button>
           <el-button
             size="mini"
             type="text"
@@ -206,13 +205,13 @@
     />
   </div>
     </el-card>
-    <el-card class="controlled-card">
+    <el-card shadow="never" class="controlled-card">
       <div slot="header">
         <div class="card-header">
           <div>客户贸易信息</div>
         </div>
       </div>
-      <client-trade v-if='idSelect' :key="idSelect" :clCode="codeSelect" />
+      <client-trade v-if='idSelect' :key="idSelect" :clCode="codeSelect" @update="getList" />
       <el-empty v-else description="选中客户信息后即可管理客户贸易信息" />
     </el-card>
   </div>
@@ -368,10 +367,6 @@ export default {
       this.download('system/client/export', {
         ...this.queryParams
       }, `client_${new Date().getTime()}.xlsx`)
-    },
-    // 查看客户贸易信息
-    handleClientTrade(row) {
-      this.$router.push(`/clientTrade?clCode=${row.clCode}`)
     }
   }
 };
@@ -385,10 +380,6 @@ export default {
 }
 ::v-deep .el-radio span.el-radio__label {
   display: none;
-}
-.view-card {
-  max-height: 50vh;
-  overflow: scroll;
 }
 .card-header {
   display: flex;

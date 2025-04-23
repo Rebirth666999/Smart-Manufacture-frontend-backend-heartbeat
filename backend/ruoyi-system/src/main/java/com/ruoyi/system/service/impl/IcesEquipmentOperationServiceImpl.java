@@ -14,9 +14,7 @@ import com.ruoyi.flowable.factory.FlowServiceFactory;
 import com.ruoyi.system.domain.IcesEquipmentOperationStep;
 import com.ruoyi.system.domain.IcesEquipmentOperationStepPrev;
 import com.ruoyi.system.domain.bo.*;
-import com.ruoyi.system.domain.vo.IcesEquipmentOperationStepParamVo;
-import com.ruoyi.system.domain.vo.IcesEquipmentOperationStepPrevVo;
-import com.ruoyi.system.domain.vo.IcesEquipmentOperationStepVo;
+import com.ruoyi.system.domain.vo.*;
 import com.ruoyi.system.service.*;
 import lombok.RequiredArgsConstructor;
 import org.dom4j.Document;
@@ -25,7 +23,6 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.flowable.engine.repository.Model;
 import org.springframework.stereotype.Service;
-import com.ruoyi.system.domain.vo.IcesEquipmentOperationVo;
 import com.ruoyi.system.domain.IcesEquipmentOperation;
 import com.ruoyi.system.mapper.IcesEquipmentOperationMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -49,6 +46,7 @@ public class IcesEquipmentOperationServiceImpl extends FlowServiceFactory implem
     private final IIcesEquipmentOperationStepService operationStepService;
     private final IIcesEquipmentOperationStepParamService stepParamService;
     private final IIcesEquipmentOperationStepPrevService stepPrevService;
+    private final IIcesEquipmentService equipmentService;
 
     /**
      * 查询设备操作
@@ -95,6 +93,7 @@ public class IcesEquipmentOperationServiceImpl extends FlowServiceFactory implem
         bo.setEoCode(codeService.insertByType("EquipmentOperation"));
         IcesEquipmentOperation add = BeanUtil.toBean(bo, IcesEquipmentOperation.class);
         validEntityBeforeSave(add);
+        updateEquipment(bo);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
             bo.setEoId(add.getEoId());
@@ -109,7 +108,27 @@ public class IcesEquipmentOperationServiceImpl extends FlowServiceFactory implem
     public Boolean updateByBo(IcesEquipmentOperationBo bo) {
         IcesEquipmentOperation update = BeanUtil.toBean(bo, IcesEquipmentOperation.class);
         validEntityBeforeSave(update);
+        updateEquipment(bo);
         return baseMapper.updateById(update) > 0;
+    }
+
+    /**
+     * 新增/修改设备操作算作对设备的修改
+     * 需要更新设备的修改人、修改时间字段
+     */
+    private void updateEquipment(IcesEquipmentOperationBo bo) {
+        // 搜索条件
+        String eqCode = bo.getEqCode();
+        IcesEquipmentBo equipmentBo = new IcesEquipmentBo();
+        equipmentBo.setEqCode(eqCode);
+        // 查找列表
+        List<IcesEquipmentVo> vos = equipmentService.queryList(equipmentBo);
+        assert vos != null && vos.size() == 1;
+        // 调用更新（设置字段在目标方法进行）
+        equipmentBo.setEqCode(null);
+        equipmentBo.setEqId(vos.get(0).getEqId());
+        equipmentBo.setEqStat(vos.get(0).getEqStat());
+        equipmentService.updateByBo(equipmentBo);
     }
 
     /**
@@ -304,5 +323,11 @@ public class IcesEquipmentOperationServiceImpl extends FlowServiceFactory implem
                 stepPrevService.insertByBo(stepPrevBo);
             }
         }
+
+        // 更新设备信息
+        IcesEquipmentOperationBo equipmentOperationBo = new IcesEquipmentOperationBo();
+        equipmentOperationBo.setEoId(eoId);
+        equipmentOperationBo.setEqCode(equipmentOperation.getEqCode());
+        updateEquipment(equipmentOperationBo);
     }
 }

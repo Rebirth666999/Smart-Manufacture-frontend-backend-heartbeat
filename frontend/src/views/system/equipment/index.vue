@@ -133,6 +133,12 @@
       </el-table-column>
       <el-table-column label="IP地址" align="center" prop="eqIp" />
       <!-- <el-table-column label="已删除" align="center" prop="eqDelete" /> -->
+      <el-table-column label="创建人" align="center" prop="eqCman" />
+      <el-table-column label="创建时间" align="center" prop="eqCdate" />
+      <el-table-column label="发布人" align="center" prop="eqRman" />
+      <el-table-column label="发布时间" align="center" prop="eqRdate" />
+      <el-table-column label="修改人" align="center" prop="eqMman" />
+      <el-table-column label="修改时间" align="center" prop="eqMdate" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

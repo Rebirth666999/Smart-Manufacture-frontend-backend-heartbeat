@@ -32,9 +32,9 @@ public class IcesProcess extends BaseEntity {
      */
     private String procCode;
     /**
-     * 目标产品
+     * 目标产品需求
      */
-    private String prCode;
+    private String odCode;
     /**
      * 工艺流程名称
      */

@@ -34,10 +34,10 @@ public class IcesProcessVo {
     private String procCode;
 
     /**
-     * 目标产品
+     * 目标产品需求
      */
-    @ExcelProperty(value = "目标产品")
-    private String prCode;
+    @ExcelProperty(value = "目标产品需求")
+    private String odCode;
 
     /**
      * 工艺流程名称

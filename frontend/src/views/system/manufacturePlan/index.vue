@@ -6,23 +6,37 @@
           <div>生产计划信息</div>
         </div>
       </div>
-      <div>
-        <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-          <el-form-item label="所属订单" prop="orCode">
-            <el-select
-              v-model="queryParams.orCode"
-              placeholder="请选择订单"
-              clearable
+      <el-form :model="queryParams" ref="queryOrderForm" size="small" :inline="true"  label-width="68px">
+        <el-form-item label="所属订单" prop="orCode">
+          <el-select
+            v-model="queryParams.orCode"
+            placeholder="请选择订单"
+            clearable
+            @change="handleQuery"
+          >
+            <el-option
+              v-for="item in orderList"
+              :key="item.orCode"
+              :label="item.orCode"
+              :value="item.orCode"
             >
-              <el-option
-                v-for="item in orderList"
-                :key="item.orCode"
-                :label="item.orCode"
-                :value="item.orCode"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <!-- <el-form-item>
+          <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+          <el-button icon="el-icon-refresh" size="mini" @click="resetOrderQuery">重置</el-button>
+        </el-form-item> -->
+      </el-form>
+    </el-card>
+    <el-card shadow="never" class="controlled-card">
+      <div slot="header">
+        <div class="card-header">
+          <div>生产计划详细信息</div>
+        </div>
+      </div>
+      <div v-if="queryParams.orCode">
+        <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
           <el-form-item label="状态" prop="mpStat">
             <el-select v-model="queryParams.mpStat" placeholder="请选择状态" clearable>
               <el-option
@@ -112,12 +126,12 @@
               <el-radio :value="scope.row.mpId === idSelect" :label="true" />
             </template>
           </el-table-column>
-          <el-table-column label="生产计划ID" align="center" prop="mpId" v-if="true"/>
-          <el-table-column label="生产计划编码" align="center" prop="mpCode" />
+          <el-table-column label="计划详情ID" align="center" prop="mpId" v-if="true"/>
+          <el-table-column label="计划详情编码" align="center" prop="mpCode" />
           <el-table-column label="所属订单" align="center" prop="orCode" />
-          <el-table-column label="产品" align="center" prop="prCode">
+          <el-table-column label="产品" align="center" prop="odCode">
             <template slot-scope="scope">
-              {{ productList.find(ele => ele.prCode === scope.row.prCode).prName || '' }}
+              {{ parseOdCode(scope.row.odCode) }}
             </template>
           </el-table-column>
           <el-table-column label="状态" align="center" prop="mpStat">
@@ -202,6 +216,7 @@
           @pagination="getList"
         />
       </div>
+      <el-empty v-else description="选择订单后即可查看生产计划详情" />
     </el-card>
     <el-card shadow="never" class="controlled-card">
       <div slot="header">
@@ -219,6 +234,7 @@
 import { listManufacturePlan, getManufacturePlan, delManufacturePlan, addManufacturePlan, updateManufacturePlan } from "@/api/system/manufacturePlan";
 import { listOrder } from "@/api/system/order";
 import { listProduct } from "@/api/system/product";
+import { listOrderDemand } from "@/api/system/orderDemand";
 import manufactureTask from '@/views/system/manufactureTask';
 
 export default {
@@ -260,37 +276,37 @@ export default {
       // 订单列表
       orderList: [],
       // 产品列表
-      productList: []
+      productList: [],
+      // 产品需求列表
+      orderDemandList: []
     };
   },
   async created() {
     await this.getProductList();
     await this.getOrderList();
+    await this.getOrderDemandList();
     this.getList();
   },
   async activated() {
     await this.getProductList();
     await this.getOrderList();
+    await this.getOrderDemandList();
     this.getList();
   },
   methods: {
-    //弃用
-    handleDeprecated(row) {
-      const mpId = row.mpId;
-      this.$modal.confirm('是否确认弃用该生产计划？').then(() => {
+    // 查询订单产品需求
+    getOrderDemandList() {
+      return new Promise((resolve, reject) => {
         this.loading = true;
-        getManufacturePlan(mpId).then(response => {
-          this.form = response.data;
-          this.form.mpStat = "a";
-          updateManufacturePlan(this.form).then(response => {
-            this.$modal.msgSuccess("已弃用");
-            this.getList();
-          })
-        });
-      }).catch(() => {
-      }).finally(() => {
-        this.loading = false;
-      });
+        listOrderDemand().then(response => {
+          this.orderDemandList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
     // 查询产品列表
     getProductList() {
@@ -336,9 +352,26 @@ export default {
       this.codeSelect = undefined
       this.getList();
     },
-    /** 重置按钮操作 */
+    /** 
+     * 计划详细信息重置按钮
+     * 只能重置订单以外的筛选项
+     * @author YangZY
+     * @date 20250423
+     */
     resetQuery() {
       this.resetForm("queryForm");
+      this.idSelect = undefined
+      this.codeSelect = undefined
+      this.handleQuery();
+    },
+    /** 
+     * 计划信息重置按钮
+     * 只能重置订单筛选项
+     * @author YangZY
+     * @date 20250423
+     */
+    resetOrderQuery() {
+      this.resetForm("queryOrderForm");
       this.idSelect = undefined
       this.codeSelect = undefined
       this.handleQuery();
@@ -418,6 +451,36 @@ export default {
       }).finally(() => {
         this.loading = false;
       });
+    },
+    //弃用
+    handleDeprecated(row) {
+      const mpId = row.mpId;
+      this.$modal.confirm('是否确认弃用该生产计划？').then(() => {
+        this.loading = true;
+        getManufacturePlan(mpId).then(response => {
+          this.form = response.data;
+          this.form.mpStat = "a";
+          updateManufacturePlan(this.form).then(response => {
+            this.$modal.msgSuccess("已弃用");
+            this.getList();
+          })
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    /**
+     * 解析产品需求字段
+     * @author YangZY
+     * @date 20250423
+     */
+    parseOdCode(odCode) {
+      const demand = this.orderDemandList.find(ele => ele.odCode === odCode)
+      if (demand) {
+        return this.productList.find(ele => ele.prCode === demand.prCode).prName || ''
+      }
+      return ''
     }
   }
 };

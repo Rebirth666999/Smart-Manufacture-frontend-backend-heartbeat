@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-card class="view-card">
+    <el-card shadow="never">
       <div slot="header">
         <div class="card-header">
           <div>生产计划信息</div>
@@ -17,7 +17,7 @@
               <el-option
                 v-for="item in orderList"
                 :key="item.orCode"
-                :label="item.orName"
+                :label="item.orCode"
                 :value="item.orCode"
               >
               </el-option>
@@ -106,7 +106,6 @@
           :data="manufacturePlanList"
           @current-change="handleCurrentChange"
           highlight-current-row
-          max-height="240"
         >
           <el-table-column label="选择" width="55" align="center">
             <template slot-scope="scope">
@@ -115,11 +114,7 @@
           </el-table-column>
           <el-table-column label="生产计划ID" align="center" prop="mpId" v-if="true"/>
           <el-table-column label="生产计划编码" align="center" prop="mpCode" />
-          <el-table-column label="所属订单" align="center" prop="orCode">
-            <template slot-scope="scope">
-              {{ orderList.find(ele => ele.orCode === scope.row.orCode).orName || '' }}
-            </template>
-          </el-table-column>
+          <el-table-column label="所属订单" align="center" prop="orCode" />
           <el-table-column label="产品" align="center" prop="prCode">
             <template slot-scope="scope">
               {{ productList.find(ele => ele.prCode === scope.row.prCode).prName || '' }}
@@ -208,7 +203,7 @@
         />
       </div>
     </el-card>
-    <el-card class="controlled-card">
+    <el-card shadow="never" class="controlled-card">
       <div slot="header">
         <div class="card-header">
           <div>生产任务信息</div>
@@ -436,10 +431,6 @@ export default {
 }
 ::v-deep .el-radio span.el-radio__label {
   display: none;
-}
-.view-card {
-  max-height: 50vh;
-  overflow: scroll;
 }
 .card-header {
   display: flex;

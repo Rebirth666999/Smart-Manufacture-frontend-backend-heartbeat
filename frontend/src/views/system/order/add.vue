@@ -1,6 +1,6 @@
 <template>
   <div class="app-container" v-loading="loading">
-    <el-card>
+    <el-card shadow="never">
       <div slot="header">
         <div class="card-header">
           <div>订单信息</div>
@@ -27,8 +27,20 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="订单名称" prop="orName">
-            <el-input v-model="form.orName" placeholder="请输入订单名称" />
+          <el-form-item prop="orCode">
+            <span slot="label">
+              <el-tooltip placement="top">
+                <div slot="content">
+                  <div>订单编码须以"Order-"开头</div>
+                  <div>在其后输入五位数字，高位补0</div>
+                  <div>若留空则系统自动生成</div>
+                  <div>生成后编码不可更改</div>
+                </div>
+                <i class="el-icon-question"></i>
+              </el-tooltip>
+              订单编码
+            </span>
+            <el-input v-model="form.orCode" placeholder="请输入订单编码" :disabled="$route.query.orId" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -83,7 +95,7 @@
         </el-col>
       </el-form>
     </el-card>
-    <el-card class="controlled-card">
+    <el-card shadow="never" class="controlled-card">
       <div slot="header">
         <div class="card-header">
           <div>订单产品信息</div>
@@ -133,9 +145,6 @@ export default {
         ],
         clCode: [
           { required: true, message: "客户不能为空", trigger: "blur" }
-        ],
-        orName: [
-          { required: true, message: "订单名称不能为空", trigger: "blur" }
         ],
         orPriority: [
           { required: true, message: "订单优先级不能为空", trigger: "blur" }

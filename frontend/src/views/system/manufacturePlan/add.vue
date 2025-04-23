@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-card>
+    <el-card shadow="never">
       <div slot="header">
         <div class="card-header">
           <div>生产计划信息</div>
@@ -21,7 +21,7 @@
         <el-col :span="12">
           <el-form-item label="所属订单" prop="orCode">
             <el-select v-model="form.orCode" placeholder="请选择订单" @change="selectOrder">
-              <el-option v-for="item in orderList" :key="item.orCode" :label="item.orName" :value="item.orCode">
+              <el-option v-for="item in orderList" :key="item.orCode" :label="item.orCode" :value="item.orCode">
               </el-option>
             </el-select>
           </el-form-item>
@@ -67,7 +67,7 @@
         </el-col>
       </el-form>
     </el-card>
-    <el-card class="controlled-card">
+    <el-card shadow="never" class="controlled-card">
       <div slot="header">
         <div class="card-header">
           <div>生产任务信息</div>

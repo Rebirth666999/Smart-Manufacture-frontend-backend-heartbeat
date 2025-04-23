@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-card class="view-card">
+    <el-card shadow="never">
       <div slot="header">
         <div class="card-header">
           <div>订单信息</div>
@@ -22,14 +22,6 @@
               >
               </el-option>
             </el-select>
-          </el-form-item>
-          <el-form-item label="订单名称" prop="orName">
-            <el-input
-              v-model="queryParams.orName"
-              placeholder="请输入订单名称"
-              clearable
-              @keyup.enter.native="handleQuery"
-            />
           </el-form-item>
           <el-form-item label="状态" prop="orStat">
             <el-select v-model="queryParams.orStat" placeholder="请选择状态" clearable>
@@ -126,7 +118,6 @@
           :data="orderList"
           @current-change="handleCurrentChange"
           highlight-current-row
-          max-height="240"
         >
           <el-table-column label="选择" width="55" align="center">
             <template slot-scope="scope">
@@ -140,7 +131,6 @@
               {{ clientList.find(ele => ele.clCode === scope.row.clCode).clName || '' }}
             </template>
           </el-table-column>
-          <el-table-column label="订单名称" align="center" prop="orName" />
           <el-table-column label="状态" align="center" prop="orStat">
             <template slot-scope="scope">
               <dict-tag :options="dict.type.ices_order_status" :value="scope.row.orStat"/>
@@ -209,7 +199,7 @@
         />
       </div>
     </el-card>
-    <el-card class="controlled-card">
+    <el-card shadow="never" class="controlled-card">
       <div slot="header">
         <div class="card-header">
           <div>订单产品信息</div>
@@ -447,10 +437,6 @@ export default {
 }
 ::v-deep .el-radio span.el-radio__label {
   display: none;
-}
-.view-card {
-  max-height: 50vh;
-  overflow: scroll;
 }
 .card-header {
   display: flex;

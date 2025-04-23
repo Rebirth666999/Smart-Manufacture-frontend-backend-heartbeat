@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-card class="view-card">
+    <el-card shadow="never">
       <div slot="header">
         <div class="card-header">
           <div>流程基本信息</div>
@@ -106,7 +106,6 @@
           :data="processList"
           @current-change="handleCurrentChange"
           highlight-current-row
-          max-height="240"
         >
           <el-table-column label="选择" width="55" align="center">
             <template slot-scope="scope">
@@ -200,7 +199,7 @@
         />
       </div>
     </el-card>
-    <el-card class="controlled-card">
+    <el-card shadow="never" class="controlled-card">
       <div slot="header">
         <div class="card-header">
           <div>流程详细信息</div>
@@ -527,10 +526,6 @@ export default {
 }
 ::v-deep .el-radio span.el-radio__label {
   display: none;
-}
-.view-card {
-  max-height: 50vh;
-  overflow: scroll;
 }
 .card-header {
   display: flex;

@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-card>
+    <el-card shadow="never">
       <div slot="header">
         <div class="card-header">
           <div>工艺流程信息</div>
@@ -31,7 +31,7 @@
         </el-col>
       </el-form>
     </el-card>
-    <el-card class="controlled-card">
+    <el-card shadow="never" class="controlled-card">
       <div slot="header">
         <div class="card-header">
           <div>工艺流程设计</div>

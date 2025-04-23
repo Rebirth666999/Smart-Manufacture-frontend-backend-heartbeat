@@ -12,11 +12,8 @@
       </div>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-col :span="8">
-          <el-form-item label="目标产品" prop="prCode">
-            <el-select v-model="form.prCode" placeholder="请选择目标产品">
-              <el-option v-for="item in productList" :key="item.prCode" :label="item.prName" :value="item.prCode">
-              </el-option>
-            </el-select>
+          <el-form-item label="产品需求" prop="odCode">
+            <el-cascader v-model="form.odCode" :options="orderDemandOptions" placeholder="请选择产品需求" />
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -57,6 +54,7 @@
 import { listProcess, getProcess, delProcess, addProcess, updateProcess, saveModel, getBpmnXml } from "@/api/system/process";
 import { listMaterial } from "@/api/system/material";
 import { listProduct } from "@/api/system/product";
+import { listOrderDemand } from "@/api/system/orderDemand";
 import { listEquipmentModel } from "@/api/system/equipmentModel";
 import { listModelOperation } from "@/api/system/modelOperation";
 import ProcessDesigner from '@/components/ProcessDesigner';
@@ -83,8 +81,8 @@ export default {
         procId: [
           { required: true, message: "工艺流程ID不能为空", trigger: "blur" }
         ],
-        prCode: [
-          { required: true, message: "目标产品不能为空", trigger: "blur" }
+        odCode: [
+          { required: true, message: "产品需求不能为空", trigger: "blur" }
         ],
         procName: [
           { required: true, message: "工艺流程名称不能为空", trigger: "blur" }
@@ -112,11 +110,16 @@ export default {
       equipmentModelList: [],
       // 模型操作列表
       modelOperationList: [],
+      // 订单产品需求列表
+      orderDemandList: [],
+      // 用于级联选择器的产品需求列表
+      orderDemandOptions: []
     };
   },
   async created() {
     await this.getMaterialList();
     await this.getProductList();
+    await this.getOrderDemandList();
     await this.getEquipmentModelList();
     await this.getModelOperationList();
     if (this.$route.query.procId) {
@@ -149,6 +152,7 @@ export default {
   async activated() {
     await this.getMaterialList();
     await this.getProductList();
+    await this.getOrderDemandList();
     await this.getEquipmentModelList();
     await this.getModelOperationList();
     if (this.$route.query.procId) {
@@ -179,6 +183,43 @@ export default {
     }
   },
   methods: {
+    /**
+     * 查询订单产品需求
+     * @author YangZY
+     * @date 20250423
+     */ 
+    getOrderDemandList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listOrderDemand().then(response => {
+          this.orderDemandList = []
+          this.orderDemandOptions = []
+          const orders = new Set()  // 集合，维护不重复的订单orCode
+          // 构建原料需求列表
+          // 须包含产品名称给用户显示
+          response.rows.forEach(demand => {
+            this.orderDemandList.push({
+              ...demand,
+              prName: this.productList.find(ele => ele.prCode === demand.prCode).prName
+            })
+            orders.add(demand.orCode)
+          })
+          // 订单为第一级，产品需求为第二级，构造级联选择器的选项
+          orders.forEach(orCode => {
+            this.orderDemandOptions.push({
+              value: orCode,
+              label: orCode,
+              children: this.orderDemandList.filter(ele => ele.orCode === orCode).map(ele => { return {value: ele.odCode, label: ele.prName} })
+            })
+          })
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     // 查询原料列表
     getMaterialList() {
       return new Promise((resolve, reject) => {
@@ -239,7 +280,7 @@ export default {
     reset() {
       this.form = {
         procId: undefined,
-        prCode: undefined,
+        odCode: undefined,
         procName: undefined,
         procStat: undefined,
         procDelete: undefined,
@@ -262,6 +303,8 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           this.buttonLoading = true;
+          // 级联选择器记录完整的选择路径，但提交只需要最后的那个
+          this.form.odCode = this.form.odCode[1]
           if (this.form.procId != null) {
             updateProcess(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
@@ -311,6 +354,10 @@ export default {
 </script>
 <style scoped>
 .el-select {
+  width: 100%;
+}
+
+.el-cascader {
   width: 100%;
 }
 

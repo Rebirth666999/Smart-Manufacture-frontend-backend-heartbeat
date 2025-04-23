@@ -8,21 +8,6 @@
       </div>
       <div>
         <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-          <el-form-item label="目标产品" prop="prCode">
-            <el-select
-              v-model="queryParams.prCode"
-              placeholder="请选择目标产品"
-              clearable
-            >
-              <el-option
-                v-for="item in productList"
-                :key="item.prCode"
-                :label="item.prName"
-                :value="item.prCode"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
           <el-form-item label="名称" prop="procName">
             <el-input
               v-model="queryParams.procName"
@@ -114,9 +99,9 @@
           </el-table-column>
           <el-table-column label="工艺流程ID" align="center" prop="procId" v-if="true"/>
           <el-table-column label="工艺流程编码" align="center" prop="procCode" />
-          <el-table-column label="目标产品" align="center" prop="prCode">
+          <el-table-column label="产品需求" align="center" prop="odCode">
             <template slot-scope="scope">
-              {{ productList.find(ele => ele.prCode === scope.row.prCode).prName || '' }}
+              {{ parseOdCode(scope.row.odCode) }}
             </template>
           </el-table-column>
           <el-table-column label="工艺流程名称" align="center" prop="procName" />
@@ -223,6 +208,7 @@
 import { listProcess, getProcess, delProcess, addProcess, updateProcess, saveModel, getBpmnXml } from "@/api/system/process";
 import { listMaterial } from "@/api/system/material";
 import { listProduct } from "@/api/system/product";
+import { listOrderDemand } from "@/api/system/orderDemand";
 import { listEquipmentModel } from "@/api/system/equipmentModel";
 import { listModelOperation } from "@/api/system/modelOperation";
 import ProcessDesigner from '@/components/ProcessDesigner';
@@ -258,7 +244,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        prCode: undefined,
+        odCode: undefined,
         procName: undefined,
         procStat: undefined,
         procDelete: 0,
@@ -278,11 +264,14 @@ export default {
       equipmentModelList: [],
       // 模型操作列表
       modelOperationList: [],
+      // 订单产品需求列表
+      orderDemandList: []
     };
   },
   async created() {
     await this.getMaterialList();
     await this.getProductList();
+    await this.getOrderDemandList();
     await this.getEquipmentModelList();
     await this.getModelOperationList();
     this.getList();
@@ -290,11 +279,36 @@ export default {
   async activated() {
     await this.getMaterialList();
     await this.getProductList();
+    await this.getOrderDemandList();
     await this.getEquipmentModelList();
     await this.getModelOperationList();
     this.getList();
   },
   methods: {
+    /**
+     * 查询订单产品需求
+     * @author YangZY
+     * @date 20250423
+     */ 
+    getOrderDemandList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listOrderDemand().then(response => {
+          this.orderDemandList = []
+          response.rows.forEach(demand => {
+            this.orderDemandList.push({
+              ...demand,
+              prName: this.productList.find(ele => ele.prCode === demand.prCode).prName
+            })
+          });
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     // 查询原料列表
     getMaterialList() {
       return new Promise((resolve, reject) => {
@@ -513,6 +527,17 @@ export default {
       }).finally(() => {
         this.loading = false;
       });
+    },
+    /**
+     * 解析odCode为显示格式
+     * @author YangZY
+     * @date 20250423
+     */ 
+    parseOdCode(odCode) {
+      const demand = this.orderDemandList.find(ele => ele.odCode === odCode)
+      if (demand) {
+        return `【${demand.orCode}】${demand.prName}`
+      } else return ''
     }
   }
 };

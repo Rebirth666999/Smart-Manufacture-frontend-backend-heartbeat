@@ -39,11 +39,12 @@ public class IcesManufacturePlanBo extends BaseEntity {
      */
     @NotBlank(message = "所属订单不能为空", groups = { AddGroup.class, EditGroup.class })
     private String orCode;
+
     /**
-     * 产品
+     * 产品需求
      */
-    @NotBlank(message = "产品不能为空", groups = { AddGroup.class, EditGroup.class })
-    private String prCode;
+    @NotBlank(message = "产品需求不能为空", groups = { AddGroup.class, EditGroup.class })
+    private String odCode;
 
     /**
      * 状态代码

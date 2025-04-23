@@ -492,8 +492,8 @@ export default {
       dtpaList: [],    
       // 设备列表（全）
       eqList: [],
-      // 当前选中的生产任务
-      currentManufactureTask: null,
+      // 当前选中的生产计划
+      currentManufacturePlan: null,
     };
   },
   async created() {
@@ -519,48 +519,6 @@ export default {
     this.getList();
   },
   methods: {
-    // 弃用
-    handleDeprecated(row) {
-      const mtId = row.mtId;
-      this.$modal.confirm('是否确认弃用该生产计划？').then(() => {
-        this.loading = true;
-        getManufactureTask(mtId).then(response => {
-          this.form = response.data;
-          const desc = this.form.mtDesc || '';
-          if (this.form.mtStat === '4' || this.form.mtStat === 'd') {
-            if (!desc.includes('已发布') && !desc.includes('已生成')) {
-              this.$prompt('请在描述中手动输入原状态（已发布或已生成）信息', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                inputValue: desc
-              }).then(({ value }) => {
-                this.form.mtDesc = value;
-                this.form.mtStat = 'a';
-                updateManufactureTask(this.form).then(response => {
-                  this.$modal.msgSuccess("已弃用");
-                  this.getList();
-                }).finally(() => {
-                  this.loading = false;
-                });
-              }).catch(() => {
-                this.loading = false;
-              });
-            } else {
-              this.form.mtStat = 'a';
-              updateManufactureTask(this.form).then(response => {
-                this.$modal.msgSuccess("已弃用");
-                this.getList();
-              }).finally(() => {
-                this.loading = false;
-              });
-            }
-          }
-        });
-      }).catch(() => {
-      }).finally(() => {
-        this.loading = false;
-      });
-    },
     // 获取流程信息参照所需的列表
     // 设备模型、模型操作、设备操作、设备
     getReferenceList() {
@@ -599,7 +557,7 @@ export default {
       return new Promise((resolve, reject) => {
         this.loading = true;
         listProcess().then(response => {
-          this.processList = response.rows.filter(ele => ele.prCode === this.currentManufactureTask.prCode)
+          this.processList = response.rows.filter(ele => ele.odCode === this.currentManufacturePlan.odCode)
           resolve()
         }).catch(() => {
           reject()
@@ -614,7 +572,7 @@ export default {
         this.loading = true;
         listManufacturePlan().then(response => {
           this.manufacturePlanList = response.rows
-          this.currentManufactureTask = response.rows.find(ele => ele.mpCode === this.mpCode)
+          this.currentManufacturePlan = response.rows.find(ele => ele.mpCode === this.mpCode)
           resolve()
         }).catch(() => {
           reject()
@@ -933,7 +891,49 @@ export default {
     // 查看设备任务
     async handleViewDeviceTask(row) {
       this.$router.push(`/manufacture/deviceTask/view?mtId=${row.mtId}`)
-    }
+    },
+    // 弃用
+    handleDeprecated(row) {
+      const mtId = row.mtId;
+      this.$modal.confirm('是否确认弃用该生产计划？').then(() => {
+        this.loading = true;
+        getManufactureTask(mtId).then(response => {
+          this.form = response.data;
+          const desc = this.form.mtDesc || '';
+          if (this.form.mtStat === '4' || this.form.mtStat === 'd') {
+            if (!desc.includes('已发布') && !desc.includes('已生成')) {
+              this.$prompt('请在描述中手动输入原状态（已发布或已生成）信息', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                inputValue: desc
+              }).then(({ value }) => {
+                this.form.mtDesc = value;
+                this.form.mtStat = 'a';
+                updateManufactureTask(this.form).then(response => {
+                  this.$modal.msgSuccess("已弃用");
+                  this.getList();
+                }).finally(() => {
+                  this.loading = false;
+                });
+              }).catch(() => {
+                this.loading = false;
+              });
+            } else {
+              this.form.mtStat = 'a';
+              updateManufactureTask(this.form).then(response => {
+                this.$modal.msgSuccess("已弃用");
+                this.getList();
+              }).finally(() => {
+                this.loading = false;
+              });
+            }
+          }
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
   }
 };
 </script>

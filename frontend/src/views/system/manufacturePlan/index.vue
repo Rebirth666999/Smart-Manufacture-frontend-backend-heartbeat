@@ -11,7 +11,7 @@
           <el-select
             v-model="queryParams.orCode"
             placeholder="请选择订单"
-            clearable
+            filterable
             @change="handleQuery"
           >
             <el-option
@@ -23,10 +23,10 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <!-- <el-form-item>
-          <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-form-item>
+          <!-- <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button> -->
           <el-button icon="el-icon-refresh" size="mini" @click="resetOrderQuery">重置</el-button>
-        </el-form-item> -->
+        </el-form-item>
       </el-form>
     </el-card>
     <el-card shadow="never" class="controlled-card">
@@ -290,13 +290,31 @@ export default {
     await this.getProductList();
     await this.getOrderList();
     await this.getOrderDemandList();
-    this.getList();
+    await this.getList();
+    if (this.$route.query.mpCode) {
+      const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpCode === this.$route.query.mpCode)
+      this.$router.replace('/manufacture/manufacturePlan')
+      if (manufacturePlan) {
+        this.queryParams.orCode = manufacturePlan.orCode
+        this.idSelect = manufacturePlan.mpId
+        this.codeSelect = manufacturePlan.mpCode
+      }
+    }
   },
   async activated() {
     await this.getProductList();
     await this.getOrderList();
     await this.getOrderDemandList();
-    this.getList();
+    await this.getList();
+    if (this.$route.query.mpCode) {
+      const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpCode === this.$route.query.mpCode)
+      this.$router.replace('/manufacture/manufacturePlan')
+      if (manufacturePlan) {
+        this.queryParams.orCode = manufacturePlan.orCode
+        this.idSelect = manufacturePlan.mpId
+        this.codeSelect = manufacturePlan.mpCode
+      }
+    }
   },
   methods: {
     // 查询订单产品需求
@@ -343,12 +361,17 @@ export default {
     },
     /** 查询生产计划列表 */
     getList() {
-      this.loading = true;
-      listManufacturePlan(this.queryParams).then(response => {
-        this.manufacturePlanList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listManufacturePlan(this.queryParams).then(response => {
+          this.manufacturePlanList = response.rows;
+          this.total = response.total;
+          this.loading = false;
+          resolve()
+        }).catch(() => {
+          reject()
+        })
+      })
     },
     /** 搜索按钮操作 */
     handleQuery() {

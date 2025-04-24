@@ -11,7 +11,7 @@
           <el-select
             v-model="queryParams.orCode"
             placeholder="请选择订单"
-            clearable
+            filterable
             @change="handleQuery"
           >
             <el-option
@@ -23,10 +23,10 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <!-- <el-form-item>
-          <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-form-item>
+          <!-- <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button> -->
           <el-button icon="el-icon-refresh" size="mini" @click="resetOrderQuery">重置</el-button>
-        </el-form-item> -->
+        </el-form-item>
       </el-form>
     </el-card>
     <el-card shadow="never" class="controlled-card">

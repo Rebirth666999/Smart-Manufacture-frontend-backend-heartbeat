@@ -12,6 +12,7 @@
             v-model="queryParams.orCode"
             placeholder="请选择订单"
             clearable
+            filterable
             @change="selectOrder"
           >
             <el-option
@@ -23,10 +24,10 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <!-- <el-form-item>
-          <el-button type="primary" icon="el-icon-search" size="mini" @click="selectOrder">搜索</el-button>
+        <el-form-item>
+          <!-- <el-button type="primary" icon="el-icon-search" size="mini" @click="selectOrder">搜索</el-button> -->
           <el-button icon="el-icon-refresh" size="mini" @click="resetOrderQuery">重置</el-button>
-        </el-form-item> -->
+        </el-form-item>
       </el-form>
 
       <el-table
@@ -349,6 +350,18 @@ export default {
       if (this.queryParams.orCode) {
         this.form.orCode = this.queryParams.orCode
       }
+    },
+    /** 
+     * 计划信息重置按钮
+     * 只能重置订单筛选项
+     * @author YangZY
+     * @date 20250424
+     */
+    resetOrderQuery() {
+      this.resetForm("queryOrderForm");
+      this.idSelect = undefined
+      this.codeSelect = undefined
+      this.handleQuery();
     },
     // 重置页面
     resetPage() {

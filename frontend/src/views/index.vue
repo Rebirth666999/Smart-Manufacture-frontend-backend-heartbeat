@@ -108,6 +108,28 @@
     <div class="mainImg">
       <img :src="bgImage" >
     </div>
+    <el-row :gutter="20">
+      <el-col :span="12">
+        <el-card shadow="never">
+          <div slot="header">
+            <div class="card-header">
+              <div>任务托盘</div>
+            </div>
+          </div>
+          <el-empty description="暂无需要处理的任务" />
+        </el-card>
+      </el-col>
+      <el-col :span="12">
+        <el-card shadow="never">
+          <div slot="header">
+            <div class="card-header">
+              <div>报警托盘</div>
+            </div>
+          </div>
+          <el-empty description="暂无需要处理的报警" />
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -195,6 +217,13 @@ export default {
   .mainImg {
     display: flex;
     justify-content: center;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 17px;
   }
 }
 </style>

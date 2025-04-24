@@ -219,13 +219,16 @@
       <el-empty v-else description="选择订单后即可查看生产计划详情" />
     </el-card>
     <el-card shadow="never" class="controlled-card">
-      <div slot="header">
-        <div class="card-header">
-          <div>生产任务信息</div>
-        </div>
-      </div>
-      <manufacture-task v-if='idSelect' :key="idSelect" :mpCode="codeSelect" @update="getList" />
-      <el-empty v-else description="选中生产计划后即可管理下属生产任务" />
+      <el-tabs value="task">
+        <el-tab-pane label="生产任务" name="task">
+          <manufacture-task v-if='idSelect' :key="idSelect" :mpCode="codeSelect" @update="getList" />
+          <el-empty v-else description="选中生产计划后即可管理下属生产任务" />
+        </el-tab-pane>
+        <el-tab-pane label="生产材料" name="material">
+          <manufacture-material v-if='idSelect' :key="idSelect" :mpCode="codeSelect" />
+          <el-empty v-else description="选中生产计划后即可管理生产材料" />
+        </el-tab-pane>
+      </el-tabs>
     </el-card>
   </div>
 </template>
@@ -236,11 +239,13 @@ import { listOrder } from "@/api/system/order";
 import { listProduct } from "@/api/system/product";
 import { listOrderDemand } from "@/api/system/orderDemand";
 import manufactureTask from '@/views/system/manufactureTask';
+import ManufactureMaterial from '@/views/system/manufactureTask/material';
 
 export default {
   name: "ManufacturePlan",
   components: {
-    manufactureTask
+    manufactureTask,
+    ManufactureMaterial
   },
   dicts: ['ices_manufacture_plan_status'],
   data() {
@@ -503,5 +508,8 @@ export default {
 }
 .controlled-card {
   margin-top: 10px;
+}
+::v-deep .el-tabs__item {
+  font-size: 17px;
 }
 </style>

@@ -42,3 +42,12 @@ export function delProcessStep(psId) {
     method: 'delete'
   })
 }
+
+// 查询工艺步骤原料需求列表
+export function listProcessMaterial(query) {
+  return request({
+    url: '/system/processMaterial/list',
+    method: 'get',
+    params: query
+  })
+}

@@ -106,7 +106,7 @@
     </el-row>
     <el-divider /> -->
     <div class="mainImg">
-      <img :src="bgImage" >
+      <el-image :src="bgImage" />
     </div>
     <el-row :gutter="20">
       <el-col :span="12">

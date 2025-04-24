@@ -116,7 +116,7 @@
               <div>任务托盘</div>
             </div>
           </div>
-          <el-empty description="暂无需要处理的任务" />
+          <task-tray />
         </el-card>
       </el-col>
       <el-col :span="12">
@@ -135,8 +135,12 @@
 
 <script>
 import bg from "@/assets/images/bg.png";
+import TaskTray from "@/views/tray/TaskTray"
 export default {
   name: "Index",
+  components: {
+    TaskTray
+  },
   data() {
     return {
       // 版本号

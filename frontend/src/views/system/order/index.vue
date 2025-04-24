@@ -266,12 +266,28 @@ export default {
   async created() {
     await this.getProductList();
     await this.getClientList();
-    this.getList();
+    await this.getList();
+    if (this.$route.query.orCode) {
+      const order = this.orderList.find(ele => ele.orCode === this.$route.query.orCode)
+      this.$router.replace('/order')
+      if (order) {
+        this.idSelect = order.orId
+        this.codeSelect = order.orCode
+      }
+    }
   },
   async activated() {
     await this.getProductList();
     await this.getClientList();
-    this.getList();
+    await this.getList();
+    if (this.$route.query.orCode) {
+      const order = this.orderList.find(ele => ele.orCode === this.$route.query.orCode)
+      this.$router.replace('/order')
+      if (order) {
+        this.idSelect = order.orId
+        this.codeSelect = order.orCode
+      }
+    }
   },
   methods: {
     // 查询客户列表
@@ -304,17 +320,22 @@ export default {
     },
     /** 查询订单列表 */
     getList() {
-      this.loading = true;
-      this.queryParams.params = {};
-      if (null != this.daterangeOrDeadline && '' != this.daterangeOrDeadline) {
-        this.queryParams.params["beginOrDeadline"] = this.daterangeOrDeadline[0];
-        this.queryParams.params["endOrDeadline"] = this.daterangeOrDeadline[1];
-      }
-      listOrder(this.queryParams).then(response => {
-        this.orderList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        this.queryParams.params = {};
+        if (null != this.daterangeOrDeadline && '' != this.daterangeOrDeadline) {
+          this.queryParams.params["beginOrDeadline"] = this.daterangeOrDeadline[0];
+          this.queryParams.params["endOrDeadline"] = this.daterangeOrDeadline[1];
+        }
+        listOrder(this.queryParams).then(response => {
+          this.orderList = response.rows;
+          this.total = response.total;
+          this.loading = false;
+          resolve()
+        }).catch(() => {
+          reject()
+        })
+      })
     },
     /** 搜索按钮操作 */
     handleQuery() {

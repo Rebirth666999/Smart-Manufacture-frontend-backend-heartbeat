@@ -42,7 +42,7 @@
         </el-descriptions>
         <el-form>
           <el-form-item label="参数值">
-            <el-input v-model="dtpaValue" placeholder="若留空则使用默认参数" />
+            <el-input v-model="dtpaValue" type="textarea" placeholder="若留空则使用默认参数" />
           </el-form-item>
         </el-form>
         <template slot="footer">

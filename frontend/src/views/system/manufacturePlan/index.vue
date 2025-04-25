@@ -296,6 +296,7 @@ export default {
       this.$router.replace('/manufacture/manufacturePlan')
       if (manufacturePlan) {
         this.queryParams.orCode = manufacturePlan.orCode
+        this.handleQuery()
         this.idSelect = manufacturePlan.mpId
         this.codeSelect = manufacturePlan.mpCode
       }
@@ -311,6 +312,7 @@ export default {
       this.$router.replace('/manufacture/manufacturePlan')
       if (manufacturePlan) {
         this.queryParams.orCode = manufacturePlan.orCode
+        this.handleQuery()
         this.idSelect = manufacturePlan.mpId
         this.codeSelect = manufacturePlan.mpCode
       }

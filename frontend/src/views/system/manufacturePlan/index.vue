@@ -3,11 +3,11 @@
     <el-card shadow="never">
       <div slot="header">
         <div class="card-header">
-          <div>生产计划信息</div>
+          <div>订单信息</div>
         </div>
       </div>
       <el-form :model="queryParams" ref="queryOrderForm" size="small" :inline="true"  label-width="68px">
-        <el-form-item label="所属订单" prop="orCode">
+        <el-form-item label="订单" prop="orCode">
           <el-select
             v-model="queryParams.orCode"
             placeholder="请选择订单"
@@ -29,6 +29,15 @@
         </el-form-item>
       </el-form>
     </el-card>
+
+    <el-card shadow="never" class="controlled-card">
+      <div slot="header">
+        <div class="card-header">
+          <div>生产计划信息</div>
+        </div>
+      </div>
+    </el-card>
+
     <el-card shadow="never" class="controlled-card">
       <div slot="header">
         <div class="card-header">
@@ -134,11 +143,11 @@
               {{ parseOdCode(scope.row.odCode) }}
             </template>
           </el-table-column>
-          <el-table-column label="状态" align="center" prop="mpStat">
+          <!-- <el-table-column label="状态" align="center" prop="mpStat">
             <template slot-scope="scope">
               <dict-tag :options="dict.type.ices_manufacture_plan_status" :value="scope.row.mpStat"/>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column label="实际开始时间" align="center" prop="mpBegin">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.mpBegin, '{y}-{m}-{d}') }}</span>
@@ -175,27 +184,27 @@
                 v-show="scope.row.mpStat==='1' || scope.row.mpStat==='4' || scope.row.mpStat==='5'"
                 v-hasPermi="['system:manufacturePlan:edit']"
               >修改</el-button>
-              <el-button
+              <!-- <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-finished"
                 v-show="scope.row.mpStat==='1'"
                 @click="handleSubmitReview(scope.row)"
-              >提交审核</el-button>
-              <el-button
+              >提交审核</el-button> -->
+              <!-- <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-refresh-left"
                 v-show="scope.row.mpStat === '2'"
                 @click="handleWithdrawReview(scope.row)"
-              >撤回审核</el-button>
-              <el-button
+              >撤回审核</el-button> -->
+              <!-- <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-delete"
                 v-show="scope.row.mpStat==='4' || scope.row.mpStat==='5'"
                 @click="handleDeprecated(scope.row)"
-              >弃用</el-button>
+              >弃用</el-button> -->
               <el-button
                 size="mini"
                 type="text"

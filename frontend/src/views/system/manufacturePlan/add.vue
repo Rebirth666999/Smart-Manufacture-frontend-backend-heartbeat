@@ -94,7 +94,7 @@
           <div>已有生产计划详细信息</div>
         </div>
       </div>
-      <div v-if="queryParams.orCode">
+      <div v-if="queryParams.orCode && form.mpmCode">
         <el-table
           v-loading="loading"
           :data="manufacturePlanList"
@@ -147,14 +147,15 @@
           @pagination="getList"
         />
       </div>
-      <el-empty v-else description="选定订单后即可查看生产计划详细信息" />
+      <el-empty v-else description="暂无生产计划详细信息" />
     </el-card>
 
     <el-card shadow="never" class="controlled-card">
       <div slot="header">
         <div class="card-header">
-          <div>维护生产计划详细信息</div>
-          <div v-show="queryParams.orCode">
+          <div v-if="form.mpCode">维护生产计划详细信息</div>
+          <div v-else>添加生产计划详细信息</div>
+          <div v-show="queryParams.orCode && form.mpmCode">
             <el-button
               :loading="buttonLoading"
               type="primary"
@@ -167,7 +168,7 @@
           </div>
         </div>
       </div>
-      <div v-if="queryParams.orCode">
+      <div v-if="queryParams.orCode && form.mpmCode">
         <el-form ref="form" :model="form" :rules="rules" label-width="110px">
           <el-col :span="12">
             <el-form-item label="详细信息编码" prop="mpCode">
@@ -228,7 +229,7 @@
           </el-col>
         </el-form>
       </div>
-      <el-empty v-else description="选定订单后即可录入生产计划详细信息" />
+      <el-empty v-else description="未找到生产计划，无法维护生产计划详细信息" />
     </el-card>
     <el-card shadow="never" class="controlled-card">
       <div slot="header">
@@ -499,9 +500,12 @@ export default {
       await this.getMainList()
       this.queryParams.pageNum = 1
       this.form.orCode = this.queryParams.orCode
-      console.log(this.manufacturePlanMainList)
-      this.form.mpmCode = this.manufacturePlanMainList[0].mpmCode
-      this.getList()
+      if (this.manufacturePlanMainList.length > 0) {
+        this.form.mpmCode = this.manufacturePlanMainList[0].mpmCode
+        this.getList()
+      } else {
+        this.form.mpmCode = undefined
+      }
       const order = this.orderList.find(ele => ele.orCode === row)
       if (order) {
         this.orderDemandList = this.orderDemandListFull.filter(ele => ele.orCode === order.orCode)

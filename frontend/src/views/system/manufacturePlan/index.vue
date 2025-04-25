@@ -263,14 +263,14 @@
           <el-table-column label="修改时间" align="center" prop="mpMdate" />
           <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template slot-scope="scope">
-              <el-button
+              <!-- <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-edit"
                 @click="handleUpdate(scope.row)"
                 v-show="scope.row.mpStat==='1' || scope.row.mpStat==='4' || scope.row.mpStat==='5'"
                 v-hasPermi="['system:manufacturePlan:edit']"
-              >修改</el-button>
+              >修改</el-button> -->
               <!-- <el-button
                 size="mini"
                 type="text"
@@ -292,13 +292,29 @@
                 v-show="scope.row.mpStat==='4' || scope.row.mpStat==='5'"
                 @click="handleDeprecated(scope.row)"
               >弃用</el-button> -->
-              <el-button
+              <!-- <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-delete"
                 @click="handleDelete(scope.row)"
                 v-hasPermi="['system:manufacturePlan:remove']"
                 v-show="scope.row.mpStat === '1'"
+              >删除</el-button> -->
+
+              
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-edit"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['system:manufacturePlan:edit']"
+              >修改</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-delete"
+                @click="handleDelete(scope.row)"
+                v-hasPermi="['system:manufacturePlan:remove']"
               >删除</el-button>
             </template>
           </el-table-column>

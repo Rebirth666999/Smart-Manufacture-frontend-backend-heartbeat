@@ -3,7 +3,7 @@
     <el-card shadow="never">
       <div slot="header">
         <div class="card-header">
-          <div>生产计划信息</div>
+          <div>订单信息</div>
         </div>
       </div>
       <el-form :model="queryParams" ref="queryOrderForm" size="small" :inline="true" label-width="68px">
@@ -29,63 +29,131 @@
           <el-button icon="el-icon-refresh" size="mini" @click="resetOrderQuery">重置</el-button>
         </el-form-item>
       </el-form>
+      <div v-if="queryParams.orCode">
+        <el-table
+          :data="orderList.filter(ele => ele.orCode === queryParams.orCode)"
+        >
+          <el-table-column label="订单ID" align="center" prop="orId" v-if="true"/>
+          <el-table-column label="订单编码" align="center" prop="orCode" />
+          <el-table-column label="订单优先级" align="center" prop="orPriority" />
+          <el-table-column label="截止时间" align="center" prop="orDeadline" width="180">
+            <template slot-scope="scope">
+              <span>{{ parseTime(scope.row.orDeadline, '{y}-{m}-{d}') }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="总价" align="center" prop="orPrice" />
+          <el-table-column label="创建人" align="center" prop="orCman" />
+          <el-table-column label="创建时间" align="center" prop="orCdate" />
+          <el-table-column label="修改人" align="center" prop="orMman" />
+          <el-table-column label="修改时间" align="center" prop="orMdate" />
+        </el-table>
+      </div>
+    </el-card>
 
-      <el-table
-        v-loading="loading"
-        :data="manufacturePlanList"
-        v-if="queryParams.orCode"
-      >
-        <el-table-column label="计划详情ID" align="center" prop="mpId" v-if="true"/>
-        <el-table-column label="计划详情编码" align="center" prop="mpCode" />
-        <el-table-column label="所属订单" align="center" prop="orCode" />
-        <el-table-column label="产品" align="center" prop="odCode">
-          <template slot-scope="scope">
-            {{ parseOdCode(scope.row.odCode) }}
-          </template>
-        </el-table-column>
-        <el-table-column label="状态" align="center" prop="mpStat">
-          <template slot-scope="scope">
-            <dict-tag :options="dict.type.ices_manufacture_plan_status" :value="scope.row.mpStat"/>
-          </template>
-        </el-table-column>
-        <el-table-column label="实际开始时间" align="center" prop="mpBegin">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.mpBegin, '{y}-{m}-{d}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="最晚结束时间" align="center" prop="mpEndPlan">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.mpEndPlan, '{y}-{m}-{d}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="实际结束时间" align="center" prop="mpEndReal">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.mpEndReal, '{y}-{m}-{d}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="优先级" align="center" prop="mpPriority" />
-        <el-table-column label="计划产品数量" align="center" prop="mpQtyPlan" />
-        <el-table-column label="已完成产品数量" align="center" prop="mpQtyReal" />
-        <el-table-column label="创建人" align="center" prop="mpCman" />
-        <el-table-column label="创建时间" align="center" prop="mpCdate" />
-        <el-table-column label="下发人" align="center" prop="mpRman" />
-        <el-table-column label="下发时间" align="center" prop="mpRdate" />
-        <el-table-column label="修改人" align="center" prop="mpMman" />
-        <el-table-column label="修改时间" align="center" prop="mpMdate" />
-      </el-table>
-
-      <pagination
-        v-show="total>0 && queryParams.orCode"
-        :total="total"
-        :page.sync="queryParams.pageNum"
-        :limit.sync="queryParams.pageSize"
-        @pagination="getList"
-      />
-    </el-card>    
     <el-card shadow="never" class="controlled-card">
       <div slot="header">
         <div class="card-header">
-          <div>生产计划详细信息</div>
+          <div>生产计划信息</div>
+        </div>
+      </div>
+      <div v-if="queryParams.orCode">
+        <el-table
+          v-loading="loading"
+          :data="manufacturePlanMainList"
+        >
+          <el-table-column label="计划ID" align="center" prop="mpmId" v-if="true"/>
+          <el-table-column label="计划编码" align="center" prop="mpmCode" />
+          <el-table-column label="订单" align="center" prop="orCode" />
+          <el-table-column label="实际开始时间" align="center" prop="mpmBegin">
+            <template slot-scope="scope">
+              <span>{{ parseTime(scope.row.mpmBegin, '{y}-{m}-{d}') }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="最晚结束时间" align="center" prop="mpmEndPlan">
+            <template slot-scope="scope">
+              <span>{{ parseTime(scope.row.mpmEndPlan, '{y}-{m}-{d}') }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="实际结束时间" align="center" prop="mpmEndReal">
+            <template slot-scope="scope">
+              <span>{{ parseTime(scope.row.mpmEndReal, '{y}-{m}-{d}') }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="创建人" align="center" prop="mpmCman" />
+          <el-table-column label="创建时间" align="center" prop="mpmCdate" />
+          <el-table-column label="修改人" align="center" prop="mpmMman" />
+          <el-table-column label="修改时间" align="center" prop="mpmMdate" />
+        </el-table>
+      </div>
+      <el-empty v-else description="选择订单后即可查看生产计划" />
+    </el-card>
+
+    <el-card shadow="never" class="controlled-card">
+      <div slot="header">
+        <div class="card-header">
+          <div>已有生产计划详细信息</div>
+        </div>
+      </div>
+      <div v-if="queryParams.orCode">
+        <el-table
+          v-loading="loading"
+          :data="manufacturePlanList"
+          v-if="queryParams.orCode"
+        >
+          <el-table-column label="计划详情ID" align="center" prop="mpId" v-if="true"/>
+          <el-table-column label="计划详情编码" align="center" prop="mpCode" />
+          <el-table-column label="所属生产计划" align="center" prop="mpmCode" />
+          <el-table-column label="所属订单" align="center" prop="orCode" />
+          <el-table-column label="产品" align="center" prop="odCode">
+            <template slot-scope="scope">
+              {{ parseOdCode(scope.row.odCode) }}
+            </template>
+          </el-table-column>
+          <el-table-column label="状态" align="center" prop="mpStat">
+            <template slot-scope="scope">
+              <dict-tag :options="dict.type.ices_manufacture_plan_status" :value="scope.row.  mpStat"/>
+            </template>
+          </el-table-column>
+          <el-table-column label="实际开始时间" align="center" prop="mpBegin">
+            <template slot-scope="scope">
+              <span>{{ parseTime(scope.row.mpBegin, '{y}-{m}-{d}') }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="最晚结束时间" align="center" prop="mpEndPlan">
+            <template slot-scope="scope">
+              <span>{{ parseTime(scope.row.mpEndPlan, '{y}-{m}-{d}') }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="实际结束时间" align="center" prop="mpEndReal">
+            <template slot-scope="scope">
+              <span>{{ parseTime(scope.row.mpEndReal, '{y}-{m}-{d}') }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="优先级" align="center" prop="mpPriority" />
+          <el-table-column label="计划产品数量" align="center" prop="mpQtyPlan" />
+          <el-table-column label="已完成产品数量" align="center" prop="mpQtyReal" />
+          <el-table-column label="创建人" align="center" prop="mpCman" />
+          <el-table-column label="创建时间" align="center" prop="mpCdate" />
+          <el-table-column label="下发人" align="center" prop="mpRman" />
+          <el-table-column label="下发时间" align="center" prop="mpRdate" />
+          <el-table-column label="修改人" align="center" prop="mpMman" />
+          <el-table-column label="修改时间" align="center" prop="mpMdate" />
+        </el-table>
+        <pagination
+          v-show="total>0 && queryParams.orCode"
+          :total="total"
+          :page.sync="queryParams.pageNum"
+          :limit.sync="queryParams.pageSize"
+          @pagination="getList"
+        />
+      </div>
+      <el-empty v-else description="选定订单后即可录入生产计划详细信息" />
+    </el-card>
+
+    <el-card shadow="never" class="controlled-card">
+      <div slot="header">
+        <div class="card-header">
+          <div>维护生产计划详细信息</div>
           <div v-show="queryParams.orCode">
             <el-button
               :loading="buttonLoading"
@@ -102,11 +170,21 @@
       <div v-if="queryParams.orCode">
         <el-form ref="form" :model="form" :rules="rules" label-width="110px">
           <el-col :span="12">
+            <el-form-item label="详细信息编码" prop="mpCode">
+              <el-input v-model="form.mpCode" disabled />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item label="所属订单" prop="orCode">
               <el-select v-model="form.orCode" placeholder="请选择订单" disabled>
                 <el-option v-for="item in orderList" :key="item.orCode" :label="item.orCode" :value="item.orCode">
                 </el-option>
               </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="所属生产计划" prop="mpmCode">
+              <el-input v-model="form.mpmCode" disabled />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -166,6 +244,7 @@
 
 <script>
 import { listManufacturePlan, getManufacturePlan, delManufacturePlan, addManufacturePlan, updateManufacturePlan } from "@/api/system/manufacturePlan";
+import { listManufacturePlanMain } from "@/api/system/manufacturePlanMain";
 import { listOrder } from "@/api/system/order";
 import { listProduct } from "@/api/system/product";
 import { listOrderDemand } from "@/api/system/orderDemand";
@@ -204,6 +283,9 @@ export default {
         orCode: [
           { required: true, message: "所属订单不能为空", trigger: "blur" }
         ],
+        mpmCode: [
+          { required: true, message: "所属生产计划不能为空", trigger: "blur" }
+        ],
         odCode: [
           { required: true, message: "产品不能为空", trigger: "blur" }
         ],
@@ -227,6 +309,8 @@ export default {
       orderDemandListFull: [],
       // 选择订单的产品需求
       orderDemandList: [],
+      // 生产计划信息
+      manufacturePlanMainList: []
     };
   },
   async created() {
@@ -299,12 +383,26 @@ export default {
         })
       })
     },
-    // 查询产品列表
+    // 查询订单列表
     getOrderList() {
       return new Promise((resolve, reject) => {
         this.loading = true;
         listOrder().then(response => {
           this.orderList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
+    // 查询生产计划主表列表
+    getMainList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listManufacturePlanMain({ orCode: this.queryParams.orCode }).then(response => {
+          this.manufacturePlanMainList = response.rows
           resolve()
         }).catch(() => {
           reject()
@@ -332,6 +430,7 @@ export default {
         mpId: undefined,
         orCode: undefined,
         odCode: undefined,
+        mpmCode: undefined,
         mpStat: undefined,
         mpBegin: undefined,
         mpEndPlan: undefined,
@@ -396,9 +495,12 @@ export default {
       });
     },
     // 选择所属订单的监听函数
-    selectOrder(row, flag=1) {
+    async selectOrder(row, flag=1) {
+      await this.getMainList()
       this.queryParams.pageNum = 1
       this.form.orCode = this.queryParams.orCode
+      console.log(this.manufacturePlanMainList)
+      this.form.mpmCode = this.manufacturePlanMainList[0].mpmCode
       this.getList()
       const order = this.orderList.find(ele => ele.orCode === row)
       if (order) {

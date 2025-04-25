@@ -406,6 +406,7 @@ export default {
     await this.getProductList();
     await this.getOrderList();
     await this.getOrderDemandList();
+    await this.getList();
     if (this.$route.query.mpCode) {
       const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpCode === this.$route.query.mpCode)
       this.$router.replace('/manufacture/manufacturePlan')
@@ -421,6 +422,7 @@ export default {
     await this.getProductList();
     await this.getOrderList();
     await this.getOrderDemandList();
+    await this.getList();
     if (this.$route.query.mpCode) {
       const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpCode === this.$route.query.mpCode)
       this.$router.replace('/manufacture/manufacturePlan')

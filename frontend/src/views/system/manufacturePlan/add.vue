@@ -147,7 +147,7 @@
           @pagination="getList"
         />
       </div>
-      <el-empty v-else description="选定订单后即可录入生产计划详细信息" />
+      <el-empty v-else description="选定订单后即可查看生产计划详细信息" />
     </el-card>
 
     <el-card shadow="never" class="controlled-card">
@@ -237,7 +237,7 @@
         </div>
       </div>
       <manufacture-task v-if='form.mpCode' :mpCode="form.mpCode" />
-      <el-empty v-else description="保存生产计划后即可管理下属生产任务" />
+      <el-empty v-else description="保存生产计划详细后即可管理下属生产任务" />
     </el-card>
   </div>
 </template>

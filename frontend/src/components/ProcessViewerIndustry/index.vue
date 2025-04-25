@@ -332,13 +332,22 @@ export default {
         else minimum = minimum < element.cnt ? minimum : element.cnt
       })
       // 染色
+      let finish = 1
       nodes.forEach(element => {
         if (element.progress) {
           canvas.addMarker(element.dtModel, 'primary')
+          finish = 0
         } else if (element.cnt > minimum) {
           canvas.addMarker(element.dtModel, 'success')
+          finish = 0
         }
       })
+      // 所有节点的次数一致，且不为0，则本轮已结束
+      if (finish === 1 && minimum > 0) {
+        nodes.forEach(element => {
+          canvas.addMarker(element.dtModel, 'success')
+        })
+      }
     },
     // 更新已经暂存的任务
     updateTask(data) {

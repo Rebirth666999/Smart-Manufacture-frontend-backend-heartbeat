@@ -10,14 +10,19 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.ruoyi.system.service.IIcesCodeService;
+import com.ruoyi.system.domain.IcesOrderDemand;
+import com.ruoyi.system.domain.bo.IcesManufacturePlanBo;
+import com.ruoyi.system.domain.bo.IcesOrderBo;
+import com.ruoyi.system.domain.bo.IcesOrderDemandBo;
+import com.ruoyi.system.domain.vo.IcesOrderDemandVo;
+import com.ruoyi.system.domain.vo.IcesOrderVo;
+import com.ruoyi.system.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesManufacturePlanMainBo;
 import com.ruoyi.system.domain.vo.IcesManufacturePlanMainVo;
 import com.ruoyi.system.domain.IcesManufacturePlanMain;
 import com.ruoyi.system.mapper.IcesManufacturePlanMainMapper;
-import com.ruoyi.system.service.IIcesManufacturePlanMainService;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,6 +42,9 @@ public class IcesManufacturePlanMainServiceImpl implements IIcesManufacturePlanM
 
     private final IcesManufacturePlanMainMapper baseMapper;
     private final IIcesCodeService codeService;
+    private final IIcesManufacturePlanService manufacturePlanService;
+    private final IIcesOrderDemandService orderDemandService;
+    private final IIcesOrderService orderService;
 
     /**
      * 查询生产计划(主)
@@ -90,6 +98,28 @@ public class IcesManufacturePlanMainServiceImpl implements IIcesManufacturePlanM
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
             bo.setMpmId(add.getMpmId());
+            // 根据订单的产品需求，自动加入生产计划详细
+            // 查找订单产品需求
+            IcesOrderDemandBo orderDemandBo = new IcesOrderDemandBo();
+            orderDemandBo.setOrCode(bo.getOrCode());
+            List<IcesOrderDemandVo> orderDemandVos = orderDemandService.queryList(orderDemandBo);
+            // 查找订单
+            IcesOrderBo orderBo = new IcesOrderBo();
+            orderBo.setOrCode(bo.getOrCode());
+            List<IcesOrderVo> orderVos = orderService.queryList(orderBo);
+            assert orderVos.size() == 1;
+            // 自动生成计划详细信息
+            for (IcesOrderDemandVo orderDemandVo : orderDemandVos) {
+                IcesManufacturePlanBo manufacturePlanBo = new IcesManufacturePlanBo();
+                manufacturePlanBo.setOrCode(bo.getOrCode());
+                manufacturePlanBo.setMpmCode(bo.getMpmCode());
+                manufacturePlanBo.setMpEndPlan(bo.getMpmEndPlan());
+                manufacturePlanBo.setOdCode(orderDemandVo.getOdCode());
+                manufacturePlanBo.setMpQtyPlan(orderDemandVo.getOdDemand());
+                manufacturePlanBo.setMpPriority(orderVos.get(0).getOrPriority());
+                manufacturePlanBo.setMpStat("1");
+                manufacturePlanService.insertByBo(manufacturePlanBo);
+            }
         }
         return queryById(add.getMpmId());
     }

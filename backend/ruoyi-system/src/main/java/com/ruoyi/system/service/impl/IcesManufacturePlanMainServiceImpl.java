@@ -79,7 +79,7 @@ public class IcesManufacturePlanMainServiceImpl implements IIcesManufacturePlanM
      * 新增生产计划(主)
      */
     @Override
-    public Boolean insertByBo(IcesManufacturePlanMainBo bo) {
+    public IcesManufacturePlanMainVo insertByBo(IcesManufacturePlanMainBo bo) {
         bo.setMpmCode(codeService.insertByType("ManufacturePlanMain"));
         String cMan = getLoginUsername();
         String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
@@ -91,7 +91,7 @@ public class IcesManufacturePlanMainServiceImpl implements IIcesManufacturePlanM
         if (flag) {
             bo.setMpmId(add.getMpmId());
         }
-        return flag;
+        return queryById(add.getMpmId());
     }
 
     /**

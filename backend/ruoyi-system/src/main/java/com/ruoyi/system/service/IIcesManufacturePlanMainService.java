@@ -1,6 +1,5 @@
 package com.ruoyi.system.service;
 
-import com.ruoyi.system.domain.IcesManufacturePlanMain;
 import com.ruoyi.system.domain.vo.IcesManufacturePlanMainVo;
 import com.ruoyi.system.domain.bo.IcesManufacturePlanMainBo;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -35,7 +34,7 @@ public interface IIcesManufacturePlanMainService {
     /**
      * 新增生产计划(主)
      */
-    Boolean insertByBo(IcesManufacturePlanMainBo bo);
+    IcesManufacturePlanMainVo insertByBo(IcesManufacturePlanMainBo bo);
 
     /**
      * 修改生产计划(主)

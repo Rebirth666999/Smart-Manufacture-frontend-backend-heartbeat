@@ -78,8 +78,8 @@ public class IcesManufacturePlanMainController extends BaseController {
     @Log(title = "生产计划(主)", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody IcesManufacturePlanMainBo bo) {
-        return toAjax(iIcesManufacturePlanMainService.insertByBo(bo));
+    public R<IcesManufacturePlanMainVo> add(@Validated(AddGroup.class) @RequestBody IcesManufacturePlanMainBo bo) {
+        return R.ok(iIcesManufacturePlanMainService.insertByBo(bo));
     }
 
     /**

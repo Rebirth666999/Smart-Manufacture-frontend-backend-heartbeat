@@ -348,6 +348,10 @@ export default {
         this.queryParams.orCode = this.form.orCode
         this.getList()
       });
+    } else if (this.$route.query.orCode) {
+      this.queryParams.orCode = this.$route.query.orCode
+      this.form.orCode = this.$route.query.orCode
+      this.$router.replace("/manufacture/manufacturePlan/addMain")
     } else {
       this.loading = false;
     }
@@ -364,6 +368,10 @@ export default {
         this.queryParams.orCode = this.form.orCode
         this.getList()
       });
+    } else if (this.$route.query.orCode) {
+      this.queryParams.orCode = this.$route.query.orCode
+      this.form.orCode = this.$route.query.orCode
+      this.$router.replace("/manufacture/manufacturePlan/addMain")
     } else {
       this.loading = false;
     }

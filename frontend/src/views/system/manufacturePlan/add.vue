@@ -109,11 +109,11 @@
               {{ parseOdCode(scope.row.odCode) }}
             </template>
           </el-table-column>
-          <el-table-column label="状态" align="center" prop="mpStat">
+          <!-- <el-table-column label="状态" align="center" prop="mpStat">
             <template slot-scope="scope">
-              <dict-tag :options="dict.type.ices_manufacture_plan_status" :value="scope.row.  mpStat"/>
+              <dict-tag :options="dict.type.ices_manufacture_plan_status" :value="scope.row.mpStat"/>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column label="实际开始时间" align="center" prop="mpBegin">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.mpBegin, '{y}-{m}-{d}') }}</span>

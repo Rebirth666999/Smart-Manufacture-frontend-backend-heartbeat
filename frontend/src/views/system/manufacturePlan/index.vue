@@ -64,7 +64,7 @@
               icon="el-icon-plus"
               size="mini"
               :disabled="manufacturePlanMainList.length > 0"
-              @click="handleAdd"
+              @click="handleAddMain"
             >新增</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -73,7 +73,7 @@
               plain
               icon="el-icon-download"
               size="mini"
-              @click="handleExport"
+              @click="handleExportMain"
             >导出</el-button>
           </el-col>
         </el-row>
@@ -110,13 +110,13 @@
                 size="mini"
                 type="text"
                 icon="el-icon-edit"
-                @click="handleUpdate(scope.row)"
+                @click="handleUpdateMain(scope.row)"
               >修改</el-button>
               <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-delete"
-                @click="handleDelete(scope.row)"
+                @click="handleDeleteMain(scope.row)"
               >删除</el-button>
             </template>
           </el-table-column>
@@ -131,7 +131,7 @@
           <div>生产计划详细信息</div>
         </div>
       </div>
-      <div v-if="queryParams.orCode">
+      <div v-if="queryParams.orCode && manufacturePlanMainList.length > 0">
         <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
           <!-- <el-form-item label="状态" prop="mpStat">
             <el-select v-model="queryParams.mpStat" placeholder="请选择状态" clearable>
@@ -312,8 +312,9 @@
           @pagination="getList"
         />
       </div>
-      <el-empty v-else description="选择订单后即可查看生产计划详情" />
+      <el-empty v-else description="暂无生产计划详细信息" />
     </el-card>
+
     <el-card shadow="never" class="controlled-card">
       <el-tabs value="task">
         <el-tab-pane label="生产任务" name="task">
@@ -331,7 +332,7 @@
 
 <script>
 import { listManufacturePlan, getManufacturePlan, delManufacturePlan, addManufacturePlan, updateManufacturePlan } from "@/api/system/manufacturePlan";
-import { listManufacturePlanMain } from "@/api/system/manufacturePlanMain";
+import { listManufacturePlanMain, getManufacturePlanMain, delManufacturePlanMain, addManufacturePlanMain, updateManufacturePlanMain } from "@/api/system/manufacturePlanMain";
 import { listOrder } from "@/api/system/order";
 import { listProduct } from "@/api/system/product";
 import { listOrderDemand } from "@/api/system/orderDemand";
@@ -389,8 +390,6 @@ export default {
     await this.getProductList();
     await this.getOrderList();
     await this.getOrderDemandList();
-    await this.getList();
-    await this.getMainList();
     if (this.$route.query.mpCode) {
       const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpCode === this.$route.query.mpCode)
       this.$router.replace('/manufacture/manufacturePlan')
@@ -406,8 +405,6 @@ export default {
     await this.getProductList();
     await this.getOrderList();
     await this.getOrderDemandList();
-    await this.getList();
-    await this.getMainList();
     if (this.$route.query.mpCode) {
       const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpCode === this.$route.query.mpCode)
       this.$router.replace('/manufacture/manufacturePlan')
@@ -541,7 +538,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const mpIds = row.mpId || this.idSelect;
-      this.$modal.confirm('是否确认删除生产计划编号为"' + mpIds + '"的数据项？').then(() => {
+      this.$modal.confirm('是否确认删除生产计划详情编号为"' + mpIds + '"的数据项？').then(() => {
         this.loading = true;
         return delManufacturePlan(mpIds);
       }).then(() => {
@@ -615,6 +612,36 @@ export default {
       }).finally(() => {
         this.loading = false;
       });
+    },
+    /** 新增生产计划主表 */
+    handleAddMain() {
+      this.$router.push(`/manufacture/manufacturePlan/addMain?orCode=${this.queryParams.orCode}`)
+    },
+    /** 修改生产计划主表 */
+    handleUpdateMain(row) {
+      const mpmId = row.mpmId
+      this.$router.push(`/manufacture/manufacturePlan/addMain?mpmId=${mpmId}`)
+    },
+    /** 删除生产计划主表 */
+    handleDeleteMain(row) {
+      const mpmIds = row.mpmId;
+      this.$modal.confirm('是否确认删除生产计划编号为"' + mpmIds + '"的数据项？').then(() => {
+        this.loading = true;
+        return delManufacturePlanMain(mpmIds);
+      }).then(() => {
+        this.loading = false;
+        this.manufacturePlanMainList = []
+        this.$modal.msgSuccess("删除成功");
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    /** 导出生产计划主表 */
+    handleExportMain() {
+      this.download('system/manufacturePlanMain/export', {
+        orCode: this.queryParams.orCode
+      }, `manufacturePlanMain_${new Date().getTime()}.xlsx`)
     },
     /**
      * 解析产品需求字段

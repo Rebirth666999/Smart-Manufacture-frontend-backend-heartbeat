@@ -330,9 +330,7 @@ export default {
       orderList: [],
       // 全部产品列表
       productList: [],
-      // 所有订单的产品需求
-      orderDemandListFull: [],
-      // 选择订单的产品需求
+      // 订单产品需求
       orderDemandList: [],
       // 生产计划信息
       manufacturePlanMainList: []
@@ -376,10 +374,10 @@ export default {
       return new Promise((resolve, reject) => {
         this.loading = true;
         listOrderDemand().then(response => {
-          this.orderDemandListFull = []
+          this.orderDemandList = []
           response.rows.forEach(demand => {
             // 追加产品名称字段
-            this.orderDemandListFull.push({
+            this.orderDemandList.push({
               ...demand,
               prName: this.productList.find(ele => ele.prCode === demand.prCode).prName
             })

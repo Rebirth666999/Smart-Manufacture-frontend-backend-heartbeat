@@ -86,6 +86,7 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
         lqw.eq(StringUtils.isNotBlank(bo.getMpCode()), IcesManufacturePlan::getMpCode, bo.getMpCode());
         lqw.eq(StringUtils.isNotBlank(bo.getOrCode()), IcesManufacturePlan::getOrCode, bo.getOrCode());
         lqw.eq(StringUtils.isNotBlank(bo.getOdCode()), IcesManufacturePlan::getOdCode, bo.getOdCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getMpmCode()), IcesManufacturePlan::getMpmCode, bo.getMpmCode());
         lqw.eq(StringUtils.isNotBlank(bo.getMpStat()), IcesManufacturePlan::getMpStat, bo.getMpStat());
         lqw.eq(bo.getMpPriority() != null, IcesManufacturePlan::getMpPriority, bo.getMpPriority());
         lqw.eq(bo.getMpDelete() != null, IcesManufacturePlan::getMpDelete, bo.getMpDelete());

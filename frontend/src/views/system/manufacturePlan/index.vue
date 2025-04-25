@@ -137,7 +137,7 @@
           </el-table-column>
           <el-table-column label="计划详情ID" align="center" prop="mpId" v-if="true"/>
           <el-table-column label="计划详情编码" align="center" prop="mpCode" />
-          <el-table-column label="所属订单" align="center" prop="orCode" />
+          <el-table-column label="所属生产计划" align="center" prop="mpmCode" />
           <el-table-column label="产品" align="center" prop="odCode">
             <template slot-scope="scope">
               {{ parseOdCode(scope.row.odCode) }}

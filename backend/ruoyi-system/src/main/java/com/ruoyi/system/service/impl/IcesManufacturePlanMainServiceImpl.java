@@ -126,7 +126,15 @@ public class IcesManufacturePlanMainServiceImpl implements IIcesManufacturePlanM
      * 保存前的数据校验
      */
     private void validEntityBeforeSave(IcesManufacturePlanMain entity){
-        //TODO 做一些数据校验,如唯一约束
+        // 新增的生产计划不能和已有的重复
+        if (entity.getMpmId() == null) {
+            IcesManufacturePlanMainBo bo = new IcesManufacturePlanMainBo();
+            bo.setOrCode(entity.getOrCode());
+            List<IcesManufacturePlanMainVo> vos = queryList(bo);
+            if (!vos.isEmpty()) {
+                throw new RuntimeException("对应订单已存在生产计划");
+            }
+        }
     }
 
     /**

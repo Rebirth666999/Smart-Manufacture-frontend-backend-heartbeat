@@ -745,6 +745,7 @@ export default {
               this.$modal.msgSuccess("新增成功");
               this.$router.replace(`/manufacture/manufacturePlan/addMain?mpmId=${response.data.mpmId}`)
               this.form = response.data
+              this.queryParams.mpmCode = this.form.mpmCode
               this.preview = false
               this.getList()
             }).finally(() => {

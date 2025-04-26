@@ -454,6 +454,7 @@ export default {
         const product = this.productList.find(ele => ele.prCode === prCode)
         this.custInfo = JSON.parse(product.prCust)
       }
+      this.custList = []
     },
     /**
      * 定制详情选中某个定制项名称

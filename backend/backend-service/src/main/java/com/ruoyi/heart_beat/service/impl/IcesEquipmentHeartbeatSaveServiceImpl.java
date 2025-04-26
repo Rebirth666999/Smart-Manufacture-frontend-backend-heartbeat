@@ -4,12 +4,16 @@ import cn.hutool.core.bean.BeanUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ruoyi.heart_beat.domain.*;
 import com.ruoyi.heart_beat.service.IcesEquipmentHeartbeatSaveService;
+import com.ruoyi.system.domain.IcesDeviceTask;
 import com.ruoyi.system.domain.IcesEquipment;
 import com.ruoyi.system.domain.IcesEquipmentRecord;
+import com.ruoyi.system.domain.bo.IcesDeviceTaskBo;
 import com.ruoyi.system.domain.bo.IcesEquipmentBo;
 import com.ruoyi.system.domain.bo.IcesEquipmentRecordBo;
+import com.ruoyi.system.domain.vo.IcesDeviceTaskVo;
 import com.ruoyi.system.mapper.IcesEquipmentRecordMapper;
 import com.ruoyi.system.service.IIcesCodeService;
+import com.ruoyi.system.service.IIcesDeviceTaskService;
 import com.ruoyi.system.service.IIcesEquipmentRecordService;
 import com.ruoyi.system.service.IIcesEquipmentService;
 import liquibase.pro.packaged.D;
@@ -27,6 +31,8 @@ public class IcesEquipmentHeartbeatSaveServiceImpl implements IcesEquipmentHeart
     private IIcesCodeService codeService;
     @Autowired
     private IIcesEquipmentService equipmentService;
+    @Autowired
+    private IIcesDeviceTaskService deviceTaskService;
     //事件类型代码
     private static Map<String,String> erTypeDict = new HashMap<>();
     //事件状态代码
@@ -42,6 +48,12 @@ public class IcesEquipmentHeartbeatSaveServiceImpl implements IcesEquipmentHeart
     private static Map<String,IcesTaskInfo> tasksInfo=new HashMap<>();
     //控制节点对应的设备id
     private String controllerId="EquipmentModel-00008";
+    // 已下发任务code
+    private Set<String> dtRelease = new HashSet<>();
+    // 已完成任务code
+    private Set<String> dtDone = new HashSet<>();
+    // 已完成任务code
+    private Set<String> dtDoing = new HashSet<>();
     static {
         erTypeDict.put("进行中","1");
         erTypeDict.put("已完成","2");
@@ -65,7 +77,7 @@ public class IcesEquipmentHeartbeatSaveServiceImpl implements IcesEquipmentHeart
             //可能不对，当控制节点出错时可能不会执行这些代码
             IcesError icesError = objectMapper.readValue(heartbeatMsg, IcesError.class);
             System.out.println("!!!!!!!!!!!!!!!!!!ERROR HAPPENED!!!!!!!!!!!!!!!!!!!!!!!!!");
-            saveDB(controllerId,erTypeDict.get("已完成"),erStatDict.get("发生故障"),1,new Date(),new Date(),heartbeatMsg);
+//            saveDB(controllerId,erTypeDict.get("已完成"),erStatDict.get("发生故障"),1,new Date(),new Date(),heartbeatMsg);
             return 0;
         }catch (Exception e){
 
@@ -117,107 +129,151 @@ public class IcesEquipmentHeartbeatSaveServiceImpl implements IcesEquipmentHeart
             System.out.println("   执行完的设备操作: " + opDone);
             System.out.println("   未执行的设备操作: " + opUndo);
             System.out.println();
-            for (String s : opUndo) {
-                System.out.println("准备添加任务接收记录"+opUndo+eqOpReceived);
-                if(!eqOpReceived.contains(s)){
-                    System.out.println("添加任务接收记录");
-                    eqOpReceived.add(s);
-                    final IcesTaskInfo taskInfo = tasksInfo.get(taskId);
-                    for (IcesProcessRoute icesProcessRoute : taskInfo.getProcessRoute()) {
-                        if(s.equals(icesProcessRoute.getPrdId())){
-                            final ObjectMapper mapper = new ObjectMapper();
-                            final IcesOpTaskStatus icesOpTaskStatus = new IcesOpTaskStatus();
-                            icesOpTaskStatus.setOpId(icesProcessRoute.getOpId());
-                            icesOpTaskStatus.setTaskId(nowTaskId);
-                            icesOpTaskStatus.setPrdId(icesProcessRoute.getPrdId());
-                            final String desc = mapper.writeValueAsString(icesOpTaskStatus);
-                            saveDB(icesProcessRoute.getEqId(),erTypeDict.get("已完成"),erStatDict.get("收到任务"),1,new Date(),new Date(),desc);
-                            break;
-                        }
+            for (String dtCode: opUndo) {
+                if (!dtRelease.contains(dtCode)) {
+                    dtRelease.add(dtCode);
+                    IcesDeviceTaskBo deviceTaskBo = new IcesDeviceTaskBo();
+                    deviceTaskBo.setDtCode(dtCode);
+                    List<IcesDeviceTaskVo> vos = deviceTaskService.queryList(deviceTaskBo);
+                    if (!vos.isEmpty()) {
+                        deviceTaskBo.setDtId(vos.get(0).getDtId());
+                        deviceTaskBo.setDtStat("2");
+                        deviceTaskService.updateByBo(deviceTaskBo);
                     }
                 }
             }
-            for (String s : opDoing) {
-                if(!eqOpExecuting.contains(s)){
-                    System.out.println("添加设备执行记录");
-                    eqOpExecuting.add(s);
-                    //如果当前设备操作未加入接收队列，直接进入了执行队列
-                    boolean flag=false;
-                    if(!eqOpReceived.contains(s)){
-                        flag=true;
-                    }/*else {
-                        //当前任务已经在接收队列，现需要清除接收队列中的该任务
-                        eqOpReceived.
-                    }*/
-                    final IcesTaskInfo taskInfo = tasksInfo.get(taskId);
-                    for (IcesProcessRoute icesProcessRoute : taskInfo.getProcessRoute()) {
-                        if(s.equals(icesProcessRoute.getPrdId())){
-                            final ObjectMapper mapper = new ObjectMapper();
-                            final IcesOpTaskStatus icesOpTaskStatus = new IcesOpTaskStatus();
-                            icesOpTaskStatus.setOpId(icesProcessRoute.getOpId());
-                            icesOpTaskStatus.setTaskId(nowTaskId);
-                            icesOpTaskStatus.setPrdId(icesProcessRoute.getPrdId());
-                            final String desc = mapper.writeValueAsString(icesOpTaskStatus);
-                            saveDB(icesProcessRoute.getEqId(),erTypeDict.get("已完成"),erStatDict.get("执行任务"),1,new Date(),new Date(),desc);
-                            if(flag){
-                                System.out.println("添加任务接收记录");
-                                eqOpReceived.add(s);
-                                saveDB(icesProcessRoute.getEqId(),erTypeDict.get("已完成"),erStatDict.get("收到任务"),1,new Date(),new Date(),desc);
-                            }
-                            break;
-                        }
+            for (String dtCode: opDoing) {
+                if (!dtDoing.contains(dtCode)) {
+                    dtDoing.add(dtCode);
+                    IcesDeviceTaskBo deviceTaskBo = new IcesDeviceTaskBo();
+                    deviceTaskBo.setDtCode(dtCode);
+                    List<IcesDeviceTaskVo> vos = deviceTaskService.queryList(deviceTaskBo);
+                    if (!vos.isEmpty()) {
+                        deviceTaskBo.setDtId(vos.get(0).getDtId());
+                        deviceTaskBo.setDtStat("3");
+                        deviceTaskService.updateByBo(deviceTaskBo);
                     }
                 }
             }
+            for (String dtCode: opDone) {
+                if (!dtDone.contains(dtCode)) {
+                    dtDone.add(dtCode);
+                    IcesDeviceTaskBo deviceTaskBo = new IcesDeviceTaskBo();
+                    deviceTaskBo.setDtCode(dtCode);
+                    List<IcesDeviceTaskVo> vos = deviceTaskService.queryList(deviceTaskBo);
+                    if (!vos.isEmpty()) {
+                        deviceTaskBo.setDtId(vos.get(0).getDtId());
+                        deviceTaskBo.setDtStat("4");
+                        deviceTaskService.updateByBo(deviceTaskBo);
+                    }
+                }
+            }
+            if (opUndo.isEmpty() && opDoing.isEmpty() && opDone.isEmpty()) {
+                dtRelease.clear();
+                dtDone.clear();
+                dtDoing.clear();
+            }
+//            for (String s : opUndo) {
+//                System.out.println("准备添加任务接收记录"+opUndo+eqOpReceived);
+//                if(!eqOpReceived.contains(s)){
+//                    System.out.println("添加任务接收记录");
+//                    eqOpReceived.add(s);
+//                    final IcesTaskInfo taskInfo = tasksInfo.get(taskId);
+//                    for (IcesProcessRoute icesProcessRoute : taskInfo.getProcessRoute()) {
+//                        if(s.equals(icesProcessRoute.getPrdId())){
+//                            final ObjectMapper mapper = new ObjectMapper();
+//                            final IcesOpTaskStatus icesOpTaskStatus = new IcesOpTaskStatus();
+//                            icesOpTaskStatus.setOpId(icesProcessRoute.getOpId());
+//                            icesOpTaskStatus.setTaskId(nowTaskId);
+//                            icesOpTaskStatus.setPrdId(icesProcessRoute.getPrdId());
+//                            final String desc = mapper.writeValueAsString(icesOpTaskStatus);
+//                            saveDB(icesProcessRoute.getEqId(),erTypeDict.get("已完成"),erStatDict.get("收到任务"),1,new Date(),new Date(),desc);
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//            for (String s : opDoing) {
+//                if(!eqOpExecuting.contains(s)){
+//                    System.out.println("添加设备执行记录");
+//                    eqOpExecuting.add(s);
+//                    //如果当前设备操作未加入接收队列，直接进入了执行队列
+//                    boolean flag=false;
+//                    if(!eqOpReceived.contains(s)){
+//                        flag=true;
+//                    }/*else {
+//                        //当前任务已经在接收队列，现需要清除接收队列中的该任务
+//                        eqOpReceived.
+//                    }*/
+//                    final IcesTaskInfo taskInfo = tasksInfo.get(taskId);
+//                    for (IcesProcessRoute icesProcessRoute : taskInfo.getProcessRoute()) {
+//                        if(s.equals(icesProcessRoute.getPrdId())){
+//                            final ObjectMapper mapper = new ObjectMapper();
+//                            final IcesOpTaskStatus icesOpTaskStatus = new IcesOpTaskStatus();
+//                            icesOpTaskStatus.setOpId(icesProcessRoute.getOpId());
+//                            icesOpTaskStatus.setTaskId(nowTaskId);
+//                            icesOpTaskStatus.setPrdId(icesProcessRoute.getPrdId());
+//                            final String desc = mapper.writeValueAsString(icesOpTaskStatus);
+//                            saveDB(icesProcessRoute.getEqId(),erTypeDict.get("已完成"),erStatDict.get("执行任务"),1,new Date(),new Date(),desc);
+//                            if(flag){
+//                                System.out.println("添加任务接收记录");
+//                                eqOpReceived.add(s);
+//                                saveDB(icesProcessRoute.getEqId(),erTypeDict.get("已完成"),erStatDict.get("收到任务"),1,new Date(),new Date(),desc);
+//                            }
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
             // 打印心跳信息
             System.out.println("心跳信息:");
-            for (IcesHeartbeat heartbeat : root.getHeartbeat()) {
-                String eqId=heartbeat.getEqId();
-                String eqNmae=heartbeat.getEqName();
-                String status=heartbeat.getStatus().toString();
-                System.out.println("   设备id: " +  eqId);
-                System.out.println("   设备名: " + eqNmae);
-                System.out.println("   当前状态: " + status);
-                saveDB(eqId,erTypeDict.get("已完成"),erStatDict.get("设备心跳"),1,new Date(),new Date(),status);
-                System.out.println();
-
-            }
+//            for (IcesHeartbeat heartbeat : root.getHeartbeat()) {
+//                String eqId=heartbeat.getEqId();
+//                String eqNmae=heartbeat.getEqName();
+//                String status=heartbeat.getStatus().toString();
+//                System.out.println("   设备id: " +  eqId);
+//                System.out.println("   设备名: " + eqNmae);
+//                System.out.println("   当前状态: " + status);
+//                saveDB(eqId,erTypeDict.get("已完成"),erStatDict.get("设备心跳"),1,new Date(),new Date(),status);
+//                System.out.println();
+//
+//            }
             //打印操作完成信息
             System.out.println("任务完成信息");
-            for (IcesOpFinishMsg opFinishMsg : root.getOpFinishMsg()) {
-                // 将方法调用的结果保存为变量
-                String eqId = opFinishMsg.getEqId();
-                String eqName = opFinishMsg.getEqName();
-                String opId = opFinishMsg.getOpId();
-                String opName = opFinishMsg.getOpName();
-                Date beginTime = opFinishMsg.getBeginTime();
-                Date finishTime = opFinishMsg.getFinishTime();
-                Map<String, Object> status = opFinishMsg.getStatus();
-
-                // 使用变量进行打印
-                System.out.println("   设备id : " + eqId);
-                System.out.println("   设备名 : " + eqName);
-                System.out.println("   操作id : " + opId);
-                System.out.println("   操作名 : " + opName);
-                System.out.println("   开始时间 : " + beginTime);
-                System.out.println("   结束时间 : " + finishTime);
-                System.out.println("   结束信息 : " + status.toString());
-                System.out.println();
-                //构建存入数据库的dec字段
-                final ObjectMapper mapper = new ObjectMapper();
-                final IcesOpFinishMsgStatus icesOpFinishMsgStatus = new IcesOpFinishMsgStatus();
-                icesOpFinishMsgStatus.setStatus(status);
-                icesOpFinishMsgStatus.setOpID(opId);
-                icesOpFinishMsgStatus.setOpName(opName);
-                icesOpFinishMsgStatus.setTaskId(nowTaskId);
-                final String statusDB = mapper.writeValueAsString(icesOpFinishMsgStatus);
-                //因为在同一时刻，不会有一个设备完成两个相同的操作，因此可以用opFinishMsg来进行区分
-                if(!opFinishMsgSave.contains(opFinishMsg)){
-                   System.out.println("写入任务完成信息");
-                    saveDB(eqId,erTypeDict.get("已完成"),erStatDict.get("任务执行完成"),1,beginTime,finishTime,statusDB);
-                   opFinishMsgSave.add(opFinishMsg);
-                }
-            }
+//            for (IcesOpFinishMsg opFinishMsg : root.getOpFinishMsg()) {
+//                // 将方法调用的结果保存为变量
+//                String eqId = opFinishMsg.getEqId();
+//                String eqName = opFinishMsg.getEqName();
+//                String opId = opFinishMsg.getOpId();
+//                String opName = opFinishMsg.getOpName();
+//                Date beginTime = opFinishMsg.getBeginTime();
+//                Date finishTime = opFinishMsg.getFinishTime();
+//                Map<String, Object> status = opFinishMsg.getStatus();
+//
+//                // 使用变量进行打印
+//                System.out.println("   设备id : " + eqId);
+//                System.out.println("   设备名 : " + eqName);
+//                System.out.println("   操作id : " + opId);
+//                System.out.println("   操作名 : " + opName);
+//                System.out.println("   开始时间 : " + beginTime);
+//                System.out.println("   结束时间 : " + finishTime);
+//                System.out.println("   结束信息 : " + status.toString());
+//                System.out.println();
+//                //构建存入数据库的dec字段
+//                final ObjectMapper mapper = new ObjectMapper();
+//                final IcesOpFinishMsgStatus icesOpFinishMsgStatus = new IcesOpFinishMsgStatus();
+//                icesOpFinishMsgStatus.setStatus(status);
+//                icesOpFinishMsgStatus.setOpID(opId);
+//                icesOpFinishMsgStatus.setOpName(opName);
+//                icesOpFinishMsgStatus.setTaskId(nowTaskId);
+//                final String statusDB = mapper.writeValueAsString(icesOpFinishMsgStatus);
+//                //因为在同一时刻，不会有一个设备完成两个相同的操作，因此可以用opFinishMsg来进行区分
+//                if(!opFinishMsgSave.contains(opFinishMsg)){
+//                   System.out.println("写入任务完成信息");
+//                    saveDB(eqId,erTypeDict.get("已完成"),erStatDict.get("任务执行完成"),1,beginTime,finishTime,statusDB);
+//                   opFinishMsgSave.add(opFinishMsg);
+//                }
+//            }
             //打印错误信息
             System.out.println("错误信息");
             System.out.println(   root.getError());

@@ -189,6 +189,9 @@ export default {
     },
     extraList: {
       type: Object
+    },
+    flag: {
+      type: Number
     }
   },
   data () {
@@ -213,6 +216,14 @@ export default {
     xml: {
       handler(newXml) {
         this.importXML(newXml);
+      },
+      immediate: true
+    },
+    flag: {
+      handler(flag) {
+        if (this.mode === 4) {
+          this.paint()
+        }
       },
       immediate: true
     }
@@ -335,9 +346,13 @@ export default {
       let finish = 1
       nodes.forEach(element => {
         if (element.progress) {
+          canvas.removeMarker(element.dtModel, 'primary')
+          canvas.removeMarker(element.dtModel, 'success')
           canvas.addMarker(element.dtModel, 'primary')
           finish = 0
         } else if (element.cnt > minimum) {
+          canvas.removeMarker(element.dtModel, 'primary')
+          canvas.removeMarker(element.dtModel, 'success')
           canvas.addMarker(element.dtModel, 'success')
           finish = 0
         }
@@ -345,6 +360,8 @@ export default {
       // 所有节点的次数一致，且不为0，则本轮已结束
       if (finish === 1 && minimum > 0) {
         nodes.forEach(element => {
+          canvas.removeMarker(element.dtModel, 'primary')
+          canvas.removeMarker(element.dtModel, 'success')
           canvas.addMarker(element.dtModel, 'success')
         })
       }

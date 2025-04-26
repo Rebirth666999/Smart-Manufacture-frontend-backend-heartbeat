@@ -21,7 +21,7 @@
         <el-form :model="form" :rules="rules" ref="form" label-width="110px">
           <el-col :span="12">
             <el-form-item label="订单" prop="orCode">
-              <el-button plain @click="openSelectOrder" class="order-button">
+              <el-button plain @click="openSelectOrder" class="order-button" :disabled="form.mpmId">
                 {{ currentOrCode || '请选择订单' }}
               </el-button>
             </el-form-item>
@@ -40,7 +40,7 @@
                 </el-tooltip>
                 编码
               </span>
-              <el-input v-model="form.mpmCode" placeholder="请输入生产计划编码" />
+              <el-input v-model="form.mpmCode" placeholder="请输入生产计划编码"  :disabled="form.mpmId" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -117,7 +117,6 @@
               v-hasPermi="['system:manufacturePlan:export']"
             >导出</el-button>
           </el-col>
-          <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
         </el-row>
 
         <el-table
@@ -258,7 +257,7 @@
       <el-form label-width="110px">
         <el-form-item label="订单编号" prop="orCode">
           <el-select
-            v-model="queryParams.orCode"
+            v-model="form.orCode"
             placeholder="请选择订单"
             filterable
             @change="selectOrder"
@@ -351,7 +350,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         orCode: undefined,
-        procCode: undefined,
+        mpmCode: undefined,
         mpStat: undefined,
         mpPriority: undefined,
         mpDelete: 0,
@@ -389,11 +388,33 @@ export default {
     await this.getProductList();
     await this.getOrderList();
     await this.getOrderDemandList();
+    if (this.$route.query.mpmId) {
+      getManufacturePlanMain(this.$route.query.mpmId).then(response => {
+        this.form = response.data;
+        this.queryParams.mpmCode = response.data.mpmCode;
+        this.currentOrCode = response.data.orCode;
+        this.getList();
+        this.loading = false;
+      });
+    } else {
+      this.loading = false;
+    }
   },
   async activated() {
     await this.getProductList();
     await this.getOrderList();
     await this.getOrderDemandList();
+    if (this.$route.query.mpmId) {
+      getManufacturePlanMain(this.$route.query.mpmId).then(response => {
+        this.form = response.data;
+        this.queryParams.mpmCode = response.data.mpmCode;
+        this.currentOrCode = response.data.orCode;
+        this.getList();
+        this.loading = false;
+      });
+    } else {
+      this.loading = false;
+    }
   },
   methods: {
     // 查询订单产品需求
@@ -451,30 +472,6 @@ export default {
           reject()
         })
       })
-    },
-    /** 搜索按钮操作 */
-    handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.idSelect = undefined
-      this.codeSelect = undefined
-      if (this.queryParams.orCode) {
-        this.getList();
-      } else {
-        this.manufacturePlanMainList = []
-        this.manufacturePlanList = []
-      }
-    },
-    /** 
-     * 计划详细信息重置按钮
-     * 只能重置订单以外的筛选项
-     * @author YangZY
-     * @date 20250423
-     */
-    resetQuery() {
-      this.resetForm("queryForm");
-      this.idSelect = undefined
-      this.codeSelect = undefined
-      this.handleQuery();
     },
     // 选中数据条目
     handleCurrentChange(current, old) {
@@ -554,7 +551,6 @@ export default {
      * @date 20250426
      */
     cancel() {
-      this.queryParams.orCode = this.currentOrCode
       this.open = false
     },
     /**
@@ -563,26 +559,20 @@ export default {
      * @date 20250426
      */
     submitOrder() {
-      this.currentOrCode = this.queryParams.orCode
       this.form.orCode = this.currentOrCode
-      if (this.form.mpmId) {
-        // 显示生产计划详细
-        this.handleQuery()
-      } else {
-        // 加载出所有产品需求，填入生产计划信息
-        this.preview = true
-        const demands = this.orderDemandList.filter(ele => ele.orCode === this.currentOrCode)
-        this.manufacturePlanList = []
-        demands.forEach(demand => {
-          this.manufacturePlanList.push({
-            orCode: this.currentOrCode,
-            mpEndPlan: this.form.mpmEndPlan,
-            odCode: demand.odCode,
-            mpQtyPlan: demand.odDemand,
-            mpPriority: this.currentOrder.orPriority
-          })
+      // 加载出所有产品需求，填入生产计划信息
+      this.preview = true
+      const demands = this.orderDemandList.filter(ele => ele.orCode === this.currentOrCode)
+      this.manufacturePlanList = []
+      demands.forEach(demand => {
+        this.manufacturePlanList.push({
+          orCode: this.currentOrCode,
+          mpEndPlan: this.form.mpmEndPlan,
+          odCode: demand.odCode,
+          mpQtyPlan: demand.odDemand,
+          mpPriority: this.currentOrder.orPriority
         })
-      }
+      })
       this.open = false
     },
     /**

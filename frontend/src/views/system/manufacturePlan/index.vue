@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-card shadow="never">
+    <!-- <el-card shadow="never">
       <div slot="header">
         <div class="card-header">
           <div>订单信息</div>
@@ -24,7 +24,6 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <!-- <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button> -->
           <el-button icon="el-icon-refresh" size="mini" @click="resetOrderQuery">重置</el-button>
         </el-form-item>
       </el-form>
@@ -47,15 +46,25 @@
           <el-table-column label="修改时间" align="center" prop="orMdate" />
         </el-table>
       </div>
-    </el-card>
+    </el-card> -->
 
-    <el-card shadow="never" class="controlled-card">
+    <el-card shadow="never">
       <div slot="header">
         <div class="card-header">
           <div>生产计划信息</div>
         </div>
       </div>
-      <div v-if="queryParams.orCode">
+      <div>
+        <el-form :model="queryParams" ref="queryOrderForm" size="small" :inline="true"  label-width="68px">
+          <el-form-item label="订单" prop="orCode">
+            <el-button size="mini" type="primary" @click="openSelectOrder">
+              {{ currentOrCode || '选择订单' }}
+            </el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button icon="el-icon-refresh" size="mini" @click="resetOrderQuery">重置</el-button>
+          </el-form-item>
+        </el-form>
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
             <el-button
@@ -122,7 +131,6 @@
           </el-table-column>
         </el-table>
       </div>
-      <el-empty v-else description="选择订单后即可查看生产计划" />
     </el-card>
 
     <el-card shadow="never" class="controlled-card">
@@ -343,6 +351,61 @@
         </el-tab-pane>
       </el-tabs>
     </el-card>
+
+    <!-- 选择订单对话框 -->
+    <el-dialog title="选择订单" :visible.sync="open" width="550px" append-to-body>
+      <el-form label-width="110px">
+        <el-form-item label="订单编号" prop="orCode">
+          <el-select
+            v-model="queryParams.orCode"
+            placeholder="请选择订单"
+            filterable
+            @change="selectOrder"
+          >
+            <el-option
+              v-for="item in orderList"
+              :key="item.orCode"
+              :label="item.orCode"
+              :value="item.orCode"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <el-descriptions border :column="1">
+        <el-descriptions-item label="订单ID">
+          {{ currentOrder ? currentOrder.orId : '' }}
+        </el-descriptions-item>
+        <el-descriptions-item label="订单编码">
+          {{ currentOrder ? currentOrder.orCode : '' }}
+        </el-descriptions-item>
+        <el-descriptions-item label="订单优先级">
+          {{ currentOrder ? currentOrder.orPriority : '' }}
+        </el-descriptions-item>
+        <el-descriptions-item label="截止时间">
+          {{ currentOrder ? parseTime(currentOrder.orDeadline, '{y}-{m}-{d}') : '' }}
+        </el-descriptions-item>
+        <el-descriptions-item label="总价">
+          {{ currentOrder ? currentOrder.orPrice : '' }}
+        </el-descriptions-item>
+        <el-descriptions-item label="创建人">
+          {{ currentOrder ? currentOrder.orCman : '' }}
+        </el-descriptions-item>
+        <el-descriptions-item label="创建时间">
+          {{ currentOrder ? currentOrder.orCdate : '' }}
+        </el-descriptions-item>
+        <el-descriptions-item label="修改人">
+          {{ currentOrder ? currentOrder.orMman : '' }}
+        </el-descriptions-item>
+        <el-descriptions-item label="修改时间">
+          {{ currentOrder ? currentOrder.orMdate : '' }}
+        </el-descriptions-item>
+      </el-descriptions>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitOrder">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -392,6 +455,12 @@ export default {
       },
       // 用于编辑属性的表单
       form: {},
+      // 选择订单窗口是否打开
+      open: false,
+      // 用于显示的当前选择订单
+      currentOrCode: '',
+      // 当前选择订单信息
+      currentOrder: undefined,
       // 订单列表
       orderList: [],
       // 产品列表
@@ -510,8 +579,13 @@ export default {
       this.queryParams.pageNum = 1;
       this.idSelect = undefined
       this.codeSelect = undefined
-      this.getList();
-      this.getMainList();
+      if (this.queryParams.orCode) {
+        this.getList();
+        this.getMainList();
+      } else {
+        this.manufacturePlanMainList = []
+        this.manufacturePlanList = []
+      }
     },
     /** 
      * 计划详细信息重置按钮
@@ -533,6 +607,7 @@ export default {
      */
     resetOrderQuery() {
       this.resetForm("queryOrderForm");
+      this.currentOrCode = ''
       this.idSelect = undefined
       this.codeSelect = undefined
       this.handleQuery();
@@ -672,6 +747,46 @@ export default {
         return this.productList.find(ele => ele.prCode === demand.prCode).prName || ''
       }
       return ''
+    },
+    /**
+     * 打开选择订单窗口
+     * @author YangZY
+     * @date 20250426
+     */
+    openSelectOrder() {
+      this.open = true
+      if (this.currentOrCode) {
+        this.selectOrder(this.currentOrCode)
+      } else {
+        this.currentOrder = undefined
+      }
+    },
+    /**
+     * 生产计划选择订单
+     * @author YangZY
+     * @date 20250426
+     */
+    selectOrder(orCode) {
+      this.currentOrder = this.orderList.find(ele => ele.orCode === orCode)
+    },
+    /**
+     * 关闭选择订单窗口
+     * @author YangZY
+     * @date 20250426
+     */
+    cancel() {
+      this.queryParams.orCode = this.currentOrCode
+      this.open = false
+    },
+    /**
+     * 确认选择订单
+     * @author YangZY
+     * @date 20250426
+     */
+    submitOrder() {
+      this.currentOrCode = this.queryParams.orCode
+      this.handleQuery()
+      this.open = false
     }
   }
 };

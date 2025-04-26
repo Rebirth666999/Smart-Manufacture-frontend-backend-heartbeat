@@ -339,8 +339,6 @@ export default {
       single: true,
       // 非多个禁用
       multiple: true,
-      // 显示搜索条件
-      showSearch: true,
       // 总条数
       total: 0,
       // 生产计划表格数据
@@ -597,6 +595,8 @@ export default {
       this.currentOrCode = '';
       this.manufacturePlanList = [];
       this.preview = false;
+      this.idSelect = undefined;
+      this.codeSelect = undefined;
     },
     /**
      * 重置此页面

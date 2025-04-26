@@ -358,6 +358,73 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 添加或修改计划详情对话框 -->
+    <el-dialog :title="manufacturePlan.title" :visible.sync="manufacturePlan.open" width="850px" append-to-body>
+      <el-form ref="manufacturePlanForm" :model="manufacturePlan.form" :rules="manufacturePlan.rules" label-width="110px">
+        <el-col :span="12">
+          <el-form-item label="所属订单" prop="orCode">
+            <el-select v-model="manufacturePlan.form.orCode" placeholder="请选择订单" disabled>
+              <el-option v-for="item in orderList" :key="item.orCode" :label="item.orCode" :value="item.orCode">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="所属生产计划" prop="mpmCode">
+            <el-input v-model="manufacturePlan.form.mpmCode" disabled />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item prop="odCode">
+            <span slot="label">
+              <el-tooltip placement="top">
+                <div slot="content">
+                  <div>须先选择订单，才能够加载订单的产品需求</div>
+                </div>
+                <i class="el-icon-question"></i>
+              </el-tooltip>
+              产品
+            </span>
+            <el-select v-model="manufacturePlan.form.odCode" placeholder="请选择产品" @change="selectProduct">
+              <el-option
+                v-for="item in orderDemandList.filter(ele => ele.orCode === manufacturePlan.form.orCode)"
+                :key="item.odCode"
+                :label="parseOdCode(item.odCode)"
+                :value="item.odCode"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="最晚结束时间" prop="mpEndPlan">
+            <el-date-picker clearable v-model="manufacturePlan.form.mpEndPlan" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
+              placeholder="请选择最晚结束时间">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="优先级" prop="mpPriority">
+            <el-input v-model="manufacturePlan.form.mpPriority" placeholder="请输入优先级" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="计划产品数量" prop="mpQtyPlan">
+            <el-input v-model="manufacturePlan.form.mpQtyPlan" placeholder="请输入计划产品数量" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="描述" prop="mpDesc">
+            <el-input v-model="manufacturePlan.form.mpDesc" type="textarea" placeholder="请输入内容" />
+          </el-form-item>
+        </el-col>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button :loading="manufacturePlan.buttonLoading" type="primary" @click="submitManufacturePlanForm">确 定</el-button>
+        <el-button @click="cancelManufacturePlanForm">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -420,7 +487,42 @@ export default {
       // 产品需求列表
       orderDemandList: [],
       // 生产计划主表
-      manufacturePlanMainList: []
+      manufacturePlanMainList: [],
+      // 生产计划详情编辑相关
+      manufacturePlan: {
+        // 窗口标题
+        title: '',
+        // 窗口是否打开
+        open: false,
+        // 按钮加载中
+        buttonLoading: false,
+        // 表单内容
+        form: {},
+        // 校验规则
+        rules: {
+          mpId: [
+            { required: true, message: "生产计划不能为空", trigger: "blur" }
+          ],
+          orCode: [
+            { required: true, message: "所属订单不能为空", trigger: "blur" }
+          ],
+          mpmCode: [
+            { required: true, message: "所属生产计划不能为空", trigger: "blur" }
+          ],
+          odCode: [
+            { required: true, message: "产品不能为空", trigger: "blur" }
+          ],
+          mpEndPlan: [
+            { required: true, message: "最晚结束时间不能为空", trigger: "blur" }
+          ],
+          mpPriority: [
+            { required: true, message: "优先级不能为空", trigger: "blur" }
+          ],
+          mpQtyPlan: [
+            { required: true, message: "产品数量不能为空", trigger: "blur" }
+          ],
+        },
+      }
     };
   },
   async created() {
@@ -573,12 +675,23 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.$router.push(`/manufacture/manufacturePlan/add`)
+      this.resetManufacturePlanForm();
+      this.manufacturePlan.form.orCode = this.currentOrCode
+      this.manufacturePlan.form.mpmCode = this.manufacturePlanMainList[0].mpmCode
+      this.manufacturePlan.open = true;
+      this.manufacturePlan.title = "添加生产计划详情";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
+      this.loading = true;
+      this.resetManufacturePlanForm();
       const mpId = row.mpId || this.idSelect
-      this.$router.push(`/manufacture/manufacturePlan/add?mpId=${mpId}`)
+      getManufacturePlan(mpId).then(response => {
+        this.loading = false;
+        this.manufacturePlan.form = response.data;
+        this.manufacturePlan.open = true;
+        this.manufacturePlan.title = "修改生产计划详情";
+      });
     },
     /** 删除按钮操作 */
     handleDelete(row) {
@@ -739,7 +852,86 @@ export default {
       this.currentOrCode = this.queryParams.orCode
       this.handleQuery()
       this.open = false
-    }
+    },
+    /**
+     * 提交生产计划详情表单
+     * @author YangZY
+     * @date 20250426
+     */
+    submitManufacturePlanForm() {
+      this.$refs["manufacturePlanForm"].validate(valid => {
+        if (valid) {
+          this.manufacturePlan.buttonLoading = true;
+          if (this.manufacturePlan.form.mpId != null) {
+            updateManufacturePlan(this.manufacturePlan.form).then(response => {
+              this.$modal.msgSuccess("修改成功");
+              this.getList();
+              this.manufacturePlan.open = false;
+            }).finally(() => {
+              this.manufacturePlan.buttonLoading = false;
+            });
+          } else {
+            this.manufacturePlan.form.mpStat = '1'
+            addManufacturePlan(this.manufacturePlan.form).then(response => {
+              this.$modal.msgSuccess("新增成功");
+              this.getList();
+              this.manufacturePlan.open = false;
+            }).finally(() => {
+              this.manufacturePlan.buttonLoading = false;
+            });
+          }
+        }
+      });
+    },
+    /**
+     * 关闭生产计划详情表单
+     * @author YangZY
+     * @date 20250426
+     */
+    cancelManufacturePlanForm() {
+      this.manufacturePlan.open = false
+      this.resetManufacturePlanForm()
+    },
+    /**
+     * 重置生产计划详情表单
+     * @author YangZY
+     * @date 20250426
+     */
+    resetManufacturePlanForm() {
+      this.manufacturePlan.form = {
+        mpId: undefined,
+        orCode: undefined,
+        odCode: undefined,
+        mpmCode: undefined,
+        mpStat: undefined,
+        mpBegin: undefined,
+        mpEndPlan: undefined,
+        mpEndReal: undefined,
+        mpPriority: undefined,
+        mpQtyPlan: undefined,
+        mpQtyReal: undefined,
+        mpDelete: undefined,
+        mpDesc: undefined,
+        createBy: undefined,
+        updateBy: undefined,
+        createTime: undefined,
+        updateTime: undefined
+      };
+      this.resetForm("manufacturePlanForm");
+    },
+    /**
+     * 选择产品的监听函数
+     * 自动填入计划数量
+     * @param {string} odCode 选择的odCode
+     * @author YangZY
+     * @date 20250423
+     */
+    selectProduct(odCode) {
+      const demand = this.orderDemandList.find(ele => ele.odCode === odCode)
+      if (demand) {
+        this.manufacturePlan.form.mpQtyPlan = demand.odDemand
+      }
+    },
   }
 };
 </script>

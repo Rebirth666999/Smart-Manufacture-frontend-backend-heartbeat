@@ -83,12 +83,24 @@ export default {
     await this.getStoreList()
     await this.getReferenceList()
     const row = (await getManufactureTask(this.$route.query.mtId)).data
-    if (this.interval === null) {
-      this.interval = setInterval(() => {
-        this.update(row)
-      }, 5000);
-    }
-    this.viewerData.loading = false
+    // 找到工艺流程
+    const process = this.processList.find(ele => ele.procCode === row.procCode)
+    // 找到已生成的设备任务
+    this.viewerData.dtList = (await listDeviceTask({ mtCode: row.mtCode })).rows
+    this.viewerData.dtpaList = (await listDeviceTaskParam({ mtCode: row.mtCode })).rows
+    // 找到设备
+    this.viewerData.eqList = this.eqList.filter(ele => ele.arCode === row.arCode)
+    // 打开流程
+    this.viewerData.index = process.procModel
+    getBpmnXml(process.procModel).then(response => {
+      this.viewerData.bpmnXml = response.data || ''
+      if (this.interval === null) {
+        this.interval = setInterval(() => {
+          this.update(row)
+        }, 5000);
+      }
+      this.viewerData.loading = false
+    })
   },
   async activated() {
     this.viewerData.index = ''
@@ -99,12 +111,24 @@ export default {
     await this.getStoreList()
     await this.getReferenceList()
     const row = (await getManufactureTask(this.$route.query.mtId)).data
-    if (this.interval === null) {
-      this.interval = setInterval(() => {
-        this.update(row)
-      }, 5000);
-    }
-    this.viewerData.loading = false
+    // 找到工艺流程
+    const process = this.processList.find(ele => ele.procCode === row.procCode)
+    // 找到已生成的设备任务
+    this.viewerData.dtList = (await listDeviceTask({ mtCode: row.mtCode })).rows
+    this.viewerData.dtpaList = (await listDeviceTaskParam({ mtCode: row.mtCode })).rows
+    // 找到设备
+    this.viewerData.eqList = this.eqList.filter(ele => ele.arCode === row.arCode)
+    // 打开流程
+    this.viewerData.index = process.procModel
+    getBpmnXml(process.procModel).then(response => {
+      this.viewerData.bpmnXml = response.data || ''
+      if (this.interval === null) {
+        this.interval = setInterval(() => {
+          this.update(row)
+        }, 5000);
+      }
+      this.viewerData.loading = false
+    })
   },
   destroyed() {
     clearInterval(this.interval)
@@ -113,19 +137,8 @@ export default {
   methods: {
     async update(row) {
       this.updateFlag = 1
-      // 找到工艺流程
-      const process = this.processList.find(ele => ele.procCode === row.procCode)
-      // 找到已生成的设备任务
       this.viewerData.dtList = (await listDeviceTask({ mtCode: row.mtCode })).rows
-      this.viewerData.dtpaList = (await listDeviceTaskParam({ mtCode: row.mtCode })).rows
-      // 找到设备
-      this.viewerData.eqList = this.eqList.filter(ele => ele.arCode === row.arCode)
-      // 打开流程
-      this.viewerData.index = process.procModel
-      getBpmnXml(process.procModel).then(response => {
-        this.viewerData.bpmnXml = response.data || ''
-        this.updateFlag = 0
-      })
+      this.updateFlag = 0
     },
     // 获取流程信息参照所需的列表
     // 设备模型、模型操作、设备操作、设备

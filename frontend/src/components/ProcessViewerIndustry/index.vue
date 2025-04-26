@@ -13,6 +13,15 @@
           <slot />
         </el-button-group>
       </el-row>
+      <!-- 选择轮次 -->
+      <el-card shadow="never" v-if="mode === 4">
+        <el-form>
+          <el-form-item label="查看轮次">
+            <el-input-number v-model="viewRound" :min="1" :max="maxRound" @change="paint" />
+          </el-form-item>
+        </el-form>
+      </el-card>
+      <!-- 图例 -->
       <el-card shadow="never" header="图例" v-if="mode === 4">
         <div class="legend">
           <div>当前轮次<br/>已完成</div>
@@ -209,7 +218,11 @@ export default {
       // mode = 3时，维护步骤对应的设备和设备操作
       taskList: [],
       // 默认展开的页签
-      activeTab: []
+      activeTab: [],
+      // 当前查看的轮次
+      viewRound: 1,
+      // 最大轮次
+      maxRound: 1,
     }
   },
   watch: {
@@ -300,69 +313,69 @@ export default {
           this.isLoading = false;
           if (this.mode === 4) {
             this.paint()
+            const model = this.extraList.dtList[0].dtModel
+            this.maxRound = this.extraList.dtList.filter(ele => ele.dtModel === model).length
           }
         }
       }
     },
     // 根据任务完成情况，给节点染色
     paint() {
-      const canvas = this.bpmnViewer.get('canvas')
-      // primary, success, warning, danger
-      const nodes = []
-      this.extraList.dtList.forEach(element => {
-        if (element.dtStat === '4') {
-          // 已完成
-          let idx = nodes.findIndex(ele => ele.dtModel === element.dtModel)
-          if (idx === -1) {
-            nodes.push({
-              dtModel: element.dtModel,
-              cnt: 1,
-              progress: false
-            })
+      if (this.bpmnViewer) {
+        const canvas = this.bpmnViewer.get('canvas')
+        // primary, success, warning, danger
+        const nodes = []
+        this.extraList.dtList.forEach(element => {
+          if (element.dtStat === '4') {
+            // 已完成
+            let idx = nodes.findIndex(ele => ele.dtModel === element.dtModel)
+            if (idx === -1) {
+              nodes.push({
+                dtModel: element.dtModel,
+                cnt: 1,
+                progress: false
+              })
+            } else {
+              nodes[idx].cnt += 1
+            }
+          } else if (element.dtStat === '3') {
+            // 进行中
+            let idx = nodes.findIndex(ele => ele.dtModel === element.dtModel)
+            if (idx === -1) {
+              nodes.push({
+                dtModel: element.dtModel,
+                cnt: 0,
+                progress: true
+              })
+            } else {
+              nodes[idx].progress = true
+            }
           } else {
-            nodes[idx].cnt += 1
+            // 未开始
+            let idx = nodes.findIndex(ele => ele.dtModel === element.dtModel)
+            if (idx === -1) {
+              nodes.push({
+                dtModel: element.dtModel,
+                cnt: 0,
+                progress: false
+              })
+            }
           }
-        } else if (element.dtStat === '3') {
-          // 进行中
-          let idx = nodes.findIndex(ele => ele.dtModel === element.dtModel)
-          if (idx === -1) {
-            nodes.push({
-              dtModel: element.dtModel,
-              cnt: 0,
-              progress: true
-            })
-          } else {
-            nodes[idx].progress = true
-          }
-        }
-      })
-      let minimum = -1
-      // 算基准完成任务数
-      nodes.forEach(element => {
-        if (minimum === -1) minimum = element.cnt
-        else minimum = minimum < element.cnt ? minimum : element.cnt
-      })
-      // 染色
-      let finish = 1
-      nodes.forEach(element => {
-        if (element.progress) {
-          canvas.removeMarker(element.dtModel, 'primary')
-          canvas.removeMarker(element.dtModel, 'success')
-          canvas.addMarker(element.dtModel, 'primary')
-          finish = 0
-        } else if (element.cnt > minimum) {
-          canvas.removeMarker(element.dtModel, 'primary')
-          canvas.removeMarker(element.dtModel, 'success')
-          canvas.addMarker(element.dtModel, 'success')
-          finish = 0
-        }
-      })
-      // 所有节点的次数一致，且不为0，则本轮已结束
-      if (finish === 1 && minimum > 0) {
+        })
+        // 染色
         nodes.forEach(element => {
-          canvas.removeMarker(element.dtModel, 'primary')
-          canvas.removeMarker(element.dtModel, 'success')
-          canvas.addMarker(element.dtModel, 'success')
+          if (element.progress && element.cnt === this.viewRound - 1) {
+            canvas.removeMarker(element.dtModel, 'primary')
+            canvas.removeMarker(element.dtModel, 'success')
+            canvas.addMarker(element.dtModel, 'primary')
+          } else if (element.cnt >= this.viewRound) {
+            canvas.removeMarker(element.dtModel, 'primary')
+            canvas.removeMarker(element.dtModel, 'success')
+            canvas.addMarker(element.dtModel, 'success')
+          } else {
+            canvas.removeMarker(element.dtModel, 'primary')
+            canvas.removeMarker(element.dtModel, 'success')
+          }
         })
       }
     },

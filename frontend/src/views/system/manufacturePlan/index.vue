@@ -1,53 +1,5 @@
 <template>
   <div class="app-container">
-    <!-- <el-card shadow="never">
-      <div slot="header">
-        <div class="card-header">
-          <div>订单信息</div>
-        </div>
-      </div>
-      <el-form :model="queryParams" ref="queryOrderForm" size="small" :inline="true"  label-width="68px">
-        <el-form-item label="订单" prop="orCode">
-          <el-select
-            v-model="queryParams.orCode"
-            placeholder="请选择订单"
-            filterable
-            @change="handleQuery"
-          >
-            <el-option
-              v-for="item in orderList"
-              :key="item.orCode"
-              :label="item.orCode"
-              :value="item.orCode"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button icon="el-icon-refresh" size="mini" @click="resetOrderQuery">重置</el-button>
-        </el-form-item>
-      </el-form>
-      <div v-if="queryParams.orCode">
-        <el-table
-          :data="orderList.filter(ele => ele.orCode === queryParams.orCode)"
-        >
-          <el-table-column label="订单ID" align="center" prop="orId" v-if="true"/>
-          <el-table-column label="订单编码" align="center" prop="orCode" />
-          <el-table-column label="订单优先级" align="center" prop="orPriority" />
-          <el-table-column label="截止时间" align="center" prop="orDeadline" width="180">
-            <template slot-scope="scope">
-              <span>{{ parseTime(scope.row.orDeadline, '{y}-{m}-{d}') }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="总价" align="center" prop="orPrice" />
-          <el-table-column label="创建人" align="center" prop="orCman" />
-          <el-table-column label="创建时间" align="center" prop="orCdate" />
-          <el-table-column label="修改人" align="center" prop="orMman" />
-          <el-table-column label="修改时间" align="center" prop="orMdate" />
-        </el-table>
-      </div>
-    </el-card> -->
-
     <el-card shadow="never">
       <div slot="header">
         <div class="card-header">

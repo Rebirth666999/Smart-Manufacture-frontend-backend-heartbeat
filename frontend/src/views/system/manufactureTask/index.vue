@@ -644,6 +644,9 @@ export default {
       this.reset();
       if (this.mpCode) {
         this.form.mpCode = this.mpCode
+        this.form.mtEndPlan = this.currentManufacturePlan.mpEndPlan
+        this.form.mtPriority = this.currentManufacturePlan.mpPriority
+        this.form.mtQtyPlan = this.currentManufacturePlan.mpQtyPlan
       }
       this.open = true;
       this.title = "添加生产任务";

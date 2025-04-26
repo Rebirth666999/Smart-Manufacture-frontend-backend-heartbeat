@@ -88,7 +88,11 @@ public class IcesManufacturePlanMainServiceImpl implements IIcesManufacturePlanM
      */
     @Override
     public IcesManufacturePlanMainVo insertByBo(IcesManufacturePlanMainBo bo) {
-        bo.setMpmCode(codeService.insertByType("ManufacturePlanMain"));
+        if (StringUtils.isBlank(bo.getMpmCode())) {
+            bo.setMpmCode(codeService.insertByType("ManufacturePlanMain"));
+        } else {
+            codeService.checkCode("ManufacturePlanMain", bo.getMpmCode());
+        }
         String cMan = getLoginUsername();
         String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         bo.setMpmCman(cMan);

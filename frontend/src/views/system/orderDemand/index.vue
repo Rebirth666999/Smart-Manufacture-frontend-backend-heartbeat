@@ -6,7 +6,7 @@
           <el-option
             v-for="option in orderList"
             :key="option.orCode"
-            :label="option.orName"
+            :label="option.orCode"
             :value="option.orCode">
           </el-option>
         </el-select>
@@ -85,11 +85,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="所需产品ID" align="center" prop="odId" v-if="true"/>
       <el-table-column label="所需产品编码" align="center" prop="odCode" />
-      <el-table-column label="订单" align="center" prop="orCode">
-        <template slot-scope="scope">
-          {{ orderList.find(ele => ele.orCode === scope.row.orCode).orName || '' }}
-      </template>
-        </el-table-column>
+      <el-table-column label="订单" align="center" prop="orCode" />
       <el-table-column label="所需产品" align="center" prop="prCode">
         <template slot-scope="scope">
           {{ productList.find(ele => ele.prCode === scope.row.prCode).prName || '' }}
@@ -97,6 +93,7 @@
       </el-table-column>
       <el-table-column label="数量" align="center" prop="odDemand" />
       <el-table-column label="金额小计" align="center" prop="odPrice" />
+      <el-table-column label="定制详情" align="center" prop="odCust" />
       <!-- <el-table-column label="已删除" align="center" prop="odDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -127,20 +124,20 @@
     />
 
     <!-- 添加或修改订单所需产品关联对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="650px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="订单" prop="orCode">
           <el-select v-model="form.orCode" placeholder="请选择订单" disabled>
             <el-option
               v-for="option in orderList"
               :key="option.orCode"
-              :label="option.orName"
+              :label="option.orCode"
               :value="option.orCode">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="所需产品" prop="prCode">
-          <el-select v-model="form.prCode" placeholder="请选择产品">
+          <el-select v-model="form.prCode" placeholder="请选择产品" @change="selectPrCode">
             <el-option
              v-for="option in productList"
              :key="option.prCode"
@@ -155,8 +152,40 @@
         <el-form-item label="金额小计" prop="odPrice">
           <el-input v-model="form.odPrice" placeholder="请输入金额小计" />
         </el-form-item>
-        <el-form-item label="定制详情" prop="odCust">
-          <el-input v-model="form.odCust" type="textarea" placeholder="请输入定制详情" />
+        <el-form-item label="定制详情" prop="odCust" v-if="form.prCode">
+          <el-table class="mb8" :data="custList" size="mini">
+            <el-table-column label="序号" align="center" type="index" />
+            <el-table-column label="定制项名称" align="center" prop="custKey">
+              <template slot-scope="scope">
+                <el-select v-model="custList[scope.$index].custKey" @change="selectCustKey(scope)">
+                  <el-option
+                    v-for="item in Object.keys(custInfo)"
+                    :key="item"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
+              </template>
+            </el-table-column>
+            <el-table-column label="值" align="center" prop="custVal">
+              <template slot-scope="scope">
+                <el-select v-model="custList[scope.$index].custVal">
+                  <el-option
+                    v-for="item in custInfo[custList[scope.$index].custKey]"
+                    :key="item"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" align="center" width="60px">
+              <template slot-scope="scope">
+                <el-button @click="deleteCust(scope)" type="danger" icon="el-icon-delete" size="small" circle plain></el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-button @click="addCust" type="primary" icon="el-icon-plus" size="small" plain>新增</el-button>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -237,6 +266,10 @@ export default {
       productList: [],
       // 订单列表
       orderList: [],
+      // 暂存用定制信息表格
+      custList: [],
+      // 定制信息
+      custInfo: []
     };
   },
   async created() {
@@ -350,6 +383,9 @@ export default {
       getOrderDemand(odId).then(response => {
         this.loading = false;
         this.form = response.data;
+        // 载入定制选项
+        this.selectPrCode(this.form.prCode);
+        this.parseCustString(this.form.odCust);
         this.open = true;
         this.title = "修改订单所需产品关联";
       });
@@ -358,11 +394,16 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          if (!this.parseCustObject()) {
+            this.$modal.msgWarning("定制详情存在错误或重复");
+            return
+          }
           this.buttonLoading = true;
           if (this.form.odId != null) {
             updateOrderDemand(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
+              this.$emit('update')
               this.getList();
             }).finally(() => {
               this.buttonLoading = false;
@@ -371,6 +412,7 @@ export default {
             addOrderDemand(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
+              this.$emit('update')
               this.getList();
             }).finally(() => {
               this.buttonLoading = false;
@@ -387,6 +429,7 @@ export default {
         return delOrderDemand(odIds);
       }).then(() => {
         this.loading = false;
+        this.$emit('update')
         this.getList();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {
@@ -399,6 +442,92 @@ export default {
       this.download('system/orderDemand/export', {
         ...this.queryParams
       }, `orderDemand_${new Date().getTime()}.xlsx`)
+    },
+    /**
+     * 选中产品后的回调函数
+     * @param {string?} prCode 选中的prCode
+     * @author YangZY
+     * @date 20250423
+     */
+    selectPrCode(prCode) {
+      if (prCode) {
+        const product = this.productList.find(ele => ele.prCode === prCode)
+        this.custInfo = JSON.parse(product.prCust)
+      }
+      this.custList = []
+    },
+    /**
+     * 定制详情选中某个定制项名称
+     * 需要清空已选择的值
+     * @param {any} scope 当前选中内容
+     * @author YangZY
+     * @date 20250423
+     */
+    selectCustKey(scope) {
+      this.custList[scope.$index].custVal = ''
+    },
+    /**
+     * 删除指定的定制详情
+     * @param {any} scope 表格行信息
+     * @author YangZY
+     * @date 20250423
+     */
+    deleteCust(scope) {
+      this.custList.splice(scope.$index, 1)
+    },
+    /**
+     * 添加一条定制详情
+     * @author YangZY
+     * @date 20250423
+     */
+    addCust() {
+      this.custList.push({
+        custKey: '',
+        custVal: ''
+      })
+    },
+    /**
+     * 定制详情JSON转换为List
+     * @param {string?} str 待转换字符串
+     * @author YangZY
+     * @date 20250423
+     */
+    parseCustString(str) {
+      if (str) {
+        const json = JSON.parse(str)
+        this.custList = []
+        Object.keys(json).forEach(key => {
+          this.custList.push({
+            custKey: key,
+            custVal: json[key]
+          })
+        })
+      }
+    },
+    /**
+     * 定制详情List转换为JSON
+     * @returns 是否存在不合法记录
+     * @author YangZY
+     * @date 20250423
+     */
+    parseCustObject() {
+      const result = {}
+      let success = true
+      const keys = this.custList.map(ele => ele.custKey)
+      const keySet = new Set(keys)
+      if (keys.length !== keySet.size) {
+        // 有重复key
+        return false
+      }
+      this.custList.forEach(cust => {
+        if (cust.custKey.length > 0 && cust.custVal.length > 0) {
+          result[cust.custKey] = cust.custVal
+        } else {
+          success = false
+        }
+      })
+      this.form.odCust = JSON.stringify(result)
+      return success
     }
   }
 };

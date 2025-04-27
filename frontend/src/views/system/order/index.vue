@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-card class="view-card">
+    <el-card shadow="never">
       <div slot="header">
         <div class="card-header">
           <div>订单信息</div>
@@ -22,14 +22,6 @@
               >
               </el-option>
             </el-select>
-          </el-form-item>
-          <el-form-item label="订单名称" prop="orName">
-            <el-input
-              v-model="queryParams.orName"
-              placeholder="请输入订单名称"
-              clearable
-              @keyup.enter.native="handleQuery"
-            />
           </el-form-item>
           <el-form-item label="状态" prop="orStat">
             <el-select v-model="queryParams.orStat" placeholder="请选择状态" clearable>
@@ -126,7 +118,6 @@
           :data="orderList"
           @current-change="handleCurrentChange"
           highlight-current-row
-          max-height="240"
         >
           <el-table-column label="选择" width="55" align="center">
             <template slot-scope="scope">
@@ -140,7 +131,6 @@
               {{ clientList.find(ele => ele.clCode === scope.row.clCode).clName || '' }}
             </template>
           </el-table-column>
-          <el-table-column label="订单名称" align="center" prop="orName" />
           <el-table-column label="状态" align="center" prop="orStat">
             <template slot-scope="scope">
               <dict-tag :options="dict.type.ices_order_status" :value="scope.row.orStat"/>
@@ -153,8 +143,12 @@
             </template>
           </el-table-column>
           <el-table-column label="总价" align="center" prop="orPrice" />
+          <el-table-column label="创建人" align="center" prop="orCman" />
+          <el-table-column label="创建时间" align="center" prop="orCdate" />
+          <el-table-column label="修改人" align="center" prop="orMman" />
+          <el-table-column label="修改时间" align="center" prop="orMdate" />
           <!-- <el-table-column label="已删除" align="center" prop="orDelete" /> -->
-          <el-table-column label="描述" align="center" prop="orDesc" />
+          <!-- <el-table-column label="描述" align="center" prop="orDesc" /> -->
           <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template slot-scope="scope">
               <el-button
@@ -205,13 +199,13 @@
         />
       </div>
     </el-card>
-    <el-card class="controlled-card">
+    <el-card shadow="never" class="controlled-card">
       <div slot="header">
         <div class="card-header">
           <div>订单产品信息</div>
         </div>
       </div>
-      <order-demand v-if='idSelect' :key="idSelect" :orCode="codeSelect" />
+      <order-demand v-if='idSelect' :key="idSelect" :orCode="codeSelect" @update="getList"/>
       <el-empty v-else description="选中订单后即可管理订单产品" />
     </el-card>
   </div>
@@ -272,12 +266,28 @@ export default {
   async created() {
     await this.getProductList();
     await this.getClientList();
-    this.getList();
+    await this.getList();
+    if (this.$route.query.orCode) {
+      const order = this.orderList.find(ele => ele.orCode === this.$route.query.orCode)
+      this.$router.replace('/order')
+      if (order) {
+        this.idSelect = order.orId
+        this.codeSelect = order.orCode
+      }
+    }
   },
   async activated() {
     await this.getProductList();
     await this.getClientList();
-    this.getList();
+    await this.getList();
+    if (this.$route.query.orCode) {
+      const order = this.orderList.find(ele => ele.orCode === this.$route.query.orCode)
+      this.$router.replace('/order')
+      if (order) {
+        this.idSelect = order.orId
+        this.codeSelect = order.orCode
+      }
+    }
   },
   methods: {
     // 查询客户列表
@@ -310,17 +320,22 @@ export default {
     },
     /** 查询订单列表 */
     getList() {
-      this.loading = true;
-      this.queryParams.params = {};
-      if (null != this.daterangeOrDeadline && '' != this.daterangeOrDeadline) {
-        this.queryParams.params["beginOrDeadline"] = this.daterangeOrDeadline[0];
-        this.queryParams.params["endOrDeadline"] = this.daterangeOrDeadline[1];
-      }
-      listOrder(this.queryParams).then(response => {
-        this.orderList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        this.queryParams.params = {};
+        if (null != this.daterangeOrDeadline && '' != this.daterangeOrDeadline) {
+          this.queryParams.params["beginOrDeadline"] = this.daterangeOrDeadline[0];
+          this.queryParams.params["endOrDeadline"] = this.daterangeOrDeadline[1];
+        }
+        listOrder(this.queryParams).then(response => {
+          this.orderList = response.rows;
+          this.total = response.total;
+          this.loading = false;
+          resolve()
+        }).catch(() => {
+          reject()
+        })
+      })
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -443,10 +458,6 @@ export default {
 }
 ::v-deep .el-radio span.el-radio__label {
   display: none;
-}
-.view-card {
-  max-height: 50vh;
-  overflow: scroll;
 }
 .card-header {
   display: flex;

@@ -43,7 +43,6 @@ public class IcesOrderBo extends BaseEntity {
     /**
      * 订单名称
      */
-    @NotBlank(message = "订单名称不能为空", groups = { AddGroup.class, EditGroup.class })
     private String orName;
 
     /**

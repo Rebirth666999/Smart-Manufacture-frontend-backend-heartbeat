@@ -312,7 +312,7 @@ export default {
     },
     // 查看对应的客户等级
     handleClientLevel(row) {
-      this.$router.push(`/order/clientLevelPreferential?cpCode=${row.cpCode}`)
+      this.$router.push(`/clientLevelPreferential?cpCode=${row.cpCode}`)
     }
   }
 };

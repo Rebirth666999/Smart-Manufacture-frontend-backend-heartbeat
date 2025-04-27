@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.IcesProductInspectionDetailMapper">
+
+    <resultMap type="com.ruoyi.system.domain.IcesProductInspectionDetail" id="IcesProductInspectionDetailResult">
+        <result property="pidId" column="pid_id"/>
+        <result property="pidCode" column="pid_code"/>
+        <result property="piCode" column="pi_code"/>
+        <result property="prCode" column="pr_code"/>
+        <result property="pidBatchNum" column="pid_batch_num"/>
+        <result property="pidResult" column="pid_result"/>
+        <result property="pidFlag" column="pid_flag"/>
+        <result property="pidMan" column="pid_man"/>
+        <result property="pidDate" column="pid_date"/>
+        <result property="pidDelete" column="pid_delete"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

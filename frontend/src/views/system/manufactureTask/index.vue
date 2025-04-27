@@ -173,8 +173,14 @@
       <el-table-column label="优先级" align="center" prop="mtPriority" />
       <el-table-column label="计划产品数量" align="center" prop="mtQtyPlan" />
       <el-table-column label="已完成产品数量" align="center" prop="mtQtyReal" />
+      <el-table-column label="创建人" align="center" prop="mtCman" />
+      <el-table-column label="创建时间" align="center" prop="mtCdate" />
+      <el-table-column label="下发人" align="center" prop="mtRman" />
+      <el-table-column label="下发时间" align="center" prop="mtRdate" />
+      <el-table-column label="修改人" align="center" prop="mtMman" />
+      <el-table-column label="修改时间" align="center" prop="mtMdate" />
       <!-- <el-table-column label="已删除" align="center" prop="mtDelete" /> -->
-      <el-table-column label="描述" align="center" prop="mtDesc" />
+      <!-- <el-table-column label="描述" align="center" prop="mtDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -376,10 +382,6 @@ import { listProcess, getBpmnXml } from "@/api/system/process";
 import { listMaterialStore } from "@/api/system/materialStore";
 import { listProductStore } from "@/api/system/productStore";
 
-import { listEquipment } from "@/api/system/equipment";
-import { listEquipmentOperation } from "@/api/system/equipmentOperation";
-import { listModelOperation } from "@/api/system/modelOperation";
-import { listEquipmentModel } from "@/api/system/equipmentModel";
 import { listEquipmentOperationStep } from "@/api/system/equipmentOperationStep";
 import { listEquipmentOperationStepParam } from "@/api/system/equipmentOperationStepParam";import { listEquipmentAtomOperation } from "@/api/system/equipmentAtomOperation";
 
@@ -470,12 +472,6 @@ export default {
       materialStoreList: [],
       // 产品仓库列表
       productStoreList: [],
-      // 设备模型列表
-      emList: [],
-      // 模型操作列表
-      moList: [],
-      // 设备操作列表
-      eoList: [],
       // 设备操作步骤列表
       eosList: [],
       // 设备操作步骤参数列表
@@ -486,8 +482,8 @@ export default {
       dtpaList: [],    
       // 设备列表（全）
       eqList: [],
-      // 当前选中的生产任务
-      currentManufactureTask: null,
+      // 当前选中的生产计划
+      currentManufacturePlan: null,
     };
   },
   async created() {
@@ -513,58 +509,12 @@ export default {
     this.getList();
   },
   methods: {
-    // 弃用
-    handleDeprecated(row) {
-      const mtId = row.mtId;
-      this.$modal.confirm('是否确认弃用该生产计划？').then(() => {
-        this.loading = true;
-        getManufactureTask(mtId).then(response => {
-          this.form = response.data;
-          const desc = this.form.mtDesc || '';
-          if (this.form.mtStat === '4' || this.form.mtStat === 'd') {
-            if (!desc.includes('已发布') && !desc.includes('已生成')) {
-              this.$prompt('请在描述中手动输入原状态（已发布或已生成）信息', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                inputValue: desc
-              }).then(({ value }) => {
-                this.form.mtDesc = value;
-                this.form.mtStat = 'a';
-                updateManufactureTask(this.form).then(response => {
-                  this.$modal.msgSuccess("已弃用");
-                  this.getList();
-                }).finally(() => {
-                  this.loading = false;
-                });
-              }).catch(() => {
-                this.loading = false;
-              });
-            } else {
-              this.form.mtStat = 'a';
-              updateManufactureTask(this.form).then(response => {
-                this.$modal.msgSuccess("已弃用");
-                this.getList();
-              }).finally(() => {
-                this.loading = false;
-              });
-            }
-          }
-        });
-      }).catch(() => {
-      }).finally(() => {
-        this.loading = false;
-      });
-    },
     // 获取流程信息参照所需的列表
     // 设备模型、模型操作、设备操作、设备
     getReferenceList() {
       return new Promise(async (resolve, reject) => {
         this.loading = true
         try {
-          this.emList = (await listEquipmentModel()).rows
-          this.moList = (await listModelOperation()).rows
-          this.eoList = (await listEquipmentOperation()).rows
-          this.eqList = (await listEquipment()).rows
           this.eosList = (await listEquipmentOperationStep()).rows
           this.eospaList = (await listEquipmentOperationStepParam()).rows
         } catch (err) {
@@ -593,7 +543,7 @@ export default {
       return new Promise((resolve, reject) => {
         this.loading = true;
         listProcess().then(response => {
-          this.processList = response.rows
+          this.processList = response.rows.filter(ele => ele.odCode === this.currentManufacturePlan.odCode)
           resolve()
         }).catch(() => {
           reject()
@@ -608,6 +558,7 @@ export default {
         this.loading = true;
         listManufacturePlan().then(response => {
           this.manufacturePlanList = response.rows
+          this.currentManufacturePlan = response.rows.find(ele => ele.mpCode === this.mpCode)
           resolve()
         }).catch(() => {
           reject()
@@ -693,6 +644,9 @@ export default {
       this.reset();
       if (this.mpCode) {
         this.form.mpCode = this.mpCode
+        this.form.mtEndPlan = this.currentManufacturePlan.mpEndPlan
+        this.form.mtPriority = this.currentManufacturePlan.mpPriority
+        this.form.mtQtyPlan = this.currentManufacturePlan.mpQtyPlan
       }
       this.open = true;
       this.title = "添加生产任务";
@@ -734,6 +688,7 @@ export default {
             updateManufactureTask(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
+              this.$emit('update')
               this.getList();
             }).finally(() => {
               this.buttonLoading = false;
@@ -744,6 +699,7 @@ export default {
             addManufactureTask(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
+              this.$emit('update')
               this.getList();
             }).finally(() => {
               this.buttonLoading = false;
@@ -760,6 +716,7 @@ export default {
         return delManufactureTask(mtIds);
       }).then(() => {
         this.loading = false;
+        this.$emit('update')
         this.getList();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {
@@ -835,20 +792,28 @@ export default {
           "preemptive": false,
         }
 
+        // 对应车间主控节点
         const areaControl = (await listAreaControl({ arCode: row.arCode })).rows
+        // 所有的设备原子操作
         const equipmentAtomOperationList = (await listEquipmentAtomOperation()).rows
-
+        // 当前生产任务的所有设备任务
         const deviceTask = (await listDeviceTask({ mtCode: row.mtCode })).rows
+        // 当前生产任务的所有任务参数
         const deviceTaskParam = (await listDeviceTaskParam({ mtCode: row.mtCode })).rows
+        // 当前生产任务的所有设备任务前序关系
         const deviceTaskPrev = (await listDeviceTaskPrev({ mtCode: row.mtCode })).rows
         let processRoute = []
 
         // 处理每个task
         for (let task of deviceTask) {
+          // 当前task的前序
           const prev = deviceTaskPrev.filter(ele => ele.dtCodeCur === task.dtCode)
-          const equipment = this.eqList.find(ele => ele.eqCode === task.eqCode)
+          // 当前task的设备操作步骤
+          // 排除开始和结束两个步骤
           const equipmentOperationStep = this.eosList.find(ele => ele.eoCode === task.eoCode && ele.eaoCode)
+          // 当前task的原子操作
           const equipmentAtomOperation = equipmentAtomOperationList.find(ele => ele.eaoCode === equipmentOperationStep.eaoCode)
+          // 当前task的所有操作参数（模板）
           const equipmentOperationStepParams = this.eospaList.filter(ele => ele.eosCode === equipmentOperationStep.eosCode)
           // 取出所需信息
           let route = {
@@ -859,8 +824,11 @@ export default {
             "opParam": {}
           }
           // 解析参数信息
-          for (let param of deviceTaskParam) {
+          // 遍历当前任务的所有实际参数
+          for (let param of deviceTaskParam.filter(ele => ele.dtCode === task.dtCode)) {
+            // 找到参数模板
             const paramInfo = equipmentOperationStepParams.find(ele => ele.eospaCode === param.eospaCode)
+            // 解析参数
             if (paramInfo) {
               try {
                 if (paramInfo.eospaType === '1')
@@ -877,6 +845,7 @@ export default {
                   return
                 }
               } catch (error) {
+                console.error("参数解析出错", error)
                 this.$modal.msgError("参数类型不合法，请重新生成设备任务")
                 return
               }
@@ -911,7 +880,49 @@ export default {
     // 查看设备任务
     async handleViewDeviceTask(row) {
       this.$router.push(`/manufacture/deviceTask/view?mtId=${row.mtId}`)
-    }
+    },
+    // 弃用
+    handleDeprecated(row) {
+      const mtId = row.mtId;
+      this.$modal.confirm('是否确认弃用该生产计划？').then(() => {
+        this.loading = true;
+        getManufactureTask(mtId).then(response => {
+          this.form = response.data;
+          const desc = this.form.mtDesc || '';
+          if (this.form.mtStat === '4' || this.form.mtStat === 'd') {
+            if (!desc.includes('已发布') && !desc.includes('已生成')) {
+              this.$prompt('请在描述中手动输入原状态（已发布或已生成）信息', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                inputValue: desc
+              }).then(({ value }) => {
+                this.form.mtDesc = value;
+                this.form.mtStat = 'a';
+                updateManufactureTask(this.form).then(response => {
+                  this.$modal.msgSuccess("已弃用");
+                  this.getList();
+                }).finally(() => {
+                  this.loading = false;
+                });
+              }).catch(() => {
+                this.loading = false;
+              });
+            } else {
+              this.form.mtStat = 'a';
+              updateManufactureTask(this.form).then(response => {
+                this.$modal.msgSuccess("已弃用");
+                this.getList();
+              }).finally(() => {
+                this.loading = false;
+              });
+            }
+          }
+        });
+      }).catch(() => {
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
   }
 };
 </script>

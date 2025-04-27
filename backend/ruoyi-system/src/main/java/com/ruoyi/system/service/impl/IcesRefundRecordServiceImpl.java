@@ -1,6 +1,9 @@
 package com.ruoyi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.helper.LoginHelper;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
@@ -16,6 +19,8 @@ import com.ruoyi.system.domain.IcesRefundRecord;
 import com.ruoyi.system.mapper.IcesRefundRecordMapper;
 import com.ruoyi.system.service.IIcesRefundRecordService;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Collection;
@@ -24,7 +29,7 @@ import java.util.Collection;
  * 退货记录Service业务层处理
  *
  * @author ruoyi
- * @date 2025-03-28
+ * @date 2025-04-19
  */
 @RequiredArgsConstructor
 @Service
@@ -65,9 +70,11 @@ public class IcesRefundRecordServiceImpl implements IIcesRefundRecordService {
         LambdaQueryWrapper<IcesRefundRecord> lqw = Wrappers.lambdaQuery();
         lqw.eq(StringUtils.isNotBlank(bo.getRrCode()), IcesRefundRecord::getRrCode, bo.getRrCode());
         lqw.eq(StringUtils.isNotBlank(bo.getOrCode()), IcesRefundRecord::getOrCode, bo.getOrCode());
-        lqw.eq(StringUtils.isNotBlank(bo.getMaCode()), IcesRefundRecord::getMaCode, bo.getMaCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getPrCode()), IcesRefundRecord::getPrCode, bo.getPrCode());
         lqw.eq(StringUtils.isNotBlank(bo.getClCode()), IcesRefundRecord::getClCode, bo.getClCode());
         lqw.eq(bo.getRrDelete() != null, IcesRefundRecord::getRrDelete, bo.getRrDelete());
+        lqw.eq(StringUtils.isNotBlank(bo.getRrMan()), IcesRefundRecord::getRrMan, bo.getRrMan());
+        lqw.eq(StringUtils.isNotBlank(bo.getRrDate()), IcesRefundRecord::getRrDate, bo.getRrDate());
         return lqw;
     }
 
@@ -77,6 +84,11 @@ public class IcesRefundRecordServiceImpl implements IIcesRefundRecordService {
     @Override
     public Boolean insertByBo(IcesRefundRecordBo bo) {
         bo.setRrCode(codeService.insertByType("RefundRecord"));
+        // 填入办理人信息
+        String cMan = getLoginUsername();
+        String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        bo.setRrMan(cMan);
+        bo.setRrDate(cDate);
         IcesRefundRecord add = BeanUtil.toBean(bo, IcesRefundRecord.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
@@ -94,6 +106,20 @@ public class IcesRefundRecordServiceImpl implements IIcesRefundRecordService {
         IcesRefundRecord update = BeanUtil.toBean(bo, IcesRefundRecord.class);
         validEntityBeforeSave(update);
         return baseMapper.updateById(update) > 0;
+    }
+
+    /**
+     * 获取当前用户名称
+     * @return 用户名
+     */
+    private String getLoginUsername() {
+        LoginUser loginUser;
+        try {
+            loginUser = LoginHelper.getLoginUser();
+        } catch (Exception e) {
+            return null;
+        }
+        return ObjectUtil.isNotNull(loginUser) ? loginUser.getUsername() : null;
     }
 
     /**

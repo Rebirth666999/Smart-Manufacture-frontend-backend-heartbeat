@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.domain.IcesDeviceTask;
 import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -63,6 +64,7 @@ public class IcesDeviceTaskPrevServiceImpl implements IIcesDeviceTaskPrevService
     private LambdaQueryWrapper<IcesDeviceTaskPrev> buildQueryWrapper(IcesDeviceTaskPrevBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<IcesDeviceTaskPrev> lqw = Wrappers.lambdaQuery();
+        lqw.eq(StringUtils.isNotBlank(bo.getMtCode()), IcesDeviceTaskPrev::getMtCode, bo.getMtCode());
         lqw.eq(StringUtils.isNotBlank(bo.getDtprCode()), IcesDeviceTaskPrev::getDtprCode, bo.getDtprCode());
         lqw.eq(StringUtils.isNotBlank(bo.getDtCodeCur()), IcesDeviceTaskPrev::getDtCodeCur, bo.getDtCodeCur());
         lqw.eq(StringUtils.isNotBlank(bo.getDtCodePrev()), IcesDeviceTaskPrev::getDtCodePrev, bo.getDtCodePrev());

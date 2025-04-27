@@ -294,7 +294,7 @@ export default {
             this.hint += clientPreferential.cpName
             this.hint += " "
             // 设置筛选
-            this.queryParams.cpCode = clientLevel.cpCode
+            this.queryParams.cpCode = clientPreferential.cpCode
             this.queryParams.cllCode = undefined
           }
           resolve()

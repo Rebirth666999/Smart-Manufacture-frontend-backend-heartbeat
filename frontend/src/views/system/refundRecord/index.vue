@@ -1,41 +1,21 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <!-- <el-form-item label="退货记录编码" prop="rrCode">
-        <el-input
-          v-model="queryParams.rrCode"
-          placeholder="请输入退货记录编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item> -->
       <el-form-item label="订单" prop="orCode">
-       <el-select v-model="queryParams.orCode" placeholder="请选择订单" clearable>
-        <el-option
-         v-for="option in orderList"
-         :key="option.orCode"
-         :label="option.orName"
-         :value="option.orCode">
-        </el-option>
-       </el-select>
+        <el-select v-model="queryParams.orCode" placeholder="请选择订单">
+          <el-option v-for="item in orderList" :key="item.orCode" :label="item.orCode" :value="item.orCode">
+          </el-option>
+        </el-select>
       </el-form-item>
-      <el-form-item label="产品" prop="maCode">
-        <el-select v-model="queryParams.maCode" placeholder="请选择产品" clearable>
-          <el-option
-           v-for="option in productList"
-           :key="option.maCode"
-           :label="option.maName"
-           :value="option.maCode">
+      <el-form-item label="产品" prop="prCode">
+        <el-select v-model="queryParams.prCode" placeholder="请选择产品">
+          <el-option v-for="item in productList" :key="item.prCode" :label="item.prName" :value="item.prCode">
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="客户" prop="clCode">
-        <el-select v-model="queryParams.clCode" placeholder="请选择客户" clearable>
-          <el-option
-           v-for="option in clientList"
-           :key="option.clCode"
-           :label="option.clName"
-           :value="option.clCode">
+        <el-select v-model="queryParams.clCode" placeholder="请选择客户">
+          <el-option v-for="item in clientList" :key="item.clCode" :label="item.clName" :value="item.clCode">
           </el-option>
         </el-select>
       </el-form-item>
@@ -45,8 +25,24 @@
           placeholder="请输入已删除"
           clearable
           @keyup.enter.native="handleQuery"
-        /> -->
-      <!-- </el-form-item> -->
+        />
+      </el-form-item> -->
+      <!-- <el-form-item label="办理人" prop="rrMan">
+        <el-input
+          v-model="queryParams.rrMan"
+          placeholder="请输入办理人"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="办理日期" prop="rrDate">
+        <el-input
+          v-model="queryParams.rrDate"
+          placeholder="请输入办理日期"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -55,132 +51,77 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['system:refundRecord:add']"
-        >新增</el-button>
+        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
+          v-hasPermi="['system:refundRecord:add']">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:refundRecord:edit']"
-        >修改</el-button>
+        <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
+          v-hasPermi="['system:refundRecord:edit']">修改</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:refundRecord:remove']"
-        >删除</el-button>
+        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
+          v-hasPermi="['system:refundRecord:remove']">删除</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:refundRecord:export']"
-        >导出</el-button>
+        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
+          v-hasPermi="['system:refundRecord:export']">导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="refundRecordList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="退货记录ID" align="center" prop="rrId" v-if="true"/>
+      <el-table-column label="退货记录ID" align="center" prop="rrId" v-if="true" />
       <el-table-column label="退货记录编码" align="center" prop="rrCode" />
-      <el-table-column label="订单" align="center" prop="orCode" >
-       <template slot-scope="scope">
-        {{ orderList.find(ele => ele.orCode === scope.row.orCode).orName || '' }}
-       </template>
-      </el-table-column>
-      <el-table-column label="产品" align="center" prop="maCode" >
+      <el-table-column label="订单" align="center" prop="orCode" />
+      <el-table-column label="产品" align="center" prop="prCode">
         <template slot-scope="scope">
-         {{ productList.find(ele => ele.maCode === scope.row.maCode).maName || '' }}
+          {{ productList.find(ele => ele.prCode === scope.row.prCode).prName || '' }}
         </template>
       </el-table-column>
-      <el-table-column label="客户" align="center" prop="clCode" >
+      <el-table-column label="客户" align="center" prop="clCode">
         <template slot-scope="scope">
-         {{ clientList.find(ele => ele.clCode === scope.row.clCode).clName || '' }}
+          {{ clientList.find(ele => ele.clCode === scope.row.clCode).clName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="数量" align="center" prop="rrCount" />
-      <!-- <el-table-column label="已删除" align="center" prop="rrDelete" /> -->
-      <!-- <el-table-column label="描述" align="center" prop="rrDesc" /> -->
+      <!-- <el-table-column label="已删除" align="center" prop="rrDelete" />
+      <el-table-column label="描述" align="center" prop="rrDesc" /> -->
+      <el-table-column label="办理人" align="center" prop="rrMan" />
+      <el-table-column label="办理日期" align="center" prop="rrDate" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:refundRecord:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:refundRecord:remove']"
-          >删除</el-button>
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+            v-hasPermi="['system:refundRecord:edit']">修改</el-button>
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+            v-hasPermi="['system:refundRecord:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+    <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
+      @pagination="getList" />
 
     <!-- 添加或修改退货记录对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="520px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="订单" prop="orCode">
-          <el-select v-model="form.orCode" placeholder="请选择订单" clearable @change="handleOrderChange">
-           <el-option
-            v-for="option in orderList"
-            :key="option.orCode"
-            :label="option.orName"
-            :value="option.orCode">
-           </el-option>
+          <el-select v-model="form.orCode" placeholder="请选择订单" @change="selectOrder">
+            <el-option v-for="item in orderList" :key="item.orCode" :label="item.orCode" :value="item.orCode">
+            </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="产品" prop="maCode">
-          <el-select v-model="form.maCode" :disabled="!form.orCode" placeholder="请先选择订单" clearable>
-           <el-option
-            v-for="option in getMaterialByOrder(form.orCode)"
-            :key="option.maCode"
-            :label="option.maName"
-            :value="option.maCode">
-           </el-option>
-         </el-select>
+        <el-form-item label="产品" prop="prCode">
+          <el-select v-model="form.prCode" placeholder="请选择产品">
+            <el-option v-for="item in productList.filter(ele => productCodeSelectList.indexOf(ele.prCode) !== -1 )" :key="item.prCode" :label="item.prName" :value="item.prCode">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="客户" prop="clCode">
-          <el-select v-model="form.clCode" :disabled="!form.orCode" placeholder="请先选择订单" clearable>
-           <el-option
-            v-for="option in getClientByOrder(form.orCode)"
-            :key="option.clCode"
-            :label="option.clName"
-            :value="option.clCode">
-           </el-option>
-         </el-select>
+          <el-select v-model="form.clCode" placeholder="请选择客户" disabled>
+            <el-option v-for="item in clientList" :key="item.clCode" :label="item.clName" :value="item.clCode">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="数量" prop="rrCount">
           <el-input v-model="form.rrCount" placeholder="请输入数量" />
@@ -199,9 +140,11 @@
 
 <script>
 import { listRefundRecord, getRefundRecord, delRefundRecord, addRefundRecord, updateRefundRecord } from "@/api/system/refundRecord";
-import { listOrder } from "@/api/system/order"
+import { listOrder } from "@/api/system/order";
+import { listOrderDemand } from "@/api/system/orderDemand";
 import { listProduct } from "@/api/system/product";
-import { listClient } from "@/api/system/client"
+import { listClient } from "@/api/system/client";
+
 
 export default {
   name: "RefundRecord",
@@ -223,9 +166,11 @@ export default {
       total: 0,
       // 退货记录表格数据
       refundRecordList: [],
-      //订单数据
+      //订单列表
       orderList: [],
-      //产品数据
+      //客户列表
+      clientList: [],
+      //产品列表
       productList: [],
       // 弹出层标题
       title: "",
@@ -237,9 +182,11 @@ export default {
         pageSize: 10,
         rrCode: undefined,
         orCode: undefined,
-        maCode: undefined,
+        prCode: undefined,
         clCode: undefined,
-        rrDelete: 0
+        rrDelete: undefined,
+        rrMan: undefined,
+        rrDate: undefined
       },
       // 表单参数
       form: {},
@@ -248,63 +195,46 @@ export default {
         rrId: [
           { required: true, message: "退货记录ID不能为空", trigger: "blur" }
         ],
-        rrCode: [
-          { required: true, message: "退货记录编码不能为空", trigger: "blur" }
-        ],
         orCode: [
           { required: true, message: "订单不能为空", trigger: "blur" }
         ],
+        prCode: [
+          { required: true, message: "产品不能为空", trigger: "blur" }
+        ],
+        clCode: [
+          { required: true, message: "客户不能为空", trigger: "blur" }
+        ],
         rrCount: [
           { required: true, message: "数量不能为空", trigger: "blur" }
-        ],
-        rrDelete: [
-          { required: true, message: "已删除不能为空", trigger: "blur" }
-        ],
-      }
+        ]
+      },
+      // 订单列表
+      orderList: [],
+      // 订单产品需求列表
+      orderDemandList: [],
+      // 产品列表
+      productList: [],
+      // 已选中订单的产品列表
+      productCodeSelectList: [],
+      // 客户列表
+      clientList: [],
     };
   },
   async created() {
     await this.getOrderList();
-    await this.getMaterialList();
+    await this.getOrderDemandList();
+    await this.getProductList();
     await this.getClientList();
     this.getList();
   },
   async activated() {
     await this.getOrderList();
-    await this.getMaterialList();
+    await this.getOrderDemandList();
+    await this.getProductList();
     await this.getClientList();
     this.getList();
   },
   methods: {
-    // 根据订单获取对应的产品
-    getMaterialByOrder(orCode) {
-      const order = this.orderList.find(item => item.orCode === orCode);
-      if (order) {
-        return this.productList.filter(item => item.maCode === order.maCode);
-      }
-      return [];
-    },
-    // 根据订单获取对应的客户
-    getClientByOrder(orCode) {
-      const order = this.orderList.find(item => item.orCode === orCode);
-      if (order) {
-         return this.clientList.filter(item => item.clCode === order.clCode);
-      }
-      return [];
-    },
-    // 订单选择变化处理函数
-    handleOrderChange() {
-      if (this.form.orCode) {
-        const order = this.orderList.find(item => item.orCode === this.form.orCode);
-        if (order) {
-          this.form.maCode = order.maCode;
-          this.form.clCode = order.clCode;
-        }
-      } else {
-          this.form.maCode = undefined;
-          this.form.clCode = undefined;
-        }
-    },
     // 查询订单
     getOrderList() {
       return new Promise((resolve, reject) => {
@@ -319,8 +249,22 @@ export default {
         })
       })
     },
+    // 查询订单产品需求
+    getOrderDemandList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listOrderDemand().then(response => {
+          this.orderDemandList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     // 查询产品
-    getMaterialList() {
+    getProductList() {
       return new Promise((resolve, reject) => {
         this.loading = true;
         listProduct().then(response => {
@@ -333,8 +277,8 @@ export default {
         })
       })
     },
-    // 查询用户
-    getClientList(){
+    // 查询客户
+    getClientList() {
       return new Promise((resolve, reject) => {
         this.loading = true;
         listClient().then(response => {
@@ -367,15 +311,17 @@ export default {
         rrId: undefined,
         rrCode: undefined,
         orCode: undefined,
-        maCode: undefined,
+        prCode: undefined,
         clCode: undefined,
         rrCount: undefined,
-        rrDelete: undefined,
+        rrDelete: 0,
         rrDesc: undefined,
         createBy: undefined,
         updateBy: undefined,
         createTime: undefined,
-        updateTime: undefined
+        updateTime: undefined,
+        rrMan: undefined,
+        rrDate: undefined
       };
       this.resetForm("form");
     },
@@ -392,7 +338,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.rrId)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
@@ -409,6 +355,7 @@ export default {
       getRefundRecord(rrId).then(response => {
         this.loading = false;
         this.form = response.data;
+        this.selectOrder(this.form.orCode)
         this.open = true;
         this.title = "修改退货记录";
       });
@@ -458,15 +405,26 @@ export default {
       this.download('system/refundRecord/export', {
         ...this.queryParams
       }, `refundRecord_${new Date().getTime()}.xlsx`)
+    },
+    // 选择订单后的回调函数
+    selectOrder(orCode) {
+      const order = this.orderList.find(ele => ele.orCode === orCode)
+      // 自动填入客户字段
+      this.form.clCode = order.clCode
+      // 找到订单的需求产品
+      this.form.prCode = undefined
+      const demand = this.orderDemandList.filter(ele => ele.orCode === orCode)
+      this.productCodeSelectList = demand.map(ele => ele.prCode)
     }
   }
 };
 </script>
 <style scoped>
-.el-select{
+.el-select {
   width: 100%;
 }
-.el-date-editor{
+
+.el-date-editor {
   width: 100%;
 }
 </style>

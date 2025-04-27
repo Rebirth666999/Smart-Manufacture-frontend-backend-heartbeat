@@ -107,7 +107,7 @@
     />
 
     <!-- 添加或修改产品对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="550px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="650px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="产品名称" prop="prName">
           <el-input v-model="form.prName" placeholder="请输入产品名称" />
@@ -116,7 +116,25 @@
           <el-input v-model="form.prOccupy" placeholder="请输入占用货位数量" />
         </el-form-item>
         <el-form-item label="定制详情" prop="prCust">
-          <el-input v-model="form.prCust" type="textarea" placeholder="请输入内容" />
+          <el-table class="mb8" :data="custList" size="mini">
+            <el-table-column label="序号" align="center" type="index" />
+            <el-table-column label="定制项名称" align="center" prop="custKey">
+              <template slot-scope="scope">
+                <el-input v-model="custList[scope.$index].custKey" />
+              </template>
+            </el-table-column>
+            <el-table-column label="可选值" align="center" prop="custVal">
+              <template slot-scope="scope">
+                <el-input v-model="custList[scope.$index].custVal" />
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" align="center" width="60px">
+              <template slot-scope="scope">
+                <el-button @click="deleteCust(scope)" type="danger" icon="el-icon-delete" size="small" circle plain></el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-button @click="addCust" type="primary" icon="el-icon-plus" size="small" plain>新增</el-button>
         </el-form-item>
         <el-form-item label="描述" prop="prDesc">
           <el-input v-model="form.prDesc" type="textarea" placeholder="请输入内容" />
@@ -178,7 +196,9 @@ export default {
         prOccupy: [
           { required: true, message: "占用货位数量不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 暂存用定制信息表格
+      custList: []
     };
   },
   created() {
@@ -246,6 +266,7 @@ export default {
       getProduct(prId).then(response => {
         this.loading = false;
         this.form = response.data;
+        this.parseCustString(this.form.prCust);
         this.open = true;
         this.title = "修改产品";
       });
@@ -254,6 +275,10 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          if (!this.parseCustObject()) {
+            this.$modal.msgWarning("请完整填写定制详情");
+            return
+          }
           this.buttonLoading = true;
           if (this.form.prId != null) {
             updateProduct(this.form).then(response => {
@@ -295,6 +320,67 @@ export default {
       this.download('system/product/export', {
         ...this.queryParams
       }, `product_${new Date().getTime()}.xlsx`)
+    },
+    /**
+     * 删除指定的定制详情
+     * @param {any} scope 表格行信息
+     * @author YangZY
+     * @date 20250423
+     */
+    deleteCust(scope) {
+      this.custList.splice(scope.$index, 1)
+    },
+    /**
+     * 添加一条定制详情
+     * @author YangZY
+     * @date 20250423
+     */
+    addCust() {
+      this.custList.push({
+        custKey: '',
+        custVal: ''
+      })
+    },
+    /**
+     * 定制详情JSON转换为List
+     * @param {string} str 待转换字符串
+     * @author YangZY
+     * @date 20250423
+     */
+    parseCustString(str) {
+      const json = JSON.parse(str)
+      this.custList = []
+      Object.keys(json).forEach(key => {
+        json[key].forEach(val => {
+          this.custList.push({
+            custKey: key,
+            custVal: val
+          })
+        })
+      })
+    },
+    /**
+     * 定制详情List转换为JSON
+     * @returns 是否存在不合法记录
+     * @author YangZY
+     * @date 20250423
+     */
+    parseCustObject() {
+      const result = {}
+      let success = true
+      this.custList.forEach(cust => {
+        if (cust.custKey.length > 0 && cust.custVal.length > 0) {
+          if (cust.custKey in result) {
+            result[cust.custKey].push(cust.custVal)
+          } else {
+            result[cust.custKey] = [cust.custVal]
+          }
+        } else {
+          success = false
+        }
+      })
+      this.form.prCust = JSON.stringify(result)
+      return success
     }
   }
 };

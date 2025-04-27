@@ -7,7 +7,13 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.domain.bo.IcesClientBo;
+import com.ruoyi.system.domain.bo.IcesClientTradeBo;
+import com.ruoyi.system.domain.bo.IcesOrderBo;
+import com.ruoyi.system.domain.vo.IcesClientVo;
+import com.ruoyi.system.domain.vo.IcesOrderVo;
 import com.ruoyi.system.service.IIcesCodeService;
+import com.ruoyi.system.service.IIcesOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesOrderDemandBo;
@@ -32,6 +38,7 @@ public class IcesOrderDemandServiceImpl implements IIcesOrderDemandService {
 
     private final IcesOrderDemandMapper baseMapper;
     private final IIcesCodeService codeService;
+    private final IIcesOrderService orderService;
 
     /**
      * 查询订单所需产品关联
@@ -79,6 +86,7 @@ public class IcesOrderDemandServiceImpl implements IIcesOrderDemandService {
         bo.setOdCode(codeService.insertByType("OrderDemand"));
         IcesOrderDemand add = BeanUtil.toBean(bo, IcesOrderDemand.class);
         validEntityBeforeSave(add);
+        updateOrder(bo);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
             bo.setOdId(add.getOdId());
@@ -93,7 +101,27 @@ public class IcesOrderDemandServiceImpl implements IIcesOrderDemandService {
     public Boolean updateByBo(IcesOrderDemandBo bo) {
         IcesOrderDemand update = BeanUtil.toBean(bo, IcesOrderDemand.class);
         validEntityBeforeSave(update);
+        updateOrder(bo);
         return baseMapper.updateById(update) > 0;
+    }
+
+    /**
+     * 新增/修改订单产品算作对订单信息的修改
+     * 需要更新订单信息的修改人、修改时间字段
+     */
+    private void updateOrder(IcesOrderDemandBo bo) {
+        // 搜索条件
+        String orCode = bo.getOrCode();
+        IcesOrderBo orderBo = new IcesOrderBo();
+        orderBo.setOrCode(orCode);
+        // 查找列表
+        List<IcesOrderVo> vos = orderService.queryList(orderBo);
+        assert vos != null && vos.size() == 1;
+        // 调用更新（设置字段在目标方法进行）
+        orderBo.setOrCode(null);
+        orderBo.setOrId(vos.get(0).getOrId());
+        orderBo.setOrStat(vos.get(0).getOrStat());
+        orderService.updateByBo(orderBo);
     }
 
     /**

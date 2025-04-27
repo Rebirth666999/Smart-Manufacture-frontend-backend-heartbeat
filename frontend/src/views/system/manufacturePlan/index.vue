@@ -535,7 +535,8 @@ export default {
       this.$router.replace('/manufacture/manufacturePlan')
       if (manufacturePlan) {
         this.queryParams.orCode = manufacturePlan.orCode
-        this.handleQuery()
+        this.currentOrCode = manufacturePlan.orCode
+        await this.handleQuery()
         this.idSelect = manufacturePlan.mpId
         this.codeSelect = manufacturePlan.mpCode
       }
@@ -551,7 +552,8 @@ export default {
       this.$router.replace('/manufacture/manufacturePlan')
       if (manufacturePlan) {
         this.queryParams.orCode = manufacturePlan.orCode
-        this.handleQuery()
+        this.currentOrCode = manufacturePlan.orCode
+        await this.handleQuery()
         this.idSelect = manufacturePlan.mpId
         this.codeSelect = manufacturePlan.mpCode
       }
@@ -632,13 +634,13 @@ export default {
       })
     },
     /** 搜索按钮操作 */
-    handleQuery() {
+    async handleQuery() {
       this.queryParams.pageNum = 1;
       this.idSelect = undefined
       this.codeSelect = undefined
       if (this.queryParams.orCode) {
-        this.getList();
-        this.getMainList();
+        await this.getList();
+        await this.getMainList();
       } else {
         this.manufacturePlanMainList = []
         this.manufacturePlanList = []

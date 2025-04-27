@@ -20,7 +20,7 @@
       <el-table-column label="库存情况" align="center" prop="mssStock">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.mssStock > 1.2 * scope.row.pmDemand + 1" type="success">库存充足</el-tag>
-          <el-tag v-else-if="scope.row.mssStock > scope.row.pmDemand" type="warning">库存紧张</el-tag>
+          <el-tag v-else-if="scope.row.mssStock >= scope.row.pmDemand" type="warning">库存紧张</el-tag>
           <el-tag v-else type="danger">库存不足</el-tag>
         </template>
       </el-table-column>

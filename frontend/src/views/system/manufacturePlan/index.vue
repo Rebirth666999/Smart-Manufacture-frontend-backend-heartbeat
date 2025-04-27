@@ -525,39 +525,42 @@ export default {
       }
     };
   },
-  async created() {
-    await this.getProductList();
-    await this.getOrderList();
-    await this.getOrderDemandList();
-    await this.getList();
-    if (this.$route.query.mpCode) {
-      const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpCode === this.$route.query.mpCode)
-      this.$router.replace('/manufacture/manufacturePlan')
-      if (manufacturePlan) {
-        this.queryParams.orCode = manufacturePlan.orCode
-        this.handleQuery()
-        this.idSelect = manufacturePlan.mpId
-        this.codeSelect = manufacturePlan.mpCode
+  watch: {
+    $route(route) {
+      if (route.path === '/manufacture/manufacturePlan') {
+        this.setUpPage()
       }
     }
+  },
+  async created() {
+    await this.setUpPage()
   },
   async activated() {
-    await this.getProductList();
-    await this.getOrderList();
-    await this.getOrderDemandList();
-    await this.getList();
-    if (this.$route.query.mpCode) {
-      const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpCode === this.$route.query.mpCode)
-      this.$router.replace('/manufacture/manufacturePlan')
-      if (manufacturePlan) {
-        this.queryParams.orCode = manufacturePlan.orCode
-        this.handleQuery()
-        this.idSelect = manufacturePlan.mpId
-        this.codeSelect = manufacturePlan.mpCode
-      }
-    }
+    await this.setUpPage()
   },
   methods: {
+    /** 
+     * 页面初始化
+     * @author YangZY
+     * @date 20250427
+     */
+    async setUpPage() {
+      await this.getProductList();
+      await this.getOrderList();
+      await this.getOrderDemandList();
+      await this.getList();
+      if (this.$route.query.mpCode) {
+        const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpCode === this.$route.query.mpCode)
+        this.$router.replace('/manufacture/manufacturePlan')
+        if (manufacturePlan) {
+          this.queryParams.orCode = manufacturePlan.orCode
+          this.currentOrCode = manufacturePlan.orCode
+          await this.handleQuery()
+          this.idSelect = manufacturePlan.mpId
+          this.codeSelect = manufacturePlan.mpCode
+        }
+      }
+    },
     // 查询订单产品需求
     getOrderDemandList() {
       return new Promise((resolve, reject) => {
@@ -632,13 +635,13 @@ export default {
       })
     },
     /** 搜索按钮操作 */
-    handleQuery() {
+    async handleQuery() {
       this.queryParams.pageNum = 1;
       this.idSelect = undefined
       this.codeSelect = undefined
       if (this.queryParams.orCode) {
-        this.getList();
-        this.getMainList();
+        await this.getList();
+        await this.getMainList();
       } else {
         this.manufacturePlanMainList = []
         this.manufacturePlanList = []

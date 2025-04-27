@@ -13,7 +13,7 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-col :span="8">
           <el-form-item label="产品需求" prop="odCode">
-            <el-cascader v-model="form.odCode" :options="orderDemandOptions" placeholder="请选择产品需求" />
+            <el-cascader v-model="form.odCode" :options="orderDemandOptions" placeholder="请选择产品需求" @change="selectOdCode"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -349,6 +349,18 @@ export default {
       }).catch(action => {
       })
     },
+    /**
+     * 选择产品需求的监听函数
+     * 自动填入定制详情
+     * @param {string[]} event 树形选择的所有key
+     * @author YangZY
+     * @date 20250426
+     */
+    selectOdCode(event) {
+      const odCode = event[1]
+      const demand = this.orderDemandList.find(ele => ele.odCode === odCode)
+      this.form.procDesc = demand.odCust
+    }
   }
 };
 </script>

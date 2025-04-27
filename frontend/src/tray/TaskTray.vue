@@ -125,29 +125,27 @@ export default {
         plans.forEach(plan => sum += plan.mpQtyPlan)
 
         if (sum < demand.odDemand) {
-          incompleteSet.add({
-            label: demand.orCode,
-            type: 'order'
-          })
+          incompleteSet.add(demand.orCode)
         } else if (sum > demand.odDemand) {
-          errorSet.add({
-            label: demand.orCode,
-            type: 'order'
-          })
+          errorSet.add(demand.orCode)
         }
       })
       if (incompleteSet.size > 0) {
+        const arr = []
+        incompleteSet.forEach(orCode => arr.push({label: orCode, type: 'order'}))
         this.treeData.push({
           label: '订单未完成分配',
           root: true,
-          children: Array.from(incompleteSet)
+          children: arr
         })
       }
       if (errorSet.size > 0) {
+        const arr = []
+        errorSet.forEach(orCode => arr.push({label: orCode, type: 'order'}))
         this.treeData.push({
           label: '订单分配错误',
           root: true,
-          children: Array.from(errorSet)
+          children: arr
         })
       }
     },
@@ -166,29 +164,27 @@ export default {
         tasks.forEach(task => sum += task.mtQtyPlan)
 
         if (sum < plan.mpQtyPlan) {
-          incompleteSet.add({
-            label: plan.mpCode,
-            type: 'manufacturePlan'
-          })
+          incompleteSet.add(plan.mpCode)
         } else if (sum > plan.mpQtyPlan) {
-          errorSet.add({
-            label: plan.mpCode,
-            type: 'manufacturePlan'
-          })
+          errorSet.add(plan.mpCode)
         }
       })
       if (incompleteSet.size > 0) {
+        const arr = []
+        incompleteSet.forEach(mpCode => arr.push({label: mpCode, type: 'manufacturePlan'}))
         this.treeData.push({
           label: '生产计划未完成分配',
           root: true,
-          children: Array.from(incompleteSet)
+          children: arr
         })
       }
       if (errorSet.size > 0) {
+        const arr = []
+        errorSet.forEach(mpCode => arr.push({label: mpCode, type: 'manufacturePlan'}))
         this.treeData.push({
           label: '生产计划分配错误',
           root: true,
-          children: Array.from(errorSet)
+          children: arr
         })
       }
     },

@@ -135,7 +135,7 @@
 
 <script>
 import bg from "@/assets/images/bg.png";
-import TaskTray from "@/views/tray/TaskTray"
+import TaskTray from "@/tray/TaskTray"
 export default {
   name: "Index",
   components: {

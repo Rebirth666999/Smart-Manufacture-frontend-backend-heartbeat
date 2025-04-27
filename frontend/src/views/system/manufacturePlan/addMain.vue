@@ -4,128 +4,77 @@
       <div slot="header">
         <div class="card-header">
           <div>生产计划信息</div>
+          <div>
+            <el-button
+              :loading="buttonLoading"
+              type="primary"
+              @click="submitForm"
+            >保 存</el-button>
+            <el-button
+              :loading="buttonLoading"
+              @click="resetPage"
+            >重 置</el-button>
+          </div>
         </div>
       </div>
       <div>
-        <el-form :model="queryParams" ref="queryOrderForm" size="small" :inline="true"  label-width="68px">
-          <el-form-item label="订单" prop="orCode">
-            <el-button size="mini" type="primary" @click="openSelectOrder">
-              {{ currentOrCode || '选择订单' }}
-            </el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button icon="el-icon-refresh" size="mini" @click="resetOrderQuery">重置</el-button>
-          </el-form-item>
+        <el-form :model="form" :rules="rules" ref="form" label-width="110px">
+          <el-col :span="12">
+            <el-form-item label="订单" prop="orCode">
+              <el-button plain @click="openSelectOrder" class="order-button" :disabled="form.mpmId !== undefined">
+                {{ currentOrCode || '请选择订单' }}
+              </el-button>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item prop="mpmCode">
+              <span slot="label">
+                <el-tooltip placement="top">
+                  <div slot="content">
+                    <div>生产计划编码须以"ManufacturePlanMain-"开头</div>
+                    <div>在其后输入五位数字，高位补0</div>
+                    <div>若留空则系统自动生成</div>
+                    <div>保存后编码不可更改</div>
+                  </div>
+                  <i class="el-icon-question"></i>
+                </el-tooltip>
+                编码
+              </span>
+              <el-input v-model="form.mpmCode" placeholder="请输入生产计划编码"  :disabled="form.mpmId !== undefined" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="实际开始时间" prop="mpmBegin">
+              <el-date-picker clearable
+                v-model="form.mpmBegin"
+                type="datetime"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                placeholder="请选择实际开始时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="最晚结束时间" prop="mpmEndPlan">
+              <el-date-picker clearable
+                v-model="form.mpmEndPlan"
+                type="datetime"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                placeholder="请选择最晚结束时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
         </el-form>
-        <el-row :gutter="10" class="mb8">
-          <el-col :span="1.5">
-            <el-button
-              type="primary"
-              plain
-              icon="el-icon-plus"
-              size="mini"
-              :disabled="manufacturePlanMainList.length > 0"
-              @click="handleAddMain"
-            >新增</el-button>
-          </el-col>
-          <el-col :span="1.5">
-            <el-button
-              type="warning"
-              plain
-              icon="el-icon-download"
-              size="mini"
-              @click="handleExportMain"
-            >导出</el-button>
-          </el-col>
-        </el-row>
-  
-        <el-table
-          v-loading="loading"
-          :data="manufacturePlanMainList"
-        >
-          <el-table-column label="计划ID" align="center" prop="mpmId" v-if="true"/>
-          <el-table-column label="计划编码" align="center" prop="mpmCode" />
-          <el-table-column label="订单" align="center" prop="orCode" />
-          <el-table-column label="实际开始时间" align="center" prop="mpmBegin">
-            <template slot-scope="scope">
-              <span>{{ parseTime(scope.row.mpmBegin, '{y}-{m}-{d}') }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="最晚结束时间" align="center" prop="mpmEndPlan">
-            <template slot-scope="scope">
-              <span>{{ parseTime(scope.row.mpmEndPlan, '{y}-{m}-{d}') }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="实际结束时间" align="center" prop="mpmEndReal">
-            <template slot-scope="scope">
-              <span>{{ parseTime(scope.row.mpmEndReal, '{y}-{m}-{d}') }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="创建人" align="center" prop="mpmCman" />
-          <el-table-column label="创建时间" align="center" prop="mpmCdate" />
-          <el-table-column label="修改人" align="center" prop="mpmMman" />
-          <el-table-column label="修改时间" align="center" prop="mpmMdate" />
-          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-edit"
-                @click="handleUpdateMain(scope.row)"
-              >修改</el-button>
-              <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-delete"
-                @click="handleDeleteMain(scope.row)"
-              >删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
       </div>
     </el-card>
 
     <el-card shadow="never" class="controlled-card">
       <div slot="header">
         <div class="card-header">
-          <div>生产计划详细信息</div>
+          <div>生产计划详细信息 <el-tag v-if="preview">预览中</el-tag></div>
         </div>
       </div>
-      <div v-if="queryParams.orCode && manufacturePlanMainList.length > 0">
-        <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-          <!-- <el-form-item label="状态" prop="mpStat">
-            <el-select v-model="queryParams.mpStat" placeholder="请选择状态" clearable>
-              <el-option
-                v-for="dict in dict.type.ices_manufacture_plan_status"
-                :key="dict.value"
-                :label="dict.label"
-                :value="dict.value"
-              />
-            </el-select>
-          </el-form-item> -->
-          <el-form-item label="优先级" prop="mpPriority">
-            <el-input
-              v-model="queryParams.mpPriority"
-              placeholder="请输入优先级"
-              clearable
-              @keyup.enter.native="handleQuery"
-            />
-          </el-form-item>
-          <!-- <el-form-item label="已删除" prop="mpDelete">
-            <el-input
-              v-model="queryParams.mpDelete"
-              placeholder="请输入已删除"
-              clearable
-              @keyup.enter.native="handleQuery"
-            />
-          </el-form-item> -->
-          <el-form-item>
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-          </el-form-item>
-        </el-form>
-
-        <el-row :gutter="10" class="mb8">
+      <div v-if="manufacturePlanList.length > 0">
+        <el-row :gutter="10" class="mb8" v-if="!preview">
           <el-col :span="1.5">
             <el-button
               type="primary"
@@ -168,7 +117,6 @@
               v-hasPermi="['system:manufacturePlan:export']"
             >导出</el-button>
           </el-col>
-          <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
         </el-row>
 
         <el-table
@@ -177,7 +125,7 @@
           @current-change="handleCurrentChange"
           highlight-current-row
         >
-          <el-table-column label="选择" width="55" align="center">
+          <el-table-column label="选择" width="55" align="center" v-if="!preview">
             <template slot-scope="scope">
               <el-radio :value="scope.row.mpId === idSelect" :label="true" />
             </template>
@@ -221,7 +169,7 @@
           <el-table-column label="下发时间" align="center" prop="mpRdate" />
           <el-table-column label="修改人" align="center" prop="mpMman" />
           <el-table-column label="修改时间" align="center" prop="mpMdate" />
-          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="!preview">
             <template slot-scope="scope">
               <!-- <el-button
                 size="mini"
@@ -309,7 +257,7 @@
       <el-form label-width="110px">
         <el-form-item label="订单编号" prop="orCode">
           <el-select
-            v-model="queryParams.orCode"
+            v-model="form.orCode"
             placeholder="请选择订单"
             filterable
             @change="selectOrder"
@@ -438,7 +386,7 @@ import manufactureTask from '@/views/system/manufactureTask';
 import ManufactureMaterial from '@/views/system/manufactureTask/material';
 
 export default {
-  name: "ManufacturePlan",
+  name: "ManufacturePlanAdd",
   components: {
     manufactureTask,
     ManufactureMaterial
@@ -448,6 +396,8 @@ export default {
     return {
       // 遮罩层
       loading: true,
+      // 主表提交按钮是否加载中
+      buttonLoading: false,
       // 选中内容
       idSelect: undefined,
       // 选中code
@@ -456,8 +406,6 @@ export default {
       single: true,
       // 非多个禁用
       multiple: true,
-      // 显示搜索条件
-      showSearch: true,
       // 总条数
       total: 0,
       // 生产计划表格数据
@@ -467,13 +415,22 @@ export default {
         pageNum: 1,
         pageSize: 10,
         orCode: undefined,
-        procCode: undefined,
+        mpmCode: undefined,
         mpStat: undefined,
         mpPriority: undefined,
         mpDelete: 0,
       },
-      // 用于编辑属性的表单
+      // 表单
       form: {},
+      // 表单校验
+      rules: {
+        orCode: [
+          { required: true, message: "所属订单不能为空", trigger: "blur" }
+        ],
+        mpmEndPlan: [
+          { required: true, message: "最晚结束时间不能为空", trigger: "blur" }
+        ]
+      },
       // 选择订单窗口是否打开
       open: false,
       // 用于显示的当前选择订单
@@ -488,6 +445,8 @@ export default {
       orderDemandList: [],
       // 生产计划主表
       manufacturePlanMainList: [],
+      // 生产计划详情是否在预览模式
+      preview: false,
       // 生产计划详情编辑相关
       manufacturePlan: {
         // 窗口标题
@@ -529,32 +488,32 @@ export default {
     await this.getProductList();
     await this.getOrderList();
     await this.getOrderDemandList();
-    await this.getList();
-    if (this.$route.query.mpCode) {
-      const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpCode === this.$route.query.mpCode)
-      this.$router.replace('/manufacture/manufacturePlan')
-      if (manufacturePlan) {
-        this.queryParams.orCode = manufacturePlan.orCode
-        this.handleQuery()
-        this.idSelect = manufacturePlan.mpId
-        this.codeSelect = manufacturePlan.mpCode
-      }
+    if (this.$route.query.mpmId) {
+      getManufacturePlanMain(this.$route.query.mpmId).then(response => {
+        this.form = response.data;
+        this.queryParams.mpmCode = response.data.mpmCode;
+        this.currentOrCode = response.data.orCode;
+        this.getList();
+        this.loading = false;
+      });
+    } else {
+      this.loading = false;
     }
   },
   async activated() {
     await this.getProductList();
     await this.getOrderList();
     await this.getOrderDemandList();
-    await this.getList();
-    if (this.$route.query.mpCode) {
-      const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpCode === this.$route.query.mpCode)
-      this.$router.replace('/manufacture/manufacturePlan')
-      if (manufacturePlan) {
-        this.queryParams.orCode = manufacturePlan.orCode
-        this.handleQuery()
-        this.idSelect = manufacturePlan.mpId
-        this.codeSelect = manufacturePlan.mpCode
-      }
+    if (this.$route.query.mpmId) {
+      getManufacturePlanMain(this.$route.query.mpmId).then(response => {
+        this.form = response.data;
+        this.queryParams.mpmCode = response.data.mpmCode;
+        this.currentOrCode = response.data.orCode;
+        this.getList();
+        this.loading = false;
+      });
+    } else {
+      this.loading = false;
     }
   },
   methods: {
@@ -600,74 +559,19 @@ export default {
         })
       })
     },
-    // 查询生产计划主表列表
-    getMainList() {
-      return new Promise((resolve, reject) => {
-        this.loading = true;
-        listManufacturePlanMain({ orCode: this.queryParams.orCode }).then(response => {
-          this.manufacturePlanMainList = response.rows
-          resolve()
-        }).catch(() => {
-          reject()
-        }).finally(() => {
-          this.loading = false
-        })
-      })
-    },
     /** 查询生产计划列表 */
     getList() {
       return new Promise((resolve, reject) => {
         this.loading = true;
-        const id = this.idSelect
-        this.idSelect = undefined
         listManufacturePlan(this.queryParams).then(response => {
           this.manufacturePlanList = response.rows;
           this.total = response.total;
-          this.idSelect = id
           this.loading = false;
           resolve()
         }).catch(() => {
           reject()
         })
       })
-    },
-    /** 搜索按钮操作 */
-    handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.idSelect = undefined
-      this.codeSelect = undefined
-      if (this.queryParams.orCode) {
-        this.getList();
-        this.getMainList();
-      } else {
-        this.manufacturePlanMainList = []
-        this.manufacturePlanList = []
-      }
-    },
-    /** 
-     * 计划详细信息重置按钮
-     * 只能重置订单以外的筛选项
-     * @author YangZY
-     * @date 20250423
-     */
-    resetQuery() {
-      this.resetForm("queryForm");
-      this.idSelect = undefined
-      this.codeSelect = undefined
-      this.handleQuery();
-    },
-    /** 
-     * 计划信息重置按钮
-     * 只能重置订单筛选项
-     * @author YangZY
-     * @date 20250423
-     */
-    resetOrderQuery() {
-      this.resetForm("queryOrderForm");
-      this.currentOrCode = ''
-      this.idSelect = undefined
-      this.codeSelect = undefined
-      this.handleQuery();
     },
     // 选中数据条目
     handleCurrentChange(current, old) {
@@ -680,7 +584,7 @@ export default {
     handleAdd() {
       this.resetManufacturePlanForm();
       this.manufacturePlan.form.orCode = this.currentOrCode
-      this.manufacturePlan.form.mpmCode = this.manufacturePlanMainList[0].mpmCode
+      this.manufacturePlan.form.mpmCode = this.form.mpmCode
       this.manufacturePlan.open = true;
       this.manufacturePlan.title = "添加生产计划详情";
     },
@@ -719,91 +623,6 @@ export default {
         ...this.queryParams
       }, `manufacturePlan_${new Date().getTime()}.xlsx`)
     },
-    // 提交审核
-    handleSubmitReview(row) {
-      const mpId = row.mpId;
-      this.$modal.confirm('是否要提交审核？审核在开始之前可以撤回。').then(() => {
-        this.loading = true;
-        getManufacturePlan(mpId).then(response => {
-          this.form = response.data;
-          this.form.mpStat = "2";
-          updateManufacturePlan(this.form).then(response => {
-            this.$modal.msgSuccess("已提交审核");
-            this.getList();
-          })
-        });
-      }).catch(() => {
-      }).finally(() => {
-        this.loading = false;
-      });
-    },
-    // 撤回审核
-    handleWithdrawReview(row) {
-      const mpId = row.mpId;
-      this.$modal.confirm('是否要撤回审核？若审核已开始即无法撤回。').then(() => {
-        this.loading = true;
-        getManufacturePlan(mpId).then(response => {
-          this.form = response.data;
-          if(this.form.mpStat === '2') this.form.mpStat = '1';
-          else if(this.form.mpStat === '7' || this.form.mpStat === 'a') this.form.mpStat = '4';
-          updateManufacturePlan(this.form).then(response => {
-            this.$modal.msgSuccess("已撤回审核");
-            this.getList();
-          })
-        });
-      }).catch(() => {
-      }).finally(() => {
-        this.loading = false;
-      });
-    },
-    //弃用
-    handleDeprecated(row) {
-      const mpId = row.mpId;
-      this.$modal.confirm('是否确认弃用该生产计划？').then(() => {
-        this.loading = true;
-        getManufacturePlan(mpId).then(response => {
-          this.form = response.data;
-          this.form.mpStat = "a";
-          updateManufacturePlan(this.form).then(response => {
-            this.$modal.msgSuccess("已弃用");
-            this.getList();
-          })
-        });
-      }).catch(() => {
-      }).finally(() => {
-        this.loading = false;
-      });
-    },
-    /** 新增生产计划主表 */
-    handleAddMain() {
-      this.$router.push(`/manufacture/manufacturePlan/addMain?orCode=${this.queryParams.orCode}`)
-    },
-    /** 修改生产计划主表 */
-    handleUpdateMain(row) {
-      const mpmId = row.mpmId
-      this.$router.push(`/manufacture/manufacturePlan/addMain?mpmId=${mpmId}`)
-    },
-    /** 删除生产计划主表 */
-    handleDeleteMain(row) {
-      const mpmIds = row.mpmId;
-      this.$modal.confirm('是否确认删除生产计划编号为"' + mpmIds + '"的数据项？').then(() => {
-        this.loading = true;
-        return delManufacturePlanMain(mpmIds);
-      }).then(() => {
-        this.loading = false;
-        this.manufacturePlanMainList = []
-        this.$modal.msgSuccess("删除成功");
-      }).catch(() => {
-      }).finally(() => {
-        this.loading = false;
-      });
-    },
-    /** 导出生产计划主表 */
-    handleExportMain() {
-      this.download('system/manufacturePlanMain/export', {
-        orCode: this.queryParams.orCode
-      }, `manufacturePlanMain_${new Date().getTime()}.xlsx`)
-    },
     /**
      * 解析产品需求字段
      * @author YangZY
@@ -830,7 +649,7 @@ export default {
       }
     },
     /**
-     * 生产计划选择订单
+     * 选择订单
      * @author YangZY
      * @date 20250426
      */
@@ -843,7 +662,7 @@ export default {
      * @date 20250426
      */
     cancel() {
-      this.queryParams.orCode = this.currentOrCode
+      this.form.orCode = this.currentOrCode
       this.open = false
     },
     /**
@@ -852,9 +671,89 @@ export default {
      * @date 20250426
      */
     submitOrder() {
-      this.currentOrCode = this.queryParams.orCode
-      this.handleQuery()
+      this.currentOrCode = this.form.orCode
+      this.form.orCode = this.currentOrCode
+      // 加载出所有产品需求，填入生产计划信息
+      this.preview = true
+      const demands = this.orderDemandList.filter(ele => ele.orCode === this.currentOrCode)
+      this.manufacturePlanList = []
+      demands.forEach(demand => {
+        this.manufacturePlanList.push({
+          orCode: this.currentOrCode,
+          mpEndPlan: this.form.mpmEndPlan,
+          odCode: demand.odCode,
+          mpQtyPlan: demand.odDemand,
+          mpPriority: this.currentOrder.orPriority
+        })
+      })
       this.open = false
+    },
+    /**
+     * 重置表单
+     * @author YangZY
+     * @date 20250426
+     */
+    reset() {
+      this.form = {
+        mpmId: undefined,
+        orCode: undefined,
+        mpmCode: undefined,
+        mpmBegin: undefined,
+        mpmEndPlan: undefined,
+        mpmStat: undefined,
+        createBy: undefined,
+        updateBy: undefined,
+        createTime: undefined,
+        updateTime: undefined
+      };
+      this.resetForm("form");
+      this.currentOrCode = '';
+      this.manufacturePlanList = [];
+      this.preview = false;
+      this.idSelect = undefined;
+      this.codeSelect = undefined;
+    },
+    /**
+     * 重置此页面
+     * @author YangZY
+     * @date 20250426
+     */
+    resetPage() {
+      this.$router.replace(`/manufacture/manufacturePlan/addMain`)
+      this.reset()
+    },
+    /**
+     * 提交主表信息
+     * @author YangZY
+     * @date 20250426
+     */
+    submitForm() {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          this.buttonLoading = true;
+          if (this.form.mpmId != null) {
+            updateManufacturePlanMain(this.form).then(response => {
+              this.$modal.msgSuccess("修改成功")
+              this.preview = false
+              this.getList()
+            }).finally(() => {
+              this.buttonLoading = false;
+            });
+          } else {
+            this.form.mpmStat = '1'
+            addManufacturePlanMain(this.form).then(response => {
+              this.$modal.msgSuccess("新增成功");
+              this.$router.replace(`/manufacture/manufacturePlan/addMain?mpmId=${response.data.mpmId}`)
+              this.form = response.data
+              this.queryParams.mpmCode = this.form.mpmCode
+              this.preview = false
+              this.getList()
+            }).finally(() => {
+              this.buttonLoading = false;
+            });
+          }
+        }
+      });
     },
     /**
      * 提交生产计划详情表单
@@ -959,5 +858,9 @@ export default {
 }
 ::v-deep .el-tabs__item {
   font-size: 17px;
+}
+.order-button {
+  width: 100%;
+  text-align: left;
 }
 </style>

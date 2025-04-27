@@ -48,6 +48,12 @@ public class IcesManufacturePlanVo {
     private String odCode;
 
     /**
+     * 所属生产计划
+     */
+    @ExcelProperty(value = "所属生产计划")
+    private String mpmCode;
+
+    /**
      * 状态代码
      */
     @ExcelProperty(value = "状态代码", converter = ExcelDictConvert.class)

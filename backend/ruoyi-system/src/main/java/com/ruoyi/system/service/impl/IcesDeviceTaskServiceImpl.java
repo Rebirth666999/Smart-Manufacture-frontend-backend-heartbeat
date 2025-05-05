@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesDeviceTaskBo;
 import com.ruoyi.system.domain.IcesDeviceTask;
 import com.ruoyi.system.mapper.IcesDeviceTaskMapper;
-import com.ruoyi.flowable.factory.FlowServiceFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -39,7 +38,6 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
     private final IIcesProcessStepService processStepService;
     private final IIcesProcessStepPrevService stepPrevService;
     private final IIcesProcessStepPrevRoundService prevRoundService;
-    private final FlowServiceFactory flowServiceFactory;
     private final IIcesDeviceTaskParamService deviceTaskParamService;
     private final IIcesDeviceTaskPrevService deviceTaskPrevService;
     private final IIcesManufactureTaskService manufactureTaskService;
@@ -146,7 +144,10 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
         return baseMapper.deleteBatchIds(ids) > 0;
     }
 
-
+    /**
+     * 保存设备任务
+     * @param jsonStr 前端传来的JSON格式数据
+     */
     @Override
     public void saveDtasks(String jsonStr) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
@@ -288,6 +289,11 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
         }
     }
 
+    /**
+     * 删除数据库已有的与当前生产任务关联的
+     * 设备任务、任务前序关系、任务参数
+     * @param mtCode 生产任务
+     */
     private void deleteExisting(String mtCode) {
         // 如果数据库中已经存在步骤参数信息，则删除
         IcesDeviceTaskParamBo taskParamBo = new IcesDeviceTaskParamBo();
@@ -324,6 +330,159 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
         if (!taskIds.isEmpty()) {
             deleteWithValidByIds(taskIds, false);
         }
+    }
+
+    /**
+     * 找到当前生产任务当前轮次还需要执行的设备任务
+     * @param mtCode 生产任务
+     * @return 当前轮次还需要执行的设备任务
+     * @author YangZY
+     * @date 20250504
+     */
+    @Override
+    public List<IcesDeviceTaskVo> findRemain(String mtCode) {
+        // 找到生产任务，应当只有一个
+        IcesManufactureTaskBo manufactureTaskBo = new IcesManufactureTaskBo();
+        manufactureTaskBo.setMtCode(mtCode);
+        List<IcesManufactureTaskVo> manufactureTaskVos = manufactureTaskService.queryList(manufactureTaskBo);
+        assert manufactureTaskVos.size() == 1;
+        // 找到所有工艺步骤
+        IcesProcessStepBo processStepBo = new IcesProcessStepBo();
+        processStepBo.setProcCode(manufactureTaskVos.get(0).getProcCode());
+        List<IcesProcessStepVo> processStepVos = processStepService.queryList(processStepBo);
+
+        // 找到开始事件和结束事件
+        // 创建code到processStep的映射
+        // 此处start和end等价
+        IcesProcessStepVo start = null;
+        IcesProcessStepVo end = null;
+        Map<String, IcesProcessStepVo> processStepMap = new HashMap<>();
+        for (IcesProcessStepVo processStepVo : processStepVos) {
+            // 寻找没有对应模型操作的步骤
+            if (processStepVo.getMoCode() == null) {
+                // 第一个给start
+                // 第二个给end
+                if (start == null) {
+                    start = processStepVo;
+                } else {
+                    end = processStepVo;
+                }
+            }
+            // 关系加入映射
+            processStepMap.put(processStepVo.getPsCode(), processStepVo);
+        }
+        // 工艺流程应当存在开始事件和结束事件
+        assert start != null;
+        assert end != null;
+
+        // 找到工艺步骤的所有前序关系
+        IcesProcessStepPrevBo stepPrevBo = new IcesProcessStepPrevBo();
+        stepPrevBo.setProcCode(manufactureTaskVos.get(0).getProcCode());
+        List<IcesProcessStepPrevVo> stepPrevVos = stepPrevService.queryList(stepPrevBo);
+        // 找到起始操作和结束操作
+        // 取出model字符串
+        List<String> startSteps = new ArrayList<>();
+        List<String> endSteps = new ArrayList<>();
+        for (IcesProcessStepPrevVo stepPrevVo : stepPrevVos) {
+            // 起始操作
+            // 前序是开始事件
+            if (stepPrevVo.getPsCodePrev().equals(start.getPsCode()) ||
+                stepPrevVo.getPsCodePrev().equals(end.getPsCode())) {
+                startSteps.add(processStepMap.get(stepPrevVo.getPsCodeCur()).getPsModel());
+            }
+            // 结束操作
+            // 是结束事件的前序
+            if (stepPrevVo.getPsCodeCur().equals(start.getPsCode()) ||
+                stepPrevVo.getPsCodeCur().equals(end.getPsCode())) {
+                endSteps.add(processStepMap.get(stepPrevVo.getPsCodePrev()).getPsModel());
+            }
+        }
+        // 找到所有设备任务
+        IcesDeviceTaskBo bo = new IcesDeviceTaskBo();
+        bo.setMtCode(mtCode);
+        List<IcesDeviceTaskVo> tasks = queryList(bo);
+        // 找到起始任务和结束任务
+        List<IcesDeviceTaskVo> allTasks = new ArrayList<>();         // 本轮次所有任务
+        List<IcesDeviceTaskVo> startTasks = new ArrayList<>();       // 本轮次所有起始任务
+        List<IcesDeviceTaskVo> endTasks = new ArrayList<>();         // 本轮次所有结束任务
+        List<IcesDeviceTaskVo> remainingTasks = new ArrayList<>();   // 要返回的所有剩余任务
+        int ssCnt = 0;  // 起始任务的已开始数量
+        int eeCnt = 0;  // 结束任务的已结束数量
+        for (IcesDeviceTaskVo task : tasks) {
+            // 添加任务
+            allTasks.add(task);
+            // 起始任务
+            if (startSteps.contains(task.getDtModel())) {
+                startTasks.add(task);
+                if (task.getDtStat().equals("4") || task.getDtStat().equals("3")) {
+                    // 已完成、进行中
+                    ssCnt++;
+                }
+            }
+            // 结束任务
+            if (endSteps.contains(task.getDtModel())) {
+                endTasks.add(task);
+                if (task.getDtStat().equals("4")) {
+                    // 已完成
+                    eeCnt++;
+                }
+            }
+            // 找全了一轮次的起始和结束任务，判断当前轮次状态
+            // 所有的起始任务未开始，则轮次未开始
+            // 有一个起始任务已开始，则轮次已开始
+            // 全部的结束任务都结束，则轮次已结束
+            if (startTasks.size() == startSteps.size() && endTasks.size() == endSteps.size()) {
+                if (ssCnt == 0 || eeCnt == endSteps.size()) {
+                    // 本轮未开始、本轮已结束
+                    // 不需要执行任何操作
+                    ssCnt = 0;
+                    eeCnt = 0;
+                    allTasks.clear();
+                    startTasks.clear();
+                    endTasks.clear();
+                } else {
+                    // 本轮已开始，但未结束
+                    // 找到未开始的任务
+                    for (IcesDeviceTaskVo taskVo : allTasks) {
+                        if (task.getDtStat().equals("2")) {
+                            // 已下发，未开始
+                            remainingTasks.add(taskVo);
+                        }
+                    }
+                    // 本轮处理完成
+                    ssCnt = 0;
+                    eeCnt = 0;
+                    allTasks.clear();
+                    startTasks.clear();
+                    endTasks.clear();
+                }
+            }
+        }
+        return remainingTasks;
+    }
+
+    /**
+     * 找到指定车间所有本轮还需执行的设备任务
+     * @param arCode 车间编号
+     * @return 还需要执行的设备任务
+     * @author YangZY
+     * @date 20250504
+     */
+    @Override
+    public List<IcesDeviceTaskVo> findAllRemain(String arCode) {
+        // 找到此车间的所有生产任务
+        IcesManufactureTaskBo manufactureTaskBo = new IcesManufactureTaskBo();
+        manufactureTaskBo.setArCode(arCode);
+        List<IcesManufactureTaskVo> manufactureTaskVos = manufactureTaskService.queryList(manufactureTaskBo);
+        // 遍历所有的生产任务
+        List<IcesDeviceTaskVo> result = new ArrayList<>();
+        for (IcesManufactureTaskVo manufactureTaskVo : manufactureTaskVos) {
+            // 只有未完成的生产任务会被计算
+            if (!manufactureTaskVo.getMtStat().equals("6")) {
+                result.addAll(findRemain(manufactureTaskVo.getMtCode()));
+            }
+        }
+        return result;
     }
 }
 

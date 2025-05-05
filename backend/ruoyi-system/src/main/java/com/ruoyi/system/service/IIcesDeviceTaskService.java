@@ -48,17 +48,19 @@ public interface IIcesDeviceTaskService {
      * 校验并批量删除设备任务信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
-    void saveDtasks(String modelXML) throws DocumentException, JsonProcessingException;
+
     /**
      * 保存设备任务
      */
+    void saveDtasks(String modelXML) throws DocumentException, JsonProcessingException;
 
     /**
-     * 根据当前ID查询前序步骤ID
-     *
-     * @param currentId 当前步骤ID
-     * @return 前序步骤ID
+     * 找到当前生产任务当前轮次还需要执行的设备任务
      */
+    List<IcesDeviceTaskVo> findRemain(String mtCode);
 
-
+    /**
+     * 找到指定车间所有本轮还需执行的设备任务
+     */
+    List<IcesDeviceTaskVo> findAllRemain(String arCode);
 }

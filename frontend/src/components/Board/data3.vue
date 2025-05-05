@@ -8,22 +8,13 @@
         <span>地址</span>
       </li>
     </ul>
-    <vueSeamlessScroll :data="source" class="seamless-warp" >
-      <ul
-        class="list"
-        :style="'height:'+source.length*38+'px;'"
-        @mousemove="stopScroll"
-        @mouseout="doScroll"
-      >
-        <li
-          :class="{devicelistitem: true, even: (index + 1) % 2 !== 0}"
-          v-for="(item,index) in source"
-          :key="index"
-        >
-          <span :title="item.name">{{item.name}}</span>
-          <span :title="item.sex">{{item.sex}}</span>
-          <span :title="item.age">{{item.age}}</span>
-          <span :title="item.address">{{item.address}}</span>
+    <vueSeamlessScroll :data="source" class="seamless-warp" :class-option="option">
+      <ul class="list" :style="'height:' + source.length * 38 + 'px;'" @mousemove="stopScroll" @mouseout="doScroll">
+        <li :class="{ devicelistitem: true, even: (index + 1) % 2 !== 0 }" v-for="(item, index) in source" :key="index">
+          <span :title="item.name">{{ item.name }}</span>
+          <span :title="item.sex">{{ item.sex }}</span>
+          <span :title="item.age">{{ item.age }}</span>
+          <span :title="item.address">{{ item.address }}</span>
         </li>
       </ul>
     </vueSeamlessScroll>
@@ -31,53 +22,60 @@
 </template>
 
 <script>
-    import vueSeamlessScroll from "vue-seamless-scroll";
-    export default {
-    components: {
+import vueSeamlessScroll from "vue-seamless-scroll";
+export default {
+  components: {
     vueSeamlessScroll,
   },
-    data() {
+  data() {
     return {
-    allowScroll: true,
-    source: [],
-  };
+      allowScroll: true,
+      source: [],
+      option: {
+        step: 0.5
+      }
+    };
   },
-    computed: {
+  computed: {
     optionSingleHeightTime() {
-    return {
-    singleHeight: 38,
-    waitTime: 3000,
-    limitMoveNum: this.source ? this.source.length : 5,
-  };
+      return {
+        singleHeight: 38,
+        waitTime: 3000,
+        limitMoveNum: this.source ? this.source.length : 5,
+      };
+    },
   },
-  },
-    mounted() {
+  mounted() {
     this.initData();
   },
-    methods: {
+  methods: {
     initData() {
-    this.source = [];
-    for (let i = 0; i < 30; i++) {
-    this.source.push({
-    name: `张三${i + 1}`,
-    sex: "男",
-    age: i + 1,
-    address: "中国大陆浙江省杭州市西湖区",
-  });
-  }
-  },
+      this.source = [];
+      for (let i = 0; i < 30; i++) {
+        this.source.push({
+          name: `张三${i + 1}`,
+          sex: "男",
+          age: i + 1,
+          address: "中国大陆浙江省杭州市西湖区",
+        });
+      }
+    },
     stopScroll() {
-    this.allowScroll = false;
-  },
+      this.allowScroll = false;
+    },
     doScroll() {
-    this.allowScroll = true;
+      this.allowScroll = true;
+    },
   },
-  },
-  };
+};
 </script>
 
 <style scoped>
-*{ margin:0; padding:0; }
+* {
+  margin: 0;
+  padding: 0;
+}
+
 .table-demo-wrapper {
   margin: 0;
   left: 0;
@@ -160,5 +158,4 @@
 .table-demo-wrapper .seamless-warp .list .even {
   background: linear-gradient(180deg, rgba(85, 109, 255, 0.3), rgba(45, 67, 139, 0.3), rgba(85, 109, 255, 0.3));
 }
-
 </style>

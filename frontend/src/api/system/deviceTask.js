@@ -71,10 +71,20 @@ export function listDeviceTaskPrev(query) {
   })
 }
 
+// 下发设备任务
 export function executeDeviceTask(url, data) {
   return request({
     baseURL: '',
     url: url,
+    method: 'post',
+    data: data
+  })
+}
+
+// 查询设备任务前序列表
+export function findRemainByManufactureTask(data) {
+  return request({
+    url: '/system/deviceTask/findRemainByManufactureTask',
     method: 'post',
     data: data
   })

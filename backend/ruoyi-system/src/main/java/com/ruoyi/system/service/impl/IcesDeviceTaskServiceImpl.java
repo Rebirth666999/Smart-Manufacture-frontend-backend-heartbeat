@@ -444,7 +444,7 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
                     // 本轮已开始，但未结束
                     // 找到未开始的任务
                     for (IcesDeviceTaskVo taskVo : allTasks) {
-                        if (task.getDtStat().equals("2")) {
+                        if (taskVo.getDtStat().equals("2")) {
                             // 已下发，未开始
                             remainingTasks.add(taskVo);
                         }

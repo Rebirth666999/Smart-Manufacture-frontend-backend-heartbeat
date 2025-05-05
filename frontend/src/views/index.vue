@@ -108,28 +108,6 @@
     <div class="mainImg">
       <el-image :src="bgImage" />
     </div>
-    <el-row :gutter="20">
-      <el-col :span="12">
-        <el-card shadow="never">
-          <div slot="header">
-            <div class="card-header">
-              <div>任务托盘</div>
-            </div>
-          </div>
-          <task-tray />
-        </el-card>
-      </el-col>
-      <el-col :span="12">
-        <el-card shadow="never">
-          <div slot="header">
-            <div class="card-header">
-              <div>报警托盘</div>
-            </div>
-          </div>
-          <el-empty description="暂无需要处理的报警" />
-        </el-card>
-      </el-col>
-    </el-row>
   </div>
 </template>
 

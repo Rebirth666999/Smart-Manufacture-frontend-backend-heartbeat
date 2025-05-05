@@ -3,12 +3,11 @@ package com.ruoyi.system.controller;
 import java.util.List;
 import java.util.Arrays;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ruoyi.system.domain.bo.IcesManufactureTaskBo;
 import lombok.RequiredArgsConstructor;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.*;
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import org.dom4j.DocumentException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
 import com.ruoyi.common.annotation.RepeatSubmit;
@@ -24,9 +23,6 @@ import com.ruoyi.system.domain.vo.IcesDeviceTaskVo;
 import com.ruoyi.system.domain.bo.IcesDeviceTaskBo;
 import com.ruoyi.system.service.IIcesDeviceTaskService;
 import com.ruoyi.common.core.page.TableDataInfo;
-import com.ruoyi.system.service.IIcesProcessStepService;
-import com.ruoyi.system.service.IIcesProcessStepPrevService;
-import com.ruoyi.system.service.IIcesProcessStepPrevRoundService;
 
 /**
  * 设备任务
@@ -127,6 +123,15 @@ public class IcesDeviceTaskController extends BaseController {
         }
     }
 
+    /**
+     * 按生产任务获取本轮剩余设备任务
+     * @param manufactureTaskBo 要查询的生产任务
+     */
+    @RepeatSubmit()
+    @PostMapping("/findRemainByManufactureTask")
+    public R<List<IcesDeviceTaskVo>> findRemainByManufactureTask(@RequestBody IcesManufactureTaskBo manufactureTaskBo) {
+        return R.ok(iIcesDeviceTaskService.findRemain(manufactureTaskBo.getMtCode()));
+    }
 
 }
 

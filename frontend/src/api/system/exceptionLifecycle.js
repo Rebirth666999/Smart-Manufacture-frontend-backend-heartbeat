@@ -55,10 +55,19 @@ export function saveModel(data) {
   })
 }
 
-// 获取模型
+// 获取模型（根据生命周期ID）
 export function getModel(query) {
   return request({
     url: '/system/exceptionLifecycle/getModel',
+    method: 'get',
+    params: query
+  })
+}
+
+// 获取模型（根据模型ID）
+export function getBpmnModel(query) {
+  return request({
+    url: '/system/exceptionLifecycle/getBpmnXml',
     method: 'get',
     params: query
   })

@@ -51,4 +51,6 @@ public interface IIcesExceptionLifecycleService {
     Boolean saveModel(String json) throws JsonProcessingException, DocumentException;
 
     String getModel(String exlId);
+
+    String queryBpmnXmlById(String modelId);
 }

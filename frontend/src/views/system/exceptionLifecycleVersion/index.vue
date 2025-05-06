@@ -111,6 +111,12 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-search"
+            @click="handleView(scope.row)"
+          >查看</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:exceptionLifecycleVersion:remove']"
@@ -155,15 +161,24 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 流程图 -->
+    <el-dialog :title="processView.title" :visible.sync="processView.open" width="70%" append-to-body>
+      <process-viewer :key="`designer-${processView.index}`" :xml="processView.xmlData" :style="{height: '600px'}" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { listExceptionLifecycleVersion, getExceptionLifecycleVersion, delExceptionLifecycleVersion, addExceptionLifecycleVersion, updateExceptionLifecycleVersion } from "@/api/system/exceptionLifecycleVersion";
-import { listExceptionLifecycle } from "@/api/system/exceptionLifecycle";
+import { listExceptionLifecycle, getBpmnModel } from "@/api/system/exceptionLifecycle";
+import ProcessViewer from '@/components/ProcessViewer'
 
 export default {
   name: "ExceptionLifecycleVersion",
+  components: {
+    ProcessViewer
+  },
   data() {
     return {
       // 按钮loading
@@ -217,7 +232,14 @@ export default {
       // 1-按生命周期筛选版本
       mode: 0,
       // 页面顶部提示
-      hint: ''
+      hint: '',
+      // 查看器相关
+      processView: {
+        title: '',
+        open: false,
+        index: undefined,
+        xmlData:"",
+      }
     };
   },
   async created() {
@@ -374,6 +396,24 @@ export default {
       this.download('system/exceptionLifecycleVersion/export', {
         ...this.queryParams
       }, `exceptionLifecycleVersion_${new Date().getTime()}.xlsx`)
+    },
+    /**
+     * 查看流程
+     * @param {any} row 生命周期信息
+     * @author YangZY
+     * @date 20250506
+     */ 
+    handleView(row) {
+      this.processView.index = row.exlvDefId
+      this.processView.title = "查看异常生命周期版本 " + row.exlvName
+      this.processView.open = true
+      if (row.exlvDefId && row.exlvDefId.length > 0) {
+        getBpmnModel({ modelId: row.exlvDefId }).then(response => {
+          this.processView.xmlData = response.data
+        })
+      } else {
+        this.processView.xmlData = ''
+      }
     }
   }
 };

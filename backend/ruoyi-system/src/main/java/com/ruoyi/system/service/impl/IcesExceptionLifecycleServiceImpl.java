@@ -131,6 +131,8 @@ public class IcesExceptionLifecycleServiceImpl extends FlowServiceFactory implem
      * 保存异常处理流程
      * @param json 前端传来的JSON字符串
      * @return 是否成功
+     * @author YangZY
+     * @date 20250506
      */
     @Override
     public Boolean saveModel(String json) throws JsonProcessingException, DocumentException {
@@ -197,6 +199,8 @@ public class IcesExceptionLifecycleServiceImpl extends FlowServiceFactory implem
      * 获取生命周期最新版本
      * @param exlId 生命周期
      * @return 模型XML字符串
+     * @author YangZY
+     * @date 20250506
      */
     @Override
     public String getModel(String exlId) {
@@ -208,5 +212,18 @@ public class IcesExceptionLifecycleServiceImpl extends FlowServiceFactory implem
         } else {
             return "";
         }
+    }
+
+    /**
+     * 根据模型ID查模型
+     * @param modelId 模型ID
+     * @return 模型XML字符串
+     * @author YangZY
+     * @date 20250506
+     */
+    @Override
+    public String queryBpmnXmlById(String modelId) {
+        byte[] bpmnBytes = repositoryService.getModelEditorSource(modelId);
+        return StrUtil.utf8Str(bpmnBytes);
     }
 }

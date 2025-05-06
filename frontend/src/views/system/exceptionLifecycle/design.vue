@@ -1,7 +1,6 @@
 <template>
   <div class="app-container">
     <process-designer
-      v-if='designerOpen'
       :key="designerOpen"
       :style="{ height: 'calc(100vh - 130px)' }"
       ref="modelDesigner"
@@ -15,6 +14,7 @@
 </template>
 <script>
 import ProcessDesigner from '@/components/ProcessDesigner';
+import { saveModel, getModel } from "@/api/system/exceptionLifecycle";
 
 export default {
   name: "Process",
@@ -30,7 +30,7 @@ export default {
       // 表单参数
       form: {},
       // 设计窗口是否打开
-      designerOpen: true,
+      designerOpen: false,
       // 设计器相关数据
       designerData: {
         loading: false,
@@ -41,32 +41,51 @@ export default {
           processKey: null
         }
       },
-      exlId: ''
+      // 传入的生命周期ID
+      exlId: '',
     };
   },
   created() {
+    this.designerData.loading = true
     this.exlId = this.$route.query.exlId
+    getModel({exlId: this.exlId}).then(response => {
+      this.designerData.bpmnXml = response.data
+    }).finally(() => {
+      this.designerOpen = true
+      this.designerData.loading = false
+    })
   },
   activated() {
+    this.designerData.loading = true
     this.exlId = this.$route.query.exlId
+    getModel({exlId: this.exlId}).then(response => {
+      this.designerData.bpmnXml = response.data
+    }).finally(() => {
+      this.designerOpen = true
+      this.designerData.loading = false
+    })
   },
   methods: {
     // 保存流程按钮操作
     onSaveDesigner(bpmnXml) {
-      console.log(bpmnXml)
-      // this.$confirm("是否保存工艺流程？", "提示", {
-      //   distinguishCancelAndClose: true,
-      //   confirmButtonText: '是',
-      //   cancelButtonText: '否'
-      // }).then(() => {
-      //   this.designerData.loading = true;
-      //   saveModel(bpmnXml).then(response => {
-      //     this.$modal.msgSuccess("保存成功");
-      //   }).finally(() => {
-      //     this.designerData.loading = false;
-      //   })
-      // }).catch(action => {
-      // })
+      this.$confirm('是否保存异常生命周期为新版本？', '提示', {
+        confirmButtonText: '保存',
+        cancelButtonText: '取消',
+      }).then(() => {
+        // 保存为新版本
+        this.designerData.loading = true;
+        saveModel({
+          exlId: this.exlId,
+          xml: bpmnXml,
+        }).then(response => {
+          this.$modal.msgSuccess("保存成功");
+          this.$tab.closePage();
+        }).finally(() => {
+          this.designerData.loading = false;
+        })
+      }).catch({
+
+      })
     },
   }
 }

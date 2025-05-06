@@ -1,14 +1,26 @@
 package com.ruoyi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.flowable.factory.FlowServiceFactory;
+import com.ruoyi.system.domain.bo.IcesExceptionLifecycleVersionBo;
+import com.ruoyi.system.domain.vo.IcesExceptionLifecycleVersionVo;
 import com.ruoyi.system.service.IIcesCodeService;
+import com.ruoyi.system.service.IIcesExceptionLifecycleVersionService;
 import lombok.RequiredArgsConstructor;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+import org.flowable.engine.repository.Model;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesExceptionLifecycleBo;
 import com.ruoyi.system.domain.vo.IcesExceptionLifecycleVo;
@@ -16,6 +28,8 @@ import com.ruoyi.system.domain.IcesExceptionLifecycle;
 import com.ruoyi.system.mapper.IcesExceptionLifecycleMapper;
 import com.ruoyi.system.service.IIcesExceptionLifecycleService;
 
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Collection;
@@ -28,10 +42,11 @@ import java.util.Collection;
  */
 @RequiredArgsConstructor
 @Service
-public class IcesExceptionLifecycleServiceImpl implements IIcesExceptionLifecycleService {
+public class IcesExceptionLifecycleServiceImpl extends FlowServiceFactory implements IIcesExceptionLifecycleService {
 
     private final IcesExceptionLifecycleMapper baseMapper;
     private final IIcesCodeService codeService;
+    private final IIcesExceptionLifecycleVersionService lifecycleVersionService;
 
     /**
      * 查询异常生命周期
@@ -110,5 +125,88 @@ public class IcesExceptionLifecycleServiceImpl implements IIcesExceptionLifecycl
             //TODO 做一些业务上的校验,判断是否需要校验
         }
         return baseMapper.deleteBatchIds(ids) > 0;
+    }
+
+    /**
+     * 保存异常处理流程
+     * @param json 前端传来的JSON字符串
+     * @return 是否成功
+     */
+    @Override
+    public Boolean saveModel(String json) throws JsonProcessingException, DocumentException {
+        // 接收参数
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> data = mapper.readValue(json, Map.class);
+        String exlId = data.get("exlId").toString();
+        String xml = data.get("xml").toString();
+
+        // 找到生命周期
+        IcesExceptionLifecycleVo lifecycleVo = queryById(Long.valueOf(exlId));
+        // 找到已有的版本
+        IcesExceptionLifecycleVersionBo versionBo = new IcesExceptionLifecycleVersionBo();
+        versionBo.setExlCode(lifecycleVo.getExlCode());
+        List<IcesExceptionLifecycleVersionVo> versionVos = lifecycleVersionService.queryList(versionBo);
+
+        // 解析XML得到key和name
+        SAXReader saxReader = new SAXReader();
+        Document document = saxReader.read(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
+        Element rootElement = document.getRootElement();
+        Element process = rootElement.element("process");
+        String processId = process.attributeValue("id");
+        String processName = process.attributeValue("name");
+
+        int ver = 0;
+
+        if (!versionVos.isEmpty()) {
+            // 确定目前最新的版本
+            for (IcesExceptionLifecycleVersionVo vo : versionVos) {
+                String name = vo.getExlvName().split("v")[1];
+                int current = Integer.parseInt(name);
+                ver = Math.max(ver, current + 1);
+            }
+        }
+
+        // 保存模型和XML
+        Model model = repositoryService.newModel();
+        model.setName(processName);
+        model.setKey(processId);
+        model.setVersion(ver);
+        repositoryService.saveModel(model);
+        repositoryService.addModelEditorSource(model.getId(),
+            StringUtils.getBytes(xml, StandardCharsets.UTF_8));
+        // 更新生命周期版本
+        // 生成版本
+        IcesExceptionLifecycleVersionBo newVersionBo = new IcesExceptionLifecycleVersionBo();
+        newVersionBo.setExlCode(lifecycleVo.getExlCode());
+        newVersionBo.setExlvName("v" + ver);
+        newVersionBo.setExlvDefId(model.getId());
+        newVersionBo.setExlvGeId(model.getKey());
+        lifecycleVersionService.insertByBo(newVersionBo);
+        // 更新生命周期
+        // 当前版本是最新版本
+        IcesExceptionLifecycleBo lifecycleBo = new IcesExceptionLifecycleBo();
+        lifecycleBo.setExlId(lifecycleVo.getExlId());
+        lifecycleBo.setExlModelId(model.getId());
+        lifecycleBo.setExlModelKey(model.getKey());
+        updateByBo(lifecycleBo);
+
+        return true;
+    }
+
+    /**
+     * 获取生命周期最新版本
+     * @param exlId 生命周期
+     * @return 模型XML字符串
+     */
+    @Override
+    public String getModel(String exlId) {
+        // 找到生命周期
+        IcesExceptionLifecycleVo lifecycleVo = queryById(Long.valueOf(exlId));
+        if (StringUtils.isNotBlank(lifecycleVo.getExlModelId())) {
+            byte[] bpmnBytes = repositoryService.getModelEditorSource(lifecycleVo.getExlModelId());
+            return StrUtil.utf8Str(bpmnBytes);
+        } else {
+            return "";
+        }
     }
 }

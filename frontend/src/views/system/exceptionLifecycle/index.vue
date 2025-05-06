@@ -108,6 +108,12 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-brush"
+            @click="handleDesign(scope.row)"
+          >设计</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-document"
             @click="handleVersion(scope.row)"
           >版本</el-button>
@@ -378,6 +384,10 @@ export default {
     // 查看生命周期版本
     handleVersion(row) {
       this.$router.push(`/exception/exceptionLifecycleVersion?exlCode=${row.exlCode}`)
+    },
+    // 生命周期设计
+    handleDesign(row) {
+      this.$router.push(`/exception/exceptionLifecycleDesign?exlId=${row.exlId}`)
     }
   }
 };

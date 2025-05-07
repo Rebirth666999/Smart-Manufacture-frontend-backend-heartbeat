@@ -76,7 +76,7 @@ public class IcesExceptionRecordServiceImpl implements IIcesExceptionRecordServi
      * 新增异常记录
      */
     @Override
-    public Boolean insertByBo(IcesExceptionRecordBo bo) {
+    public IcesExceptionRecordVo insertByBo(IcesExceptionRecordBo bo) {
         bo.setExrCode(codeService.insertByType("ExceptionRecord"));
         IcesExceptionRecord add = BeanUtil.toBean(bo, IcesExceptionRecord.class);
         validEntityBeforeSave(add);
@@ -84,7 +84,7 @@ public class IcesExceptionRecordServiceImpl implements IIcesExceptionRecordServi
         if (flag) {
             bo.setExrId(add.getExrId());
         }
-        return flag;
+        return queryById(add.getExrId());
     }
 
     /**

@@ -59,7 +59,10 @@ public class IcesCodeServiceImpl implements IIcesCodeService {
     @Override
     public void checkCode(String type, String code) {
         String pattern = "^" + type + "-\\d{5}$";
-        if (!code.matches(pattern)) {
+        String patternModify = "^" + type + "-\\d{5}(-D)+$";
+        boolean normal = code.matches(pattern);
+        boolean modify = code.matches(patternModify);
+        if (!normal && !modify) {
             throw new RuntimeException("编码格式错误");
         } else {
             // 查找编码是否存在
@@ -70,10 +73,18 @@ public class IcesCodeServiceImpl implements IIcesCodeService {
             lqw.eq(query.getCoType() != null, IcesCode::getCoType, query.getCoType());
             lqw.eq(query.getCoNum() != null, IcesCode::getCoNum, query.getCoNum());
             List<IcesCode> codeList = baseMapper.selectList(lqw);
-            if (codeList.isEmpty()) {
-                baseMapper.insert(query);
+            if (normal) {
+                // 普通插入，需要确保不重复
+                if (codeList.isEmpty()) {
+                    baseMapper.insert(query);
+                } else {
+                    throw new RuntimeException("编码已存在");
+                }
             } else {
-                throw new RuntimeException("编码已存在");
+                // 插入编辑后内容，需要确保存在
+                if (codeList.isEmpty()) {
+                    throw new RuntimeException("原编码不存在");
+                }
             }
         }
     }

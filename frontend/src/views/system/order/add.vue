@@ -255,6 +255,7 @@ export default {
         maCode: undefined,
         clCode: undefined,
         orName: undefined,
+        orCodeOrgn: undefined,
         orStat: undefined,
         orDemand: undefined,
         orPriority: undefined,
@@ -277,11 +278,34 @@ export default {
         if (valid) {
           this.buttonLoading = true;
           if (this.form.orId != null) {
-            updateOrder(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
-            }).finally(() => {
-              this.buttonLoading = false;
-            });
+            if (this.form.orStat !== '1') {
+              this.$confirm('修改已发布的订单将记录订单历史记录，请确认订单信息已修改完毕。', '提示', {
+                confirmButtonText: '确定修改',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                // 已发布之后的修改需要记录历史
+                this.form.orCodeOrgn = this.form.orCode
+                updateOrder(this.form).then(response => {
+                  // 发布之后修改，应当提醒用户
+                  // 然后离开此界面
+                  this.$modal.msgSuccess("修改成功");
+                  this.$tab.closeOpenPage({ path: "/order" });
+                }).finally(() => {
+                  this.buttonLoading = false;
+                })
+              }).catch(() => {
+                // 取消操作
+                this.buttonLoading = false;
+              })
+            } else {
+              // 未发布的可以直接修改
+              updateOrder(this.form).then(response => {
+                this.$modal.msgSuccess("修改成功");
+              }).finally(() => {
+                this.buttonLoading = false;
+              })
+            }
           } else {
             // 新增订单的默认状态
             this.form.orStat = '1'

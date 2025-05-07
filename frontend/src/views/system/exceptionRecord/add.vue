@@ -49,7 +49,25 @@
         </el-col>
         <el-col :span="24">
           <el-form-item label="参数" prop="exrParam">
-            <el-input v-model="form.exrParam" type="textarea" placeholder="请输入内容" />
+            <el-table class="mb8" :data="paramList">
+              <el-table-column label="序号" align="center" type="index" />
+              <el-table-column label="键" align="center" prop="paramKey">
+                <template slot-scope="scope">
+                  <el-input v-model="paramList[scope.$index].key" />
+                </template>
+              </el-table-column>
+              <el-table-column label="值" align="center" prop="paramVal">
+                <template slot-scope="scope">
+                  <el-input v-model="paramList[scope.$index].val" />
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" align="center" width="80px">
+                <template slot-scope="scope">
+                  <el-button @click="deleteParam(scope)" type="danger" icon="el-icon-delete" size="small" circle plain></el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-button @click="addParam" type="primary" icon="el-icon-plus" size="small" plain>新增</el-button>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -202,9 +220,6 @@ export default {
         exrDesc: [
           { required: true, message: "描述不能为空", trigger: "blur" }
         ],
-        exrParam: [
-          { required: true, message: "参数不能为空", trigger: "blur" }
-        ],
         exrStat: [
           { required: true, message: "状态不能为空", trigger: "change" }
         ],
@@ -226,18 +241,22 @@ export default {
       // 异常源列表
       exceptionSourceList: [],
       // 用户列表
-      userList: []
+      userList: [],
+      // 暂存用参数表格
+      paramList: []
     };
   },
   async created() {
     await this.getUserList();
     await this.getExceptionList();
     await this.getExceptionSourceList();
+    this.parseParamString(this.form.exrParam);
   },
   async activated() {
     await this.getUserList();
     await this.getExceptionList();
     await this.getExceptionSourceList();
+    this.parseParamString(this.form.exrParam);
   },
   methods: {
     // 获取用户列表
@@ -311,12 +330,17 @@ export default {
         updateBy: undefined,
         updateTime: undefined
       };
+      this.paramList = []
       this.resetForm("form");
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          if (!this.parseParamObject()) {
+            this.$modal.msgWarning("请完整填写参数");
+            return
+          }
           this.buttonLoading = true;
           if (this.form.exrId != null) {
             updateExceptionRecord(this.form).then(response => {
@@ -336,6 +360,63 @@ export default {
         }
       });
     },
+    /**
+     * 删除指定的定制详情
+     * @param {any} scope 表格行信息
+     * @author YangZY
+     * @date 20250507
+     */
+    deleteParam(scope) {
+      this.paramList.splice(scope.$index, 1)
+    },
+    /**
+     * 添加一条定制详情
+     * @author YangZY
+     * @date 20250507
+     */
+    addParam() {
+      this.paramList.push({
+        key: '',
+        val: ''
+      })
+    },
+    /**
+     * 参数JSON转换为List
+     * @param {string} str 待转换字符串
+     * @author YangZY
+     * @date 20250507
+     */
+    parseParamString(str) {
+      if (str) {
+        const json = JSON.parse(str)
+        this.paramList = []
+        Object.keys(json).forEach(key => {
+          this.paramList.push({
+            key: key,
+            val: json[key]
+          })
+        })
+      }
+    },
+    /**
+     * 参数List转换为JSON
+     * @returns 是否存在不合法记录
+     * @author YangZY
+     * @date 20250423
+     */
+    parseParamObject() {
+      const result = {}
+      let success = true
+      this.paramList.forEach(param => {
+        if (param.key.length > 0 && param.val.length > 0) {
+          result[param.key] = param.val
+        } else {
+          success = false
+        }
+      })
+      this.form.exrParam = JSON.stringify(result)
+      return success
+    }
   }
 };
 </script>

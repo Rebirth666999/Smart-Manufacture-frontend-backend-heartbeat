@@ -1,6 +1,5 @@
 package com.ruoyi.system.service;
 
-import com.ruoyi.system.domain.IcesExceptionRecord;
 import com.ruoyi.system.domain.vo.IcesExceptionRecordVo;
 import com.ruoyi.system.domain.bo.IcesExceptionRecordBo;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -35,7 +34,7 @@ public interface IIcesExceptionRecordService {
     /**
      * 新增异常记录
      */
-    Boolean insertByBo(IcesExceptionRecordBo bo);
+    IcesExceptionRecordVo insertByBo(IcesExceptionRecordBo bo);
 
     /**
      * 修改异常记录

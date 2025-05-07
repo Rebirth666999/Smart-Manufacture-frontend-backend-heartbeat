@@ -78,8 +78,8 @@ public class IcesExceptionRecordController extends BaseController {
     @Log(title = "异常记录", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody IcesExceptionRecordBo bo) {
-        return toAjax(iIcesExceptionRecordService.insertByBo(bo));
+    public R<IcesExceptionRecordVo> add(@Validated(AddGroup.class) @RequestBody IcesExceptionRecordBo bo) {
+        return R.ok(iIcesExceptionRecordService.insertByBo(bo));
     }
 
     /**

@@ -37,6 +37,7 @@ import IndustryContentPadProvider from "@/plugins/package/designer/plugins/conte
 import RuoyiPaletteProvider from "@/plugins/package/designer/plugins/palette/ruoyi";
 import EquipmentOperationPaletteProvider from "@/plugins/package/designer/plugins/palette/equipmentOperation";
 import ProcessPaletteProvider from "@/plugins/package/designer/plugins/palette/process";
+import ExceptionPaletteProvider from "@/plugins/package/designer/plugins/palette/exception";
 import { vuePlugin } from "@/plugins/package/highlight";
 import "highlight.js/styles/atom-one-dark-reasonable.css";
 Vue.use(vuePlugin);
@@ -56,6 +57,7 @@ export default {
     // 0-ruoyi原先的表单审批流程
     // 1-设备操作流程
     // 2-产品工艺流程
+    // 3-异常处理流程
     mode: {
       type: Number,
       required: true,
@@ -88,14 +90,21 @@ export default {
   },
   created() {
     if (this.mode === 0) {
+      // 0-ruoyi原先的表单审批流程
       this.controlForm.additionalModel.push(RuoyiContentPadProvider);
       this.controlForm.additionalModel.push(RuoyiPaletteProvider);
     } else if (this.mode === 1) {
+      // 1-设备操作流程
       this.controlForm.additionalModel.push(IndustryContentPadProvider);
       this.controlForm.additionalModel.push(EquipmentOperationPaletteProvider);
-    } else {
+    } else if (this.mode === 2) {
+      // 2-产品工艺流程
       this.controlForm.additionalModel.push(IndustryContentPadProvider);
       this.controlForm.additionalModel.push(ProcessPaletteProvider);
+    } else {
+      // 3-异常处理流程
+      this.controlForm.additionalModel.push(IndustryContentPadProvider);
+      this.controlForm.additionalModel.push(ExceptionPaletteProvider);
     }
   },
   methods: {

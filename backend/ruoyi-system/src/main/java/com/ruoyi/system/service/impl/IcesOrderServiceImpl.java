@@ -101,11 +101,6 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
      */
     @Override
     public IcesOrderVo insertByBo(IcesOrderBo bo) {
-        if (StringUtils.isBlank(bo.getOrCode())) {
-            bo.setOrCode(codeService.insertByType("Order"));
-        } else {
-            codeService.checkCode("Order", bo.getOrCode());
-        }
         String cMan = getLoginUsername();
         String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         // 填入创建信息

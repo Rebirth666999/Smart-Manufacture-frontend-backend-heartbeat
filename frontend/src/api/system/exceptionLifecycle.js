@@ -42,3 +42,33 @@ export function delExceptionLifecycle(exlId) {
     method: 'delete'
   })
 }
+
+// 保存模型
+export function saveModel(data) {
+  return request({
+    url: '/system/exceptionLifecycle/save',
+    method: 'post',
+    headers: {
+      'Content-Type': 'text/plain;charset=utf-8'
+    },
+    data: data
+  })
+}
+
+// 获取模型（根据生命周期ID）
+export function getModel(query) {
+  return request({
+    url: '/system/exceptionLifecycle/getModel',
+    method: 'get',
+    params: query
+  })
+}
+
+// 获取模型（根据模型ID）
+export function getBpmnModel(query) {
+  return request({
+    url: '/system/exceptionLifecycle/getBpmnXml',
+    method: 'get',
+    params: query
+  })
+}

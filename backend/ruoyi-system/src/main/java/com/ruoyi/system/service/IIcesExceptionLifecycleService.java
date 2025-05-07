@@ -1,10 +1,11 @@
 package com.ruoyi.system.service;
 
-import com.ruoyi.system.domain.IcesExceptionLifecycle;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ruoyi.system.domain.vo.IcesExceptionLifecycleVo;
 import com.ruoyi.system.domain.bo.IcesExceptionLifecycleBo;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
+import org.dom4j.DocumentException;
 
 import java.util.Collection;
 import java.util.List;
@@ -46,4 +47,10 @@ public interface IIcesExceptionLifecycleService {
      * 校验并批量删除异常生命周期信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+    Boolean saveModel(String json) throws JsonProcessingException, DocumentException;
+
+    String getModel(String exlId);
+
+    String queryBpmnXmlById(String modelId);
 }

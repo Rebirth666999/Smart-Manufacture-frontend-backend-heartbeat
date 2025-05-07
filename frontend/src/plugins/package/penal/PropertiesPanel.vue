@@ -106,6 +106,18 @@
         </div>
         <proc-material :id="elementId" :maList="extraList.maList" />
       </el-collapse-item>
+
+      <!-- 异常处理流程 -->
+      <el-collapse-item
+        name="exceptionBasic"
+        v-if="mode === 3"
+        key="exceptionBasic"
+      >
+        <div slot="title" class="panel-tab__title">
+          <i class="el-icon-info"></i>常规
+        </div>
+        <exception-base-info :id-edit-disabled="idEditDisabled"    :business-object="elementBusinessObject" :type="elementType" />
+      </el-collapse-item>
     </el-collapse>
   </div>
 </template>
@@ -113,6 +125,7 @@
 import ElementBaseInfo from "./base/ElementBaseInfo";
 import EosBaseInfo from "./base/EquipmentOperationStepBaseInfo";
 import ProcBaseInfo from "./base/ProcessBaseInfo";
+import ExceptionBaseInfo from "./base/ExceptionBaseInfo";
 import ElementOtherConfig from "./other/ElementOtherConfig";
 import ElementTask from "./task/ElementTask";
 import ElementMultiInstance from "./multi-instance/ElementMultiInstance";
@@ -147,7 +160,8 @@ export default {
     EosParam,
     ProcBaseInfo,
     ProcProperties,
-    ProcMaterial
+    ProcMaterial,
+    ExceptionBaseInfo
   },
   componentName: "BpmnPropertiesPanel",
   props: {
@@ -168,6 +182,7 @@ export default {
     // 0-ruoyi原先的表单审批流程
     // 1-设备操作流程
     // 2-产品工艺流程
+    // 3-异常处理流程
     mode: {
       type: Number,
       required: true
@@ -202,6 +217,8 @@ export default {
           this.activeTab = ["eosBasic", "eosProperties", "eosParam"];
         } else if (this.mode === 2) {
           this.activeTab = ["procBasic", "procProperties", "procMaterial"];
+        } else if (this.mode === 3) {
+          this.activeTab = ["exceptionBasic"];
         }
       }
     }

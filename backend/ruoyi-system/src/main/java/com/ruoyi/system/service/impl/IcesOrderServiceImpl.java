@@ -187,12 +187,21 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
         return baseMapper.deleteBatchIds(ids) > 0;
     }
 
+    /**
+     * 所有生产计划完成，更新订单
+     *
+     * @param icesManufacturePlanBo 作为参照的生产计划信息
+     */
     @Override
     public void updateStatus(IcesManufacturePlanBo icesManufacturePlanBo) {
+        // 找到订单
         IcesOrderBo bo = new IcesOrderBo();
-        bo.setOrCode(icesManufacturePlanBo.getMpCode());
+        bo.setOrCode(icesManufacturePlanBo.getOrCode());
         List<IcesOrderVo> icesOrderVos = queryList(bo);
-        icesManufacturePlanBo.setMpId(icesOrderVos.get(0).getOrId());
+        // 设置ID、状态
+        bo.setOrId(icesOrderVos.get(0).getOrId());
+        bo.setOrCode(null);
+        bo.setOrStat("6");
         updateByBo(bo);
     }
 }

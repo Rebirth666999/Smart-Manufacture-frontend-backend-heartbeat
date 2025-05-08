@@ -1,5 +1,6 @@
 package com.ruoyi.system.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ruoyi.system.domain.IcesOrderDemand;
 import com.ruoyi.system.domain.vo.IcesOrderDemandVo;
 import com.ruoyi.system.domain.bo.IcesOrderDemandBo;
@@ -46,4 +47,6 @@ public interface IIcesOrderDemandService {
      * 校验并批量删除订单所需产品关联信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+    Boolean updateWithOrder(String json) throws JsonProcessingException;
 }

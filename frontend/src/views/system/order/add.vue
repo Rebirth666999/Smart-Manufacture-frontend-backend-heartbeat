@@ -40,7 +40,7 @@
               </el-tooltip>
               订单编码
             </span>
-            <el-input v-model="form.orCode" placeholder="请输入订单编码" :disabled="$route.query.orId" />
+            <el-input v-model="form.orCode" placeholder="请输入订单编码" :disabled="$route.query.orId != undefined" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -95,7 +95,7 @@
         </el-col>
       </el-form>
     </el-card>
-    <el-card shadow="never" class="controlled-card">
+    <el-card shadow="never" class="controlled-card" v-if="mode !== 2">
       <div slot="header">
         <div class="card-header">
           <div>订单产品信息</div>
@@ -104,20 +104,31 @@
       <order-demand v-if='form.orCode' :orCode="form.orCode" />
       <el-empty v-else description="保存订单后即可管理订单产品" />
     </el-card>
+    <el-card shadow="never" class="controlled-card" v-if="mode === 2">
+      <div slot="header">
+        <div class="card-header">
+          <div>订单产品信息（预览）</div>
+        </div>
+      </div>
+      <order-demand-preview v-if='form.orCode' :orCode="form.orCode" ref="orderDemand" />
+    </el-card>
   </div>
 </template>
 
 <script>
 import { listOrder, getOrder, delOrder, addOrder, updateOrder } from "@/api/system/order";
+import { updateOrderWithDemand } from "@/api/system/orderDemand";
 import { listProduct } from "@/api/system/product";
 import { listClient } from "@/api/system/client";
 import { listClientTrade } from "@/api/system/clientTrade";
 import orderDemand from '@/views/system/orderDemand';
+import orderDemandPreview from '@/views/system/orderDemand/preview';
 
 export default {
   name: "Order",
   components: {
-    orderDemand
+    orderDemand,
+    orderDemandPreview
   },
   dicts: ['ices_order_status'],
   data() {
@@ -167,7 +178,11 @@ export default {
       // 客户列表
       clientList: [],
       // 客户贸易信息列表
-      clientTradeList: []
+      clientTradeList: [],
+      // 0-新增
+      // 1-未发布修改
+      // 2-发布后修改
+      mode: 0
     };
   },
   async created() {
@@ -179,9 +194,15 @@ export default {
     if (this.$route.query.orId) {
       getOrder(this.$route.query.orId).then(response => {
         this.form = response.data;
+        if (response.data.orStat === '1') {
+          this.mode = 1
+        } else {
+          this.mode = 2
+        }
         this.loading = false;
       });
     } else {
+      this.mode = 0
       this.loading = false;
     }
   },
@@ -194,9 +215,15 @@ export default {
     if (this.$route.query.orId) {
       getOrder(this.$route.query.orId).then(response => {
         this.form = response.data;
+        if (response.data.orStat === '1') {
+          this.mode = 1
+        } else {
+          this.mode = 2
+        }
         this.loading = false;
       });
     } else {
+      this.mode = 0
       this.loading = false;
     }
   },
@@ -283,17 +310,19 @@ export default {
                 confirmButtonText: '确定修改',
                 cancelButtonText: '取消',
                 type: 'warning'
-              }).then(() => {
+              }).then(async () => {
                 // 已发布之后的修改需要记录历史
                 this.form.orCodeOrgn = this.form.orCode
-                updateOrder(this.form).then(response => {
-                  // 发布之后修改，应当提醒用户
-                  // 然后离开此界面
-                  this.$modal.msgSuccess("修改成功");
-                  this.$tab.closeOpenPage({ path: "/order" });
-                }).finally(() => {
-                  this.buttonLoading = false;
+                const newOrder = (await updateOrder(this.form)).data
+                await updateOrderWithDemand({
+                  order: newOrder,
+                  demand: this.$refs.orderDemand.orderDemandList
                 })
+                // 发布之后修改，应当提醒用户
+                // 然后离开此界面
+                this.$modal.msgSuccess("修改成功");
+                this.$tab.closeOpenPage({ path: "/order" });
+                this.buttonLoading = false;
               }).catch(() => {
                 // 取消操作
                 this.buttonLoading = false;

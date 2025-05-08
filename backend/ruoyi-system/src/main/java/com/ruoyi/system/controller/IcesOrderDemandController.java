@@ -2,7 +2,6 @@ package com.ruoyi.system.controller;
 
 import java.util.List;
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 
 import lombok.RequiredArgsConstructor;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +16,6 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.validate.AddGroup;
 import com.ruoyi.common.core.validate.EditGroup;
-import com.ruoyi.common.core.validate.QueryGroup;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.system.domain.vo.IcesOrderDemandVo;
@@ -104,5 +102,18 @@ public class IcesOrderDemandController extends BaseController {
     public R<Void> remove(@NotEmpty(message = "主键不能为空")
                           @PathVariable Long[] odIds) {
         return toAjax(iIcesOrderDemandService.deleteWithValidByIds(Arrays.asList(odIds), true));
+    }
+
+    /**
+     * 根据新订单信息，加入产品需求
+     */
+    @PostMapping("/updateWithOrder")
+    public R<Void> updateWithOrder(@RequestBody String json) {
+        try {
+            return toAjax(iIcesOrderDemandService.updateWithOrder(json));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.fail();
+        }
     }
 }

@@ -247,16 +247,34 @@ export default {
     };
   },
   async created() {
-    await this.getUserList();
-    await this.getExceptionList();
-    await this.getExceptionSourceList();
-    this.parseParamString(this.form.exrParam);
+    this.loading = true
+    await this.getUserList()
+    await this.getExceptionList()
+    await this.getExceptionSourceList()
+    if (this.$route.query.exrId) {
+      getExceptionRecord(this.$route.query.exrId).then(response => {
+        this.form = response.data
+        this.parseParamString(this.form.exrParam)
+        this.loading = false
+      })
+    } else {
+      this.loading = false
+    }
   },
   async activated() {
-    await this.getUserList();
-    await this.getExceptionList();
-    await this.getExceptionSourceList();
-    this.parseParamString(this.form.exrParam);
+    this.loading = true
+    await this.getUserList()
+    await this.getExceptionList()
+    await this.getExceptionSourceList()
+    if (this.$route.query.exrId) {
+      getExceptionRecord(this.$route.query.exrId).then(response => {
+        this.form = response.data
+        this.parseParamString(this.form.exrParam)
+        this.loading = false
+      })
+    } else {
+      this.loading = false
+    }
   },
   methods: {
     // 获取用户列表

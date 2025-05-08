@@ -547,21 +547,12 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加异常记录";
+      this.$router.push(`/exception/exceptionRecordAdd`)
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.loading = true;
-      this.reset();
       const exrId = row.exrId || this.ids
-      getExceptionRecord(exrId).then(response => {
-        this.loading = false;
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改异常记录";
-      });
+      this.$router.push(`/exception/exceptionRecordAdd?exrId=${exrId}`)
     },
     /** 提交按钮 */
     submitForm() {

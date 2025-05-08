@@ -7,7 +7,7 @@
       v-loading="designerData.loading"
       :bpmnXml="designerData.bpmnXml"
       :designerForm="designerData.form" :mode="3"
-      :extraList="{}"
+      :extraList="extraList"
       @save="onSaveDesigner"
     />
   </div>
@@ -15,6 +15,7 @@
 <script>
 import ProcessDesigner from '@/components/ProcessDesigner';
 import { saveModel, getModel } from "@/api/system/exceptionLifecycle";
+import { listUser } from "@/api/system/user";
 
 export default {
   name: "Process",
@@ -43,10 +44,15 @@ export default {
       },
       // 传入的生命周期ID
       exlId: '',
+      // 额外传入编辑器的内容
+      extraList: {
+        userList: []
+      }
     };
   },
-  created() {
+  async created() {
     this.designerData.loading = true
+    await this.getUserList()
     this.exlId = this.$route.query.exlId
     getModel({exlId: this.exlId}).then(response => {
       this.designerData.bpmnXml = response.data
@@ -55,8 +61,9 @@ export default {
       this.designerData.loading = false
     })
   },
-  activated() {
+  async activated() {
     this.designerData.loading = true
+    await this.getUserList()
     this.exlId = this.$route.query.exlId
     getModel({exlId: this.exlId}).then(response => {
       this.designerData.bpmnXml = response.data
@@ -66,6 +73,20 @@ export default {
     })
   },
   methods: {
+    // 获取用户列表
+    getUserList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listUser().then(response => {
+          this.extraList.userList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     // 保存流程按钮操作
     onSaveDesigner(bpmnXml) {
       this.$confirm('是否保存异常生命周期为新版本？', '提示', {

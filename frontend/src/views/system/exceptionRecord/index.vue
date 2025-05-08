@@ -163,19 +163,33 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:exceptionRecord:edit']"
+            v-show="scope.row.exrStat === '1'"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-document"
-            @click="handleRecordLog(scope.row)"
-          >处理日志</el-button>
+            icon="el-icon-finished"
+            v-show="scope.row.exrStat === '1'"
+          >开始确认</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-check"
+            v-show="scope.row.exrStat === '2'"
+          >确认为异常</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-close"
+            v-show="scope.row.exrStat === '2'"
+          >确认为非异常</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:exceptionRecord:remove']"
+            v-show="scope.row.exrStat === '1'"
           >删除</el-button>
         </template>
       </el-table-column>

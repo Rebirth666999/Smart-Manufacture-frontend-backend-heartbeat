@@ -53,4 +53,6 @@ public interface IIcesExceptionLifecycleService {
     String getModel(String exlId);
 
     String queryBpmnXmlById(String modelId);
+
+    Boolean deployModel(IcesExceptionLifecycleBo bo);
 }

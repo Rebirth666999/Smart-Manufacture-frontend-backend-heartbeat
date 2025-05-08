@@ -398,11 +398,11 @@ export default {
      * @date 20250506
      */ 
     handleView(row) {
-      this.processView.index = row.exlvDefId
+      this.processView.index = row.exlvGeId
       this.processView.title = "查看异常生命周期版本 " + row.exlvName
       this.processView.open = true
-      if (row.exlvDefId && row.exlvDefId.length > 0) {
-        getBpmnModel({ modelId: row.exlvDefId }).then(response => {
+      if (row.exlvGeId && row.exlvGeId.length > 0) {
+        getBpmnModel({ modelId: row.exlvGeId }).then(response => {
           this.processView.xmlData = response.data
         })
       } else {

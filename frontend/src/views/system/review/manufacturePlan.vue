@@ -10,7 +10,12 @@
       class="mb8"
     >
     </el-alert>
-
+    <el-card class="view-card">
+      <div slot="header">
+        <div class="card-header">
+          <div>生产计划信息</div>
+        </div>
+      </div>
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="所属订单" prop="orCode">
         <el-select
@@ -82,17 +87,16 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="manufacturePlanList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
+    <el-table v-loading="loading" :data="manufacturePlanList" @current-change="handleCurrentChange" >
+      <el-table-column label="选择" width="55" align="center">
+            <template slot-scope="scope">
+              <el-radio :value="scope.row.mpId === idSelect" :label="true" />
+            </template>
+          </el-table-column>
       <el-table-column label="生产计划ID" align="center" prop="mpCode" v-if="true"/>
       <el-table-column label="所属订单" align="center" prop="orCode">
         <template slot-scope="scope">
           {{ getOrderName(scope.row.orCode) }}
-        </template>
-      </el-table-column>
-      <el-table-column label="工艺流程" align="center" prop="procCode">
-        <template slot-scope="scope">
-          {{ getProcessName(scope.row.procCode) }}
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center" prop="mpStat">
@@ -134,12 +138,6 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-view"
-            @click="handleView(scope.row)"
-          >查看详情</el-button>
-          <el-button
-            size="mini"
-            type="text"
             icon="el-icon-edit"
             v-show="scope.row.mpStat === '2' || scope.row.mpStat === '7' || scope.row.mpStat === 'a'"
             @click="startReview(scope.row)"
@@ -169,50 +167,30 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-
-    <!-- 查看生产计划详情对话框 -->
-    <el-dialog :title="`查看生产计划详情 - ID: ${viewData.mpCode}`" :visible.sync="viewOpen" width="650px" append-to-body>
-      <el-descriptions :column="1" border>
-        <el-descriptions-item label="生产计划ID">{{ viewData.mpCode }}</el-descriptions-item>
-        <el-descriptions-item label="所属订单">
-          {{ getOrderName(viewData.orCode) }}
-        </el-descriptions-item>
-        <el-descriptions-item label="工艺流程">
-          {{ getProcessName(viewData.procCode) }}
-        </el-descriptions-item>
-        <el-descriptions-item label="状态">
-          <dict-tag :options="dict.type.ices_manufacture_plan_status_review" :value="viewData.mpStat"/>
-        </el-descriptions-item>
-        <el-descriptions-item label="实际开始时间">
-          {{ parseTime(viewData.mpBegin, '{y}-{m}-{d}') }}
-        </el-descriptions-item>
-        <el-descriptions-item label="最晚结束时间">
-          {{ parseTime(viewData.mpEndPlan, '{y}-{m}-{d}') }}
-        </el-descriptions-item>
-        <el-descriptions-item label="实际结束时间">
-          {{ parseTime(viewData.mpEndReal, '{y}-{m}-{d}') }}
-        </el-descriptions-item>
-        <el-descriptions-item label="优先级">{{ viewData.mpPriority }}</el-descriptions-item>
-        <el-descriptions-item label="计划产品数量">{{ viewData.mpQtyPlan }}</el-descriptions-item>
-        <el-descriptions-item label="已完成产品数量">{{ viewData.mpQtyReal }}</el-descriptions-item>
-        <el-descriptions-item label="描述">{{ viewData.mpDesc }}</el-descriptions-item>
-        <el-descriptions-item label="创建时间">
-          {{ parseTime(viewData.createTime, '{y}-{m}-{d} {h}:{i}:{s}') }}
-        </el-descriptions-item>
-        <el-descriptions-item label="更新时间">
-          {{ parseTime(viewData.updateTime, '{y}-{m}-{d} {h}:{i}:{s}') }}
-        </el-descriptions-item>
-      </el-descriptions>
-    </el-dialog>
+    </el-card>
+    <el-card class="controlled-card">
+      <div slot="header">
+        <div class="card-header">
+          <div>生产任务信息</div>
+        </div>
+      </div>
+      <manufacture-task v-if='idSelect' :key="idSelect" :mpCode="codeSelect" />
+      <el-empty v-else description="选中生产计划后即可管理下属生产任务" />
+    </el-card>
   </div>
 </template>
 
 <script>
 import { getManufacturePlan, listReviewManufacturePlan, updateManufacturePlan } from "@/api/system/manufacturePlan";
-import { listProcess } from "@/api/system/process";
 import { listOrder } from "@/api/system/order";
+import { listProduct } from "@/api/system/product";
+import manufactureTask from '@/views/system/manufactureTask';
+import { listProcess} from "@/api/system/process";
 
 export default {
+  components: {
+    manufactureTask
+  },
   name: "ManufacturePlanReview",
   dicts: ['ices_manufacture_plan_status_review'],
   data() {
@@ -221,8 +199,10 @@ export default {
       buttonLoading: false,
       // 遮罩层
       loading: true,
-      // 选中数组
-      ids: [],
+      // 选中条目
+      idSelect: undefined,
+      // 选中code
+      codeSelect: undefined,
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -253,7 +233,9 @@ export default {
       // 1-根据订单管理 2-根据工艺流程管理
       mode: 0,
       // 页面顶部提示
-      hint: ''
+      hint: '',
+      //产品列表
+      productList:[]
     };
   },
   async created() {
@@ -264,6 +246,7 @@ export default {
       this.mode = 2
     }
     await this.getProcessList();
+    await this.getProductList();
     await this.getOrderList();
     this.getList();
   },
@@ -276,6 +259,7 @@ export default {
       this.mode = 0
     }
     await this.getProcessList();
+    await this.getProductList();
     await this.getOrderList();
     this.getList();
   },
@@ -288,14 +272,40 @@ export default {
       const order = this.orderList.find(ele => ele.orCode === orCode);
       return order ? order.orName : orCode;
     },
-    
-    // 获取工艺流程名称
-    getProcessName(procCode) {
-      if (!procCode) return '';
-      if (!this.processListFull || this.processListFull.length === 0) return procCode;
-      
-      const proc = this.processListFull.find(ele => ele.procCode === procCode);
-      return proc ? proc.procName : procCode;
+     // 查询产品列表
+     getProductList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listProduct().then(response => {
+          this.productList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
+    // 查询订单列表
+    getOrderList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listOrder().then(response => {
+          this.orderList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
+    //选中数据条目
+    handleCurrentChange(current, old) {
+      if (current) {
+        this.idSelect = current.mpId
+        this.codeSelect = current.mpCode
+      }
     },
     
     // 开始审核
@@ -380,31 +390,7 @@ export default {
           this.loading = false;
         })
       })
-    },
-    // 查询订单列表
-    getOrderList() {
-      return new Promise((resolve, reject) => {
-        this.loading = true;
-        listOrder().then(response => {
-          this.orderList = response.rows || []
-          if (this.mode === 1) {
-            let order = this.orderList.find(ele => ele.orCode === this.$route.query.orCode)
-            // 构造提示文本
-            this.hint = "订单 "
-            this.hint += order.orName
-            this.hint += " "
-            // 设置筛选
-            this.queryParams.orCode = order.orCode
-            this.queryParams.procCode = undefined
-          }
-          resolve()
-        }).catch(() => {
-          reject()
-        }).finally(() => {
-          this.loading = false;
-        })
-      })
-    },
+    },   
     /** 查询生产计划列表 */
     getList() {
       this.loading = true;
@@ -417,36 +403,48 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
+      this.idSelect = undefined
+      this.codeSelect = undefined
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
-      this.queryParams.orCode = this.$route.query.orCode
-      this.queryParams.procCode = this.$route.query.procCode
+      this.idSelect = undefined
+      this.codeSelect = undefined
       this.handleQuery();
     },
-    // 多选框选中数据
-    handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.mpId)
-      this.single = selection.length!==1
-      this.multiple = !selection.length
-    },
+
     /** 导出按钮操作 */
     handleExport() {
       this.download('system/manufacturePlan/export', {
         ...this.queryParams
       }, `manufacturePlan_${new Date().getTime()}.xlsx`)
     },
-    /** 查看详情按钮操作 */
-    handleView(row) {
-      this.loading = true;
-      getManufacturePlan(row.mpId).then(response => {
-        this.loading = false;
-        this.viewData = response.data || {};
-        this.viewOpen = true;
-      });
-    }
   }
 };
 </script> 
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+::v-deep .el-radio span.el-radio__label {
+  display: none;
+}
+.view-card {
+  max-height: 50vh;
+  overflow: scroll;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 17px;
+}
+.controlled-card {
+  margin-top: 10px;
+}
+</style>

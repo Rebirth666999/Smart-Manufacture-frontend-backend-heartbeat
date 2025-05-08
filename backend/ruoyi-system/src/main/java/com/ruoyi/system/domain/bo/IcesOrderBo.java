@@ -46,6 +46,11 @@ public class IcesOrderBo extends BaseEntity {
     private String orName;
 
     /**
+     * 原订单编码
+     */
+    private String orCodeOrgn;
+
+    /**
      * 状态代码
      */
     private String orStat;

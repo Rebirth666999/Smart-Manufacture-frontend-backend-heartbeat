@@ -101,6 +101,12 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
      */
     @Override
     public IcesOrderVo insertByBo(IcesOrderBo bo) {
+        // 检查编码
+        if (StringUtils.isBlank(bo.getOrCode())) {
+            bo.setOrCode(codeService.insertByType("Order"));
+        } else {
+            codeService.checkCode("Order", bo.getOrCode());
+        }
         String cMan = getLoginUsername();
         String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         // 填入创建信息
@@ -120,14 +126,36 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
      */
     @Override
     public Boolean updateByBo(IcesOrderBo bo) {
+        // 先找到原先信息
+        IcesOrderVo orgn = queryById(bo.getOrId());
+        // 填入修改信息
         String mMan = getLoginUsername();
         String mDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        // 填入修改信息
         bo.setOrMman(mMan);
         bo.setOrMdate(mDate);
-        IcesOrder update = BeanUtil.toBean(bo, IcesOrder.class);
-        validEntityBeforeSave(update);
-        return baseMapper.updateById(update) > 0;
+        if (orgn.getOrCodeOrgn() == null && StringUtils.isNotBlank(bo.getOrCode())) {
+            // 之前没有原订单号，现在有，说明修改了订单的信息
+            // 原先实体状态变成已修改
+            IcesOrder update = new IcesOrder();
+            update.setOrId(bo.getOrId());
+            update.setOrStat("d");
+            validEntityBeforeSave(update);
+            baseMapper.updateById(update);
+            // 新的实体变为新订单信息
+            // 抹掉ID
+            bo.setOrId(null);
+            // 设置编码
+            bo.setOrCode(bo.getOrCode() + "-D");
+            // 状态为待审核（修改）
+            bo.setOrStat("8");
+            insertByBo(bo);
+            return true;
+        } else {
+            // 普通修改
+            IcesOrder update = BeanUtil.toBean(bo, IcesOrder.class);
+            validEntityBeforeSave(update);
+            return baseMapper.updateById(update) > 0;
+        }
     }
 
     /**

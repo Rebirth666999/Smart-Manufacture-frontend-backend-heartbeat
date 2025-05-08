@@ -126,6 +126,7 @@
           </el-table-column>
           <el-table-column label="订单ID" align="center" prop="orId" v-if="true"/>
           <el-table-column label="订单编码" align="center" prop="orCode" />
+          <el-table-column label="原订单编码" align="center" prop="orCodeOrgn" />
           <el-table-column label="客户" align="center" prop="clCode">
             <template slot-scope="scope">
               {{ clientList.find(ele => ele.clCode === scope.row.clCode).clName || '' }}

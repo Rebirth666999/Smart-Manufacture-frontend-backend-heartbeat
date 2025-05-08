@@ -181,8 +181,7 @@ public class IcesExceptionLifecycleServiceImpl extends FlowServiceFactory implem
         IcesExceptionLifecycleVersionBo newVersionBo = new IcesExceptionLifecycleVersionBo();
         newVersionBo.setExlCode(lifecycleVo.getExlCode());
         newVersionBo.setExlvName("v" + ver);
-        newVersionBo.setExlvDefId(model.getId());
-        newVersionBo.setExlvGeId(model.getKey());
+        newVersionBo.setExlvGeId(model.getId());
         lifecycleVersionService.insertByBo(newVersionBo);
         // 更新生命周期
         // 当前版本是最新版本

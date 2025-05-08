@@ -1,16 +1,5 @@
 <template>
   <div class="app-container">
-    <!-- 顶部提示 -->
-    <el-alert
-      v-show="hint.length > 0"
-      :title="`正在根据${hint}筛选异常生命周期版本`"
-      type="info"
-      show-icon
-      :closable="false"
-      class="mb8"
-    >
-    </el-alert>
-
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="110px">
       <el-form-item label="所属生命周期" prop="exlCode">
         <el-select v-model="queryParams.exlCode" placeholder="请选择异常生命周期" :disabled="mode === 1" clearable>
@@ -176,6 +165,11 @@ import ProcessViewer from '@/components/ProcessViewer'
 
 export default {
   name: "ExceptionLifecycleVersion",
+  props: {
+    exlCode: {
+      required: false
+    }
+  },
   components: {
     ProcessViewer
   },
@@ -243,14 +237,14 @@ export default {
     };
   },
   async created() {
-    if (this.$route.query.exlCode) {
+    if (this.exlCode) {
       this.mode = 1
     }
     await this.getExceptionLifecycleList();
     this.getList();
   },
   async activated() {
-    if (this.$route.query.exlCode) {
+    if (this.exlCode) {
       this.mode = 1
     } else {
       this.mode = 0
@@ -266,7 +260,7 @@ export default {
         listExceptionLifecycle().then(response => {
           this.exceptionLifecycleList = response.rows
           if (this.mode === 1) {
-            let exl = response.rows.find(ele => ele.exlCode === this.$route.query.exlCode)
+            let exl = response.rows.find(ele => ele.exlCode === this.exlCode)
             // 构造提示文本
             this.hint = "异常生命周期 "
             this.hint += exl.exlCode
@@ -321,7 +315,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
-      this.queryParams.exlCode = this.$route.query.exlCode
+      this.queryParams.exlCode = this.exlCode
       this.handleQuery();
     },
     // 多选框选中数据
@@ -334,7 +328,7 @@ export default {
     handleAdd() {
       this.reset();
       if (this.mode === 1) {
-        this.form.exlCode = this.$route.query.exlCode
+        this.form.exlCode = this.exlCode
       }
       this.open = true;
       this.title = "添加异常生命周期版本";

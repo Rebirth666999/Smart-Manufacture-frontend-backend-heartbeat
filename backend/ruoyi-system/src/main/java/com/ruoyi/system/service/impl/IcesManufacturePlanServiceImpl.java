@@ -42,7 +42,7 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
      * 查询生产计划
      */
     @Override
-    public IcesManufacturePlanVo queryById(Long mpId){
+    public IcesManufacturePlanVo queryById(Long mpId) {
         return baseMapper.selectVoById(mpId);
     }
 
@@ -125,21 +125,20 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
         bo.setMpMdate(mDate);
         IcesManufacturePlan update = BeanUtil.toBean(bo, IcesManufacturePlan.class);
         validEntityBeforeSave(update);
-        //判断状态是否为已完成
+        // 如果生产计划已完成，检查是否需要更新订单
         if (bo.getMpStat() != null && bo.getMpStat().equals("6")) {
             IcesManufacturePlanBo icesManufacturePlanBo = new IcesManufacturePlanBo();
             icesManufacturePlanBo.setMpCode(update.getMpCode());
             List<IcesManufacturePlanVo> OtherVos = queryList(icesManufacturePlanBo);
             int done = 1;
             for (IcesManufacturePlanVo otherVo : OtherVos) {
-                if(!otherVo.getMpStat().equals("6")) {
+                if (!otherVo.getMpStat().equals("6")) {
                     //证明还有未完成
                     done = 0;
                     break;
                 }
             }
-            if (done == 1)
-            {
+            if (done == 1) {
                 //所有的都已完成
                 orderService.updateStatus(bo);
             }
@@ -149,6 +148,7 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
 
     /**
      * 获取当前用户名称
+     *
      * @return 用户名
      */
     private String getLoginUsername() {
@@ -164,7 +164,7 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
     /**
      * 保存前的数据校验
      */
-    private void validEntityBeforeSave(IcesManufacturePlan entity){
+    private void validEntityBeforeSave(IcesManufacturePlan entity) {
         //TODO 做一些数据校验,如唯一约束
     }
 
@@ -173,17 +173,27 @@ public class IcesManufacturePlanServiceImpl implements IIcesManufacturePlanServi
      */
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        if(isValid){
+        if (isValid) {
             //TODO 做一些业务上的校验,判断是否需要校验
         }
         return baseMapper.deleteBatchIds(ids) > 0;
     }
+
+    /**
+     * 所有生产任务完成，更新生产计划
+     *
+     * @param icesManufactureTaskBo 作为参照的生产任务信息
+     */
     @Override
     public void updateStatus(IcesManufactureTaskBo icesManufactureTaskBo) {
+        // 找到生产计划
         IcesManufacturePlanBo bo = new IcesManufacturePlanBo();
-        bo.setMpCode(icesManufactureTaskBo.getMtCode());
+        bo.setMpCode(icesManufactureTaskBo.getMpCode());
         List<IcesManufacturePlanVo> icesManufacturePlanVos = queryList(bo);
+        // 设置ID、状态
         bo.setMpId(icesManufacturePlanVos.get(0).getMpId());
+        bo.setMpCode(null);
+        bo.setMpStat("6");
         updateByBo(bo);
     }
 

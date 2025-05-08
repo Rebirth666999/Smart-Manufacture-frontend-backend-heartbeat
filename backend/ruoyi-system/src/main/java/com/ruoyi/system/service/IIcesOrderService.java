@@ -1,6 +1,5 @@
 package com.ruoyi.system.service;
 
-import com.ruoyi.system.domain.IcesOrder;
 import com.ruoyi.system.domain.bo.IcesManufacturePlanBo;
 import com.ruoyi.system.domain.vo.IcesOrderVo;
 import com.ruoyi.system.domain.bo.IcesOrderBo;
@@ -46,7 +45,7 @@ public interface IIcesOrderService {
     /**
      * 修改订单
      */
-    Boolean updateByBo(IcesOrderBo bo);
+    IcesOrderVo updateByBo(IcesOrderBo bo);
 
     /**
      * 校验并批量删除订单信息

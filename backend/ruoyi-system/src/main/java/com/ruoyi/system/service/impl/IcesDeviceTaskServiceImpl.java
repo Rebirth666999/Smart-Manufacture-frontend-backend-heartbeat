@@ -46,7 +46,7 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
      * 查询设备任务
      */
     @Override
-    public IcesDeviceTaskVo queryById(Long dtId){
+    public IcesDeviceTaskVo queryById(Long dtId) {
         return baseMapper.selectVoById(dtId);
     }
 
@@ -104,20 +104,21 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
         IcesDeviceTask update = BeanUtil.toBean(bo, IcesDeviceTask.class);
         validEntityBeforeSave(update);
 
-        // bo是否已完成
-        if(Objects.equals(bo.getDtStat(), "4")){
+        // 如果已完成，考虑更新生产任务状态
+        if (Objects.equals(bo.getDtStat(), "4")) {
+            // 找到同一生产任务下的设备任务
             IcesDeviceTaskBo icesDeviceTaskBo = new IcesDeviceTaskBo();
             icesDeviceTaskBo.setMtCode(bo.getMtCode());
-            List<IcesDeviceTaskVo> otherBos=queryList(bo);
-            int done=1;
-            for(IcesDeviceTaskVo vo:otherBos){
-                if(!vo.getMtCode().equals("4")){
-                    done=0;
+            List<IcesDeviceTaskVo> otherBos = queryList(bo);
+            int done = 1;
+            // 有一个未完成，则生产任务不需要更新状态
+            for (IcesDeviceTaskVo vo : otherBos) {
+                if (!vo.getMtCode().equals("4")) {
+                    done = 0;
                     break;
                 }
             }
-            if(done==1){
-                System.out.println("任务已经全部完成");
+            if (done == 1) {
                 manufactureTaskService.updateStatus(bo);
             }
         }
@@ -127,7 +128,7 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
     /**
      * 保存前的数据校验
      */
-    private void validEntityBeforeSave(IcesDeviceTask entity){
+    private void validEntityBeforeSave(IcesDeviceTask entity) {
         //TODO 做一些数据校验,如唯一约束
 
 
@@ -138,7 +139,7 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
      */
     @Override
     public Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid) {
-        if(isValid){
+        if (isValid) {
             //TODO 做一些业务上的校验,判断是否需要校验
         }
         return baseMapper.deleteBatchIds(ids) > 0;
@@ -146,6 +147,7 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
 
     /**
      * 保存设备任务
+     *
      * @param jsonStr 前端传来的JSON格式数据
      */
     @Override
@@ -235,8 +237,9 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
                     taskParamBo.setDtpaValue(param.get("dtpaValue").toString());
                     taskParamBo.setDtpaDelete(0L);
                     deviceTaskParamService.insertByBo(taskParamBo);
-                }}
-            for (Map<String, Object> task : deviceTasks){
+                }
+            }
+            for (Map<String, Object> task : deviceTasks) {
                 // 找到当前设备任务对应的工艺步骤
                 IcesProcessStepVo step = modelIdToStep.get(task.get("id").toString());
                 IcesDeviceTask deviceTask = currentRoundTasks.get(task.get("id").toString());
@@ -292,6 +295,7 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
     /**
      * 删除数据库已有的与当前生产任务关联的
      * 设备任务、任务前序关系、任务参数
+     *
      * @param mtCode 生产任务
      */
     private void deleteExisting(String mtCode) {
@@ -334,6 +338,7 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
 
     /**
      * 找到当前生产任务当前轮次还需要执行的设备任务
+     *
      * @param mtCode 生产任务
      * @return 当前轮次还需要执行的设备任务
      * @author YangZY
@@ -463,6 +468,7 @@ public class IcesDeviceTaskServiceImpl implements IIcesDeviceTaskService {
 
     /**
      * 找到指定车间所有本轮还需执行的设备任务
+     *
      * @param arCode 车间编号
      * @return 还需要执行的设备任务
      * @author YangZY

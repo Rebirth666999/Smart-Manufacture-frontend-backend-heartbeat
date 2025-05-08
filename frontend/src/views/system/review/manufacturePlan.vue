@@ -10,7 +10,8 @@
       class="mb8"
     >
     </el-alert>
-    <div slot="header">
+    <el-card class="view-card">
+      <div slot="header">
         <div class="card-header">
           <div>生产计划信息</div>
         </div>
@@ -166,10 +167,7 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-
-   
-    
-
+    </el-card>
     <el-card class="controlled-card">
       <div slot="header">
         <div class="card-header">
@@ -203,6 +201,8 @@ export default {
       loading: true,
       // 选中条目
       idSelect: undefined,
+      // 选中code
+      codeSelect: undefined,
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -300,6 +300,7 @@ export default {
         })
       })
     },
+    //选中数据条目
     handleCurrentChange(current, old) {
       if (current) {
         this.idSelect = current.mpId
@@ -403,14 +404,14 @@ export default {
     handleQuery() {
       this.queryParams.pageNum = 1;
       this.idSelect = undefined
+      this.codeSelect = undefined
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
       this.idSelect = undefined
-      this.queryParams.orCode = this.$route.query.orCode
-      this.queryParams.procCode = this.$route.query.procCode
+      this.codeSelect = undefined
       this.handleQuery();
     },
 

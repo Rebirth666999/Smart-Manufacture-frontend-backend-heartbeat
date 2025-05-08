@@ -27,9 +27,7 @@
           v-model="endFromThis"
           active-text="允许"
           inactive-text="不允许"
-          active-value="true"
-          inactive-value="false"
-          @change="updateEnd"
+          @change="updateText"
         />
       </div>
     </div>
@@ -40,9 +38,7 @@
           v-model="jumpFromThis"
           active-text="允许"
           inactive-text="不允许"
-          active-value="true"
-          inactive-value="false"
-          @change="updateJump"
+          @change="updateText"
         />
       </div>
     </div>
@@ -59,8 +55,8 @@ export default {
   data() {
     return {
       user: [],
-      endFromThis: 'true',
-      jumpFromThis: 'true'
+      endFromThis: true,
+      jumpFromThis: true,
     };
   },
   watch: {
@@ -80,19 +76,16 @@ export default {
           this.user = []
         }
 
-        const endFromThis = window.bpmnInstances.bpmnElement.businessObject.$attrs.endFromThis
-        if (endFromThis) {
+        const text = window.bpmnInstances.bpmnElement.businessObject.$attrs.text
+        if (text) {
+          const endFromThis = text[0] === '1'
+          const jumpFromThis = text[1] === '1'
           this.endFromThis = endFromThis
-        } else {
-          this.endFromThis = 'true'
-          this.updateEnd()
-        }
-        const jumpFromThis = window.bpmnInstances.bpmnElement.businessObject.$attrs.jumpFromThis
-        if (jumpFromThis) {
           this.jumpFromThis = jumpFromThis
         } else {
-          this.jumpFromThis = 'true'
-          this.updateJump()
+          this.endFromThis = true
+          this.jumpFromThis = true
+          this.updateText()
         }
       }
     }
@@ -107,23 +100,20 @@ export default {
       })
       window.bpmnInstances.modeling.updateProperties(
         window.bpmnInstances.bpmnElement,
-        { user: result }
+        { assignee: result }
       );
     },
-    // 更新属性：是否允许从此步骤结束
-    updateEnd() {
+    // 更新属性
+    updateText() {
+      let text = ""
+      text += this.endFromThis ? '1' : '0'
+      text += this.jumpFromThis ? '1' : '0'
+
       window.bpmnInstances.modeling.updateProperties(
         window.bpmnInstances.bpmnElement,
-        { endFromThis: this.endFromThis }
+        { text: text }
       );
     },
-    // 更新属性：是否允许从此步骤跳转
-    updateJump() {
-      window.bpmnInstances.modeling.updateProperties(
-        window.bpmnInstances.bpmnElement,
-        { jumpFromThis: this.jumpFromThis }
-      );
-    }
   },
   beforeDestroy() {
     this.bpmnElement = null;

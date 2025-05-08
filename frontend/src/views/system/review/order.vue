@@ -186,30 +186,24 @@
     />
 
     <!-- 查看订单详情对话框 -->
-    <el-dialog :title="'查看订单详情 - ' + viewData.orName" :visible.sync="viewOpen" width="530px" append-to-body>
+    <el-dialog :title="'查看订单详情 - ' + viewData.orCode" :visible.sync="viewOpen" width="530px" append-to-body>
       <el-descriptions :column="1" border>
-        <el-descriptions-item label="订单ID">{{ viewData.orCode }}</el-descriptions-item>
-        <el-descriptions-item label="所需产品">
-          {{ getProductName(viewData.maCode) }}
-        </el-descriptions-item>
+        <el-descriptions-item label="订单ID">{{ viewData.orId }}</el-descriptions-item>
+        <el-descriptions-item label="订单编码">{{ viewData.orCode }}</el-descriptions-item>
         <el-descriptions-item label="客户">{{ viewData.clCode }}</el-descriptions-item>
-        <el-descriptions-item label="订单名称">{{ viewData.orName }}</el-descriptions-item>
         <el-descriptions-item label="状态">
           <dict-tag :options="dict.type.ices_order_status_review" :value="viewData.orStat"/>
         </el-descriptions-item>
-        <el-descriptions-item label="所需产品数量">{{ viewData.orDemand }}</el-descriptions-item>
         <el-descriptions-item label="订单优先级">{{ viewData.orPriority }}</el-descriptions-item>
         <el-descriptions-item label="截止时间">
           {{ parseTime(viewData.orDeadline, '{y}-{m}-{d}') }}
         </el-descriptions-item>
         <el-descriptions-item label="总价">{{ viewData.orPrice }}</el-descriptions-item>
         <el-descriptions-item label="描述">{{ viewData.orDesc }}</el-descriptions-item>
-        <el-descriptions-item label="创建时间">
-          {{ parseTime(viewData.createTime, '{y}-{m}-{d} {h}:{i}:{s}') }}
-        </el-descriptions-item>
-        <el-descriptions-item label="更新时间">
-          {{ parseTime(viewData.updateTime, '{y}-{m}-{d} {h}:{i}:{s}') }}
-        </el-descriptions-item>
+        <el-descriptions-item label="创建人">{{ viewData.orCman }}</el-descriptions-item>
+        <el-descriptions-item label="创建时间">{{ viewData.orCdate }}</el-descriptions-item>
+        <el-descriptions-item label="修改人">{{ viewData.orMman }}</el-descriptions-item>
+        <el-descriptions-item label="修改时间">{{ viewData.orMdate }}</el-descriptions-item>
       </el-descriptions>
     </el-dialog>
     </div>
@@ -227,7 +221,7 @@
 </template>
 
 <script>
-import { getOrder, listReviewOrder, updateOrder } from "@/api/system/order";
+import { getOrder, listReviewOrder, updateOrder, listOrder } from "@/api/system/order";
 import { listProduct } from "@/api/system/product";
 import orderDemand from "@/views/system/orderDemand";
 
@@ -328,7 +322,27 @@ export default {
         this.loading = true;
         getOrder(row.orId).then(response => {
           this.form = response.data;
-          if (this.form.orStat === '3' || this.form.orStat === '9' || this.form.orStat === 'c') this.form.orStat = '4';
+          if (this.form.orStat === '3') {
+            // 新增审核
+            this.form.orStat = '4';
+          } else if (this.form.orStat === 'c') {
+            // 弃用审核
+            this.form.orStat = 'a';
+          } else if (this.form.orStat === '9') {
+            // 修改审核
+            this.form.orStat = '4';
+          }
+          // 原订单改为弃用
+          if (row.orCodeOrgn) {
+            listOrder({ orCode: row.orCodeOrgn }).then(response => {
+              const order = response.rows[0]
+              if (order) {
+                order.orStat = 'a'
+                updateOrder(order)
+              }
+            })
+          }
+          // 新订单改为对应状态
           updateOrder(this.form).then(response => {
             this.$modal.msgSuccess("已通过审核");
             this.getList();
@@ -346,7 +360,13 @@ export default {
         this.loading = true;
         getOrder(row.orId).then(response => {
           this.form = response.data;
-          if (this.form.orStat === '3' || this.form.orStat === '9' || this.form.orStat === 'c') this.form.orStat = '1';
+          if (this.form.orStat === '3' || this.form.orStat === '9') {
+            // 新增审核、修改审核
+            this.form.orStat = '1';
+          } else if (this.form.orStat === 'c') {
+            // 弃用审核
+            this.form.orStat = '4';
+          }
           updateOrder(this.form).then(response => {
             this.$modal.msgSuccess("已驳回审核");
             this.getList();

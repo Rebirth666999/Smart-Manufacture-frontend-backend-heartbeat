@@ -169,6 +169,7 @@
             size="mini"
             type="text"
             icon="el-icon-finished"
+            @click="handleStartConfirm(scope.row)"
             v-show="scope.row.exrStat === '1'"
           >开始确认</el-button>
           <el-button
@@ -176,12 +177,14 @@
             type="text"
             icon="el-icon-check"
             v-show="scope.row.exrStat === '2'"
+            @click="handleConfirmPositive(scope.row)"
           >确认为异常</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-close"
             v-show="scope.row.exrStat === '2'"
+            @click="handleConfirmNegative(scope.row)"
           >确认为非异常</el-button>
           <el-button
             size="mini"
@@ -617,6 +620,59 @@ export default {
     // 查看处理日志
     handleRecordLog(row) {
       this.$router.push(`/exception/exceptionRecordLog?exrCode=${row.exrCode}`)
+    },
+    /** 开始确认上报记录
+     * @param {any} row 记录信息
+     * @author YangZY
+     * @date 20250508
+     */
+    handleStartConfirm(row) {
+      this.$modal.confirm('是否开始确认异常上报记录？').then(() => {
+        getExceptionRecord(row.exrId).then(response => {
+          this.form = response.data
+          this.form.exrStat = "2"
+          updateExceptionRecord(this.form).then(response => {
+            this.$modal.msgSuccess("已开始确认");
+            this.getList();
+          })
+        })
+      })
+    },
+    /** 确认上报记录非异常
+     * @param {any} row 记录信息
+     * @author YangZY
+     * @date 20250508
+     */
+    handleConfirmNegative(row) {
+      this.$modal.confirm('是否确认上报记录为非异常？').then(() => {
+        getExceptionRecord(row.exrId).then(response => {
+          this.form = response.data
+          this.form.exrStat = "3"
+          updateExceptionRecord(this.form).then(response => {
+            this.$modal.msgSuccess("确认完成");
+            this.getList();
+          })
+        })
+      })
+    },
+    /** 确认上报记录为异常
+     * @param {any} row 记录信息
+     * @author YangZY
+     * @date 20250508
+     */
+    handleConfirmPositive(row) {
+      this.$modal.confirm('是否确认上报记录为非异常？').then(() => {
+        getExceptionRecord(row.exrId).then(response => {
+          this.form = response.data
+          this.form.exrStat = "4"
+          updateExceptionRecord(this.form).then(response => {
+            // TODO 后端发现确认为异常，自动启动对应异常的生命周期
+            // TODO 如果生命周期不存在/没有任何部署，则不通过确认
+            this.$modal.msgSuccess("确认完成");
+            this.getList();
+          })
+        })
+      })
     }
   }
 };

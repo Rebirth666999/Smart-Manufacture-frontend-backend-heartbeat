@@ -52,6 +52,7 @@
               size="mini"
               @click="handleAdd"
               v-hasPermi="['system:exceptionLifecycle:add']"
+              :disabled="exceptionLifecycleList.length > 0"
             >新增</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -431,6 +432,7 @@ export default {
         this.idSelect = undefined
         deployExceptionLifecycle(row).then(response => {
           this.$modal.msgSuccess("部署成功");
+        }).finally(() => {
           this.idSelect = select
         })
       })

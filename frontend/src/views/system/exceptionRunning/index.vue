@@ -20,25 +20,35 @@
         </template>
       </el-table-column>
       <el-table-column label="耗时" align="center" prop="duration" width="180"/>
-      <!-- <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
+          <!-- <el-button
             type="text"
             size="mini"
             icon="el-icon-tickets"
             @click="handleFlowRecord(scope.row)"
-            v-hasPermi="['workflow:process:query']"
-          >详情</el-button>
+          >详情</el-button> -->
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-search"
+            @click="handleViewer(scope.row)"
+          >查看流程</el-button>
         </template>
-      </el-table-column> -->
+      </el-table-column>
     </el-table>
+    <el-dialog title="查看异常记录" :visible.sync="processView.open" width="50%">
+      <el-image v-if="processView.img" :src="processView.img" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { listOwnProcess, stopProcess, delProcess } from '@/api/workflow/process';
 import { listAllCategory } from '@/api/workflow/category';
-import { listProcess } from '@/api/system/exceptionRunning';
+import { listProcess, getProcessFlowXml } from '@/api/system/exceptionRunning';
+import { pictureClip } from '@/utils/pictureClip';
+
 export default {
   name: "exceptionRunningProcess",
   dicts: ['wf_process_status'],
@@ -82,7 +92,11 @@ export default {
       // 表单参数
       form: {},
       // 表单校验
-      rules: {
+      rules: {},
+      // 查看器参数
+      processView: {
+        open: false,
+        img: undefined
       },
     };
   },
@@ -190,6 +204,20 @@ export default {
     },
     categoryFormat(row, column) {
       return this.categoryOptions.find(k => k.code === row.category)?.categoryName ?? '';
+    },
+    /**
+     * 查看流程
+     * @param {any} row 异常记录
+     * @author YangZY
+     * @date 20250509
+     */
+    handleViewer(row) {
+      getProcessFlowXml(row.procInsId).then(response => {
+        pictureClip(response, "img/png").then(res => {
+          this.processView.img = res
+          this.processView.open = true
+        })
+      })
     }
   }
 };

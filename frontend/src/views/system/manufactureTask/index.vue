@@ -216,6 +216,7 @@
             size="mini"
             type="text"
             icon="el-icon-close"
+            v-show="scope.row.mtStat==='5'"
             @click="handleStopDeviceTask(scope.row)"
           >停止设备任务</el-button>
           <el-button
@@ -552,7 +553,7 @@ export default {
         this.loading = true;
         listProcess().then(response => {
           this.processList = response.rows.filter(ele => ele.odCode === this.currentManufacturePlan.odCode)
-          processListSelection = response.rows.filter(ele => ele.odCode === this.currentManufacturePlan.odCode && ele.procStat === '4')
+          this.processListSelection = response.rows.filter(ele => ele.odCode === this.currentManufacturePlan.odCode && ele.procStat === '4')
           resolve()
         }).catch(() => {
           reject()

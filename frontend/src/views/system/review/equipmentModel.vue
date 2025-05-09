@@ -247,7 +247,6 @@ export default {
     },
     // 查询模型类型列表
     getEquipmentModelTypeList() {
-      
       return new Promise((resolve, reject) => {
         this.loading = true;
         listEquipmentModelType().then(response => {

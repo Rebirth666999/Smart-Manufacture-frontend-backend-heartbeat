@@ -661,7 +661,7 @@ export default {
      * @date 20250508
      */
     handleConfirmPositive(row) {
-      this.$modal.confirm('是否确认上报记录为非异常？').then(() => {
+      this.$modal.confirm('是否确认上报记录为异常？').then(() => {
         getExceptionRecord(row.exrId).then(response => {
           this.form = response.data
           this.form.exrStat = "4"

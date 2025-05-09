@@ -97,7 +97,7 @@ export default {
     getList() {
       this.loading = true;
       listProcess().then(response => {
-        this.processList = response;
+        this.processList = response.data;
         this.loading = false;
       });
     },

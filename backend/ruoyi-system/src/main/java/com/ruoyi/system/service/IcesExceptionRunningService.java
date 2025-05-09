@@ -2,8 +2,12 @@ package com.ruoyi.system.service;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.service.UserService;
+import com.ruoyi.common.helper.LoginHelper;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.flowable.common.constant.ProcessConstants;
@@ -31,6 +35,7 @@ import org.flowable.task.api.TaskQuery;
 import org.flowable.variable.api.history.HistoricVariableInstance;
 import org.springframework.stereotype.Service;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -147,50 +152,86 @@ public class IcesExceptionRunningService extends FlowServiceFactory {
         List<IcesExceptionVo> exceptions = exceptionService.queryList(new IcesExceptionBo());
         List<IcesExceptionLifecycleVo> lifecycles = lifecycleService.queryList(new IcesExceptionLifecycleBo());
         List<IcesExceptionLifecycleVersionVo> lifecycleVersions = lifecycleVersionService.queryList(new IcesExceptionLifecycleVersionBo());
-
-        for (Task task : taskList) {
-            IcesExceptionTaskVo taskVo = new IcesExceptionTaskVo();
-            // 当前流程信息
-            taskVo.setTaskId(task.getId());
-            taskVo.setTaskDefKey(task.getTaskDefinitionKey());
-            taskVo.setCreateTime(task.getCreateTime());
-            taskVo.setProcDefId(task.getProcessDefinitionId());
-            taskVo.setTaskName(task.getName());
-            // 流程定义信息
-            ProcessDefinition pd = repositoryService.createProcessDefinitionQuery()
-                .processDefinitionId(task.getProcessDefinitionId())
-                .singleResult();
-            taskVo.setDeployId(pd.getDeploymentId());
-            taskVo.setProcDefName(pd.getName());
-            taskVo.setProcDefVersion(pd.getVersion());
-            taskVo.setProcInsId(task.getProcessInstanceId());
-
-            // 流程发起人信息
-            HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery()
-                .processInstanceId(task.getProcessInstanceId())
-                .singleResult();
-            Long userId = Long.parseLong(historicProcessInstance.getStartUserId());
-            String nickName = userService.selectNickNameById(userId);
-            taskVo.setStartUserId(userId);
-            taskVo.setStartUserName(nickName);
-
-            // 找到生命周期版本
-            IcesExceptionLifecycleVersionVo currentVersion = lifecycleVersions.stream().filter(lifecycleVersion -> lifecycleVersion.getExlvDefId() != null && lifecycleVersion.getExlvDefId().equals(taskVo.getProcDefId())).findFirst().orElse(null);
-            if (currentVersion != null) {
-                taskVo.setExlvName(currentVersion.getExlvName());
-                // 找到生命周期
-                IcesExceptionLifecycleVo currentLifecycle = lifecycles.stream().filter(lifecycle -> lifecycle.getExlCode().equals(currentVersion.getExlCode())).findFirst().orElse(null);
-                if (currentLifecycle != null) {
-                    // 找到所属异常
-                    IcesExceptionVo currentException = exceptions.stream().filter(exception -> exception.getExCode().equals(currentLifecycle.getExCode())).findFirst().orElse(null);
-                    if (currentException != null) {
-                        taskVo.setExName(currentException.getExName());
+        // 获取当前用户信息
+        Long currentUser = getLoginUserId();
+        if (currentUser != null) {
+            for (Task task : taskList) {
+                // 通过解析逗号分隔的assignee
+                // 确认任务是否为自己处理
+                boolean assign = false;
+                String[] assignees = task.getAssignee().split(",");
+                for (String assignee : assignees) {
+                    if (assignee.equals(currentUser.toString())) {
+                        assign = true;
+                        break;
                     }
                 }
-            }
+                if (!assign) {
+                    continue;
+                }
 
-            taskVoList.add(taskVo);
+                IcesExceptionTaskVo taskVo = new IcesExceptionTaskVo();
+                // 当前流程信息
+                taskVo.setTaskId(task.getId());
+                taskVo.setTaskDefKey(task.getTaskDefinitionKey());
+                taskVo.setCreateTime(task.getCreateTime());
+                taskVo.setProcDefId(task.getProcessDefinitionId());
+                taskVo.setTaskName(task.getName());
+                // 流程定义信息
+                ProcessDefinition pd = repositoryService.createProcessDefinitionQuery()
+                    .processDefinitionId(task.getProcessDefinitionId())
+                    .singleResult();
+                taskVo.setDeployId(pd.getDeploymentId());
+                taskVo.setProcDefName(pd.getName());
+                taskVo.setProcDefVersion(pd.getVersion());
+                taskVo.setProcInsId(task.getProcessInstanceId());
+
+                // 流程发起人信息
+                HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery()
+                    .processInstanceId(task.getProcessInstanceId())
+                    .singleResult();
+                Long userId = Long.parseLong(historicProcessInstance.getStartUserId());
+                String nickName = userService.selectNickNameById(userId);
+                taskVo.setStartUserId(userId);
+                taskVo.setStartUserName(nickName);
+
+                // 找到生命周期版本
+                IcesExceptionLifecycleVersionVo currentVersion = lifecycleVersions.stream().filter(lifecycleVersion -> lifecycleVersion.getExlvDefId() != null && lifecycleVersion.getExlvDefId().equals(taskVo.getProcDefId())).findFirst().orElse(null);
+                if (currentVersion != null) {
+                    taskVo.setExlvName(currentVersion.getExlvName());
+                    // 找到生命周期
+                    IcesExceptionLifecycleVo currentLifecycle = lifecycles.stream().filter(lifecycle -> lifecycle.getExlCode().equals(currentVersion.getExlCode())).findFirst().orElse(null);
+                    if (currentLifecycle != null) {
+                        // 找到所属异常
+                        IcesExceptionVo currentException = exceptions.stream().filter(exception -> exception.getExCode().equals(currentLifecycle.getExCode())).findFirst().orElse(null);
+                        if (currentException != null) {
+                            taskVo.setExName(currentException.getExName());
+                        }
+                    }
+                }
+
+                taskVoList.add(taskVo);
+            }
         }
         return taskVoList;
+    }
+
+    /**
+     * 获取当前用户ID
+     * @return 用户ID
+     */
+    private Long getLoginUserId() {
+        LoginUser loginUser;
+        try {
+            loginUser = LoginHelper.getLoginUser();
+        } catch (Exception e) {
+            return null;
+        }
+        return ObjectUtil.isNotNull(loginUser) ? loginUser.getUserId() : null;
+    }
+
+    public String getProcessXML(String defId) {
+        InputStream inputStream = repositoryService.getProcessModel(defId);
+        return StrUtil.utf8Str(IoUtil.readBytes(inputStream, false));
     }
 }

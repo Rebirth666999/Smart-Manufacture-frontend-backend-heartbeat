@@ -15,3 +15,21 @@ export function listTodoProcess() {
     method: 'get',
   })
 }
+
+// 获取流程模型
+export function getProcessXml(data) {
+  return request({
+    url: '/system/exception/running/processXML/',
+    method: 'post',
+    data: data
+  })
+}
+
+// 获取流程模型
+export function getProcessFlowXml(procId) {
+  return request({
+    url: '/workflow/task/diagram/' + procId,
+    method: 'post',
+    responseType: 'blob'
+  })
+}

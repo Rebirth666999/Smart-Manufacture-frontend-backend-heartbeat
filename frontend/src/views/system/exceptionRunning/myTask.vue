@@ -23,25 +23,74 @@
             type="text"
             icon="el-icon-edit-outline"
             @click="handleProcess(scope.row)"
-            v-hasPermi="['workflow:process:approval']"
-          >办理
-          </el-button>
+          >处理</el-button>
         </template>
       </el-table-column>
+      <el-dialog title="处理异常" :visible.sync="open" width="70%" append-to-body>
+        <el-form ref="form" :model="form" :rules="rules" label-width="110px">
+          <el-form-item label="处理意见" prop="content">
+            <el-input v-model="form.content" type="textarea" placeholder="请输入内容" />
+          </el-form-item>
+          <el-form-item prop="end">
+            <span slot="label">
+              <el-tooltip placement="top">
+                <div slot="content">
+                  <div>若选择是，则此任务处理完毕后异常即处理完成</div>
+                  <div>后续任务均无需处理</div>
+                  <div>该选项可在生命周期中禁用</div>
+                </div>
+                <i class="el-icon-question"></i>
+              </el-tooltip>
+              结束流程
+            </span>
+            <el-switch v-model="form.end" active-text="是" inactive-text="否" />
+          </el-form-item>
+          <el-form-item prop="jump">
+            <span slot="label">
+              <el-tooltip placement="top">
+                <div slot="content">
+                  <div>若选择是，则此任务处理完毕后跳转到指定的任务处理</div>
+                  <div>该选项可在生命周期中禁用</div>
+                </div>
+                <i class="el-icon-question"></i>
+              </el-tooltip>
+              跳转处理
+            </span>
+            <el-switch v-model="form.jump" active-text="是" inactive-text="否" />
+          </el-form-item>
+          <el-form-item label="跳转目标" prop="jumpTarget">
+            <el-input v-model="form.jumpTarget" type="textarea" placeholder="请输入内容" />
+          </el-form-item>
+        </el-form>
+        <!-- <process-viewer :key="`designer-${processView.index}`" :xml="processView.xmlData" :style="{'height': '300px', 'margin-bottom': '2em'}" /> -->
+        <div>
+          <img v-if="processView.img" :src="processView.img" />
+        </div>
+        <div slot="footer" class="dialog-footer">
+          <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 认</el-button>
+          <el-button @click="cancel">取 消</el-button>
+        </div>
+      </el-dialog>
     </el-table>
   </div>
 </template>
 
 <script>
-import { listTodoProcess } from '@/api/system/exceptionRunning';
+import { listTodoProcess, getProcessXml, getProcessFlowXml } from '@/api/system/exceptionRunning';
+import ProcessViewer from '@/components/ProcessViewer'
+import { xml2json } from 'xml-js';
 
 export default {
   name: "Todo",
-  components: {},
+  components: {
+    ProcessViewer
+  },
   data() {
     return {
       // 遮罩层
       loading: true,
+      // 按钮加载
+      buttonLoading: false,
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -68,33 +117,52 @@ export default {
         category: null
       },
       // 表单参数
-      form: {},
+      form: {
+        end: false,
+        jump: false
+      },
       // 表单校验
-      rules: {}
+      rules: {},
+      // 当前选中的任务
+      currentTask: {},
+      processView: {
+        index: '',
+        xmlData: '',
+        img: undefined
+      }
     };
   },
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      vm.getList()
-    })
+  created() {
+    this.getList()
+  },
+  activated() {
+    this.getList()
   },
   methods: {
     /** 查询流程定义列表 */
     getList() {
       this.loading = true;
       listTodoProcess().then(response => {
-        this.todoList = response;
+        this.todoList = response.data;
         this.loading = false;
       });
     },
     // 跳转到处理页面
     handleProcess(row) {
-      this.$router.push({
-        path: '/workflow/process/detail/' + row.procInsId,
-        query: {
-          taskId: row.taskId,
-          processed: true
-        }
+      this.currentTask = row
+      this.processView.index = row.procDefId
+      this.open = true
+      getProcessFlowXml(row.procInsId).then(response => {
+        const blob = new Blob([response], { type: 'image/png' })
+        this.processView.img = window.URL.createObjectURL(blob)
+      })
+      getProcessXml(row.procDefId).then(response => {
+        this.processView.xmlData = response.data
+        // 读取流程图
+        const process = (JSON.parse(xml2json(response.data))).elements[0].elements[0]
+        const currentNode = process.elements.find(ele => ele.attributes.id === row.taskDefKey	)
+        const allNodes = process.elements.filter(ele => ele.name === "bpmn2:userTask")
+        console.log(currentNode, allNodes)
       })
     },
     // 取消按钮
@@ -105,29 +173,17 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        id: null,
-        name: null,
-        category: null,
-        key: null,
-        tenantId: null,
-        deployTime: null,
-        derivedFrom: null,
-        derivedFromRoot: null,
-        parentDeploymentId: null,
-        engineVersion: null
+        id: undefined,
+        content: undefined,
+        end: false,
+        jump: false,
+        target: undefined
       };
       this.resetForm("form");
     },
-    /** 搜索按钮操作 */
-    handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.getList();
-    },
-    /** 重置按钮操作 */
-    resetQuery() {
-      this.dateRange = [];
-      this.resetForm("queryForm");
-      this.handleQuery();
+    // 提交处理
+    submitForm() {
+
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
@@ -135,18 +191,6 @@ export default {
       this.single = selection.length !== 1
       this.multiple = !selection.length
     },
-    /** 新增按钮操作 */
-    handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加流程定义";
-    },
-    /** 导出按钮操作 */
-    handleExport() {
-      this.download('workflow/process/todoExport', {
-        ...this.queryParams
-      }, `wf_todo_process_${new Date().getTime()}.xlsx`)
-    }
   }
 };
 </script>

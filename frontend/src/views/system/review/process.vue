@@ -7,21 +7,6 @@
         </div>
       </div>
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="目标产品" prop="prCode">
-        <el-select
-          v-model="queryParams.prCode"
-          placeholder="请选择目标产品"
-          clearable
-        >
-          <el-option
-            v-for="item in productList"
-            :key="item.prCode"
-            :label="item.prName"
-            :value="item.prCode"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
       <el-form-item label="名称" prop="procName">
         <el-input
           v-model="queryParams.procName"
@@ -61,22 +46,22 @@
     </el-row>
 
     <el-table 
-    v-loading="loading" 
-    :data="processList" 
-    @current-change="handleCurrentChange"  
-    highlight-current-row
-    max-height="240"
+      v-loading="loading" 
+      :data="processList" 
+      @current-change="handleCurrentChange"  
+      highlight-current-row
+      max-height="240"
     >
       <el-table-column label="选择" width="55" align="center">
-            <template slot-scope="scope">
-              <el-radio :value="scope.row.procId === idSelect" :label="true" />
-            </template>
-          </el-table-column>
+        <template slot-scope="scope">
+          <el-radio :value="scope.row.procId === idSelect" :label="true" />
+        </template>
+      </el-table-column>
       <el-table-column label="工艺流程ID" align="center" prop="procId" v-if="true"/>
       <el-table-column label="工艺流程编码" align="center" prop="procCode" />
-      <el-table-column label="目标产品" align="center" prop="prCode">
+      <el-table-column label="产品需求" align="center" prop="odCode">
         <template slot-scope="scope">
-          {{ productList.find(ele => ele.prCode === scope.row.prCode).prName || '' }}
+          {{ parseOdCode(scope.row.odCode) }}
         </template>
       </el-table-column>
       <el-table-column label="工艺流程名称" align="center" prop="procName" />
@@ -147,6 +132,7 @@
 <script>
 import { getProcess, listProcess, getBpmnXml, updateProcess ,listReviewProcess} from "@/api/system/process";
 import { listProduct } from "@/api/system/product";
+import { listOrderDemand } from "@/api/system/orderDemand";
 import ProcessViewer from '@/components/ProcessViewerIndustry';
 import { listMaterial } from "@/api/system/material";
 import { listEquipmentModel } from "@/api/system/equipmentModel";
@@ -208,11 +194,14 @@ export default {
       equipmentModelList: [],
       // 模型操作列表
       modelOperationList: [],
+      // 订单产品需求列表
+      orderDemandList: []
     };
   },
   async created() {
     await this.getMaterialList();
     await this.getProductList();
+    await this.getOrderDemandList();
     await this.getEquipmentModelList();
     await this.getModelOperationList();
     this.getList();
@@ -220,11 +209,37 @@ export default {
   async activated() {
     await this.getMaterialList();
     await this.getProductList();
+    await this.getOrderDemandList();
     await this.getEquipmentModelList();
     await this.getModelOperationList();
     this.getList();
   },
-  methods: { // 查询原料列表
+  methods: {
+    /**
+     * 查询订单产品需求
+     * @author YangZY
+     * @date 20250423
+     */ 
+    getOrderDemandList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listOrderDemand().then(response => {
+          this.orderDemandList = []
+          response.rows.forEach(demand => {
+            this.orderDemandList.push({
+              ...demand,
+              prName: this.productList.find(ele => ele.prCode === demand.prCode).prName
+            })
+          });
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
+    // 查询原料列表
     getMaterialList() {
       return new Promise((resolve, reject) => {
         this.loading = true;
@@ -286,6 +301,7 @@ export default {
       listReviewProcess(this.queryParams).then(response => {
         this.processList = response.rows;
         this.total = response.total;
+        this.idSelect = undefined
         this.loading = false;
       });
     },
@@ -297,7 +313,7 @@ export default {
           this.form = response.data;
           if (this.form.procStat === '2') this.form.procStat = '3';
           else this.form.procStat = '8';
-        updateProcess(this.form).then(response => {
+          updateProcess(this.form).then(response => {
             this.$modal.msgSuccess("已开始审核");
             this.getList();
           })
@@ -307,15 +323,15 @@ export default {
         this.loading = false;
       });
     },
-    
     // 通过审核
     passReview(row) {
       this.$modal.confirm('是否要通过审核？').then(() => {
         this.loading = true;
         getProcess(row.procId).then(response => {
           this.form = response.data;
-          if (this.form.procStat === '3' || this.form.procStat === '8') this.form.procStat = '4';
-        updateProcess(this.form).then(response => {
+          if (this.form.procStat === '3' || this.form.procStat === '8')
+            this.form.procStat = '4';
+          updateProcess(this.form).then(response => {
             this.$modal.msgSuccess("已通过审核");
             this.getList();
           })
@@ -325,15 +341,15 @@ export default {
         this.loading = false;
       });
     },
-    
     // 驳回审核
     rejectReview(row) {
       this.$modal.confirm('是否要驳回审核？').then(() => {
         this.loading = true;
         getProcess(row.procId).then(response => {
           this.form = response.data;
-          if (this.form.procStat === '3' || this.form.procStat === '8') this.form.procStat = '1';
-        updateProcess(this.form).then(response => {
+          if (this.form.procStat === '3' || this.form.procStat === '8')
+            this.form.procStat = '1';
+          updateProcess(this.form).then(response => {
             this.$modal.msgSuccess("已驳回审核");
             this.getList();
           })
@@ -343,10 +359,6 @@ export default {
         this.loading = false;
       });
     },
-    
-   
- 
-
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
@@ -359,7 +371,6 @@ export default {
       this.idSelect = undefined
       this.handleQuery();
     },
-
     /** 导出按钮操作 */
     handleExport() {
       this.download('system/process/export', {
@@ -380,6 +391,17 @@ export default {
           this.viewerData.bpmnXml = ''
         }
       }
+    },
+    /**
+     * 解析odCode为显示格式
+     * @author YangZY
+     * @date 20250423
+     */ 
+    parseOdCode(odCode) {
+      const demand = this.orderDemandList.find(ele => ele.odCode === odCode)
+      if (demand) {
+        return `【${demand.orCode}】${demand.prName}`
+      } else return ''
     }
   }
 };

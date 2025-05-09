@@ -43,7 +43,7 @@
               </el-tooltip>
               结束流程
             </span>
-            <el-switch v-model="form.end" active-text="是" inactive-text="否" />
+            <el-switch v-model="form.end" :disabled="disabled.end" active-text="是" inactive-text="否" />
           </el-form-item>
           <el-form-item prop="jump">
             <span slot="label">
@@ -56,10 +56,18 @@
               </el-tooltip>
               跳转处理
             </span>
-            <el-switch v-model="form.jump" active-text="是" inactive-text="否" />
+            <el-switch v-model="form.jump" :disabled="disabled.jump" active-text="是" inactive-text="否" />
           </el-form-item>
-          <el-form-item label="跳转目标" prop="jumpTarget">
-            <el-input v-model="form.jumpTarget" type="textarea" placeholder="请输入内容" />
+          <el-form-item label="跳转目标" prop="jumpTarget" v-if="form.jump">
+            <el-select v-model="form.jumpTarget" placeholder="请选择跳转目标">
+              <el-option
+                v-for="item in jumpRange"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+                :disabled="item.disabled">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-form>
         <!-- <process-viewer :key="`designer-${processView.index}`" :xml="processView.xmlData" :style="{'height': '300px', 'margin-bottom': '2em'}" /> -->
@@ -122,14 +130,35 @@ export default {
         jump: false
       },
       // 表单校验
-      rules: {},
+      rules: {
+        content: [
+          { required: true, message: "处理意见不能为空", trigger: "blur" }
+        ],
+        end: [
+          { required: true, message: "请选择是否结束流程", trigger: "blur" }
+        ],
+        jump: [
+          { required: true, message: "请选择是否跳转处理", trigger: "blur" }
+        ],
+        jumpTarget: [
+          { required: true, message: "跳转目标不能为空", trigger: "blur" }
+        ],
+      },
       // 当前选中的任务
       currentTask: {},
+      // 查看器参数
       processView: {
         index: '',
         xmlData: '',
         img: undefined
-      }
+      },
+      // 是否禁用跳转和完成
+      disabled: {
+        end: false,
+        jump: false
+      },
+      // 跳转流程的范围
+      jumpRange: []
     };
   },
   created() {
@@ -162,7 +191,19 @@ export default {
         const process = (JSON.parse(xml2json(response.data))).elements[0].elements[0]
         const currentNode = process.elements.find(ele => ele.attributes.id === row.taskDefKey	)
         const allNodes = process.elements.filter(ele => ele.name === "bpmn2:userTask")
-        console.log(currentNode, allNodes)
+        // 是否禁用结束和跳转
+        const code = currentNode.attributes['flowable:text']
+        this.disabled.end = code.startsWith("0")
+        this.disabled.jump = code.endsWith("0")
+        // 跳转的范围选择
+        this.jumpRange = []
+        allNodes.forEach(ele => {
+          this.jumpRange.push({
+            label: ele.attributes.name,
+            value: ele.attributes.id,
+            disabled: ele.attributes.id === row.taskDefKey
+          })
+        })
       })
     },
     // 取消按钮
@@ -194,3 +235,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.el-select{
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+</style>

@@ -271,6 +271,7 @@ public class IcesExceptionRunningService extends FlowServiceFactory {
         IcesExceptionRecordLogBo logBo = new IcesExceptionRecordLogBo();
         logBo.setExrCode(task.getProcessInstanceId());
         logBo.setExrlResult(bo.getContent());
+        logBo.setExrlTask(bo.getTaskId());
         recordLogService.insertByBo(logBo);
         // 结束流程
         if (bo.getEnd()) {

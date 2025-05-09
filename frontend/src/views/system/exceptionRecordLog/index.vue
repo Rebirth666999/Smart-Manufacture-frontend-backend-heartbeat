@@ -87,6 +87,7 @@
       <el-table-column label="处理日志ID" align="center" prop="exrlId" v-if="true"/>
       <el-table-column label="处理日志编码" align="center" prop="exrlCode" />
       <el-table-column label="所属异常记录" align="center" prop="exrCode" />
+      <el-table-column label="所属处理任务" align="center" prop="exrlTask" />
       <el-table-column label="处理人" align="center" prop="exrlUserHandle">
         <template slot-scope="scope">
           {{ scope.row.exrlUserHandle && (userList.find(ele => ele.userId === scope.row.exrlUserHandle).userName || '') }}

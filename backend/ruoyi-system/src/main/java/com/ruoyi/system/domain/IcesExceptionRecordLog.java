@@ -36,6 +36,10 @@ public class IcesExceptionRecordLog extends BaseEntity {
      */
     private String exrCode;
     /**
+     * 所属处理任务
+     */
+    private String exrlTask;
+    /**
      * 处理人
      */
     private Long exrlUserHandle;

@@ -35,8 +35,12 @@ public class IcesExceptionRecordLogBo extends BaseEntity {
     /**
      * 所属异常记录
      */
-    @NotBlank(message = "所属异常记录不能为空", groups = { AddGroup.class, EditGroup.class })
     private String exrCode;
+
+    /**
+     * 所属处理任务
+     */
+    private String exrlTask;
 
     /**
      * 处理人

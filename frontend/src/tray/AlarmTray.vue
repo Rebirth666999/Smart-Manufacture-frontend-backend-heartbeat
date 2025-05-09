@@ -8,11 +8,12 @@
         <el-button v-else type="text">{{ data.label }}</el-button>
       </div>
     </el-tree>
-    <el-empty v-else description="暂无需要处理的任务" />
+    <el-empty v-else :image="emptyImageUrl" :image-size="100" description="暂无需要处理的报警" />
   </div>
 </template>
 <script>
 import { listTodoProcess } from '@/api/system/exceptionRunning';
+import emptyImage from '@/assets/images/empty.svg';
 
 export default {
   name: "AlarmTray",
@@ -24,6 +25,8 @@ export default {
       show: true,
       // 待办任务列表
       todoList: [],
+      // "空白"图片URL
+      emptyImageUrl: emptyImage
     }
   },
   async created() {

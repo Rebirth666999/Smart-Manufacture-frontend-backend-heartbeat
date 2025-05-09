@@ -33,3 +33,12 @@ export function getProcessFlowXml(procId) {
     responseType: 'blob'
   })
 }
+
+// 处理任务
+export function handleTask(data) {
+  return request({
+    url: '/system/exception/running/handleTask/',
+    method: 'post',
+    data: data
+  })
+}

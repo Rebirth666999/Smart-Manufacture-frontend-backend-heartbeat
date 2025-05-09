@@ -11,25 +11,30 @@ import com.ruoyi.common.helper.LoginHelper;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.flowable.common.constant.ProcessConstants;
+import com.ruoyi.flowable.common.enums.FlowComment;
 import com.ruoyi.flowable.common.enums.ProcessStatus;
 import com.ruoyi.flowable.core.domain.ProcessQuery;
 import com.ruoyi.flowable.factory.FlowServiceFactory;
+import com.ruoyi.flowable.utils.ModelUtils;
 import com.ruoyi.flowable.utils.ProcessUtils;
 import com.ruoyi.flowable.utils.TaskUtils;
 import com.ruoyi.system.domain.IcesExceptionLifecycle;
 import com.ruoyi.system.domain.IcesExceptionLifecycleVersion;
-import com.ruoyi.system.domain.bo.IcesExceptionBo;
-import com.ruoyi.system.domain.bo.IcesExceptionLifecycleBo;
-import com.ruoyi.system.domain.bo.IcesExceptionLifecycleVersionBo;
+import com.ruoyi.system.domain.bo.*;
 import com.ruoyi.system.domain.vo.IcesExceptionLifecycleVersionVo;
 import com.ruoyi.system.domain.vo.IcesExceptionLifecycleVo;
 import com.ruoyi.system.domain.vo.IcesExceptionTaskVo;
 import com.ruoyi.system.domain.vo.IcesExceptionVo;
 import lombok.RequiredArgsConstructor;
+import org.flowable.bpmn.model.BpmnModel;
+import org.flowable.bpmn.model.EndEvent;
 import org.flowable.engine.history.HistoricProcessInstance;
 import org.flowable.engine.history.HistoricProcessInstanceQuery;
 import org.flowable.engine.repository.Deployment;
 import org.flowable.engine.repository.ProcessDefinition;
+import org.flowable.engine.runtime.Execution;
+import org.flowable.engine.runtime.ProcessInstance;
+import org.flowable.task.api.DelegationState;
 import org.flowable.task.api.Task;
 import org.flowable.task.api.TaskQuery;
 import org.flowable.variable.api.history.HistoricVariableInstance;
@@ -54,6 +59,7 @@ public class IcesExceptionRunningService extends FlowServiceFactory {
     private final IIcesExceptionService exceptionService;
     private final IIcesExceptionLifecycleService lifecycleService;
     private final IIcesExceptionLifecycleVersionService lifecycleVersionService;
+    private final IIcesExceptionRecordLogService recordLogService;
 
     /**
      * 查找所有流程
@@ -230,8 +236,58 @@ public class IcesExceptionRunningService extends FlowServiceFactory {
         return ObjectUtil.isNotNull(loginUser) ? loginUser.getUserId() : null;
     }
 
+    /**
+     * 根据流程定义获取流程图
+     * @param defId 模型定义ID
+     * @return 模型XML
+     */
     public String getProcessXML(String defId) {
         InputStream inputStream = repositoryService.getProcessModel(defId);
         return StrUtil.utf8Str(IoUtil.readBytes(inputStream, false));
+    }
+
+    /**
+     * 处理任务
+     * @param bo 任务信息
+     * @return 是否成功
+     */
+    public Boolean handleTask(IcesExceptionTaskBo bo) {
+        // flowable模型完成当前task
+        Task task = taskService.createTaskQuery().taskId(bo.getTaskId()).singleResult();
+        identityService.setAuthenticatedUserId(TaskUtils.getUserId());
+        if (DelegationState.PENDING.equals(task.getDelegationState())) {
+            taskService.resolveTask(bo.getTaskId());
+        } else {
+            taskService.complete(bo.getTaskId());
+        }
+        // 存储处理记录
+        IcesExceptionRecordLogBo logBo = new IcesExceptionRecordLogBo();
+        logBo.setExrCode(task.getProcessInstanceId());
+        logBo.setExrlResult(bo.getContent());
+        recordLogService.insertByBo(logBo);
+        // 结束流程
+        if (bo.getEnd()) {
+            // 获取流程实例
+            ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
+                .processInstanceId(task.getProcessInstanceId())
+                .singleResult();
+            // 获取流程定义
+            ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+                .processDefinitionId(task.getProcessDefinitionId())
+                .singleResult();
+            // 流程设置为已完成
+            runtimeService.setVariable(processInstance.getId(), ProcessConstants.PROCESS_STATUS_KEY, ProcessStatus.COMPLETED.getStatus());
+            // 获取所有节点信息
+            BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinition.getId());
+            EndEvent endEvent = ModelUtils.getEndEvent(bpmnModel);
+            // 终止流程（全部执行移动到末尾）
+            List<Execution> executions = runtimeService.createExecutionQuery().parentId(task.getProcessInstanceId()).list();
+            List<String> executionIds = executions.stream().map(Execution::getId).collect(Collectors.toList());
+            runtimeService.createChangeActivityStateBuilder()
+                .processInstanceId(task.getProcessInstanceId())
+                .moveExecutionsToSingleActivityId(executionIds, endEvent.getId())
+                .changeState();
+        }
+        return true;
     }
 }

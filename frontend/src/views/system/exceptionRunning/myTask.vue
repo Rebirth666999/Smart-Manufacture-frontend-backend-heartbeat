@@ -26,7 +26,7 @@
           >处理</el-button>
         </template>
       </el-table-column>
-      <el-dialog title="处理异常" :visible.sync="open" width="70%" append-to-body>
+      <el-dialog title="处理异常" :visible.sync="open" width="50%" append-to-body>
         <el-form ref="form" :model="form" :rules="rules" label-width="110px">
           <el-form-item label="处理意见" prop="content">
             <el-input v-model="form.content" type="textarea" placeholder="请输入内容" />
@@ -45,7 +45,7 @@
             </span>
             <el-switch v-model="form.end" :disabled="disabled.end" active-text="是" inactive-text="否" />
           </el-form-item>
-          <el-form-item prop="jump">
+          <!-- <el-form-item prop="jump">
             <span slot="label">
               <el-tooltip placement="top">
                 <div slot="content">
@@ -68,7 +68,7 @@
                 :disabled="item.disabled">
               </el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
         </el-form>
         <!-- <process-viewer :key="`designer-${processView.index}`" :xml="processView.xmlData" :style="{'height': '300px', 'margin-bottom': '2em'}" /> -->
         <div>
@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import { listTodoProcess, getProcessXml, getProcessFlowXml } from '@/api/system/exceptionRunning';
+import { listTodoProcess, getProcessXml, getProcessFlowXml, handleTask } from '@/api/system/exceptionRunning';
 import ProcessViewer from '@/components/ProcessViewer'
 import { xml2json } from 'xml-js';
 
@@ -285,7 +285,18 @@ export default {
     },
     // 提交处理
     submitForm() {
-
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          this.buttonLoading = true;
+          handleTask({ ...this.form, taskId: this.currentTask.taskId }).then(response => {
+            this.$modal.msgSuccess("处理成功");
+            this.open = false;
+            this.getList();
+          }).finally(() => {
+            this.buttonLoading = false;
+          });
+        }
+      })
     },
     // 多选框选中数据
     handleSelectionChange(selection) {

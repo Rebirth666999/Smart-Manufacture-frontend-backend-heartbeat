@@ -10,10 +10,11 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.ruoyi.system.domain.IcesOrderDemand;
+import com.ruoyi.system.domain.IcesManufacturePlan;
 import com.ruoyi.system.domain.bo.IcesManufacturePlanBo;
 import com.ruoyi.system.domain.bo.IcesOrderBo;
 import com.ruoyi.system.domain.bo.IcesOrderDemandBo;
+import com.ruoyi.system.domain.vo.IcesManufacturePlanVo;
 import com.ruoyi.system.domain.vo.IcesOrderDemandVo;
 import com.ruoyi.system.domain.vo.IcesOrderVo;
 import com.ruoyi.system.service.*;
@@ -25,10 +26,7 @@ import com.ruoyi.system.domain.IcesManufacturePlanMain;
 import com.ruoyi.system.mapper.IcesManufacturePlanMainMapper;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Collection;
+import java.util.*;
 
 /**
  * 生产计划(主)Service业务层处理
@@ -60,6 +58,24 @@ public class IcesManufacturePlanMainServiceImpl implements IIcesManufacturePlanM
     @Override
     public TableDataInfo<IcesManufacturePlanMainVo> queryPageList(IcesManufacturePlanMainBo bo, PageQuery pageQuery) {
         LambdaQueryWrapper<IcesManufacturePlanMain> lqw = buildQueryWrapper(bo);
+        Page<IcesManufacturePlanMainVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
+        return TableDataInfo.build(result);
+    }
+
+    /**
+     * 查询审核用的生产计划(主)列表
+     */
+    @Override
+    public TableDataInfo<IcesManufacturePlanMainVo> queryReviewList(IcesManufacturePlanMainBo bo, PageQuery pageQuery) {
+        LambdaQueryWrapper<IcesManufacturePlanMain> lqw = buildQueryWrapper(bo);
+        List<String> stats = new ArrayList<>();
+        stats.add("2");  // 待审核
+        stats.add("3");  // 审核中
+        stats.add("a");  // 待审核（弃用）
+        stats.add("b");  // 审核中（弃用）
+        stats.add("7");  // 待审核（修改）
+        stats.add("8");  // 待审核（修改）
+        lqw.in(IcesManufacturePlanMain::getMpmStat, stats);
         Page<IcesManufacturePlanMainVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
         return TableDataInfo.build(result);
     }

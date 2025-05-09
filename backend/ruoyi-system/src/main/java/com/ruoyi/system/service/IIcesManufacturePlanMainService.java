@@ -1,9 +1,11 @@
 package com.ruoyi.system.service;
 
+import com.ruoyi.system.domain.bo.IcesManufacturePlanBo;
 import com.ruoyi.system.domain.vo.IcesManufacturePlanMainVo;
 import com.ruoyi.system.domain.bo.IcesManufacturePlanMainBo;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
+import com.ruoyi.system.domain.vo.IcesManufacturePlanVo;
 
 import java.util.Collection;
 import java.util.List;
@@ -25,6 +27,11 @@ public interface IIcesManufacturePlanMainService {
      * 查询生产计划(主)列表
      */
     TableDataInfo<IcesManufacturePlanMainVo> queryPageList(IcesManufacturePlanMainBo bo, PageQuery pageQuery);
+
+    /**
+     * 查询审核用生产计划(主)列表
+     */
+    TableDataInfo<IcesManufacturePlanMainVo> queryReviewList(IcesManufacturePlanMainBo bo, PageQuery pageQuery);
 
     /**
      * 查询生产计划(主)列表

@@ -1,9 +1,13 @@
 package com.ruoyi.system.service;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.ObjectUtil;
 import com.ruoyi.common.core.service.UserService;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.flowable.common.constant.ProcessConstants;
+import com.ruoyi.flowable.common.enums.ProcessStatus;
 import com.ruoyi.flowable.core.domain.ProcessQuery;
 import com.ruoyi.flowable.factory.FlowServiceFactory;
 import com.ruoyi.flowable.utils.ProcessUtils;
@@ -21,6 +25,7 @@ import org.flowable.engine.history.HistoricProcessInstance;
 import org.flowable.engine.history.HistoricProcessInstanceQuery;
 import org.flowable.engine.repository.Deployment;
 import org.flowable.task.api.Task;
+import org.flowable.variable.api.history.HistoricVariableInstance;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -96,10 +101,27 @@ public class IcesExceptionRunningService extends FlowServiceFactory {
                 }
             }
             // 当前所处流程
+            // 用逗号分割
             List<Task> taskList = taskService.createTaskQuery().processInstanceId(hisIns.getId()).includeIdentityLinks().list();
             if (CollUtil.isNotEmpty(taskList)) {
                 taskVo.setTaskName(taskList.stream().map(Task::getName).filter(StringUtils::isNotEmpty).collect(Collectors.joining(",")));
             }
+
+            // 获取流程状态
+            HistoricVariableInstance processStatusVariable = historyService.createHistoricVariableInstanceQuery()
+                .processInstanceId(hisIns.getId())
+                .variableName(ProcessConstants.PROCESS_STATUS_KEY)
+                .singleResult();
+            String processStatus = null;
+            if (ObjectUtil.isNotNull(processStatusVariable)) {
+                processStatus = Convert.toStr(processStatusVariable.getValue());
+            }
+            // 兼容旧流程
+            if (processStatus == null) {
+                processStatus = ObjectUtil.isNull(hisIns.getEndTime()) ? ProcessStatus.RUNNING.getStatus() : ProcessStatus.COMPLETED.getStatus();
+            }
+            taskVo.setProcessStatus(processStatus);
+
             taskVoList.add(taskVo);
         }
         return taskVoList;

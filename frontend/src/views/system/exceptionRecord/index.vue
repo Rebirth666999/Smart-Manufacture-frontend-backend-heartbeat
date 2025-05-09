@@ -628,12 +628,14 @@ export default {
      */
     handleStartConfirm(row) {
       this.$modal.confirm('是否开始确认异常上报记录？').then(() => {
+        this.loading = true
         getExceptionRecord(row.exrId).then(response => {
           this.form = response.data
           this.form.exrStat = "2"
           updateExceptionRecord(this.form).then(response => {
-            this.$modal.msgSuccess("已开始确认");
-            this.getList();
+            this.$modal.msgSuccess("已开始确认")
+            this.getList()
+            this.loading = false
           })
         })
       })
@@ -645,12 +647,14 @@ export default {
      */
     handleConfirmNegative(row) {
       this.$modal.confirm('是否确认上报记录为非异常？').then(() => {
+        this.loading = true
         getExceptionRecord(row.exrId).then(response => {
           this.form = response.data
           this.form.exrStat = "3"
           updateExceptionRecord(this.form).then(response => {
-            this.$modal.msgSuccess("确认完成");
-            this.getList();
+            this.$modal.msgSuccess("确认完成")
+            this.getList()
+            this.loading = false
           })
         })
       })
@@ -662,14 +666,14 @@ export default {
      */
     handleConfirmPositive(row) {
       this.$modal.confirm('是否确认上报记录为异常？').then(() => {
+        this.loading = true
         getExceptionRecord(row.exrId).then(response => {
           this.form = response.data
           this.form.exrStat = "4"
           updateExceptionRecord(this.form).then(response => {
-            // TODO 后端发现确认为异常，自动启动对应异常的生命周期
-            // TODO 如果生命周期不存在/没有任何部署，则不通过确认
-            this.$modal.msgSuccess("确认完成");
-            this.getList();
+            this.$modal.msgSuccess("确认完成，已启动异常处理")
+            this.getList()
+            this.loading = false
           })
         })
       })

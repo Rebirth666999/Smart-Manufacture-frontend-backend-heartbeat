@@ -1,14 +1,27 @@
 package com.ruoyi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.flowable.common.constant.ProcessConstants;
+import com.ruoyi.flowable.common.enums.ProcessStatus;
+import com.ruoyi.flowable.factory.FlowServiceFactory;
+import com.ruoyi.flowable.utils.TaskUtils;
+import com.ruoyi.system.domain.bo.IcesExceptionLifecycleBo;
+import com.ruoyi.system.domain.bo.IcesExceptionLifecycleVersionBo;
+import com.ruoyi.system.domain.vo.IcesExceptionLifecycleVersionVo;
+import com.ruoyi.system.domain.vo.IcesExceptionLifecycleVo;
 import com.ruoyi.system.service.IIcesCodeService;
+import com.ruoyi.system.service.IIcesExceptionLifecycleService;
+import com.ruoyi.system.service.IIcesExceptionLifecycleVersionService;
 import lombok.RequiredArgsConstructor;
+import org.flowable.bpmn.constants.BpmnXMLConstants;
+import org.flowable.engine.repository.ProcessDefinition;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesExceptionRecordBo;
 import com.ruoyi.system.domain.vo.IcesExceptionRecordVo;
@@ -16,9 +29,7 @@ import com.ruoyi.system.domain.IcesExceptionRecord;
 import com.ruoyi.system.mapper.IcesExceptionRecordMapper;
 import com.ruoyi.system.service.IIcesExceptionRecordService;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Collection;
+import java.util.*;
 
 /**
  * 异常记录Service业务层处理
@@ -28,10 +39,12 @@ import java.util.Collection;
  */
 @RequiredArgsConstructor
 @Service
-public class IcesExceptionRecordServiceImpl implements IIcesExceptionRecordService {
+public class IcesExceptionRecordServiceImpl extends FlowServiceFactory implements IIcesExceptionRecordService {
 
     private final IcesExceptionRecordMapper baseMapper;
     private final IIcesCodeService codeService;
+    private final IIcesExceptionLifecycleService lifecycleService;
+    private final IIcesExceptionLifecycleVersionService lifecycleVersionService;
 
     /**
      * 查询异常记录
@@ -92,9 +105,66 @@ public class IcesExceptionRecordServiceImpl implements IIcesExceptionRecordServi
      */
     @Override
     public Boolean updateByBo(IcesExceptionRecordBo bo) {
+        // 先找到原先的异常记录
+        IcesExceptionRecordVo orgn = queryById(bo.getExrId());
+        if (orgn.getExrStat().equals("2") && bo.getExrStat().equals("4")) {
+            // 原先确认中，现在确认为异常
+            // 自动启动对应异常的生命周期
+            startLifecycle(bo);
+        }
         IcesExceptionRecord update = BeanUtil.toBean(bo, IcesExceptionRecord.class);
         validEntityBeforeSave(update);
         return baseMapper.updateById(update) > 0;
+    }
+
+    /**
+     * 启动异常的生命周期
+     * @param bo 异常上报记录
+     */
+    private void startLifecycle(IcesExceptionRecordBo bo) {
+        // 找到生命周期
+        IcesExceptionLifecycleBo lifecycleBo = new IcesExceptionLifecycleBo();
+        lifecycleBo.setExCode(bo.getExCode());
+        List<IcesExceptionLifecycleVo> lifecycleVos = lifecycleService.queryList(lifecycleBo);
+        if (lifecycleVos.isEmpty()) {
+            throw new RuntimeException("对应异常未定义生命周期，无法启动处理");
+        }
+        // 找到生命周期版本
+        IcesExceptionLifecycleVersionBo lifecycleVersionBo = new IcesExceptionLifecycleVersionBo();
+        lifecycleVersionBo.setExlCode(lifecycleVos.get(0).getExlCode());
+        List<IcesExceptionLifecycleVersionVo> lifecycleVersionVos = lifecycleVersionService.queryList(lifecycleVersionBo);
+        if (lifecycleVersionVos.isEmpty()) {
+            throw new RuntimeException("对应异常生命周期未设计，无法启动处理");
+        }
+        // 最后创建的永远是最新版本，因此先逆序
+        Collections.reverse(lifecycleVersionVos);
+        // 找到最新的已部署版本的流程定义
+        String defId = null;
+        for (IcesExceptionLifecycleVersionVo lifecycleVersionVo : lifecycleVersionVos) {
+            if (lifecycleVersionVo.getExlvDefId() != null) {
+                defId = lifecycleVersionVo.getExlvDefId();
+                break;
+            }
+        }
+        if (defId == null) {
+            throw new RuntimeException("对应异常生命周期未部署，无法启动处理");
+        }
+        try {
+            ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+                .processDefinitionId(defId).singleResult();
+            Map<String, Object> variables = new HashMap<>();
+            // 设置流程发起人Id到流程中
+            String userIdStr = TaskUtils.getUserId();
+            identityService.setAuthenticatedUserId(userIdStr);
+            variables.put(BpmnXMLConstants.ATTRIBUTE_EVENT_START_INITIATOR, userIdStr);
+            // 设置流程状态为进行中
+            variables.put(ProcessConstants.PROCESS_STATUS_KEY, ProcessStatus.RUNNING.getStatus());
+            // 启动流程实例
+            runtimeService.startProcessInstanceById(processDefinition.getId(), variables);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServiceException("异常生命周期启动错误");
+        }
     }
 
     /**

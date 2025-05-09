@@ -11,6 +11,7 @@ import com.ruoyi.flowable.common.enums.ProcessStatus;
 import com.ruoyi.flowable.core.domain.ProcessQuery;
 import com.ruoyi.flowable.factory.FlowServiceFactory;
 import com.ruoyi.flowable.utils.ProcessUtils;
+import com.ruoyi.flowable.utils.TaskUtils;
 import com.ruoyi.system.domain.IcesExceptionLifecycle;
 import com.ruoyi.system.domain.IcesExceptionLifecycleVersion;
 import com.ruoyi.system.domain.bo.IcesExceptionBo;
@@ -24,7 +25,9 @@ import lombok.RequiredArgsConstructor;
 import org.flowable.engine.history.HistoricProcessInstance;
 import org.flowable.engine.history.HistoricProcessInstanceQuery;
 import org.flowable.engine.repository.Deployment;
+import org.flowable.engine.repository.ProcessDefinition;
 import org.flowable.task.api.Task;
+import org.flowable.task.api.TaskQuery;
 import org.flowable.variable.api.history.HistoricVariableInstance;
 import org.springframework.stereotype.Service;
 
@@ -121,6 +124,51 @@ public class IcesExceptionRunningService extends FlowServiceFactory {
                 processStatus = ObjectUtil.isNull(hisIns.getEndTime()) ? ProcessStatus.RUNNING.getStatus() : ProcessStatus.COMPLETED.getStatus();
             }
             taskVo.setProcessStatus(processStatus);
+
+            taskVoList.add(taskVo);
+        }
+        return taskVoList;
+    }
+
+    /**
+     * 查找自己的待办任务
+     * @return 任务列表
+     */
+    public List<IcesExceptionTaskVo> selectTodoProcessList() {
+        TaskQuery taskQuery = taskService.createTaskQuery()
+            .active()
+            .includeProcessVariables()
+            .orderByTaskCreateTime().desc();
+        // 构建搜索条件
+        ProcessUtils.buildProcessSearch(taskQuery, new ProcessQuery());
+        List<Task> taskList = taskQuery.list();
+        List<IcesExceptionTaskVo> taskVoList = new ArrayList<>();
+
+        for (Task task : taskList) {
+            IcesExceptionTaskVo taskVo = new IcesExceptionTaskVo();
+            // 当前流程信息
+            taskVo.setTaskId(task.getId());
+            taskVo.setTaskDefKey(task.getTaskDefinitionKey());
+            taskVo.setCreateTime(task.getCreateTime());
+            taskVo.setProcDefId(task.getProcessDefinitionId());
+            taskVo.setTaskName(task.getName());
+            // 流程定义信息
+            ProcessDefinition pd = repositoryService.createProcessDefinitionQuery()
+                .processDefinitionId(task.getProcessDefinitionId())
+                .singleResult();
+            taskVo.setDeployId(pd.getDeploymentId());
+            taskVo.setProcDefName(pd.getName());
+            taskVo.setProcDefVersion(pd.getVersion());
+            taskVo.setProcInsId(task.getProcessInstanceId());
+
+            // 流程发起人信息
+            HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery()
+                .processInstanceId(task.getProcessInstanceId())
+                .singleResult();
+            Long userId = Long.parseLong(historicProcessInstance.getStartUserId());
+            String nickName = userService.selectNickNameById(userId);
+            taskVo.setStartUserId(userId);
+            taskVo.setStartUserName(nickName);
 
             taskVoList.add(taskVo);
         }

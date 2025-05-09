@@ -7,3 +7,11 @@ export function listProcess() {
     method: 'get',
   })
 }
+
+// 查询运行中的流程列表
+export function listTodoProcess() {
+  return request({
+    url: '/system/exception/running/todoList',
+    method: 'get',
+  })
+}

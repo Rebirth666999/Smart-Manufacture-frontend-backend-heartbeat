@@ -37,4 +37,12 @@ public class IcesExceptionRunningController {
         return icesExceptionRunningService.selectProcessList();
     }
 
+    /**
+     * 查询运行中的流程列表
+     */
+    @GetMapping("/todoList")
+    public List<IcesExceptionTaskVo> todoList() {
+        return icesExceptionRunningService.selectTodoProcessList();
+    }
+
 }

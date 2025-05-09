@@ -10,7 +10,9 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.flowable.common.constant.ProcessConstants;
 import com.ruoyi.flowable.factory.FlowServiceFactory;
+import com.ruoyi.system.domain.IcesExceptionLifecycleVersion;
 import com.ruoyi.system.domain.bo.IcesExceptionLifecycleVersionBo;
 import com.ruoyi.system.domain.vo.IcesExceptionLifecycleVersionVo;
 import com.ruoyi.system.service.IIcesCodeService;
@@ -20,7 +22,9 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.flowable.engine.repository.Deployment;
 import org.flowable.engine.repository.Model;
+import org.flowable.engine.repository.ProcessDefinition;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesExceptionLifecycleBo;
 import com.ruoyi.system.domain.vo.IcesExceptionLifecycleVo;
@@ -181,8 +185,7 @@ public class IcesExceptionLifecycleServiceImpl extends FlowServiceFactory implem
         IcesExceptionLifecycleVersionBo newVersionBo = new IcesExceptionLifecycleVersionBo();
         newVersionBo.setExlCode(lifecycleVo.getExlCode());
         newVersionBo.setExlvName("v" + ver);
-        newVersionBo.setExlvDefId(model.getId());
-        newVersionBo.setExlvGeId(model.getKey());
+        newVersionBo.setExlvGeId(model.getId());
         lifecycleVersionService.insertByBo(newVersionBo);
         // 更新生命周期
         // 当前版本是最新版本
@@ -225,5 +228,42 @@ public class IcesExceptionLifecycleServiceImpl extends FlowServiceFactory implem
     public String queryBpmnXmlById(String modelId) {
         byte[] bpmnBytes = repositoryService.getModelEditorSource(modelId);
         return StrUtil.utf8Str(bpmnBytes);
+    }
+
+    /**
+     * 部署指定生命周期的最新版本
+     * @param bo 生命周期实体
+     * @return 是否成功
+     */
+    @Override
+    public Boolean deployModel(IcesExceptionLifecycleBo bo) {
+        // 找到对应的模型版本
+        IcesExceptionLifecycleVersionBo versionBo = new IcesExceptionLifecycleVersionBo();
+        versionBo.setExlvGeId(bo.getExlModelId());
+        List<IcesExceptionLifecycleVersionVo> versionVos = lifecycleVersionService.queryList(versionBo);
+        if (versionVos.size() != 1) {
+            throw new RuntimeException("无法找到模型");
+        } else if (versionVos.get(0).getExlvDefId() != null) {
+            throw new RuntimeException("模型已经部署");
+        } else {
+            // 找到模型、XML图
+            Model model = repositoryService.getModel(bo.getExlModelId());
+            byte[] bpmnBytes = repositoryService.getModelEditorSource(bo.getExlModelId());
+            String processName = model.getName() + ProcessConstants.SUFFIX;
+            // 部署、创建流程定义
+            Deployment deployment = repositoryService.createDeployment()
+                .name(model.getName())
+                .key(model.getKey())
+                .addBytes(processName, bpmnBytes)
+                .deploy();
+            ProcessDefinition procDef = repositoryService.createProcessDefinitionQuery()
+                .deploymentId(deployment.getId())
+                .singleResult();
+            // 流程定义写入版本
+            versionBo.setExlvId(versionVos.get(0).getExlvId());
+            versionBo.setExlvDefId(procDef.getId());
+            lifecycleVersionService.updateByBo(versionBo);
+        }
+        return true;
     }
 }

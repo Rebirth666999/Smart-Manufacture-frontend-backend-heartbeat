@@ -36,7 +36,7 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
+      <el-col :span="1.5" v-if="mode === 0">
         <el-button
           type="primary"
           plain
@@ -46,7 +46,7 @@
           v-hasPermi="['system:orderDemand:add']"
         >新增</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <el-col :span="1.5" v-if="mode === 0">
         <el-button
           type="success"
           plain
@@ -57,7 +57,7 @@
           v-hasPermi="['system:orderDemand:edit']"
         >修改</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <el-col :span="1.5" v-if="mode === 0">
         <el-button
           type="danger"
           plain
@@ -95,7 +95,7 @@
       <el-table-column label="金额小计" align="center" prop="odPrice" />
       <el-table-column label="定制详情" align="center" prop="odCust" />
       <!-- <el-table-column label="已删除" align="center" prop="odDelete" /> -->
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="mode === 0">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -269,7 +269,10 @@ export default {
       // 暂存用定制信息表格
       custList: [],
       // 定制信息
-      custInfo: []
+      custInfo: [],
+      // 0-可编辑
+      // 1-不可编辑
+      mode: 0
     };
   },
   async created() {
@@ -295,6 +298,12 @@ export default {
         this.loading = true;
         listOrder().then(response => {
           this.orderList = response.rows
+          const order = response.rows.find(ele => ele.orCode === this.orCode)
+          if (order && order.orStat !== '1') {
+            this.mode = 1
+          } else {
+            this.mode = 0
+          }
           resolve()
         }).catch(() => {
           reject()

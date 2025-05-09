@@ -72,3 +72,11 @@ export function getBpmnModel(query) {
     params: query
   })
 }
+
+export function deployExceptionLifecycle(data) {
+  return request({
+    url: '/system/exceptionLifecycle/deploy',
+    method: 'post',
+    data: data
+  })
+}

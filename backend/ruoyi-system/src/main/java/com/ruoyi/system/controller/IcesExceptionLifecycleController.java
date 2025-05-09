@@ -144,4 +144,13 @@ public class IcesExceptionLifecycleController extends BaseController {
     public R<String> getBpmnXml(String modelId) {
         return R.ok("操作成功", iIcesExceptionLifecycleService.queryBpmnXmlById(modelId));
     }
+
+    /**
+     * 部署指定生命周期的最新版本
+     */
+    @RepeatSubmit()
+    @PostMapping("/deploy")
+    public R<Void> deploy(@RequestBody IcesExceptionLifecycleBo bo) {
+        return toAjax(iIcesExceptionLifecycleService.deployModel(bo));
+    }
 }

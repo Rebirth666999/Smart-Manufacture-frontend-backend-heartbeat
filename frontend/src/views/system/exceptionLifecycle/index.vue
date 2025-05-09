@@ -52,6 +52,7 @@
               size="mini"
               @click="handleAdd"
               v-hasPermi="['system:exceptionLifecycle:add']"
+              :disabled="exceptionLifecycleList.length > 0"
             >新增</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -130,6 +131,12 @@
               <el-button
                 size="mini"
                 type="text"
+                icon="el-icon-s-help"
+                @click="handleDeploy(scope.row)"
+              >部署</el-button>
+              <el-button
+                size="mini"
+                type="text"
                 icon="el-icon-delete"
                 @click="handleDelete(scope.row)"
                 v-hasPermi="['system:exceptionLifecycle:remove']"
@@ -193,7 +200,7 @@
 </template>
 
 <script>
-import { listExceptionLifecycle, getExceptionLifecycle, delExceptionLifecycle, addExceptionLifecycle, updateExceptionLifecycle } from "@/api/system/exceptionLifecycle";
+import { listExceptionLifecycle, getExceptionLifecycle, delExceptionLifecycle, addExceptionLifecycle, updateExceptionLifecycle, deployExceptionLifecycle } from "@/api/system/exceptionLifecycle";
 import { listException } from "@/api/system/exception";
 import ExceptionLifecycleVersion from '@/views/system/exceptionLifecycleVersion';
 
@@ -417,6 +424,18 @@ export default {
     // 生命周期设计
     handleDesign(row) {
       this.$router.push(`/exception/exceptionLifecycleDesign?exlId=${row.exlId}`)
+    },
+    // 生命周期部署
+    handleDeploy(row) {
+      this.$modal.confirm('是否确认部署此异常生命周期的最新版本？').then(() => {
+        const select = this.idSelect
+        this.idSelect = undefined
+        deployExceptionLifecycle(row).then(response => {
+          this.$modal.msgSuccess("部署成功");
+        }).finally(() => {
+          this.idSelect = select
+        })
+      })
     }
   }
 };

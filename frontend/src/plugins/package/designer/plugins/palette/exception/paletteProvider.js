@@ -99,11 +99,11 @@ PaletteProvider.prototype.getPaletteEntries = function() {
     },
     "create.start-event": createAction("bpmn:StartEvent", "event", "bpmn-icon-start-event-none", translate("Create StartEvent")),
     "create.end-event": createAction("bpmn:EndEvent", "event", "bpmn-icon-end-event-none", translate("Create EndEvent")),
-    "create.send-task": createAction("bpmn:SendTask", "activity", "bpmn-icon-send-task", "创建通知任务"),
-    "create.receive-task": createAction("bpmn:ReceiveTask", "activity", "bpmn-icon-receive-task", "创建外部调用任务"),
-    "create.service-task": createAction("bpmn:ServiceTask", "activity", "bpmn-icon-service-task", "创建异常记录维护任务"),
+    // "create.send-task": createAction("bpmn:SendTask", "activity", "bpmn-icon-send-task", "创建通知任务"),
+    // "create.receive-task": createAction("bpmn:ReceiveTask", "activity", "bpmn-icon-receive-task", "创建外部调用任务"),
+    // "create.service-task": createAction("bpmn:ServiceTask", "activity", "bpmn-icon-service-task", "创建异常记录维护任务"),
     "create.user-task": createAction("bpmn:UserTask", "activity", "bpmn-icon-user-task", "创建人工处理任务"),
-    "create.script-task": createAction("bpmn:ScriptTask", "activity", "bpmn-icon-script-task", "创建自动处理任务"),
+    // "create.script-task": createAction("bpmn:ScriptTask", "activity", "bpmn-icon-script-task", "创建自动处理任务"),
   });
 
   return actions;

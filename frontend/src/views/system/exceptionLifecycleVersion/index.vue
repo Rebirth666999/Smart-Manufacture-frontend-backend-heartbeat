@@ -36,27 +36,6 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['system:exceptionLifecycleVersion:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:exceptionLifecycleVersion:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
           type="danger"
           plain
           icon="el-icon-delete"
@@ -90,13 +69,6 @@
       <!-- <el-table-column label="已删除" align="center" prop="exlvDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:exceptionLifecycleVersion:edit']"
-          >修改</el-button>
           <el-button
             size="mini"
             type="text"
@@ -398,11 +370,11 @@ export default {
      * @date 20250506
      */ 
     handleView(row) {
-      this.processView.index = row.exlvDefId
+      this.processView.index = row.exlvGeId
       this.processView.title = "查看异常生命周期版本 " + row.exlvName
       this.processView.open = true
-      if (row.exlvDefId && row.exlvDefId.length > 0) {
-        getBpmnModel({ modelId: row.exlvDefId }).then(response => {
+      if (row.exlvGeId && row.exlvGeId.length > 0) {
+        getBpmnModel({ modelId: row.exlvGeId }).then(response => {
           this.processView.xmlData = response.data
         })
       } else {

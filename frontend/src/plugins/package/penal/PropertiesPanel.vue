@@ -118,6 +118,16 @@
         </div>
         <exception-base-info :id-edit-disabled="idEditDisabled"    :business-object="elementBusinessObject" :type="elementType" />
       </el-collapse-item>
+      <el-collapse-item
+        name="exceptionUserTaskProperties"
+        v-if="mode === 3 && elementType === 'UserTask'"
+        key="exceptionUserTaskProperties"
+      >
+        <div slot="title" class="panel-tab__title">
+          <i class="el-icon-s-promotion"></i>人工处理任务属性
+        </div>
+        <exception-usertask :id="elementId" :userList="extraList.userList" />
+      </el-collapse-item>
     </el-collapse>
   </div>
 </template>
@@ -139,6 +149,7 @@ import ElementForm from "./form/ElementForm";
 import UserTaskListeners from "./listeners/UserTaskListeners";
 import EosParam from "./param/EquipmentOperationStepParam";
 import ProcMaterial from "./other/ProcessMaterial";
+import ExceptionUsertask from "./task/ExceptionUsertask";
 /**
  * 自定义bpmn画图侧边栏
  */
@@ -161,7 +172,8 @@ export default {
     ProcBaseInfo,
     ProcProperties,
     ProcMaterial,
-    ExceptionBaseInfo
+    ExceptionBaseInfo,
+    ExceptionUsertask
   },
   componentName: "BpmnPropertiesPanel",
   props: {
@@ -218,7 +230,7 @@ export default {
         } else if (this.mode === 2) {
           this.activeTab = ["procBasic", "procProperties", "procMaterial"];
         } else if (this.mode === 3) {
-          this.activeTab = ["exceptionBasic"];
+          this.activeTab = ["exceptionBasic", "exceptionUserTaskProperties"];
         }
       }
     }

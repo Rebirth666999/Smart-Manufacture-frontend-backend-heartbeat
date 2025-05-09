@@ -40,6 +40,12 @@ public class IcesExceptionRecordLogVo {
     private String exrCode;
 
     /**
+     * 所属处理任务
+     */
+    @ExcelProperty(value = "所属处理任务")
+    private String exrlTask;
+
+    /**
      * 处理人
      */
     @ExcelProperty(value = "处理人")

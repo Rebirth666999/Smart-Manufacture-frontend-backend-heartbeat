@@ -158,12 +158,13 @@
                 icon="el-icon-edit"
                 @click="handleUpdate(scope.row)"
                 v-hasPermi="['system:order:edit']"
+                v-show="scope.row.orStat==='1' || scope.row.orStat==='4' || scope.row.orStat==='d' || scope.row.orStat==='5'"
               >修改</el-button>
               <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-finished"
-                v-if="scope.row.orStat==='1'"
+                v-show="scope.row.orStat==='1'"
                 @click="handleSubmitReview(scope.row)"
               >提交审核</el-button>
               <el-button
@@ -185,6 +186,7 @@
                 type="text"
                 icon="el-icon-delete"
                 @click="handleDelete(scope.row)"
+                v-show="scope.row.orStat==='1'"
                 v-hasPermi="['system:order:remove']"
               >删除</el-button>
             </template>

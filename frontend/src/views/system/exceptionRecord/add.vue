@@ -72,7 +72,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="状态" prop="exrStat">
-            <el-select v-model="form.exrStat" placeholder="请选择状态">
+            <el-select v-model="form.exrStat" placeholder="请选择状态" disabled>
               <el-option
                 v-for="dict in dict.type.ices_exception_record_status"
                 :key="dict.value"
@@ -205,7 +205,9 @@ export default {
       // 遮罩层
       loading: true,
       // 表单参数
-      form: {},
+      form: {
+        exrStat: "1",
+      },
       // 表单校验
       rules: {
         exrId: [
@@ -247,16 +249,34 @@ export default {
     };
   },
   async created() {
-    await this.getUserList();
-    await this.getExceptionList();
-    await this.getExceptionSourceList();
-    this.parseParamString(this.form.exrParam);
+    this.loading = true
+    await this.getUserList()
+    await this.getExceptionList()
+    await this.getExceptionSourceList()
+    if (this.$route.query.exrId) {
+      getExceptionRecord(this.$route.query.exrId).then(response => {
+        this.form = response.data
+        this.parseParamString(this.form.exrParam)
+        this.loading = false
+      })
+    } else {
+      this.loading = false
+    }
   },
   async activated() {
-    await this.getUserList();
-    await this.getExceptionList();
-    await this.getExceptionSourceList();
-    this.parseParamString(this.form.exrParam);
+    this.loading = true
+    await this.getUserList()
+    await this.getExceptionList()
+    await this.getExceptionSourceList()
+    if (this.$route.query.exrId) {
+      getExceptionRecord(this.$route.query.exrId).then(response => {
+        this.form = response.data
+        this.parseParamString(this.form.exrParam)
+        this.loading = false
+      })
+    } else {
+      this.loading = false
+    }
   },
   methods: {
     // 获取用户列表
@@ -315,7 +335,7 @@ export default {
         exCode: undefined,
         exrDesc: undefined,
         exrParam: undefined,
-        exrStat: undefined,
+        exrStat: "1",
         exrLevel: undefined,
         exrUserReport: undefined,
         exrUserHandle: undefined,

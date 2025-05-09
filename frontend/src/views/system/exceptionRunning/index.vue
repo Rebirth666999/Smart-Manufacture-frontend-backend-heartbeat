@@ -37,22 +37,6 @@
             </template>
           </el-table-column>
           <el-table-column label="耗时" align="center" prop="duration" width="180"/>
-          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-            <template slot-scope="scope">
-              <!-- <el-button
-                type="text"
-                size="mini"
-                icon="el-icon-tickets"
-                @click="handleFlowRecord(scope.row)"
-              >详情</el-button> -->
-              <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-search"
-                @click="handleViewer(scope.row)"
-              >查看流程</el-button>
-            </template>
-          </el-table-column>
         </el-table>
       </div>
     </el-card>

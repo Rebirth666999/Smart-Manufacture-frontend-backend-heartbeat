@@ -216,6 +216,7 @@
             size="mini"
             type="text"
             icon="el-icon-close"
+            v-show="scope.row.mtStat==='5'"
             @click="handleStopDeviceTask(scope.row)"
           >停止设备任务</el-button>
           <el-button
@@ -286,7 +287,7 @@
               placeholder="请选择工艺流程"
             >
               <el-option
-                v-for="item in processList"
+                v-for="item in processListSelection"
                 :key="item.procCode"
                 :label="item.procName"
                 :value="item.procCode"
@@ -474,6 +475,8 @@ export default {
       manufacturePlanList: [],
       // 工艺流程列表
       processList: [],
+      // 已发布，供选择的工艺流程列表
+      processListSelection: [],
       // 原料仓库列表
       materialStoreList: [],
       // 产品仓库列表
@@ -550,6 +553,7 @@ export default {
         this.loading = true;
         listProcess().then(response => {
           this.processList = response.rows.filter(ele => ele.odCode === this.currentManufacturePlan.odCode)
+          this.processListSelection = response.rows.filter(ele => ele.odCode === this.currentManufacturePlan.odCode && ele.procStat === '4')
           resolve()
         }).catch(() => {
           reject()

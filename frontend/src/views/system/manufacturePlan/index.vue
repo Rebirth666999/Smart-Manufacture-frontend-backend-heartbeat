@@ -46,6 +46,11 @@
           <el-table-column label="计划ID" align="center" prop="mpmId" v-if="true"/>
           <el-table-column label="计划编码" align="center" prop="mpmCode" />
           <el-table-column label="订单" align="center" prop="orCode" />
+          <el-table-column label="状态" align="center" prop="mpmStat">
+            <template slot-scope="scope">
+              <dict-tag :options="dict.type.ices_manufacture_plan_status" :value="scope.row.mpmStat"/>
+            </template>
+          </el-table-column>
           <el-table-column label="实际开始时间" align="center" prop="mpmBegin">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.mpmBegin, '{y}-{m}-{d}') }}</span>
@@ -71,12 +76,28 @@
                 size="mini"
                 type="text"
                 icon="el-icon-edit"
+                v-if="mode === 0"
                 @click="handleUpdateMain(scope.row)"
               >修改</el-button>
               <el-button
                 size="mini"
                 type="text"
+                icon="el-icon-finished"
+                v-if="mode === 0"
+                @click="handleSubmitReview(scope.row)"
+              >提交审核</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-refresh-left"
+                v-if="scope.row.mpmStat === '2'"
+                @click="handleWithdrawReview(scope.row)"
+              >撤回审核</el-button>
+              <el-button
+                size="mini"
+                type="text"
                 icon="el-icon-delete"
+                v-if="mode === 0"
                 @click="handleDeleteMain(scope.row)"
               >删除</el-button>
             </template>
@@ -92,7 +113,7 @@
         </div>
       </div>
       <div v-if="queryParams.orCode && manufacturePlanMainList.length > 0">
-        <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+        <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-if="showSearch" label-width="68px">
           <!-- <el-form-item label="状态" prop="mpStat">
             <el-select v-model="queryParams.mpStat" placeholder="请选择状态" clearable>
               <el-option
@@ -126,7 +147,7 @@
         </el-form>
 
         <el-row :gutter="10" class="mb8">
-          <el-col :span="1.5">
+          <el-col :span="1.5" v-if="mode === 0">
             <el-button
               type="primary"
               plain
@@ -136,7 +157,7 @@
               v-hasPermi="['system:manufacturePlan:add']"
             >新增</el-button>
           </el-col>
-          <el-col :span="1.5">
+          <el-col :span="1.5" v-if="mode === 0">
             <el-button
               type="success"
               plain
@@ -147,7 +168,7 @@
               v-hasPermi="['system:manufacturePlan:edit']"
             >修改</el-button>
           </el-col>
-          <el-col :span="1.5">
+          <el-col :span="1.5" v-if="mode === 0">
             <el-button
               type="danger"
               plain
@@ -228,28 +249,15 @@
                 type="text"
                 icon="el-icon-edit"
                 @click="handleUpdate(scope.row)"
-                v-show="scope.row.mpStat==='1' || scope.row.mpStat==='4' || scope.row.mpStat==='5'"
+                v-if="scope.row.mpStat==='1' || scope.row.mpStat==='4' || scope.row.mpStat==='5'"
                 v-hasPermi="['system:manufacturePlan:edit']"
               >修改</el-button> -->
-              <!-- <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-finished"
-                v-show="scope.row.mpStat==='1'"
-                @click="handleSubmitReview(scope.row)"
-              >提交审核</el-button> -->
-              <!-- <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-refresh-left"
-                v-show="scope.row.mpStat === '2'"
-                @click="handleWithdrawReview(scope.row)"
-              >撤回审核</el-button> -->
+              <!--  -->
               <!-- <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-delete"
-                v-show="scope.row.mpStat==='4' || scope.row.mpStat==='5'"
+                v-if="scope.row.mpStat==='4' || scope.row.mpStat==='5'"
                 @click="handleDeprecated(scope.row)"
               >弃用</el-button> -->
               <!-- <el-button
@@ -258,7 +266,7 @@
                 icon="el-icon-delete"
                 @click="handleDelete(scope.row)"
                 v-hasPermi="['system:manufacturePlan:remove']"
-                v-show="scope.row.mpStat === '1'"
+                v-if="scope.row.mpStat === '1'"
               >删除</el-button> -->
 
               
@@ -268,6 +276,7 @@
                 icon="el-icon-edit"
                 @click="handleUpdate(scope.row)"
                 v-hasPermi="['system:manufacturePlan:edit']"
+                v-if="mode === 0"
               >修改</el-button>
               <el-button
                 size="mini"
@@ -275,13 +284,14 @@
                 icon="el-icon-delete"
                 @click="handleDelete(scope.row)"
                 v-hasPermi="['system:manufacturePlan:remove']"
+                v-if="mode === 0"
               >删除</el-button>
             </template>
           </el-table-column>
         </el-table>
 
         <pagination
-          v-show="total>0"
+          v-if="total>0"
           :total="total"
           :page.sync="queryParams.pageNum"
           :limit.sync="queryParams.pageSize"
@@ -522,7 +532,10 @@ export default {
             { required: true, message: "产品数量不能为空", trigger: "blur" }
           ],
         },
-      }
+      },
+      // 0-生产计划未发布可修改
+      // 1-生产计划不可修改
+      mode: 0
     };
   },
   watch: {
@@ -642,6 +655,10 @@ export default {
       if (this.queryParams.orCode) {
         await this.getList();
         await this.getMainList();
+        if (this.manufacturePlanMainList.length > 0) {
+          const stat = this.manufacturePlanMainList[0].mpmStat
+          this.mode = stat === '1'? 0 : 1
+        }
       } else {
         this.manufacturePlanMainList = []
         this.manufacturePlanList = []
@@ -724,15 +741,15 @@ export default {
     },
     // 提交审核
     handleSubmitReview(row) {
-      const mpId = row.mpId;
+      const mpmId = row.mpmId;
       this.$modal.confirm('是否要提交审核？审核在开始之前可以撤回。').then(() => {
         this.loading = true;
-        getManufacturePlan(mpId).then(response => {
-          this.form = response.data;
-          this.form.mpStat = "2";
-          updateManufacturePlan(this.form).then(response => {
+        getManufacturePlanMain(mpmId).then(response => {
+          const form = response.data;
+          form.mpmStat = "2";
+          updateManufacturePlanMain(form).then(response => {
             this.$modal.msgSuccess("已提交审核");
-            this.getList();
+            this.handleQuery();
           })
         });
       }).catch(() => {
@@ -742,16 +759,16 @@ export default {
     },
     // 撤回审核
     handleWithdrawReview(row) {
-      const mpId = row.mpId;
+      const mpmId = row.mpmId;
       this.$modal.confirm('是否要撤回审核？若审核已开始即无法撤回。').then(() => {
         this.loading = true;
-        getManufacturePlan(mpId).then(response => {
-          this.form = response.data;
-          if(this.form.mpStat === '2') this.form.mpStat = '1';
-          else if(this.form.mpStat === '7' || this.form.mpStat === 'a') this.form.mpStat = '4';
-          updateManufacturePlan(this.form).then(response => {
+        getManufacturePlanMain(mpmId).then(response => {
+          const form = response.data;
+          if(form.mpmStat === '2') form.mpmStat = '1';
+          else if (form.mpmStat === '7' || form.mpmStat === 'a') form.mpmStat = '4';
+          updateManufacturePlanMain(form).then(response => {
             this.$modal.msgSuccess("已撤回审核");
-            this.getList();
+            this.handleQuery();
           })
         });
       }).catch(() => {

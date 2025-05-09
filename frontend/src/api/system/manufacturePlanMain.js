@@ -42,3 +42,11 @@ export function delManufacturePlanMain(mpmId) {
     method: 'delete'
   })
 }
+
+export function listManufacturePlanMainReview(query) {
+  return request({
+    url: '/system/manufacturePlanMain/reviewList',
+    method: 'get',
+    params: query
+  })
+}

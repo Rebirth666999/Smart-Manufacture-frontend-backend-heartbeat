@@ -162,20 +162,40 @@ export default {
       jumpRange: []
     };
   },
-  created() {
-    this.getList()
+  async created() {
+    await this.getList()
+    if (this.$route.query.taskId) {
+      const task = this.todoList.find(ele => ele.taskId === this.$route.query.taskId)
+      this.$router.push(`/exception/exceptionProcess/todo`)
+      if (task) {
+        this.handleProcess(task)
+      }
+    }
   },
-  activated() {
-    this.getList()
+  async activated() {
+    await this.getList()
+    if (this.$route.query.taskId) {
+      const task = this.todoList.find(ele => ele.taskId === this.$route.query.taskId)
+      this.$router.push(`/exception/exceptionProcess/todo`)
+      if (task) {
+        this.handleProcess(task)
+      }
+    }
   },
   methods: {
-    /** 查询流程定义列表 */
+    /** 查询待办任务列表 */
     getList() {
-      this.loading = true;
-      listTodoProcess().then(response => {
-        this.todoList = response.data;
-        this.loading = false;
-      });
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listTodoProcess().then(response => {
+          this.todoList = response.data;
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
     // 跳转到处理页面
     handleProcess(row) {

@@ -7,7 +7,7 @@
       <el-table-column label="任务节点" align="center" prop="taskName"/>
       <el-table-column label="流程版本" align="center">
         <template slot-scope="scope">
-          <el-tag size="medium" >v{{scope.row.procDefVersion}}</el-tag>
+          <el-tag size="medium">{{scope.row.exlvName}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="流程发起人" align="center">

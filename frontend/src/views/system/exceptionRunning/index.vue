@@ -7,14 +7,9 @@
       <el-table-column label="流程定义编号" align="center" prop="procDefId" :show-overflow-tooltip="true"/>
       <el-table-column label="所属异常名称" align="center" prop="exName" :show-overflow-tooltip="true"/>
       <!-- <el-table-column label="流程类别" align="center" prop="category" :formatter="categoryFormat" /> -->
-      <el-table-column label="生命周期版本" align="center" width="80px">
-        <template slot-scope="scope">
-          <el-tag size="medium" >{{ scope.row.exlvName }}</el-tag>
-        </template>
-      </el-table-column>
       <el-table-column label="流程版本" align="center" width="80px">
         <template slot-scope="scope">
-          <el-tag size="medium" >v{{ scope.row.procDefVersion }}</el-tag>
+          <el-tag size="medium" >{{ scope.row.exlvName }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="当前节点" align="center" prop="taskName"/>

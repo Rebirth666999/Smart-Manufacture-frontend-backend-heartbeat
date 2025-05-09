@@ -143,6 +143,10 @@ public class IcesExceptionRunningService extends FlowServiceFactory {
         ProcessUtils.buildProcessSearch(taskQuery, new ProcessQuery());
         List<Task> taskList = taskQuery.list();
         List<IcesExceptionTaskVo> taskVoList = new ArrayList<>();
+        // 预先找到所有所需列表
+        List<IcesExceptionVo> exceptions = exceptionService.queryList(new IcesExceptionBo());
+        List<IcesExceptionLifecycleVo> lifecycles = lifecycleService.queryList(new IcesExceptionLifecycleBo());
+        List<IcesExceptionLifecycleVersionVo> lifecycleVersions = lifecycleVersionService.queryList(new IcesExceptionLifecycleVersionBo());
 
         for (Task task : taskList) {
             IcesExceptionTaskVo taskVo = new IcesExceptionTaskVo();
@@ -169,6 +173,21 @@ public class IcesExceptionRunningService extends FlowServiceFactory {
             String nickName = userService.selectNickNameById(userId);
             taskVo.setStartUserId(userId);
             taskVo.setStartUserName(nickName);
+
+            // 找到生命周期版本
+            IcesExceptionLifecycleVersionVo currentVersion = lifecycleVersions.stream().filter(lifecycleVersion -> lifecycleVersion.getExlvDefId() != null && lifecycleVersion.getExlvDefId().equals(taskVo.getProcDefId())).findFirst().orElse(null);
+            if (currentVersion != null) {
+                taskVo.setExlvName(currentVersion.getExlvName());
+                // 找到生命周期
+                IcesExceptionLifecycleVo currentLifecycle = lifecycles.stream().filter(lifecycle -> lifecycle.getExlCode().equals(currentVersion.getExlCode())).findFirst().orElse(null);
+                if (currentLifecycle != null) {
+                    // 找到所属异常
+                    IcesExceptionVo currentException = exceptions.stream().filter(exception -> exception.getExCode().equals(currentLifecycle.getExCode())).findFirst().orElse(null);
+                    if (currentException != null) {
+                        taskVo.setExName(currentException.getExName());
+                    }
+                }
+            }
 
             taskVoList.add(taskVo);
         }

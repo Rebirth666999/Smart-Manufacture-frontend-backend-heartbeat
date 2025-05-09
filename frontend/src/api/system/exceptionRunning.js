@@ -42,3 +42,11 @@ export function handleTask(data) {
     data: data
   })
 }
+
+// 查询已结束的流程列表
+export function listFinishProcess() {
+  return request({
+    url: '/system/exception/running/finishList',
+    method: 'get',
+  })
+}

@@ -62,4 +62,12 @@ public class IcesExceptionRunningController extends BaseController {
         return toAjax(icesExceptionRunningService.handleTask(task));
     }
 
+    /**
+     * 查询运行中的流程列表
+     */
+    @GetMapping("/finishList")
+    public R<List<IcesExceptionTaskVo>> finishList() {
+        return R.ok(icesExceptionRunningService.selectFinishedProcessList());
+    }
+
 }

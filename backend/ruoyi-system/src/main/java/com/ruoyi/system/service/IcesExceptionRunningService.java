@@ -2,10 +2,15 @@ package com.ruoyi.system.service;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.date.BetweenFormatter;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ruoyi.common.core.domain.PageQuery;
 import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.service.UserService;
 import com.ruoyi.common.helper.LoginHelper;
 import com.ruoyi.common.utils.DateUtils;
@@ -37,6 +42,8 @@ import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.task.api.DelegationState;
 import org.flowable.task.api.Task;
 import org.flowable.task.api.TaskQuery;
+import org.flowable.task.api.history.HistoricTaskInstance;
+import org.flowable.task.api.history.HistoricTaskInstanceQuery;
 import org.flowable.variable.api.history.HistoricVariableInstance;
 import org.springframework.stereotype.Service;
 
@@ -289,5 +296,96 @@ public class IcesExceptionRunningService extends FlowServiceFactory {
                 .changeState();
         }
         return true;
+    }
+
+    /**
+     * 查找自己的已办任务
+     * @return 任务列表
+     */
+    public List<IcesExceptionTaskVo> selectFinishedProcessList() {
+        HistoricTaskInstanceQuery taskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
+            .includeProcessVariables()
+            .finished()
+            .orderByHistoricTaskInstanceEndTime()
+            .desc();
+        // 构建搜索条件
+        ProcessUtils.buildProcessSearch(taskInstanceQuery, new ProcessQuery());
+        List<HistoricTaskInstance> historicTaskInstanceList = taskInstanceQuery.list();
+        List<IcesExceptionTaskVo> hisTaskList = new ArrayList<>();
+
+        // 预先找到所有所需列表
+        List<IcesExceptionVo> exceptions = exceptionService.queryList(new IcesExceptionBo());
+        List<IcesExceptionLifecycleVo> lifecycles = lifecycleService.queryList(new IcesExceptionLifecycleBo());
+        List<IcesExceptionLifecycleVersionVo> lifecycleVersions = lifecycleVersionService.queryList(new IcesExceptionLifecycleVersionBo());
+
+        // 获取当前用户信息
+        Long currentUser = getLoginUserId();
+        if (currentUser != null) {
+            for (HistoricTaskInstance task : historicTaskInstanceList) {
+                // 通过解析逗号分隔的assignee
+                // 确认任务是否为自己处理
+                boolean assign = false;
+                String[] assignees = task.getAssignee().split(",");
+                for (String assignee : assignees) {
+                    if (assignee.equals(currentUser.toString())) {
+                        assign = true;
+                        break;
+                    }
+                }
+                if (!assign) {
+                    continue;
+                }
+
+                IcesExceptionTaskVo taskVo = new IcesExceptionTaskVo();
+                // 当前流程信息
+                taskVo.setTaskId(task.getId());
+                // 审批人员信息
+                taskVo.setCreateTime(task.getCreateTime());
+                taskVo.setFinishTime(task.getEndTime());
+                taskVo.setDuration(DateUtil.formatBetween(task.getDurationInMillis(), BetweenFormatter.Level.SECOND));
+                taskVo.setProcDefId(task.getProcessDefinitionId());
+                taskVo.setTaskDefKey(task.getTaskDefinitionKey());
+                taskVo.setTaskName(task.getName());
+
+                // 流程定义信息
+                ProcessDefinition pd = repositoryService.createProcessDefinitionQuery()
+                    .processDefinitionId(task.getProcessDefinitionId())
+                    .singleResult();
+                taskVo.setDeployId(pd.getDeploymentId());
+                taskVo.setProcDefName(pd.getName());
+                taskVo.setProcDefVersion(pd.getVersion());
+                taskVo.setProcInsId(task.getProcessInstanceId());
+                taskVo.setHisProcInsId(task.getProcessInstanceId());
+
+                // 流程发起人信息
+                HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery()
+                    .processInstanceId(task.getProcessInstanceId())
+                    .singleResult();
+                Long userId = Long.parseLong(historicProcessInstance.getStartUserId());
+                String nickName = userService.selectNickNameById(userId);
+                taskVo.setStartUserId(userId);
+                taskVo.setStartUserName(nickName);
+
+                // 流程变量
+                taskVo.setProcVars(task.getProcessVariables());
+
+                // 找到生命周期版本
+                IcesExceptionLifecycleVersionVo currentVersion = lifecycleVersions.stream().filter(lifecycleVersion -> lifecycleVersion.getExlvDefId() != null && lifecycleVersion.getExlvDefId().equals(taskVo.getProcDefId())).findFirst().orElse(null);
+                if (currentVersion != null) {
+                    taskVo.setExlvName(currentVersion.getExlvName());
+                    // 找到生命周期
+                    IcesExceptionLifecycleVo currentLifecycle = lifecycles.stream().filter(lifecycle -> lifecycle.getExlCode().equals(currentVersion.getExlCode())).findFirst().orElse(null);
+                    if (currentLifecycle != null) {
+                        // 找到所属异常
+                        IcesExceptionVo currentException = exceptions.stream().filter(exception -> exception.getExCode().equals(currentLifecycle.getExCode())).findFirst().orElse(null);
+                        if (currentException != null) {
+                            taskVo.setExName(currentException.getExName());
+                        }
+                    }
+                }
+                hisTaskList.add(taskVo);
+            }
+        }
+        return hisTaskList;
     }
 }

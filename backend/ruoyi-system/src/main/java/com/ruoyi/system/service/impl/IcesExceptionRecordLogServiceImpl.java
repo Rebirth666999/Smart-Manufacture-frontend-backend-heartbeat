@@ -70,6 +70,7 @@ public class IcesExceptionRecordLogServiceImpl implements IIcesExceptionRecordLo
         LambdaQueryWrapper<IcesExceptionRecordLog> lqw = Wrappers.lambdaQuery();
         lqw.eq(StringUtils.isNotBlank(bo.getExrlCode()), IcesExceptionRecordLog::getExrlCode, bo.getExrlCode());
         lqw.eq(StringUtils.isNotBlank(bo.getExrCode()), IcesExceptionRecordLog::getExrCode, bo.getExrCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getExrlTask()), IcesExceptionRecordLog::getExrlTask, bo.getExrlTask());
         lqw.eq(bo.getExrlDelete() != null, IcesExceptionRecordLog::getExrlDelete, bo.getExrlDelete());
         return lqw;
     }

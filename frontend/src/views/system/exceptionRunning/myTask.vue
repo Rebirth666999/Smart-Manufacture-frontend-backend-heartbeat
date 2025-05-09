@@ -26,60 +26,61 @@
           >处理</el-button>
         </template>
       </el-table-column>
-      <el-dialog title="处理异常" :visible.sync="open" width="50%" append-to-body>
-        <el-form ref="form" :model="form" :rules="rules" label-width="110px">
-          <el-form-item label="处理意见" prop="content">
-            <el-input v-model="form.content" type="textarea" placeholder="请输入内容" />
-          </el-form-item>
-          <el-form-item prop="end">
-            <span slot="label">
-              <el-tooltip placement="top">
-                <div slot="content">
-                  <div>若选择是，则此任务处理完毕后异常即处理完成</div>
-                  <div>后续任务均无需处理</div>
-                  <div>该选项可在生命周期中禁用</div>
-                </div>
-                <i class="el-icon-question"></i>
-              </el-tooltip>
-              结束流程
-            </span>
-            <el-switch v-model="form.end" :disabled="disabled.end" active-text="是" inactive-text="否" />
-          </el-form-item>
-          <!-- <el-form-item prop="jump">
-            <span slot="label">
-              <el-tooltip placement="top">
-                <div slot="content">
-                  <div>若选择是，则此任务处理完毕后跳转到指定的任务处理</div>
-                  <div>该选项可在生命周期中禁用</div>
-                </div>
-                <i class="el-icon-question"></i>
-              </el-tooltip>
-              跳转处理
-            </span>
-            <el-switch v-model="form.jump" :disabled="disabled.jump" active-text="是" inactive-text="否" />
-          </el-form-item>
-          <el-form-item label="跳转目标" prop="jumpTarget" v-if="form.jump">
-            <el-select v-model="form.jumpTarget" placeholder="请选择跳转目标">
-              <el-option
-                v-for="item in jumpRange"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-                :disabled="item.disabled">
-              </el-option>
-            </el-select>
-          </el-form-item> -->
-        </el-form>
-        <!-- <process-viewer :key="`designer-${processView.index}`" :xml="processView.xmlData" :style="{'height': '300px', 'margin-bottom': '2em'}" /> -->
-        <div>
-          <el-image v-if="processView.img" :src="processView.img" />
-        </div>
-        <div slot="footer" class="dialog-footer">
-          <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 认</el-button>
-          <el-button @click="cancel">取 消</el-button>
-        </div>
-      </el-dialog>
     </el-table>
+    
+    <el-dialog title="处理异常" :visible.sync="open" width="50%" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
+        <el-form-item label="处理意见" prop="content">
+          <el-input v-model="form.content" type="textarea" placeholder="请输入内容" />
+        </el-form-item>
+        <el-form-item prop="end">
+          <span slot="label">
+            <el-tooltip placement="top">
+              <div slot="content">
+                <div>若选择是，则此任务处理完毕后异常即处理完成</div>
+                <div>后续任务均无需处理</div>
+                <div>该选项可在生命周期中禁用</div>
+              </div>
+              <i class="el-icon-question"></i>
+            </el-tooltip>
+            结束流程
+          </span>
+          <el-switch v-model="form.end" :disabled="disabled.end" active-text="是" inactive-text="否" />
+        </el-form-item>
+        <!-- <el-form-item prop="jump">
+          <span slot="label">
+            <el-tooltip placement="top">
+              <div slot="content">
+                <div>若选择是，则此任务处理完毕后跳转到指定的任务处理</div>
+                <div>该选项可在生命周期中禁用</div>
+              </div>
+              <i class="el-icon-question"></i>
+            </el-tooltip>
+            跳转处理
+          </span>
+          <el-switch v-model="form.jump" :disabled="disabled.jump" active-text="是" inactive-text="否" />
+        </el-form-item>
+        <el-form-item label="跳转目标" prop="jumpTarget" v-if="form.jump">
+          <el-select v-model="form.jumpTarget" placeholder="请选择跳转目标">
+            <el-option
+              v-for="item in jumpRange"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+              :disabled="item.disabled">
+            </el-option>
+          </el-select>
+        </el-form-item> -->
+      </el-form>
+      <!-- <process-viewer :key="`designer-${processView.index}`" :xml="processView.xmlData" :style="{'height': '300px', 'margin-bottom': '2em'}" /> -->
+      <div>
+        <el-image v-if="processView.img" :src="processView.img" />
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 认</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 

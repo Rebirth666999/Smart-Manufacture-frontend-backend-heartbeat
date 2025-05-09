@@ -19,12 +19,38 @@
       <el-table-column label="接收时间" align="center" prop="createTime" width="180"/>
       <el-table-column label="结束时间" align="center" prop="finishTime" width="180"/>
       <el-table-column label="耗时" align="center" prop="duration" />
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-document"
+            @click="handleLog(scope.row)"
+          >处理日志</el-button>
+        </template>
+      </el-table-column>
     </el-table>
+
+    <el-dialog title="处理日志" :visible.sync="open" width="40%" append-to-body>
+      <el-descriptions border :column="1">
+        <el-descriptions-item label="处理人">
+          {{ parseUserId(logData.exrlUserHandle) }}
+        </el-descriptions-item>
+        <el-descriptions-item label="处理时间">
+          {{ logData.exrlTime }}
+        </el-descriptions-item>
+        <el-descriptions-item label="处理意见">
+          {{ logData.exrlResult }}
+        </el-descriptions-item>
+      </el-descriptions>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { listFinishProcess } from '@/api/system/exceptionRunning';
+import { listExceptionRecordLog } from "@/api/system/exceptionRecordLog";
+import { listUser } from "@/api/system/user";
 import ProcessViewer from '@/components/ProcessViewer'
 
 export default {
@@ -97,14 +123,24 @@ export default {
         jump: false
       },
       // 跳转流程的范围
-      jumpRange: []
+      jumpRange: [],
+      // 要查看的处理日志信息
+      logData: {
+        exrlUserHandle: '',
+        exrlTime: '',
+        exrlResult: ''
+      },
+      // 用户列表
+      userList: []
     };
   },
   async created() {
     await this.getList()
+    await this.getUserList()
   },
   async activated() {
     await this.getList()
+    await this.getUserList()
   },
   methods: {
     /** 查询待办任务列表 */
@@ -121,12 +157,51 @@ export default {
         })
       })
     },
+    // 获取用户列表
+    getUserList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listUser().then(response => {
+          this.userList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
       this.single = selection.length !== 1
       this.multiple = !selection.length
     },
+    /**
+     * 查看处理日志
+     * @param {any} row 任务信息
+     * @author YangZY
+     * @date 20250509
+     */
+    handleLog(row) {
+      listExceptionRecordLog({ exrlTask: row.taskId }).then(response => {
+        if (response.rows.length > 0) {
+          this.logData = response.rows[0]
+          this.open = true
+        }
+      })
+    },
+    /**
+     * 处理人ID映射
+     * @param {number} userId 用户ID
+     * @returns 用户名
+     * @author YangZY
+     * @date 20250509
+     */
+    parseUserId(userId) {
+      const user = this.userList.find(ele => ele.userId === userId)
+      return user? user.userName : ''
+    }
   }
 };
 </script>

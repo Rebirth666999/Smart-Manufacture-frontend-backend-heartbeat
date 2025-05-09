@@ -1,26 +1,8 @@
 <template>
   <div class="app-container">
-    <!-- 顶部提示 -->
-    <el-alert
-      v-show="hint.length > 0"
-      :title="`正在根据${hint}筛选异常处理日志`"
-      type="info"
-      show-icon
-      :closable="false"
-      class="mb8"
-    >
-    </el-alert>
-
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="异常记录" prop="exrCode">
-        <el-select v-model="queryParams.exrCode" placeholder="请选择所属异常记录" :disabled="mode === 1" clearable>
-          <el-option
-           v-for="option in exceptionRecordList"
-           :key="option.exrCode"
-           :label="option.exrCode"
-           :value="option.exrCode">
-          </el-option>
-        </el-select>
+        <el-input v-model="queryParams.exrCode" placeholder="请输入异常记录" :disabled="mode === 1" />
       </el-form-item>
       <!-- <el-form-item label="已删除" prop="exrlDelete">
         <el-input
@@ -37,7 +19,7 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button
           type="primary"
           plain
@@ -68,7 +50,7 @@
           @click="handleDelete"
           v-hasPermi="['system:exceptionRecordLog:remove']"
         >删除</el-button>
-      </el-col>
+      </el-col> -->
       <el-col :span="1.5">
         <el-button
           type="warning"
@@ -86,8 +68,8 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="处理日志ID" align="center" prop="exrlId" v-if="true"/>
       <el-table-column label="处理日志编码" align="center" prop="exrlCode" />
-      <el-table-column label="所属异常记录" align="center" prop="exrCode" />
-      <el-table-column label="所属处理任务" align="center" prop="exrlTask" />
+      <el-table-column label="所属异常记录" align="center" prop="exrCode" :show-overflow-tooltip="true" />
+      <el-table-column label="所属处理任务" align="center" prop="exrlTask" :show-overflow-tooltip="true" />
       <el-table-column label="处理人" align="center" prop="exrlUserHandle">
         <template slot-scope="scope">
           {{ scope.row.exrlUserHandle && (userList.find(ele => ele.userId === scope.row.exrlUserHandle).userName || '') }}
@@ -96,7 +78,7 @@
       <el-table-column label="处理时间" align="center" prop="exrlTime" />
       <el-table-column label="处理意见" align="center" prop="exrlResult" />
       <!-- <el-table-column label="已删除" align="center" prop="exrlDelete" /> -->
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <!-- <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -113,7 +95,7 @@
             v-hasPermi="['system:exceptionRecordLog:remove']"
           >删除</el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
 
     <pagination
@@ -173,6 +155,11 @@ import { listUser } from "@/api/system/user";
 
 export default {
   name: "ExceptionRecordLog",
+  props: {
+    procInsId: {
+      required: false
+    }
+  },
   data() {
     return {
       // 按钮loading
@@ -234,15 +221,17 @@ export default {
     };
   },
   async created() {
-    if (this.$route.query.exrCode) {
+    if (this.procInsId) {
       this.mode = 1
+    } else {
+      this.mode = 0
     }
     await this.getUserList();
     await this.getExceptionRecordList();
     this.getList();
   },
   async activated() {
-    if (this.$route.query.exrCode) {
+    if (this.procInsId) {
       this.mode = 1
     } else {
       this.mode = 0
@@ -273,13 +262,8 @@ export default {
         listExceptionRecord().then(response => {
           this.exceptionRecordList = response.rows
           if (this.mode === 1) {
-            let exr = response.rows.find(ele => ele.exrCode === this.$route.query.exrCode)
-            // 构造提示文本
-            this.hint = "异常记录 "
-            this.hint += exr.exrCode
-            this.hint += " "
             // 设置筛选
-            this.queryParams.exrCode = exr.exrCode
+            this.queryParams.exrCode = this.procInsId
           }
           resolve()
         }).catch(() => {
@@ -328,7 +312,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
-      this.queryParams.exrCode = this.$route.query.exrCode
+      this.queryParams.exrCode = this.procInsId
       this.handleQuery();
     },
     // 多选框选中数据
@@ -341,7 +325,7 @@ export default {
     handleAdd() {
       this.reset();
       if (this.mode === 1) {
-        this.form.exrCode = this.$route.query.exrCode
+        this.form.exrCode = this.procInsId
       }
       this.open = true;
       this.title = "添加异常处理日志";

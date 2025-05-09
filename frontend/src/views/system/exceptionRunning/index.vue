@@ -1,66 +1,100 @@
 <template>
   <div class="app-container">
-    <el-table v-loading="loading" :data="processList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="流程编号" align="center" prop="procInsId" :show-overflow-tooltip="true"/>
-      <el-table-column label="流程名称" align="center" prop="procDefName" :show-overflow-tooltip="true"/>
-      <el-table-column label="流程定义编号" align="center" prop="procDefId" :show-overflow-tooltip="true"/>
-      <el-table-column label="所属异常名称" align="center" prop="exName" :show-overflow-tooltip="true"/>
-      <!-- <el-table-column label="流程类别" align="center" prop="category" :formatter="categoryFormat" /> -->
-      <el-table-column label="流程版本" align="center" width="80px">
-        <template slot-scope="scope">
-          <el-tag size="medium" >{{ scope.row.exlvName }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="当前节点" align="center" prop="taskName"/>
-      <el-table-column label="提交时间" align="center" prop="createTime" width="180"/>
-      <el-table-column label="流程状态" align="center" width="100">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.wf_process_status" :value="scope.row.processStatus"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="耗时" align="center" prop="duration" width="180"/>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <!-- <el-button
-            type="text"
-            size="mini"
-            icon="el-icon-tickets"
-            @click="handleFlowRecord(scope.row)"
-          >详情</el-button> -->
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-search"
-            @click="handleViewer(scope.row)"
-          >查看流程</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-dialog title="查看异常记录" :visible.sync="processView.open" width="50%">
-      <el-image v-if="processView.img" :src="processView.img" />
-    </el-dialog>
+    <el-card shadow="never">
+      <div slot="header">
+        <div class="card-header">
+          <div>异常记录信息</div>
+        </div>
+      </div>
+      <div>
+        <el-table
+          v-loading="loading"
+          :data="processList"
+          @current-change="handleCurrentChange"
+          highlight-current-row
+        >
+          <el-table-column label="选择" width="55" align="center">
+            <template slot-scope="scope">
+              <el-radio :value="scope.row.procInsId === idSelect" :label="true" />
+            </template>
+          </el-table-column>
+          <el-table-column label="流程编号" align="center" prop="procInsId" :show-overflow-tooltip="true"/>
+          <el-table-column label="流程名称" align="center" prop="procDefName" :show-overflow-tooltip="true"/>
+          <el-table-column label="流程定义编号" align="center" prop="procDefId" :show-overflow-tooltip="true"/>
+          <el-table-column label="异常名称" align="center" prop="exName" />
+          <!-- <el-table-column label="流程类别" align="center" prop="category"     :formatter="categoryFormat" /> -->
+          <el-table-column label="流程版本" align="center" width="80px">
+            <template slot-scope="scope">
+              <el-tag size="medium" >{{ scope.row.exlvName }}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="当前节点" align="center" prop="taskName"/>
+          <el-table-column label="提交时间" align="center" prop="createTime" width="180"/>
+          <el-table-column label="结束时间" align="center" prop="finishTime" width="180"/>
+          <el-table-column label="流程状态" align="center" width="100">
+            <template slot-scope="scope">
+              <dict-tag :options="dict.type.wf_process_status" :value="scope.row.processStatus"/>
+            </template>
+          </el-table-column>
+          <el-table-column label="耗时" align="center" prop="duration" width="180"/>
+          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+            <template slot-scope="scope">
+              <!-- <el-button
+                type="text"
+                size="mini"
+                icon="el-icon-tickets"
+                @click="handleFlowRecord(scope.row)"
+              >详情</el-button> -->
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-search"
+                @click="handleViewer(scope.row)"
+              >查看流程</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+    </el-card>
+
+    <el-card shadow="never" class="controlled-card">
+      <div slot="header">
+        <div class="card-header">
+          <div>异常记录详情</div>
+        </div>
+      </div>
+      <el-tabs value="task">
+        <el-tab-pane label="处理进度" name="task">
+          <el-image v-if="idSelect && processView.img" :src="processView.img" />
+          <el-empty v-else description="选中异常记录后即可查看处理进度" />
+        </el-tab-pane>
+        <el-tab-pane label="处理日志" name="log">
+          <exception-record-log v-if='idSelect' :key="idSelect" :procInsId="idSelect" />
+          <el-empty v-else description="选中异常记录后即可查看处理日志" />
+        </el-tab-pane>
+      </el-tabs>
+    </el-card>
   </div>
 </template>
 
 <script>
-import { listOwnProcess, stopProcess, delProcess } from '@/api/workflow/process';
-import { listAllCategory } from '@/api/workflow/category';
 import { listProcess, getProcessFlowXml } from '@/api/system/exceptionRunning';
 import { pictureClip } from '@/utils/pictureClip';
+import ExceptionRecordLog from '@/views/system/exceptionRecordLog'
 
 export default {
   name: "exceptionRunningProcess",
   dicts: ['wf_process_status'],
   components: {
+    ExceptionRecordLog
   },
   data() {
     return {
       // 遮罩层
       loading: true,
       processLoading: true,
-      // 选中数组
-      ids: [],
+      // 选中内容
+      idSelect: undefined,
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -115,110 +149,41 @@ export default {
         this.loading = false;
       });
     },
-    // 取消按钮
-    cancel() {
-      this.open = false;
-      this.reset();
-    },
-    // 表单重置
-    reset() {
-      this.form = {
-        id: null,
-        name: null,
-        category: null,
-        key: null,
-        tenantId: null,
-        deployTime: null,
-        derivedFrom: null,
-        derivedFromRoot: null,
-        parentDeploymentId: null,
-        engineVersion: null
-      };
-      this.resetForm("form");
-    },
-    /** 搜索按钮操作 */
-    handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.getList();
-    },
-    /** 重置按钮操作 */
-    resetQuery() {
-      this.dateRange = [];
-      this.resetForm("queryForm");
-      this.handleQuery();
-    },
-    // 多选框选中数据
-    handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.procInsId);
-      this.single = selection.length !== 1;
-      this.multiple = !selection.length;
-    },
-    handleAgain(row) {
-      this.$router.push({
-        path: '/workflow/process/start/' + row.deployId,
-        query: {
-          definitionId: row.procDefId,
-          procInsId: row.procInsId
-        }
-      })
-      console.log(row);
-    },
-    /**  取消流程申请 */
-    handleStop(row){
-      const params = {
-        procInsId: row.procInsId
+    // 选中数据条目
+    handleCurrentChange(current, old) {
+      if (current) {
+        this.idSelect = current.procInsId
+        getProcessFlowXml(current.procInsId).then(response => {
+          pictureClip(response, "img/png").then(res => {
+            this.processView.img = res
+          })
+        })
       }
-      stopProcess(params).then( res => {
-        this.$modal.msgSuccess(res.msg);
-        this.getList();
-      });
-    },
-    /** 流程流转记录 */
-    handleFlowRecord(row) {
-      this.$router.push({
-        path: '/workflow/process/detail/' + row.procInsId,
-        query: {
-          processed: false
-        }
-      })
-    },
-    /** 删除按钮操作 */
-    handleDelete(row) {
-      const ids = row.procInsId || this.ids;
-      this.$confirm('是否确认删除流程定义编号为"' + ids + '"的数据项?', "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(function() {
-        return delProcess(ids);
-      }).then(() => {
-        this.getList();
-        this.$modal.msgSuccess("删除成功");
-      })
-    },
-    /** 导出按钮操作 */
-    handleExport() {
-      this.download('workflow/process/ownExport', {
-        ...this.queryParams
-      }, `wf_own_process_${new Date().getTime()}.xlsx`)
     },
     categoryFormat(row, column) {
       return this.categoryOptions.find(k => k.code === row.category)?.categoryName ?? '';
     },
-    /**
-     * 查看流程
-     * @param {any} row 异常记录
-     * @author YangZY
-     * @date 20250509
-     */
-    handleViewer(row) {
-      getProcessFlowXml(row.procInsId).then(response => {
-        pictureClip(response, "img/png").then(res => {
-          this.processView.img = res
-          this.processView.open = true
-        })
-      })
-    }
   }
 };
 </script>
+
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+::v-deep .el-radio span.el-radio__label {
+  display: none;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 17px;
+}
+.controlled-card {
+  margin-top: 10px;
+}
+</style>

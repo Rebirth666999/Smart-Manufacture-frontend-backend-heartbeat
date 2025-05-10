@@ -107,6 +107,11 @@ public class IcesExceptionRecordBo extends BaseEntity {
     private String exrImpactLevel;
 
     /**
+     * 异常执行流程
+     */
+    private String exrProcess;
+
+    /**
      * 已删除
      */
     private Long exrDelete;

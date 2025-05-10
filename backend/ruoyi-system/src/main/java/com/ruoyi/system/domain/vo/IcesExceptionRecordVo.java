@@ -114,6 +114,12 @@ public class IcesExceptionRecordVo {
     private String exrImpactLevel;
 
     /**
+     * 异常执行流程
+     */
+    @ExcelProperty(value = "异常执行流程")
+    private String exrProcess;
+
+    /**
      * 已删除
      */
     @ExcelProperty(value = "已删除")

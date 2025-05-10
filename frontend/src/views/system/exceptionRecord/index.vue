@@ -127,7 +127,7 @@
           <dict-tag :options="dict.type.ices_exception_record_level" :value="scope.row.exrLevel"/>
         </template>
       </el-table-column>
-      <el-table-column label="上报类型" align="center" prop="exrUserReport">
+      <el-table-column label="上报类型" width="90" align="center" prop="exrUserReport">
         <template slot-scope="scope">
           <el-tag type="warning" v-if="scope.row.exrUserReport === '信息系统'">自动上报</el-tag>
           <el-tag type="info" v-else>人工上报</el-tag>
@@ -144,6 +144,7 @@
           <dict-tag :options="dict.type.ices_exception_record_impact_level" :value="scope.row.exrImpactLevel"/>
         </template>
       </el-table-column>
+      <el-table-column label="异常执行流程" align="center" prop="exrProcess" />
       <!-- <el-table-column label="已删除" align="center" prop="exrDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">

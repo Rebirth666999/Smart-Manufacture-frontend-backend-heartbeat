@@ -21,6 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="exrImpactFactor" column="exr_impact_factor"/>
         <result property="exrImpactLevel" column="exr_impact_level"/>
         <result property="exrDelete" column="exr_delete"/>
+        <result property="exrProcess" column="exr_process"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>

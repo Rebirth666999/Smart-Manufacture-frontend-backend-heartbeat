@@ -193,21 +193,6 @@ export default {
         exsName: [
           { required: true, message: "名称不能为空", trigger: "blur" }
         ],
-        exsToken: [
-          { required: true, message: "认证token不能为空", trigger: "blur" }
-        ],
-        exsInspectionUrl: [
-          { required: true, message: "巡检接口不能为空", trigger: "blur" }
-        ],
-        exsHandleUrl: [
-          { required: true, message: "处理接口不能为空", trigger: "blur" }
-        ],
-        exsStateUrl: [
-          { required: true, message: "状态检查接口不能为空", trigger: "blur" }
-        ],
-        exsNotifyUrl: [
-          { required: true, message: "预警接口不能为空", trigger: "blur" }
-        ],
         exsDelete: [
           { required: true, message: "已删除不能为空", trigger: "blur" }
         ],

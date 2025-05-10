@@ -82,7 +82,7 @@
                 v-for="item in userList"
                 :key="item.userId"
                 :label="item.userName"
-                :value="item.userId"
+                :value="item.userName"
               >
               </el-option>
             </el-select>
@@ -99,7 +99,7 @@
                 v-for="item in userList"
                 :key="item.userId"
                 :label="item.userName"
-                :value="item.userId"
+                :value="item.userName"
               >
               </el-option>
             </el-select>
@@ -116,7 +116,7 @@
                 v-for="item in userList"
                 :key="item.userId"
                 :label="item.userName"
-                :value="item.userId"
+                :value="item.userName"
               >
               </el-option>
             </el-select>
@@ -133,7 +133,7 @@
                 v-for="item in userList"
                 :key="item.userId"
                 :label="item.userName"
-                :value="item.userId"
+                :value="item.userName"
               >
               </el-option>
             </el-select>

@@ -139,11 +139,6 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="24">
-          <el-form-item label="持续时间" prop="exrDuration">
-            <el-input v-model="form.exrDuration" placeholder="请输入持续时间" />
-          </el-form-item>
-        </el-col>
         <el-col :span="12">
           <el-form-item label="影响因子" prop="exrImpactFactor">
             <el-input v-model="form.exrImpactFactor" placeholder="请输入影响因子" />
@@ -228,9 +223,6 @@ export default {
         ],
         exrLevel: [
           { required: true, message: "等级不能为空", trigger: "change" }
-        ],
-        exrDuration: [
-          { required: true, message: "持续时间不能为空", trigger: "blur" }
         ],
         exrImpactFactor: [
           { required: true, message: "影响因子不能为空", trigger: "blur" }

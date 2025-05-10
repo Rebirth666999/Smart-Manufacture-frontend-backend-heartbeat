@@ -144,7 +144,6 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
             exceptionRecordBo.setExrUserReport("信息系统");  // 上报人
             exceptionRecordBo.setExrStat("4");  // 直接确认为异常
             exceptionRecordBo.setExrLevel("2");  // 异常等级：严重
-            exceptionRecordBo.setExrDuration(0L);  // 持续时间：无（因为是立即上报）
             exceptionRecordBo.setExrImpactFactor(0.5F);  // 影响因子
             exceptionRecordBo.setExrImpactLevel("2");  // 影响等级：严重
             // 参数：填入订单信息

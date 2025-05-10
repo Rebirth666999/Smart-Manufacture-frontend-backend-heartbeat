@@ -122,7 +122,7 @@
           <dict-tag :options="dict.type.ices_exception_record_status" :value="scope.row.exrStat"/>
         </template>
       </el-table-column>
-      <el-table-column label="等级" align="center" prop="exrLevel">
+      <el-table-column label="等级" width="90" align="center" prop="exrLevel">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_exception_record_level" :value="scope.row.exrLevel"/>
         </template>
@@ -137,9 +137,9 @@
       <el-table-column label="当前处理人" align="center" prop="exrUserHandle" />
       <el-table-column label="异常解除人" align="center" prop="exrUserFinish" />
       <el-table-column label="异常责任人" align="center" prop="exrUserResp" />
-      <el-table-column label="持续时间" align="center" prop="exrDuration" />
-      <el-table-column label="影响因子" align="center" prop="exrImpactFactor" />
-      <el-table-column label="影响等级" align="center" prop="exrImpactLevel">
+      <el-table-column label="上报时间" align="center" prop="exrCdate" />
+      <el-table-column label="影响因子" width="90" align="center" prop="exrImpactFactor" />
+      <el-table-column label="影响等级" width="90" align="center" prop="exrImpactLevel">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_exception_record_impact_level" :value="scope.row.exrImpactLevel"/>
         </template>

@@ -72,9 +72,9 @@ public class IcesExceptionRecord extends BaseEntity {
      */
     private String exrUserResp;
     /**
-     * 持续时间
+     * 上报时间
      */
-    private Long exrDuration;
+    private String exrCdate;
     /**
      * 影响因子
      */

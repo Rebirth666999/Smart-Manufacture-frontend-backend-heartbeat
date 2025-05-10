@@ -89,10 +89,9 @@ public class IcesExceptionRecordBo extends BaseEntity {
     private String exrUserResp;
 
     /**
-     * 持续时间
+     * 上报时间
      */
-    @NotNull(message = "持续时间不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long exrDuration;
+    private String exrCdate;
 
     /**
      * 影响因子

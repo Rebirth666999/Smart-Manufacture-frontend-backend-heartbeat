@@ -96,10 +96,10 @@ public class IcesExceptionRecordVo {
     private String exrUserResp;
 
     /**
-     * 持续时间
+     * 上报时间
      */
-    @ExcelProperty(value = "持续时间")
-    private Long exrDuration;
+    @ExcelProperty(value = "上报时间")
+    private String exrCdate;
 
     /**
      * 影响因子

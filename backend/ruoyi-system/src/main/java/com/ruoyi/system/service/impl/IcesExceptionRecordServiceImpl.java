@@ -33,6 +33,7 @@ import com.ruoyi.system.domain.IcesExceptionRecord;
 import com.ruoyi.system.mapper.IcesExceptionRecordMapper;
 import com.ruoyi.system.service.IIcesExceptionRecordService;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -95,6 +96,9 @@ public class IcesExceptionRecordServiceImpl extends FlowServiceFactory implement
     @Override
     public IcesExceptionRecordVo insertByBo(IcesExceptionRecordBo bo) {
         bo.setExrCode(codeService.insertByType("ExceptionRecord"));
+        // 设置上报时间
+        String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        bo.setExrCdate(cDate);
         // 如果未填写上报人，则使用当前用户
         if (StringUtils.isBlank(bo.getExrUserReport())) {
             bo.setExrUserReport(getLoginUsername());

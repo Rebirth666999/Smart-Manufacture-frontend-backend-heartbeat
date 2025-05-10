@@ -17,7 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="exrUserHandle" column="exr_user_handle"/>
         <result property="exrUserFinish" column="exr_user_finish"/>
         <result property="exrUserResp" column="exr_user_resp"/>
-        <result property="exrDuration" column="exr_duration"/>
+        <result property="exrCdate" column="exr_cdate"/>
         <result property="exrImpactFactor" column="exr_impact_factor"/>
         <result property="exrImpactLevel" column="exr_impact_level"/>
         <result property="exrDelete" column="exr_delete"/>

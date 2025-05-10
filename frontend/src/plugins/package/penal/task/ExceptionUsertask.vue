@@ -1,20 +1,20 @@
 <template>
   <div class="panel-tab__content">
     <div class="element-property input-property">
-      <div class="element-property__label">处理人：</div>
+      <div class="element-property__label">处理部门：</div>
       <div class="element-property__value">
         <el-select
           multiple
           size="mini"
-          v-model="user"
-          @change="updateUser"
-          @blur="updateUser"
+          v-model="dept"
+          @change="updateDept"
+          @blur="updateDept"
         >
           <el-option
-            v-for="item in userList"
-            :key="item.userId"
-            :label="item.userName"
-            :value="item.userId"
+            v-for="item in deptList"
+            :key="item.deptId"
+            :label="item.deptName"
+            :value="item.deptId"
           >
           </el-option>
         </el-select>
@@ -50,11 +50,11 @@ export default {
   name: "EquipmentOperationStepProperties",
   props: {
     id: String,
-    userList: Array
+    deptList: Array
   },
   data() {
     return {
-      user: [],
+      dept: [],
       endFromThis: true,
       jumpFromThis: true,
     };
@@ -64,19 +64,19 @@ export default {
     id: {
       immediate: true,
       handler: function(id) {
-        const userStr = window.bpmnInstances.bpmnElement.businessObject.$attrs.user
-        if (userStr) {
-          this.user = userStr.split(",")
-          this.user.pop()
+        const deptStr = window.bpmnInstances.bpmnElement.businessObject.assignee
+        if (deptStr) {
+          this.dept = deptStr.split(",")
+          this.dept.pop()
           // 转换为number
-          for (let i in this.user) {
-            this.user[i] = parseInt(this.user[i])
+          for (let i in this.dept) {
+            this.dept[i] = parseInt(this.dept[i])
           }
         } else {
-          this.user = []
+          this.dept = []
         }
 
-        const text = window.bpmnInstances.bpmnElement.businessObject.$attrs.text
+        const text = window.bpmnInstances.bpmnElement.businessObject.text
         if (text) {
           const endFromThis = text[0] === '1'
           const jumpFromThis = text[1] === '1'
@@ -91,10 +91,10 @@ export default {
     }
   },
   methods: {
-    // 更新属性：处理人
-    updateUser() {
+    // 更新属性：部门
+    updateDept() {
       let result = ""
-      this.user.forEach(ele => {
+      this.dept.forEach(ele => {
         result += ele
         result += ","
       })
@@ -103,7 +103,7 @@ export default {
         { assignee: result }
       );
     },
-    // 更新属性
+    // 更新属性：是否可结束、跳转
     updateText() {
       let text = ""
       text += this.endFromThis ? '1' : '0'
@@ -123,7 +123,7 @@ export default {
 <style scoped>
 .long-label {
   display: block;
-  width: 37%;
+  width: 31%;
   text-align: right;
   overflow: hidden;
   padding-right: 2px;

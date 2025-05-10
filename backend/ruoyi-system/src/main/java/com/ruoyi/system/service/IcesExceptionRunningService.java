@@ -166,7 +166,7 @@ public class IcesExceptionRunningService extends FlowServiceFactory {
         List<IcesExceptionLifecycleVo> lifecycles = lifecycleService.queryList(new IcesExceptionLifecycleBo());
         List<IcesExceptionLifecycleVersionVo> lifecycleVersions = lifecycleVersionService.queryList(new IcesExceptionLifecycleVersionBo());
         // 获取当前用户信息
-        Long currentUser = getLoginUserId();
+        LoginUser currentUser = getLoginUser();
         if (currentUser != null) {
             for (Task task : taskList) {
                 // 通过解析逗号分隔的assignee
@@ -174,7 +174,7 @@ public class IcesExceptionRunningService extends FlowServiceFactory {
                 boolean assign = false;
                 String[] assignees = task.getAssignee().split(",");
                 for (String assignee : assignees) {
-                    if (assignee.equals(currentUser.toString())) {
+                    if (assignee.equals(currentUser.getDeptId().toString())) {
                         assign = true;
                         break;
                     }
@@ -230,17 +230,17 @@ public class IcesExceptionRunningService extends FlowServiceFactory {
     }
 
     /**
-     * 获取当前用户ID
-     * @return 用户ID
+     * 获取当前用户
+     * @return 用户
      */
-    private Long getLoginUserId() {
+    private LoginUser getLoginUser() {
         LoginUser loginUser;
         try {
             loginUser = LoginHelper.getLoginUser();
         } catch (Exception e) {
             return null;
         }
-        return ObjectUtil.isNotNull(loginUser) ? loginUser.getUserId() : null;
+        return ObjectUtil.isNotNull(loginUser) ? loginUser : null;
     }
 
     /**
@@ -320,7 +320,7 @@ public class IcesExceptionRunningService extends FlowServiceFactory {
         List<IcesExceptionLifecycleVersionVo> lifecycleVersions = lifecycleVersionService.queryList(new IcesExceptionLifecycleVersionBo());
 
         // 获取当前用户信息
-        Long currentUser = getLoginUserId();
+        LoginUser currentUser = getLoginUser();
         if (currentUser != null) {
             for (HistoricTaskInstance task : historicTaskInstanceList) {
                 // 通过解析逗号分隔的assignee
@@ -328,7 +328,7 @@ public class IcesExceptionRunningService extends FlowServiceFactory {
                 boolean assign = false;
                 String[] assignees = task.getAssignee().split(",");
                 for (String assignee : assignees) {
-                    if (assignee.equals(currentUser.toString())) {
+                    if (assignee.equals(currentUser.getDeptId().toString())) {
                         assign = true;
                         break;
                     }

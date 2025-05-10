@@ -86,6 +86,7 @@ public class IcesExceptionRecordServiceImpl extends FlowServiceFactory implement
         lqw.eq(StringUtils.isNotBlank(bo.getExCode()), IcesExceptionRecord::getExCode, bo.getExCode());
         lqw.eq(StringUtils.isNotBlank(bo.getExrStat()), IcesExceptionRecord::getExrStat, bo.getExrStat());
         lqw.eq(StringUtils.isNotBlank(bo.getExrLevel()), IcesExceptionRecord::getExrLevel, bo.getExrLevel());
+        lqw.eq(StringUtils.isNotBlank(bo.getExrProcess()), IcesExceptionRecord::getExrProcess, bo.getExrProcess());
         lqw.eq(bo.getExrDelete() != null, IcesExceptionRecord::getExrDelete, bo.getExrDelete());
         return lqw;
     }

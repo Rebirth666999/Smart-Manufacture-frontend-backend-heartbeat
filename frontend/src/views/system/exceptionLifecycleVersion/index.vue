@@ -63,7 +63,11 @@
       <el-table-column label="生命周期版本ID" align="center" prop="exlvId" v-if="true"/>
       <el-table-column label="生命周期版本编码" align="center" prop="exlvCode" />
       <el-table-column label="所属生命周期" align="center" prop="exlCode" />
-      <el-table-column label="版本名称" align="center" prop="exlvName" />
+      <el-table-column label="版本" align="center" prop="exlvName">
+        <template slot-scope="scope">
+          <el-tag size="medium" >{{ scope.row.exlvName }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="模型定义ID" align="center" prop="exlvDefId" />
       <el-table-column label="模型文件ID" align="center" prop="exlvGeId" />
       <!-- <el-table-column label="已删除" align="center" prop="exlvDelete" /> -->

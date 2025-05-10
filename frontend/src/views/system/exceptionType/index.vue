@@ -279,6 +279,11 @@ export default {
         if (valid) {
           this.buttonLoading = true;
           if (this.form.extId != null) {
+            if (this.form.extCodeParent === this.form.extCode) {
+              this.$modal.msgError("上级异常不可与自身相同");
+              this.buttonLoading = false;
+              return
+            }
             updateExceptionType(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;

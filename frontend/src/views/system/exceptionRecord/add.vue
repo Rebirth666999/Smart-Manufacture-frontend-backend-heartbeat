@@ -47,29 +47,6 @@
             <el-input v-model="form.exrDesc" type="textarea" placeholder="请输入内容" />
           </el-form-item>
         </el-col>
-        <el-col :span="24">
-          <el-form-item label="参数" prop="exrParam">
-            <el-table class="mb8" :data="paramList">
-              <el-table-column label="序号" align="center" type="index" />
-              <el-table-column label="键" align="center" prop="paramKey">
-                <template slot-scope="scope">
-                  <el-input v-model="paramList[scope.$index].key" />
-                </template>
-              </el-table-column>
-              <el-table-column label="值" align="center" prop="paramVal">
-                <template slot-scope="scope">
-                  <el-input v-model="paramList[scope.$index].val" />
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" align="center" width="80px">
-                <template slot-scope="scope">
-                  <el-button @click="deleteParam(scope)" type="danger" icon="el-icon-delete" size="small" circle plain></el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-            <el-button @click="addParam" type="primary" icon="el-icon-plus" size="small" plain>新增</el-button>
-          </el-form-item>
-        </el-col>
         <el-col :span="12">
           <el-form-item label="状态" prop="exrStat">
             <el-select v-model="form.exrStat" placeholder="请选择状态" disabled>
@@ -182,6 +159,30 @@
                 :value="dict.value"
               ></el-option>
             </el-select>
+          </el-form-item>
+        </el-col>
+        
+        <el-col :span="24">
+          <el-form-item label="参数" prop="exrParam">
+            <el-table class="mb8" :data="paramList">
+              <el-table-column label="序号" align="center" type="index" />
+              <el-table-column label="键" align="center" prop="paramKey">
+                <template slot-scope="scope">
+                  <el-input v-model="paramList[scope.$index].key" />
+                </template>
+              </el-table-column>
+              <el-table-column label="值" align="center" prop="paramVal">
+                <template slot-scope="scope">
+                  <el-input v-model="paramList[scope.$index].val" />
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" align="center" width="80px">
+                <template slot-scope="scope">
+                  <el-button @click="deleteParam(scope)" type="danger" icon="el-icon-delete" size="small" circle plain></el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-button @click="addParam" type="primary" icon="el-icon-plus" size="small" plain>新增</el-button>
           </el-form-item>
         </el-col>
       </el-form>

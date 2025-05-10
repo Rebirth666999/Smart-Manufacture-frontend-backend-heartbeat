@@ -1,0 +1,18 @@
+// generated from rosidl_adapter/resource/action.idl.em
+// with input from interfaces/action/MoveToRight.action
+// generated code does not contain a copyright notice
+
+
+module interfaces {
+  module action {
+    struct MoveToRight_Goal {
+      uint8 structure_needs_at_least_one_member;
+    };
+    struct MoveToRight_Result {
+      string finish;
+    };
+    struct MoveToRight_Feedback {
+      int32 feedback;
+    };
+  };
+};

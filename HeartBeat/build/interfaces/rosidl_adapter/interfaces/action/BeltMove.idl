@@ -1,0 +1,18 @@
+// generated from rosidl_adapter/resource/action.idl.em
+// with input from interfaces/action/BeltMove.action
+// generated code does not contain a copyright notice
+
+
+module interfaces {
+  module action {
+    struct BeltMove_Goal {
+      uint8 structure_needs_at_least_one_member;
+    };
+    struct BeltMove_Result {
+      string finish;
+    };
+    struct BeltMove_Feedback {
+      int32 feedback;
+    };
+  };
+};

@@ -1,0 +1,38 @@
+running egg_info
+creating ../../build/belt_long_server/belt_long_server.egg-info
+writing ../../build/belt_long_server/belt_long_server.egg-info/PKG-INFO
+writing dependency_links to ../../build/belt_long_server/belt_long_server.egg-info/dependency_links.txt
+writing entry points to ../../build/belt_long_server/belt_long_server.egg-info/entry_points.txt
+writing requirements to ../../build/belt_long_server/belt_long_server.egg-info/requires.txt
+writing top-level names to ../../build/belt_long_server/belt_long_server.egg-info/top_level.txt
+writing manifest file '../../build/belt_long_server/belt_long_server.egg-info/SOURCES.txt'
+reading manifest file '../../build/belt_long_server/belt_long_server.egg-info/SOURCES.txt'
+writing manifest file '../../build/belt_long_server/belt_long_server.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/berry/HeartBeat/build/belt_long_server/build
+creating /home/berry/HeartBeat/build/belt_long_server/build/lib
+creating /home/berry/HeartBeat/build/belt_long_server/build/lib/belt_long_server
+copying belt_long_server/BeltCtr.py -> /home/berry/HeartBeat/build/belt_long_server/build/lib/belt_long_server
+copying belt_long_server/belt_long_server.py -> /home/berry/HeartBeat/build/belt_long_server/build/lib/belt_long_server
+copying belt_long_server/__init__.py -> /home/berry/HeartBeat/build/belt_long_server/build/lib/belt_long_server
+running install
+running install_lib
+creating /home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages/belt_long_server
+copying /home/berry/HeartBeat/build/belt_long_server/build/lib/belt_long_server/BeltCtr.py -> /home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages/belt_long_server
+copying /home/berry/HeartBeat/build/belt_long_server/build/lib/belt_long_server/belt_long_server.py -> /home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages/belt_long_server
+copying /home/berry/HeartBeat/build/belt_long_server/build/lib/belt_long_server/__init__.py -> /home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages/belt_long_server
+byte-compiling /home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages/belt_long_server/BeltCtr.py to BeltCtr.cpython-310.pyc
+byte-compiling /home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages/belt_long_server/belt_long_server.py to belt_long_server.cpython-310.pyc
+byte-compiling /home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages/belt_long_server/__init__.py to __init__.cpython-310.pyc
+running install_data
+creating /home/berry/HeartBeat/install/belt_long_server/share/ament_index
+creating /home/berry/HeartBeat/install/belt_long_server/share/ament_index/resource_index
+creating /home/berry/HeartBeat/install/belt_long_server/share/ament_index/resource_index/packages
+copying resource/belt_long_server -> /home/berry/HeartBeat/install/belt_long_server/share/ament_index/resource_index/packages
+copying package.xml -> /home/berry/HeartBeat/install/belt_long_server/share/belt_long_server
+running install_egg_info
+Copying ../../build/belt_long_server/belt_long_server.egg-info to /home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages/belt_long_server-0.0.0-py3.10.egg-info
+running install_scripts
+Installing belt_long_server script to /home/berry/HeartBeat/install/belt_long_server/lib/belt_long_server
+writing list of installed files to '/home/berry/HeartBeat/build/belt_long_server/install.log'

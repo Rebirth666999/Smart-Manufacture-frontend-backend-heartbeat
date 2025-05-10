@@ -16,6 +16,7 @@
 import ProcessDesigner from '@/components/ProcessDesigner';
 import { saveModel, getModel } from "@/api/system/exceptionLifecycle";
 import { listUser } from "@/api/system/user";
+import { listDept } from "@/api/system/dept";
 
 export default {
   name: "Process",
@@ -46,13 +47,15 @@ export default {
       exlId: '',
       // 额外传入编辑器的内容
       extraList: {
-        userList: []
+        userList: [],
+        deptList: []
       }
     };
   },
   async created() {
     this.designerData.loading = true
     await this.getUserList()
+    await this.getDeptList()
     this.exlId = this.$route.query.exlId
     getModel({exlId: this.exlId}).then(response => {
       this.designerData.bpmnXml = response.data
@@ -64,6 +67,7 @@ export default {
   async activated() {
     this.designerData.loading = true
     await this.getUserList()
+    await this.getDeptList()
     this.exlId = this.$route.query.exlId
     getModel({exlId: this.exlId}).then(response => {
       this.designerData.bpmnXml = response.data
@@ -73,6 +77,20 @@ export default {
     })
   },
   methods: {
+    // 获取部门列表
+    getDeptList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listDept().then(response => {
+          this.extraList.deptList = response.data
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     // 获取用户列表
     getUserList() {
       return new Promise((resolve, reject) => {

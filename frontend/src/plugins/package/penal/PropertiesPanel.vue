@@ -126,7 +126,7 @@
         <div slot="title" class="panel-tab__title">
           <i class="el-icon-s-promotion"></i>人工处理任务属性
         </div>
-        <exception-usertask :id="elementId" :userList="extraList.userList" />
+        <exception-usertask :id="elementId" :deptList="extraList.deptList" />
       </el-collapse-item>
     </el-collapse>
   </div>

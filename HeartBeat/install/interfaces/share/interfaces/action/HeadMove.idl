@@ -1,0 +1,28 @@
+// generated from rosidl_adapter/resource/action.idl.em
+// with input from interfaces/action/HeadMove.action
+// generated code does not contain a copyright notice
+
+
+module interfaces {
+  module action {
+    @verbatim (language="comment", text=
+      "Goal")
+    struct HeadMove_Goal {
+      sequence<double> pos;
+
+      string lst;
+    };
+    @verbatim (language="comment", text=
+      "Result")
+    struct HeadMove_Result {
+      string finish;
+    };
+    @verbatim (language="comment", text=
+      "Feedback")
+    struct HeadMove_Feedback {
+      string ast;
+
+      double duration;
+    };
+  };
+};

@@ -1,0 +1,40 @@
+[4.383s] Invoking command in '/home/berry/HeartBeat/src/track_server': PYTHONPATH=/home/berry/HeartBeat/build/track_server/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/track_server build --build-base /home/berry/HeartBeat/build/track_server/build install --record /home/berry/HeartBeat/build/track_server/install.log --single-version-externally-managed install_data
+[6.167s] running egg_info
+[6.169s] creating ../../build/track_server/track_server.egg-info
+[6.171s] writing ../../build/track_server/track_server.egg-info/PKG-INFO
+[6.172s] writing dependency_links to ../../build/track_server/track_server.egg-info/dependency_links.txt
+[6.173s] writing entry points to ../../build/track_server/track_server.egg-info/entry_points.txt
+[6.173s] writing requirements to ../../build/track_server/track_server.egg-info/requires.txt
+[6.174s] writing top-level names to ../../build/track_server/track_server.egg-info/top_level.txt
+[6.175s] writing manifest file '../../build/track_server/track_server.egg-info/SOURCES.txt'
+[6.183s] reading manifest file '../../build/track_server/track_server.egg-info/SOURCES.txt'
+[6.187s] writing manifest file '../../build/track_server/track_server.egg-info/SOURCES.txt'
+[6.187s] running build
+[6.188s] running build_py
+[6.189s] creating /home/berry/HeartBeat/build/track_server/build
+[6.189s] creating /home/berry/HeartBeat/build/track_server/build/lib
+[6.190s] creating /home/berry/HeartBeat/build/track_server/build/lib/track_server
+[6.190s] copying track_server/track_server.py -> /home/berry/HeartBeat/build/track_server/build/lib/track_server
+[6.191s] copying track_server/__init__.py -> /home/berry/HeartBeat/build/track_server/build/lib/track_server
+[6.191s] copying track_server/track.py -> /home/berry/HeartBeat/build/track_server/build/lib/track_server
+[6.192s] running install
+[6.194s] running install_lib
+[6.197s] creating /home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages/track_server
+[6.198s] copying /home/berry/HeartBeat/build/track_server/build/lib/track_server/track_server.py -> /home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages/track_server
+[6.199s] copying /home/berry/HeartBeat/build/track_server/build/lib/track_server/__init__.py -> /home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages/track_server
+[6.199s] copying /home/berry/HeartBeat/build/track_server/build/lib/track_server/track.py -> /home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages/track_server
+[6.204s] byte-compiling /home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages/track_server/track_server.py to track_server.cpython-310.pyc
+[6.209s] byte-compiling /home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages/track_server/__init__.py to __init__.cpython-310.pyc
+[6.211s] byte-compiling /home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages/track_server/track.py to track.cpython-310.pyc
+[6.214s] running install_data
+[6.215s] creating /home/berry/HeartBeat/install/track_server/share/ament_index
+[6.216s] creating /home/berry/HeartBeat/install/track_server/share/ament_index/resource_index
+[6.216s] creating /home/berry/HeartBeat/install/track_server/share/ament_index/resource_index/packages
+[6.217s] copying resource/track_server -> /home/berry/HeartBeat/install/track_server/share/ament_index/resource_index/packages
+[6.217s] copying package.xml -> /home/berry/HeartBeat/install/track_server/share/track_server
+[6.217s] running install_egg_info
+[6.294s] Copying ../../build/track_server/track_server.egg-info to /home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages/track_server-0.0.0-py3.10.egg-info
+[6.300s] running install_scripts
+[6.443s] Installing track_server script to /home/berry/HeartBeat/install/track_server/lib/track_server
+[6.445s] writing list of installed files to '/home/berry/HeartBeat/build/track_server/install.log'
+[6.591s] Invoked command in '/home/berry/HeartBeat/src/track_server' returned '0': PYTHONPATH=/home/berry/HeartBeat/build/track_server/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/track_server build --build-base /home/berry/HeartBeat/build/track_server/build install --record /home/berry/HeartBeat/build/track_server/install.log --single-version-externally-managed install_data

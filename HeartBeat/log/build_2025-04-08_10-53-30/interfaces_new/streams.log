@@ -1,0 +1,521 @@
+[5.132s] Invoking command in '/home/berry/HeartBeat/build/interfaces_new': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/berry/HeartBeat/install/track_server:/home/berry/HeartBeat/install/controller:/home/berry/HeartBeat/install/belt_short_server:/home/berry/HeartBeat/install/belt_long_server:/home/berry/RoArm/install/test1:/home/berry/RoArm/install/serial_ctrl:/home/berry/RoArm/install/pos_sub:/home/berry/RoArm/install/pos_pub:/home/berry/RoArm/install/pos_client:/home/berry/RoArm/install/Position_Sub:/home/berry/RoArm/install/Pos_Server:/home/berry/RoArm/install/Pos_Client:/home/berry/ices_ws/install/track_server:/home/berry/ices_ws/install/launch_test:/home/berry/ices_ws/install/control:/home/berry/ices_ws/install/c_arm:/home/berry/ices_ws/install/arm_server:/home/berry/ices_ws/install/belt_short_server:/home/berry/ices_ws/install/belt_short_client:/home/berry/ices_ws/install/belt_long_server:/opt/ros/humble /usr/bin/cmake --build /home/berry/HeartBeat/build/interfaces_new -- -j4 -l4
+[5.615s] [  0%] Built target interfaces_new__cpp
+[5.647s] [ 12%] Built target interfaces_new__rosidl_generator_c
+[5.923s] [ 24%] Built target interfaces_new__rosidl_typesupport_cpp
+[5.927s] [ 24%] Built target ament_cmake_python_copy_interfaces_new
+[6.045s] [ 40%] Built target interfaces_new__rosidl_typesupport_introspection_cpp
+[6.054s] [ 48%] Built target interfaces_new__rosidl_typesupport_fastrtps_cpp
+[6.261s] [ 60%] Built target interfaces_new__rosidl_typesupport_introspection_c
+[6.268s] [ 72%] Built target interfaces_new__rosidl_typesupport_fastrtps_c
+[6.331s] [ 84%] Built target interfaces_new__rosidl_typesupport_c
+[6.456s] [ 84%] Built target interfaces_new
+[6.591s] [ 85%] Built target interfaces_new__py
+[6.916s] [ 96%] Built target interfaces_new__rosidl_generator_py
+[7.087s] [35m[1mConsolidate compiler generated dependencies of target interfaces_new__rosidl_typesupport_fastrtps_c__pyext[0m
+[7.105s] [35m[1mConsolidate compiler generated dependencies of target interfaces_new__rosidl_typesupport_introspection_c__pyext[0m
+[7.132s] [35m[1mConsolidate compiler generated dependencies of target interfaces_new__rosidl_typesupport_c__pyext[0m
+[7.286s] [ 97%] [32mBuilding C object CMakeFiles/interfaces_new__rosidl_typesupport_fastrtps_c__pyext.dir/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c.o[0m
+[7.321s] [ 98%] [32mBuilding C object CMakeFiles/interfaces_new__rosidl_typesupport_c__pyext.dir/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c.o[0m
+[7.334s] [ 99%] [32mBuilding C object CMakeFiles/interfaces_new__rosidl_typesupport_introspection_c__pyext.dir/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c.o[0m
+[8.678s] running egg_info
+[8.683s] writing interfaces_new.egg-info/PKG-INFO
+[8.685s] writing dependency_links to interfaces_new.egg-info/dependency_links.txt
+[8.686s] writing top-level names to interfaces_new.egg-info/top_level.txt
+[8.704s] reading manifest file 'interfaces_new.egg-info/SOURCES.txt'
+[8.710s] writing manifest file 'interfaces_new.egg-info/SOURCES.txt'
+[8.976s] [ 99%] Built target ament_cmake_python_build_interfaces_new_egg
+[9.288s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:17350:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__goal__create_ros_message[m[K’
+[9.289s] 17350 | static void * [01;31m[Kinterfaces_new__action__move_time__goal__create_ros_message[m[K(void)
+[9.289s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.290s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:5177:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__goal__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.290s]  5177 | static void * [01;36m[Kinterfaces_new__action__move_time__goal__create_ros_message[m[K(void)
+[9.292s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.293s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:17355:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__goal__destroy_ros_message[m[K’
+[9.294s] 17355 | static void [01;31m[Kinterfaces_new__action__move_time__goal__destroy_ros_message[m[K(void * raw_ros_message)
+[9.295s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.295s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:5182:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__goal__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[9.296s]  5182 | static void [01;36m[Kinterfaces_new__action__move_time__goal__destroy_ros_message[m[K(void * raw_ros_message)
+[9.296s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.298s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:17372:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__goal[m[K’
+[9.303s] 17372 | [01;31m[K_register_msg_type__action__move_time__goal[m[K(PyObject * pymodule)
+[9.316s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.316s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:5199:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__goal[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.317s]  5199 | [01;36m[K_register_msg_type__action__move_time__goal[m[K(PyObject * pymodule)
+[9.318s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.318s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:17492:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__result__create_ros_message[m[K’
+[9.319s] 17492 | static void * [01;31m[Kinterfaces_new__action__move_time__result__create_ros_message[m[K(void)
+[9.320s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.320s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:5319:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__result__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.322s]  5319 | static void * [01;36m[Kinterfaces_new__action__move_time__result__create_ros_message[m[K(void)
+[9.323s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.324s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:17497:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__result__destroy_ros_message[m[K’
+[9.325s] 17497 | static void [01;31m[Kinterfaces_new__action__move_time__result__destroy_ros_message[m[K(void * raw_ros_message)
+[9.329s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.330s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:5324:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__result__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[9.333s]  5324 | static void [01;36m[Kinterfaces_new__action__move_time__result__destroy_ros_message[m[K(void * raw_ros_message)
+[9.333s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.338s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:17514:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__result[m[K’
+[9.347s] 17514 | [01;31m[K_register_msg_type__action__move_time__result[m[K(PyObject * pymodule)
+[9.349s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.356s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:5341:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__result[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.357s]  5341 | [01;36m[K_register_msg_type__action__move_time__result[m[K(PyObject * pymodule)
+[9.358s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.359s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:17350:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__goal__create_ros_message[m[K’
+[9.367s] 17350 | static void * [01;31m[Kinterfaces_new__action__move_time__goal__create_ros_message[m[K(void)
+[9.368s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.369s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:5177:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__goal__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.370s]  5177 | static void * [01;36m[Kinterfaces_new__action__move_time__goal__create_ros_message[m[K(void)
+[9.371s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.374s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:17355:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__goal__destroy_ros_message[m[K’
+[9.380s] 17355 | static void [01;31m[Kinterfaces_new__action__move_time__goal__destroy_ros_message[m[K(void * raw_ros_message)
+[9.381s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.381s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:5182:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__goal__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[9.382s]  5182 | static void [01;36m[Kinterfaces_new__action__move_time__goal__destroy_ros_message[m[K(void * raw_ros_message)
+[9.384s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.385s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:17372:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__goal[m[K’
+[9.386s] 17372 | [01;31m[K_register_msg_type__action__move_time__goal[m[K(PyObject * pymodule)
+[9.387s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.388s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:5199:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__goal[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.389s]  5199 | [01;36m[K_register_msg_type__action__move_time__goal[m[K(PyObject * pymodule)
+[9.391s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.392s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:17350:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__goal__create_ros_message[m[K’
+[9.393s] 17350 | static void * [01;31m[Kinterfaces_new__action__move_time__goal__create_ros_message[m[K(void)
+[9.394s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.396s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:5177:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__goal__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.397s]  5177 | static void * [01;36m[Kinterfaces_new__action__move_time__goal__create_ros_message[m[K(void)
+[9.398s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.399s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:17355:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__goal__destroy_ros_message[m[K’
+[9.399s] 17355 | static void [01;31m[Kinterfaces_new__action__move_time__goal__destroy_ros_message[m[K(void * raw_ros_message)
+[9.403s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.404s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:5182:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__goal__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[9.408s]  5182 | static void [01;36m[Kinterfaces_new__action__move_time__goal__destroy_ros_message[m[K(void * raw_ros_message)
+[9.408s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.419s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:17492:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__result__create_ros_message[m[K’
+[9.420s] 17492 | static void * [01;31m[Kinterfaces_new__action__move_time__result__create_ros_message[m[K(void)
+[9.421s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.421s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:5319:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__result__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.422s]  5319 | static void * [01;36m[Kinterfaces_new__action__move_time__result__create_ros_message[m[K(void)
+[9.422s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.423s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:17634:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__feedback__create_ros_message[m[K’
+[9.424s] 17634 | static void * [01;31m[Kinterfaces_new__action__move_time__feedback__create_ros_message[m[K(void)
+[9.424s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.425s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:17372:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__goal[m[K’
+[9.426s] 17372 | [01;31m[K_register_msg_type__action__move_time__goal[m[K(PyObject * pymodule)
+[9.427s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.428s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:5461:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__feedback__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.428s]  5461 | static void * [01;36m[Kinterfaces_new__action__move_time__feedback__create_ros_message[m[K(void)
+[9.429s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.429s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:17639:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__feedback__destroy_ros_message[m[K’
+[9.430s] 17639 | static void [01;31m[Kinterfaces_new__action__move_time__feedback__destroy_ros_message[m[K(void * raw_ros_message)
+[9.430s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.431s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:5466:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__feedback__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[9.431s]  5466 | static void [01;36m[Kinterfaces_new__action__move_time__feedback__destroy_ros_message[m[K(void * raw_ros_message)
+[9.432s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.444s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:17656:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__feedback[m[K’
+[9.445s] 17656 | [01;31m[K_register_msg_type__action__move_time__feedback[m[K(PyObject * pymodule)
+[9.446s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.447s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:17497:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__result__destroy_ros_message[m[K’
+[9.448s] 17497 | static void [01;31m[Kinterfaces_new__action__move_time__result__destroy_ros_message[m[K(void * raw_ros_message)
+[9.448s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.449s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:5199:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__goal[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.450s]  5199 | [01;36m[K_register_msg_type__action__move_time__goal[m[K(PyObject * pymodule)
+[9.451s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.453s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:5324:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__result__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[9.453s]  5324 | static void [01;36m[Kinterfaces_new__action__move_time__result__destroy_ros_message[m[K(void * raw_ros_message)
+[9.454s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.458s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:17514:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__result[m[K’
+[9.459s] 17514 | [01;31m[K_register_msg_type__action__move_time__result[m[K(PyObject * pymodule)
+[9.464s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.465s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:5483:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__feedback[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.466s]  5483 | [01;36m[K_register_msg_type__action__move_time__feedback[m[K(PyObject * pymodule)
+[9.467s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.475s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:17492:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__result__create_ros_message[m[K’
+[9.476s] 17492 | static void * [01;31m[Kinterfaces_new__action__move_time__result__create_ros_message[m[K(void)
+[9.477s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.477s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:5341:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__result[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.478s]  5341 | [01;36m[K_register_msg_type__action__move_time__result[m[K(PyObject * pymodule)
+[9.479s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.480s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:5319:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__result__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.480s]  5319 | static void * [01;36m[Kinterfaces_new__action__move_time__result__create_ros_message[m[K(void)
+[9.481s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.481s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:17497:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__result__destroy_ros_message[m[K’
+[9.482s] 17497 | static void [01;31m[Kinterfaces_new__action__move_time__result__destroy_ros_message[m[K(void * raw_ros_message)
+[9.483s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.487s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:5324:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__result__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[9.488s]  5324 | static void [01;36m[Kinterfaces_new__action__move_time__result__destroy_ros_message[m[K(void * raw_ros_message)
+[9.488s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.489s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:17634:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__feedback__create_ros_message[m[K’
+[9.490s] 17634 | static void * [01;31m[Kinterfaces_new__action__move_time__feedback__create_ros_message[m[K(void)
+[9.490s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.491s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:5461:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__feedback__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.492s]  5461 | static void * [01;36m[Kinterfaces_new__action__move_time__feedback__create_ros_message[m[K(void)
+[9.492s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.493s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:17514:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__result[m[K’
+[9.494s] 17514 | [01;31m[K_register_msg_type__action__move_time__result[m[K(PyObject * pymodule)
+[9.494s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.495s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:5341:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__result[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.496s]  5341 | [01;36m[K_register_msg_type__action__move_time__result[m[K(PyObject * pymodule)
+[9.497s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.498s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:17639:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__feedback__destroy_ros_message[m[K’
+[9.499s] 17639 | static void [01;31m[Kinterfaces_new__action__move_time__feedback__destroy_ros_message[m[K(void * raw_ros_message)
+[9.512s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.512s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:5466:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__feedback__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[9.513s]  5466 | static void [01;36m[Kinterfaces_new__action__move_time__feedback__destroy_ros_message[m[K(void * raw_ros_message)
+[9.513s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.514s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:17656:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__feedback[m[K’
+[9.515s] 17656 | [01;31m[K_register_msg_type__action__move_time__feedback[m[K(PyObject * pymodule)
+[9.515s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.516s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:5483:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__feedback[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.517s]  5483 | [01;36m[K_register_msg_type__action__move_time__feedback[m[K(PyObject * pymodule)
+[9.517s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.518s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:17634:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__feedback__create_ros_message[m[K’
+[9.519s] 17634 | static void * [01;31m[Kinterfaces_new__action__move_time__feedback__create_ros_message[m[K(void)
+[9.520s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.522s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:5461:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__feedback__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.523s]  5461 | static void * [01;36m[Kinterfaces_new__action__move_time__feedback__create_ros_message[m[K(void)
+[9.523s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.524s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:17639:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__feedback__destroy_ros_message[m[K’
+[9.525s] 17639 | static void [01;31m[Kinterfaces_new__action__move_time__feedback__destroy_ros_message[m[K(void * raw_ros_message)
+[9.526s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.526s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:17776:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__request__create_ros_message[m[K’
+[9.527s] 17776 | static void * [01;31m[Kinterfaces_new__action__move_time__send_goal__request__create_ros_message[m[K(void)
+[9.541s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.543s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:5603:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__request__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.556s]  5603 | static void * [01;36m[Kinterfaces_new__action__move_time__send_goal__request__create_ros_message[m[K(void)
+[9.557s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.558s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:17781:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__request__destroy_ros_message[m[K’
+[9.559s] 17781 | static void [01;31m[Kinterfaces_new__action__move_time__send_goal__request__destroy_ros_message[m[K(void * raw_ros_message)
+[9.562s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.564s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:5608:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__request__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[9.564s]  5608 | static void [01;36m[Kinterfaces_new__action__move_time__send_goal__request__destroy_ros_message[m[K(void * raw_ros_message)
+[9.565s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.565s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:17798:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__send_goal__request[m[K’
+[9.566s] 17798 | [01;31m[K_register_msg_type__action__move_time__send_goal__request[m[K(PyObject * pymodule)
+[9.566s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.567s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:5625:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__send_goal__request[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.567s]  5625 | [01;36m[K_register_msg_type__action__move_time__send_goal__request[m[K(PyObject * pymodule)
+[9.568s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.569s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:17918:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__response__create_ros_message[m[K’
+[9.569s] 17918 | static void * [01;31m[Kinterfaces_new__action__move_time__send_goal__response__create_ros_message[m[K(void)
+[9.570s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.571s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:5745:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__response__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.580s]  5745 | static void * [01;36m[Kinterfaces_new__action__move_time__send_goal__response__create_ros_message[m[K(void)
+[9.580s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.581s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:17776:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__request__create_ros_message[m[K’
+[9.582s] 17776 | static void * [01;31m[Kinterfaces_new__action__move_time__send_goal__request__create_ros_message[m[K(void)
+[9.582s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.583s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:5603:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__request__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.584s]  5603 | static void * [01;36m[Kinterfaces_new__action__move_time__send_goal__request__create_ros_message[m[K(void)
+[9.586s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.604s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:17781:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__request__destroy_ros_message[m[K’
+[9.606s] 17781 | static void [01;31m[Kinterfaces_new__action__move_time__send_goal__request__destroy_ros_message[m[K(void * raw_ros_message)
+[9.607s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.609s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:5608:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__request__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[9.610s]  5608 | static void [01;36m[Kinterfaces_new__action__move_time__send_goal__request__destroy_ros_message[m[K(void * raw_ros_message)
+[9.611s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.612s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:17798:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__send_goal__request[m[K’
+[9.613s] 17798 | [01;31m[K_register_msg_type__action__move_time__send_goal__request[m[K(PyObject * pymodule)
+[9.614s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.615s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:5625:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__send_goal__request[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.628s]  5625 | [01;36m[K_register_msg_type__action__move_time__send_goal__request[m[K(PyObject * pymodule)
+[9.629s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.629s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:5466:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__feedback__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[9.630s]  5466 | static void [01;36m[Kinterfaces_new__action__move_time__feedback__destroy_ros_message[m[K(void * raw_ros_message)
+[9.631s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.632s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:17656:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__feedback[m[K’
+[9.632s] 17656 | [01;31m[K_register_msg_type__action__move_time__feedback[m[K(PyObject * pymodule)
+[9.633s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.634s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:5483:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__feedback[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.635s]  5483 | [01;36m[K_register_msg_type__action__move_time__feedback[m[K(PyObject * pymodule)
+[9.635s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.636s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:17776:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__request__create_ros_message[m[K’
+[9.637s] 17776 | static void * [01;31m[Kinterfaces_new__action__move_time__send_goal__request__create_ros_message[m[K(void)
+[9.638s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.638s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:5603:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__request__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.651s]  5603 | static void * [01;36m[Kinterfaces_new__action__move_time__send_goal__request__create_ros_message[m[K(void)
+[9.654s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.655s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:17781:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__request__destroy_ros_message[m[K’
+[9.656s] 17781 | static void [01;31m[Kinterfaces_new__action__move_time__send_goal__request__destroy_ros_message[m[K(void * raw_ros_message)
+[9.657s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.657s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:5608:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__request__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[9.659s]  5608 | static void [01;36m[Kinterfaces_new__action__move_time__send_goal__request__destroy_ros_message[m[K(void * raw_ros_message)
+[9.660s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.661s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:17923:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__response__destroy_ros_message[m[K’
+[9.662s] 17923 | static void [01;31m[Kinterfaces_new__action__move_time__send_goal__response__destroy_ros_message[m[K(void * raw_ros_message)
+[9.662s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.663s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:5750:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__response__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[9.664s]  5750 | static void [01;36m[Kinterfaces_new__action__move_time__send_goal__response__destroy_ros_message[m[K(void * raw_ros_message)
+[9.665s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.665s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:17940:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__send_goal__response[m[K’
+[9.666s] 17940 | [01;31m[K_register_msg_type__action__move_time__send_goal__response[m[K(PyObject * pymodule)
+[9.680s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.680s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:5767:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__send_goal__response[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.681s]  5767 | [01;36m[K_register_msg_type__action__move_time__send_goal__response[m[K(PyObject * pymodule)
+[9.682s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.683s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:18046:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_srv_type__action__move_time__send_goal[m[K’
+[9.684s] 18046 | [01;31m[K_register_srv_type__action__move_time__send_goal[m[K(PyObject * pymodule)
+[9.684s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.685s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:5873:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_srv_type__action__move_time__send_goal[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.686s]  5873 | [01;36m[K_register_srv_type__action__move_time__send_goal[m[K(PyObject * pymodule)
+[9.687s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.696s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:18089:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__get_result__request__create_ros_message[m[K’
+[9.696s] 18089 | static void * [01;31m[Kinterfaces_new__action__move_time__get_result__request__create_ros_message[m[K(void)
+[9.697s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.698s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:5916:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__get_result__request__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.698s]  5916 | static void * [01;36m[Kinterfaces_new__action__move_time__get_result__request__create_ros_message[m[K(void)
+[9.699s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.700s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:17918:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__response__create_ros_message[m[K’
+[9.700s] 17918 | static void * [01;31m[Kinterfaces_new__action__move_time__send_goal__response__create_ros_message[m[K(void)
+[9.701s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.701s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:5745:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__response__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.702s]  5745 | static void * [01;36m[Kinterfaces_new__action__move_time__send_goal__response__create_ros_message[m[K(void)
+[9.702s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.711s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:17923:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__response__destroy_ros_message[m[K’
+[9.712s] 17923 | static void [01;31m[Kinterfaces_new__action__move_time__send_goal__response__destroy_ros_message[m[K(void * raw_ros_message)
+[9.712s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.713s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:5750:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__response__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[9.714s]  5750 | static void [01;36m[Kinterfaces_new__action__move_time__send_goal__response__destroy_ros_message[m[K(void * raw_ros_message)
+[9.714s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.715s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:17940:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__send_goal__response[m[K’
+[9.716s] 17940 | [01;31m[K_register_msg_type__action__move_time__send_goal__response[m[K(PyObject * pymodule)
+[9.717s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.717s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:5767:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__send_goal__response[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.718s]  5767 | [01;36m[K_register_msg_type__action__move_time__send_goal__response[m[K(PyObject * pymodule)
+[9.718s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.727s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:18046:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_srv_type__action__move_time__send_goal[m[K’
+[9.729s] 18046 | [01;31m[K_register_srv_type__action__move_time__send_goal[m[K(PyObject * pymodule)
+[9.730s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.731s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:17798:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__send_goal__request[m[K’
+[9.732s] 17798 | [01;31m[K_register_msg_type__action__move_time__send_goal__request[m[K(PyObject * pymodule)
+[9.732s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.733s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:5625:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__send_goal__request[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.734s]  5625 | [01;36m[K_register_msg_type__action__move_time__send_goal__request[m[K(PyObject * pymodule)
+[9.734s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.735s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:17918:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__response__create_ros_message[m[K’
+[9.735s] 17918 | static void * [01;31m[Kinterfaces_new__action__move_time__send_goal__response__create_ros_message[m[K(void)
+[9.736s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.737s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:5745:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__response__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.737s]  5745 | static void * [01;36m[Kinterfaces_new__action__move_time__send_goal__response__create_ros_message[m[K(void)
+[9.738s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.738s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:17923:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__response__destroy_ros_message[m[K’
+[9.739s] 17923 | static void [01;31m[Kinterfaces_new__action__move_time__send_goal__response__destroy_ros_message[m[K(void * raw_ros_message)
+[9.752s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.754s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:5750:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__send_goal__response__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[9.755s]  5750 | static void [01;36m[Kinterfaces_new__action__move_time__send_goal__response__destroy_ros_message[m[K(void * raw_ros_message)
+[9.755s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.756s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:18094:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__get_result__request__destroy_ros_message[m[K’
+[9.757s] 18094 | static void [01;31m[Kinterfaces_new__action__move_time__get_result__request__destroy_ros_message[m[K(void * raw_ros_message)
+[9.757s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.758s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:17940:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__send_goal__response[m[K’
+[9.771s] 17940 | [01;31m[K_register_msg_type__action__move_time__send_goal__response[m[K(PyObject * pymodule)
+[9.772s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.773s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:5921:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__get_result__request__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[9.774s]  5921 | static void [01;36m[Kinterfaces_new__action__move_time__get_result__request__destroy_ros_message[m[K(void * raw_ros_message)
+[9.774s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.775s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:5873:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_srv_type__action__move_time__send_goal[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.776s]  5873 | [01;36m[K_register_srv_type__action__move_time__send_goal[m[K(PyObject * pymodule)
+[9.777s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.777s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:18111:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__get_result__request[m[K’
+[9.778s] 18111 | [01;31m[K_register_msg_type__action__move_time__get_result__request[m[K(PyObject * pymodule)
+[9.779s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.779s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:5767:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__send_goal__response[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.780s]  5767 | [01;36m[K_register_msg_type__action__move_time__send_goal__response[m[K(PyObject * pymodule)
+[9.781s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.781s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:5938:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__get_result__request[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.782s]  5938 | [01;36m[K_register_msg_type__action__move_time__get_result__request[m[K(PyObject * pymodule)
+[9.783s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.788s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:18046:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_srv_type__action__move_time__send_goal[m[K’
+[9.788s] 18046 | [01;31m[K_register_srv_type__action__move_time__send_goal[m[K(PyObject * pymodule)
+[9.789s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.790s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:18089:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__get_result__request__create_ros_message[m[K’
+[9.790s] 18089 | static void * [01;31m[Kinterfaces_new__action__move_time__get_result__request__create_ros_message[m[K(void)
+[9.791s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.791s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:5916:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__get_result__request__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.792s]  5916 | static void * [01;36m[Kinterfaces_new__action__move_time__get_result__request__create_ros_message[m[K(void)
+[9.793s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.794s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:18094:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__get_result__request__destroy_ros_message[m[K’
+[9.795s] 18094 | static void [01;31m[Kinterfaces_new__action__move_time__get_result__request__destroy_ros_message[m[K(void * raw_ros_message)
+[9.796s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.796s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:5873:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_srv_type__action__move_time__send_goal[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.797s]  5873 | [01;36m[K_register_srv_type__action__move_time__send_goal[m[K(PyObject * pymodule)
+[9.797s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.798s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:18231:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__get_result__response__create_ros_message[m[K’
+[9.799s] 18231 | static void * [01;31m[Kinterfaces_new__action__move_time__get_result__response__create_ros_message[m[K(void)
+[9.812s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.812s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:6058:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__get_result__response__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.814s]  6058 | static void * [01;36m[Kinterfaces_new__action__move_time__get_result__response__create_ros_message[m[K(void)
+[9.815s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.816s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:18236:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__get_result__response__destroy_ros_message[m[K’
+[9.817s] 18236 | static void [01;31m[Kinterfaces_new__action__move_time__get_result__response__destroy_ros_message[m[K(void * raw_ros_message)
+[9.818s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.819s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:18089:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__get_result__request__create_ros_message[m[K’
+[9.819s] 18089 | static void * [01;31m[Kinterfaces_new__action__move_time__get_result__request__create_ros_message[m[K(void)
+[9.832s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.833s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:5921:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__get_result__request__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[9.833s]  5921 | static void [01;36m[Kinterfaces_new__action__move_time__get_result__request__destroy_ros_message[m[K(void * raw_ros_message)
+[9.834s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.835s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:6063:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__get_result__response__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[9.836s]  6063 | static void [01;36m[Kinterfaces_new__action__move_time__get_result__response__destroy_ros_message[m[K(void * raw_ros_message)
+[9.836s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.837s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:18111:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__get_result__request[m[K’
+[9.837s] 18111 | [01;31m[K_register_msg_type__action__move_time__get_result__request[m[K(PyObject * pymodule)
+[9.838s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.839s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:5916:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__get_result__request__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.840s]  5916 | static void * [01;36m[Kinterfaces_new__action__move_time__get_result__request__create_ros_message[m[K(void)
+[9.841s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.842s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:18253:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__get_result__response[m[K’
+[9.842s] 18253 | [01;31m[K_register_msg_type__action__move_time__get_result__response[m[K(PyObject * pymodule)
+[9.846s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.855s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:6080:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__get_result__response[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.856s]  6080 | [01;36m[K_register_msg_type__action__move_time__get_result__response[m[K(PyObject * pymodule)
+[9.857s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.858s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:18094:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__get_result__request__destroy_ros_message[m[K’
+[9.859s] 18094 | static void [01;31m[Kinterfaces_new__action__move_time__get_result__request__destroy_ros_message[m[K(void * raw_ros_message)
+[9.860s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.860s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:5938:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__get_result__request[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.861s]  5938 | [01;36m[K_register_msg_type__action__move_time__get_result__request[m[K(PyObject * pymodule)
+[9.862s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.862s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:18359:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_srv_type__action__move_time__get_result[m[K’
+[9.886s] 18359 | [01;31m[K_register_srv_type__action__move_time__get_result[m[K(PyObject * pymodule)
+[9.887s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.888s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:6186:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_srv_type__action__move_time__get_result[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.889s]  6186 | [01;36m[K_register_srv_type__action__move_time__get_result[m[K(PyObject * pymodule)
+[9.889s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.890s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:18402:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__feedback_message__create_ros_message[m[K’
+[9.890s] 18402 | static void * [01;31m[Kinterfaces_new__action__move_time__feedback_message__create_ros_message[m[K(void)
+[9.892s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.893s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:6229:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__feedback_message__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.893s]  6229 | static void * [01;36m[Kinterfaces_new__action__move_time__feedback_message__create_ros_message[m[K(void)
+[9.894s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.895s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:18231:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__get_result__response__create_ros_message[m[K’
+[9.896s] 18231 | static void * [01;31m[Kinterfaces_new__action__move_time__get_result__response__create_ros_message[m[K(void)
+[9.897s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.898s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:6058:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__get_result__response__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.899s]  6058 | static void * [01;36m[Kinterfaces_new__action__move_time__get_result__response__create_ros_message[m[K(void)
+[9.903s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.904s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:18407:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__feedback_message__destroy_ros_message[m[K’
+[9.905s] 18407 | static void [01;31m[Kinterfaces_new__action__move_time__feedback_message__destroy_ros_message[m[K(void * raw_ros_message)
+[9.906s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.906s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:18236:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__get_result__response__destroy_ros_message[m[K’
+[9.907s] 18236 | static void [01;31m[Kinterfaces_new__action__move_time__get_result__response__destroy_ros_message[m[K(void * raw_ros_message)
+[9.914s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.915s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:6234:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__feedback_message__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[9.916s]  6234 | static void [01;36m[Kinterfaces_new__action__move_time__feedback_message__destroy_ros_message[m[K(void * raw_ros_message)
+[9.916s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.917s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:6063:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__get_result__response__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[9.918s]  6063 | static void [01;36m[Kinterfaces_new__action__move_time__get_result__response__destroy_ros_message[m[K(void * raw_ros_message)
+[9.918s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.919s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:18253:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__get_result__response[m[K’
+[9.920s] 18253 | [01;31m[K_register_msg_type__action__move_time__get_result__response[m[K(PyObject * pymodule)
+[9.920s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.921s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:18424:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__feedback_message[m[K’
+[9.922s] 18424 | [01;31m[K_register_msg_type__action__move_time__feedback_message[m[K(PyObject * pymodule)
+[9.923s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.923s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:5921:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__get_result__request__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[9.926s]  5921 | static void [01;36m[Kinterfaces_new__action__move_time__get_result__request__destroy_ros_message[m[K(void * raw_ros_message)
+[9.927s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.928s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:18111:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__get_result__request[m[K’
+[9.928s] 18111 | [01;31m[K_register_msg_type__action__move_time__get_result__request[m[K(PyObject * pymodule)
+[9.929s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.929s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:5938:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__get_result__request[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.929s]  5938 | [01;36m[K_register_msg_type__action__move_time__get_result__request[m[K(PyObject * pymodule)
+[9.930s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.930s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:18231:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__get_result__response__create_ros_message[m[K’
+[9.932s] 18231 | static void * [01;31m[Kinterfaces_new__action__move_time__get_result__response__create_ros_message[m[K(void)
+[9.932s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.933s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:6058:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__get_result__response__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.934s]  6058 | static void * [01;36m[Kinterfaces_new__action__move_time__get_result__response__create_ros_message[m[K(void)
+[9.934s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.935s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:18236:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__get_result__response__destroy_ros_message[m[K’
+[9.937s] 18236 | static void [01;31m[Kinterfaces_new__action__move_time__get_result__response__destroy_ros_message[m[K(void * raw_ros_message)
+[9.938s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.938s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:6080:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__get_result__response[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.939s]  6080 | [01;36m[K_register_msg_type__action__move_time__get_result__response[m[K(PyObject * pymodule)
+[9.941s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.943s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:6251:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__feedback_message[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.950s]  6251 | [01;36m[K_register_msg_type__action__move_time__feedback_message[m[K(PyObject * pymodule)
+[9.951s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.952s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:6063:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__get_result__response__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[9.952s]  6063 | static void [01;36m[Kinterfaces_new__action__move_time__get_result__response__destroy_ros_message[m[K(void * raw_ros_message)
+[9.953s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.953s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:18527:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_action_type__action__move_time[m[K’
+[9.954s] 18527 | [01;31m[K_register_action_type__action__move_time[m[K(PyObject * pymodule)
+[9.955s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.955s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c:6354:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_action_type__action__move_time[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.956s]  6354 | [01;36m[K_register_action_type__action__move_time[m[K(PyObject * pymodule)
+[9.957s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.957s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:18359:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_srv_type__action__move_time__get_result[m[K’
+[9.958s] 18359 | [01;31m[K_register_srv_type__action__move_time__get_result[m[K(PyObject * pymodule)
+[9.958s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.959s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:18253:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__get_result__response[m[K’
+[9.960s] 18253 | [01;31m[K_register_msg_type__action__move_time__get_result__response[m[K(PyObject * pymodule)
+[9.960s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.961s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:6080:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__get_result__response[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.962s]  6080 | [01;36m[K_register_msg_type__action__move_time__get_result__response[m[K(PyObject * pymodule)
+[9.962s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.963s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:6186:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_srv_type__action__move_time__get_result[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.976s]  6186 | [01;36m[K_register_srv_type__action__move_time__get_result[m[K(PyObject * pymodule)
+[9.976s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.977s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:18359:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_srv_type__action__move_time__get_result[m[K’
+[9.978s] 18359 | [01;31m[K_register_srv_type__action__move_time__get_result[m[K(PyObject * pymodule)
+[9.979s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.980s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:18402:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__feedback_message__create_ros_message[m[K’
+[9.981s] 18402 | static void * [01;31m[Kinterfaces_new__action__move_time__feedback_message__create_ros_message[m[K(void)
+[9.982s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.984s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:6229:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__feedback_message__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[9.984s]  6229 | static void * [01;36m[Kinterfaces_new__action__move_time__feedback_message__create_ros_message[m[K(void)
+[9.985s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.985s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:18407:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__feedback_message__destroy_ros_message[m[K’
+[9.986s] 18407 | static void [01;31m[Kinterfaces_new__action__move_time__feedback_message__destroy_ros_message[m[K(void * raw_ros_message)
+[9.986s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.987s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:6186:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_srv_type__action__move_time__get_result[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[9.988s]  6186 | [01;36m[K_register_srv_type__action__move_time__get_result[m[K(PyObject * pymodule)
+[9.989s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[9.990s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:18402:15:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__feedback_message__create_ros_message[m[K’
+[10.007s] 18402 | static void * [01;31m[Kinterfaces_new__action__move_time__feedback_message__create_ros_message[m[K(void)
+[10.008s]       |               [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[10.009s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:6234:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__feedback_message__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[10.009s]  6234 | static void [01;36m[Kinterfaces_new__action__move_time__feedback_message__destroy_ros_message[m[K(void * raw_ros_message)
+[10.010s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[10.011s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:18424:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__feedback_message[m[K’
+[10.011s] 18424 | [01;31m[K_register_msg_type__action__move_time__feedback_message[m[K(PyObject * pymodule)
+[10.012s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[10.013s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:6229:15:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__feedback_message__create_ros_message[m[K’ with type ‘[01m[Kvoid *(void)[m[K’
+[10.013s]  6229 | static void * [01;36m[Kinterfaces_new__action__move_time__feedback_message__create_ros_message[m[K(void)
+[10.014s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[10.014s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:18407:13:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[Kinterfaces_new__action__move_time__feedback_message__destroy_ros_message[m[K’
+[10.015s] 18407 | static void [01;31m[Kinterfaces_new__action__move_time__feedback_message__destroy_ros_message[m[K(void * raw_ros_message)
+[10.015s]       |             [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[10.016s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:6251:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__feedback_message[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[10.016s]  6251 | [01;36m[K_register_msg_type__action__move_time__feedback_message[m[K(PyObject * pymodule)
+[10.017s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[10.017s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:18527:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_action_type__action__move_time[m[K’
+[10.018s] 18527 | [01;31m[K_register_action_type__action__move_time[m[K(PyObject * pymodule)
+[10.018s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[10.019s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:6234:13:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[Kinterfaces_new__action__move_time__feedback_message__destroy_ros_message[m[K’ with type ‘[01m[Kvoid(void *)[m[K’
+[10.020s]  6234 | static void [01;36m[Kinterfaces_new__action__move_time__feedback_message__destroy_ros_message[m[K(void * raw_ros_message)
+[10.020s]       |             [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[10.021s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:18424:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_msg_type__action__move_time__feedback_message[m[K’
+[10.022s] 18424 | [01;31m[K_register_msg_type__action__move_time__feedback_message[m[K(PyObject * pymodule)
+[10.022s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[10.023s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:6251:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_msg_type__action__move_time__feedback_message[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[10.036s]  6251 | [01;36m[K_register_msg_type__action__move_time__feedback_message[m[K(PyObject * pymodule)
+[10.036s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[10.037s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:18527:1:[m[K [01;31m[Kerror: [m[Kredefinition of ‘[01m[K_register_action_type__action__move_time[m[K’
+[10.037s] 18527 | [01;31m[K_register_action_type__action__move_time[m[K(PyObject * pymodule)
+[10.038s]       | [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[10.038s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c:6354:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_action_type__action__move_time[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[10.039s]  6354 | [01;36m[K_register_action_type__action__move_time[m[K(PyObject * pymodule)
+[10.039s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[10.040s] [01m[K/home/berry/HeartBeat/build/interfaces_new/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c:6354:1:[m[K [01;36m[Knote: [m[Kprevious definition of ‘[01m[K_register_action_type__action__move_time[m[K’ with type ‘[01m[Kint8_t(PyObject *)[m[K’ {aka ‘[01m[Ksigned char(struct _object *)[m[K’}
+[10.040s]  6354 | [01;36m[K_register_action_type__action__move_time[m[K(PyObject * pymodule)
+[10.041s]       | [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[10.041s] gmake[2]: *** [CMakeFiles/interfaces_new__rosidl_typesupport_fastrtps_c__pyext.dir/build.make:76: CMakeFiles/interfaces_new__rosidl_typesupport_fastrtps_c__pyext.dir/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c.o] Error 1
+[10.045s] gmake[1]: *** [CMakeFiles/Makefile2:505: CMakeFiles/interfaces_new__rosidl_typesupport_fastrtps_c__pyext.dir/all] Error 2
+[10.046s] gmake[1]: *** Waiting for unfinished jobs....
+[10.046s] gmake[2]: *** [CMakeFiles/interfaces_new__rosidl_typesupport_c__pyext.dir/build.make:76: CMakeFiles/interfaces_new__rosidl_typesupport_c__pyext.dir/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c.o] Error 1
+[10.059s] gmake[1]: *** [CMakeFiles/Makefile2:564: CMakeFiles/interfaces_new__rosidl_typesupport_c__pyext.dir/all] Error 2
+[10.060s] gmake[2]: *** [CMakeFiles/interfaces_new__rosidl_typesupport_introspection_c__pyext.dir/build.make:76: CMakeFiles/interfaces_new__rosidl_typesupport_introspection_c__pyext.dir/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c.o] Error 1
+[10.061s] gmake[1]: *** [CMakeFiles/Makefile2:535: CMakeFiles/interfaces_new__rosidl_typesupport_introspection_c__pyext.dir/all] Error 2
+[10.062s] gmake: *** [Makefile:146: all] Error 2
+[10.062s] Invoked command in '/home/berry/HeartBeat/build/interfaces_new' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/berry/HeartBeat/install/track_server:/home/berry/HeartBeat/install/controller:/home/berry/HeartBeat/install/belt_short_server:/home/berry/HeartBeat/install/belt_long_server:/home/berry/RoArm/install/test1:/home/berry/RoArm/install/serial_ctrl:/home/berry/RoArm/install/pos_sub:/home/berry/RoArm/install/pos_pub:/home/berry/RoArm/install/pos_client:/home/berry/RoArm/install/Position_Sub:/home/berry/RoArm/install/Pos_Server:/home/berry/RoArm/install/Pos_Client:/home/berry/ices_ws/install/track_server:/home/berry/ices_ws/install/launch_test:/home/berry/ices_ws/install/control:/home/berry/ices_ws/install/c_arm:/home/berry/ices_ws/install/arm_server:/home/berry/ices_ws/install/belt_short_server:/home/berry/ices_ws/install/belt_short_client:/home/berry/ices_ws/install/belt_long_server:/opt/ros/humble /usr/bin/cmake --build /home/berry/HeartBeat/build/interfaces_new -- -j4 -l4

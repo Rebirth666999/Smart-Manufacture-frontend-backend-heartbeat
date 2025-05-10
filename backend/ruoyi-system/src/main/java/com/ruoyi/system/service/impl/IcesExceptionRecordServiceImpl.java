@@ -25,6 +25,7 @@ import com.ruoyi.system.service.IIcesExceptionLifecycleVersionService;
 import lombok.RequiredArgsConstructor;
 import org.flowable.bpmn.constants.BpmnXMLConstants;
 import org.flowable.engine.repository.ProcessDefinition;
+import org.flowable.engine.runtime.ProcessInstance;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesExceptionRecordBo;
 import com.ruoyi.system.domain.vo.IcesExceptionRecordVo;
@@ -98,6 +99,9 @@ public class IcesExceptionRecordServiceImpl extends FlowServiceFactory implement
         if (StringUtils.isBlank(bo.getExrUserReport())) {
             bo.setExrUserReport(getLoginUsername());
         }
+        if (bo.getExrStat().equals("4")) {
+            bo.setExrProcess(startLifecycle(bo));
+        }
         IcesExceptionRecord add = BeanUtil.toBean(bo, IcesExceptionRecord.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
@@ -117,7 +121,7 @@ public class IcesExceptionRecordServiceImpl extends FlowServiceFactory implement
         if (orgn.getExrStat().equals("2") && bo.getExrStat().equals("4")) {
             // 原先确认中，现在确认为异常
             // 自动启动对应异常的生命周期
-            startLifecycle(bo);
+            bo.setExrProcess(startLifecycle(bo));
         }
         IcesExceptionRecord update = BeanUtil.toBean(bo, IcesExceptionRecord.class);
         validEntityBeforeSave(update);
@@ -144,10 +148,12 @@ public class IcesExceptionRecordServiceImpl extends FlowServiceFactory implement
 
     /**
      * 启动异常的生命周期
+     *
      * @param bo 异常上报记录
+     * @return 流程ID
      */
     @Override
-    public void startLifecycle(IcesExceptionRecordBo bo) {
+    public String startLifecycle(IcesExceptionRecordBo bo) {
         // 找到生命周期
         IcesExceptionLifecycleBo lifecycleBo = new IcesExceptionLifecycleBo();
         lifecycleBo.setExCode(bo.getExCode());
@@ -186,7 +192,8 @@ public class IcesExceptionRecordServiceImpl extends FlowServiceFactory implement
             // 设置流程状态为进行中
             variables.put(ProcessConstants.PROCESS_STATUS_KEY, ProcessStatus.RUNNING.getStatus());
             // 启动流程实例
-            runtimeService.startProcessInstanceById(processDefinition.getId(), variables);
+            ProcessInstance processInstance = runtimeService.startProcessInstanceById(processDefinition.getId(), variables);
+            return processInstance.getId();
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServiceException("异常生命周期启动错误");

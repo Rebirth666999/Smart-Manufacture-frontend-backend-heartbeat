@@ -41,7 +41,7 @@ public interface IIcesExceptionRecordService {
      */
     Boolean updateByBo(IcesExceptionRecordBo bo);
 
-    void startLifecycle(IcesExceptionRecordBo bo);
+    String startLifecycle(IcesExceptionRecordBo bo);
 
     /**
      * 校验并批量删除异常记录信息

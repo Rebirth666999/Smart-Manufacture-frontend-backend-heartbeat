@@ -155,8 +155,6 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
             // 编写描述
             exceptionRecordBo.setExrDesc("订单 " + bo.getOrCodeOrgn() + " 发生修改，时间 " + mDate);
             exceptionRecordService.insertByBo(exceptionRecordBo);
-            // 立即启动异常处理
-            exceptionRecordService.startLifecycle(exceptionRecordBo);
 
             // 原先实体状态变成已修改
             IcesOrder update = new IcesOrder();

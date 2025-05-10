@@ -1,7 +1,11 @@
 package com.ruoyi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.common.helper.LoginHelper;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
@@ -91,6 +95,10 @@ public class IcesExceptionRecordServiceImpl extends FlowServiceFactory implement
     @Override
     public IcesExceptionRecordVo insertByBo(IcesExceptionRecordBo bo) {
         bo.setExrCode(codeService.insertByType("ExceptionRecord"));
+        // 如果未填写上报人，则使用当前用户
+        if (StringUtils.isBlank(bo.getExrUserReport())) {
+            bo.setExrUserReport(getLoginUsername());
+        }
         IcesExceptionRecord add = BeanUtil.toBean(bo, IcesExceptionRecord.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
@@ -115,6 +123,24 @@ public class IcesExceptionRecordServiceImpl extends FlowServiceFactory implement
         IcesExceptionRecord update = BeanUtil.toBean(bo, IcesExceptionRecord.class);
         validEntityBeforeSave(update);
         return baseMapper.updateById(update) > 0;
+    }
+
+    /**
+     * 获取当前用户名
+     * @return 用户名
+     */
+    private String getLoginUsername() {
+        LoginUser loginUser;
+        try {
+            loginUser = LoginHelper.getLoginUser();
+        } catch (Exception e) {
+            return null;
+        }
+        if (ObjectUtil.isNotNull(loginUser)) {
+            return loginUser.getUsername();
+        } else {
+            return null;
+        }
     }
 
     /**

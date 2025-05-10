@@ -88,7 +88,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <!-- <el-col :span="12">
           <el-form-item label="当前处理人" prop="exrUserHandle">
             <el-select
               v-model="form.exrUserHandle"
@@ -104,8 +104,8 @@
               </el-option>
             </el-select>
           </el-form-item>
-        </el-col>
-        <el-col :span="12">
+        </el-col> -->
+        <!-- <el-col :span="12">
           <el-form-item label="异常解除人" prop="exrUserFinish">
             <el-select
               v-model="form.exrUserFinish"
@@ -121,7 +121,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-        </el-col>
+        </el-col> -->
         <el-col :span="12">
           <el-form-item label="异常责任人" prop="exrUserResp">
             <el-select

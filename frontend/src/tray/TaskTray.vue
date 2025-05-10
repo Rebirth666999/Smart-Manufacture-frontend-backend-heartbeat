@@ -8,13 +8,14 @@
         <el-button v-else type="text">{{ data.label }}</el-button>
       </div>
     </el-tree>
-    <el-empty v-else description="暂无需要处理的任务" />
+    <el-empty v-else :image="emptyImageUrl" :image-size="100" description="暂无需要处理的任务" />
   </div>
 </template>
 <script>
 import { listOrderDemand } from "@/api/system/orderDemand";
 import { listManufacturePlan } from "@/api/system/manufacturePlan";
 import { listManufactureTask } from "@/api/system/manufactureTask";
+import emptyImage from '@/assets/images/empty.svg';
 
 // TODO
 // 未完成分配的订单：生产计划没有涵盖全部产品需求
@@ -34,7 +35,9 @@ export default {
       // 生产计划列表
       manufacturePlanList: [],
       // 生产任务列表
-      manufactureTaskList: []
+      manufactureTaskList: [],
+      // "空白"图片URL
+      emptyImageUrl: emptyImage
     }
   },
   async created() {

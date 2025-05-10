@@ -221,7 +221,7 @@ export default {
           this.form = response.data;
           this.form.eqStat = '4';
         updateEquipment(this.form).then(response => {
-            this.$modal.confirm('已通过审核');
+            this.$modal.msgSuccess('已通过审核');
             this.getList();
           })
         });
@@ -238,7 +238,7 @@ export default {
            this.form = response.data;
            this.form.eqStat = '1';
         updateEquipment(this.form).then(response => {
-          this.$modal.confirm('已驳回审核');
+          this.$modal.msgSuccess('已驳回审核');
           this.getList();
         })
         });

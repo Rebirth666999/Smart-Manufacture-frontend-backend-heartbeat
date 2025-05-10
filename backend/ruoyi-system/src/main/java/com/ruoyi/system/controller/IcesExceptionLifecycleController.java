@@ -2,6 +2,7 @@ package com.ruoyi.system.controller;
 
 import java.util.List;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import lombok.RequiredArgsConstructor;
@@ -104,5 +105,52 @@ public class IcesExceptionLifecycleController extends BaseController {
     public R<Void> remove(@NotEmpty(message = "主键不能为空")
                           @PathVariable Long[] exlIds) {
         return toAjax(iIcesExceptionLifecycleService.deleteWithValidByIds(Arrays.asList(exlIds), true));
+    }
+
+    /**
+     * 保存异常生命周期
+     * @param json 前端传来的内容，包括生命周期ID和模型XML
+     * @author YangZY
+     * @date 20250506
+     */
+    @PostMapping("/save")
+    public R<Void> save(@RequestBody String json) {
+        try {
+            return toAjax(iIcesExceptionLifecycleService.saveModel(json));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.fail();
+        }
+    }
+
+    /**
+     * 获取生命周期模型XML
+     * @param exlId 生命周期ID
+     * @author YangZY
+     * @date 20250506
+     */
+    @GetMapping(value = "/getModel")
+    public R<String> getModel(String exlId) {
+        return R.ok("操作成功", iIcesExceptionLifecycleService.getModel(exlId));
+    }
+
+    /**
+     * 获取模型XML
+     * @param modelId 模型ID
+     * @author YangZY
+     * @date 20250506
+     */
+    @GetMapping(value = "/getBpmnXml")
+    public R<String> getBpmnXml(String modelId) {
+        return R.ok("操作成功", iIcesExceptionLifecycleService.queryBpmnXmlById(modelId));
+    }
+
+    /**
+     * 部署指定生命周期的最新版本
+     */
+    @RepeatSubmit()
+    @PostMapping("/deploy")
+    public R<Void> deploy(@RequestBody IcesExceptionLifecycleBo bo) {
+        return toAjax(iIcesExceptionLifecycleService.deployModel(bo));
     }
 }

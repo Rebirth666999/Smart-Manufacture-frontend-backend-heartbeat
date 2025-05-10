@@ -11,124 +11,159 @@
     >
     </el-alert>
 
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="所属异常" prop="exCode">
-        <el-select v-model="queryParams.exCode" placeholder="请选择所属异常" :disabled="mode === 1" clearable>
-          <el-option
-           v-for="option in exceptionList"
-           :key="option.exCode"
-           :label="option.exName"
-           :value="option.exCode">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <!-- <el-form-item label="已删除" prop="exlDelete">
-        <el-input
-          v-model="queryParams.exlDelete"
-          placeholder="请输入已删除"
-          clearable
-          @keyup.enter.native="handleQuery"
+    <el-card shadow="never">
+      <div slot="header">
+        <div class="card-header">
+          <div>异常生命周期信息</div>
+        </div>
+      </div>
+      <div>
+        <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+          <el-form-item label="所属异常" prop="exCode">
+            <el-select v-model="queryParams.exCode" placeholder="请选择所属异常" :disabled="mode === 1" clearable>
+              <el-option
+               v-for="option in exceptionList"
+               :key="option.exCode"
+               :label="option.exName"
+               :value="option.exCode">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <!-- <el-form-item label="已删除" prop="exlDelete">
+            <el-input
+              v-model="queryParams.exlDelete"
+              placeholder="请输入已删除"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item> -->
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+          </el-form-item>
+        </el-form>
+    
+        <el-row :gutter="10" class="mb8">
+          <el-col :span="1.5">
+            <el-button
+              type="primary"
+              plain
+              icon="el-icon-plus"
+              size="mini"
+              @click="handleAdd"
+              v-hasPermi="['system:exceptionLifecycle:add']"
+              :disabled="exceptionLifecycleList.length > 0"
+            >新增</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="success"
+              plain
+              icon="el-icon-edit"
+              size="mini"
+              :disabled="single"
+              @click="handleUpdate"
+              v-hasPermi="['system:exceptionLifecycle:edit']"
+            >修改</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="danger"
+              plain
+              icon="el-icon-delete"
+              size="mini"
+              :disabled="multiple"
+              @click="handleDelete"
+              v-hasPermi="['system:exceptionLifecycle:remove']"
+            >删除</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="warning"
+              plain
+              icon="el-icon-download"
+              size="mini"
+              @click="handleExport"
+              v-hasPermi="['system:exceptionLifecycle:export']"
+            >导出</el-button>
+          </el-col>
+          <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+        </el-row>
+    
+        <el-table
+          v-loading="loading"
+          :data="exceptionLifecycleList"
+          @current-change="handleCurrentChange"
+          highlight-current-row
+        >
+          <el-table-column label="选择" width="55" align="center">
+            <template slot-scope="scope">
+              <el-radio :value="scope.row.exlId === idSelect" :label="true" />
+            </template>
+          </el-table-column>
+          <el-table-column label="生命周期ID" align="center" prop="exlId" v-if="true"/>
+          <el-table-column label="生命周期编码" align="center" prop="exlCode" />
+          <el-table-column label="所属异常" align="center" prop="exCode">
+            <template slot-scope="scope">
+              {{ exceptionList.find(ele => ele.exCode === scope.row.exCode).exName || '' }}
+            </template>
+          </el-table-column>
+          <el-table-column label="缩略图" align="center" prop="exlSnapshot" />
+          <el-table-column label="模型ID" align="center" prop="exlModelId" />
+          <el-table-column label="模型key" align="center" prop="exlModelKey" />
+          <!-- <el-table-column label="已删除" align="center" prop="exlDelete" /> -->
+          <!-- <el-table-column label="描述" align="center" prop="exlDesc" /> -->
+          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-edit"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['system:exceptionLifecycle:edit']"
+              >修改</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-brush"
+                @click="handleDesign(scope.row)"
+              >设计</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-s-help"
+                @click="handleDeploy(scope.row)"
+              >部署</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-delete"
+                @click="handleDelete(scope.row)"
+                v-hasPermi="['system:exceptionLifecycle:remove']"
+              >删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+    
+        <pagination
+          v-show="total>0"
+          :total="total"
+          :page.sync="queryParams.pageNum"
+          :limit.sync="queryParams.pageSize"
+          @pagination="getList"
         />
-      </el-form-item> -->
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
-
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['system:exceptionLifecycle:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:exceptionLifecycle:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:exceptionLifecycle:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:exceptionLifecycle:export']"
-        >导出</el-button>
-      </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
-
-    <el-table v-loading="loading" :data="exceptionLifecycleList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="生命周期ID" align="center" prop="exlId" v-if="true"/>
-      <el-table-column label="生命周期编码" align="center" prop="exlCode" />
-      <el-table-column label="所属异常" align="center" prop="exCode">
-        <template slot-scope="scope">
-          {{ exceptionList.find(ele => ele.exCode === scope.row.exCode).exName || '' }}
-        </template>
-      </el-table-column>
-      <el-table-column label="缩略图" align="center" prop="exlSnapshot" />
-      <el-table-column label="模型ID" align="center" prop="exlModelId" />
-      <el-table-column label="模型key" align="center" prop="exlModelKey" />
-      <!-- <el-table-column label="已删除" align="center" prop="exlDelete" /> -->
-      <!-- <el-table-column label="描述" align="center" prop="exlDesc" /> -->
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:exceptionLifecycle:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-document"
-            @click="handleVersion(scope.row)"
-          >版本</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:exceptionLifecycle:remove']"
-          >删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+      </div>
+    </el-card>
+    
+    <el-card shadow="never" class="controlled-card">
+      <div slot="header">
+        <div class="card-header">
+          <div>异常生命周期版本信息</div>
+        </div>
+      </div>
+      <exception-lifecycle-version v-if='idSelect' :key="idSelect" :exlCode="codeSelect" />
+      <el-empty v-else description="选中参数模板后即可查看详细信息" />
+    </el-card>
 
     <!-- 添加或修改异常生命周期对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
@@ -165,19 +200,25 @@
 </template>
 
 <script>
-import { listExceptionLifecycle, getExceptionLifecycle, delExceptionLifecycle, addExceptionLifecycle, updateExceptionLifecycle } from "@/api/system/exceptionLifecycle";
+import { listExceptionLifecycle, getExceptionLifecycle, delExceptionLifecycle, addExceptionLifecycle, updateExceptionLifecycle, deployExceptionLifecycle } from "@/api/system/exceptionLifecycle";
 import { listException } from "@/api/system/exception";
+import ExceptionLifecycleVersion from '@/views/system/exceptionLifecycleVersion';
 
 export default {
   name: "ExceptionLifecycle",
+  components: {
+    ExceptionLifecycleVersion
+  },
   data() {
     return {
       // 按钮loading
       buttonLoading: false,
       // 遮罩层
       loading: true,
-      // 选中数组
-      ids: [],
+      // 选中内容
+      idSelect: undefined,
+      // 选中code
+      codeSelect: undefined,
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -302,11 +343,12 @@ export default {
       this.queryParams.exCode = this.$route.query.exCode
       this.handleQuery();
     },
-    // 多选框选中数据
-    handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.exlId)
-      this.single = selection.length!==1
-      this.multiple = !selection.length
+    // 选中数据条目
+    handleCurrentChange(current, old) {
+      if (current) {
+        this.idSelect = current.exlId
+        this.codeSelect = current.exlCode
+      }
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -321,7 +363,7 @@ export default {
     handleUpdate(row) {
       this.loading = true;
       this.reset();
-      const exlId = row.exlId || this.ids
+      const exlId = row.exlId || this.idSelect
       getExceptionLifecycle(exlId).then(response => {
         this.loading = false;
         this.form = response.data;
@@ -356,7 +398,7 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const exlIds = row.exlId || this.ids;
+      const exlIds = row.exlId || this.idSelect;
       this.$modal.confirm('是否确认删除异常生命周期编号为"' + exlIds + '"的数据项？').then(() => {
         this.loading = true;
         return delExceptionLifecycle(exlIds);
@@ -378,15 +420,43 @@ export default {
     // 查看生命周期版本
     handleVersion(row) {
       this.$router.push(`/exception/exceptionLifecycleVersion?exlCode=${row.exlCode}`)
+    },
+    // 生命周期设计
+    handleDesign(row) {
+      this.$router.push(`/exception/exceptionLifecycleDesign?exlId=${row.exlId}`)
+    },
+    // 生命周期部署
+    handleDeploy(row) {
+      this.$modal.confirm('是否确认部署此异常生命周期的最新版本？').then(() => {
+        const select = this.idSelect
+        this.idSelect = undefined
+        deployExceptionLifecycle(row).then(response => {
+          this.$modal.msgSuccess("部署成功");
+        }).finally(() => {
+          this.idSelect = select
+        })
+      })
     }
   }
 };
 </script>
-<style scope>
-.el-select{
+<style scoped>
+.el-select {
   width: 100%;
 }
 .el-date-editor{
   width: 100%;
+}
+::v-deep .el-radio span.el-radio__label {
+  display: none;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 17px;
+}
+.controlled-card {
+  margin-top: 10px;
 }
 </style>

@@ -1,16 +1,17 @@
 package com.ruoyi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.ruoyi.system.domain.bo.IcesClientBo;
-import com.ruoyi.system.domain.bo.IcesClientTradeBo;
 import com.ruoyi.system.domain.bo.IcesOrderBo;
-import com.ruoyi.system.domain.vo.IcesClientVo;
 import com.ruoyi.system.domain.vo.IcesOrderVo;
 import com.ruoyi.system.service.IIcesCodeService;
 import com.ruoyi.system.service.IIcesOrderService;
@@ -140,5 +141,32 @@ public class IcesOrderDemandServiceImpl implements IIcesOrderDemandService {
             //TODO 做一些业务上的校验,判断是否需要校验
         }
         return baseMapper.deleteBatchIds(ids) > 0;
+    }
+
+    /**
+     * 给更新的订单配置产品
+     * @param json 前端传来数据
+     * @return 是否成功
+     * @author YangZY
+     * @date 20250508
+     */
+    @Override
+    public Boolean updateWithOrder(String json) throws JsonProcessingException {
+        // 接收参数
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> data = mapper.readValue(json, Map.class);
+        // order是对象
+        IcesOrderVo order = BeanUtil.toBean(data.get("order"), IcesOrderVo.class);
+        // demand是对象数组
+        JSONArray demandArray = JSONUtil.parseArray(data.get("demand"));
+        List<IcesOrderDemandBo> demand = demandArray.toList(IcesOrderDemandBo.class);
+        // 为新的订单插入产品需求
+        for (IcesOrderDemandBo demandBo : demand) {
+            demandBo.setOdId(null);
+            demandBo.setOdCode(null);
+            demandBo.setOrCode(order.getOrCode());
+            insertByBo(demandBo);
+        }
+        return true;
     }
 }

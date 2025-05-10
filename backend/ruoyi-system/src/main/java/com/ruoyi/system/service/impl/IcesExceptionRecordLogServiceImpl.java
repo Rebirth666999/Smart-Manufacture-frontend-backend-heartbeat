@@ -1,6 +1,9 @@
 package com.ruoyi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.helper.LoginHelper;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
@@ -16,6 +19,8 @@ import com.ruoyi.system.domain.IcesExceptionRecordLog;
 import com.ruoyi.system.mapper.IcesExceptionRecordLogMapper;
 import com.ruoyi.system.service.IIcesExceptionRecordLogService;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Collection;
@@ -65,6 +70,7 @@ public class IcesExceptionRecordLogServiceImpl implements IIcesExceptionRecordLo
         LambdaQueryWrapper<IcesExceptionRecordLog> lqw = Wrappers.lambdaQuery();
         lqw.eq(StringUtils.isNotBlank(bo.getExrlCode()), IcesExceptionRecordLog::getExrlCode, bo.getExrlCode());
         lqw.eq(StringUtils.isNotBlank(bo.getExrCode()), IcesExceptionRecordLog::getExrCode, bo.getExrCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getExrlTask()), IcesExceptionRecordLog::getExrlTask, bo.getExrlTask());
         lqw.eq(bo.getExrlDelete() != null, IcesExceptionRecordLog::getExrlDelete, bo.getExrlDelete());
         return lqw;
     }
@@ -75,6 +81,10 @@ public class IcesExceptionRecordLogServiceImpl implements IIcesExceptionRecordLo
     @Override
     public Boolean insertByBo(IcesExceptionRecordLogBo bo) {
         bo.setExrlCode(codeService.insertByType("ExceptionRecordLog"));
+        Long cMan = getLoginUserId();
+        String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        bo.setExrlUserHandle(cMan);
+        bo.setExrlTime(cDate);
         IcesExceptionRecordLog add = BeanUtil.toBean(bo, IcesExceptionRecordLog.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
@@ -92,6 +102,20 @@ public class IcesExceptionRecordLogServiceImpl implements IIcesExceptionRecordLo
         IcesExceptionRecordLog update = BeanUtil.toBean(bo, IcesExceptionRecordLog.class);
         validEntityBeforeSave(update);
         return baseMapper.updateById(update) > 0;
+    }
+
+    /**
+     * 获取当前用户ID
+     * @return 用户ID
+     */
+    private Long getLoginUserId() {
+        LoginUser loginUser;
+        try {
+            loginUser = LoginHelper.getLoginUser();
+        } catch (Exception e) {
+            return null;
+        }
+        return ObjectUtil.isNotNull(loginUser) ? loginUser.getUserId() : null;
     }
 
     /**

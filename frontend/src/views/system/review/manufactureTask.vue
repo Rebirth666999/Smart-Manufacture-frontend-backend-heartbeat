@@ -78,9 +78,24 @@
       <el-table-column label="生产任务ID" align="center" prop="mtId" v-if="true"/>
       <el-table-column label="生产任务编码" align="center" prop="mtCode" />
       <el-table-column label="所属生产计划" align="center" prop="mpCode" />
+      <el-table-column label="工艺流程" align="center" prop="procCode">
+        <template slot-scope="scope">
+          {{ processList.find(ele => ele.procCode === scope.row.procCode).procName || '' }}
+        </template>
+      </el-table-column>
       <el-table-column label="目标车间" align="center" prop="arCode">
         <template slot-scope="scope">
           {{ areaList.find(ele => ele.arCode === scope.row.arCode).arName || '' }}
+        </template>
+      </el-table-column>
+      <el-table-column label="原料仓库" align="center" prop="msCode">
+        <template slot-scope="scope">
+          {{ materialStoreList.find(ele => ele.msCode === scope.row.msCode).msName || '' }}
+        </template>
+      </el-table-column>
+      <el-table-column label="产品仓库" align="center" prop="prsCode">
+        <template slot-scope="scope">
+          {{ productStoreList.find(ele => ele.prsCode === scope.row.prsCode).prsName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center" prop="mtStat">
@@ -93,24 +108,10 @@
           <span>{{ parseTime(scope.row.mtEndPlan, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="更新时间" align="center" prop="updateTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column label="优先级" align="center" prop="mtPriority" />
+      <el-table-column label="计划产品数量" align="center" prop="mtQtyPlan" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-view"
-            @click="handleTaskDetailView(scope.row)"
-          >任务详情</el-button>
           <el-button
             size="mini"
             type="text"
@@ -150,6 +151,9 @@
 import { getManufactureTask, listReviewManufactureTask , updateManufactureTask} from "@/api/system/manufactureTask";
 import { listManufacturePlan } from "@/api/system/manufacturePlan";
 import { listArea } from "@/api/system/area";
+import { listProcess } from "@/api/system/process";
+import { listMaterialStore } from "@/api/system/materialStore";
+import { listProductStore } from "@/api/system/productStore";
 
 
 export default {
@@ -184,6 +188,12 @@ export default {
       },
       // 生产计划数据
       manufacturePlanList: [],
+      // 工艺流程列表
+      processList: [],
+      // 原料仓库列表
+      materialStoreList: [],
+      // 产品仓库列表
+      productStoreList: [],
       // 车间数据
       areaList: [],
       // 1-根据生产计划筛选
@@ -198,6 +208,8 @@ export default {
       this.mode = 1
     }
     await this.getManufacturePlanList();
+    await this.getProcessList();
+    await this.getStoreList();
     await this.getAreaList();
     this.getList();
   },
@@ -208,10 +220,40 @@ export default {
       this.mode = 0
     }
     await this.getManufacturePlanList();
+    await this.getProcessList();
+    await this.getStoreList();
     await this.getAreaList();
     this.getList();
   },
   methods: {
+    // 获取仓库列表
+    getStoreList() {
+      return new Promise(async (resolve, reject) => {
+        this.loading = true
+        try {
+          this.materialStoreList = (await listMaterialStore()).rows
+          this.productStoreList = (await listProductStore()).rows
+        } catch (err) {
+          reject()
+        }
+        this.loading = false
+        resolve()
+      })
+    },
+    // 获取工艺流程列表
+    getProcessList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listProcess().then(response => {
+          this.processList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     //开始审核
     startReview(row) {
       this.$modal.confirm('是否要开始审核？').then(() => {
@@ -332,10 +374,6 @@ export default {
       this.download('system/manufactureTask/export', {
         ...this.queryParams
       }, `manufactureTask_${new Date().getTime()}.xlsx`)
-    },
-    // 查看任务详情
-    handleTaskDetailView(row) {
-      this.$router.push(`/manufacture/taskDetail?mtCode=${row.mtCode}`)
     }
   }
 };

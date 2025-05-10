@@ -62,6 +62,11 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/dataV',
+    component: () => import('@/views/dataV/enterprise'),
+    hidden: true
+  },
+  {
     path: '',
     component: Layout,
     redirect: 'index',

@@ -10,10 +10,7 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.ruoyi.system.domain.IcesEquipmentModel;
 import com.ruoyi.system.domain.bo.IcesManufacturePlanBo;
-import com.ruoyi.system.domain.vo.IcesClientVo;
-import com.ruoyi.system.domain.vo.IcesEquipmentModelVo;
 import com.ruoyi.system.service.IIcesCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -101,6 +98,7 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
      */
     @Override
     public IcesOrderVo insertByBo(IcesOrderBo bo) {
+        // 检查编码
         if (StringUtils.isBlank(bo.getOrCode())) {
             bo.setOrCode(codeService.insertByType("Order"));
         } else {
@@ -124,15 +122,37 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
      * 修改订单
      */
     @Override
-    public Boolean updateByBo(IcesOrderBo bo) {
+    public IcesOrderVo updateByBo(IcesOrderBo bo) {
+        // 先找到原先信息
+        IcesOrderVo orgn = queryById(bo.getOrId());
+        // 填入修改信息
         String mMan = getLoginUsername();
         String mDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        // 填入修改信息
         bo.setOrMman(mMan);
         bo.setOrMdate(mDate);
-        IcesOrder update = BeanUtil.toBean(bo, IcesOrder.class);
-        validEntityBeforeSave(update);
-        return baseMapper.updateById(update) > 0;
+        if (orgn.getOrCodeOrgn() == null && StringUtils.isNotBlank(bo.getOrCode())) {
+            // 之前没有原订单号，现在有，说明修改了订单的信息
+            // 原先实体状态变成已修改
+            IcesOrder update = new IcesOrder();
+            update.setOrId(bo.getOrId());
+            update.setOrStat("d");
+            validEntityBeforeSave(update);
+            baseMapper.updateById(update);
+            // 新的实体变为新订单信息
+            // 抹掉ID
+            bo.setOrId(null);
+            // 设置编码
+            bo.setOrCode(bo.getOrCode() + "-D");
+            // 状态为待审核（修改）
+            bo.setOrStat("8");
+            return insertByBo(bo);
+        } else {
+            // 普通修改
+            IcesOrder update = BeanUtil.toBean(bo, IcesOrder.class);
+            validEntityBeforeSave(update);
+            baseMapper.updateById(update);
+            return queryById(update.getOrId());
+        }
     }
 
     /**
@@ -167,12 +187,21 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
         return baseMapper.deleteBatchIds(ids) > 0;
     }
 
+    /**
+     * 所有生产计划完成，更新订单
+     *
+     * @param icesManufacturePlanBo 作为参照的生产计划信息
+     */
     @Override
     public void updateStatus(IcesManufacturePlanBo icesManufacturePlanBo) {
+        // 找到订单
         IcesOrderBo bo = new IcesOrderBo();
-        bo.setOrCode(icesManufacturePlanBo.getMpCode());
+        bo.setOrCode(icesManufacturePlanBo.getOrCode());
         List<IcesOrderVo> icesOrderVos = queryList(bo);
-        icesManufacturePlanBo.setMpId(icesOrderVos.get(0).getOrId());
+        // 设置ID、状态
+        bo.setOrId(icesOrderVos.get(0).getOrId());
+        bo.setOrCode(null);
+        bo.setOrStat("6");
         updateByBo(bo);
     }
 }

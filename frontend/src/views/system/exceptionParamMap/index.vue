@@ -1,16 +1,5 @@
 <template>
   <div class="app-container">
-    <!-- 顶部提示 -->
-    <el-alert
-      v-show="hint.length > 0"
-      :title="`正在根据${hint}筛选`"
-      type="info"
-      show-icon
-      :closable="false"
-      class="mb8"
-    >
-    </el-alert>
-
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="110px">
       <el-form-item label="异常参数模板" prop="exptCode">
         <el-select v-model="queryParams.exptCode" placeholder="请选择异常参数模板" :disabled="mode === 1" clearable>
@@ -200,6 +189,11 @@ import { listExceptionParam } from "@/api/system/exceptionParam";
 
 export default {
   name: "ExceptionParamMap",
+  props: {
+    exptCode: {
+      required: false
+    }
+  },
   data() {
     return {
       // 按钮loading
@@ -266,7 +260,7 @@ export default {
     };
   },
   async created() {
-    if (this.$route.query.exptCode) {
+    if (this.exptCode) {
       this.mode = 1
     }
     await this.getExceptionParamTemplateList();
@@ -274,7 +268,7 @@ export default {
     this.getList();
   },
   async activated() {
-    if (this.$route.query.exptCode) {
+    if (this.exptCode) {
       this.mode = 1
     } else {
       this.mode = 0
@@ -305,7 +299,7 @@ export default {
         listExceptionParamTemplate().then(response => {
           this.exceptionParamTemplateList = response.rows
           if (this.mode === 1) {
-            let expt = response.rows.find(ele => ele.exptCode === this.$route.query.exptCode)
+            let expt = response.rows.find(ele => ele.exptCode === this.exptCode)
             // 构造提示文本
             this.hint = "异常参数模板 "
             this.hint += expt.exptCode
@@ -364,7 +358,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
-      this.queryParams.exptCode = this.$route.query.exptCode
+      this.queryParams.exptCode = this.exptCode
       this.handleQuery();
     },
     // 多选框选中数据
@@ -377,7 +371,7 @@ export default {
     handleAdd() {
       this.reset();
       if (this.mode === 1) {
-        this.form.exptCode = this.$route.query.exptCode
+        this.form.exptCode = this.exptCode
       }
       this.open = true;
       this.title = "添加异常参数模板条目";

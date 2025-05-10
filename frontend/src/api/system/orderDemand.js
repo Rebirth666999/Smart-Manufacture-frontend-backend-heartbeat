@@ -42,3 +42,15 @@ export function delOrderDemand(odId) {
     method: 'delete'
   })
 }
+
+// 修改订单所需产品关联
+export function updateOrderWithDemand(data) {
+  return request({
+    url: '/system/orderDemand/updateWithOrder',
+    method: 'post',
+    data: data,
+    headers: {
+      'Content-Type': 'text/plain;charset=utf-8'
+    },
+  })
+}

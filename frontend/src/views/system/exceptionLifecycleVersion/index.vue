@@ -1,16 +1,5 @@
 <template>
   <div class="app-container">
-    <!-- 顶部提示 -->
-    <el-alert
-      v-show="hint.length > 0"
-      :title="`正在根据${hint}筛选异常生命周期版本`"
-      type="info"
-      show-icon
-      :closable="false"
-      class="mb8"
-    >
-    </el-alert>
-
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="110px">
       <el-form-item label="所属生命周期" prop="exlCode">
         <el-select v-model="queryParams.exlCode" placeholder="请选择异常生命周期" :disabled="mode === 1" clearable>
@@ -45,27 +34,6 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['system:exceptionLifecycleVersion:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:exceptionLifecycleVersion:edit']"
-        >修改</el-button>
-      </el-col>
       <el-col :span="1.5">
         <el-button
           type="danger"
@@ -104,10 +72,9 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:exceptionLifecycleVersion:edit']"
-          >修改</el-button>
+            icon="el-icon-search"
+            @click="handleView(scope.row)"
+          >查看</el-button>
           <el-button
             size="mini"
             type="text"
@@ -155,15 +122,29 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 流程图 -->
+    <el-dialog :title="processView.title" :visible.sync="processView.open" width="70%" append-to-body>
+      <process-viewer :key="`designer-${processView.index}`" :xml="processView.xmlData" :style="{height: '600px'}" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { listExceptionLifecycleVersion, getExceptionLifecycleVersion, delExceptionLifecycleVersion, addExceptionLifecycleVersion, updateExceptionLifecycleVersion } from "@/api/system/exceptionLifecycleVersion";
-import { listExceptionLifecycle } from "@/api/system/exceptionLifecycle";
+import { listExceptionLifecycle, getBpmnModel } from "@/api/system/exceptionLifecycle";
+import ProcessViewer from '@/components/ProcessViewer'
 
 export default {
   name: "ExceptionLifecycleVersion",
+  props: {
+    exlCode: {
+      required: false
+    }
+  },
+  components: {
+    ProcessViewer
+  },
   data() {
     return {
       // 按钮loading
@@ -217,18 +198,25 @@ export default {
       // 1-按生命周期筛选版本
       mode: 0,
       // 页面顶部提示
-      hint: ''
+      hint: '',
+      // 查看器相关
+      processView: {
+        title: '',
+        open: false,
+        index: undefined,
+        xmlData:"",
+      }
     };
   },
   async created() {
-    if (this.$route.query.exlCode) {
+    if (this.exlCode) {
       this.mode = 1
     }
     await this.getExceptionLifecycleList();
     this.getList();
   },
   async activated() {
-    if (this.$route.query.exlCode) {
+    if (this.exlCode) {
       this.mode = 1
     } else {
       this.mode = 0
@@ -244,7 +232,7 @@ export default {
         listExceptionLifecycle().then(response => {
           this.exceptionLifecycleList = response.rows
           if (this.mode === 1) {
-            let exl = response.rows.find(ele => ele.exlCode === this.$route.query.exlCode)
+            let exl = response.rows.find(ele => ele.exlCode === this.exlCode)
             // 构造提示文本
             this.hint = "异常生命周期 "
             this.hint += exl.exlCode
@@ -299,7 +287,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
-      this.queryParams.exlCode = this.$route.query.exlCode
+      this.queryParams.exlCode = this.exlCode
       this.handleQuery();
     },
     // 多选框选中数据
@@ -312,7 +300,7 @@ export default {
     handleAdd() {
       this.reset();
       if (this.mode === 1) {
-        this.form.exlCode = this.$route.query.exlCode
+        this.form.exlCode = this.exlCode
       }
       this.open = true;
       this.title = "添加异常生命周期版本";
@@ -374,6 +362,24 @@ export default {
       this.download('system/exceptionLifecycleVersion/export', {
         ...this.queryParams
       }, `exceptionLifecycleVersion_${new Date().getTime()}.xlsx`)
+    },
+    /**
+     * 查看流程
+     * @param {any} row 生命周期信息
+     * @author YangZY
+     * @date 20250506
+     */ 
+    handleView(row) {
+      this.processView.index = row.exlvGeId
+      this.processView.title = "查看异常生命周期版本 " + row.exlvName
+      this.processView.open = true
+      if (row.exlvGeId && row.exlvGeId.length > 0) {
+        getBpmnModel({ modelId: row.exlvGeId }).then(response => {
+          this.processView.xmlData = response.data
+        })
+      } else {
+        this.processView.xmlData = ''
+      }
     }
   }
 };

@@ -15,7 +15,7 @@
         </div>
         <div class="tray-content">
           <task-tray v-if="taskOpen" />
-          <div v-if="alarmOpen">报警托盘：正在施工</div>
+          <alarm-tray v-if="alarmOpen" />
         </div>
       </div>
       <app-main/>
@@ -33,6 +33,7 @@ import ResizeMixin from './mixin/ResizeHandler'
 import { mapState } from 'vuex'
 import variables from '@/assets/styles/variables.scss'
 import TaskTray from '@/tray/TaskTray.vue'
+import AlarmTray from '@/tray/AlarmTray.vue'
 
 export default {
   name: 'Layout',
@@ -43,7 +44,8 @@ export default {
     Settings,
     Sidebar,
     TagsView,
-    TaskTray
+    TaskTray,
+    AlarmTray
   },
   mixins: [ResizeMixin],
   computed: {
@@ -153,7 +155,7 @@ export default {
         // 目前显示的是任务托盘，自动切换
         this.taskOpen = false
         this.alarmOpen = true
-      } else if (this.taskOpen) {
+      } else if (this.alarmOpen) {
         // 目前显示的是报警托盘，隐藏
         this.alarmOpen = false
         // 重置大小

@@ -1,21 +1,12 @@
 <template>
   <div class="app-container">
+    <el-card class="view-card">
+      <div slot="header">
+        <div class="card-header">
+          <div>流程基本信息</div>
+        </div>
+      </div>
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="目标产品" prop="maCode">
-        <el-select
-          v-model="queryParams.maCode"
-          placeholder="请选择目标产品"
-          clearable
-        >
-          <el-option
-            v-for="item in productList"
-            :key="item.maCode"
-            :label="item.maName"
-            :value="item.maCode"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
       <el-form-item label="名称" prop="procName">
         <el-input
           v-model="queryParams.procName"
@@ -54,13 +45,23 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="processList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
+    <el-table 
+      v-loading="loading" 
+      :data="processList" 
+      @current-change="handleCurrentChange"  
+      highlight-current-row
+      max-height="240"
+    >
+      <el-table-column label="选择" width="55" align="center">
+        <template slot-scope="scope">
+          <el-radio :value="scope.row.procId === idSelect" :label="true" />
+        </template>
+      </el-table-column>
       <el-table-column label="工艺流程ID" align="center" prop="procId" v-if="true"/>
       <el-table-column label="工艺流程编码" align="center" prop="procCode" />
-      <el-table-column label="目标产品" align="center" prop="maCode">
+      <el-table-column label="产品需求" align="center" prop="odCode">
         <template slot-scope="scope">
-          {{ productList.find(ele => ele.maCode === scope.row.maCode).maName || '' }}
+          {{ parseOdCode(scope.row.odCode) }}
         </template>
       </el-table-column>
       <el-table-column label="工艺流程名称" align="center" prop="procName" />
@@ -72,12 +73,7 @@
      
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-search"
-            @click="handleViewer(scope.row)"
-          >查看流程</el-button>
+
           <el-button
             size="mini"
             type="text"
@@ -109,24 +105,38 @@
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
-    />
+    /></el-card>
 
-    <!-- 查看流程对话框 -->
-    <el-dialog :title="viewerData.title" :visible.sync="viewerOpen" width="70%" append-to-body>
-      <process-viewer
-        v-loading="viewerData.loading"
-        :key="`designer-${viewerData.index}`"
-        :xml="viewerData.bpmnXml"
-        :style="{height: '60vh'}"
-      />
-    </el-dialog>
+
+
+<el-card class="controlled-card">
+    <div slot="header">
+      <div class="card-header">
+        <div>流程详细信息</div>
+      </div>
+    </div>
+    <process-viewer 
+      v-if='idSelect'
+      :key="idSelect"
+      v-loading="viewerData.loading"
+      :xml="viewerData.bpmnXml"
+      :style="{ height: 'calc(100vh - 180px)' }"
+      :mode="2"
+      :extraList="{ emList: equipmentModelList, moList: modelOperationList, maList: materialList }"
+    />
+    <el-empty v-else description="选中工艺流程后即可查看流程详情" />
+  </el-card>
   </div>
 </template>
 
 <script>
 import { getProcess, listProcess, getBpmnXml, updateProcess ,listReviewProcess} from "@/api/system/process";
 import { listProduct } from "@/api/system/product";
-import ProcessViewer from '@/components/ProcessViewer';
+import { listOrderDemand } from "@/api/system/orderDemand";
+import ProcessViewer from '@/components/ProcessViewerIndustry';
+import { listMaterial } from "@/api/system/material";
+import { listEquipmentModel } from "@/api/system/equipmentModel";
+import { listModelOperation } from "@/api/system/modelOperation";
 
 export default {
   name: "ProcessReview",
@@ -140,8 +150,10 @@ export default {
       buttonLoading: false,
       // 遮罩层
       loading: true,
-      // 选中数组
-      ids: [],
+
+      // 选中内容
+      idSelect: undefined,
+
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -173,18 +185,102 @@ export default {
         bpmnXml: ''
       },
       // 表单数据
-      form: {}
+      form: {},
+      // 产品列表
+      productList: [],
+      // 原料列表
+      materialList: [],
+      // 设备模型列表
+      equipmentModelList: [],
+      // 模型操作列表
+      modelOperationList: [],
+      // 订单产品需求列表
+      orderDemandList: []
     };
   },
   async created() {
+    await this.getMaterialList();
     await this.getProductList();
+    await this.getOrderDemandList();
+    await this.getEquipmentModelList();
+    await this.getModelOperationList();
     this.getList();
   },
   async activated() {
+    await this.getMaterialList();
     await this.getProductList();
+    await this.getOrderDemandList();
+    await this.getEquipmentModelList();
+    await this.getModelOperationList();
     this.getList();
   },
   methods: {
+    /**
+     * 查询订单产品需求
+     * @author YangZY
+     * @date 20250423
+     */ 
+    getOrderDemandList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listOrderDemand().then(response => {
+          this.orderDemandList = []
+          response.rows.forEach(demand => {
+            this.orderDemandList.push({
+              ...demand,
+              prName: this.productList.find(ele => ele.prCode === demand.prCode).prName
+            })
+          });
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
+    // 查询原料列表
+    getMaterialList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listMaterial().then(response => {
+          this.materialList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
+    // 查询设备模型列表
+    getEquipmentModelList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listEquipmentModel().then(response => {
+          this.equipmentModelList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
+    // 查询模型操作列表
+    getModelOperationList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listModelOperation().then(response => {
+          this.modelOperationList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     // 查询产品列表
     getProductList() {
       return new Promise((resolve, reject) => {
@@ -205,6 +301,7 @@ export default {
       listReviewProcess(this.queryParams).then(response => {
         this.processList = response.rows;
         this.total = response.total;
+        this.idSelect = undefined
         this.loading = false;
       });
     },
@@ -216,7 +313,7 @@ export default {
           this.form = response.data;
           if (this.form.procStat === '2') this.form.procStat = '3';
           else this.form.procStat = '8';
-        updateProcess(this.form).then(response => {
+          updateProcess(this.form).then(response => {
             this.$modal.msgSuccess("已开始审核");
             this.getList();
           })
@@ -226,15 +323,15 @@ export default {
         this.loading = false;
       });
     },
-    
     // 通过审核
     passReview(row) {
       this.$modal.confirm('是否要通过审核？').then(() => {
         this.loading = true;
         getProcess(row.procId).then(response => {
           this.form = response.data;
-          if (this.form.procStat === '3' || this.form.procStat === '8') this.form.procStat = '4';
-        updateProcess(this.form).then(response => {
+          if (this.form.procStat === '3' || this.form.procStat === '8')
+            this.form.procStat = '4';
+          updateProcess(this.form).then(response => {
             this.$modal.msgSuccess("已通过审核");
             this.getList();
           })
@@ -244,15 +341,15 @@ export default {
         this.loading = false;
       });
     },
-    
     // 驳回审核
     rejectReview(row) {
       this.$modal.confirm('是否要驳回审核？').then(() => {
         this.loading = true;
         getProcess(row.procId).then(response => {
           this.form = response.data;
-          if (this.form.procStat === '3' || this.form.procStat === '8') this.form.procStat = '1';
-        updateProcess(this.form).then(response => {
+          if (this.form.procStat === '3' || this.form.procStat === '8')
+            this.form.procStat = '1';
+          updateProcess(this.form).then(response => {
             this.$modal.msgSuccess("已驳回审核");
             this.getList();
           })
@@ -262,25 +359,17 @@ export default {
         this.loading = false;
       });
     },
-    
-   
- 
-
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
       this.getList();
+      this.idSelect = undefined
     },
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.idSelect = undefined
       this.handleQuery();
-    },
-    // 多选框选中数据
-    handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.procId)
-      this.single = selection.length!==1
-      this.multiple = !selection.length
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -288,17 +377,56 @@ export default {
         ...this.queryParams
       }, `process_${new Date().getTime()}.xlsx`)
     },
-    /** 查看流程按钮操作 */
-    handleViewer(row) {
-      this.viewerData.loading = true
-      this.viewerData.title = row.procName
-      this.viewerData.index = row.procModel
-      this.viewerOpen = true
-      getBpmnXml(row.procModel).then(response => {
-        this.viewerData.bpmnXml = response.data || ''
-        this.viewerData.loading = false
-      })
+     // 选中数据条目
+     handleCurrentChange(current, old) {
+      if (current) {
+        this.idSelect = current.procId
+        if (current.procModel) {
+          this.viewerData.loading = true
+          getBpmnXml(current.procModel).then(response => {
+            this.viewerData.bpmnXml = response.data || ''
+            this.viewerData.loading = false
+          })
+        } else {
+          this.viewerData.bpmnXml = ''
+        }
+      }
+    },
+    /**
+     * 解析odCode为显示格式
+     * @author YangZY
+     * @date 20250423
+     */ 
+    parseOdCode(odCode) {
+      const demand = this.orderDemandList.find(ele => ele.odCode === odCode)
+      if (demand) {
+        return `【${demand.orCode}】${demand.prName}`
+      } else return ''
     }
   }
 };
 </script> 
+<style scoped>
+.el-select {
+  width: 100%;
+}
+.el-date-editor{
+  width: 100%;
+}
+::v-deep .el-radio span.el-radio__label {
+  display: none;
+}
+.view-card {
+  max-height: 50vh;
+  overflow: scroll;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 17px;
+}
+.controlled-card {
+  margin-top: 10px;
+}
+</style>

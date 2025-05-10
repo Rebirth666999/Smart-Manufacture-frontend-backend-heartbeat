@@ -66,6 +66,8 @@ public class IcesExceptionLifecycleVersionServiceImpl implements IIcesExceptionL
         lqw.eq(StringUtils.isNotBlank(bo.getExlvCode()), IcesExceptionLifecycleVersion::getExlvCode, bo.getExlvCode());
         lqw.eq(StringUtils.isNotBlank(bo.getExlCode()), IcesExceptionLifecycleVersion::getExlCode, bo.getExlCode());
         lqw.like(StringUtils.isNotBlank(bo.getExlvName()), IcesExceptionLifecycleVersion::getExlvName, bo.getExlvName());
+        lqw.like(StringUtils.isNotBlank(bo.getExlvGeId()), IcesExceptionLifecycleVersion::getExlvGeId, bo.getExlvGeId());
+        lqw.like(StringUtils.isNotBlank(bo.getExlvDefId()), IcesExceptionLifecycleVersion::getExlvDefId, bo.getExlvDefId());
         lqw.eq(bo.getExlvDelete() != null, IcesExceptionLifecycleVersion::getExlvDelete, bo.getExlvDelete());
         return lqw;
     }

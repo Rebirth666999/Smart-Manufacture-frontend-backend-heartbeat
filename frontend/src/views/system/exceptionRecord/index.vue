@@ -163,19 +163,36 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:exceptionRecord:edit']"
+            v-show="scope.row.exrStat === '1'"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-document"
-            @click="handleRecordLog(scope.row)"
-          >处理日志</el-button>
+            icon="el-icon-finished"
+            @click="handleStartConfirm(scope.row)"
+            v-show="scope.row.exrStat === '1'"
+          >开始确认</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-check"
+            v-show="scope.row.exrStat === '2'"
+            @click="handleConfirmPositive(scope.row)"
+          >确认为异常</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-close"
+            v-show="scope.row.exrStat === '2'"
+            @click="handleConfirmNegative(scope.row)"
+          >确认为非异常</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:exceptionRecord:remove']"
+            v-show="scope.row.exrStat === '1'"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -547,21 +564,12 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加异常记录";
+      this.$router.push(`/exception/exceptionRecordAdd`)
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.loading = true;
-      this.reset();
       const exrId = row.exrId || this.ids
-      getExceptionRecord(exrId).then(response => {
-        this.loading = false;
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改异常记录";
-      });
+      this.$router.push(`/exception/exceptionRecordAdd?exrId=${exrId}`)
     },
     /** 提交按钮 */
     submitForm() {
@@ -612,6 +620,63 @@ export default {
     // 查看处理日志
     handleRecordLog(row) {
       this.$router.push(`/exception/exceptionRecordLog?exrCode=${row.exrCode}`)
+    },
+    /** 开始确认上报记录
+     * @param {any} row 记录信息
+     * @author YangZY
+     * @date 20250508
+     */
+    handleStartConfirm(row) {
+      this.$modal.confirm('是否开始确认异常上报记录？').then(() => {
+        this.loading = true
+        getExceptionRecord(row.exrId).then(response => {
+          this.form = response.data
+          this.form.exrStat = "2"
+          updateExceptionRecord(this.form).then(response => {
+            this.$modal.msgSuccess("已开始确认")
+            this.getList()
+            this.loading = false
+          })
+        })
+      })
+    },
+    /** 确认上报记录非异常
+     * @param {any} row 记录信息
+     * @author YangZY
+     * @date 20250508
+     */
+    handleConfirmNegative(row) {
+      this.$modal.confirm('是否确认上报记录为非异常？').then(() => {
+        this.loading = true
+        getExceptionRecord(row.exrId).then(response => {
+          this.form = response.data
+          this.form.exrStat = "3"
+          updateExceptionRecord(this.form).then(response => {
+            this.$modal.msgSuccess("确认完成")
+            this.getList()
+            this.loading = false
+          })
+        })
+      })
+    },
+    /** 确认上报记录为异常
+     * @param {any} row 记录信息
+     * @author YangZY
+     * @date 20250508
+     */
+    handleConfirmPositive(row) {
+      this.$modal.confirm('是否确认上报记录为异常？').then(() => {
+        this.loading = true
+        getExceptionRecord(row.exrId).then(response => {
+          this.form = response.data
+          this.form.exrStat = "4"
+          updateExceptionRecord(this.form).then(response => {
+            this.$modal.msgSuccess("确认完成，已启动异常处理")
+            this.getList()
+            this.loading = false
+          })
+        })
+      })
     }
   }
 };

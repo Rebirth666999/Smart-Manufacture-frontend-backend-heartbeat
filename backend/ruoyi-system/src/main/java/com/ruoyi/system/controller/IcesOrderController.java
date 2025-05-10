@@ -98,8 +98,8 @@ public class IcesOrderController extends BaseController {
     @Log(title = "订单", businessType = BusinessType.UPDATE)
     @RepeatSubmit()
     @PutMapping()
-    public R<Void> edit(@Validated(EditGroup.class) @RequestBody IcesOrderBo bo) {
-        return toAjax(iIcesOrderService.updateByBo(bo));
+    public R<IcesOrderVo> edit(@Validated(EditGroup.class) @RequestBody IcesOrderBo bo) {
+        return R.ok(iIcesOrderService.updateByBo(bo));
     }
 
     /**

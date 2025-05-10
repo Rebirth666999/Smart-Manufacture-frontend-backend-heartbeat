@@ -71,11 +71,14 @@
             </el-option>
           </el-select>
         </el-form-item> -->
+        <el-form-item label="处理进度">
+          <el-image v-if="processView.img" :src="processView.img" />
+          <!-- <process-viewer :key="`designer-${processView.index}`" :xml="processView.xmlData" :style="{'height': '300px', 'margin-bottom': '2em'}" /> -->
+        </el-form-item>
+        <el-form-item label="处理方法">
+          <div> {{ currentTask.description || '暂无' }} </div>
+        </el-form-item>
       </el-form>
-      <!-- <process-viewer :key="`designer-${processView.index}`" :xml="processView.xmlData" :style="{'height': '300px', 'margin-bottom': '2em'}" /> -->
-      <div>
-        <el-image v-if="processView.img" :src="processView.img" />
-      </div>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 认</el-button>
         <el-button @click="cancel">取 消</el-button>

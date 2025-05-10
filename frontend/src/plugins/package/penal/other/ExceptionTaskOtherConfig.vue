@@ -34,7 +34,7 @@ export default {
       handler: function(id) {
         if (id && id.length) {
           this.$nextTick(() => {
-          this.documentation = "";
+            this.documentation = window.bpmnInstances.bpmnElement.businessObject.formKey || '';
           });
         } else {
           this.documentation = "";

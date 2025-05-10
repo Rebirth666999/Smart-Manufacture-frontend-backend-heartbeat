@@ -71,28 +71,27 @@ public class IcesExceptionRecordBo extends BaseEntity {
     /**
      * 异常上报人
      */
-    private Long exrUserReport;
+    private String exrUserReport;
 
     /**
      * 当前处理人
      */
-    private Long exrUserHandle;
+    private String exrUserHandle;
 
     /**
      * 异常解除人
      */
-    private Long exrUserFinish;
+    private String exrUserFinish;
 
     /**
      * 异常责任人
      */
-    private Long exrUserResp;
+    private String exrUserResp;
 
     /**
-     * 持续时间
+     * 上报时间
      */
-    @NotNull(message = "持续时间不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long exrDuration;
+    private String exrCdate;
 
     /**
      * 影响因子
@@ -105,6 +104,11 @@ public class IcesExceptionRecordBo extends BaseEntity {
      */
     @NotBlank(message = "影响等级不能为空", groups = { AddGroup.class, EditGroup.class })
     private String exrImpactLevel;
+
+    /**
+     * 异常执行流程
+     */
+    private String exrProcess;
 
     /**
      * 已删除

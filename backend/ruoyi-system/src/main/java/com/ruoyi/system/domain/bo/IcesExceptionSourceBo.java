@@ -41,31 +41,26 @@ public class IcesExceptionSourceBo extends BaseEntity {
     /**
      * 认证token
      */
-    @NotBlank(message = "认证token不能为空", groups = { AddGroup.class, EditGroup.class })
     private String exsToken;
 
     /**
      * 巡检接口
      */
-    @NotBlank(message = "巡检接口不能为空", groups = { AddGroup.class, EditGroup.class })
     private String exsInspectionUrl;
 
     /**
      * 处理接口
      */
-    @NotBlank(message = "处理接口不能为空", groups = { AddGroup.class, EditGroup.class })
     private String exsHandleUrl;
 
     /**
      * 状态检查接口
      */
-    @NotBlank(message = "状态检查接口不能为空", groups = { AddGroup.class, EditGroup.class })
     private String exsStateUrl;
 
     /**
      * 预警接口
      */
-    @NotBlank(message = "预警接口不能为空", groups = { AddGroup.class, EditGroup.class })
     private String exsNotifyUrl;
 
     /**

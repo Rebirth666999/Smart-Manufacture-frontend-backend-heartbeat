@@ -103,8 +103,8 @@
 
     <el-table v-loading="loading" :data="exceptionRecordList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="异常记录ID" align="center" prop="exrId" v-if="true"/>
-      <el-table-column label="异常记录编码" align="center" prop="exrCode" />
+      <el-table-column label="异常记录ID" align="center" prop="exrId" v-if="true"  :show-overflow-tooltip="true" />
+      <el-table-column label="异常记录编码" align="center" prop="exrCode" :show-overflow-tooltip="true" />
       <el-table-column label="异常源" align="center" prop="exsCode">
         <template slot-scope="scope">
           {{ exceptionSourceList.find(ele => ele.exsCode === scope.row.exsCode).exsName || '' }}
@@ -115,45 +115,36 @@
           {{ exceptionList.find(ele => ele.exCode === scope.row.exCode).exName || '' }}
         </template>
       </el-table-column>
-      <el-table-column label="描述" align="center" prop="exrDesc" />
-      <el-table-column label="参数" align="center" prop="exrParam" />
+      <el-table-column label="描述" align="center" prop="exrDesc" :show-overflow-tooltip="true" />
+      <el-table-column label="参数" align="center" prop="exrParam" :show-overflow-tooltip="true" />
       <el-table-column label="状态" align="center" prop="exrStat">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_exception_record_status" :value="scope.row.exrStat"/>
         </template>
       </el-table-column>
-      <el-table-column label="等级" align="center" prop="exrLevel">
+      <el-table-column label="等级" width="90" align="center" prop="exrLevel">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_exception_record_level" :value="scope.row.exrLevel"/>
         </template>
       </el-table-column>
-      <el-table-column label="异常上报人" align="center" prop="exrUserReport">
+      <el-table-column label="上报类型" width="90" align="center" prop="exrUserReport">
         <template slot-scope="scope">
-          {{ scope.row.exrUserReport && (userList.find(ele => ele.userId === scope.row.exrUserReport).userName || '') }}
+          <el-tag type="warning" v-if="scope.row.exrUserReport === '信息系统'">自动上报</el-tag>
+          <el-tag type="info" v-else>人工上报</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="当前处理人" align="center" prop="exrUserHandle">
-        <template slot-scope="scope">
-          {{ scope.row.exrUserHandle && (userList.find(ele => ele.userId === scope.row.exrUserHandle).userName || '') }}
-        </template>
-      </el-table-column>
-      <el-table-column label="异常解除人" align="center" prop="exrUserFinish">
-        <template slot-scope="scope">
-          {{ scope.row.exrUserFinish && (userList.find(ele => ele.userId === scope.row.exrUserFinish).userName || '') }}
-        </template>
-      </el-table-column>
-      <el-table-column label="异常责任人" align="center" prop="exrUserResp">
-        <template slot-scope="scope">
-          {{ scope.row.exrUserResp && (userList.find(ele => ele.userId === scope.row.exrUserResp).userName || '') }}
-        </template>
-      </el-table-column>
-      <el-table-column label="持续时间" align="center" prop="exrDuration" />
-      <el-table-column label="影响因子" align="center" prop="exrImpactFactor" />
-      <el-table-column label="影响等级" align="center" prop="exrImpactLevel">
+      <el-table-column label="异常上报人" align="center" prop="exrUserReport" />
+      <el-table-column label="当前处理人" align="center" prop="exrUserHandle" />
+      <el-table-column label="异常解除人" align="center" prop="exrUserFinish" />
+      <el-table-column label="异常责任人" align="center" prop="exrUserResp" />
+      <el-table-column label="上报时间" width="150" align="center" prop="exrCdate" />
+      <el-table-column label="影响因子" width="90" align="center" prop="exrImpactFactor" />
+      <el-table-column label="影响等级" width="90" align="center" prop="exrImpactLevel">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_exception_record_impact_level" :value="scope.row.exrImpactLevel"/>
         </template>
       </el-table-column>
+      <el-table-column label="异常执行流程" align="center" prop="exrProcess" :show-overflow-tooltip="true" />
       <!-- <el-table-column label="已删除" align="center" prop="exrDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">

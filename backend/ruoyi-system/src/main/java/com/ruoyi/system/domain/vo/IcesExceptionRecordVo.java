@@ -75,31 +75,31 @@ public class IcesExceptionRecordVo {
      * 异常上报人
      */
     @ExcelProperty(value = "异常上报人")
-    private Long exrUserReport;
+    private String exrUserReport;
 
     /**
      * 当前处理人
      */
     @ExcelProperty(value = "当前处理人")
-    private Long exrUserHandle;
+    private String exrUserHandle;
 
     /**
      * 异常解除人
      */
     @ExcelProperty(value = "异常解除人")
-    private Long exrUserFinish;
+    private String exrUserFinish;
 
     /**
      * 异常责任人
      */
     @ExcelProperty(value = "异常责任人")
-    private Long exrUserResp;
+    private String exrUserResp;
 
     /**
-     * 持续时间
+     * 上报时间
      */
-    @ExcelProperty(value = "持续时间")
-    private Long exrDuration;
+    @ExcelProperty(value = "上报时间")
+    private String exrCdate;
 
     /**
      * 影响因子
@@ -112,6 +112,12 @@ public class IcesExceptionRecordVo {
      */
     @ExcelProperty(value = "影响等级")
     private String exrImpactLevel;
+
+    /**
+     * 异常执行流程
+     */
+    @ExcelProperty(value = "异常执行流程")
+    private String exrProcess;
 
     /**
      * 已删除

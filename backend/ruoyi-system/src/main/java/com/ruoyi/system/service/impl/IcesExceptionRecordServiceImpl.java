@@ -1,7 +1,10 @@
 package com.ruoyi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.common.helper.LoginHelper;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
@@ -22,6 +25,7 @@ import com.ruoyi.system.service.IIcesExceptionLifecycleVersionService;
 import lombok.RequiredArgsConstructor;
 import org.flowable.bpmn.constants.BpmnXMLConstants;
 import org.flowable.engine.repository.ProcessDefinition;
+import org.flowable.engine.runtime.ProcessInstance;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesExceptionRecordBo;
 import com.ruoyi.system.domain.vo.IcesExceptionRecordVo;
@@ -29,6 +33,7 @@ import com.ruoyi.system.domain.IcesExceptionRecord;
 import com.ruoyi.system.mapper.IcesExceptionRecordMapper;
 import com.ruoyi.system.service.IIcesExceptionRecordService;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -81,6 +86,7 @@ public class IcesExceptionRecordServiceImpl extends FlowServiceFactory implement
         lqw.eq(StringUtils.isNotBlank(bo.getExCode()), IcesExceptionRecord::getExCode, bo.getExCode());
         lqw.eq(StringUtils.isNotBlank(bo.getExrStat()), IcesExceptionRecord::getExrStat, bo.getExrStat());
         lqw.eq(StringUtils.isNotBlank(bo.getExrLevel()), IcesExceptionRecord::getExrLevel, bo.getExrLevel());
+        lqw.eq(StringUtils.isNotBlank(bo.getExrProcess()), IcesExceptionRecord::getExrProcess, bo.getExrProcess());
         lqw.eq(bo.getExrDelete() != null, IcesExceptionRecord::getExrDelete, bo.getExrDelete());
         return lqw;
     }
@@ -91,6 +97,16 @@ public class IcesExceptionRecordServiceImpl extends FlowServiceFactory implement
     @Override
     public IcesExceptionRecordVo insertByBo(IcesExceptionRecordBo bo) {
         bo.setExrCode(codeService.insertByType("ExceptionRecord"));
+        // 设置上报时间
+        String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        bo.setExrCdate(cDate);
+        // 如果未填写上报人，则使用当前用户
+        if (StringUtils.isBlank(bo.getExrUserReport())) {
+            bo.setExrUserReport(getLoginUsername());
+        }
+        if (bo.getExrStat().equals("4")) {
+            bo.setExrProcess(startLifecycle(bo));
+        }
         IcesExceptionRecord add = BeanUtil.toBean(bo, IcesExceptionRecord.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
@@ -110,7 +126,7 @@ public class IcesExceptionRecordServiceImpl extends FlowServiceFactory implement
         if (orgn.getExrStat().equals("2") && bo.getExrStat().equals("4")) {
             // 原先确认中，现在确认为异常
             // 自动启动对应异常的生命周期
-            startLifecycle(bo);
+            bo.setExrProcess(startLifecycle(bo));
         }
         IcesExceptionRecord update = BeanUtil.toBean(bo, IcesExceptionRecord.class);
         validEntityBeforeSave(update);
@@ -118,10 +134,31 @@ public class IcesExceptionRecordServiceImpl extends FlowServiceFactory implement
     }
 
     /**
-     * 启动异常的生命周期
-     * @param bo 异常上报记录
+     * 获取当前用户名
+     * @return 用户名
      */
-    private void startLifecycle(IcesExceptionRecordBo bo) {
+    private String getLoginUsername() {
+        LoginUser loginUser;
+        try {
+            loginUser = LoginHelper.getLoginUser();
+        } catch (Exception e) {
+            return null;
+        }
+        if (ObjectUtil.isNotNull(loginUser)) {
+            return loginUser.getUsername();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * 启动异常的生命周期
+     *
+     * @param bo 异常上报记录
+     * @return 流程ID
+     */
+    @Override
+    public String startLifecycle(IcesExceptionRecordBo bo) {
         // 找到生命周期
         IcesExceptionLifecycleBo lifecycleBo = new IcesExceptionLifecycleBo();
         lifecycleBo.setExCode(bo.getExCode());
@@ -160,7 +197,8 @@ public class IcesExceptionRecordServiceImpl extends FlowServiceFactory implement
             // 设置流程状态为进行中
             variables.put(ProcessConstants.PROCESS_STATUS_KEY, ProcessStatus.RUNNING.getStatus());
             // 启动流程实例
-            runtimeService.startProcessInstanceById(processDefinition.getId(), variables);
+            ProcessInstance processInstance = runtimeService.startProcessInstanceById(processDefinition.getId(), variables);
+            return processInstance.getId();
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServiceException("异常生命周期启动错误");

@@ -82,13 +82,13 @@
                 v-for="item in userList"
                 :key="item.userId"
                 :label="item.userName"
-                :value="item.userId"
+                :value="item.userName"
               >
               </el-option>
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <!-- <el-col :span="12">
           <el-form-item label="当前处理人" prop="exrUserHandle">
             <el-select
               v-model="form.exrUserHandle"
@@ -99,13 +99,13 @@
                 v-for="item in userList"
                 :key="item.userId"
                 :label="item.userName"
-                :value="item.userId"
+                :value="item.userName"
               >
               </el-option>
             </el-select>
           </el-form-item>
-        </el-col>
-        <el-col :span="12">
+        </el-col> -->
+        <!-- <el-col :span="12">
           <el-form-item label="异常解除人" prop="exrUserFinish">
             <el-select
               v-model="form.exrUserFinish"
@@ -116,12 +116,12 @@
                 v-for="item in userList"
                 :key="item.userId"
                 :label="item.userName"
-                :value="item.userId"
+                :value="item.userName"
               >
               </el-option>
             </el-select>
           </el-form-item>
-        </el-col>
+        </el-col> -->
         <el-col :span="12">
           <el-form-item label="异常责任人" prop="exrUserResp">
             <el-select
@@ -133,15 +133,10 @@
                 v-for="item in userList"
                 :key="item.userId"
                 :label="item.userName"
-                :value="item.userId"
+                :value="item.userName"
               >
               </el-option>
             </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item label="持续时间" prop="exrDuration">
-            <el-input v-model="form.exrDuration" placeholder="请输入持续时间" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -228,9 +223,6 @@ export default {
         ],
         exrLevel: [
           { required: true, message: "等级不能为空", trigger: "change" }
-        ],
-        exrDuration: [
-          { required: true, message: "持续时间不能为空", trigger: "blur" }
         ],
         exrImpactFactor: [
           { required: true, message: "影响因子不能为空", trigger: "blur" }

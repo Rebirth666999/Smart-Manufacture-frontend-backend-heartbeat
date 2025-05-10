@@ -58,23 +58,23 @@ public class IcesExceptionRecord extends BaseEntity {
     /**
      * 异常上报人
      */
-    private Long exrUserReport;
+    private String exrUserReport;
     /**
      * 当前处理人
      */
-    private Long exrUserHandle;
+    private String exrUserHandle;
     /**
      * 异常解除人
      */
-    private Long exrUserFinish;
+    private String exrUserFinish;
     /**
      * 异常责任人
      */
-    private Long exrUserResp;
+    private String exrUserResp;
     /**
-     * 持续时间
+     * 上报时间
      */
-    private Long exrDuration;
+    private String exrCdate;
     /**
      * 影响因子
      */
@@ -83,6 +83,10 @@ public class IcesExceptionRecord extends BaseEntity {
      * 影响等级
      */
     private String exrImpactLevel;
+    /**
+     * 异常执行流程
+     */
+    private String exrProcess;
     /**
      * 已删除
      */

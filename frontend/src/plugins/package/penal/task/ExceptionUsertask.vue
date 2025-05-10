@@ -14,7 +14,7 @@
             v-for="item in deptList"
             :key="item.deptId"
             :label="item.deptName"
-            :value="item.deptId"
+            :value="parseInt(item.deptId)"
           >
           </el-option>
         </el-select>

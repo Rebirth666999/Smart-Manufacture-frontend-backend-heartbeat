@@ -190,6 +190,7 @@ public class IcesExceptionRunningService extends FlowServiceFactory {
                 taskVo.setCreateTime(task.getCreateTime());
                 taskVo.setProcDefId(task.getProcessDefinitionId());
                 taskVo.setTaskName(task.getName());
+                taskVo.setDescription(task.getFormKey());
                 // 流程定义信息
                 ProcessDefinition pd = repositoryService.createProcessDefinitionQuery()
                     .processDefinitionId(task.getProcessDefinitionId())

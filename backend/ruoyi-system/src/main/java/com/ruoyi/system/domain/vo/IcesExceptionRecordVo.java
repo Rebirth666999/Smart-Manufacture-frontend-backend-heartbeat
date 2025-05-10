@@ -75,25 +75,25 @@ public class IcesExceptionRecordVo {
      * 异常上报人
      */
     @ExcelProperty(value = "异常上报人")
-    private Long exrUserReport;
+    private String exrUserReport;
 
     /**
      * 当前处理人
      */
     @ExcelProperty(value = "当前处理人")
-    private Long exrUserHandle;
+    private String exrUserHandle;
 
     /**
      * 异常解除人
      */
     @ExcelProperty(value = "异常解除人")
-    private Long exrUserFinish;
+    private String exrUserFinish;
 
     /**
      * 异常责任人
      */
     @ExcelProperty(value = "异常责任人")
-    private Long exrUserResp;
+    private String exrUserResp;
 
     /**
      * 持续时间

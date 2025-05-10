@@ -2,7 +2,6 @@ package com.ruoyi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.helper.LoginHelper;
@@ -147,7 +146,8 @@ public class IcesExceptionRecordServiceImpl extends FlowServiceFactory implement
      * 启动异常的生命周期
      * @param bo 异常上报记录
      */
-    private void startLifecycle(IcesExceptionRecordBo bo) {
+    @Override
+    public void startLifecycle(IcesExceptionRecordBo bo) {
         // 找到生命周期
         IcesExceptionLifecycleBo lifecycleBo = new IcesExceptionLifecycleBo();
         lifecycleBo.setExCode(bo.getExCode());

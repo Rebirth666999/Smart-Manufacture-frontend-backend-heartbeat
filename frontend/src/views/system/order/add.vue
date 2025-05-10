@@ -306,7 +306,7 @@ export default {
           this.buttonLoading = true;
           if (this.form.orId != null) {
             if (this.form.orStat !== '1') {
-              this.$confirm('修改已发布的订单将记录订单历史记录，请确认订单信息已修改完毕。', '提示', {
+              this.$confirm('修改已发布的订单将记录订单历史记录并启动报警处理，请确认订单信息已修改完毕。', '提示', {
                 confirmButtonText: '确定修改',
                 cancelButtonText: '取消',
                 type: 'warning'
@@ -320,7 +320,7 @@ export default {
                 })
                 // 发布之后修改，应当提醒用户
                 // 然后离开此界面
-                this.$modal.msgSuccess("修改成功");
+                this.$modal.msgSuccess("修改成功，已启动报警处理");
                 this.$tab.closeOpenPage({ path: "/order" });
                 this.buttonLoading = false;
               }).catch(() => {

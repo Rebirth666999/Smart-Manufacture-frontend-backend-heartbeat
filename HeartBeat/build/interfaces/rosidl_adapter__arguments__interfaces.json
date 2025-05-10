@@ -1,0 +1,22 @@
+{
+  "package_name": "interfaces",
+  "non_idl_tuples": [
+    "/home/berry/HeartBeat/src/interfaces:action/Arm1Test.action",
+    "/home/berry/HeartBeat/src/interfaces:action/Arm2Test.action",
+    "/home/berry/HeartBeat/src/interfaces:action/StopTime.action",
+    "/home/berry/HeartBeat/src/interfaces:action/MoveMood.action",
+    "/home/berry/HeartBeat/src/interfaces:action/MoveTime.action",
+    "/home/berry/HeartBeat/src/interfaces:action/IsMoving.action",
+    "/home/berry/HeartBeat/src/interfaces:action/MoveToLeft.action",
+    "/home/berry/HeartBeat/src/interfaces:action/MoveToRight.action",
+    "/home/berry/HeartBeat/src/interfaces:action/GetStatus.action",
+    "/home/berry/HeartBeat/src/interfaces:action/BeltMove.action",
+    "/home/berry/HeartBeat/src/interfaces:action/BeltStop.action",
+    "/home/berry/HeartBeat/src/interfaces:action/Fetch.action",
+    "/home/berry/HeartBeat/src/interfaces:action/GripperOpen.action",
+    "/home/berry/HeartBeat/src/interfaces:action/HeadMove.action",
+    "/home/berry/HeartBeat/src/interfaces:action/MultipleTurn.action",
+    "/home/berry/HeartBeat/src/interfaces:msg/Arm1Heartbeat.msg",
+    "/home/berry/HeartBeat/src/interfaces:msg/Arm2Heartbeat.msg"
+  ]
+}

@@ -1,0 +1,39 @@
+[8.443s] Invoking command in '/home/berry/HeartBeat/src/controller': PYTHONPATH=/home/berry/HeartBeat/build/controller/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/controller/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/controller build --build-base /home/berry/HeartBeat/build/controller/build install --record /home/berry/HeartBeat/build/controller/install.log --single-version-externally-managed install_data
+[10.663s] running egg_info
+[10.673s] creating ../../build/controller/controller.egg-info
+[10.674s] writing ../../build/controller/controller.egg-info/PKG-INFO
+[10.675s] writing dependency_links to ../../build/controller/controller.egg-info/dependency_links.txt
+[10.676s] writing entry points to ../../build/controller/controller.egg-info/entry_points.txt
+[10.678s] writing requirements to ../../build/controller/controller.egg-info/requires.txt
+[10.679s] writing top-level names to ../../build/controller/controller.egg-info/top_level.txt
+[10.680s] writing manifest file '../../build/controller/controller.egg-info/SOURCES.txt'
+[10.685s] reading manifest file '../../build/controller/controller.egg-info/SOURCES.txt'
+[10.693s] writing manifest file '../../build/controller/controller.egg-info/SOURCES.txt'
+[10.694s] running build
+[10.695s] running build_py
+[10.708s] creating /home/berry/HeartBeat/build/controller/build
+[10.709s] creating /home/berry/HeartBeat/build/controller/build/lib
+[10.709s] creating /home/berry/HeartBeat/build/controller/build/lib/controller
+[10.710s] copying controller/db.py -> /home/berry/HeartBeat/build/controller/build/lib/controller
+[10.712s] copying controller/controller.py -> /home/berry/HeartBeat/build/controller/build/lib/controller
+[10.716s] copying controller/__init__.py -> /home/berry/HeartBeat/build/controller/build/lib/controller
+[10.717s] running install
+[10.724s] running install_lib
+[10.725s] creating /home/berry/HeartBeat/install/controller/lib/python3.10/site-packages/controller
+[10.726s] copying /home/berry/HeartBeat/build/controller/build/lib/controller/db.py -> /home/berry/HeartBeat/install/controller/lib/python3.10/site-packages/controller
+[10.726s] copying /home/berry/HeartBeat/build/controller/build/lib/controller/controller.py -> /home/berry/HeartBeat/install/controller/lib/python3.10/site-packages/controller
+[10.732s] copying /home/berry/HeartBeat/build/controller/build/lib/controller/__init__.py -> /home/berry/HeartBeat/install/controller/lib/python3.10/site-packages/controller
+[10.733s] byte-compiling /home/berry/HeartBeat/install/controller/lib/python3.10/site-packages/controller/db.py to db.cpython-310.pyc
+[10.734s] byte-compiling /home/berry/HeartBeat/install/controller/lib/python3.10/site-packages/controller/controller.py to controller.cpython-310.pyc
+[10.741s] byte-compiling /home/berry/HeartBeat/install/controller/lib/python3.10/site-packages/controller/__init__.py to __init__.cpython-310.pyc
+[10.744s] running install_data
+[10.745s] creating /home/berry/HeartBeat/install/controller/share/ament_index
+[10.746s] creating /home/berry/HeartBeat/install/controller/share/ament_index/resource_index
+[10.747s] creating /home/berry/HeartBeat/install/controller/share/ament_index/resource_index/packages
+[10.748s] copying resource/controller -> /home/berry/HeartBeat/install/controller/share/ament_index/resource_index/packages
+[10.748s] copying package.xml -> /home/berry/HeartBeat/install/controller/share/controller
+[10.749s] running install_egg_info
+[10.864s] Copying ../../build/controller/controller.egg-info to /home/berry/HeartBeat/install/controller/lib/python3.10/site-packages/controller-0.0.0-py3.10.egg-info
+[10.874s] running install_scripts
+[11.059s] writing list of installed files to '/home/berry/HeartBeat/build/controller/install.log'
+[11.423s] Invoked command in '/home/berry/HeartBeat/src/controller' returned '0': PYTHONPATH=/home/berry/HeartBeat/build/controller/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/controller/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/controller build --build-base /home/berry/HeartBeat/build/controller/build install --record /home/berry/HeartBeat/build/controller/install.log --single-version-externally-managed install_data

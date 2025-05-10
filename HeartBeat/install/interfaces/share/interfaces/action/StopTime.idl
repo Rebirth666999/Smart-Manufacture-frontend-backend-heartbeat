@@ -1,0 +1,18 @@
+// generated from rosidl_adapter/resource/action.idl.em
+// with input from interfaces/action/StopTime.action
+// generated code does not contain a copyright notice
+
+
+module interfaces {
+  module action {
+    struct StopTime_Goal {
+      double stoptime;
+    };
+    struct StopTime_Result {
+      string finish;
+    };
+    struct StopTime_Feedback {
+      int32 feedback;
+    };
+  };
+};

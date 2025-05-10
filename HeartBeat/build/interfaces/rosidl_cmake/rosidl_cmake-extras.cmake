@@ -1,0 +1,4 @@
+# generated from rosidl_cmake/cmake/rosidl_cmake-extras.cmake.in
+
+set(interfaces_IDL_FILES "action/Arm1Test.idl;action/Arm2Test.idl;action/StopTime.idl;action/MoveMood.idl;action/MoveTime.idl;action/IsMoving.idl;action/MoveToLeft.idl;action/MoveToRight.idl;action/GetStatus.idl;action/BeltMove.idl;action/BeltStop.idl;action/Fetch.idl;action/GripperOpen.idl;action/HeadMove.idl;action/MultipleTurn.idl;msg/Arm1Heartbeat.idl;msg/Arm2Heartbeat.idl")
+set(interfaces_INTERFACE_FILES "action/Arm1Test.action;action/Arm2Test.action;action/StopTime.action;action/MoveMood.action;action/MoveTime.action;action/IsMoving.action;action/MoveToLeft.action;action/MoveToRight.action;action/GetStatus.action;action/BeltMove.action;action/BeltStop.action;action/Fetch.action;action/GripperOpen.action;action/HeadMove.action;action/MultipleTurn.action;msg/Arm1Heartbeat.msg;msg/Arm2Heartbeat.msg")

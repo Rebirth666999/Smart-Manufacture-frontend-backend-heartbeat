@@ -1,0 +1,20 @@
+// generated from rosidl_adapter/resource/action.idl.em
+// with input from interfaces/action/MoveMood.action
+// generated code does not contain a copyright notice
+
+
+module interfaces {
+  module action {
+    struct MoveMood_Goal {
+      int32 mood;
+
+      double stop_sec;
+    };
+    struct MoveMood_Result {
+      string finish;
+    };
+    struct MoveMood_Feedback {
+      int32 feedback;
+    };
+  };
+};

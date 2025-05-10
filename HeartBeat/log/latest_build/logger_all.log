@@ -1,0 +1,364 @@
+[0.506s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[0.507s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=4, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0xffff9ade6e00>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0xffff9afc02b0>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0xffff9afc02b0>>)
+[1.858s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[1.859s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[1.859s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[1.859s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[1.860s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[1.860s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[1.860s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/berry/HeartBeat'
+[1.861s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[1.861s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[1.862s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[1.862s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[1.862s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[1.862s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[1.862s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[1.863s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[1.863s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[1.976s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[1.976s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[1.976s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[1.976s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[1.977s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[1.977s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[1.978s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[1.978s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[1.978s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[1.979s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[1.979s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[1.980s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[1.980s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[1.980s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[1.981s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ignore', 'ignore_ament_install']
+[1.982s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore'
+[1.982s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore_ament_install'
+[1.982s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_pkg']
+[1.983s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_pkg'
+[1.983s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_meta']
+[1.983s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_meta'
+[1.983s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ros']
+[1.983s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ros'
+[1.984s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['cmake', 'python']
+[1.984s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'cmake'
+[1.984s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python'
+[1.984s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['python_setup_py']
+[1.984s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python_setup_py'
+[1.986s] Level 1:colcon.colcon_core.package_identification:_identify(src/belt_long_server) by extensions ['ignore', 'ignore_ament_install']
+[1.986s] Level 1:colcon.colcon_core.package_identification:_identify(src/belt_long_server) by extension 'ignore'
+[1.986s] Level 1:colcon.colcon_core.package_identification:_identify(src/belt_long_server) by extension 'ignore_ament_install'
+[1.986s] Level 1:colcon.colcon_core.package_identification:_identify(src/belt_long_server) by extensions ['colcon_pkg']
+[1.987s] Level 1:colcon.colcon_core.package_identification:_identify(src/belt_long_server) by extension 'colcon_pkg'
+[1.987s] Level 1:colcon.colcon_core.package_identification:_identify(src/belt_long_server) by extensions ['colcon_meta']
+[1.987s] Level 1:colcon.colcon_core.package_identification:_identify(src/belt_long_server) by extension 'colcon_meta'
+[1.987s] Level 1:colcon.colcon_core.package_identification:_identify(src/belt_long_server) by extensions ['ros']
+[1.987s] Level 1:colcon.colcon_core.package_identification:_identify(src/belt_long_server) by extension 'ros'
+[1.999s] DEBUG:colcon.colcon_core.package_identification:Package 'src/belt_long_server' with type 'ros.ament_python' and name 'belt_long_server'
+[2.000s] Level 1:colcon.colcon_core.package_identification:_identify(src/belt_short_server) by extensions ['ignore', 'ignore_ament_install']
+[2.001s] Level 1:colcon.colcon_core.package_identification:_identify(src/belt_short_server) by extension 'ignore'
+[2.001s] Level 1:colcon.colcon_core.package_identification:_identify(src/belt_short_server) by extension 'ignore_ament_install'
+[2.002s] Level 1:colcon.colcon_core.package_identification:_identify(src/belt_short_server) by extensions ['colcon_pkg']
+[2.002s] Level 1:colcon.colcon_core.package_identification:_identify(src/belt_short_server) by extension 'colcon_pkg'
+[2.002s] Level 1:colcon.colcon_core.package_identification:_identify(src/belt_short_server) by extensions ['colcon_meta']
+[2.002s] Level 1:colcon.colcon_core.package_identification:_identify(src/belt_short_server) by extension 'colcon_meta'
+[2.002s] Level 1:colcon.colcon_core.package_identification:_identify(src/belt_short_server) by extensions ['ros']
+[2.003s] Level 1:colcon.colcon_core.package_identification:_identify(src/belt_short_server) by extension 'ros'
+[2.006s] DEBUG:colcon.colcon_core.package_identification:Package 'src/belt_short_server' with type 'ros.ament_python' and name 'belt_short_server'
+[2.007s] Level 1:colcon.colcon_core.package_identification:_identify(src/controller) by extensions ['ignore', 'ignore_ament_install']
+[2.008s] Level 1:colcon.colcon_core.package_identification:_identify(src/controller) by extension 'ignore'
+[2.008s] Level 1:colcon.colcon_core.package_identification:_identify(src/controller) by extension 'ignore_ament_install'
+[2.008s] Level 1:colcon.colcon_core.package_identification:_identify(src/controller) by extensions ['colcon_pkg']
+[2.008s] Level 1:colcon.colcon_core.package_identification:_identify(src/controller) by extension 'colcon_pkg'
+[2.009s] Level 1:colcon.colcon_core.package_identification:_identify(src/controller) by extensions ['colcon_meta']
+[2.009s] Level 1:colcon.colcon_core.package_identification:_identify(src/controller) by extension 'colcon_meta'
+[2.009s] Level 1:colcon.colcon_core.package_identification:_identify(src/controller) by extensions ['ros']
+[2.009s] Level 1:colcon.colcon_core.package_identification:_identify(src/controller) by extension 'ros'
+[2.012s] DEBUG:colcon.colcon_core.package_identification:Package 'src/controller' with type 'ros.ament_python' and name 'controller'
+[2.014s] Level 1:colcon.colcon_core.package_identification:_identify(src/flask_eq) by extensions ['ignore', 'ignore_ament_install']
+[2.014s] Level 1:colcon.colcon_core.package_identification:_identify(src/flask_eq) by extension 'ignore'
+[2.015s] Level 1:colcon.colcon_core.package_identification:_identify(src/flask_eq) by extension 'ignore_ament_install'
+[2.015s] Level 1:colcon.colcon_core.package_identification:_identify(src/flask_eq) by extensions ['colcon_pkg']
+[2.015s] Level 1:colcon.colcon_core.package_identification:_identify(src/flask_eq) by extension 'colcon_pkg'
+[2.015s] Level 1:colcon.colcon_core.package_identification:_identify(src/flask_eq) by extensions ['colcon_meta']
+[2.015s] Level 1:colcon.colcon_core.package_identification:_identify(src/flask_eq) by extension 'colcon_meta'
+[2.016s] Level 1:colcon.colcon_core.package_identification:_identify(src/flask_eq) by extensions ['ros']
+[2.016s] Level 1:colcon.colcon_core.package_identification:_identify(src/flask_eq) by extension 'ros'
+[2.016s] Level 1:colcon.colcon_core.package_identification:_identify(src/flask_eq) by extensions ['cmake', 'python']
+[2.017s] Level 1:colcon.colcon_core.package_identification:_identify(src/flask_eq) by extension 'cmake'
+[2.017s] Level 1:colcon.colcon_core.package_identification:_identify(src/flask_eq) by extension 'python'
+[2.017s] Level 1:colcon.colcon_core.package_identification:_identify(src/flask_eq) by extensions ['python_setup_py']
+[2.017s] Level 1:colcon.colcon_core.package_identification:_identify(src/flask_eq) by extension 'python_setup_py'
+[2.018s] Level 1:colcon.colcon_core.package_identification:_identify(src/interfaces) by extensions ['ignore', 'ignore_ament_install']
+[2.019s] Level 1:colcon.colcon_core.package_identification:_identify(src/interfaces) by extension 'ignore'
+[2.019s] Level 1:colcon.colcon_core.package_identification:_identify(src/interfaces) by extension 'ignore_ament_install'
+[2.020s] Level 1:colcon.colcon_core.package_identification:_identify(src/interfaces) by extensions ['colcon_pkg']
+[2.020s] Level 1:colcon.colcon_core.package_identification:_identify(src/interfaces) by extension 'colcon_pkg'
+[2.020s] Level 1:colcon.colcon_core.package_identification:_identify(src/interfaces) by extensions ['colcon_meta']
+[2.020s] Level 1:colcon.colcon_core.package_identification:_identify(src/interfaces) by extension 'colcon_meta'
+[2.020s] Level 1:colcon.colcon_core.package_identification:_identify(src/interfaces) by extensions ['ros']
+[2.020s] Level 1:colcon.colcon_core.package_identification:_identify(src/interfaces) by extension 'ros'
+[2.025s] DEBUG:colcon.colcon_core.package_identification:Package 'src/interfaces' with type 'ros.ament_cmake' and name 'interfaces'
+[2.026s] Level 1:colcon.colcon_core.package_identification:_identify(src/track_server) by extensions ['ignore', 'ignore_ament_install']
+[2.027s] Level 1:colcon.colcon_core.package_identification:_identify(src/track_server) by extension 'ignore'
+[2.027s] Level 1:colcon.colcon_core.package_identification:_identify(src/track_server) by extension 'ignore_ament_install'
+[2.028s] Level 1:colcon.colcon_core.package_identification:_identify(src/track_server) by extensions ['colcon_pkg']
+[2.028s] Level 1:colcon.colcon_core.package_identification:_identify(src/track_server) by extension 'colcon_pkg'
+[2.028s] Level 1:colcon.colcon_core.package_identification:_identify(src/track_server) by extensions ['colcon_meta']
+[2.028s] Level 1:colcon.colcon_core.package_identification:_identify(src/track_server) by extension 'colcon_meta'
+[2.028s] Level 1:colcon.colcon_core.package_identification:_identify(src/track_server) by extensions ['ros']
+[2.029s] Level 1:colcon.colcon_core.package_identification:_identify(src/track_server) by extension 'ros'
+[2.032s] DEBUG:colcon.colcon_core.package_identification:Package 'src/track_server' with type 'ros.ament_python' and name 'track_server'
+[2.032s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[2.032s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[2.032s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[2.033s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[2.033s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[2.125s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[2.126s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[2.144s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 271 installed packages in /opt/ros/humble
+[2.156s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[2.381s] Level 5:colcon.colcon_core.verb:set package 'belt_long_server' build argument 'cmake_args' from command line to 'None'
+[2.381s] Level 5:colcon.colcon_core.verb:set package 'belt_long_server' build argument 'cmake_target' from command line to 'None'
+[2.382s] Level 5:colcon.colcon_core.verb:set package 'belt_long_server' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[2.382s] Level 5:colcon.colcon_core.verb:set package 'belt_long_server' build argument 'cmake_clean_cache' from command line to 'False'
+[2.382s] Level 5:colcon.colcon_core.verb:set package 'belt_long_server' build argument 'cmake_clean_first' from command line to 'False'
+[2.382s] Level 5:colcon.colcon_core.verb:set package 'belt_long_server' build argument 'cmake_force_configure' from command line to 'False'
+[2.382s] Level 5:colcon.colcon_core.verb:set package 'belt_long_server' build argument 'ament_cmake_args' from command line to 'None'
+[2.382s] Level 5:colcon.colcon_core.verb:set package 'belt_long_server' build argument 'catkin_cmake_args' from command line to 'None'
+[2.382s] Level 5:colcon.colcon_core.verb:set package 'belt_long_server' build argument 'catkin_skip_building_tests' from command line to 'False'
+[2.382s] DEBUG:colcon.colcon_core.verb:Building package 'belt_long_server' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/berry/HeartBeat/build/belt_long_server', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/berry/HeartBeat/install/belt_long_server', 'merge_install': False, 'path': '/home/berry/HeartBeat/src/belt_long_server', 'symlink_install': False, 'test_result_base': None}
+[2.384s] Level 5:colcon.colcon_core.verb:set package 'belt_short_server' build argument 'cmake_args' from command line to 'None'
+[2.384s] Level 5:colcon.colcon_core.verb:set package 'belt_short_server' build argument 'cmake_target' from command line to 'None'
+[2.384s] Level 5:colcon.colcon_core.verb:set package 'belt_short_server' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[2.385s] Level 5:colcon.colcon_core.verb:set package 'belt_short_server' build argument 'cmake_clean_cache' from command line to 'False'
+[2.385s] Level 5:colcon.colcon_core.verb:set package 'belt_short_server' build argument 'cmake_clean_first' from command line to 'False'
+[2.385s] Level 5:colcon.colcon_core.verb:set package 'belt_short_server' build argument 'cmake_force_configure' from command line to 'False'
+[2.385s] Level 5:colcon.colcon_core.verb:set package 'belt_short_server' build argument 'ament_cmake_args' from command line to 'None'
+[2.385s] Level 5:colcon.colcon_core.verb:set package 'belt_short_server' build argument 'catkin_cmake_args' from command line to 'None'
+[2.385s] Level 5:colcon.colcon_core.verb:set package 'belt_short_server' build argument 'catkin_skip_building_tests' from command line to 'False'
+[2.385s] DEBUG:colcon.colcon_core.verb:Building package 'belt_short_server' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/berry/HeartBeat/build/belt_short_server', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/berry/HeartBeat/install/belt_short_server', 'merge_install': False, 'path': '/home/berry/HeartBeat/src/belt_short_server', 'symlink_install': False, 'test_result_base': None}
+[2.387s] Level 5:colcon.colcon_core.verb:set package 'controller' build argument 'cmake_args' from command line to 'None'
+[2.387s] Level 5:colcon.colcon_core.verb:set package 'controller' build argument 'cmake_target' from command line to 'None'
+[2.387s] Level 5:colcon.colcon_core.verb:set package 'controller' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[2.387s] Level 5:colcon.colcon_core.verb:set package 'controller' build argument 'cmake_clean_cache' from command line to 'False'
+[2.388s] Level 5:colcon.colcon_core.verb:set package 'controller' build argument 'cmake_clean_first' from command line to 'False'
+[2.388s] Level 5:colcon.colcon_core.verb:set package 'controller' build argument 'cmake_force_configure' from command line to 'False'
+[2.388s] Level 5:colcon.colcon_core.verb:set package 'controller' build argument 'ament_cmake_args' from command line to 'None'
+[2.388s] Level 5:colcon.colcon_core.verb:set package 'controller' build argument 'catkin_cmake_args' from command line to 'None'
+[2.388s] Level 5:colcon.colcon_core.verb:set package 'controller' build argument 'catkin_skip_building_tests' from command line to 'False'
+[2.388s] DEBUG:colcon.colcon_core.verb:Building package 'controller' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/berry/HeartBeat/build/controller', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/berry/HeartBeat/install/controller', 'merge_install': False, 'path': '/home/berry/HeartBeat/src/controller', 'symlink_install': False, 'test_result_base': None}
+[2.390s] Level 5:colcon.colcon_core.verb:set package 'interfaces' build argument 'cmake_args' from command line to 'None'
+[2.390s] Level 5:colcon.colcon_core.verb:set package 'interfaces' build argument 'cmake_target' from command line to 'None'
+[2.390s] Level 5:colcon.colcon_core.verb:set package 'interfaces' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[2.390s] Level 5:colcon.colcon_core.verb:set package 'interfaces' build argument 'cmake_clean_cache' from command line to 'False'
+[2.390s] Level 5:colcon.colcon_core.verb:set package 'interfaces' build argument 'cmake_clean_first' from command line to 'False'
+[2.391s] Level 5:colcon.colcon_core.verb:set package 'interfaces' build argument 'cmake_force_configure' from command line to 'False'
+[2.391s] Level 5:colcon.colcon_core.verb:set package 'interfaces' build argument 'ament_cmake_args' from command line to 'None'
+[2.391s] Level 5:colcon.colcon_core.verb:set package 'interfaces' build argument 'catkin_cmake_args' from command line to 'None'
+[2.391s] Level 5:colcon.colcon_core.verb:set package 'interfaces' build argument 'catkin_skip_building_tests' from command line to 'False'
+[2.391s] DEBUG:colcon.colcon_core.verb:Building package 'interfaces' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/berry/HeartBeat/build/interfaces', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/berry/HeartBeat/install/interfaces', 'merge_install': False, 'path': '/home/berry/HeartBeat/src/interfaces', 'symlink_install': False, 'test_result_base': None}
+[2.393s] Level 5:colcon.colcon_core.verb:set package 'track_server' build argument 'cmake_args' from command line to 'None'
+[2.393s] Level 5:colcon.colcon_core.verb:set package 'track_server' build argument 'cmake_target' from command line to 'None'
+[2.393s] Level 5:colcon.colcon_core.verb:set package 'track_server' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[2.393s] Level 5:colcon.colcon_core.verb:set package 'track_server' build argument 'cmake_clean_cache' from command line to 'False'
+[2.393s] Level 5:colcon.colcon_core.verb:set package 'track_server' build argument 'cmake_clean_first' from command line to 'False'
+[2.393s] Level 5:colcon.colcon_core.verb:set package 'track_server' build argument 'cmake_force_configure' from command line to 'False'
+[2.393s] Level 5:colcon.colcon_core.verb:set package 'track_server' build argument 'ament_cmake_args' from command line to 'None'
+[2.393s] Level 5:colcon.colcon_core.verb:set package 'track_server' build argument 'catkin_cmake_args' from command line to 'None'
+[2.394s] Level 5:colcon.colcon_core.verb:set package 'track_server' build argument 'catkin_skip_building_tests' from command line to 'False'
+[2.394s] DEBUG:colcon.colcon_core.verb:Building package 'track_server' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/berry/HeartBeat/build/track_server', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/berry/HeartBeat/install/track_server', 'merge_install': False, 'path': '/home/berry/HeartBeat/src/track_server', 'symlink_install': False, 'test_result_base': None}
+[2.394s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[2.398s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[2.399s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/berry/HeartBeat/src/belt_long_server' with build type 'ament_python'
+[2.400s] Level 1:colcon.colcon_core.shell:create_environment_hook('belt_long_server', 'ament_prefix_path')
+[2.410s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[2.412s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/belt_long_server/share/belt_long_server/hook/ament_prefix_path.ps1'
+[2.416s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/berry/HeartBeat/install/belt_long_server/share/belt_long_server/hook/ament_prefix_path.dsv'
+[2.419s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/belt_long_server/share/belt_long_server/hook/ament_prefix_path.sh'
+[2.424s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[2.424s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[2.441s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/berry/HeartBeat/src/belt_short_server' with build type 'ament_python'
+[2.441s] Level 1:colcon.colcon_core.shell:create_environment_hook('belt_short_server', 'ament_prefix_path')
+[2.443s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/belt_short_server/share/belt_short_server/hook/ament_prefix_path.ps1'
+[2.446s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/berry/HeartBeat/install/belt_short_server/share/belt_short_server/hook/ament_prefix_path.dsv'
+[2.449s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/belt_short_server/share/belt_short_server/hook/ament_prefix_path.sh'
+[2.452s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[2.452s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[2.468s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/berry/HeartBeat/src/controller' with build type 'ament_python'
+[2.469s] Level 1:colcon.colcon_core.shell:create_environment_hook('controller', 'ament_prefix_path')
+[2.471s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/controller/share/controller/hook/ament_prefix_path.ps1'
+[2.474s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/berry/HeartBeat/install/controller/share/controller/hook/ament_prefix_path.dsv'
+[2.476s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/controller/share/controller/hook/ament_prefix_path.sh'
+[2.479s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[2.479s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[2.495s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/berry/HeartBeat/src/interfaces' with build type 'ament_cmake'
+[2.496s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/berry/HeartBeat/src/interfaces'
+[2.497s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[2.498s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[3.775s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/berry/HeartBeat/src/belt_long_server'
+[3.776s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[3.776s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[5.053s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/berry/HeartBeat/src/belt_short_server'
+[5.054s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[5.054s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[6.312s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/berry/HeartBeat/src/controller'
+[6.313s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[6.314s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[6.345s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/berry/HeartBeat/build/interfaces': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/berry/HeartBeat/src/interfaces -DCMAKE_INSTALL_PREFIX=/home/berry/HeartBeat/install/interfaces
+[8.745s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/berry/HeartBeat/src/belt_short_server': PYTHONPATH=/home/berry/HeartBeat/build/belt_short_server/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/belt_short_server build --build-base /home/berry/HeartBeat/build/belt_short_server/build install --record /home/berry/HeartBeat/build/belt_short_server/install.log --single-version-externally-managed install_data
+[8.761s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/berry/HeartBeat/src/belt_long_server': PYTHONPATH=/home/berry/HeartBeat/build/belt_long_server/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/belt_long_server build --build-base /home/berry/HeartBeat/build/belt_long_server/build install --record /home/berry/HeartBeat/build/belt_long_server/install.log --single-version-externally-managed install_data
+[8.770s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/berry/HeartBeat/src/controller': PYTHONPATH=/home/berry/HeartBeat/build/controller/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/controller/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/controller build --build-base /home/berry/HeartBeat/build/controller/build install --record /home/berry/HeartBeat/build/controller/install.log --single-version-externally-managed install_data
+[10.991s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/berry/HeartBeat/src/belt_long_server' returned '0': PYTHONPATH=/home/berry/HeartBeat/build/belt_long_server/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/belt_long_server build --build-base /home/berry/HeartBeat/build/belt_long_server/build install --record /home/berry/HeartBeat/build/belt_long_server/install.log --single-version-externally-managed install_data
+[11.023s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/belt_long_server' for CMake module files
+[11.028s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/belt_long_server' for CMake config files
+[11.034s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/belt_long_server/lib'
+[11.035s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/belt_long_server/bin'
+[11.036s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/belt_long_server/lib/pkgconfig/belt_long_server.pc'
+[11.037s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages'
+[11.038s] Level 1:colcon.colcon_core.shell:create_environment_hook('belt_long_server', 'pythonpath')
+[11.039s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/belt_long_server/share/belt_long_server/hook/pythonpath.ps1'
+[11.042s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/berry/HeartBeat/install/belt_long_server/share/belt_long_server/hook/pythonpath.dsv'
+[11.044s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/belt_long_server/share/belt_long_server/hook/pythonpath.sh'
+[11.047s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/belt_long_server/bin'
+[11.048s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(belt_long_server)
+[11.049s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/belt_long_server/share/belt_long_server/package.ps1'
+[11.053s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/berry/HeartBeat/install/belt_long_server/share/belt_long_server/package.dsv'
+[11.056s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/belt_long_server/share/belt_long_server/package.sh'
+[11.060s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/belt_long_server/share/belt_long_server/package.bash'
+[11.064s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/belt_long_server/share/belt_long_server/package.zsh'
+[11.068s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/berry/HeartBeat/install/belt_long_server/share/colcon-core/packages/belt_long_server)
+[11.071s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/berry/HeartBeat/src/track_server' with build type 'ament_python'
+[11.072s] Level 1:colcon.colcon_core.shell:create_environment_hook('track_server', 'ament_prefix_path')
+[11.073s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/track_server/share/track_server/hook/ament_prefix_path.ps1'
+[11.079s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/berry/HeartBeat/install/track_server/share/track_server/hook/ament_prefix_path.dsv'
+[11.081s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/track_server/share/track_server/hook/ament_prefix_path.sh'
+[11.084s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[11.084s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[11.107s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/controller' for CMake module files
+[11.109s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/berry/HeartBeat/src/controller' returned '0': PYTHONPATH=/home/berry/HeartBeat/build/controller/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/controller/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/controller build --build-base /home/berry/HeartBeat/build/controller/build install --record /home/berry/HeartBeat/build/controller/install.log --single-version-externally-managed install_data
+[11.111s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/controller' for CMake config files
+[11.115s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/controller/lib'
+[11.115s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/controller/bin'
+[11.116s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/controller/lib/pkgconfig/controller.pc'
+[11.117s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/controller/lib/python3.10/site-packages'
+[11.118s] Level 1:colcon.colcon_core.shell:create_environment_hook('controller', 'pythonpath')
+[11.119s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/controller/share/controller/hook/pythonpath.ps1'
+[11.122s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/berry/HeartBeat/install/controller/share/controller/hook/pythonpath.dsv'
+[11.124s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/controller/share/controller/hook/pythonpath.sh'
+[11.127s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/controller/bin'
+[11.127s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(controller)
+[11.129s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/controller/share/controller/package.ps1'
+[11.132s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/berry/HeartBeat/install/controller/share/controller/package.dsv'
+[11.134s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/controller/share/controller/package.sh'
+[11.137s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/controller/share/controller/package.bash'
+[11.139s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/controller/share/controller/package.zsh'
+[11.141s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/berry/HeartBeat/install/controller/share/colcon-core/packages/controller)
+[11.144s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/belt_short_server' for CMake module files
+[11.149s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/berry/HeartBeat/src/belt_short_server' returned '0': PYTHONPATH=/home/berry/HeartBeat/build/belt_short_server/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/belt_short_server build --build-base /home/berry/HeartBeat/build/belt_short_server/build install --record /home/berry/HeartBeat/build/belt_short_server/install.log --single-version-externally-managed install_data
+[11.150s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/belt_short_server' for CMake config files
+[11.154s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/belt_short_server/lib'
+[11.155s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/belt_short_server/bin'
+[11.155s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/belt_short_server/lib/pkgconfig/belt_short_server.pc'
+[11.156s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages'
+[11.156s] Level 1:colcon.colcon_core.shell:create_environment_hook('belt_short_server', 'pythonpath')
+[11.158s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/belt_short_server/share/belt_short_server/hook/pythonpath.ps1'
+[11.160s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/berry/HeartBeat/install/belt_short_server/share/belt_short_server/hook/pythonpath.dsv'
+[11.162s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/belt_short_server/share/belt_short_server/hook/pythonpath.sh'
+[11.165s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/belt_short_server/bin'
+[11.165s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(belt_short_server)
+[11.167s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/belt_short_server/share/belt_short_server/package.ps1'
+[11.169s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/berry/HeartBeat/install/belt_short_server/share/belt_short_server/package.dsv'
+[11.172s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/belt_short_server/share/belt_short_server/package.sh'
+[11.174s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/belt_short_server/share/belt_short_server/package.bash'
+[11.176s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/belt_short_server/share/belt_short_server/package.zsh'
+[11.179s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/berry/HeartBeat/install/belt_short_server/share/colcon-core/packages/belt_short_server)
+[12.880s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/berry/HeartBeat/src/track_server'
+[12.882s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[12.882s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[14.856s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/berry/HeartBeat/src/track_server': PYTHONPATH=/home/berry/HeartBeat/build/track_server/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/track_server build --build-base /home/berry/HeartBeat/build/track_server/build install --record /home/berry/HeartBeat/build/track_server/install.log --single-version-externally-managed install_data
+[16.535s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/track_server' for CMake module files
+[16.538s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/berry/HeartBeat/src/track_server' returned '0': PYTHONPATH=/home/berry/HeartBeat/build/track_server/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/track_server build --build-base /home/berry/HeartBeat/build/track_server/build install --record /home/berry/HeartBeat/build/track_server/install.log --single-version-externally-managed install_data
+[16.540s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/track_server' for CMake config files
+[16.546s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/track_server/lib'
+[16.547s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/track_server/bin'
+[16.547s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/track_server/lib/pkgconfig/track_server.pc'
+[16.548s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages'
+[16.548s] Level 1:colcon.colcon_core.shell:create_environment_hook('track_server', 'pythonpath')
+[16.550s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/track_server/share/track_server/hook/pythonpath.ps1'
+[16.552s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/berry/HeartBeat/install/track_server/share/track_server/hook/pythonpath.dsv'
+[16.554s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/track_server/share/track_server/hook/pythonpath.sh'
+[16.557s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/track_server/bin'
+[16.558s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(track_server)
+[16.559s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/track_server/share/track_server/package.ps1'
+[16.562s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/berry/HeartBeat/install/track_server/share/track_server/package.dsv'
+[16.565s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/track_server/share/track_server/package.sh'
+[16.567s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/track_server/share/track_server/package.bash'
+[16.570s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/track_server/share/track_server/package.zsh'
+[16.572s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/berry/HeartBeat/install/track_server/share/colcon-core/packages/track_server)
+[19.888s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/berry/HeartBeat/build/interfaces' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/berry/HeartBeat/src/interfaces -DCMAKE_INSTALL_PREFIX=/home/berry/HeartBeat/install/interfaces
+[19.902s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/berry/HeartBeat/build/interfaces': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/berry/HeartBeat/build/interfaces -- -j4 -l4
+[192.920s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/berry/HeartBeat/build/interfaces' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/berry/HeartBeat/build/interfaces -- -j4 -l4
+[192.965s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/berry/HeartBeat/build/interfaces': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/berry/HeartBeat/build/interfaces
+[194.268s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(interfaces)
+[194.270s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/interfaces' for CMake module files
+[194.272s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/berry/HeartBeat/build/interfaces' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/berry/HeartBeat/build/interfaces
+[194.276s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/interfaces' for CMake config files
+[194.290s] Level 1:colcon.colcon_core.shell:create_environment_hook('interfaces', 'cmake_prefix_path')
+[194.291s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/interfaces/share/interfaces/hook/cmake_prefix_path.ps1'
+[194.293s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/berry/HeartBeat/install/interfaces/share/interfaces/hook/cmake_prefix_path.dsv'
+[194.296s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/interfaces/share/interfaces/hook/cmake_prefix_path.sh'
+[194.298s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/interfaces/lib'
+[194.299s] Level 1:colcon.colcon_core.shell:create_environment_hook('interfaces', 'ld_library_path_lib')
+[194.300s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/interfaces/share/interfaces/hook/ld_library_path_lib.ps1'
+[194.302s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/berry/HeartBeat/install/interfaces/share/interfaces/hook/ld_library_path_lib.dsv'
+[194.303s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/interfaces/share/interfaces/hook/ld_library_path_lib.sh'
+[194.305s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/interfaces/bin'
+[194.306s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/interfaces/lib/pkgconfig/interfaces.pc'
+[194.307s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/interfaces/lib/python3.10/site-packages'
+[194.307s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/interfaces/bin'
+[194.309s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/interfaces/share/interfaces/package.ps1'
+[194.311s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/berry/HeartBeat/install/interfaces/share/interfaces/package.dsv'
+[194.314s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/interfaces/share/interfaces/package.sh'
+[194.316s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/interfaces/share/interfaces/package.bash'
+[194.318s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/interfaces/share/interfaces/package.zsh'
+[194.319s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/berry/HeartBeat/install/interfaces/share/colcon-core/packages/interfaces)
+[194.323s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(interfaces)
+[194.324s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/interfaces' for CMake module files
+[194.328s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/interfaces' for CMake config files
+[194.340s] Level 1:colcon.colcon_core.shell:create_environment_hook('interfaces', 'cmake_prefix_path')
+[194.341s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/interfaces/share/interfaces/hook/cmake_prefix_path.ps1'
+[194.343s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/berry/HeartBeat/install/interfaces/share/interfaces/hook/cmake_prefix_path.dsv'
+[194.345s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/interfaces/share/interfaces/hook/cmake_prefix_path.sh'
+[194.348s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/interfaces/lib'
+[194.348s] Level 1:colcon.colcon_core.shell:create_environment_hook('interfaces', 'ld_library_path_lib')
+[194.349s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/interfaces/share/interfaces/hook/ld_library_path_lib.ps1'
+[194.352s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/berry/HeartBeat/install/interfaces/share/interfaces/hook/ld_library_path_lib.dsv'
+[194.353s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/berry/HeartBeat/install/interfaces/share/interfaces/hook/ld_library_path_lib.sh'
+[194.356s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/interfaces/bin'
+[194.356s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/interfaces/lib/pkgconfig/interfaces.pc'
+[194.357s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/interfaces/lib/python3.10/site-packages'
+[194.358s] Level 1:colcon.colcon_core.environment:checking '/home/berry/HeartBeat/install/interfaces/bin'
+[194.359s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/interfaces/share/interfaces/package.ps1'
+[194.362s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/berry/HeartBeat/install/interfaces/share/interfaces/package.dsv'
+[194.365s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/interfaces/share/interfaces/package.sh'
+[194.367s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/interfaces/share/interfaces/package.bash'
+[194.370s] INFO:colcon.colcon_core.shell:Creating package script '/home/berry/HeartBeat/install/interfaces/share/interfaces/package.zsh'
+[194.372s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/berry/HeartBeat/install/interfaces/share/colcon-core/packages/interfaces)
+[194.373s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[194.375s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[194.375s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[194.376s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[194.429s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[194.430s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[194.430s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[194.735s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[194.737s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/berry/HeartBeat/install/local_setup.ps1'
+[194.743s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/berry/HeartBeat/install/_local_setup_util_ps1.py'
+[194.752s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/berry/HeartBeat/install/setup.ps1'
+[194.757s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/berry/HeartBeat/install/local_setup.sh'
+[194.760s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/berry/HeartBeat/install/_local_setup_util_sh.py'
+[194.764s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/berry/HeartBeat/install/setup.sh'
+[194.770s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/berry/HeartBeat/install/local_setup.bash'
+[194.773s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/berry/HeartBeat/install/setup.bash'
+[194.778s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/berry/HeartBeat/install/local_setup.zsh'
+[194.781s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/berry/HeartBeat/install/setup.zsh'

@@ -1,0 +1,24 @@
+[10.129s] Invoking command in '/home/berry/HeartBeat/src/belt_long_server': PYTHONPATH=/home/berry/HeartBeat/build/belt_long_server/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/belt_long_server build --build-base /home/berry/HeartBeat/build/belt_long_server/build install --record /home/berry/HeartBeat/build/belt_long_server/install.log --single-version-externally-managed install_data
+[12.887s] running egg_info
+[12.891s] writing ../../build/belt_long_server/belt_long_server.egg-info/PKG-INFO
+[12.904s] writing dependency_links to ../../build/belt_long_server/belt_long_server.egg-info/dependency_links.txt
+[12.905s] writing entry points to ../../build/belt_long_server/belt_long_server.egg-info/entry_points.txt
+[12.909s] writing requirements to ../../build/belt_long_server/belt_long_server.egg-info/requires.txt
+[12.910s] writing top-level names to ../../build/belt_long_server/belt_long_server.egg-info/top_level.txt
+[12.927s] reading manifest file '../../build/belt_long_server/belt_long_server.egg-info/SOURCES.txt'
+[12.938s] writing manifest file '../../build/belt_long_server/belt_long_server.egg-info/SOURCES.txt'
+[12.946s] running build
+[12.947s] running build_py
+[12.952s] copying belt_long_server/belt_long_server.py -> /home/berry/HeartBeat/build/belt_long_server/build/lib/belt_long_server
+[12.955s] running install
+[12.958s] running install_lib
+[12.972s] copying /home/berry/HeartBeat/build/belt_long_server/build/lib/belt_long_server/belt_long_server.py -> /home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages/belt_long_server
+[12.988s] byte-compiling /home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages/belt_long_server/belt_long_server.py to belt_long_server.cpython-310.pyc
+[12.997s] running install_data
+[13.002s] running install_egg_info
+[13.122s] removing '/home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages/belt_long_server-0.0.0-py3.10.egg-info' (and everything under it)
+[13.125s] Copying ../../build/belt_long_server/belt_long_server.egg-info to /home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages/belt_long_server-0.0.0-py3.10.egg-info
+[13.141s] running install_scripts
+[13.453s] Installing belt_long_server script to /home/berry/HeartBeat/install/belt_long_server/lib/belt_long_server
+[13.460s] writing list of installed files to '/home/berry/HeartBeat/build/belt_long_server/install.log'
+[13.714s] Invoked command in '/home/berry/HeartBeat/src/belt_long_server' returned '0': PYTHONPATH=/home/berry/HeartBeat/build/belt_long_server/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/belt_long_server build --build-base /home/berry/HeartBeat/build/belt_long_server/build install --record /home/berry/HeartBeat/build/belt_long_server/install.log --single-version-externally-managed install_data

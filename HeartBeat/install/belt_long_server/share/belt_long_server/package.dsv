@@ -1,0 +1,6 @@
+source;share/belt_long_server/hook/pythonpath.ps1
+source;share/belt_long_server/hook/pythonpath.dsv
+source;share/belt_long_server/hook/pythonpath.sh
+source;share/belt_long_server/hook/ament_prefix_path.ps1
+source;share/belt_long_server/hook/ament_prefix_path.dsv
+source;share/belt_long_server/hook/ament_prefix_path.sh

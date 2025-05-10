@@ -1,0 +1,506 @@
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 707, in <module>
+    main()
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 703, in main
+    t1.join()
+  File "/usr/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/usr/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 707, in <module>
+    main()
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 703, in main
+    t1.join()
+  File "/usr/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/usr/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 707, in <module>
+    main()
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 703, in main
+    t1.join()
+  File "/usr/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/usr/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 707, in <module>
+    main()
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 703, in main
+    t1.join()
+  File "/usr/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/usr/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 707, in <module>
+    main()
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 703, in main
+    t1.join()
+  File "/usr/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/usr/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 707, in <module>
+    main()
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 703, in main
+    t1.join()
+  File "/usr/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/usr/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 707, in <module>
+    main()
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 704, in main
+    t2.join()
+  File "/usr/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/usr/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 707, in <module>
+    main()
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 704, in main
+    t2.join()
+  File "/usr/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/usr/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 707, in <module>
+    main()
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 703, in main
+    t1.join()
+  File "/usr/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/usr/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 707, in <module>
+    main()
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 703, in main
+    t1.join()
+  File "/usr/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/usr/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 707, in <module>
+    main()
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 703, in main
+    t1.join()
+  File "/usr/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/usr/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 707, in <module>
+    main()
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 703, in main
+    t1.join()
+  File "/usr/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/usr/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 707, in <module>
+    main()
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 704, in main
+    t2.join()
+  File "/usr/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/usr/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 707, in <module>
+    main()
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 703, in main
+    t1.join()
+  File "/usr/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/usr/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 707, in <module>
+    main()
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 703, in main
+    t1.join()
+  File "/usr/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/usr/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 707, in <module>
+    main()
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 704, in main
+    t2.join()
+  File "/usr/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/usr/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 707, in <module>
+    main()
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 703, in main
+    t1.join()
+  File "/usr/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/usr/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 707, in <module>
+    main()
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 703, in main
+    t1.join()
+  File "/usr/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/usr/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 707, in <module>
+    main()
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 703, in main
+    t1.join()
+  File "/usr/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/usr/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'
+Traceback (most recent call last):
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 707, in <module>
+    main()
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 703, in main
+    t1.join()
+  File "/usr/lib/python3.10/threading.py", line 1096, in join
+    self._wait_for_tstate_lock()
+  File "/usr/lib/python3.10/threading.py", line 1116, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/threading.py", line 1326, in invoke_excepthook
+    hook(args)
+  File "/home/berry/HeartBeat/src/controller/controller/controller.py", line 107, in thread_exception_handler
+    client.send_msg(json.dumps(e))
+AttributeError: 'NoneType' object has no attribute 'send_msg'

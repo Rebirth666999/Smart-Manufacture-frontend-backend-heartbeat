@@ -1,0 +1,18 @@
+// generated from rosidl_adapter/resource/action.idl.em
+// with input from interfaces/action/IsMoving.action
+// generated code does not contain a copyright notice
+
+
+module interfaces {
+  module action {
+    struct IsMoving_Goal {
+      uint8 structure_needs_at_least_one_member;
+    };
+    struct IsMoving_Result {
+      string finish;
+    };
+    struct IsMoving_Feedback {
+      int32 feedback;
+    };
+  };
+};

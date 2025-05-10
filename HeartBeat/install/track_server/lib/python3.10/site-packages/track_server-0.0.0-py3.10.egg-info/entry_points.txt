@@ -1,0 +1,3 @@
+[console_scripts]
+track_server = track_server.track_server:main
+

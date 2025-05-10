@@ -1,0 +1,581 @@
+[0.000000] (-) TimerEvent: {}
+[0.001851] (belt_long_server) JobQueued: {'identifier': 'belt_long_server', 'dependencies': OrderedDict()}
+[0.002494] (belt_short_server) JobQueued: {'identifier': 'belt_short_server', 'dependencies': OrderedDict()}
+[0.002599] (controller) JobQueued: {'identifier': 'controller', 'dependencies': OrderedDict()}
+[0.002695] (interfaces_new) JobQueued: {'identifier': 'interfaces_new', 'dependencies': OrderedDict()}
+[0.002787] (track_server) JobQueued: {'identifier': 'track_server', 'dependencies': OrderedDict()}
+[0.002881] (belt_long_server) JobStarted: {'identifier': 'belt_long_server'}
+[0.059650] (belt_short_server) JobStarted: {'identifier': 'belt_short_server'}
+[0.098958] (-) TimerEvent: {}
+[0.103076] (controller) JobStarted: {'identifier': 'controller'}
+[0.145984] (interfaces_new) JobStarted: {'identifier': 'interfaces_new'}
+[0.199176] (-) TimerEvent: {}
+[0.299974] (-) TimerEvent: {}
+[0.400655] (-) TimerEvent: {}
+[0.501340] (-) TimerEvent: {}
+[0.602056] (-) TimerEvent: {}
+[0.702849] (-) TimerEvent: {}
+[0.803626] (-) TimerEvent: {}
+[0.904395] (-) TimerEvent: {}
+[1.005095] (-) TimerEvent: {}
+[1.105798] (-) TimerEvent: {}
+[1.206507] (-) TimerEvent: {}
+[1.307192] (-) TimerEvent: {}
+[1.407889] (-) TimerEvent: {}
+[1.508605] (-) TimerEvent: {}
+[1.609326] (-) TimerEvent: {}
+[1.710036] (-) TimerEvent: {}
+[1.810934] (-) TimerEvent: {}
+[1.912176] (-) TimerEvent: {}
+[2.012913] (-) TimerEvent: {}
+[2.114674] (-) TimerEvent: {}
+[2.215650] (-) TimerEvent: {}
+[2.316424] (-) TimerEvent: {}
+[2.417133] (-) TimerEvent: {}
+[2.517862] (-) TimerEvent: {}
+[2.618604] (-) TimerEvent: {}
+[2.719355] (-) TimerEvent: {}
+[2.820131] (-) TimerEvent: {}
+[2.920844] (-) TimerEvent: {}
+[3.021532] (-) TimerEvent: {}
+[3.122238] (-) TimerEvent: {}
+[3.223054] (-) TimerEvent: {}
+[3.323887] (-) TimerEvent: {}
+[3.424593] (-) TimerEvent: {}
+[3.525405] (-) TimerEvent: {}
+[3.626313] (-) TimerEvent: {}
+[3.727091] (-) TimerEvent: {}
+[3.828028] (-) TimerEvent: {}
+[3.928906] (-) TimerEvent: {}
+[4.029715] (-) TimerEvent: {}
+[4.130469] (-) TimerEvent: {}
+[4.231259] (-) TimerEvent: {}
+[4.332071] (-) TimerEvent: {}
+[4.432797] (-) TimerEvent: {}
+[4.533503] (-) TimerEvent: {}
+[4.634209] (-) TimerEvent: {}
+[4.734908] (-) TimerEvent: {}
+[4.835604] (-) TimerEvent: {}
+[4.936457] (-) TimerEvent: {}
+[5.037421] (-) TimerEvent: {}
+[5.138294] (-) TimerEvent: {}
+[5.239353] (-) TimerEvent: {}
+[5.270459] (interfaces_new) JobProgress: {'identifier': 'interfaces_new', 'progress': 'cmake'}
+[5.273992] (interfaces_new) JobProgress: {'identifier': 'interfaces_new', 'progress': 'build'}
+[5.276872] (interfaces_new) Command: {'cmd': ['/usr/bin/cmake', '--build', '/home/berry/HeartBeat/build/interfaces_new', '--', '-j4', '-l4'], 'cwd': '/home/berry/HeartBeat/build/interfaces_new', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('USER', 'berry'), ('SSH_CLIENT', '192.168.1.107 59494 22'), ('LC_TIME', 'zh_CN.UTF-8'), ('XDG_SESSION_TYPE', 'tty'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/home/berry/HeartBeat/install/interfaces_new/lib:/home/berry/RoArm/install/interface/lib:/home/berry/ices_ws/install/interfaces/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib'), ('MOTD_SHOWN', 'pam'), ('HOME', '/home/berry'), ('OLDPWD', '/home/berry/HeartBeat/src'), ('SSH_TTY', '/dev/pts/4'), ('ROS_PYTHON_VERSION', '3'), ('LC_MONETARY', 'zh_CN.UTF-8'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLCON_PREFIX_PATH', '/home/berry/HeartBeat/install:/home/berry/RoArm/install:/home/berry/ices_ws/install'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'berry'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('TERM', 'xterm'), ('XDG_SESSION_ID', '12'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/home/berry/.local/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'), ('LC_ADDRESS', 'zh_CN.UTF-8'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('DISPLAY', 'localhost:14.0'), ('LANG', 'en_US.UTF-8'), ('LC_TELEPHONE', 'zh_CN.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('AMENT_PREFIX_PATH', '/home/berry/HeartBeat/install/track_server:/home/berry/HeartBeat/install/interfaces_new:/home/berry/HeartBeat/install/controller:/home/berry/HeartBeat/install/belt_short_server:/home/berry/HeartBeat/install/belt_long_server:/home/berry/RoArm/install/test1:/home/berry/RoArm/install/serial_ctrl:/home/berry/RoArm/install/roarm:/home/berry/RoArm/install/pos_sub:/home/berry/RoArm/install/pos_pub:/home/berry/RoArm/install/pos_client:/home/berry/RoArm/install/interface:/home/berry/RoArm/install/Position_Sub:/home/berry/RoArm/install/Pos_Server:/home/berry/RoArm/install/Pos_Client:/home/berry/ices_ws/install/track_server:/home/berry/ices_ws/install/launch_test:/home/berry/ices_ws/install/control:/home/berry/ices_ws/install/c_arm:/home/berry/ices_ws/install/arm_server:/home/berry/ices_ws/install/interfaces:/home/berry/ices_ws/install/belt_short_server:/home/berry/ices_ws/install/belt_short_client:/home/berry/ices_ws/install/belt_long_server:/opt/ros/humble'), ('SHELL', '/bin/bash'), ('LC_NAME', 'zh_CN.UTF-8'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('LC_MEASUREMENT', 'zh_CN.UTF-8'), ('LC_IDENTIFICATION', 'zh_CN.UTF-8'), ('PWD', '/home/berry/HeartBeat/build/interfaces_new'), ('SSH_CONNECTION', '192.168.1.107 59494 192.168.1.106 22'), ('XDG_DATA_DIRS', '/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop'), ('PYTHONPATH', '/home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/interfaces_new/local/lib/python3.10/dist-packages:/home/berry/HeartBeat/install/controller/lib/python3.10/site-packages:/home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages:/home/berry/RoArm/install/test1/lib/python3.10/site-packages:/home/berry/RoArm/install/serial_ctrl/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_sub/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_pub/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_client/lib/python3.10/site-packages:/home/berry/RoArm/install/interface/local/lib/python3.10/dist-packages:/home/berry/RoArm/install/Position_Sub/lib/python3.10/site-packages:/home/berry/RoArm/install/Pos_Server/lib/python3.10/site-packages:/home/berry/RoArm/install/Pos_Client/lib/python3.10/site-packages:/home/berry/ices_ws/install/track_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/launch_test/lib/python3.10/site-packages:/home/berry/ices_ws/install/control/lib/python3.10/site-packages:/home/berry/ices_ws/install/c_arm/lib/python3.10/site-packages:/home/berry/ices_ws/install/arm_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/interfaces/local/lib/python3.10/dist-packages:/home/berry/ices_ws/install/belt_short_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/belt_short_client/lib/python3.10/site-packages:/home/berry/ices_ws/install/belt_long_server/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('LC_NUMERIC', 'zh_CN.UTF-8'), ('LC_PAPER', 'zh_CN.UTF-8'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/berry/HeartBeat/install/interfaces_new:/home/berry/RoArm/install/roarm:/home/berry/RoArm/install/interface:/home/berry/ices_ws/install/interfaces:/home/berry/HeartBeat/install/track_server:/home/berry/HeartBeat/install/controller:/home/berry/HeartBeat/install/belt_short_server:/home/berry/HeartBeat/install/belt_long_server:/home/berry/RoArm/install/test1:/home/berry/RoArm/install/serial_ctrl:/home/berry/RoArm/install/pos_sub:/home/berry/RoArm/install/pos_pub:/home/berry/RoArm/install/pos_client:/home/berry/RoArm/install/Position_Sub:/home/berry/RoArm/install/Pos_Server:/home/berry/RoArm/install/Pos_Client:/home/berry/ices_ws/install/track_server:/home/berry/ices_ws/install/launch_test:/home/berry/ices_ws/install/control:/home/berry/ices_ws/install/c_arm:/home/berry/ices_ws/install/arm_server:/home/berry/ices_ws/install/belt_short_server:/home/berry/ices_ws/install/belt_short_client:/home/berry/ices_ws/install/belt_long_server:/opt/ros/humble')]), 'shell': False}
+[5.341021] (-) TimerEvent: {}
+[5.442948] (-) TimerEvent: {}
+[5.535949] (interfaces_new) StdoutLine: {'line': b'-- Found rosidl_default_generators: 1.2.0 (/opt/ros/humble/share/rosidl_default_generators/cmake)\n'}
+[5.537796] (interfaces_new) StdoutLine: {'line': b'-- Found ament_cmake_core: 1.3.9 (/opt/ros/humble/share/ament_cmake_core/cmake)\n'}
+[5.543153] (-) TimerEvent: {}
+[5.644849] (-) TimerEvent: {}
+[5.746806] (-) TimerEvent: {}
+[5.848521] (-) TimerEvent: {}
+[5.950011] (-) TimerEvent: {}
+[6.051044] (-) TimerEvent: {}
+[6.153215] (-) TimerEvent: {}
+[6.254621] (-) TimerEvent: {}
+[6.355958] (-) TimerEvent: {}
+[6.459911] (-) TimerEvent: {}
+[6.567892] (-) TimerEvent: {}
+[6.683939] (-) TimerEvent: {}
+[6.795949] (-) TimerEvent: {}
+[6.903882] (-) TimerEvent: {}
+[7.007941] (-) TimerEvent: {}
+[7.115957] (-) TimerEvent: {}
+[7.226508] (-) TimerEvent: {}
+[7.269876] (interfaces_new) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[7.289071] (interfaces_new) StdoutLine: {'line': b'-- Found rosidl_adapter: 3.1.5 (/opt/ros/humble/share/rosidl_adapter/cmake)\n'}
+[7.326681] (-) TimerEvent: {}
+[7.428459] (-) TimerEvent: {}
+[7.530147] (-) TimerEvent: {}
+[7.631829] (-) TimerEvent: {}
+[7.733529] (-) TimerEvent: {}
+[7.828032] (interfaces_new) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[7.833803] (-) TimerEvent: {}
+[7.935666] (-) TimerEvent: {}
+[8.038041] (-) TimerEvent: {}
+[8.055109] (interfaces_new) StdoutLine: {'line': b'-- Found std_msgs: 4.2.4 (/opt/ros/humble/share/std_msgs/cmake)\n'}
+[8.138345] (-) TimerEvent: {}
+[8.240270] (-) TimerEvent: {}
+[8.342380] (-) TimerEvent: {}
+[8.417501] (belt_short_server) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', 'setup.py', 'egg_info', '--egg-base', '../../build/belt_short_server', 'build', '--build-base', '/home/berry/HeartBeat/build/belt_short_server/build', 'install', '--record', '/home/berry/HeartBeat/build/belt_short_server/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/home/berry/HeartBeat/src/belt_short_server', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'berry', 'SSH_CLIENT': '192.168.1.107 59494 22', 'LC_TIME': 'zh_CN.UTF-8', 'XDG_SESSION_TYPE': 'tty', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/home/berry/HeartBeat/install/interfaces_new/lib:/home/berry/RoArm/install/interface/lib:/home/berry/ices_ws/install/interfaces/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib', 'MOTD_SHOWN': 'pam', 'HOME': '/home/berry', 'OLDPWD': '/home/berry/HeartBeat/src', 'SSH_TTY': '/dev/pts/4', 'ROS_PYTHON_VERSION': '3', 'LC_MONETARY': 'zh_CN.UTF-8', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLCON_PREFIX_PATH': '/home/berry/HeartBeat/install:/home/berry/RoArm/install:/home/berry/ices_ws/install', 'ROS_DISTRO': 'humble', 'LOGNAME': 'berry', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'TERM': 'xterm', 'XDG_SESSION_ID': '12', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/home/berry/.local/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin', 'LC_ADDRESS': 'zh_CN.UTF-8', 'XDG_RUNTIME_DIR': '/run/user/1000', 'DISPLAY': 'localhost:14.0', 'LANG': 'en_US.UTF-8', 'LC_TELEPHONE': 'zh_CN.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'AMENT_PREFIX_PATH': '/home/berry/HeartBeat/install/track_server:/home/berry/HeartBeat/install/interfaces_new:/home/berry/HeartBeat/install/controller:/home/berry/HeartBeat/install/belt_short_server:/home/berry/HeartBeat/install/belt_long_server:/home/berry/RoArm/install/test1:/home/berry/RoArm/install/serial_ctrl:/home/berry/RoArm/install/roarm:/home/berry/RoArm/install/pos_sub:/home/berry/RoArm/install/pos_pub:/home/berry/RoArm/install/pos_client:/home/berry/RoArm/install/interface:/home/berry/RoArm/install/Position_Sub:/home/berry/RoArm/install/Pos_Server:/home/berry/RoArm/install/Pos_Client:/home/berry/ices_ws/install/track_server:/home/berry/ices_ws/install/launch_test:/home/berry/ices_ws/install/control:/home/berry/ices_ws/install/c_arm:/home/berry/ices_ws/install/arm_server:/home/berry/ices_ws/install/interfaces:/home/berry/ices_ws/install/belt_short_server:/home/berry/ices_ws/install/belt_short_client:/home/berry/ices_ws/install/belt_long_server:/opt/ros/humble', 'SHELL': '/bin/bash', 'LC_NAME': 'zh_CN.UTF-8', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'LC_MEASUREMENT': 'zh_CN.UTF-8', 'LC_IDENTIFICATION': 'zh_CN.UTF-8', 'PWD': '/home/berry/HeartBeat/build/belt_short_server', 'SSH_CONNECTION': '192.168.1.107 59494 192.168.1.106 22', 'XDG_DATA_DIRS': '/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/berry/HeartBeat/build/belt_short_server/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/interfaces_new/local/lib/python3.10/dist-packages:/home/berry/HeartBeat/install/controller/lib/python3.10/site-packages:/home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages:/home/berry/RoArm/install/test1/lib/python3.10/site-packages:/home/berry/RoArm/install/serial_ctrl/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_sub/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_pub/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_client/lib/python3.10/site-packages:/home/berry/RoArm/install/interface/local/lib/python3.10/dist-packages:/home/berry/RoArm/install/Position_Sub/lib/python3.10/site-packages:/home/berry/RoArm/install/Pos_Server/lib/python3.10/site-packages:/home/berry/RoArm/install/Pos_Client/lib/python3.10/site-packages:/home/berry/ices_ws/install/track_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/launch_test/lib/python3.10/site-packages:/home/berry/ices_ws/install/control/lib/python3.10/site-packages:/home/berry/ices_ws/install/c_arm/lib/python3.10/site-packages:/home/berry/ices_ws/install/arm_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/interfaces/local/lib/python3.10/dist-packages:/home/berry/ices_ws/install/belt_short_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/belt_short_client/lib/python3.10/site-packages:/home/berry/ices_ws/install/belt_long_server/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'LC_NUMERIC': 'zh_CN.UTF-8', 'LC_PAPER': 'zh_CN.UTF-8', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/home/berry/HeartBeat/install/interfaces_new:/home/berry/RoArm/install/roarm:/home/berry/RoArm/install/interface:/home/berry/ices_ws/install/interfaces'}, 'shell': False}
+[8.442705] (-) TimerEvent: {}
+[8.547058] (-) TimerEvent: {}
+[8.648684] (-) TimerEvent: {}
+[8.750464] (-) TimerEvent: {}
+[8.853616] (-) TimerEvent: {}
+[8.908059] (belt_long_server) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', 'setup.py', 'egg_info', '--egg-base', '../../build/belt_long_server', 'build', '--build-base', '/home/berry/HeartBeat/build/belt_long_server/build', 'install', '--record', '/home/berry/HeartBeat/build/belt_long_server/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/home/berry/HeartBeat/src/belt_long_server', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'berry', 'SSH_CLIENT': '192.168.1.107 59494 22', 'LC_TIME': 'zh_CN.UTF-8', 'XDG_SESSION_TYPE': 'tty', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/home/berry/HeartBeat/install/interfaces_new/lib:/home/berry/RoArm/install/interface/lib:/home/berry/ices_ws/install/interfaces/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib', 'MOTD_SHOWN': 'pam', 'HOME': '/home/berry', 'OLDPWD': '/home/berry/HeartBeat/src', 'SSH_TTY': '/dev/pts/4', 'ROS_PYTHON_VERSION': '3', 'LC_MONETARY': 'zh_CN.UTF-8', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLCON_PREFIX_PATH': '/home/berry/HeartBeat/install:/home/berry/RoArm/install:/home/berry/ices_ws/install', 'ROS_DISTRO': 'humble', 'LOGNAME': 'berry', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'TERM': 'xterm', 'XDG_SESSION_ID': '12', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/home/berry/.local/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin', 'LC_ADDRESS': 'zh_CN.UTF-8', 'XDG_RUNTIME_DIR': '/run/user/1000', 'DISPLAY': 'localhost:14.0', 'LANG': 'en_US.UTF-8', 'LC_TELEPHONE': 'zh_CN.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'AMENT_PREFIX_PATH': '/home/berry/HeartBeat/install/track_server:/home/berry/HeartBeat/install/interfaces_new:/home/berry/HeartBeat/install/controller:/home/berry/HeartBeat/install/belt_short_server:/home/berry/HeartBeat/install/belt_long_server:/home/berry/RoArm/install/test1:/home/berry/RoArm/install/serial_ctrl:/home/berry/RoArm/install/roarm:/home/berry/RoArm/install/pos_sub:/home/berry/RoArm/install/pos_pub:/home/berry/RoArm/install/pos_client:/home/berry/RoArm/install/interface:/home/berry/RoArm/install/Position_Sub:/home/berry/RoArm/install/Pos_Server:/home/berry/RoArm/install/Pos_Client:/home/berry/ices_ws/install/track_server:/home/berry/ices_ws/install/launch_test:/home/berry/ices_ws/install/control:/home/berry/ices_ws/install/c_arm:/home/berry/ices_ws/install/arm_server:/home/berry/ices_ws/install/interfaces:/home/berry/ices_ws/install/belt_short_server:/home/berry/ices_ws/install/belt_short_client:/home/berry/ices_ws/install/belt_long_server:/opt/ros/humble', 'SHELL': '/bin/bash', 'LC_NAME': 'zh_CN.UTF-8', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'LC_MEASUREMENT': 'zh_CN.UTF-8', 'LC_IDENTIFICATION': 'zh_CN.UTF-8', 'PWD': '/home/berry/HeartBeat/build/belt_long_server', 'SSH_CONNECTION': '192.168.1.107 59494 192.168.1.106 22', 'XDG_DATA_DIRS': '/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/berry/HeartBeat/build/belt_long_server/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/interfaces_new/local/lib/python3.10/dist-packages:/home/berry/HeartBeat/install/controller/lib/python3.10/site-packages:/home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages:/home/berry/RoArm/install/test1/lib/python3.10/site-packages:/home/berry/RoArm/install/serial_ctrl/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_sub/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_pub/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_client/lib/python3.10/site-packages:/home/berry/RoArm/install/interface/local/lib/python3.10/dist-packages:/home/berry/RoArm/install/Position_Sub/lib/python3.10/site-packages:/home/berry/RoArm/install/Pos_Server/lib/python3.10/site-packages:/home/berry/RoArm/install/Pos_Client/lib/python3.10/site-packages:/home/berry/ices_ws/install/track_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/launch_test/lib/python3.10/site-packages:/home/berry/ices_ws/install/control/lib/python3.10/site-packages:/home/berry/ices_ws/install/c_arm/lib/python3.10/site-packages:/home/berry/ices_ws/install/arm_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/interfaces/local/lib/python3.10/dist-packages:/home/berry/ices_ws/install/belt_short_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/belt_short_client/lib/python3.10/site-packages:/home/berry/ices_ws/install/belt_long_server/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'LC_NUMERIC': 'zh_CN.UTF-8', 'LC_PAPER': 'zh_CN.UTF-8', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/home/berry/HeartBeat/install/interfaces_new:/home/berry/RoArm/install/roarm:/home/berry/RoArm/install/interface:/home/berry/ices_ws/install/interfaces'}, 'shell': False}
+[8.953786] (-) TimerEvent: {}
+[9.054654] (-) TimerEvent: {}
+[9.155509] (-) TimerEvent: {}
+[9.256350] (-) TimerEvent: {}
+[9.357327] (-) TimerEvent: {}
+[9.458412] (-) TimerEvent: {}
+[9.560438] (-) TimerEvent: {}
+[9.661975] (-) TimerEvent: {}
+[9.692026] (controller) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', 'setup.py', 'egg_info', '--egg-base', '../../build/controller', 'build', '--build-base', '/home/berry/HeartBeat/build/controller/build', 'install', '--record', '/home/berry/HeartBeat/build/controller/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/home/berry/HeartBeat/src/controller', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'berry', 'SSH_CLIENT': '192.168.1.107 59494 22', 'LC_TIME': 'zh_CN.UTF-8', 'XDG_SESSION_TYPE': 'tty', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/home/berry/HeartBeat/install/interfaces_new/lib:/home/berry/RoArm/install/interface/lib:/home/berry/ices_ws/install/interfaces/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib', 'MOTD_SHOWN': 'pam', 'HOME': '/home/berry', 'OLDPWD': '/home/berry/HeartBeat/src', 'SSH_TTY': '/dev/pts/4', 'ROS_PYTHON_VERSION': '3', 'LC_MONETARY': 'zh_CN.UTF-8', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLCON_PREFIX_PATH': '/home/berry/HeartBeat/install:/home/berry/RoArm/install:/home/berry/ices_ws/install', 'ROS_DISTRO': 'humble', 'LOGNAME': 'berry', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'TERM': 'xterm', 'XDG_SESSION_ID': '12', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/home/berry/.local/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin', 'LC_ADDRESS': 'zh_CN.UTF-8', 'XDG_RUNTIME_DIR': '/run/user/1000', 'DISPLAY': 'localhost:14.0', 'LANG': 'en_US.UTF-8', 'LC_TELEPHONE': 'zh_CN.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'AMENT_PREFIX_PATH': '/home/berry/HeartBeat/install/track_server:/home/berry/HeartBeat/install/interfaces_new:/home/berry/HeartBeat/install/controller:/home/berry/HeartBeat/install/belt_short_server:/home/berry/HeartBeat/install/belt_long_server:/home/berry/RoArm/install/test1:/home/berry/RoArm/install/serial_ctrl:/home/berry/RoArm/install/roarm:/home/berry/RoArm/install/pos_sub:/home/berry/RoArm/install/pos_pub:/home/berry/RoArm/install/pos_client:/home/berry/RoArm/install/interface:/home/berry/RoArm/install/Position_Sub:/home/berry/RoArm/install/Pos_Server:/home/berry/RoArm/install/Pos_Client:/home/berry/ices_ws/install/track_server:/home/berry/ices_ws/install/launch_test:/home/berry/ices_ws/install/control:/home/berry/ices_ws/install/c_arm:/home/berry/ices_ws/install/arm_server:/home/berry/ices_ws/install/interfaces:/home/berry/ices_ws/install/belt_short_server:/home/berry/ices_ws/install/belt_short_client:/home/berry/ices_ws/install/belt_long_server:/opt/ros/humble', 'SHELL': '/bin/bash', 'LC_NAME': 'zh_CN.UTF-8', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'LC_MEASUREMENT': 'zh_CN.UTF-8', 'LC_IDENTIFICATION': 'zh_CN.UTF-8', 'PWD': '/home/berry/HeartBeat/build/controller', 'SSH_CONNECTION': '192.168.1.107 59494 192.168.1.106 22', 'XDG_DATA_DIRS': '/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/berry/HeartBeat/build/controller/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/controller/lib/python3.10/site-packages:/home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/interfaces_new/local/lib/python3.10/dist-packages:/home/berry/HeartBeat/install/controller/lib/python3.10/site-packages:/home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages:/home/berry/RoArm/install/test1/lib/python3.10/site-packages:/home/berry/RoArm/install/serial_ctrl/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_sub/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_pub/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_client/lib/python3.10/site-packages:/home/berry/RoArm/install/interface/local/lib/python3.10/dist-packages:/home/berry/RoArm/install/Position_Sub/lib/python3.10/site-packages:/home/berry/RoArm/install/Pos_Server/lib/python3.10/site-packages:/home/berry/RoArm/install/Pos_Client/lib/python3.10/site-packages:/home/berry/ices_ws/install/track_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/launch_test/lib/python3.10/site-packages:/home/berry/ices_ws/install/control/lib/python3.10/site-packages:/home/berry/ices_ws/install/c_arm/lib/python3.10/site-packages:/home/berry/ices_ws/install/arm_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/interfaces/local/lib/python3.10/dist-packages:/home/berry/ices_ws/install/belt_short_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/belt_short_client/lib/python3.10/site-packages:/home/berry/ices_ws/install/belt_long_server/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'LC_NUMERIC': 'zh_CN.UTF-8', 'LC_PAPER': 'zh_CN.UTF-8', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/home/berry/HeartBeat/install/interfaces_new:/home/berry/RoArm/install/roarm:/home/berry/RoArm/install/interface:/home/berry/ices_ws/install/interfaces'}, 'shell': False}
+[9.762179] (-) TimerEvent: {}
+[9.863735] (-) TimerEvent: {}
+[9.965329] (-) TimerEvent: {}
+[10.066704] (-) TimerEvent: {}
+[10.167678] (-) TimerEvent: {}
+[10.268496] (-) TimerEvent: {}
+[10.369965] (-) TimerEvent: {}
+[10.471567] (-) TimerEvent: {}
+[10.573147] (-) TimerEvent: {}
+[10.674526] (-) TimerEvent: {}
+[10.722856] (belt_short_server) StdoutLine: {'line': b'running egg_info\n'}
+[10.726610] (belt_short_server) StdoutLine: {'line': b'writing ../../build/belt_short_server/belt_short_server.egg-info/PKG-INFO\n'}
+[10.727904] (belt_short_server) StdoutLine: {'line': b'writing dependency_links to ../../build/belt_short_server/belt_short_server.egg-info/dependency_links.txt\n'}
+[10.729333] (belt_short_server) StdoutLine: {'line': b'writing entry points to ../../build/belt_short_server/belt_short_server.egg-info/entry_points.txt\n'}
+[10.730516] (belt_short_server) StdoutLine: {'line': b'writing requirements to ../../build/belt_short_server/belt_short_server.egg-info/requires.txt\n'}
+[10.731417] (belt_short_server) StdoutLine: {'line': b'writing top-level names to ../../build/belt_short_server/belt_short_server.egg-info/top_level.txt\n'}
+[10.741123] (belt_short_server) StdoutLine: {'line': b"reading manifest file '../../build/belt_short_server/belt_short_server.egg-info/SOURCES.txt'\n"}
+[10.745921] (belt_short_server) StdoutLine: {'line': b"writing manifest file '../../build/belt_short_server/belt_short_server.egg-info/SOURCES.txt'\n"}
+[10.746787] (belt_short_server) StdoutLine: {'line': b'running build\n'}
+[10.747268] (belt_short_server) StdoutLine: {'line': b'running build_py\n'}
+[10.749384] (belt_short_server) StdoutLine: {'line': b'running install\n'}
+[10.750771] (belt_short_server) StdoutLine: {'line': b'running install_lib\n'}
+[10.759653] (belt_short_server) StdoutLine: {'line': b'running install_data\n'}
+[10.760661] (belt_short_server) StdoutLine: {'line': b'running install_egg_info\n'}
+[10.774746] (-) TimerEvent: {}
+[10.842939] (belt_short_server) StdoutLine: {'line': b"removing '/home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages/belt_short_server-0.0.0-py3.10.egg-info' (and everything under it)\n"}
+[10.845308] (belt_short_server) StdoutLine: {'line': b'Copying ../../build/belt_short_server/belt_short_server.egg-info to /home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages/belt_short_server-0.0.0-py3.10.egg-info\n'}
+[10.853014] (belt_short_server) StdoutLine: {'line': b'running install_scripts\n'}
+[10.874989] (-) TimerEvent: {}
+[10.975897] (-) TimerEvent: {}
+[11.076798] (-) TimerEvent: {}
+[11.105777] (belt_short_server) StdoutLine: {'line': b'Installing belt_short_server script to /home/berry/HeartBeat/install/belt_short_server/lib/belt_short_server\n'}
+[11.121327] (belt_short_server) StdoutLine: {'line': b"writing list of installed files to '/home/berry/HeartBeat/build/belt_short_server/install.log'\n"}
+[11.177000] (-) TimerEvent: {}
+[11.278115] (-) TimerEvent: {}
+[11.343913] (belt_short_server) CommandEnded: {'returncode': 0}
+[11.378344] (-) TimerEvent: {}
+[11.416726] (belt_short_server) JobEnded: {'identifier': 'belt_short_server', 'rc': 0}
+[11.419748] (track_server) JobStarted: {'identifier': 'track_server'}
+[11.482878] (-) TimerEvent: {}
+[11.583613] (-) TimerEvent: {}
+[11.685020] (-) TimerEvent: {}
+[11.786471] (-) TimerEvent: {}
+[11.829566] (belt_long_server) StdoutLine: {'line': b'running egg_info\n'}
+[11.833224] (belt_long_server) StdoutLine: {'line': b'writing ../../build/belt_long_server/belt_long_server.egg-info/PKG-INFO\n'}
+[11.834460] (belt_long_server) StdoutLine: {'line': b'writing dependency_links to ../../build/belt_long_server/belt_long_server.egg-info/dependency_links.txt\n'}
+[11.835650] (belt_long_server) StdoutLine: {'line': b'writing entry points to ../../build/belt_long_server/belt_long_server.egg-info/entry_points.txt\n'}
+[11.836759] (belt_long_server) StdoutLine: {'line': b'writing requirements to ../../build/belt_long_server/belt_long_server.egg-info/requires.txt\n'}
+[11.837941] (belt_long_server) StdoutLine: {'line': b'writing top-level names to ../../build/belt_long_server/belt_long_server.egg-info/top_level.txt\n'}
+[11.847431] (belt_long_server) StdoutLine: {'line': b"reading manifest file '../../build/belt_long_server/belt_long_server.egg-info/SOURCES.txt'\n"}
+[11.852675] (belt_long_server) StdoutLine: {'line': b"writing manifest file '../../build/belt_long_server/belt_long_server.egg-info/SOURCES.txt'\n"}
+[11.853733] (belt_long_server) StdoutLine: {'line': b'running build\n'}
+[11.854555] (belt_long_server) StdoutLine: {'line': b'running build_py\n'}
+[11.855998] (belt_long_server) StdoutLine: {'line': b'running install\n'}
+[11.857569] (belt_long_server) StdoutLine: {'line': b'running install_lib\n'}
+[11.867590] (belt_long_server) StdoutLine: {'line': b'running install_data\n'}
+[11.868522] (belt_long_server) StdoutLine: {'line': b'running install_egg_info\n'}
+[11.886765] (-) TimerEvent: {}
+[11.952159] (belt_long_server) StdoutLine: {'line': b"removing '/home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages/belt_long_server-0.0.0-py3.10.egg-info' (and everything under it)\n"}
+[11.954237] (belt_long_server) StdoutLine: {'line': b'Copying ../../build/belt_long_server/belt_long_server.egg-info to /home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages/belt_long_server-0.0.0-py3.10.egg-info\n'}
+[11.961918] (belt_long_server) StdoutLine: {'line': b'running install_scripts\n'}
+[11.987038] (-) TimerEvent: {}
+[12.088692] (-) TimerEvent: {}
+[12.157060] (belt_long_server) StdoutLine: {'line': b'Installing belt_long_server script to /home/berry/HeartBeat/install/belt_long_server/lib/belt_long_server\n'}
+[12.175196] (belt_long_server) StdoutLine: {'line': b"writing list of installed files to '/home/berry/HeartBeat/build/belt_long_server/install.log'\n"}
+[12.188901] (-) TimerEvent: {}
+[12.289727] (-) TimerEvent: {}
+[12.390589] (-) TimerEvent: {}
+[12.492086] (-) TimerEvent: {}
+[12.593884] (-) TimerEvent: {}
+[12.694801] (-) TimerEvent: {}
+[12.796492] (-) TimerEvent: {}
+[12.854121] (controller) StdoutLine: {'line': b'running egg_info\n'}
+[12.857414] (controller) StdoutLine: {'line': b'writing ../../build/controller/controller.egg-info/PKG-INFO\n'}
+[12.858772] (controller) StdoutLine: {'line': b'writing dependency_links to ../../build/controller/controller.egg-info/dependency_links.txt\n'}
+[12.860025] (controller) StdoutLine: {'line': b'writing entry points to ../../build/controller/controller.egg-info/entry_points.txt\n'}
+[12.861324] (controller) StdoutLine: {'line': b'writing requirements to ../../build/controller/controller.egg-info/requires.txt\n'}
+[12.862332] (controller) StdoutLine: {'line': b'writing top-level names to ../../build/controller/controller.egg-info/top_level.txt\n'}
+[12.872417] (controller) StdoutLine: {'line': b"reading manifest file '../../build/controller/controller.egg-info/SOURCES.txt'\n"}
+[12.877262] (controller) StdoutLine: {'line': b"writing manifest file '../../build/controller/controller.egg-info/SOURCES.txt'\n"}
+[12.878108] (controller) StdoutLine: {'line': b'running build\n'}
+[12.878672] (controller) StdoutLine: {'line': b'running build_py\n'}
+[12.879835] (controller) StdoutLine: {'line': b'copying controller/controller.py -> /home/berry/HeartBeat/build/controller/build/lib/controller\n'}
+[12.883734] (controller) StdoutLine: {'line': b'running install\n'}
+[12.886536] (controller) StdoutLine: {'line': b'running install_lib\n'}
+[12.893264] (controller) StdoutLine: {'line': b'copying /home/berry/HeartBeat/build/controller/build/lib/controller/controller.py -> /home/berry/HeartBeat/install/controller/lib/python3.10/site-packages/controller\n'}
+[12.896895] (-) TimerEvent: {}
+[12.900382] (controller) StdoutLine: {'line': b'byte-compiling /home/berry/HeartBeat/install/controller/lib/python3.10/site-packages/controller/controller.py to controller.cpython-310.pyc\n'}
+[12.921236] (controller) StdoutLine: {'line': b'running install_data\n'}
+[12.922298] (controller) StdoutLine: {'line': b'running install_egg_info\n'}
+[12.997200] (-) TimerEvent: {}
+[13.002783] (controller) StdoutLine: {'line': b"removing '/home/berry/HeartBeat/install/controller/lib/python3.10/site-packages/controller-0.0.0-py3.10.egg-info' (and everything under it)\n"}
+[13.005845] (controller) StdoutLine: {'line': b'Copying ../../build/controller/controller.egg-info to /home/berry/HeartBeat/install/controller/lib/python3.10/site-packages/controller-0.0.0-py3.10.egg-info\n'}
+[13.014860] (controller) StdoutLine: {'line': b'running install_scripts\n'}
+[13.097391] (-) TimerEvent: {}
+[13.116111] (interfaces_new) StdoutLine: {'line': b'-- Found ament_cmake_ros: 0.10.0 (/opt/ros/humble/share/ament_cmake_ros/cmake)\n'}
+[13.171997] (controller) StdoutLine: {'line': b"writing list of installed files to '/home/berry/HeartBeat/build/controller/install.log'\n"}
+[13.197579] (-) TimerEvent: {}
+[13.299300] (-) TimerEvent: {}
+[13.400948] (-) TimerEvent: {}
+[13.502477] (-) TimerEvent: {}
+[13.604458] (-) TimerEvent: {}
+[13.706347] (-) TimerEvent: {}
+[13.807921] (-) TimerEvent: {}
+[13.909667] (-) TimerEvent: {}
+[14.013099] (-) TimerEvent: {}
+[14.068063] (belt_long_server) CommandEnded: {'returncode': 0}
+[14.101212] (belt_long_server) JobEnded: {'identifier': 'belt_long_server', 'rc': 0}
+[14.105817] (controller) CommandEnded: {'returncode': 0}
+[14.113911] (-) TimerEvent: {}
+[14.139552] (controller) JobEnded: {'identifier': 'controller', 'rc': 0}
+[14.214241] (-) TimerEvent: {}
+[14.314978] (-) TimerEvent: {}
+[14.416481] (-) TimerEvent: {}
+[14.518359] (-) TimerEvent: {}
+[14.620383] (-) TimerEvent: {}
+[14.721919] (interfaces_new) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[14.722560] (-) TimerEvent: {}
+[14.824099] (-) TimerEvent: {}
+[14.925718] (-) TimerEvent: {}
+[15.027034] (-) TimerEvent: {}
+[15.128520] (-) TimerEvent: {}
+[15.230189] (-) TimerEvent: {}
+[15.331894] (-) TimerEvent: {}
+[15.433494] (-) TimerEvent: {}
+[15.535005] (-) TimerEvent: {}
+[15.636637] (-) TimerEvent: {}
+[15.738358] (-) TimerEvent: {}
+[15.840120] (-) TimerEvent: {}
+[15.941856] (-) TimerEvent: {}
+[16.044243] (-) TimerEvent: {}
+[16.146487] (-) TimerEvent: {}
+[16.248188] (-) TimerEvent: {}
+[16.350396] (-) TimerEvent: {}
+[16.451939] (-) TimerEvent: {}
+[16.553544] (-) TimerEvent: {}
+[16.645415] (track_server) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', 'setup.py', 'egg_info', '--egg-base', '../../build/track_server', 'build', '--build-base', '/home/berry/HeartBeat/build/track_server/build', 'install', '--record', '/home/berry/HeartBeat/build/track_server/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/home/berry/HeartBeat/src/track_server', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'berry', 'SSH_CLIENT': '192.168.1.107 59494 22', 'LC_TIME': 'zh_CN.UTF-8', 'XDG_SESSION_TYPE': 'tty', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/home/berry/HeartBeat/install/interfaces_new/lib:/home/berry/RoArm/install/interface/lib:/home/berry/ices_ws/install/interfaces/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib', 'MOTD_SHOWN': 'pam', 'HOME': '/home/berry', 'OLDPWD': '/home/berry/HeartBeat/src', 'SSH_TTY': '/dev/pts/4', 'ROS_PYTHON_VERSION': '3', 'LC_MONETARY': 'zh_CN.UTF-8', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLCON_PREFIX_PATH': '/home/berry/HeartBeat/install:/home/berry/RoArm/install:/home/berry/ices_ws/install', 'ROS_DISTRO': 'humble', 'LOGNAME': 'berry', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'TERM': 'xterm', 'XDG_SESSION_ID': '12', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/home/berry/.local/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin', 'LC_ADDRESS': 'zh_CN.UTF-8', 'XDG_RUNTIME_DIR': '/run/user/1000', 'DISPLAY': 'localhost:14.0', 'LANG': 'en_US.UTF-8', 'LC_TELEPHONE': 'zh_CN.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'AMENT_PREFIX_PATH': '/home/berry/HeartBeat/install/track_server:/home/berry/HeartBeat/install/interfaces_new:/home/berry/HeartBeat/install/controller:/home/berry/HeartBeat/install/belt_short_server:/home/berry/HeartBeat/install/belt_long_server:/home/berry/RoArm/install/test1:/home/berry/RoArm/install/serial_ctrl:/home/berry/RoArm/install/roarm:/home/berry/RoArm/install/pos_sub:/home/berry/RoArm/install/pos_pub:/home/berry/RoArm/install/pos_client:/home/berry/RoArm/install/interface:/home/berry/RoArm/install/Position_Sub:/home/berry/RoArm/install/Pos_Server:/home/berry/RoArm/install/Pos_Client:/home/berry/ices_ws/install/track_server:/home/berry/ices_ws/install/launch_test:/home/berry/ices_ws/install/control:/home/berry/ices_ws/install/c_arm:/home/berry/ices_ws/install/arm_server:/home/berry/ices_ws/install/interfaces:/home/berry/ices_ws/install/belt_short_server:/home/berry/ices_ws/install/belt_short_client:/home/berry/ices_ws/install/belt_long_server:/opt/ros/humble', 'SHELL': '/bin/bash', 'LC_NAME': 'zh_CN.UTF-8', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'LC_MEASUREMENT': 'zh_CN.UTF-8', 'LC_IDENTIFICATION': 'zh_CN.UTF-8', 'PWD': '/home/berry/HeartBeat/build/track_server', 'SSH_CONNECTION': '192.168.1.107 59494 192.168.1.106 22', 'XDG_DATA_DIRS': '/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/berry/HeartBeat/build/track_server/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/interfaces_new/local/lib/python3.10/dist-packages:/home/berry/HeartBeat/install/controller/lib/python3.10/site-packages:/home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages:/home/berry/RoArm/install/test1/lib/python3.10/site-packages:/home/berry/RoArm/install/serial_ctrl/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_sub/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_pub/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_client/lib/python3.10/site-packages:/home/berry/RoArm/install/interface/local/lib/python3.10/dist-packages:/home/berry/RoArm/install/Position_Sub/lib/python3.10/site-packages:/home/berry/RoArm/install/Pos_Server/lib/python3.10/site-packages:/home/berry/RoArm/install/Pos_Client/lib/python3.10/site-packages:/home/berry/ices_ws/install/track_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/launch_test/lib/python3.10/site-packages:/home/berry/ices_ws/install/control/lib/python3.10/site-packages:/home/berry/ices_ws/install/c_arm/lib/python3.10/site-packages:/home/berry/ices_ws/install/arm_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/interfaces/local/lib/python3.10/dist-packages:/home/berry/ices_ws/install/belt_short_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/belt_short_client/lib/python3.10/site-packages:/home/berry/ices_ws/install/belt_long_server/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'LC_NUMERIC': 'zh_CN.UTF-8', 'LC_PAPER': 'zh_CN.UTF-8', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/home/berry/HeartBeat/install/interfaces_new:/home/berry/RoArm/install/roarm:/home/berry/RoArm/install/interface:/home/berry/ices_ws/install/interfaces'}, 'shell': False}
+[16.654951] (-) TimerEvent: {}
+[16.756598] (-) TimerEvent: {}
+[16.815857] (interfaces_new) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[16.856786] (-) TimerEvent: {}
+[16.958305] (-) TimerEvent: {}
+[16.985503] (interfaces_new) StdoutLine: {'line': b'-- Found python_cmake_module: 0.10.0 (/opt/ros/humble/share/python_cmake_module/cmake)\n'}
+[17.058545] (-) TimerEvent: {}
+[17.152921] (interfaces_new) StdoutLine: {'line': b'-- Using PYTHON_EXECUTABLE: /usr/bin/python3\n'}
+[17.153591] (interfaces_new) StdoutLine: {'line': b'-- Using PYTHON_INCLUDE_DIRS: /usr/include/python3.10\n'}
+[17.154062] (interfaces_new) StdoutLine: {'line': b'-- Using PYTHON_LIBRARIES: /usr/lib/aarch64-linux-gnu/libpython3.10.so\n'}
+[17.158701] (-) TimerEvent: {}
+[17.268998] (-) TimerEvent: {}
+[17.370421] (-) TimerEvent: {}
+[17.408027] (interfaces_new) StdoutLine: {'line': b'-- Found ament_lint_auto: 0.12.11 (/opt/ros/humble/share/ament_lint_auto/cmake)\n'}
+[17.470581] (-) TimerEvent: {}
+[17.477215] (interfaces_new) StdoutLine: {'line': b"-- Added test 'lint_cmake' to check CMake code style\n"}
+[17.493557] (interfaces_new) StdoutLine: {'line': b"-- Added test 'xmllint' to check XML markup files\n"}
+[17.506407] (interfaces_new) StdoutLine: {'line': b'-- Configuring done\n'}
+[17.570755] (-) TimerEvent: {}
+[17.672378] (-) TimerEvent: {}
+[17.774004] (-) TimerEvent: {}
+[17.878058] (-) TimerEvent: {}
+[17.885837] (interfaces_new) StdoutLine: {'line': b'-- Generating done\n'}
+[17.909261] (interfaces_new) StdoutLine: {'line': b'-- Build files have been written to: /home/berry/HeartBeat/build/interfaces_new\n'}
+[17.978264] (-) TimerEvent: {}
+[18.020352] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__cpp.dir/build.make:381: warning: overriding recipe for target 'rosidl_generator_cpp/interfaces_new/action/move_time.hpp'\n"}
+[18.021386] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__cpp.dir/build.make:261: warning: ignoring old recipe for target 'rosidl_generator_cpp/interfaces_new/action/move_time.hpp'\n"}
+[18.022284] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__cpp.dir/build.make:384: warning: overriding recipe for target 'rosidl_generator_cpp/interfaces_new/action/detail/move_time__builder.hpp'\n"}
+[18.023151] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__cpp.dir/build.make:264: warning: ignoring old recipe for target 'rosidl_generator_cpp/interfaces_new/action/detail/move_time__builder.hpp'\n"}
+[18.024272] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__cpp.dir/build.make:387: warning: overriding recipe for target 'rosidl_generator_cpp/interfaces_new/action/detail/move_time__struct.hpp'\n"}
+[18.025156] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__cpp.dir/build.make:267: warning: ignoring old recipe for target 'rosidl_generator_cpp/interfaces_new/action/detail/move_time__struct.hpp'\n"}
+[18.025980] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__cpp.dir/build.make:390: warning: overriding recipe for target 'rosidl_generator_cpp/interfaces_new/action/detail/move_time__traits.hpp'\n"}
+[18.026779] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__cpp.dir/build.make:270: warning: ignoring old recipe for target 'rosidl_generator_cpp/interfaces_new/action/detail/move_time__traits.hpp'\n"}
+[18.029068] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__rosidl_generator_c.dir/build.make:309: warning: overriding recipe for target 'rosidl_generator_c/interfaces_new/action/move_time.h'\n"}
+[18.030033] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__rosidl_generator_c.dir/build.make:189: warning: ignoring old recipe for target 'rosidl_generator_c/interfaces_new/action/move_time.h'\n"}
+[18.030919] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__rosidl_generator_c.dir/build.make:312: warning: overriding recipe for target 'rosidl_generator_c/interfaces_new/action/detail/move_time__functions.h'\n"}
+[18.031713] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__rosidl_generator_c.dir/build.make:192: warning: ignoring old recipe for target 'rosidl_generator_c/interfaces_new/action/detail/move_time__functions.h'\n"}
+[18.032448] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__rosidl_generator_c.dir/build.make:315: warning: overriding recipe for target 'rosidl_generator_c/interfaces_new/action/detail/move_time__struct.h'\n"}
+[18.033179] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__rosidl_generator_c.dir/build.make:195: warning: ignoring old recipe for target 'rosidl_generator_c/interfaces_new/action/detail/move_time__struct.h'\n"}
+[18.033971] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__rosidl_generator_c.dir/build.make:318: warning: overriding recipe for target 'rosidl_generator_c/interfaces_new/action/detail/move_time__type_support.h'\n"}
+[18.034625] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__rosidl_generator_c.dir/build.make:198: warning: ignoring old recipe for target 'rosidl_generator_c/interfaces_new/action/detail/move_time__type_support.h'\n"}
+[18.035746] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__rosidl_generator_c.dir/build.make:399: warning: overriding recipe for target 'rosidl_generator_c/interfaces_new/action/detail/move_time__functions.c'\n"}
+[18.036931] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__rosidl_generator_c.dir/build.make:369: warning: ignoring old recipe for target 'rosidl_generator_c/interfaces_new/action/detail/move_time__functions.c'\n"}
+[18.078530] (-) TimerEvent: {}
+[18.088712] (interfaces_new) StdoutLine: {'line': b'[  0%] \x1b[34m\x1b[1mGenerating C code for ROS interfaces\x1b[0m\n'}
+[18.160180] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__cpp.dir/build.make:381: warning: overriding recipe for target 'rosidl_generator_cpp/interfaces_new/action/move_time.hpp'\n"}
+[18.172198] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__cpp.dir/build.make:261: warning: ignoring old recipe for target 'rosidl_generator_cpp/interfaces_new/action/move_time.hpp'\n"}
+[18.172767] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__cpp.dir/build.make:384: warning: overriding recipe for target 'rosidl_generator_cpp/interfaces_new/action/detail/move_time__builder.hpp'\n"}
+[18.173156] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__cpp.dir/build.make:264: warning: ignoring old recipe for target 'rosidl_generator_cpp/interfaces_new/action/detail/move_time__builder.hpp'\n"}
+[18.173891] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__cpp.dir/build.make:387: warning: overriding recipe for target 'rosidl_generator_cpp/interfaces_new/action/detail/move_time__struct.hpp'\n"}
+[18.174318] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__cpp.dir/build.make:267: warning: ignoring old recipe for target 'rosidl_generator_cpp/interfaces_new/action/detail/move_time__struct.hpp'\n"}
+[18.174714] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__cpp.dir/build.make:390: warning: overriding recipe for target 'rosidl_generator_cpp/interfaces_new/action/detail/move_time__traits.hpp'\n"}
+[18.175137] (interfaces_new) StderrLine: {'line': b"CMakeFiles/interfaces_new__cpp.dir/build.make:270: warning: ignoring old recipe for target 'rosidl_generator_cpp/interfaces_new/action/detail/move_time__traits.hpp'\n"}
+[18.178718] (-) TimerEvent: {}
+[18.249359] (interfaces_new) StdoutLine: {'line': b'[  0%] Built target ament_cmake_python_copy_interfaces_new\n'}
+[18.278971] (-) TimerEvent: {}
+[18.280648] (interfaces_new) StdoutLine: {'line': b'[  0%] \x1b[34m\x1b[1mGenerating C++ code for ROS interfaces\x1b[0m\n'}
+[18.379189] (-) TimerEvent: {}
+[18.480971] (-) TimerEvent: {}
+[18.582458] (-) TimerEvent: {}
+[18.683988] (-) TimerEvent: {}
+[18.723131] (track_server) StdoutLine: {'line': b'running egg_info\n'}
+[18.726692] (track_server) StdoutLine: {'line': b'writing ../../build/track_server/track_server.egg-info/PKG-INFO\n'}
+[18.728429] (track_server) StdoutLine: {'line': b'writing dependency_links to ../../build/track_server/track_server.egg-info/dependency_links.txt\n'}
+[18.729656] (track_server) StdoutLine: {'line': b'writing entry points to ../../build/track_server/track_server.egg-info/entry_points.txt\n'}
+[18.730656] (track_server) StdoutLine: {'line': b'writing requirements to ../../build/track_server/track_server.egg-info/requires.txt\n'}
+[18.731557] (track_server) StdoutLine: {'line': b'writing top-level names to ../../build/track_server/track_server.egg-info/top_level.txt\n'}
+[18.741493] (track_server) StdoutLine: {'line': b"reading manifest file '../../build/track_server/track_server.egg-info/SOURCES.txt'\n"}
+[18.746258] (track_server) StdoutLine: {'line': b"writing manifest file '../../build/track_server/track_server.egg-info/SOURCES.txt'\n"}
+[18.747294] (track_server) StdoutLine: {'line': b'running build\n'}
+[18.747927] (track_server) StdoutLine: {'line': b'running build_py\n'}
+[18.749553] (track_server) StdoutLine: {'line': b'running install\n'}
+[18.751128] (track_server) StdoutLine: {'line': b'running install_lib\n'}
+[18.760870] (track_server) StdoutLine: {'line': b'running install_data\n'}
+[18.761791] (track_server) StdoutLine: {'line': b'running install_egg_info\n'}
+[18.784171] (-) TimerEvent: {}
+[18.848232] (track_server) StdoutLine: {'line': b"removing '/home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages/track_server-0.0.0-py3.10.egg-info' (and everything under it)\n"}
+[18.850468] (track_server) StdoutLine: {'line': b'Copying ../../build/track_server/track_server.egg-info to /home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages/track_server-0.0.0-py3.10.egg-info\n'}
+[18.858830] (track_server) StdoutLine: {'line': b'running install_scripts\n'}
+[18.884396] (-) TimerEvent: {}
+[18.986233] (-) TimerEvent: {}
+[19.016030] (track_server) StdoutLine: {'line': b'Installing track_server script to /home/berry/HeartBeat/install/track_server/lib/track_server\n'}
+[19.018320] (track_server) StdoutLine: {'line': b"writing list of installed files to '/home/berry/HeartBeat/build/track_server/install.log'\n"}
+[19.086518] (-) TimerEvent: {}
+[19.178645] (track_server) CommandEnded: {'returncode': 0}
+[19.186726] (-) TimerEvent: {}
+[19.250183] (track_server) JobEnded: {'identifier': 'track_server', 'rc': 0}
+[19.286943] (-) TimerEvent: {}
+[19.387877] (-) TimerEvent: {}
+[19.488695] (-) TimerEvent: {}
+[19.589524] (-) TimerEvent: {}
+[19.690555] (-) TimerEvent: {}
+[19.791439] (-) TimerEvent: {}
+[19.892315] (-) TimerEvent: {}
+[19.993017] (-) TimerEvent: {}
+[20.093730] (-) TimerEvent: {}
+[20.194486] (-) TimerEvent: {}
+[20.295203] (-) TimerEvent: {}
+[20.396131] (-) TimerEvent: {}
+[20.482254] (interfaces_new) StdoutLine: {'line': b'running egg_info\n'}
+[20.486633] (interfaces_new) StdoutLine: {'line': b'writing interfaces_new.egg-info/PKG-INFO\n'}
+[20.489251] (interfaces_new) StdoutLine: {'line': b'writing dependency_links to interfaces_new.egg-info/dependency_links.txt\n'}
+[20.491536] (interfaces_new) StdoutLine: {'line': b'writing top-level names to interfaces_new.egg-info/top_level.txt\n'}
+[20.496305] (-) TimerEvent: {}
+[20.507237] (interfaces_new) StdoutLine: {'line': b"reading manifest file 'interfaces_new.egg-info/SOURCES.txt'\n"}
+[20.511993] (interfaces_new) StdoutLine: {'line': b"writing manifest file 'interfaces_new.egg-info/SOURCES.txt'\n"}
+[20.596515] (-) TimerEvent: {}
+[20.686739] (interfaces_new) StdoutLine: {'line': b'[  0%] Built target ament_cmake_python_build_interfaces_new_egg\n'}
+[20.696668] (-) TimerEvent: {}
+[20.798115] (-) TimerEvent: {}
+[20.899495] (-) TimerEvent: {}
+[21.001054] (-) TimerEvent: {}
+[21.102685] (-) TimerEvent: {}
+[21.204277] (-) TimerEvent: {}
+[21.305700] (-) TimerEvent: {}
+[21.407144] (-) TimerEvent: {}
+[21.508575] (-) TimerEvent: {}
+[21.610079] (-) TimerEvent: {}
+[21.711570] (-) TimerEvent: {}
+[21.813183] (-) TimerEvent: {}
+[21.914804] (-) TimerEvent: {}
+[22.016241] (-) TimerEvent: {}
+[22.117680] (-) TimerEvent: {}
+[22.219220] (-) TimerEvent: {}
+[22.338497] (-) TimerEvent: {}
+[22.439923] (-) TimerEvent: {}
+[22.541494] (-) TimerEvent: {}
+[22.642913] (-) TimerEvent: {}
+[22.744555] (-) TimerEvent: {}
+[22.846092] (-) TimerEvent: {}
+[22.946888] (-) TimerEvent: {}
+[23.047617] (-) TimerEvent: {}
+[23.148323] (-) TimerEvent: {}
+[23.248989] (-) TimerEvent: {}
+[23.350493] (-) TimerEvent: {}
+[23.452210] (-) TimerEvent: {}
+[23.553691] (-) TimerEvent: {}
+[23.655218] (-) TimerEvent: {}
+[23.756909] (-) TimerEvent: {}
+[23.858358] (-) TimerEvent: {}
+[23.959034] (-) TimerEvent: {}
+[24.060763] (-) TimerEvent: {}
+[24.162201] (-) TimerEvent: {}
+[24.263669] (-) TimerEvent: {}
+[24.365258] (-) TimerEvent: {}
+[24.466718] (-) TimerEvent: {}
+[24.568297] (-) TimerEvent: {}
+[24.669725] (-) TimerEvent: {}
+[24.770416] (-) TimerEvent: {}
+[24.871914] (-) TimerEvent: {}
+[24.972637] (-) TimerEvent: {}
+[25.073309] (-) TimerEvent: {}
+[25.174836] (-) TimerEvent: {}
+[25.276634] (-) TimerEvent: {}
+[25.378081] (-) TimerEvent: {}
+[25.479604] (-) TimerEvent: {}
+[25.581237] (-) TimerEvent: {}
+[25.682822] (-) TimerEvent: {}
+[25.784280] (-) TimerEvent: {}
+[25.885850] (-) TimerEvent: {}
+[25.987328] (-) TimerEvent: {}
+[26.088886] (-) TimerEvent: {}
+[26.190291] (-) TimerEvent: {}
+[26.291860] (-) TimerEvent: {}
+[26.393566] (-) TimerEvent: {}
+[26.495069] (-) TimerEvent: {}
+[26.596519] (-) TimerEvent: {}
+[26.699037] (-) TimerEvent: {}
+[26.800436] (-) TimerEvent: {}
+[26.901101] (-) TimerEvent: {}
+[27.002556] (-) TimerEvent: {}
+[27.104035] (-) TimerEvent: {}
+[27.205553] (-) TimerEvent: {}
+[27.306965] (-) TimerEvent: {}
+[27.412601] (-) TimerEvent: {}
+[27.514059] (-) TimerEvent: {}
+[27.615500] (-) TimerEvent: {}
+[27.719242] (-) TimerEvent: {}
+[27.820814] (-) TimerEvent: {}
+[27.922281] (-) TimerEvent: {}
+[28.023701] (-) TimerEvent: {}
+[28.125219] (-) TimerEvent: {}
+[28.226745] (-) TimerEvent: {}
+[28.328278] (-) TimerEvent: {}
+[28.429765] (-) TimerEvent: {}
+[28.531341] (-) TimerEvent: {}
+[28.633544] (-) TimerEvent: {}
+[28.734950] (-) TimerEvent: {}
+[28.836562] (-) TimerEvent: {}
+[28.937240] (-) TimerEvent: {}
+[29.038628] (-) TimerEvent: {}
+[29.140160] (-) TimerEvent: {}
+[29.241699] (-) TimerEvent: {}
+[29.343059] (-) TimerEvent: {}
+[29.444587] (-) TimerEvent: {}
+[29.546097] (-) TimerEvent: {}
+[29.647647] (-) TimerEvent: {}
+[29.749167] (-) TimerEvent: {}
+[29.850697] (-) TimerEvent: {}
+[29.952157] (-) TimerEvent: {}
+[30.053659] (-) TimerEvent: {}
+[30.155068] (-) TimerEvent: {}
+[30.256624] (-) TimerEvent: {}
+[30.358138] (-) TimerEvent: {}
+[30.459834] (-) TimerEvent: {}
+[30.561274] (-) TimerEvent: {}
+[30.662791] (-) TimerEvent: {}
+[30.764450] (-) TimerEvent: {}
+[30.865982] (-) TimerEvent: {}
+[30.966687] (-) TimerEvent: {}
+[31.068388] (-) TimerEvent: {}
+[31.169770] (-) TimerEvent: {}
+[31.271236] (-) TimerEvent: {}
+[31.372919] (-) TimerEvent: {}
+[31.474492] (-) TimerEvent: {}
+[31.576267] (-) TimerEvent: {}
+[31.641401] (interfaces_new) StderrLine: {'line': b'Traceback (most recent call last):\n'}
+[31.641956] (interfaces_new) StderrLine: {'line': b'  File "/opt/ros/humble/share/rosidl_generator_cpp/cmake/../../../lib/rosidl_generator_cpp/rosidl_generator_cpp", line 38, in <module>\n'}
+[31.642333] (interfaces_new) StderrLine: {'line': b'Traceback (most recent call last):\n'}
+[31.642668] (interfaces_new) StderrLine: {'line': b'  File "/opt/ros/humble/share/rosidl_generator_c/cmake/../../../lib/rosidl_generator_c/rosidl_generator_c", line 38, in <module>\n'}
+[31.643053] (interfaces_new) StderrLine: {'line': b'    sys.exit(main())\n'}
+[31.643380] (interfaces_new) StderrLine: {'line': b'    sys.exit(main())\n'}
+[31.643855] (interfaces_new) StderrLine: {'line': b'  File "/opt/ros/humble/share/rosidl_generator_c/cmake/../../../lib/rosidl_generator_c/rosidl_generator_c", line 34, in main\n'}
+[31.644313] (interfaces_new) StderrLine: {'line': b'  File "/opt/ros/humble/share/rosidl_generator_cpp/cmake/../../../lib/rosidl_generator_cpp/rosidl_generator_cpp", line 34, in main\n'}
+[31.644691] (interfaces_new) StderrLine: {'line': b'    generate_cpp(args.generator_arguments_file)\n'}
+[31.645012] (interfaces_new) StderrLine: {'line': b'    generate_c(args.generator_arguments_file)\n'}
+[31.645326] (interfaces_new) StderrLine: {'line': b'  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rosidl_generator_cpp/__init__.py", line 38, in generate_cpp\n'}
+[31.645642] (interfaces_new) StderrLine: {'line': b'  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rosidl_generator_c/__init__.py", line 37, in generate_c\n'}
+[31.645955] (interfaces_new) StderrLine: {'line': b"gmake[2]: *** Deleting file 'rosidl_generator_c/interfaces_new/action/arm1_test.h'\n"}
+[31.646286] (interfaces_new) StderrLine: {'line': b'    return generate_files(\n'}
+[31.646595] (interfaces_new) StderrLine: {'line': b'    return generate_files(\n'}
+[31.646905] (interfaces_new) StderrLine: {'line': b'  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rosidl_cmake/__init__.py", line 87, in generate_files\n'}
+[31.647216] (interfaces_new) StderrLine: {'line': b"gmake[2]: *** Deleting file 'rosidl_generator_cpp/interfaces_new/action/arm1_test.hpp'\n"}
+[31.647528] (interfaces_new) StderrLine: {'line': b'  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rosidl_cmake/__init__.py", line 74, in generate_files\n'}
+[31.647926] (interfaces_new) StderrLine: {'line': b'    expand_template(\n'}
+[31.648267] (interfaces_new) StderrLine: {'line': b'    idl_file = parse_idl_file(locator)\n'}
+[31.648583] (interfaces_new) StderrLine: {'line': b'  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rosidl_cmake/__init__.py", line 149, in expand_template\n'}
+[31.648939] (interfaces_new) StderrLine: {'line': b'  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rosidl_parser/parser.py", line 64, in parse_idl_file\n'}
+[31.649296] (interfaces_new) StderrLine: {'line': b'    content = parse_idl_string(string, png_file=png_file)\n'}
+[31.649626] (interfaces_new) StderrLine: {'line': b'    interpreter.string(template_content, template_path, locals=data)\n'}
+[31.649940] (interfaces_new) StderrLine: {'line': b'  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rosidl_parser/parser.py", line 72, in parse_idl_string\n'}
+[31.650309] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 2391, in string\n'}
+[31.650653] (interfaces_new) StderrLine: {'line': b'    tree = get_ast_from_idl_string(idl_string)\n'}
+[31.651044] (interfaces_new) StderrLine: {'line': b'  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rosidl_parser/parser.py", line 89, in get_ast_from_idl_string\n'}
+[31.652134] (interfaces_new) StderrLine: {'line': b'    return _parser.parse(idl_string)\n'}
+[31.652550] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/lark/lark.py", line 619, in parse\n'}
+[31.653241] (interfaces_new) StderrLine: {'line': b'    self.safe(scanner, True, locals)\n'}
+[31.653606] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 2401, in safe\n'}
+[31.653950] (interfaces_new) StderrLine: {'line': b'    return self.parser.parse(text, start=start, on_error=on_error)\n'}
+[31.654819] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/lark/parser_frontends.py", line 99, in parse\n'}
+[31.656209] (interfaces_new) StderrLine: {'line': b'    self.parse(scanner, locals)\n'}
+[31.657733] (interfaces_new) StderrLine: {'line': b'    return self.parser.parse(stream, chosen_start, **kw)\n'}
+[31.659374] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 2421, in parse\n'}
+[31.660547] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/lark/parsers/earley.py", line 292, in parse\n'}
+[31.662590] (interfaces_new) StderrLine: {'line': b'    token.run(self, locals)\n'}
+[31.664135] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 1547, in run\n'}
+[31.665354] (interfaces_new) StderrLine: {'line': b'    return transformer.transform(solutions[0])\n'}
+[31.666784] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/lark/parsers/earley_forest.py", line 395, in transform\n'}
+[31.668897] (interfaces_new) StderrLine: {'line': b'    self.subrun(info[0][1], interpreter, locals)\n'}
+[31.669592] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 1631, in subrun\n'}
+[31.671194] (interfaces_new) StderrLine: {'line': b'    self.visit(root)\n'}
+[31.673682] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/lark/parsers/earley_forest.py", line 532, in visit\n'}
+[31.675077] (interfaces_new) StderrLine: {'line': b'    token.run(interpreter, locals)\n'}
+[31.676102] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 1425, in run\n'}
+[31.677217] (-) TimerEvent: {}
+[31.679557] (interfaces_new) StderrLine: {'line': b'    super(ForestToParseTree, self).visit(root)\n'}
+[31.681170] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/lark/parsers/earley_forest.py", line 338, in visit\n'}
+[31.682721] (interfaces_new) StderrLine: {'line': b'    vino(current)\n'}
+[31.685266] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/lark/parsers/earley_forest.py", line 442, in visit_intermediate_node_out\n'}
+[31.687047] (interfaces_new) StderrLine: {'line': b'    interpreter.execute(self.code, locals)\n'}
+[31.689070] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 2596, in execute\n'}
+[31.690503] (interfaces_new) StderrLine: {'line': b'    self._visit_node_out_helper(node, self.transform_intermediate_node)\n'}
+[31.691746] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/lark/parsers/earley_forest.py", line 433, in _visit_node_out_helper\n'}
+[31.693735] (interfaces_new) StderrLine: {'line': b'    transformed = method(node, self.data[id(node)])\n'}
+[31.695301] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/lark/parsers/earley_forest.py", line 589, in transform_intermediate_node\n'}
+[31.697131] (interfaces_new) StderrLine: {'line': b'    if r is Discard:\n'}
+[31.699081] (interfaces_new) StderrLine: {'line': b'    _exec(statements, self.globals, locals)\n'}
+[31.701012] (interfaces_new) StderrLine: {'line': b'KeyboardInterrupt\n'}
+[31.702840] (interfaces_new) StderrLine: {'line': b'  File "<string>", line 2, in <module>\n'}
+[31.705483] (interfaces_new) StderrLine: {'line': b'  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rosidl_cmake/__init__.py", line 198, in _expand_template\n'}
+[31.707168] (interfaces_new) StderrLine: {'line': b'    interpreter.string(content, str(template_path), kwargs)\n'}
+[31.709096] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 2391, in string\n'}
+[31.710691] (interfaces_new) StderrLine: {'line': b'    self.safe(scanner, True, locals)\n'}
+[31.712721] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 2401, in safe\n'}
+[31.714175] (interfaces_new) StderrLine: {'line': b'    self.parse(scanner, locals)\n'}
+[31.715542] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 2421, in parse\n'}
+[31.717140] (interfaces_new) StderrLine: {'line': b'    token.run(self, locals)\n'}
+[31.718474] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 1425, in run\n'}
+[31.720512] (interfaces_new) StderrLine: {'line': b'    interpreter.execute(self.code, locals)\n'}
+[31.722054] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 2596, in execute\n'}
+[31.723362] (interfaces_new) StderrLine: {'line': b'    _exec(statements, self.globals, locals)\n'}
+[31.724750] (interfaces_new) StderrLine: {'line': b'  File "<string>", line 2, in <module>\n'}
+[31.725954] (interfaces_new) StderrLine: {'line': b'  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rosidl_cmake/__init__.py", line 198, in _expand_template\n'}
+[31.727732] (interfaces_new) StderrLine: {'line': b'    interpreter.string(content, str(template_path), kwargs)\n'}
+[31.729664] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 2391, in string\n'}
+[31.732243] (interfaces_new) StderrLine: {'line': b'    self.safe(scanner, True, locals)\n'}
+[31.734103] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 2401, in safe\n'}
+[31.736708] (interfaces_new) StderrLine: {'line': b'    self.parse(scanner, locals)\n'}
+[31.738559] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 2417, in parse\n'}
+[31.740712] (interfaces_new) StderrLine: {'line': b'    token = scanner.one()\n'}
+[31.742470] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 1984, in one\n'}
+[31.743824] (interfaces_new) StderrLine: {'line': b'    token.scan(self)\n'}
+[31.745477] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 1421, in scan\n'}
+[31.747218] (interfaces_new) StderrLine: {'line': b"    i = scanner.complex('{', '}', 0)\n"}
+[31.748998] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 1893, in complex\n'}
+[31.750269] (interfaces_new) StderrLine: {'line': b'    newQuote = self.check(i, quote)\n'}
+[31.751887] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 1762, in check\n'}
+[31.753567] (interfaces_new) StderrLine: {'line': b'    def check(self, i, archetype=None):\n'}
+[31.754851] (interfaces_new) StderrLine: {'line': b'KeyboardInterrupt\n'}
+[31.757439] (interfaces_new) StderrLine: {'line': b'Exception ignored in: <function Interpreter.__del__ at 0xffff8faa3b50>\n'}
+[31.758995] (interfaces_new) StderrLine: {'line': b'Traceback (most recent call last):\n'}
+[31.760472] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 2094, in __del__\n'}
+[31.761913] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 2157, in shutdown\n'}
+[31.763702] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 2647, in finalize\n'}
+[31.765185] (interfaces_new) StderrLine: {'line': b'  File "/usr/lib/python3/dist-packages/em.py", line 2200, in push\n'}
+[31.766445] (interfaces_new) StderrLine: {'line': b"AttributeError: '_io.TextIOWrapper' object has no attribute 'push'\n"}
+[31.777570] (-) TimerEvent: {}
+[31.804553] (interfaces_new) StderrLine: {'line': b'gmake[2]: *** [CMakeFiles/interfaces_new__cpp.dir/build.make:213: rosidl_generator_cpp/interfaces_new/action/arm1_test.hpp] Interrupt\n'}
+[31.805934] (interfaces_new) StderrLine: {'line': b'gmake[1]: *** [CMakeFiles/Makefile2:317: CMakeFiles/interfaces_new__cpp.dir/all] Interrupt\n'}
+[31.816042] (interfaces_new) StderrLine: {'line': b'gmake[2]: *** [CMakeFiles/interfaces_new__rosidl_generator_c.dir/build.make:141: rosidl_generator_c/interfaces_new/action/arm1_test.h] Interrupt\n'}
+[31.816854] (interfaces_new) StderrLine: {'line': b'gmake[1]: *** [CMakeFiles/Makefile2:212: CMakeFiles/interfaces_new__rosidl_generator_c.dir/all] Interrupt\n'}
+[31.817479] (interfaces_new) StderrLine: {'line': b'gmake: *** [Makefile:146: all] Interrupt\n'}
+[31.821958] (interfaces_new) CommandEnded: {'returncode': -2}
+[31.877737] (-) TimerEvent: {}
+[31.978553] (-) TimerEvent: {}
+[32.017076] (interfaces_new) JobEnded: {'identifier': 'interfaces_new', 'rc': 'SIGINT'}
+[32.028732] (-) EventReactorShutdown: {}

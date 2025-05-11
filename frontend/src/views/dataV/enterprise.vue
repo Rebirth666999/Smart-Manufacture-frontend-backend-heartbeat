@@ -40,47 +40,73 @@
     <div class="left">
       <div class="lefttop">
         <div class="title">
-          <span class="titlefont">年度工业设备</span>
+          <span class="titlefont">根据生产计划查看生产任务完成情况</span>
           <big-data-title />
+          <el-select v-model="selectedPlan" placeholder="请选择生产计划" @change="handlePlanChange" class="plan-select">
+            <el-option
+              v-for="item in planList"
+              :key="item.mpCode"
+              :label="item.mpCode"
+              :value="item.mpCode">
+            </el-option>
+          </el-select>
         </div>
-        <data1/>
+        <data6 ref="planTaskComponent" :selectedPlan="selectedPlan" :containerId="'planTaskChart'" />
       </div>
-      <div class="leftmiddle">
+    
+      <div class="lefbottom">
         <div class="title">
-          <span class="titlefont">年度工业设备</span>
+          <span class="titlefont">根据车间查看设备任务完成情况</span>
           <big-data-title />
+          <el-select v-model="selectedArea" placeholder="请选择车间" @change="handleAreaChange" class="area-select">
+            <el-option
+              v-for="item in areaList"
+              :key="item.arCode"
+              :label="item.arName"
+              :value="item.arCode">
+            </el-option>
+          </el-select>
         </div>
-        <data2/>
+        <data6 ref="areaDeviceComponent" :selectedArea="selectedArea" :containerId="'areaDeviceChart'" />
       </div>
-      <div class="leftbottom">
-        <div class="title">
-          <span class="titlefont">年度工业设备</span>
-          <big-data-title />
-        </div>
-        <data3/>
-      </div>
+     
+     
     </div>
     <div class="right">
+      
       <div class="righttop">
 <!--        <big-data-title></big-data-title>-->
         <div class="title">
-          <span class="titlefont">年度工业设备</span>
+          <span class="titlefont">根据生产任务查看设备任务完成情况</span>
           <big-data-title />
+          <el-select v-model="selectedTask" placeholder="请选择生产任务" @change="handleTaskChange" class="task-select">
+            <el-option
+              v-for="item in taskList"
+              :key="item.mtCode"
+              :label="item.mtCode"
+              :value="item.mtCode">
+            </el-option>
+          </el-select>
         </div>
-        <data4/>
+        <data6 ref="taskDeviceComponent" :selectedTask="selectedTask" :containerId="'taskDeviceChart'" />
       </div>
-      <div class="rightmiddle">
-        <div class="title">
-          <span class="titlefont">年度工业设备</span>
-          <big-data-title />
-        </div>
-      </div>
+     
+
+     
       <div class="rightbottom">
         <div class="title">
-          <span class="titlefont">年度工业设备</span>
+          <span class="titlefont">根据订单查看生产计划完成情况</span>
           <big-data-title />
+          <el-select v-model="selectedOrder" placeholder="请选择订单" @change="handleOrderChange" class="order-select">
+            <el-option
+              v-for="item in orderList"
+              :key="item.orCode"
+              :label="item.orCode"
+              :value="item.orCode">
+            </el-option>
+          </el-select>
         </div>
-        <data6/>
+        <data6 ref="data6Component" :selectedOrder="selectedOrder" :containerId="'orderPlanChart'" />
       </div>
     </div>
 <!--    <iframe src="@/assets/board/planet.mp4" class="planet"/>-->
@@ -90,7 +116,6 @@
       </video>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -99,6 +124,11 @@ import Data1 from "@/components/Board/data1.vue";
 import data3 from "@/components/Board/data3.vue";
 import Data4 from "@/components/Board/data4.vue";
 import data6 from "@/components/Board/data6.vue";
+import { listOrder, getOrder } from "@/api/system/order";
+import { getManufactureTask, listManufactureTask } from "@/api/system/manufactureTask";
+import { listManufacturePlan } from "@/api/system/manufacturePlan";
+import { listArea } from "@/api/system/area";
+
 export default {
   name: "enterprise",
   components:{
@@ -111,12 +141,78 @@ export default {
   data(){
     return {
       imageSrc:"@/assets/board/toptitle.png",
+      orderList: [],
+      selectedOrder: null,
+      planList: [],
+      selectedPlan: null,
+      taskList: [],
+      selectedTask: null,
+      areaList: [],
+      selectedArea: null
     }
+  },
+  created() {
+    this.getOrderList();
+    this.getPlanList();
+    this.getTaskList();
+    this.getAreaList();
   },
   methods:{
     restartVideo(){
       this.$refs.videoPlayer.currentTime = 0;
       this.$refs.videoPlayer.play();
+    },
+    async getOrderList() {
+      try {
+        const response = await listOrder();
+        this.orderList = response.rows;
+      } catch (error) {
+        console.error("获取订单列表失败:", error);
+      }
+    },
+    async getPlanList() {
+      try {
+        const response = await listManufacturePlan();
+        this.planList = response.rows;
+      } catch (error) {
+        console.error("获取生产计划列表失败:", error);
+      }
+    },
+    async getTaskList() {
+      try {
+        const response = await listManufactureTask();
+        this.taskList = response.rows;
+      } catch (error) {
+        console.error("获取生产任务列表失败:", error);
+      }
+    },
+    async getAreaList() {
+      try {
+        const response = await listArea();
+        this.areaList = response.rows;
+      } catch (error) {
+        console.error("获取车间列表失败:", error);
+      }
+    },
+    handleOrderChange(value) {
+      if (this.$refs.data6Component) {
+        this.$refs.data6Component.updateChartData(value);
+      }
+    },
+    handlePlanChange(value) {
+      if (this.$refs.planTaskComponent) {
+        this.$refs.planTaskComponent.updateTaskChartData(value);
+      }
+    },
+    handleTaskChange(value) {
+      if (this.$refs.taskDeviceComponent) {
+        this.$refs.taskDeviceComponent.updateDeviceTaskChartData(value);
+      }
+    },
+    handleAreaChange(value) {
+      if (this.$refs.areaDeviceComponent) {
+        this.$refs.areaDeviceComponent.updateAreaDeviceTaskChartData(value);
+      }
     }
   }
 }
@@ -252,7 +348,7 @@ export default {
   justify-content: space-between;
 }
 .lefttop{
-  height: 33%;
+  height: 50%;
   /*background-color: skyblue;*/
   position: relative;
   /*align-items: center;*/
@@ -262,12 +358,13 @@ export default {
   /*background-color: skyblue;*/
 }
 .leftbottom{
-  height: 33%;
+  height: 50;
   /*background-color: skyblue;*/
 }
 .title{
   width: 100%;
   height: 15%;
+  position: relative;
   /*display: flex;*/
   /*align-items: center;*/
   /*background-color: navajowhite;*/
@@ -295,7 +392,7 @@ export default {
   justify-content: space-between;
 }
 .righttop{
-  height: 33%;
+  height: 50%;
   /*background-color: skyblue;*/
   position: relative;
   /*align-items: center;*/
@@ -305,7 +402,15 @@ export default {
   /*background-color: skyblue;*/
 }
 .rightbottom{
-  height: 33%;
+  height: 50%;
   /*background-color: skyblue;*/
+}
+.order-select, .plan-select, .task-select, .area-select {
+  position: absolute;
+  right: 20px;
+  top: 150%;
+  transform: translateY(-50%);
+  width: 200px;
+  z-index: 50;
 }
 </style>

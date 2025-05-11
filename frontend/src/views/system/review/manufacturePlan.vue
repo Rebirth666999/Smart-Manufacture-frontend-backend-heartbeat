@@ -324,13 +324,6 @@ export default {
       mode: 0
     };
   },
-  watch: {
-    $route(route) {
-      if (route.path === '/manufacture/manufacturePlan') {
-        this.setUpPage()
-      }
-    }
-  },
   async created() {
     await this.setUpPage()
   },

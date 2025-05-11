@@ -444,13 +444,13 @@ import { listManufacturePlanMain, getManufacturePlanMain, delManufacturePlanMain
 import { listOrder } from "@/api/system/order";
 import { listProduct } from "@/api/system/product";
 import { listOrderDemand } from "@/api/system/orderDemand";
-import manufactureTask from '@/views/system/manufactureTask';
+import ManufactureTask from '@/views/system/manufactureTask';
 import ManufactureMaterial from '@/views/system/manufactureTask/material';
 
 export default {
   name: "ManufacturePlan",
   components: {
-    manufactureTask,
+    ManufactureTask,
     ManufactureMaterial
   },
   dicts: ['ices_manufacture_plan_status'],
@@ -538,18 +538,11 @@ export default {
       mode: 0
     };
   },
-  watch: {
-    $route(route) {
-      if (route.path === '/manufacture/manufacturePlan') {
-        this.setUpPage()
-      }
-    }
+  created() {
+    this.setUpPage()
   },
-  async created() {
-    await this.setUpPage()
-  },
-  async activated() {
-    await this.setUpPage()
+  activated() {
+    this.setUpPage()
   },
   methods: {
     /** 
@@ -564,7 +557,7 @@ export default {
       await this.getList();
       if (this.$route.query.mpCode) {
         const manufacturePlan = this.manufacturePlanList.find(ele => ele.mpCode === this.$route.query.mpCode)
-        this.$router.replace('/manufacture/manufacturePlan')
+        this.$router.replace('/manufacture/manageManufacture')
         if (manufacturePlan) {
           this.queryParams.orCode = manufacturePlan.orCode
           this.currentOrCode = manufacturePlan.orCode

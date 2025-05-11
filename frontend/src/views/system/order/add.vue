@@ -321,7 +321,7 @@ export default {
                 // 发布之后修改，应当提醒用户
                 // 然后离开此界面
                 this.$modal.msgSuccess("修改成功，已启动报警处理");
-                this.$tab.closeOpenPage({ path: "/order" });
+                this.$tab.closeOpenPage({ path: "/order/manageOrder" });
                 this.buttonLoading = false;
               }).catch(() => {
                 // 取消操作
@@ -351,7 +351,7 @@ export default {
     },
     // 关闭本页，返回到订单管理
     close() {
-      const obj = { path: "/order" };
+      const obj = { path: "/order/manageOrder" };
       this.$tab.closeOpenPage(obj);
     },
     // 监听选中的贸易信息变化

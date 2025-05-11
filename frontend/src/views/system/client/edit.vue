@@ -347,21 +347,9 @@ export default {
         this.clientLevelList = []
       }
     },
-    // 选择业务员的监听函数
-    selectUser(row) {
-    if (row) {
-        // 更新表单中的归属部门
-        this.form.deptId = row.deptId;
-        // 更新表单中的手机号码
-        this.form.phonenumber = row.phonenumber;
-        // 你可以根据需求添加更多的更新逻辑，例如更新用户昵称、邮箱等
-        this.form.nickName = row.nickName;
-        this.form.email = row.email;
-      }
-    },
     // 关闭本页，返回到客户关系管理
     close() {
-      const obj = { path: "/client" };
+      const obj = { path: "/client/clientInfo" };
       this.$tab.closeOpenPage(obj);
     }
   }

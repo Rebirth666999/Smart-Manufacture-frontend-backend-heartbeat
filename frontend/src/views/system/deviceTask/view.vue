@@ -97,7 +97,7 @@ export default {
       if (this.interval === null) {
         this.interval = setInterval(() => {
           this.update(row)
-        }, 5000);
+        }, 2000);
       }
       this.viewerData.loading = false
     })

@@ -87,29 +87,29 @@ public class IcesEquipmentHeartbeatSaveServiceImpl implements IcesEquipmentHeart
             ObjectMapper objectMapper = new ObjectMapper();
             IcesHeartbeatMessage root = objectMapper.readValue(heartbeatMsg, IcesHeartbeatMessage.class);
             // 打印任务状态
-            System.out.println("任务状态:");
-            final List<String> taskUndo = root.getTasksStatus().getTaskUndo();
-            final List<String> taskDoing = root.getTasksStatus().getTaskDoning();
-            final List<String> taskDone = root.getTasksStatus().getTaskDone();
+//            System.out.println("任务状态:");
+//            final List<String> taskUndo = root.getTasksStatus().getTaskUndo();
+//            final List<String> taskDoing = root.getTasksStatus().getTaskDoning();
+//            final List<String> taskDone = root.getTasksStatus().getTaskDone();
 
-            System.out.println("   未完成的任务: " + taskUndo);
-            System.out.println("   正在执行的任务: " + taskDoing);
-            System.out.println("   已完成的任务: " + taskDone);
-            System.out.println();
+//            System.out.println("   未完成的任务: " + taskUndo);
+//            System.out.println("   正在执行的任务: " + taskDoing);
+//            System.out.println("   已完成的任务: " + taskDone);
+//            System.out.println();
 
             // 打印任务信息
             System.out.println("任务信息");
-            for (IcesTaskInfo taskInfo : root.getTaskInfo()) {
-                System.out.println(" 任务id : " + taskInfo.getProductionTask().getPtId());
-                if(!tasksInfo.containsKey(taskInfo.getProductionTask().getPtId())){
-                    tasksInfo.put(taskInfo.getProductionTask().getPtId(),taskInfo);
-                }
-                for (IcesProcessRoute route : taskInfo.getProcessRoute()) {
-                    System.out.println("  Process_Route: " + route.getPrdId() );
-                    System.out.println("  EQ ID: " + route.getEqId());
-                    System.out.println();
-                }
-            }
+//            for (IcesTaskInfo taskInfo : root.getTaskInfo()) {
+//                System.out.println(" 任务id : " + taskInfo.getProductionTask().getPtId());
+//                if(!tasksInfo.containsKey(taskInfo.getProductionTask().getPtId())){
+//                    tasksInfo.put(taskInfo.getProductionTask().getPtId(),taskInfo);
+//                }
+//                for (IcesProcessRoute route : taskInfo.getProcessRoute()) {
+//                    System.out.println("  Process_Route: " + route.getPrdId() );
+//                    System.out.println("  EQ ID: " + route.getEqId());
+//                    System.out.println();
+//                }
+//            }
 
             // 打印当前任务状态
             //对于收到任务和执行任务，存入数据库的desc字段应该包含任务id和操作id
@@ -172,6 +172,7 @@ public class IcesEquipmentHeartbeatSaveServiceImpl implements IcesEquipmentHeart
                 dtRelease.clear();
                 dtDone.clear();
                 dtDoing.clear();
+                System.out.println("========集合已清空========");
             }
 //            for (String s : opUndo) {
 //                System.out.println("准备添加任务接收记录"+opUndo+eqOpReceived);

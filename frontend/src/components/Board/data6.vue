@@ -2,7 +2,7 @@
   <div class="ybjgtzz">
     <!-- 饼图 -->
     <div class="container">
-      <div class="chartsGl" :id="containerId"></div>
+      <div class="chartsGl" id="charts"></div>
       <!-- 饼图下面的底座 -->
       <img src="@/assets/board/piebottom.png" class="bottom"/>
     </div>
@@ -11,320 +11,40 @@
 </template>
 
 <script>
-import { listManufacturePlan } from "@/api/system/manufacturePlan";
-import { listManufactureTask } from "@/api/system/manufactureTask";
-import { listDeviceTask } from "@/api/system/deviceTask";
-import { listEquipment } from "@/api/system/equipment";
 export default {
   name: "Zysjg",
-  props: {
-    selectedOrder: {
-      type: String,
-      default: null
-    },
-    selectedPlan: {
-      type: String,
-      default: null
-    },
-    selectedTask: {
-      type: String,
-      default: null
-    },
-    selectedArea: {
-      type: String,
-      default: null
-    },
-    containerId: {
-      type: String,
-      required: true
-    }
-  },
   data() {
     return {
-      optionData: [],
-      option: {},
-      chart: null,
-      equipmentList: []
+      optionData: [
+        {
+          name: '工业',//名称
+          value: 19,//值
+          itemStyle: {//颜色
+            color: 'rgba(22, 250, 249, 1)'
+          }
+        }, {
+          name: '生活',
+          value: 13,
+          itemStyle: {
+            color: 'rgba(255, 229, 13, 1)',
+          }
+        }, {
+          name: '农业',
+          value: 15,
+          itemStyle: {
+            color: 'rgba(22, 135, 250, 1)'
+          }
+        },
+      ],
+      option: {}
     };
   },
-  watch: {
-    selectedOrder: {
-      immediate: true,
-      handler(newVal) {
-        if (newVal) {
-          this.updateChartData(newVal);
-        }
-      }
-    },
-    selectedPlan: {
-      immediate: true,
-      handler(newVal) {
-        if (newVal) {
-          this.updateTaskChartData(newVal);
-        }
-      }
-    },
-    selectedTask: {
-      immediate: true,
-      handler(newVal) {
-        if (newVal) {
-          this.updateDeviceTaskChartData(newVal);
-        }
-      }
-    },
-    selectedArea: {
-      immediate: true,
-      handler(newVal) {
-        if (newVal) {
-          this.updateAreaDeviceTaskChartData(newVal);
-        }
-      }
-    }
-  },
   mounted() {
-    this.initChart();
-    this.getEquipmentList();
-  },
-  beforeDestroy() {
-    if (this.chart) {
-      this.chart.dispose();
-      this.chart = null;
-    }
+    this.$nextTick(() => {
+      this.init();
+    });
   },
   methods: {
-    initChart() {
-      if (this.chart) {
-        this.chart.dispose();
-      }
-      const chartContainer = document.getElementById(this.containerId);
-      if (chartContainer) {
-        this.chart = this.$echarts.init(chartContainer);
-        if (this.selectedOrder) {
-          this.updateChartData(this.selectedOrder);
-        } else if (this.selectedPlan) {
-          this.updateTaskChartData(this.selectedPlan);
-        }
-      }
-    },
-    async getEquipmentList() {
-    try {
-      const response = await listEquipment();
-      this.equipmentList = response.rows;
-    } catch (error) {
-      console.error("获取设备列表失败:", error);
-    }
-  },
-    async updateChartData(orCode) {
-      try {
-        const response = await listManufacturePlan({ orCode });
-        const plans = response.rows;
-        
-        // 计算已完成和未完成的数量
-        let completed = 0;
-        let inProgress = 0;
-        let total = 0;
-        
-        plans.forEach(plan => {
-          const planQty = parseInt(plan.mpQtyPlan) || 0;
-          const realQty = parseInt(plan.mpQtyReal) || 0;
-          total += planQty;
-          completed += realQty;
-        });
-        
-        inProgress = total - completed;
-        
-        this.optionData = [
-          {
-            name: '已完成',
-            value: completed,
-            itemStyle: {
-              color: 'rgba(22, 250, 249, 1)'
-            }
-          },
-          {
-            name: '进行中',
-            value: inProgress,
-            itemStyle: {
-              color: 'rgba(255, 229, 13, 1)'
-            }
-          }
-        ];
-        
-        this.updateChart();
-      } catch (error) {
-        console.error("获取生产计划数据失败:", error);
-      }
-    },
-    async updateTaskChartData(mpCode) {
-      try {
-        const response = await listManufactureTask({ mpCode });
-        const tasks = response.rows;
-        
-        let completed = 0;
-        let inProgress = 0;
-        let notStarted = 0;
-        
-        tasks.forEach(task => {
-          if (task.mtStat === '6') { // 6已完成
-            completed++;
-          } else if (  task.mtStat === '5') { // 5进行中
-            inProgress++;
-          } else if (task.mtStat === '4'){//4为已发布
-            notStarted++;
-          }
-        });
-        
-        this.optionData = [
-          {
-            name: '已完成',
-            value: completed,
-            itemStyle: {
-              color: 'rgba(22, 250, 249, 1)'
-            }
-          },
-          {
-            name: '进行中',
-            value: inProgress,
-            itemStyle: {
-              color: 'rgba(255, 229, 13, 1)'
-            }
-          },
-          {
-            name: '未开始',
-            value: notStarted,
-            itemStyle: {
-              color: 'rgba(255, 69, 0, 1)'
-            }
-          }
-        ];
-        
-        this.updateChart();
-      } catch (error) {
-        console.error("获取生产任务数据失败:", error);
-      }
-    },
-    async updateDeviceTaskChartData(mtCode) {
-      try {
-        const response = await listDeviceTask({ mtCode });
-        const deviceTasks = response.rows;
-        
-        let completed = 0;
-        let inProgress = 0;
-        let notStarted = 0;
-        
-        deviceTasks.forEach(task => {
-          switch(task.dtStat) {
-            case '4': // 已完成
-              completed++;
-              break;
-            case '2': // 已下发
-            case '3': // 执行中
-              inProgress++;
-              break;
-            default:
-              notStarted++;
-          }
-        });
-        
-        this.optionData = [
-          {
-            name: '已完成',
-            value: completed,
-            itemStyle: {
-              color: 'rgba(22, 250, 249, 1)'
-            }
-          },
-          {
-            name: '进行中',
-            value: inProgress,
-            itemStyle: {
-              color: 'rgba(255, 229, 13, 1)'
-            }
-          },
-          {
-            name: '未开始',
-            value: notStarted,
-            itemStyle: {
-              color: 'rgba(255, 69, 0, 1)'
-            }
-          }
-        ];
-        
-        this.updateChart();
-      } catch (error) {
-        console.error("获取设备任务数据失败:", error);
-      }
-    },
-    async updateAreaDeviceTaskChartData(arCode) {
-      try {
-        // 首先获取该车间的所有设备
-        const areaEquipments = this.equipmentList.filter(eq => eq.arCode === arCode);
-        const equipmentCodes = areaEquipments.map(eq => eq.eqCode);
-
-        // 获取所有设备任务
-        const response = await listDeviceTask();
-        const deviceTasks = response.rows.filter(task => {
-          // 找到任务对应的设备，检查是否属于当前车间
-          const taskEquipment = this.equipmentList.find(eq => eq.eqCode === task.eqCode);
-          return taskEquipment && taskEquipment.arCode === arCode;
-        });
-        
-        let completed = 0;
-        let inProgress = 0;
-        let notStarted = 0;
-        
-        deviceTasks.forEach(task => {
-          switch(task.dtStat) {
-            case '4': // 已完成
-              completed++;
-              break;
-            case '3': // 执行中
-              inProgress++;
-              break;
-            case '2': // 未开始
-              notStarted++;
-              break;
-          }
-        });
-        
-        this.optionData = [
-          {
-            name: '已完成',
-            value: completed,
-            itemStyle: {
-              color: 'rgba(22, 250, 249, 1)'
-            }
-          },
-          {
-            name: '进行中',
-            value: inProgress,
-            itemStyle: {
-              color: 'rgba(255, 229, 13, 1)'
-            }
-          },
-          {
-            name: '未开始',
-            value: notStarted,
-            itemStyle: {
-              color: 'rgba(255, 69, 0, 1)'
-            }
-          }
-        ];
-        
-        this.updateChart();
-      } catch (error) {
-        console.error("获取车间设备任务数据失败:", error);
-      }
-    },
-    updateChart() {
-      if (!this.chart) {
-        this.initChart();
-        return;
-      }
-      // 传入数据生成 option
-      this.option = this.getPie3D(this.optionData, 0.85);
-      this.chart.setOption(this.option);
-    },
     //初始化构建
     init() {
       //构建3d饼状图
@@ -430,9 +150,20 @@ export default {
           icon: 'circle',
           //格式化图例文本（我是数值什么显示什么）
           formatter: function (name) {
-            let item = legendBfb.filter(item => item.name == name)[0];
+            var target;
+            for (var i = 0, l = pieData.length; i < l; i++) {
+              if (pieData[i].name == name) {
+                target = pieData[i].value;
+              }
+            }
+            return `${name}: ${target}`;
+          },
+          // 这个可以显示百分比那种（可以根据你想要的来配置）
+          formatter: function (param) {
+            let item = legendBfb.filter(item => item.name == param)[0];
             let bfs = that.fomatFloat(item.value * 100, 2) + "%";
-            return `${item.name}: ${bfs}`;
+            console.log(item.name)
+            return `${item.name} :${bfs}`;
           }
         },
         //移动上去提示的文本内容(我没来得及改 你们可以根据需求改)
@@ -441,7 +172,9 @@ export default {
             if (params.seriesName !== 'mouseoutSeries' && params.seriesName !== 'pie2d') {
               let bfb = ((option.series[params.seriesIndex].pieData.endRatio - option.series[params.seriesIndex].pieData.startRatio) *
                 100).toFixed(2);
-              return `${params.seriesName}<br/>${bfb}%`;
+              return `${params.seriesName}<br/>` +
+                `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${params.color};"></span>` +
+                `${bfb}`;
             }
           }
         },

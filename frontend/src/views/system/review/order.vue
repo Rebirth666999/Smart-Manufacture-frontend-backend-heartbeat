@@ -303,7 +303,7 @@ export default {
         getOrder(row.orId).then(response => {
           this.form = response.data;
           if (this.form.orStat === '2') this.form.orStat = '3';
-          if (this.form.orStat === '8') this.form.orStat = '9';
+          else if (this.form.orStat === '8') this.form.orStat = '9';
           else this.form.orStat = 'c';
           updateOrder(this.form).then(response => {
             this.$modal.msgSuccess("已开始审核");

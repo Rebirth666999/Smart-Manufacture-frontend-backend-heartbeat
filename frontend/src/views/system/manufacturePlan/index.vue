@@ -796,12 +796,12 @@ export default {
     },
     /** 新增生产计划主表 */
     handleAddMain() {
-      this.$router.push(`/manufacture/manufacturePlan/addMain?orCode=${this.queryParams.orCode}`)
+      this.$router.push(`/manufacture/addManufacturePlan?orCode=${this.queryParams.orCode}`)
     },
     /** 修改生产计划主表 */
     handleUpdateMain(row) {
       const mpmId = row.mpmId
-      this.$router.push(`/manufacture/manufacturePlan/addMain?mpmId=${mpmId}`)
+      this.$router.push(`/manufacture/editManufacturePlan?mpmId=${mpmId}`)
     },
     /** 删除生产计划主表 */
     handleDeleteMain(row) {

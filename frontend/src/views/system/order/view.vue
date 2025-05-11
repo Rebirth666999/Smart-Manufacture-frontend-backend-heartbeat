@@ -68,7 +68,7 @@
         </el-form>
     
         <el-row :gutter="10" class="mb8">
-          <el-col :span="1.5">
+          <!-- <el-col :span="1.5">
             <el-button
               type="primary"
               plain
@@ -77,8 +77,8 @@
               @click="handleAdd"
               v-hasPermi="['system:order:add']"
             >新增</el-button>
-          </el-col>
-          <el-col :span="1.5">
+          </el-col> -->
+          <!-- <el-col :span="1.5">
             <el-button
               type="success"
               plain
@@ -88,8 +88,8 @@
               @click="handleUpdate"
               v-hasPermi="['system:order:edit']"
             >修改</el-button>
-          </el-col>
-          <el-col :span="1.5">
+          </el-col> -->
+          <!-- <el-col :span="1.5">
             <el-button
               type="danger"
               plain
@@ -99,8 +99,8 @@
               @click="handleDelete"
               v-hasPermi="['system:order:remove']"
             >删除</el-button>
-          </el-col>
-          <el-col :span="1.5">
+          </el-col> -->
+          <!-- <el-col :span="1.5">
             <el-button
               type="warning"
               plain
@@ -109,7 +109,7 @@
               @click="handleExport"
               v-hasPermi="['system:order:export']"
             >导出</el-button>
-          </el-col>
+          </el-col> -->
           <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
         </el-row>
     
@@ -150,7 +150,7 @@
           <el-table-column label="修改时间" align="center" prop="orMdate" />
           <!-- <el-table-column label="已删除" align="center" prop="orDelete" /> -->
           <!-- <el-table-column label="描述" align="center" prop="orDesc" /> -->
-          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <!-- <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -190,7 +190,7 @@
                 v-hasPermi="['system:order:remove']"
               >删除</el-button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
     
         <pagination
@@ -230,14 +230,14 @@ export default {
     return {
       // 遮罩层
       loading: true,
-      // 选中内容
-      idSelect: undefined,
-      // 选中code
-      codeSelect: undefined,
-      // 非单个禁用
-      single: true,
-      // 非多个禁用
-      multiple: true,
+      // // 选中内容
+      // idSelect: undefined,
+      // // 选中code
+      // codeSelect: undefined,
+      // // 非单个禁用
+      // single: true,
+      // // 非多个禁用
+      // multiple: true,
       // 显示搜索条件
       showSearch: true,
       // 总条数
@@ -362,93 +362,93 @@ export default {
         this.codeSelect = current.orCode
       }
     },
-    /** 新增按钮操作 */
-    handleAdd() {
-      this.$router.push(`/order/addOrder`)
-    },
-    /** 修改按钮操作 */
-    handleUpdate(row) {
-      const orId = row.orId || this.idSelect
-      this.$router.push(`/order/editOrder?orId=${orId}`)
-    },
-    /** 删除按钮操作 */
-    handleDelete(row) {
-      const orIds = row.orId || this.idSelect;
-      this.$modal.confirm('是否确认删除订单编号为"' + orIds + '"的数据项？').then(() => {
-        this.loading = true;
-        return delOrder(orIds);
-      }).then(() => {
-        this.loading = false;
-        this.getList();
-        this.idSelect = undefined
-        this.codeSelect = undefined
-        this.$modal.msgSuccess("删除成功");
-      }).catch(() => {
-      }).finally(() => {
-        this.loading = false;
-      });
-    },
-    /** 导出按钮操作 */
-    handleExport() {
-      this.download('system/order/export', {
-        ...this.queryParams
-      }, `order_${new Date().getTime()}.xlsx`)
-    },
-    // 提交审核
-    handleSubmitReview(row) {
-      const orId = row.orId;
-      this.$modal.confirm('是否要提交审核？审核在开始之前可以撤回。').then(() => {
-        this.loading = true;
-        getOrder(orId).then(response => {
-          this.form = response.data;
-          this.form.orStat = "2";
-          updateOrder(this.form).then(response => {
-            this.$modal.msgSuccess("已提交审核");
-            this.getList();
-          })
-        });
-      }).catch(() => {
-      }).finally(() => {
-        this.loading = false;
-      });
-    },
-    // 撤回审核操作
-    handleWithdrawReview(row) {
-      const orId = row.orId;
-      this.$modal.confirm('是否要撤回审核？若审核已开始即无法撤回。').then(() => {
-        this.loading = true;
-        getOrder(orId).then(response => {
-          this.form = response.data;
-          if (this.form.orStat === '2') this.form.orStat = '1'
-          else if (this.form.orStat === 'b') this.form.orStat = '4'
-          updateOrder(this.form).then(response => {
-            this.$modal.msgSuccess("已撤回审核");
-            this.getList();
-          })
-        });
-      }).catch(() => {
-      }).finally(() => {
-        this.loading = false;
-      });
-    },
-    // 弃用订单
-    handleDepreciateReview(row) {
-      const orId = row.orId;
-      this.$modal.confirm('是否弃用此订单？弃用订单需要进行订单弃用审核。').then(() => {
-        this.loading = true;
-        getOrder(orId).then(response => {
-          this.form = response.data;
-          this.form.orStat = "b";
-          updateOrder(this.form).then(response => {
-            this.$modal.msgSuccess("已提交订单弃用审核");
-            this.getList();
-          })
-        });
-      }).catch(() => {
-      }).finally(() => {
-        this.loading = false;
-      });
-    },
+    // /** 新增按钮操作 */
+    // handleAdd() {
+    //   this.$router.push(`/order/add`)
+    // },
+    // /** 修改按钮操作 */
+    // handleUpdate(row) {
+    //   const orId = row.orId || this.idSelect
+    //   this.$router.push(`/order/add?orId=${orId}`)
+    // },
+    // /** 删除按钮操作 */
+    // handleDelete(row) {
+    //   const orIds = row.orId || this.idSelect;
+    //   this.$modal.confirm('是否确认删除订单编号为"' + orIds + '"的数据项？').then(() => {
+    //     this.loading = true;
+    //     return delOrder(orIds);
+    //   }).then(() => {
+    //     this.loading = false;
+    //     this.getList();
+    //     this.idSelect = undefined
+    //     this.codeSelect = undefined
+    //     this.$modal.msgSuccess("删除成功");
+    //   }).catch(() => {
+    //   }).finally(() => {
+    //     this.loading = false;
+    //   });
+    // },
+    // /** 导出按钮操作 */
+    // handleExport() {
+    //   this.download('system/order/export', {
+    //     ...this.queryParams
+    //   }, `order_${new Date().getTime()}.xlsx`)
+    // },
+    // // 提交审核
+    // handleSubmitReview(row) {
+    //   const orId = row.orId;
+    //   this.$modal.confirm('是否要提交审核？审核在开始之前可以撤回。').then(() => {
+    //     this.loading = true;
+    //     getOrder(orId).then(response => {
+    //       this.form = response.data;
+    //       this.form.orStat = "2";
+    //       updateOrder(this.form).then(response => {
+    //         this.$modal.msgSuccess("已提交审核");
+    //         this.getList();
+    //       })
+    //     });
+    //   }).catch(() => {
+    //   }).finally(() => {
+    //     this.loading = false;
+    //   });
+    // },
+    // // 撤回审核操作
+    // handleWithdrawReview(row) {
+    //   const orId = row.orId;
+    //   this.$modal.confirm('是否要撤回审核？若审核已开始即无法撤回。').then(() => {
+    //     this.loading = true;
+    //     getOrder(orId).then(response => {
+    //       this.form = response.data;
+    //       if (this.form.orStat === '2') this.form.orStat = '1'
+    //       else if (this.form.orStat === 'b') this.form.orStat = '4'
+    //       updateOrder(this.form).then(response => {
+    //         this.$modal.msgSuccess("已撤回审核");
+    //         this.getList();
+    //       })
+    //     });
+    //   }).catch(() => {
+    //   }).finally(() => {
+    //     this.loading = false;
+    //   });
+    // },
+    // // 弃用订单
+    // handleDepreciateReview(row) {
+    //   const orId = row.orId;
+    //   this.$modal.confirm('是否弃用此订单？弃用订单需要进行订单弃用审核。').then(() => {
+    //     this.loading = true;
+    //     getOrder(orId).then(response => {
+    //       this.form = response.data;
+    //       this.form.orStat = "b";
+    //       updateOrder(this.form).then(response => {
+    //         this.$modal.msgSuccess("已提交订单弃用审核");
+    //         this.getList();
+    //       })
+    //     });
+    //   }).catch(() => {
+    //   }).finally(() => {
+    //     this.loading = false;
+    //   });
+    // },
   }
 };
 </script>

@@ -1,0 +1,26 @@
+// generated from rosidl_adapter/resource/action.idl.em
+// with input from interfaces/action/Fetch.action
+// generated code does not contain a copyright notice
+
+
+module interfaces {
+  module action {
+    @verbatim (language="comment", text=
+      "Goal")
+    struct Fetch_Goal {
+      sequence<double> para;
+
+      string lst;
+    };
+    @verbatim (language="comment", text=
+      "Result")
+    struct Fetch_Result {
+      string finish;
+    };
+    @verbatim (language="comment", text=
+      "Feedback")
+    struct Fetch_Feedback {
+      string feedback;
+    };
+  };
+};

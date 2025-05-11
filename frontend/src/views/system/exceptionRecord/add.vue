@@ -47,29 +47,6 @@
             <el-input v-model="form.exrDesc" type="textarea" placeholder="请输入内容" />
           </el-form-item>
         </el-col>
-        <el-col :span="24">
-          <el-form-item label="参数" prop="exrParam">
-            <el-table class="mb8" :data="paramList">
-              <el-table-column label="序号" align="center" type="index" />
-              <el-table-column label="键" align="center" prop="paramKey">
-                <template slot-scope="scope">
-                  <el-input v-model="paramList[scope.$index].key" />
-                </template>
-              </el-table-column>
-              <el-table-column label="值" align="center" prop="paramVal">
-                <template slot-scope="scope">
-                  <el-input v-model="paramList[scope.$index].val" />
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" align="center" width="80px">
-                <template slot-scope="scope">
-                  <el-button @click="deleteParam(scope)" type="danger" icon="el-icon-delete" size="small" circle plain></el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-            <el-button @click="addParam" type="primary" icon="el-icon-plus" size="small" plain>新增</el-button>
-          </el-form-item>
-        </el-col>
         <el-col :span="12">
           <el-form-item label="状态" prop="exrStat">
             <el-select v-model="form.exrStat" placeholder="请选择状态" disabled>
@@ -105,13 +82,13 @@
                 v-for="item in userList"
                 :key="item.userId"
                 :label="item.userName"
-                :value="item.userId"
+                :value="item.userName"
               >
               </el-option>
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <!-- <el-col :span="12">
           <el-form-item label="当前处理人" prop="exrUserHandle">
             <el-select
               v-model="form.exrUserHandle"
@@ -122,13 +99,13 @@
                 v-for="item in userList"
                 :key="item.userId"
                 :label="item.userName"
-                :value="item.userId"
+                :value="item.userName"
               >
               </el-option>
             </el-select>
           </el-form-item>
-        </el-col>
-        <el-col :span="12">
+        </el-col> -->
+        <!-- <el-col :span="12">
           <el-form-item label="异常解除人" prop="exrUserFinish">
             <el-select
               v-model="form.exrUserFinish"
@@ -139,12 +116,12 @@
                 v-for="item in userList"
                 :key="item.userId"
                 :label="item.userName"
-                :value="item.userId"
+                :value="item.userName"
               >
               </el-option>
             </el-select>
           </el-form-item>
-        </el-col>
+        </el-col> -->
         <el-col :span="12">
           <el-form-item label="异常责任人" prop="exrUserResp">
             <el-select
@@ -156,15 +133,10 @@
                 v-for="item in userList"
                 :key="item.userId"
                 :label="item.userName"
-                :value="item.userId"
+                :value="item.userName"
               >
               </el-option>
             </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item label="持续时间" prop="exrDuration">
-            <el-input v-model="form.exrDuration" placeholder="请输入持续时间" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -182,6 +154,30 @@
                 :value="dict.value"
               ></el-option>
             </el-select>
+          </el-form-item>
+        </el-col>
+        
+        <el-col :span="24">
+          <el-form-item label="参数" prop="exrParam">
+            <el-table class="mb8" :data="paramList">
+              <el-table-column label="序号" align="center" type="index" />
+              <el-table-column label="键" align="center" prop="paramKey">
+                <template slot-scope="scope">
+                  <el-input v-model="paramList[scope.$index].key" />
+                </template>
+              </el-table-column>
+              <el-table-column label="值" align="center" prop="paramVal">
+                <template slot-scope="scope">
+                  <el-input v-model="paramList[scope.$index].val" />
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" align="center" width="80px">
+                <template slot-scope="scope">
+                  <el-button @click="deleteParam(scope)" type="danger" icon="el-icon-delete" size="small" circle plain></el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-button @click="addParam" type="primary" icon="el-icon-plus" size="small" plain>新增</el-button>
           </el-form-item>
         </el-col>
       </el-form>
@@ -227,9 +223,6 @@ export default {
         ],
         exrLevel: [
           { required: true, message: "等级不能为空", trigger: "change" }
-        ],
-        exrDuration: [
-          { required: true, message: "持续时间不能为空", trigger: "blur" }
         ],
         exrImpactFactor: [
           { required: true, message: "影响因子不能为空", trigger: "blur" }

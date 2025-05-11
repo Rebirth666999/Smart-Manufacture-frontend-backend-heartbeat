@@ -1,0 +1,30 @@
+// generated from rosidl_adapter/resource/action.idl.em
+// with input from interfaces/action/MultipleTurn.action
+// generated code does not contain a copyright notice
+
+
+module interfaces {
+  module action {
+    @verbatim (language="comment", text=
+      "Goal")
+    struct MultipleTurn_Goal {
+      sequence<int32> joint_ids;
+
+      sequence<double> angles;
+
+      string lst;
+    };
+    @verbatim (language="comment", text=
+      "Result")
+    struct MultipleTurn_Result {
+      string finish;
+    };
+    @verbatim (language="comment", text=
+      "Feedback")
+    struct MultipleTurn_Feedback {
+      string ast;
+
+      double timespan;
+    };
+  };
+};

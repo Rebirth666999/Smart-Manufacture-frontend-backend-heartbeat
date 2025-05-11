@@ -1,0 +1,40 @@
+[8.369s] Invoking command in '/home/berry/HeartBeat/src/belt_short_server': PYTHONPATH=/home/berry/HeartBeat/build/belt_short_server/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/belt_short_server build --build-base /home/berry/HeartBeat/build/belt_short_server/build install --record /home/berry/HeartBeat/build/belt_short_server/install.log --single-version-externally-managed install_data
+[10.552s] running egg_info
+[10.557s] creating ../../build/belt_short_server/belt_short_server.egg-info
+[10.559s] writing ../../build/belt_short_server/belt_short_server.egg-info/PKG-INFO
+[10.562s] writing dependency_links to ../../build/belt_short_server/belt_short_server.egg-info/dependency_links.txt
+[10.564s] writing entry points to ../../build/belt_short_server/belt_short_server.egg-info/entry_points.txt
+[10.566s] writing requirements to ../../build/belt_short_server/belt_short_server.egg-info/requires.txt
+[10.567s] writing top-level names to ../../build/belt_short_server/belt_short_server.egg-info/top_level.txt
+[10.570s] writing manifest file '../../build/belt_short_server/belt_short_server.egg-info/SOURCES.txt'
+[10.587s] reading manifest file '../../build/belt_short_server/belt_short_server.egg-info/SOURCES.txt'
+[10.596s] writing manifest file '../../build/belt_short_server/belt_short_server.egg-info/SOURCES.txt'
+[10.599s] running build
+[10.601s] running build_py
+[10.604s] creating /home/berry/HeartBeat/build/belt_short_server/build
+[10.605s] creating /home/berry/HeartBeat/build/belt_short_server/build/lib
+[10.607s] creating /home/berry/HeartBeat/build/belt_short_server/build/lib/belt_short_server
+[10.609s] copying belt_short_server/BeltCtr.py -> /home/berry/HeartBeat/build/belt_short_server/build/lib/belt_short_server
+[10.612s] copying belt_short_server/__init__.py -> /home/berry/HeartBeat/build/belt_short_server/build/lib/belt_short_server
+[10.614s] copying belt_short_server/belt_short_server.py -> /home/berry/HeartBeat/build/belt_short_server/build/lib/belt_short_server
+[10.617s] running install
+[10.620s] running install_lib
+[10.626s] creating /home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages/belt_short_server
+[10.627s] copying /home/berry/HeartBeat/build/belt_short_server/build/lib/belt_short_server/BeltCtr.py -> /home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages/belt_short_server
+[10.630s] copying /home/berry/HeartBeat/build/belt_short_server/build/lib/belt_short_server/__init__.py -> /home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages/belt_short_server
+[10.632s] copying /home/berry/HeartBeat/build/belt_short_server/build/lib/belt_short_server/belt_short_server.py -> /home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages/belt_short_server
+[10.638s] byte-compiling /home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages/belt_short_server/BeltCtr.py to BeltCtr.cpython-310.pyc
+[10.647s] byte-compiling /home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages/belt_short_server/__init__.py to __init__.cpython-310.pyc
+[10.650s] byte-compiling /home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages/belt_short_server/belt_short_server.py to belt_short_server.cpython-310.pyc
+[10.658s] running install_data
+[10.660s] creating /home/berry/HeartBeat/install/belt_short_server/share/ament_index
+[10.662s] creating /home/berry/HeartBeat/install/belt_short_server/share/ament_index/resource_index
+[10.663s] creating /home/berry/HeartBeat/install/belt_short_server/share/ament_index/resource_index/packages
+[10.664s] copying resource/belt_short_server -> /home/berry/HeartBeat/install/belt_short_server/share/ament_index/resource_index/packages
+[10.666s] copying package.xml -> /home/berry/HeartBeat/install/belt_short_server/share/belt_short_server
+[10.668s] running install_egg_info
+[10.765s] Copying ../../build/belt_short_server/belt_short_server.egg-info to /home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages/belt_short_server-0.0.0-py3.10.egg-info
+[10.775s] running install_scripts
+[11.027s] Installing belt_short_server script to /home/berry/HeartBeat/install/belt_short_server/lib/belt_short_server
+[11.029s] writing list of installed files to '/home/berry/HeartBeat/build/belt_short_server/install.log'
+[11.214s] Invoked command in '/home/berry/HeartBeat/src/belt_short_server' returned '0': PYTHONPATH=/home/berry/HeartBeat/build/belt_short_server/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/belt_short_server build --build-base /home/berry/HeartBeat/build/belt_short_server/build install --record /home/berry/HeartBeat/build/belt_short_server/install.log --single-version-externally-managed install_data

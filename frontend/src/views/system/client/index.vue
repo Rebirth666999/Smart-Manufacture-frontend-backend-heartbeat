@@ -338,12 +338,12 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.$router.push(`/client/add`)
+      this.$router.push(`/client/addClient`)
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       const clId = row.clId || this.idSelect
-      this.$router.push(`/client/add?clId=${clId}`)
+      this.$router.push(`/client/editClient?clId=${clId}`)
     },
     /** 删除按钮操作 */
     handleDelete(row) {

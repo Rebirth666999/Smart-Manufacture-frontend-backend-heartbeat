@@ -71,11 +71,26 @@
             </el-option>
           </el-select>
         </el-form-item> -->
+        <el-form-item label="异常源">
+          <div> {{ parseExsCode(exceptionRecord.exsCode) }} </div>
+        </el-form-item>
+        <el-form-item label="异常">
+          <div> {{ parseExCode(exceptionRecord.exCode) }} </div>
+        </el-form-item>
+        <el-form-item label="处理进度">
+          <el-image v-if="processView.img" :src="processView.img" />
+          <!-- <process-viewer :key="`designer-${processView.index}`" :xml="processView.xmlData" :style="{'height': '300px', 'margin-bottom': '2em'}" /> -->
+        </el-form-item>
+        <el-form-item label="处理方法">
+          <div> {{ currentTask.description || '暂无' }} </div>
+        </el-form-item>
+        <el-form-item label="异常描述">
+          <div> {{ exceptionRecord.exrDesc || '暂无' }} </div>
+        </el-form-item>
+        <el-form-item label="异常参数">
+          <div> {{ exceptionRecord.exrParam || '无' }} </div>
+        </el-form-item>
       </el-form>
-      <!-- <process-viewer :key="`designer-${processView.index}`" :xml="processView.xmlData" :style="{'height': '300px', 'margin-bottom': '2em'}" /> -->
-      <div>
-        <el-image v-if="processView.img" :src="processView.img" />
-      </div>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 认</el-button>
         <el-button @click="cancel">取 消</el-button>
@@ -89,6 +104,9 @@ import { listTodoProcess, getProcessXml, getProcessFlowXml, handleTask } from '@
 import ProcessViewer from '@/components/ProcessViewer'
 import { xml2json } from 'xml-js';
 import { pictureClip } from '@/utils/pictureClip';
+import { listExceptionRecord } from "@/api/system/exceptionRecord";
+import { listException } from "@/api/system/exception";
+import { listExceptionSource } from "@/api/system/exceptionSource";
 
 export default {
   name: "Todo",
@@ -160,10 +178,14 @@ export default {
         jump: false
       },
       // 跳转流程的范围
-      jumpRange: []
+      jumpRange: [],
+      // 异常上报信息
+      exceptionRecord: {}
     };
   },
   async created() {
+    await this.getExceptionList()
+    await this.getExceptionSourceList()
     await this.getList()
     if (this.$route.query.taskId) {
       const task = this.todoList.find(ele => ele.taskId === this.$route.query.taskId)
@@ -174,6 +196,8 @@ export default {
     }
   },
   async activated() {
+    await this.getExceptionList()
+    await this.getExceptionSourceList()
     await this.getList()
     if (this.$route.query.taskId) {
       const task = this.todoList.find(ele => ele.taskId === this.$route.query.taskId)
@@ -184,6 +208,34 @@ export default {
     }
   },
   methods: {
+    // 获取异常源列表
+    getExceptionSourceList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listExceptionSource().then(response => {
+          this.exceptionSourceList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
+    // 获取异常列表
+    getExceptionList() {
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        listException().then(response => {
+          this.exceptionList = response.rows
+          resolve()
+        }).catch(() => {
+          reject()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
+    },
     /** 查询待办任务列表 */
     getList() {
       return new Promise((resolve, reject) => {
@@ -203,11 +255,13 @@ export default {
       this.currentTask = row
       this.processView.index = row.procDefId
       this.open = true
+      // 填充处理进度图片
       getProcessFlowXml(row.procInsId).then(response => {
         pictureClip(response, "img/png").then(res => {
           this.processView.img = res
         })
       })
+      // 读取流程图源文件
       getProcessXml(row.procDefId).then(response => {
         this.processView.xmlData = response.data
         // 读取流程图
@@ -227,6 +281,14 @@ export default {
             disabled: ele.attributes.id === row.taskDefKey
           })
         })
+      })
+      // 读取上报信息
+      listExceptionRecord({ exrProcess: row.procInsId }).then(response => {
+        if (response.rows.length > 0) {
+          this.exceptionRecord = response.rows[0]
+        } else {
+          this.exceptionRecord = {}
+        }
       })
     },
     // 取消按钮
@@ -266,6 +328,22 @@ export default {
       this.single = selection.length !== 1
       this.multiple = !selection.length
     },
+    // 解析异常源
+    parseExsCode(exsCode) {
+      if (exsCode) {
+        const exs = this.exceptionSourceList.find(ele => ele.exsCode = exsCode)
+        if (exs) return exs.exsName
+      }
+      return ''
+    },
+    // 解析异常
+    parseExCode(exCode) {
+      if (exCode) {
+        const ex = this.exceptionList.find(ele => ele.exCode = exCode)
+        if (ex) return ex.exName
+      }
+      return ''
+    }
   }
 };
 </script>

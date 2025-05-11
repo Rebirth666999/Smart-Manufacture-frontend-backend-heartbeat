@@ -126,7 +126,15 @@
         <div slot="title" class="panel-tab__title">
           <i class="el-icon-s-promotion"></i>人工处理任务属性
         </div>
-        <exception-usertask :id="elementId" :userList="extraList.userList" />
+        <exception-usertask :id="elementId" :deptList="extraList.deptList" />
+      </el-collapse-item>
+      <el-collapse-item
+        name="exceptionUserTaskOther"
+        v-if="mode === 3 && elementType === 'UserTask'"
+        key="exceptionUserTaskOther"
+      >
+        <div slot="title" class="panel-tab__title"><i class="el-icon-circle-plus"></i>其他</div>
+        <exception-task-other-config :id="elementId" />
       </el-collapse-item>
     </el-collapse>
   </div>
@@ -150,6 +158,7 @@ import UserTaskListeners from "./listeners/UserTaskListeners";
 import EosParam from "./param/EquipmentOperationStepParam";
 import ProcMaterial from "./other/ProcessMaterial";
 import ExceptionUsertask from "./task/ExceptionUsertask";
+import ExceptionTaskOtherConfig from "./other/ExceptionTaskOtherConfig";
 /**
  * 自定义bpmn画图侧边栏
  */
@@ -173,7 +182,8 @@ export default {
     ProcProperties,
     ProcMaterial,
     ExceptionBaseInfo,
-    ExceptionUsertask
+    ExceptionUsertask,
+    ExceptionTaskOtherConfig
   },
   componentName: "BpmnPropertiesPanel",
   props: {
@@ -230,7 +240,7 @@ export default {
         } else if (this.mode === 2) {
           this.activeTab = ["procBasic", "procProperties", "procMaterial"];
         } else if (this.mode === 3) {
-          this.activeTab = ["exceptionBasic", "exceptionUserTaskProperties"];
+          this.activeTab = ["exceptionBasic", "exceptionUserTaskProperties", "exceptionUserTaskOther"];
         }
       }
     }

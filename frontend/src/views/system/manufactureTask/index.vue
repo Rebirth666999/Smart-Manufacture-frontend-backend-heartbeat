@@ -827,13 +827,13 @@ export default {
         this.loading = false;
       });
     },
-    // 生成生产任务
+    // 生成设备任务
     handleGenerateDeviceTask(row) {
-      this.$router.push(`/manufacture/deviceTask/add?mtId=${row.mtId}`)
+      this.$router.push(`/manufacture/addDeviceTask?mtId=${row.mtId}`)
     },
     // 查看设备任务
     async handleViewDeviceTask(row) {
-      this.$router.push(`/manufacture/deviceTask/view?mtId=${row.mtId}`)
+      this.$router.push(`/manufacture/viewDeviceTask?mtId=${row.mtId}`)
     },
     // 下发设备任务
     async handleExecuteDeviceTask(row) {

@@ -111,13 +111,9 @@ public class IcesExceptionTaskVo implements Serializable {
      */
     private String duration;
     /**
-     * 任务意见
+     * 描述
      */
-    private WfCommentDto comment;
-    /**
-     * 任务意见
-     */
-    private List<Comment> commentList;
+    private String description;
     /**
      * 候选执行人
      */

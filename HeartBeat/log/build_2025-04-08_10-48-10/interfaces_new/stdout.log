@@ -1,0 +1,60 @@
+-- Found rosidl_default_generators: 1.2.0 (/opt/ros/humble/share/rosidl_default_generators/cmake)
+-- Found ament_cmake_core: 1.3.9 (/opt/ros/humble/share/ament_cmake_core/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Found rosidl_adapter: 3.1.5 (/opt/ros/humble/share/rosidl_adapter/cmake)
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found std_msgs: 4.2.4 (/opt/ros/humble/share/std_msgs/cmake)
+-- Found ament_cmake_ros: 0.10.0 (/opt/ros/humble/share/ament_cmake_ros/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found python_cmake_module: 0.10.0 (/opt/ros/humble/share/python_cmake_module/cmake)
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Using PYTHON_INCLUDE_DIRS: /usr/include/python3.10
+-- Using PYTHON_LIBRARIES: /usr/lib/aarch64-linux-gnu/libpython3.10.so
+-- Found ament_lint_auto: 0.12.11 (/opt/ros/humble/share/ament_lint_auto/cmake)
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/berry/HeartBeat/build/interfaces_new
+[35m[1mConsolidate compiler generated dependencies of target interfaces_new__rosidl_generator_c[0m
+[  0%] Built target interfaces_new__cpp
+[  1%] [32m[1mLinking C shared library libinterfaces_new__rosidl_generator_c.so[0m
+[35m[1mConsolidate compiler generated dependencies of target interfaces_new__rosidl_typesupport_fastrtps_cpp[0m
+[35m[1mConsolidate compiler generated dependencies of target interfaces_new__rosidl_typesupport_cpp[0m
+[  1%] Built target ament_cmake_python_copy_interfaces_new
+[35m[1mConsolidate compiler generated dependencies of target interfaces_new__rosidl_typesupport_introspection_cpp[0m
+[  1%] [32m[1mLinking CXX shared library libinterfaces_new__rosidl_typesupport_fastrtps_cpp.so[0m
+[  1%] [32m[1mLinking CXX shared library libinterfaces_new__rosidl_typesupport_cpp.so[0m
+[  2%] [32m[1mLinking CXX shared library libinterfaces_new__rosidl_typesupport_introspection_cpp.so[0m
+[ 13%] Built target interfaces_new__rosidl_generator_c
+[ 25%] Built target interfaces_new__rosidl_typesupport_cpp
+[35m[1mConsolidate compiler generated dependencies of target interfaces_new__rosidl_typesupport_fastrtps_c[0m
+[ 40%] Built target interfaces_new__rosidl_typesupport_fastrtps_cpp
+[ 48%] Built target interfaces_new__rosidl_typesupport_introspection_cpp
+[35m[1mConsolidate compiler generated dependencies of target interfaces_new__rosidl_typesupport_introspection_c[0m
+[35m[1mConsolidate compiler generated dependencies of target interfaces_new__rosidl_typesupport_c[0m
+[ 48%] [32m[1mLinking C shared library libinterfaces_new__rosidl_typesupport_introspection_c.so[0m
+[ 48%] [32m[1mLinking CXX shared library libinterfaces_new__rosidl_typesupport_fastrtps_c.so[0m
+[ 49%] [32m[1mLinking CXX shared library libinterfaces_new__rosidl_typesupport_c.so[0m
+[ 60%] Built target interfaces_new__rosidl_typesupport_c
+[ 72%] Built target interfaces_new__rosidl_typesupport_introspection_c
+[ 84%] Built target interfaces_new__rosidl_typesupport_fastrtps_c
+[ 84%] Built target interfaces_new
+[ 85%] Built target interfaces_new__py
+[35m[1mConsolidate compiler generated dependencies of target interfaces_new__rosidl_generator_py[0m
+[ 86%] [32m[1mLinking C shared library rosidl_generator_py/interfaces_new/libinterfaces_new__rosidl_generator_py.so[0m
+[ 96%] Built target interfaces_new__rosidl_generator_py
+[35m[1mConsolidate compiler generated dependencies of target interfaces_new__rosidl_typesupport_fastrtps_c__pyext[0m
+[35m[1mConsolidate compiler generated dependencies of target interfaces_new__rosidl_typesupport_introspection_c__pyext[0m
+[35m[1mConsolidate compiler generated dependencies of target interfaces_new__rosidl_typesupport_c__pyext[0m
+[ 97%] [32mBuilding C object CMakeFiles/interfaces_new__rosidl_typesupport_fastrtps_c__pyext.dir/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_fastrtps_c.c.o[0m
+[ 98%] [32mBuilding C object CMakeFiles/interfaces_new__rosidl_typesupport_introspection_c__pyext.dir/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_introspection_c.c.o[0m
+[ 99%] [32mBuilding C object CMakeFiles/interfaces_new__rosidl_typesupport_c__pyext.dir/rosidl_generator_py/interfaces_new/_interfaces_new_s.ep.rosidl_typesupport_c.c.o[0m
+running egg_info
+writing interfaces_new.egg-info/PKG-INFO
+writing dependency_links to interfaces_new.egg-info/dependency_links.txt
+writing top-level names to interfaces_new.egg-info/top_level.txt
+reading manifest file 'interfaces_new.egg-info/SOURCES.txt'
+writing manifest file 'interfaces_new.egg-info/SOURCES.txt'
+[ 99%] Built target ament_cmake_python_build_interfaces_new_egg

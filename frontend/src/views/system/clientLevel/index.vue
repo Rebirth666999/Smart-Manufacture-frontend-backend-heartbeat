@@ -312,7 +312,7 @@ export default {
     },
     // 查看对应的优惠策略
     handlePreferential(row) {
-      this.$router.push(`/clientLevelPreferential?cllCode=${row.cllCode}`)
+      this.$router.push(`/client/clientLevelPreferential?cllCode=${row.cllCode}`)
     }
   }
 };

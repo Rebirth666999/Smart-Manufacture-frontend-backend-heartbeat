@@ -2,6 +2,8 @@ package com.ruoyi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.helper.LoginHelper;
 import com.ruoyi.common.utils.StringUtils;
@@ -10,8 +12,10 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.domain.bo.IcesExceptionRecordBo;
 import com.ruoyi.system.domain.bo.IcesManufacturePlanBo;
 import com.ruoyi.system.service.IIcesCodeService;
+import com.ruoyi.system.service.IIcesExceptionRecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesOrderBo;
@@ -35,6 +39,7 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
 
     private final IcesOrderMapper baseMapper;
     private final IIcesCodeService codeService;
+    private final IIcesExceptionRecordService exceptionRecordService;
 
     /**
      * 查询订单
@@ -130,8 +135,26 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
         String mDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         bo.setOrMman(mMan);
         bo.setOrMdate(mDate);
-        if (orgn.getOrCodeOrgn() == null && StringUtils.isNotBlank(bo.getOrCode())) {
+        if (orgn.getOrCodeOrgn() == null && StringUtils.isNotBlank(bo.getOrCodeOrgn())) {
             // 之前没有原订单号，现在有，说明修改了订单的信息
+            // 上报异常
+            IcesExceptionRecordBo exceptionRecordBo = new IcesExceptionRecordBo();
+            exceptionRecordBo.setExsCode("ExceptionSource-00002");  // 异常源：信息系统
+            exceptionRecordBo.setExCode("Exception-00002");  // 异常：订单修改
+            exceptionRecordBo.setExrUserReport("信息系统");  // 上报人
+            exceptionRecordBo.setExrStat("4");  // 直接确认为异常
+            exceptionRecordBo.setExrLevel("2");  // 异常等级：严重
+            exceptionRecordBo.setExrImpactFactor(0.5F);  // 影响因子
+            exceptionRecordBo.setExrImpactLevel("2");  // 影响等级：严重
+            // 参数：填入订单信息
+            Map<String, String> params = new HashMap<>();
+            params.put("orCodeOrgn", bo.getOrCodeOrgn());
+            params.put("orCode", bo.getOrCode() + "-D");
+            exceptionRecordBo.setExrParam(JSONUtil.toJsonStr(params));
+            // 编写描述
+            exceptionRecordBo.setExrDesc("订单 " + bo.getOrCodeOrgn() + " 发生修改，时间 " + mDate);
+            exceptionRecordService.insertByBo(exceptionRecordBo);
+
             // 原先实体状态变成已修改
             IcesOrder update = new IcesOrder();
             update.setOrId(bo.getOrId());

@@ -1,0 +1,6 @@
+int32 mood
+float64 stop_sec
+---
+string finish 
+---
+int32 feedback

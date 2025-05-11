@@ -1,0 +1,18 @@
+// generated from rosidl_adapter/resource/action.idl.em
+// with input from interfaces/action/MoveTime.action
+// generated code does not contain a copyright notice
+
+
+module interfaces {
+  module action {
+    struct MoveTime_Goal {
+      double runtime;
+    };
+    struct MoveTime_Result {
+      string finish;
+    };
+    struct MoveTime_Feedback {
+      int32 feedback;
+    };
+  };
+};

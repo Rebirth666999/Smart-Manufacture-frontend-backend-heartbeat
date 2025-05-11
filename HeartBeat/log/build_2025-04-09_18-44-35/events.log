@@ -1,0 +1,787 @@
+[0.000000] (-) TimerEvent: {}
+[0.001001] (belt_long_server) JobQueued: {'identifier': 'belt_long_server', 'dependencies': OrderedDict()}
+[0.002215] (belt_short_server) JobQueued: {'identifier': 'belt_short_server', 'dependencies': OrderedDict()}
+[0.002830] (controller) JobQueued: {'identifier': 'controller', 'dependencies': OrderedDict()}
+[0.002931] (interfaces) JobQueued: {'identifier': 'interfaces', 'dependencies': OrderedDict()}
+[0.003024] (track_server) JobQueued: {'identifier': 'track_server', 'dependencies': OrderedDict()}
+[0.003119] (belt_long_server) JobStarted: {'identifier': 'belt_long_server'}
+[0.089582] (belt_short_server) JobStarted: {'identifier': 'belt_short_server'}
+[0.099284] (-) TimerEvent: {}
+[0.134321] (controller) JobStarted: {'identifier': 'controller'}
+[0.178082] (interfaces) JobStarted: {'identifier': 'interfaces'}
+[0.199499] (-) TimerEvent: {}
+[0.300197] (-) TimerEvent: {}
+[0.400982] (-) TimerEvent: {}
+[0.501951] (-) TimerEvent: {}
+[0.602912] (-) TimerEvent: {}
+[0.703729] (-) TimerEvent: {}
+[0.804726] (-) TimerEvent: {}
+[0.905608] (-) TimerEvent: {}
+[1.006319] (-) TimerEvent: {}
+[1.107057] (-) TimerEvent: {}
+[1.207770] (-) TimerEvent: {}
+[1.308481] (-) TimerEvent: {}
+[1.515785] (-) TimerEvent: {}
+[1.616544] (-) TimerEvent: {}
+[1.717362] (-) TimerEvent: {}
+[1.818159] (-) TimerEvent: {}
+[1.919297] (-) TimerEvent: {}
+[2.020082] (-) TimerEvent: {}
+[2.120935] (-) TimerEvent: {}
+[2.221690] (-) TimerEvent: {}
+[2.322492] (-) TimerEvent: {}
+[2.423372] (-) TimerEvent: {}
+[2.524122] (-) TimerEvent: {}
+[2.624885] (-) TimerEvent: {}
+[2.725642] (-) TimerEvent: {}
+[2.826349] (-) TimerEvent: {}
+[2.927147] (-) TimerEvent: {}
+[3.027901] (-) TimerEvent: {}
+[3.128667] (-) TimerEvent: {}
+[3.229384] (-) TimerEvent: {}
+[3.330429] (-) TimerEvent: {}
+[3.431562] (-) TimerEvent: {}
+[3.532444] (-) TimerEvent: {}
+[3.633710] (-) TimerEvent: {}
+[3.734923] (-) TimerEvent: {}
+[3.835706] (-) TimerEvent: {}
+[3.936422] (-) TimerEvent: {}
+[4.037435] (-) TimerEvent: {}
+[4.138464] (-) TimerEvent: {}
+[4.239604] (-) TimerEvent: {}
+[4.340406] (-) TimerEvent: {}
+[4.441114] (-) TimerEvent: {}
+[4.541856] (-) TimerEvent: {}
+[4.642595] (-) TimerEvent: {}
+[4.743295] (-) TimerEvent: {}
+[4.843962] (-) TimerEvent: {}
+[4.944618] (-) TimerEvent: {}
+[5.045358] (-) TimerEvent: {}
+[5.146395] (-) TimerEvent: {}
+[5.247263] (-) TimerEvent: {}
+[5.345614] (interfaces) JobProgress: {'identifier': 'interfaces', 'progress': 'cmake'}
+[5.347417] (-) TimerEvent: {}
+[5.351449] (interfaces) JobProgress: {'identifier': 'interfaces', 'progress': 'build'}
+[5.354460] (interfaces) Command: {'cmd': ['/usr/bin/cmake', '--build', '/home/berry/HeartBeat/build/interfaces', '--', '-j4', '-l4'], 'cwd': '/home/berry/HeartBeat/build/interfaces', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('USER', 'berry'), ('SSH_CLIENT', '192.168.1.112 52115 22'), ('LC_TIME', 'zh_CN.UTF-8'), ('XDG_SESSION_TYPE', 'tty'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/home/berry/HeartBeat/install/interfaces/lib:/home/berry/RoArm/install/interface/lib:/home/berry/ices_ws/install/interfaces/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib'), ('MOTD_SHOWN', 'pam'), ('HOME', '/home/berry'), ('OLDPWD', '/home/berry'), ('SSH_TTY', '/dev/pts/2'), ('ROS_PYTHON_VERSION', '3'), ('LC_MONETARY', 'zh_CN.UTF-8'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLCON_PREFIX_PATH', '/home/berry/HeartBeat/install:/home/berry/RoArm/install:/home/berry/ices_ws/install'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'berry'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('TERM', 'xterm'), ('XDG_SESSION_ID', '29'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/home/berry/.local/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'), ('LC_ADDRESS', 'zh_CN.UTF-8'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('DISPLAY', 'localhost:12.0'), ('LANG', 'en_US.UTF-8'), ('LC_TELEPHONE', 'zh_CN.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('AMENT_PREFIX_PATH', '/home/berry/HeartBeat/install/track_server:/home/berry/HeartBeat/install/interfaces:/home/berry/HeartBeat/install/controller:/home/berry/HeartBeat/install/belt_short_server:/home/berry/HeartBeat/install/belt_long_server:/home/berry/RoArm/install/test1:/home/berry/RoArm/install/serial_ctrl:/home/berry/RoArm/install/roarm:/home/berry/RoArm/install/pos_sub:/home/berry/RoArm/install/pos_pub:/home/berry/RoArm/install/pos_client:/home/berry/RoArm/install/interface:/home/berry/RoArm/install/Position_Sub:/home/berry/RoArm/install/Pos_Server:/home/berry/RoArm/install/Pos_Client:/home/berry/ices_ws/install/track_server:/home/berry/ices_ws/install/launch_test:/home/berry/ices_ws/install/control:/home/berry/ices_ws/install/c_arm:/home/berry/ices_ws/install/arm_server:/home/berry/ices_ws/install/interfaces:/home/berry/ices_ws/install/belt_short_server:/home/berry/ices_ws/install/belt_short_client:/home/berry/ices_ws/install/belt_long_server:/opt/ros/humble'), ('SHELL', '/bin/bash'), ('LC_NAME', 'zh_CN.UTF-8'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('LC_MEASUREMENT', 'zh_CN.UTF-8'), ('LC_IDENTIFICATION', 'zh_CN.UTF-8'), ('PWD', '/home/berry/HeartBeat/build/interfaces'), ('SSH_CONNECTION', '192.168.1.112 52115 192.168.1.109 22'), ('XDG_DATA_DIRS', '/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop'), ('PYTHONPATH', '/home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages:/home/berry/HeartBeat/install/controller/lib/python3.10/site-packages:/home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages:/home/berry/RoArm/install/test1/lib/python3.10/site-packages:/home/berry/RoArm/install/serial_ctrl/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_sub/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_pub/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_client/lib/python3.10/site-packages:/home/berry/RoArm/install/interface/local/lib/python3.10/dist-packages:/home/berry/RoArm/install/Position_Sub/lib/python3.10/site-packages:/home/berry/RoArm/install/Pos_Server/lib/python3.10/site-packages:/home/berry/RoArm/install/Pos_Client/lib/python3.10/site-packages:/home/berry/ices_ws/install/track_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/launch_test/lib/python3.10/site-packages:/home/berry/ices_ws/install/control/lib/python3.10/site-packages:/home/berry/ices_ws/install/c_arm/lib/python3.10/site-packages:/home/berry/ices_ws/install/arm_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/interfaces/local/lib/python3.10/dist-packages:/home/berry/ices_ws/install/belt_short_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/belt_short_client/lib/python3.10/site-packages:/home/berry/ices_ws/install/belt_long_server/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('LC_NUMERIC', 'zh_CN.UTF-8'), ('LC_PAPER', 'zh_CN.UTF-8'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/berry/HeartBeat/install/interfaces:/home/berry/RoArm/install/roarm:/home/berry/RoArm/install/interface:/home/berry/ices_ws/install/interfaces:/home/berry/HeartBeat/install/track_server:/home/berry/HeartBeat/install/controller:/home/berry/HeartBeat/install/belt_short_server:/home/berry/HeartBeat/install/belt_long_server:/home/berry/RoArm/install/test1:/home/berry/RoArm/install/serial_ctrl:/home/berry/RoArm/install/pos_sub:/home/berry/RoArm/install/pos_pub:/home/berry/RoArm/install/pos_client:/home/berry/RoArm/install/Position_Sub:/home/berry/RoArm/install/Pos_Server:/home/berry/RoArm/install/Pos_Client:/home/berry/ices_ws/install/track_server:/home/berry/ices_ws/install/launch_test:/home/berry/ices_ws/install/control:/home/berry/ices_ws/install/c_arm:/home/berry/ices_ws/install/arm_server:/home/berry/ices_ws/install/belt_short_server:/home/berry/ices_ws/install/belt_short_client:/home/berry/ices_ws/install/belt_long_server:/opt/ros/humble')]), 'shell': False}
+[5.447633] (-) TimerEvent: {}
+[5.548479] (-) TimerEvent: {}
+[5.649795] (-) TimerEvent: {}
+[5.750674] (-) TimerEvent: {}
+[5.851509] (-) TimerEvent: {}
+[5.952392] (-) TimerEvent: {}
+[6.053449] (-) TimerEvent: {}
+[6.154453] (-) TimerEvent: {}
+[6.255669] (-) TimerEvent: {}
+[6.322678] (interfaces) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target interfaces__rosidl_generator_c\x1b[0m\n'}
+[6.355919] (-) TimerEvent: {}
+[6.367080] (interfaces) StdoutLine: {'line': b'[  0%] Built target interfaces__cpp\n'}
+[6.456131] (-) TimerEvent: {}
+[6.557839] (-) TimerEvent: {}
+[6.659389] (-) TimerEvent: {}
+[6.761126] (-) TimerEvent: {}
+[6.862622] (-) TimerEvent: {}
+[6.964261] (-) TimerEvent: {}
+[7.065815] (-) TimerEvent: {}
+[7.167299] (-) TimerEvent: {}
+[7.268778] (-) TimerEvent: {}
+[7.279497] (interfaces) StdoutLine: {'line': b'[ 12%] Built target interfaces__rosidl_generator_c\n'}
+[7.353517] (interfaces) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target interfaces__rosidl_typesupport_cpp\x1b[0m\n'}
+[7.368970] (-) TimerEvent: {}
+[7.401811] (interfaces) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target interfaces__rosidl_typesupport_fastrtps_cpp\x1b[0m\n'}
+[7.469251] (-) TimerEvent: {}
+[7.571009] (-) TimerEvent: {}
+[7.595189] (interfaces) StdoutLine: {'line': b'[ 12%] Built target ament_cmake_python_copy_interfaces\n'}
+[7.621432] (interfaces) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target interfaces__rosidl_typesupport_introspection_cpp\x1b[0m\n'}
+[7.671263] (-) TimerEvent: {}
+[7.772948] (-) TimerEvent: {}
+[7.874575] (-) TimerEvent: {}
+[7.906557] (interfaces) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target interfaces__rosidl_typesupport_fastrtps_c\x1b[0m\n'}
+[7.909319] (interfaces) StdoutLine: {'line': b'[ 24%] Built target interfaces__rosidl_typesupport_cpp\n'}
+[7.935370] (interfaces) StdoutLine: {'line': b'[ 36%] Built target interfaces__rosidl_typesupport_fastrtps_cpp\n'}
+[7.974790] (-) TimerEvent: {}
+[8.076453] (-) TimerEvent: {}
+[8.134667] (interfaces) StdoutLine: {'line': b'[ 48%] Built target interfaces__rosidl_typesupport_introspection_cpp\n'}
+[8.171309] (interfaces) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target interfaces__rosidl_typesupport_introspection_c\x1b[0m\n'}
+[8.176669] (-) TimerEvent: {}
+[8.254844] (interfaces) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target interfaces__rosidl_typesupport_c\x1b[0m\n'}
+[8.277001] (-) TimerEvent: {}
+[8.299425] (interfaces) StdoutLine: {'line': b'[ 60%] Built target interfaces__rosidl_typesupport_fastrtps_c\n'}
+[8.377230] (-) TimerEvent: {}
+[8.394597] (interfaces) StdoutLine: {'line': b'[ 72%] Built target interfaces__rosidl_typesupport_introspection_c\n'}
+[8.477446] (-) TimerEvent: {}
+[8.559512] (interfaces) StdoutLine: {'line': b'[ 84%] Built target interfaces__rosidl_typesupport_c\n'}
+[8.577825] (-) TimerEvent: {}
+[8.680046] (-) TimerEvent: {}
+[8.782518] (-) TimerEvent: {}
+[8.869256] (interfaces) StdoutLine: {'line': b'[ 84%] Built target interfaces\n'}
+[8.882839] (-) TimerEvent: {}
+[8.984704] (-) TimerEvent: {}
+[9.086683] (-) TimerEvent: {}
+[9.176956] (interfaces) StdoutLine: {'line': b'[ 85%] Built target interfaces__py\n'}
+[9.186897] (-) TimerEvent: {}
+[9.288633] (-) TimerEvent: {}
+[9.354778] (interfaces) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target interfaces__rosidl_generator_py\x1b[0m\n'}
+[9.388962] (-) TimerEvent: {}
+[9.491441] (-) TimerEvent: {}
+[9.594514] (-) TimerEvent: {}
+[9.617701] (interfaces) StdoutLine: {'line': b'[ 96%] Built target interfaces__rosidl_generator_py\n'}
+[9.694815] (-) TimerEvent: {}
+[9.797647] (-) TimerEvent: {}
+[9.829489] (interfaces) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target interfaces__rosidl_typesupport_c__pyext\x1b[0m\n'}
+[9.837302] (interfaces) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target interfaces__rosidl_typesupport_introspection_c__pyext\x1b[0m\n'}
+[9.858548] (interfaces) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target interfaces__rosidl_typesupport_fastrtps_c__pyext\x1b[0m\n'}
+[9.898895] (-) TimerEvent: {}
+[10.002631] (-) TimerEvent: {}
+[10.070760] (interfaces) StdoutLine: {'line': b'[ 97%] Built target interfaces__rosidl_typesupport_fastrtps_c__pyext\n'}
+[10.083052] (interfaces) StdoutLine: {'line': b'[ 99%] Built target interfaces__rosidl_typesupport_introspection_c__pyext\n'}
+[10.102922] (-) TimerEvent: {}
+[10.124185] (interfaces) StdoutLine: {'line': b'[100%] Built target interfaces__rosidl_typesupport_c__pyext\n'}
+[10.129654] (belt_long_server) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', 'setup.py', 'egg_info', '--egg-base', '../../build/belt_long_server', 'build', '--build-base', '/home/berry/HeartBeat/build/belt_long_server/build', 'install', '--record', '/home/berry/HeartBeat/build/belt_long_server/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/home/berry/HeartBeat/src/belt_long_server', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'berry', 'SSH_CLIENT': '192.168.1.112 52115 22', 'LC_TIME': 'zh_CN.UTF-8', 'XDG_SESSION_TYPE': 'tty', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/home/berry/HeartBeat/install/interfaces/lib:/home/berry/RoArm/install/interface/lib:/home/berry/ices_ws/install/interfaces/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib', 'MOTD_SHOWN': 'pam', 'HOME': '/home/berry', 'OLDPWD': '/home/berry', 'SSH_TTY': '/dev/pts/2', 'ROS_PYTHON_VERSION': '3', 'LC_MONETARY': 'zh_CN.UTF-8', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLCON_PREFIX_PATH': '/home/berry/HeartBeat/install:/home/berry/RoArm/install:/home/berry/ices_ws/install', 'ROS_DISTRO': 'humble', 'LOGNAME': 'berry', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'TERM': 'xterm', 'XDG_SESSION_ID': '29', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/home/berry/.local/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin', 'LC_ADDRESS': 'zh_CN.UTF-8', 'XDG_RUNTIME_DIR': '/run/user/1000', 'DISPLAY': 'localhost:12.0', 'LANG': 'en_US.UTF-8', 'LC_TELEPHONE': 'zh_CN.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'AMENT_PREFIX_PATH': '/home/berry/HeartBeat/install/track_server:/home/berry/HeartBeat/install/interfaces:/home/berry/HeartBeat/install/controller:/home/berry/HeartBeat/install/belt_short_server:/home/berry/HeartBeat/install/belt_long_server:/home/berry/RoArm/install/test1:/home/berry/RoArm/install/serial_ctrl:/home/berry/RoArm/install/roarm:/home/berry/RoArm/install/pos_sub:/home/berry/RoArm/install/pos_pub:/home/berry/RoArm/install/pos_client:/home/berry/RoArm/install/interface:/home/berry/RoArm/install/Position_Sub:/home/berry/RoArm/install/Pos_Server:/home/berry/RoArm/install/Pos_Client:/home/berry/ices_ws/install/track_server:/home/berry/ices_ws/install/launch_test:/home/berry/ices_ws/install/control:/home/berry/ices_ws/install/c_arm:/home/berry/ices_ws/install/arm_server:/home/berry/ices_ws/install/interfaces:/home/berry/ices_ws/install/belt_short_server:/home/berry/ices_ws/install/belt_short_client:/home/berry/ices_ws/install/belt_long_server:/opt/ros/humble', 'SHELL': '/bin/bash', 'LC_NAME': 'zh_CN.UTF-8', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'LC_MEASUREMENT': 'zh_CN.UTF-8', 'LC_IDENTIFICATION': 'zh_CN.UTF-8', 'PWD': '/home/berry/HeartBeat/build/belt_long_server', 'SSH_CONNECTION': '192.168.1.112 52115 192.168.1.109 22', 'XDG_DATA_DIRS': '/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/berry/HeartBeat/build/belt_long_server/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages:/home/berry/HeartBeat/install/controller/lib/python3.10/site-packages:/home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages:/home/berry/RoArm/install/test1/lib/python3.10/site-packages:/home/berry/RoArm/install/serial_ctrl/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_sub/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_pub/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_client/lib/python3.10/site-packages:/home/berry/RoArm/install/interface/local/lib/python3.10/dist-packages:/home/berry/RoArm/install/Position_Sub/lib/python3.10/site-packages:/home/berry/RoArm/install/Pos_Server/lib/python3.10/site-packages:/home/berry/RoArm/install/Pos_Client/lib/python3.10/site-packages:/home/berry/ices_ws/install/track_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/launch_test/lib/python3.10/site-packages:/home/berry/ices_ws/install/control/lib/python3.10/site-packages:/home/berry/ices_ws/install/c_arm/lib/python3.10/site-packages:/home/berry/ices_ws/install/arm_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/interfaces/local/lib/python3.10/dist-packages:/home/berry/ices_ws/install/belt_short_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/belt_short_client/lib/python3.10/site-packages:/home/berry/ices_ws/install/belt_long_server/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'LC_NUMERIC': 'zh_CN.UTF-8', 'LC_PAPER': 'zh_CN.UTF-8', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/home/berry/HeartBeat/install/interfaces:/home/berry/RoArm/install/roarm:/home/berry/RoArm/install/interface:/home/berry/ices_ws/install/interfaces'}, 'shell': False}
+[10.148958] (belt_short_server) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', 'setup.py', 'egg_info', '--egg-base', '../../build/belt_short_server', 'build', '--build-base', '/home/berry/HeartBeat/build/belt_short_server/build', 'install', '--record', '/home/berry/HeartBeat/build/belt_short_server/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/home/berry/HeartBeat/src/belt_short_server', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'berry', 'SSH_CLIENT': '192.168.1.112 52115 22', 'LC_TIME': 'zh_CN.UTF-8', 'XDG_SESSION_TYPE': 'tty', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/home/berry/HeartBeat/install/interfaces/lib:/home/berry/RoArm/install/interface/lib:/home/berry/ices_ws/install/interfaces/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib', 'MOTD_SHOWN': 'pam', 'HOME': '/home/berry', 'OLDPWD': '/home/berry', 'SSH_TTY': '/dev/pts/2', 'ROS_PYTHON_VERSION': '3', 'LC_MONETARY': 'zh_CN.UTF-8', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLCON_PREFIX_PATH': '/home/berry/HeartBeat/install:/home/berry/RoArm/install:/home/berry/ices_ws/install', 'ROS_DISTRO': 'humble', 'LOGNAME': 'berry', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'TERM': 'xterm', 'XDG_SESSION_ID': '29', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/home/berry/.local/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin', 'LC_ADDRESS': 'zh_CN.UTF-8', 'XDG_RUNTIME_DIR': '/run/user/1000', 'DISPLAY': 'localhost:12.0', 'LANG': 'en_US.UTF-8', 'LC_TELEPHONE': 'zh_CN.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'AMENT_PREFIX_PATH': '/home/berry/HeartBeat/install/track_server:/home/berry/HeartBeat/install/interfaces:/home/berry/HeartBeat/install/controller:/home/berry/HeartBeat/install/belt_short_server:/home/berry/HeartBeat/install/belt_long_server:/home/berry/RoArm/install/test1:/home/berry/RoArm/install/serial_ctrl:/home/berry/RoArm/install/roarm:/home/berry/RoArm/install/pos_sub:/home/berry/RoArm/install/pos_pub:/home/berry/RoArm/install/pos_client:/home/berry/RoArm/install/interface:/home/berry/RoArm/install/Position_Sub:/home/berry/RoArm/install/Pos_Server:/home/berry/RoArm/install/Pos_Client:/home/berry/ices_ws/install/track_server:/home/berry/ices_ws/install/launch_test:/home/berry/ices_ws/install/control:/home/berry/ices_ws/install/c_arm:/home/berry/ices_ws/install/arm_server:/home/berry/ices_ws/install/interfaces:/home/berry/ices_ws/install/belt_short_server:/home/berry/ices_ws/install/belt_short_client:/home/berry/ices_ws/install/belt_long_server:/opt/ros/humble', 'SHELL': '/bin/bash', 'LC_NAME': 'zh_CN.UTF-8', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'LC_MEASUREMENT': 'zh_CN.UTF-8', 'LC_IDENTIFICATION': 'zh_CN.UTF-8', 'PWD': '/home/berry/HeartBeat/build/belt_short_server', 'SSH_CONNECTION': '192.168.1.112 52115 192.168.1.109 22', 'XDG_DATA_DIRS': '/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/berry/HeartBeat/build/belt_short_server/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages:/home/berry/HeartBeat/install/controller/lib/python3.10/site-packages:/home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages:/home/berry/RoArm/install/test1/lib/python3.10/site-packages:/home/berry/RoArm/install/serial_ctrl/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_sub/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_pub/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_client/lib/python3.10/site-packages:/home/berry/RoArm/install/interface/local/lib/python3.10/dist-packages:/home/berry/RoArm/install/Position_Sub/lib/python3.10/site-packages:/home/berry/RoArm/install/Pos_Server/lib/python3.10/site-packages:/home/berry/RoArm/install/Pos_Client/lib/python3.10/site-packages:/home/berry/ices_ws/install/track_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/launch_test/lib/python3.10/site-packages:/home/berry/ices_ws/install/control/lib/python3.10/site-packages:/home/berry/ices_ws/install/c_arm/lib/python3.10/site-packages:/home/berry/ices_ws/install/arm_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/interfaces/local/lib/python3.10/dist-packages:/home/berry/ices_ws/install/belt_short_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/belt_short_client/lib/python3.10/site-packages:/home/berry/ices_ws/install/belt_long_server/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'LC_NUMERIC': 'zh_CN.UTF-8', 'LC_PAPER': 'zh_CN.UTF-8', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/home/berry/HeartBeat/install/interfaces:/home/berry/RoArm/install/roarm:/home/berry/RoArm/install/interface:/home/berry/ices_ws/install/interfaces'}, 'shell': False}
+[10.179777] (controller) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', 'setup.py', 'egg_info', '--egg-base', '../../build/controller', 'build', '--build-base', '/home/berry/HeartBeat/build/controller/build', 'install', '--record', '/home/berry/HeartBeat/build/controller/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/home/berry/HeartBeat/src/controller', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'berry', 'SSH_CLIENT': '192.168.1.112 52115 22', 'LC_TIME': 'zh_CN.UTF-8', 'XDG_SESSION_TYPE': 'tty', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/home/berry/HeartBeat/install/interfaces/lib:/home/berry/RoArm/install/interface/lib:/home/berry/ices_ws/install/interfaces/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib', 'MOTD_SHOWN': 'pam', 'HOME': '/home/berry', 'OLDPWD': '/home/berry', 'SSH_TTY': '/dev/pts/2', 'ROS_PYTHON_VERSION': '3', 'LC_MONETARY': 'zh_CN.UTF-8', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLCON_PREFIX_PATH': '/home/berry/HeartBeat/install:/home/berry/RoArm/install:/home/berry/ices_ws/install', 'ROS_DISTRO': 'humble', 'LOGNAME': 'berry', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'TERM': 'xterm', 'XDG_SESSION_ID': '29', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/home/berry/.local/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin', 'LC_ADDRESS': 'zh_CN.UTF-8', 'XDG_RUNTIME_DIR': '/run/user/1000', 'DISPLAY': 'localhost:12.0', 'LANG': 'en_US.UTF-8', 'LC_TELEPHONE': 'zh_CN.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'AMENT_PREFIX_PATH': '/home/berry/HeartBeat/install/track_server:/home/berry/HeartBeat/install/interfaces:/home/berry/HeartBeat/install/controller:/home/berry/HeartBeat/install/belt_short_server:/home/berry/HeartBeat/install/belt_long_server:/home/berry/RoArm/install/test1:/home/berry/RoArm/install/serial_ctrl:/home/berry/RoArm/install/roarm:/home/berry/RoArm/install/pos_sub:/home/berry/RoArm/install/pos_pub:/home/berry/RoArm/install/pos_client:/home/berry/RoArm/install/interface:/home/berry/RoArm/install/Position_Sub:/home/berry/RoArm/install/Pos_Server:/home/berry/RoArm/install/Pos_Client:/home/berry/ices_ws/install/track_server:/home/berry/ices_ws/install/launch_test:/home/berry/ices_ws/install/control:/home/berry/ices_ws/install/c_arm:/home/berry/ices_ws/install/arm_server:/home/berry/ices_ws/install/interfaces:/home/berry/ices_ws/install/belt_short_server:/home/berry/ices_ws/install/belt_short_client:/home/berry/ices_ws/install/belt_long_server:/opt/ros/humble', 'SHELL': '/bin/bash', 'LC_NAME': 'zh_CN.UTF-8', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'LC_MEASUREMENT': 'zh_CN.UTF-8', 'LC_IDENTIFICATION': 'zh_CN.UTF-8', 'PWD': '/home/berry/HeartBeat/build/controller', 'SSH_CONNECTION': '192.168.1.112 52115 192.168.1.109 22', 'XDG_DATA_DIRS': '/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/berry/HeartBeat/build/controller/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/controller/lib/python3.10/site-packages:/home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages:/home/berry/HeartBeat/install/controller/lib/python3.10/site-packages:/home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages:/home/berry/RoArm/install/test1/lib/python3.10/site-packages:/home/berry/RoArm/install/serial_ctrl/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_sub/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_pub/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_client/lib/python3.10/site-packages:/home/berry/RoArm/install/interface/local/lib/python3.10/dist-packages:/home/berry/RoArm/install/Position_Sub/lib/python3.10/site-packages:/home/berry/RoArm/install/Pos_Server/lib/python3.10/site-packages:/home/berry/RoArm/install/Pos_Client/lib/python3.10/site-packages:/home/berry/ices_ws/install/track_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/launch_test/lib/python3.10/site-packages:/home/berry/ices_ws/install/control/lib/python3.10/site-packages:/home/berry/ices_ws/install/c_arm/lib/python3.10/site-packages:/home/berry/ices_ws/install/arm_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/interfaces/local/lib/python3.10/dist-packages:/home/berry/ices_ws/install/belt_short_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/belt_short_client/lib/python3.10/site-packages:/home/berry/ices_ws/install/belt_long_server/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'LC_NUMERIC': 'zh_CN.UTF-8', 'LC_PAPER': 'zh_CN.UTF-8', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/home/berry/HeartBeat/install/interfaces:/home/berry/RoArm/install/roarm:/home/berry/RoArm/install/interface:/home/berry/ices_ws/install/interfaces'}, 'shell': False}
+[10.203111] (-) TimerEvent: {}
+[10.304568] (-) TimerEvent: {}
+[10.406290] (-) TimerEvent: {}
+[10.507982] (-) TimerEvent: {}
+[10.609915] (-) TimerEvent: {}
+[10.711677] (-) TimerEvent: {}
+[10.813700] (-) TimerEvent: {}
+[10.915617] (-) TimerEvent: {}
+[11.017402] (-) TimerEvent: {}
+[11.120115] (-) TimerEvent: {}
+[11.221872] (-) TimerEvent: {}
+[11.262441] (interfaces) StdoutLine: {'line': b'running egg_info\n'}
+[11.266042] (interfaces) StdoutLine: {'line': b'writing interfaces.egg-info/PKG-INFO\n'}
+[11.267414] (interfaces) StdoutLine: {'line': b'writing dependency_links to interfaces.egg-info/dependency_links.txt\n'}
+[11.270748] (interfaces) StdoutLine: {'line': b'writing top-level names to interfaces.egg-info/top_level.txt\n'}
+[11.305846] (interfaces) StdoutLine: {'line': b"reading manifest file 'interfaces.egg-info/SOURCES.txt'\n"}
+[11.318036] (interfaces) StdoutLine: {'line': b"writing manifest file 'interfaces.egg-info/SOURCES.txt'\n"}
+[11.322390] (-) TimerEvent: {}
+[11.481628] (-) TimerEvent: {}
+[11.583208] (-) TimerEvent: {}
+[11.594775] (interfaces) StdoutLine: {'line': b'[100%] Built target ament_cmake_python_build_interfaces_egg\n'}
+[11.683414] (-) TimerEvent: {}
+[11.747328] (interfaces) CommandEnded: {'returncode': 0}
+[11.783637] (-) TimerEvent: {}
+[11.885490] (-) TimerEvent: {}
+[11.986982] (-) TimerEvent: {}
+[12.088664] (-) TimerEvent: {}
+[12.190240] (-) TimerEvent: {}
+[12.291866] (-) TimerEvent: {}
+[12.394011] (-) TimerEvent: {}
+[12.495751] (-) TimerEvent: {}
+[12.598006] (-) TimerEvent: {}
+[12.699827] (-) TimerEvent: {}
+[12.801871] (-) TimerEvent: {}
+[12.855981] (belt_short_server) StdoutLine: {'line': b'running egg_info\n'}
+[12.861941] (belt_short_server) StdoutLine: {'line': b'writing ../../build/belt_short_server/belt_short_server.egg-info/PKG-INFO\n'}
+[12.865450] (belt_short_server) StdoutLine: {'line': b'writing dependency_links to ../../build/belt_short_server/belt_short_server.egg-info/dependency_links.txt\n'}
+[12.867560] (belt_short_server) StdoutLine: {'line': b'writing entry points to ../../build/belt_short_server/belt_short_server.egg-info/entry_points.txt\n'}
+[12.869562] (belt_short_server) StdoutLine: {'line': b'writing requirements to ../../build/belt_short_server/belt_short_server.egg-info/requires.txt\n'}
+[12.871492] (belt_short_server) StdoutLine: {'line': b'writing top-level names to ../../build/belt_short_server/belt_short_server.egg-info/top_level.txt\n'}
+[12.882687] (belt_short_server) StdoutLine: {'line': b"reading manifest file '../../build/belt_short_server/belt_short_server.egg-info/SOURCES.txt'\n"}
+[12.889512] (belt_long_server) StdoutLine: {'line': b'running egg_info\n'}
+[12.893572] (belt_long_server) StdoutLine: {'line': b'writing ../../build/belt_long_server/belt_long_server.egg-info/PKG-INFO\n'}
+[12.902115] (belt_short_server) StdoutLine: {'line': b"writing manifest file '../../build/belt_short_server/belt_short_server.egg-info/SOURCES.txt'\n"}
+[12.902694] (-) TimerEvent: {}
+[12.904728] (belt_short_server) StdoutLine: {'line': b'running build\n'}
+[12.905461] (belt_short_server) StdoutLine: {'line': b'running build_py\n'}
+[12.906827] (belt_long_server) StdoutLine: {'line': b'writing dependency_links to ../../build/belt_long_server/belt_long_server.egg-info/dependency_links.txt\n'}
+[12.907882] (belt_long_server) StdoutLine: {'line': b'writing entry points to ../../build/belt_long_server/belt_long_server.egg-info/entry_points.txt\n'}
+[12.908831] (belt_long_server) StdoutLine: {'line': b'writing requirements to ../../build/belt_long_server/belt_long_server.egg-info/requires.txt\n'}
+[12.912316] (belt_long_server) StdoutLine: {'line': b'writing top-level names to ../../build/belt_long_server/belt_long_server.egg-info/top_level.txt\n'}
+[12.916491] (belt_short_server) StdoutLine: {'line': b'copying belt_short_server/belt_short_server.py -> /home/berry/HeartBeat/build/belt_short_server/build/lib/belt_short_server\n'}
+[12.917193] (belt_short_server) StdoutLine: {'line': b'running install\n'}
+[12.917978] (belt_short_server) StdoutLine: {'line': b'running install_lib\n'}
+[12.929221] (belt_long_server) StdoutLine: {'line': b"reading manifest file '../../build/belt_long_server/belt_long_server.egg-info/SOURCES.txt'\n"}
+[12.930483] (belt_short_server) StdoutLine: {'line': b'copying /home/berry/HeartBeat/build/belt_short_server/build/lib/belt_short_server/belt_short_server.py -> /home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages/belt_short_server\n'}
+[12.940440] (belt_long_server) StdoutLine: {'line': b"writing manifest file '../../build/belt_long_server/belt_long_server.egg-info/SOURCES.txt'\n"}
+[12.941835] (belt_short_server) StdoutLine: {'line': b'byte-compiling /home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages/belt_short_server/belt_short_server.py to belt_short_server.cpython-310.pyc\n'}
+[12.949205] (belt_long_server) StdoutLine: {'line': b'running build\n'}
+[12.949779] (belt_long_server) StdoutLine: {'line': b'running build_py\n'}
+[12.950682] (belt_short_server) StdoutLine: {'line': b'running install_data\n'}
+[12.953003] (belt_short_server) StdoutLine: {'line': b'running install_egg_info\n'}
+[12.954409] (belt_long_server) StdoutLine: {'line': b'copying belt_long_server/belt_long_server.py -> /home/berry/HeartBeat/build/belt_long_server/build/lib/belt_long_server\n'}
+[12.957879] (belt_long_server) StdoutLine: {'line': b'running install\n'}
+[12.960752] (belt_long_server) StdoutLine: {'line': b'running install_lib\n'}
+[12.974896] (belt_long_server) StdoutLine: {'line': b'copying /home/berry/HeartBeat/build/belt_long_server/build/lib/belt_long_server/belt_long_server.py -> /home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages/belt_long_server\n'}
+[12.990361] (belt_long_server) StdoutLine: {'line': b'byte-compiling /home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages/belt_long_server/belt_long_server.py to belt_long_server.cpython-310.pyc\n'}
+[12.993710] (controller) StdoutLine: {'line': b'running egg_info\n'}
+[12.997383] (controller) StdoutLine: {'line': b'writing ../../build/controller/controller.egg-info/PKG-INFO\n'}
+[12.999545] (belt_long_server) StdoutLine: {'line': b'running install_data\n'}
+[13.000480] (controller) StdoutLine: {'line': b'writing dependency_links to ../../build/controller/controller.egg-info/dependency_links.txt\n'}
+[13.002190] (controller) StdoutLine: {'line': b'writing entry points to ../../build/controller/controller.egg-info/entry_points.txt\n'}
+[13.002804] (-) TimerEvent: {}
+[13.004585] (belt_long_server) StdoutLine: {'line': b'running install_egg_info\n'}
+[13.009332] (controller) StdoutLine: {'line': b'writing requirements to ../../build/controller/controller.egg-info/requires.txt\n'}
+[13.010448] (controller) StdoutLine: {'line': b'writing top-level names to ../../build/controller/controller.egg-info/top_level.txt\n'}
+[13.035189] (controller) StdoutLine: {'line': b"reading manifest file '../../build/controller/controller.egg-info/SOURCES.txt'\n"}
+[13.041802] (controller) StdoutLine: {'line': b"writing manifest file '../../build/controller/controller.egg-info/SOURCES.txt'\n"}
+[13.046232] (controller) StdoutLine: {'line': b'running build\n'}
+[13.047429] (controller) StdoutLine: {'line': b'running build_py\n'}
+[13.058899] (controller) StdoutLine: {'line': b'copying controller/controller.py -> /home/berry/HeartBeat/build/controller/build/lib/controller\n'}
+[13.060697] (belt_short_server) StdoutLine: {'line': b"removing '/home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages/belt_short_server-0.0.0-py3.10.egg-info' (and everything under it)\n"}
+[13.061632] (controller) StdoutLine: {'line': b'running install\n'}
+[13.062778] (controller) StdoutLine: {'line': b'running install_lib\n'}
+[13.063348] (belt_short_server) StdoutLine: {'line': b'Copying ../../build/belt_short_server/belt_short_server.egg-info to /home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages/belt_short_server-0.0.0-py3.10.egg-info\n'}
+[13.070617] (controller) StdoutLine: {'line': b'copying /home/berry/HeartBeat/build/controller/build/lib/controller/controller.py -> /home/berry/HeartBeat/install/controller/lib/python3.10/site-packages/controller\n'}
+[13.072385] (belt_short_server) StdoutLine: {'line': b'running install_scripts\n'}
+[13.095086] (controller) StdoutLine: {'line': b'byte-compiling /home/berry/HeartBeat/install/controller/lib/python3.10/site-packages/controller/controller.py to controller.cpython-310.pyc\n'}
+[13.103040] (-) TimerEvent: {}
+[13.124714] (belt_long_server) StdoutLine: {'line': b"removing '/home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages/belt_long_server-0.0.0-py3.10.egg-info' (and everything under it)\n"}
+[13.128216] (belt_long_server) StdoutLine: {'line': b'Copying ../../build/belt_long_server/belt_long_server.egg-info to /home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages/belt_long_server-0.0.0-py3.10.egg-info\n'}
+[13.143505] (belt_long_server) StdoutLine: {'line': b'running install_scripts\n'}
+[13.174589] (controller) StdoutLine: {'line': b'running install_data\n'}
+[13.182146] (controller) StdoutLine: {'line': b'running install_egg_info\n'}
+[13.203242] (-) TimerEvent: {}
+[13.237085] (belt_short_server) StdoutLine: {'line': b'Installing belt_short_server script to /home/berry/HeartBeat/install/belt_short_server/lib/belt_short_server\n'}
+[13.241505] (belt_short_server) StdoutLine: {'line': b"writing list of installed files to '/home/berry/HeartBeat/build/belt_short_server/install.log'\n"}
+[13.303481] (-) TimerEvent: {}
+[13.349789] (controller) StdoutLine: {'line': b"removing '/home/berry/HeartBeat/install/controller/lib/python3.10/site-packages/controller-0.0.0-py3.10.egg-info' (and everything under it)\n"}
+[13.352363] (controller) StdoutLine: {'line': b'Copying ../../build/controller/controller.egg-info to /home/berry/HeartBeat/install/controller/lib/python3.10/site-packages/controller-0.0.0-py3.10.egg-info\n'}
+[13.380815] (controller) StdoutLine: {'line': b'running install_scripts\n'}
+[13.403728] (-) TimerEvent: {}
+[13.422019] (belt_short_server) CommandEnded: {'returncode': 0}
+[13.455894] (belt_long_server) StdoutLine: {'line': b'Installing belt_long_server script to /home/berry/HeartBeat/install/belt_long_server/lib/belt_long_server\n'}
+[13.462711] (belt_long_server) StdoutLine: {'line': b"writing list of installed files to '/home/berry/HeartBeat/build/belt_long_server/install.log'\n"}
+[13.504019] (-) TimerEvent: {}
+[13.582263] (belt_short_server) JobEnded: {'identifier': 'belt_short_server', 'rc': 0}
+[13.589215] (track_server) JobStarted: {'identifier': 'track_server'}
+[13.604305] (-) TimerEvent: {}
+[13.655861] (controller) StdoutLine: {'line': b"writing list of installed files to '/home/berry/HeartBeat/build/controller/install.log'\n"}
+[13.704659] (-) TimerEvent: {}
+[13.715624] (belt_long_server) CommandEnded: {'returncode': 0}
+[13.780603] (belt_long_server) JobEnded: {'identifier': 'belt_long_server', 'rc': 0}
+[13.804893] (-) TimerEvent: {}
+[13.905902] (-) TimerEvent: {}
+[14.006721] (-) TimerEvent: {}
+[14.107629] (-) TimerEvent: {}
+[14.208565] (-) TimerEvent: {}
+[14.309653] (-) TimerEvent: {}
+[14.411253] (-) TimerEvent: {}
+[14.513047] (-) TimerEvent: {}
+[14.614745] (-) TimerEvent: {}
+[14.716259] (-) TimerEvent: {}
+[14.817770] (-) TimerEvent: {}
+[14.919317] (-) TimerEvent: {}
+[15.020835] (-) TimerEvent: {}
+[15.122417] (-) TimerEvent: {}
+[15.223984] (-) TimerEvent: {}
+[15.325493] (-) TimerEvent: {}
+[15.427097] (-) TimerEvent: {}
+[15.528857] (-) TimerEvent: {}
+[15.609562] (interfaces) JobProgress: {'identifier': 'interfaces', 'progress': 'install'}
+[15.629041] (-) TimerEvent: {}
+[15.648358] (interfaces) Command: {'cmd': ['/usr/bin/cmake', '--install', '/home/berry/HeartBeat/build/interfaces'], 'cwd': '/home/berry/HeartBeat/build/interfaces', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('USER', 'berry'), ('SSH_CLIENT', '192.168.1.112 52115 22'), ('LC_TIME', 'zh_CN.UTF-8'), ('XDG_SESSION_TYPE', 'tty'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/home/berry/HeartBeat/install/interfaces/lib:/home/berry/RoArm/install/interface/lib:/home/berry/ices_ws/install/interfaces/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib'), ('MOTD_SHOWN', 'pam'), ('HOME', '/home/berry'), ('OLDPWD', '/home/berry'), ('SSH_TTY', '/dev/pts/2'), ('ROS_PYTHON_VERSION', '3'), ('LC_MONETARY', 'zh_CN.UTF-8'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLCON_PREFIX_PATH', '/home/berry/HeartBeat/install:/home/berry/RoArm/install:/home/berry/ices_ws/install'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'berry'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('TERM', 'xterm'), ('XDG_SESSION_ID', '29'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/home/berry/.local/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'), ('LC_ADDRESS', 'zh_CN.UTF-8'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('DISPLAY', 'localhost:12.0'), ('LANG', 'en_US.UTF-8'), ('LC_TELEPHONE', 'zh_CN.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('AMENT_PREFIX_PATH', '/home/berry/HeartBeat/install/track_server:/home/berry/HeartBeat/install/interfaces:/home/berry/HeartBeat/install/controller:/home/berry/HeartBeat/install/belt_short_server:/home/berry/HeartBeat/install/belt_long_server:/home/berry/RoArm/install/test1:/home/berry/RoArm/install/serial_ctrl:/home/berry/RoArm/install/roarm:/home/berry/RoArm/install/pos_sub:/home/berry/RoArm/install/pos_pub:/home/berry/RoArm/install/pos_client:/home/berry/RoArm/install/interface:/home/berry/RoArm/install/Position_Sub:/home/berry/RoArm/install/Pos_Server:/home/berry/RoArm/install/Pos_Client:/home/berry/ices_ws/install/track_server:/home/berry/ices_ws/install/launch_test:/home/berry/ices_ws/install/control:/home/berry/ices_ws/install/c_arm:/home/berry/ices_ws/install/arm_server:/home/berry/ices_ws/install/interfaces:/home/berry/ices_ws/install/belt_short_server:/home/berry/ices_ws/install/belt_short_client:/home/berry/ices_ws/install/belt_long_server:/opt/ros/humble'), ('SHELL', '/bin/bash'), ('LC_NAME', 'zh_CN.UTF-8'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('LC_MEASUREMENT', 'zh_CN.UTF-8'), ('LC_IDENTIFICATION', 'zh_CN.UTF-8'), ('PWD', '/home/berry/HeartBeat/build/interfaces'), ('SSH_CONNECTION', '192.168.1.112 52115 192.168.1.109 22'), ('XDG_DATA_DIRS', '/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop'), ('PYTHONPATH', '/home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages:/home/berry/HeartBeat/install/controller/lib/python3.10/site-packages:/home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages:/home/berry/RoArm/install/test1/lib/python3.10/site-packages:/home/berry/RoArm/install/serial_ctrl/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_sub/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_pub/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_client/lib/python3.10/site-packages:/home/berry/RoArm/install/interface/local/lib/python3.10/dist-packages:/home/berry/RoArm/install/Position_Sub/lib/python3.10/site-packages:/home/berry/RoArm/install/Pos_Server/lib/python3.10/site-packages:/home/berry/RoArm/install/Pos_Client/lib/python3.10/site-packages:/home/berry/ices_ws/install/track_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/launch_test/lib/python3.10/site-packages:/home/berry/ices_ws/install/control/lib/python3.10/site-packages:/home/berry/ices_ws/install/c_arm/lib/python3.10/site-packages:/home/berry/ices_ws/install/arm_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/interfaces/local/lib/python3.10/dist-packages:/home/berry/ices_ws/install/belt_short_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/belt_short_client/lib/python3.10/site-packages:/home/berry/ices_ws/install/belt_long_server/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('LC_NUMERIC', 'zh_CN.UTF-8'), ('LC_PAPER', 'zh_CN.UTF-8'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/berry/HeartBeat/install/interfaces:/home/berry/RoArm/install/roarm:/home/berry/RoArm/install/interface:/home/berry/ices_ws/install/interfaces:/home/berry/HeartBeat/install/track_server:/home/berry/HeartBeat/install/controller:/home/berry/HeartBeat/install/belt_short_server:/home/berry/HeartBeat/install/belt_long_server:/home/berry/RoArm/install/test1:/home/berry/RoArm/install/serial_ctrl:/home/berry/RoArm/install/pos_sub:/home/berry/RoArm/install/pos_pub:/home/berry/RoArm/install/pos_client:/home/berry/RoArm/install/Position_Sub:/home/berry/RoArm/install/Pos_Server:/home/berry/RoArm/install/Pos_Client:/home/berry/ices_ws/install/track_server:/home/berry/ices_ws/install/launch_test:/home/berry/ices_ws/install/control:/home/berry/ices_ws/install/c_arm:/home/berry/ices_ws/install/arm_server:/home/berry/ices_ws/install/belt_short_server:/home/berry/ices_ws/install/belt_short_client:/home/berry/ices_ws/install/belt_long_server:/opt/ros/humble')]), 'shell': False}
+[15.660157] (controller) CommandEnded: {'returncode': 0}
+[15.696395] (controller) JobEnded: {'identifier': 'controller', 'rc': 0}
+[15.729178] (-) TimerEvent: {}
+[15.740228] (interfaces) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[15.744788] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/ament_index/resource_index/rosidl_interfaces/interfaces\n'}
+[15.747363] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces\n'}
+[15.749561] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action\n'}
+[15.751883] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/head_move.h\n'}
+[15.753325] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/move_to_right.h\n'}
+[15.754612] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail\n'}
+[15.757825] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/get_status__type_support.h\n'}
+[15.759039] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/gripper_open__type_support.h\n'}
+[15.760363] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_move__struct.h\n'}
+[15.761565] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_left__functions.c\n'}
+[15.762754] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/is_moving__functions.c\n'}
+[15.763887] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_right__type_support.h\n'}
+[15.765079] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_time__type_support.h\n'}
+[15.766342] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm1_test__functions.h\n'}
+[15.767375] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_stop__type_support.h\n'}
+[15.768511] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/multiple_turn__struct.h\n'}
+[15.769615] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm1_test__struct.h\n'}
+[15.770740] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm1_test__type_support.h\n'}
+[15.772420] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_left__functions.h\n'}
+[15.773661] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/get_status__functions.c\n'}
+[15.774898] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/stop_time__functions.c\n'}
+[15.776231] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_mood__type_support.h\n'}
+[15.777594] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/fetch__type_support.h\n'}
+[15.779288] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/fetch__functions.h\n'}
+[15.779741] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_move__functions.h\n'}
+[15.781455] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_left__type_support.h\n'}
+[15.782003] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/head_move__type_support.h\n'}
+[15.783401] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_mood__struct.h\n'}
+[15.784014] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/multiple_turn__functions.h\n'}
+[15.784782] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/head_move__functions.c\n'}
+[15.785852] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/get_status__struct.h\n'}
+[15.786675] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_stop__functions.c\n'}
+[15.787569] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm2_test__functions.c\n'}
+[15.788609] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_stop__functions.h\n'}
+[15.789274] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_right__functions.h\n'}
+[15.790380] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/head_move__struct.h\n'}
+[15.791013] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/gripper_open__functions.h\n'}
+[15.791859] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/stop_time__struct.h\n'}
+[15.792701] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm2_test__struct.h\n'}
+[15.793419] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_move__type_support.h\n'}
+[15.794205] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_stop__struct.h\n'}
+[15.795162] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_time__struct.h\n'}
+[15.796014] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_left__struct.h\n'}
+[15.796798] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/is_moving__type_support.h\n'}
+[15.797794] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/multiple_turn__functions.c\n'}
+[15.798874] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/multiple_turn__type_support.h\n'}
+[15.799714] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_mood__functions.c\n'}
+[15.800528] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/is_moving__struct.h\n'}
+[15.801605] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_time__functions.c\n'}
+[15.802782] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/stop_time__functions.h\n'}
+[15.803934] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_time__functions.h\n'}
+[15.804919] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/gripper_open__struct.h\n'}
+[15.805943] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/is_moving__functions.h\n'}
+[15.806428] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/head_move__functions.h\n'}
+[15.806950] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/get_status__functions.h\n'}
+[15.807572] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_move__functions.c\n'}
+[15.807945] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm2_test__type_support.h\n'}
+[15.808578] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/fetch__struct.h\n'}
+[15.809728] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm2_test__functions.h\n'}
+[15.810732] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_right__struct.h\n'}
+[15.811432] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm1_test__functions.c\n'}
+[15.812303] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/fetch__functions.c\n'}
+[15.813165] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_mood__functions.h\n'}
+[15.813997] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/gripper_open__functions.c\n'}
+[15.814805] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/stop_time__type_support.h\n'}
+[15.815200] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_right__functions.c\n'}
+[15.815523] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/belt_stop.h\n'}
+[15.815872] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/is_moving.h\n'}
+[15.816352] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/move_mood.h\n'}
+[15.816783] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/move_to_left.h\n'}
+[15.817292] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/multiple_turn.h\n'}
+[15.817707] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/gripper_open.h\n'}
+[15.818237] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/get_status.h\n'}
+[15.818683] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/belt_move.h\n'}
+[15.819027] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/arm2_test.h\n'}
+[15.819424] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/fetch.h\n'}
+[15.820272] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/move_time.h\n'}
+[15.821202] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/arm1_test.h\n'}
+[15.821704] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/stop_time.h\n'}
+[15.822460] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg\n'}
+[15.823552] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail\n'}
+[15.824463] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm2_heartbeat__functions.h\n'}
+[15.825301] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm2_heartbeat__struct.h\n'}
+[15.826884] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm2_heartbeat__type_support.h\n'}
+[15.829569] (-) TimerEvent: {}
+[15.831113] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm1_heartbeat__struct.h\n'}
+[15.831882] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm1_heartbeat__functions.h\n'}
+[15.832811] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm2_heartbeat__functions.c\n'}
+[15.833407] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm1_heartbeat__functions.c\n'}
+[15.833776] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm1_heartbeat__type_support.h\n'}
+[15.834142] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/arm2_heartbeat.h\n'}
+[15.834509] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/rosidl_generator_c__visibility_control.h\n'}
+[15.834865] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/arm1_heartbeat.h\n'}
+[15.835212] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/environment/library_path.sh\n'}
+[15.835729] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/environment/library_path.dsv\n'}
+[15.836331] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/lib/libinterfaces__rosidl_generator_c.so\n'}
+[15.837042] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces\n'}
+[15.837503] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action\n'}
+[15.838044] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail\n'}
+[15.839095] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/fetch__rosidl_typesupport_fastrtps_c.h\n'}
+[15.839569] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_left__rosidl_typesupport_fastrtps_c.h\n'}
+[15.840580] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/multiple_turn__rosidl_typesupport_fastrtps_c.h\n'}
+[15.841766] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm2_test__rosidl_typesupport_fastrtps_c.h\n'}
+[15.842678] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/head_move__rosidl_typesupport_fastrtps_c.h\n'}
+[15.843684] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_move__rosidl_typesupport_fastrtps_c.h\n'}
+[15.844834] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_time__rosidl_typesupport_fastrtps_c.h\n'}
+[15.845754] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/gripper_open__rosidl_typesupport_fastrtps_c.h\n'}
+[15.846724] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_mood__rosidl_typesupport_fastrtps_c.h\n'}
+[15.847469] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/stop_time__rosidl_typesupport_fastrtps_c.h\n'}
+[15.848409] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm1_test__rosidl_typesupport_fastrtps_c.h\n'}
+[15.849116] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_stop__rosidl_typesupport_fastrtps_c.h\n'}
+[15.849656] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/is_moving__rosidl_typesupport_fastrtps_c.h\n'}
+[15.850471] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/get_status__rosidl_typesupport_fastrtps_c.h\n'}
+[15.851177] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_right__rosidl_typesupport_fastrtps_c.h\n'}
+[15.852011] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg\n'}
+[15.852898] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail\n'}
+[15.853929] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm2_heartbeat__rosidl_typesupport_fastrtps_c.h\n'}
+[15.854893] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm1_heartbeat__rosidl_typesupport_fastrtps_c.h\n'}
+[15.855761] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/rosidl_typesupport_fastrtps_c__visibility_control.h\n'}
+[15.856177] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/lib/libinterfaces__rosidl_typesupport_fastrtps_c.so\n'}
+[15.856852] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces\n'}
+[15.857714] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action\n'}
+[15.858123] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail\n'}
+[15.858450] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/multiple_turn__type_support.c\n'}
+[15.858794] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_mood__rosidl_typesupport_introspection_c.h\n'}
+[15.859167] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_move__rosidl_typesupport_introspection_c.h\n'}
+[15.859563] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_right__type_support.c\n'}
+[15.859967] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm2_test__rosidl_typesupport_introspection_c.h\n'}
+[15.860371] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/fetch__type_support.c\n'}
+[15.860744] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/multiple_turn__rosidl_typesupport_introspection_c.h\n'}
+[15.861517] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm1_test__type_support.c\n'}
+[15.861904] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/gripper_open__type_support.c\n'}
+[15.862271] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_mood__type_support.c\n'}
+[15.862760] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/head_move__type_support.c\n'}
+[15.863196] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm2_test__type_support.c\n'}
+[15.863573] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_left__type_support.c\n'}
+[15.864048] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_stop__rosidl_typesupport_introspection_c.h\n'}
+[15.864448] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_right__rosidl_typesupport_introspection_c.h\n'}
+[15.864809] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/stop_time__type_support.c\n'}
+[15.865238] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/get_status__rosidl_typesupport_introspection_c.h\n'}
+[15.865609] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm1_test__rosidl_typesupport_introspection_c.h\n'}
+[15.865974] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/is_moving__type_support.c\n'}
+[15.866714] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/head_move__rosidl_typesupport_introspection_c.h\n'}
+[15.867126] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_stop__type_support.c\n'}
+[15.867593] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/get_status__type_support.c\n'}
+[15.868387] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_time__rosidl_typesupport_introspection_c.h\n'}
+[15.868783] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/stop_time__rosidl_typesupport_introspection_c.h\n'}
+[15.869550] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_time__type_support.c\n'}
+[15.870005] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_left__rosidl_typesupport_introspection_c.h\n'}
+[15.870580] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/is_moving__rosidl_typesupport_introspection_c.h\n'}
+[15.871306] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/gripper_open__rosidl_typesupport_introspection_c.h\n'}
+[15.871935] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_move__type_support.c\n'}
+[15.872353] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/fetch__rosidl_typesupport_introspection_c.h\n'}
+[15.873077] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg\n'}
+[15.873802] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail\n'}
+[15.874372] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm1_heartbeat__rosidl_typesupport_introspection_c.h\n'}
+[15.875030] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm1_heartbeat__type_support.c\n'}
+[15.876156] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm2_heartbeat__type_support.c\n'}
+[15.876802] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm2_heartbeat__rosidl_typesupport_introspection_c.h\n'}
+[15.877708] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/rosidl_typesupport_introspection_c__visibility_control.h\n'}
+[15.878437] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/lib/libinterfaces__rosidl_typesupport_introspection_c.so\n'}
+[15.879419] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/lib/libinterfaces__rosidl_typesupport_c.so\n'}
+[15.880125] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces\n'}
+[15.880906] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action\n'}
+[15.881773] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/move_mood.hpp\n'}
+[15.882698] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail\n'}
+[15.884124] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_stop__struct.hpp\n'}
+[15.885248] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_move__struct.hpp\n'}
+[15.886347] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_right__builder.hpp\n'}
+[15.887061] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_left__traits.hpp\n'}
+[15.887656] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_time__struct.hpp\n'}
+[15.888216] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_right__struct.hpp\n'}
+[15.888979] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_time__builder.hpp\n'}
+[15.889632] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_time__traits.hpp\n'}
+[15.890256] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_mood__builder.hpp\n'}
+[15.891259] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/fetch__traits.hpp\n'}
+[15.892470] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_move__builder.hpp\n'}
+[15.893450] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_right__traits.hpp\n'}
+[15.894546] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/is_moving__struct.hpp\n'}
+[15.895393] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/get_status__struct.hpp\n'}
+[15.896221] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/get_status__builder.hpp\n'}
+[15.897255] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/gripper_open__traits.hpp\n'}
+[15.898220] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/is_moving__builder.hpp\n'}
+[15.899450] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_mood__traits.hpp\n'}
+[15.900258] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/head_move__struct.hpp\n'}
+[15.900712] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/multiple_turn__struct.hpp\n'}
+[15.901424] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm2_test__builder.hpp\n'}
+[15.902194] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/stop_time__builder.hpp\n'}
+[15.902936] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm1_test__builder.hpp\n'}
+[15.903660] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_mood__struct.hpp\n'}
+[15.904122] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/head_move__builder.hpp\n'}
+[15.904807] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/is_moving__traits.hpp\n'}
+[15.905626] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/stop_time__traits.hpp\n'}
+[15.906357] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_stop__builder.hpp\n'}
+[15.907047] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm2_test__struct.hpp\n'}
+[15.907574] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/gripper_open__builder.hpp\n'}
+[15.908022] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_move__traits.hpp\n'}
+[15.908820] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/fetch__builder.hpp\n'}
+[15.909609] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_left__struct.hpp\n'}
+[15.910280] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_stop__traits.hpp\n'}
+[15.910846] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/multiple_turn__builder.hpp\n'}
+[15.911813] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/gripper_open__struct.hpp\n'}
+[15.912505] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm2_test__traits.hpp\n'}
+[15.912930] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/fetch__struct.hpp\n'}
+[15.913328] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/head_move__traits.hpp\n'}
+[15.913731] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_left__builder.hpp\n'}
+[15.914179] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm1_test__struct.hpp\n'}
+[15.914600] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/get_status__traits.hpp\n'}
+[15.914994] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/multiple_turn__traits.hpp\n'}
+[15.915435] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/stop_time__struct.hpp\n'}
+[15.915836] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm1_test__traits.hpp\n'}
+[15.916576] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/belt_stop.hpp\n'}
+[15.916997] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/multiple_turn.hpp\n'}
+[15.917407] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/move_to_left.hpp\n'}
+[15.917784] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/get_status.hpp\n'}
+[15.918422] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/is_moving.hpp\n'}
+[15.919350] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/head_move.hpp\n'}
+[15.919760] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/move_time.hpp\n'}
+[15.920478] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/move_to_right.hpp\n'}
+[15.921367] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/gripper_open.hpp\n'}
+[15.922363] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/belt_move.hpp\n'}
+[15.923212] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/arm1_test.hpp\n'}
+[15.924095] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/fetch.hpp\n'}
+[15.924961] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/arm2_test.hpp\n'}
+[15.925560] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/stop_time.hpp\n'}
+[15.926379] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg\n'}
+[15.926883] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail\n'}
+[15.927670] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm1_heartbeat__struct.hpp\n'}
+[15.928399] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm1_heartbeat__traits.hpp\n'}
+[15.929256] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm2_heartbeat__builder.hpp\n'}
+[15.929919] (-) TimerEvent: {}
+[15.930616] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm1_heartbeat__builder.hpp\n'}
+[15.931649] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm2_heartbeat__traits.hpp\n'}
+[15.932594] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm2_heartbeat__struct.hpp\n'}
+[15.933330] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/arm2_heartbeat.hpp\n'}
+[15.934438] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/arm1_heartbeat.hpp\n'}
+[15.935212] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces\n'}
+[15.935916] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action\n'}
+[15.936775] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail\n'}
+[15.938008] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/head_move__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[15.938578] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/gripper_open__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[15.938965] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_left__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[15.939349] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm1_test__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[15.939777] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/is_moving__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[15.940264] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm2_test__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[15.940703] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_time__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[15.941199] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/get_status__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[15.941698] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/fetch__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[15.942466] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/multiple_turn__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[15.942858] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/stop_time__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[15.943281] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_right__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[15.943656] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/dds_fastrtps\n'}
+[15.944085] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_move__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[15.944502] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_stop__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[15.944994] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_mood__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[15.945472] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg\n'}
+[15.945864] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail\n'}
+[15.946245] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/dds_fastrtps\n'}
+[15.946578] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm1_heartbeat__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[15.947069] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm2_heartbeat__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[15.947749] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h\n'}
+[15.948164] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/lib/libinterfaces__rosidl_typesupport_fastrtps_cpp.so\n'}
+[15.948741] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces\n'}
+[15.949721] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action\n'}
+[15.950705] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail\n'}
+[15.951394] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm2_test__rosidl_typesupport_introspection_cpp.hpp\n'}
+[15.951827] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/head_move__type_support.cpp\n'}
+[15.952265] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_left__type_support.cpp\n'}
+[15.953014] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/get_status__type_support.cpp\n'}
+[15.953557] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/stop_time__type_support.cpp\n'}
+[15.954016] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/stop_time__rosidl_typesupport_introspection_cpp.hpp\n'}
+[15.954714] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/gripper_open__rosidl_typesupport_introspection_cpp.hpp\n'}
+[15.955207] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/head_move__rosidl_typesupport_introspection_cpp.hpp\n'}
+[15.956014] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_stop__type_support.cpp\n'}
+[15.956429] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_move__type_support.cpp\n'}
+[15.956793] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/multiple_turn__rosidl_typesupport_introspection_cpp.hpp\n'}
+[15.957346] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_right__type_support.cpp\n'}
+[15.958134] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm1_test__type_support.cpp\n'}
+[15.958551] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_left__rosidl_typesupport_introspection_cpp.hpp\n'}
+[15.959526] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/gripper_open__type_support.cpp\n'}
+[15.960586] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/fetch__type_support.cpp\n'}
+[15.961762] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_mood__type_support.cpp\n'}
+[15.963007] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_to_right__rosidl_typesupport_introspection_cpp.hpp\n'}
+[15.964178] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/is_moving__rosidl_typesupport_introspection_cpp.hpp\n'}
+[15.965557] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_move__rosidl_typesupport_introspection_cpp.hpp\n'}
+[15.966501] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/multiple_turn__type_support.cpp\n'}
+[15.967512] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/get_status__rosidl_typesupport_introspection_cpp.hpp\n'}
+[15.968389] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/is_moving__type_support.cpp\n'}
+[15.969318] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm2_test__type_support.cpp\n'}
+[15.970327] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_mood__rosidl_typesupport_introspection_cpp.hpp\n'}
+[15.971132] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/belt_stop__rosidl_typesupport_introspection_cpp.hpp\n'}
+[15.971566] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_time__rosidl_typesupport_introspection_cpp.hpp\n'}
+[15.972044] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/move_time__type_support.cpp\n'}
+[15.972995] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/fetch__rosidl_typesupport_introspection_cpp.hpp\n'}
+[15.974149] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/action/detail/arm1_test__rosidl_typesupport_introspection_cpp.hpp\n'}
+[15.975195] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg\n'}
+[15.976305] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail\n'}
+[15.976979] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm2_heartbeat__rosidl_typesupport_introspection_cpp.hpp\n'}
+[15.977702] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm1_heartbeat__rosidl_typesupport_introspection_cpp.hpp\n'}
+[15.978145] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm2_heartbeat__type_support.cpp\n'}
+[15.978539] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/include/interfaces/interfaces/msg/detail/arm1_heartbeat__type_support.cpp\n'}
+[15.978979] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/lib/libinterfaces__rosidl_typesupport_introspection_cpp.so\n'}
+[15.979356] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/lib/libinterfaces__rosidl_typesupport_cpp.so\n'}
+[15.979786] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/environment/pythonpath.sh\n'}
+[15.980347] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/environment/pythonpath.dsv\n'}
+[15.980861] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces-0.0.0-py3.10.egg-info\n'}
+[15.981322] (interfaces) StdoutLine: {'line': b'-- Installing: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces-0.0.0-py3.10.egg-info/dependency_links.txt\n'}
+[15.981730] (interfaces) StdoutLine: {'line': b'-- Installing: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces-0.0.0-py3.10.egg-info/top_level.txt\n'}
+[15.982102] (interfaces) StdoutLine: {'line': b'-- Installing: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces-0.0.0-py3.10.egg-info/SOURCES.txt\n'}
+[15.984299] (interfaces) StdoutLine: {'line': b'-- Installing: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces-0.0.0-py3.10.egg-info/PKG-INFO\n'}
+[15.984856] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces\n'}
+[15.985537] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action\n'}
+[15.986373] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_move_to_right_s.c\n'}
+[15.987082] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_fetch_s.c\n'}
+[15.987559] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_arm2_test_s.c\n'}
+[15.988038] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_belt_stop.py\n'}
+[15.988588] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_get_status.py\n'}
+[15.989033] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_belt_stop_s.c\n'}
+[15.989718] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_belt_move.py\n'}
+[15.990188] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_move_to_right.py\n'}
+[15.990675] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_move_mood.py\n'}
+[15.991169] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_arm2_test.py\n'}
+[15.991806] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_belt_move_s.c\n'}
+[15.992320] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_move_mood_s.c\n'}
+[15.992952] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_fetch.py\n'}
+[15.993546] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_move_time.py\n'}
+[15.994113] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_gripper_open.py\n'}
+[15.994666] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_stop_time_s.c\n'}
+[15.995103] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_move_time_s.c\n'}
+[15.995579] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_arm1_test.py\n'}
+[15.996099] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_gripper_open_s.c\n'}
+[15.996619] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_move_to_left.py\n'}
+[15.997220] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_get_status_s.c\n'}
+[15.997785] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_arm1_test_s.c\n'}
+[15.998716] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_head_move_s.c\n'}
+[15.999377] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_multiple_turn_s.c\n'}
+[15.999958] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_is_moving.py\n'}
+[16.000468] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/__init__.py\n'}
+[16.000985] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_move_to_left_s.c\n'}
+[16.001958] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_multiple_turn.py\n'}
+[16.002476] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_head_move.py\n'}
+[16.002926] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_stop_time.py\n'}
+[16.003448] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action/_is_moving_s.c\n'}
+[16.003977] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/interfaces_s__rosidl_typesupport_introspection_c.cpython-310-aarch64-linux-gnu.so\n'}
+[16.004452] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/interfaces_s__rosidl_typesupport_c.cpython-310-aarch64-linux-gnu.so\n'}
+[16.004976] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/_interfaces_s.ep.rosidl_typesupport_introspection_c.c\n'}
+[16.005531] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/msg\n'}
+[16.006053] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/msg/_arm1_heartbeat.py\n'}
+[16.006492] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/msg/_arm2_heartbeat_s.c\n'}
+[16.006876] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/msg/_arm1_heartbeat_s.c\n'}
+[16.007226] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/msg/__init__.py\n'}
+[16.007571] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/msg/_arm2_heartbeat.py\n'}
+[16.007919] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c\n'}
+[16.008278] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/interfaces_s__rosidl_typesupport_fastrtps_c.cpython-310-aarch64-linux-gnu.so\n'}
+[16.008690] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/_interfaces_s.ep.rosidl_typesupport_c.c\n'}
+[16.009337] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/__init__.py\n'}
+[16.009813] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/libinterfaces__rosidl_generator_py.so\n'}
+[16.030070] (-) TimerEvent: {}
+[16.131482] (-) TimerEvent: {}
+[16.233127] (-) TimerEvent: {}
+[16.287985] (interfaces) StdoutLine: {'line': b"Listing '/home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces'...\n"}
+[16.289384] (interfaces) StdoutLine: {'line': b"Listing '/home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/action'...\n"}
+[16.290616] (interfaces) StdoutLine: {'line': b"Listing '/home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/msg'...\n"}
+[16.324688] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/interfaces_s__rosidl_typesupport_fastrtps_c.cpython-310-aarch64-linux-gnu.so\n'}
+[16.343140] (-) TimerEvent: {}
+[16.355062] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/interfaces_s__rosidl_typesupport_introspection_c.cpython-310-aarch64-linux-gnu.so\n'}
+[16.382131] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages/interfaces/interfaces_s__rosidl_typesupport_c.cpython-310-aarch64-linux-gnu.so\n'}
+[16.406165] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/lib/libinterfaces__rosidl_generator_py.so\n'}
+[16.414805] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/Arm1Test.idl\n'}
+[16.415806] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/Arm2Test.idl\n'}
+[16.416782] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/StopTime.idl\n'}
+[16.418377] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/MoveMood.idl\n'}
+[16.419463] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/MoveTime.idl\n'}
+[16.421642] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/IsMoving.idl\n'}
+[16.423426] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/MoveToLeft.idl\n'}
+[16.424321] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/MoveToRight.idl\n'}
+[16.425069] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/GetStatus.idl\n'}
+[16.426372] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/BeltMove.idl\n'}
+[16.426879] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/BeltStop.idl\n'}
+[16.427250] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/Fetch.idl\n'}
+[16.427593] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/GripperOpen.idl\n'}
+[16.427965] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/HeadMove.idl\n'}
+[16.428482] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/MultipleTurn.idl\n'}
+[16.431837] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/msg/Arm1Heartbeat.idl\n'}
+[16.432929] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/msg/Arm2Heartbeat.idl\n'}
+[16.433944] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/Arm1Test.action\n'}
+[16.434755] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/Arm2Test.action\n'}
+[16.435735] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/StopTime.action\n'}
+[16.436937] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/MoveMood.action\n'}
+[16.438150] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/MoveTime.action\n'}
+[16.439057] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/IsMoving.action\n'}
+[16.440535] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/MoveToLeft.action\n'}
+[16.442973] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/MoveToRight.action\n'}
+[16.444977] (-) TimerEvent: {}
+[16.447052] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/GetStatus.action\n'}
+[16.448037] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/BeltMove.action\n'}
+[16.448696] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/BeltStop.action\n'}
+[16.449216] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/Fetch.action\n'}
+[16.449663] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/GripperOpen.action\n'}
+[16.450032] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/HeadMove.action\n'}
+[16.450373] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/action/MultipleTurn.action\n'}
+[16.450700] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/msg/Arm1Heartbeat.msg\n'}
+[16.451095] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/msg/Arm2Heartbeat.msg\n'}
+[16.451425] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/ament_index/resource_index/package_run_dependencies/interfaces\n'}
+[16.457654] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/ament_index/resource_index/parent_prefix_path/interfaces\n'}
+[16.458667] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/environment/ament_prefix_path.sh\n'}
+[16.459718] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/environment/ament_prefix_path.dsv\n'}
+[16.460665] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/environment/path.sh\n'}
+[16.461613] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/environment/path.dsv\n'}
+[16.462363] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/local_setup.bash\n'}
+[16.463563] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/local_setup.sh\n'}
+[16.464474] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/local_setup.zsh\n'}
+[16.464956] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/local_setup.dsv\n'}
+[16.465483] (interfaces) StdoutLine: {'line': b'-- Installing: /home/berry/HeartBeat/install/interfaces/share/interfaces/package.dsv\n'}
+[16.481886] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/ament_index/resource_index/packages/interfaces\n'}
+[16.532007] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/export_interfaces__rosidl_generator_cExport.cmake\n'}
+[16.532974] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/export_interfaces__rosidl_generator_cExport-noconfig.cmake\n'}
+[16.535641] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/export_interfaces__rosidl_typesupport_fastrtps_cExport.cmake\n'}
+[16.536499] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/export_interfaces__rosidl_typesupport_fastrtps_cExport-noconfig.cmake\n'}
+[16.539236] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/interfaces__rosidl_typesupport_introspection_cExport.cmake\n'}
+[16.540051] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/interfaces__rosidl_typesupport_introspection_cExport-noconfig.cmake\n'}
+[16.542499] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/interfaces__rosidl_typesupport_cExport.cmake\n'}
+[16.543344] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/interfaces__rosidl_typesupport_cExport-noconfig.cmake\n'}
+[16.545143] (-) TimerEvent: {}
+[16.546766] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/export_interfaces__rosidl_generator_cppExport.cmake\n'}
+[16.548598] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/export_interfaces__rosidl_typesupport_fastrtps_cppExport.cmake\n'}
+[16.549576] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/export_interfaces__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake\n'}
+[16.551787] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/interfaces__rosidl_typesupport_introspection_cppExport.cmake\n'}
+[16.552761] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/interfaces__rosidl_typesupport_introspection_cppExport-noconfig.cmake\n'}
+[16.555129] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/interfaces__rosidl_typesupport_cppExport.cmake\n'}
+[16.556119] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/interfaces__rosidl_typesupport_cppExport-noconfig.cmake\n'}
+[16.558484] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/export_interfaces__rosidl_generator_pyExport.cmake\n'}
+[16.559420] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/export_interfaces__rosidl_generator_pyExport-noconfig.cmake\n'}
+[16.560188] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/rosidl_cmake-extras.cmake\n'}
+[16.560922] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/ament_cmake_export_dependencies-extras.cmake\n'}
+[16.561773] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/ament_cmake_export_include_directories-extras.cmake\n'}
+[16.562653] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/ament_cmake_export_libraries-extras.cmake\n'}
+[16.563428] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/ament_cmake_export_targets-extras.cmake\n'}
+[16.564074] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake\n'}
+[16.564942] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake\n'}
+[16.566013] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/interfacesConfig.cmake\n'}
+[16.566706] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/cmake/interfacesConfig-version.cmake\n'}
+[16.567136] (interfaces) StdoutLine: {'line': b'-- Up-to-date: /home/berry/HeartBeat/install/interfaces/share/interfaces/package.xml\n'}
+[16.575895] (interfaces) CommandEnded: {'returncode': 0}
+[16.645499] (-) TimerEvent: {}
+[16.747013] (-) TimerEvent: {}
+[16.848490] (-) TimerEvent: {}
+[16.950014] (-) TimerEvent: {}
+[17.050714] (-) TimerEvent: {}
+[17.151803] (-) TimerEvent: {}
+[17.253819] (-) TimerEvent: {}
+[17.355484] (-) TimerEvent: {}
+[17.456170] (-) TimerEvent: {}
+[17.558158] (-) TimerEvent: {}
+[17.658930] (-) TimerEvent: {}
+[17.760913] (-) TimerEvent: {}
+[17.862530] (-) TimerEvent: {}
+[17.964275] (-) TimerEvent: {}
+[18.066083] (-) TimerEvent: {}
+[18.168391] (-) TimerEvent: {}
+[18.178227] (track_server) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', 'setup.py', 'egg_info', '--egg-base', '../../build/track_server', 'build', '--build-base', '/home/berry/HeartBeat/build/track_server/build', 'install', '--record', '/home/berry/HeartBeat/build/track_server/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/home/berry/HeartBeat/src/track_server', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'berry', 'SSH_CLIENT': '192.168.1.112 52115 22', 'LC_TIME': 'zh_CN.UTF-8', 'XDG_SESSION_TYPE': 'tty', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/home/berry/HeartBeat/install/interfaces/lib:/home/berry/RoArm/install/interface/lib:/home/berry/ices_ws/install/interfaces/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib', 'MOTD_SHOWN': 'pam', 'HOME': '/home/berry', 'OLDPWD': '/home/berry', 'SSH_TTY': '/dev/pts/2', 'ROS_PYTHON_VERSION': '3', 'LC_MONETARY': 'zh_CN.UTF-8', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLCON_PREFIX_PATH': '/home/berry/HeartBeat/install:/home/berry/RoArm/install:/home/berry/ices_ws/install', 'ROS_DISTRO': 'humble', 'LOGNAME': 'berry', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'TERM': 'xterm', 'XDG_SESSION_ID': '29', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/home/berry/.local/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin', 'LC_ADDRESS': 'zh_CN.UTF-8', 'XDG_RUNTIME_DIR': '/run/user/1000', 'DISPLAY': 'localhost:12.0', 'LANG': 'en_US.UTF-8', 'LC_TELEPHONE': 'zh_CN.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'AMENT_PREFIX_PATH': '/home/berry/HeartBeat/install/track_server:/home/berry/HeartBeat/install/interfaces:/home/berry/HeartBeat/install/controller:/home/berry/HeartBeat/install/belt_short_server:/home/berry/HeartBeat/install/belt_long_server:/home/berry/RoArm/install/test1:/home/berry/RoArm/install/serial_ctrl:/home/berry/RoArm/install/roarm:/home/berry/RoArm/install/pos_sub:/home/berry/RoArm/install/pos_pub:/home/berry/RoArm/install/pos_client:/home/berry/RoArm/install/interface:/home/berry/RoArm/install/Position_Sub:/home/berry/RoArm/install/Pos_Server:/home/berry/RoArm/install/Pos_Client:/home/berry/ices_ws/install/track_server:/home/berry/ices_ws/install/launch_test:/home/berry/ices_ws/install/control:/home/berry/ices_ws/install/c_arm:/home/berry/ices_ws/install/arm_server:/home/berry/ices_ws/install/interfaces:/home/berry/ices_ws/install/belt_short_server:/home/berry/ices_ws/install/belt_short_client:/home/berry/ices_ws/install/belt_long_server:/opt/ros/humble', 'SHELL': '/bin/bash', 'LC_NAME': 'zh_CN.UTF-8', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'LC_MEASUREMENT': 'zh_CN.UTF-8', 'LC_IDENTIFICATION': 'zh_CN.UTF-8', 'PWD': '/home/berry/HeartBeat/build/track_server', 'SSH_CONNECTION': '192.168.1.112 52115 192.168.1.109 22', 'XDG_DATA_DIRS': '/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/berry/HeartBeat/build/track_server/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/interfaces/local/lib/python3.10/dist-packages:/home/berry/HeartBeat/install/controller/lib/python3.10/site-packages:/home/berry/HeartBeat/install/belt_short_server/lib/python3.10/site-packages:/home/berry/HeartBeat/install/belt_long_server/lib/python3.10/site-packages:/home/berry/RoArm/install/test1/lib/python3.10/site-packages:/home/berry/RoArm/install/serial_ctrl/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_sub/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_pub/lib/python3.10/site-packages:/home/berry/RoArm/install/pos_client/lib/python3.10/site-packages:/home/berry/RoArm/install/interface/local/lib/python3.10/dist-packages:/home/berry/RoArm/install/Position_Sub/lib/python3.10/site-packages:/home/berry/RoArm/install/Pos_Server/lib/python3.10/site-packages:/home/berry/RoArm/install/Pos_Client/lib/python3.10/site-packages:/home/berry/ices_ws/install/track_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/launch_test/lib/python3.10/site-packages:/home/berry/ices_ws/install/control/lib/python3.10/site-packages:/home/berry/ices_ws/install/c_arm/lib/python3.10/site-packages:/home/berry/ices_ws/install/arm_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/interfaces/local/lib/python3.10/dist-packages:/home/berry/ices_ws/install/belt_short_server/lib/python3.10/site-packages:/home/berry/ices_ws/install/belt_short_client/lib/python3.10/site-packages:/home/berry/ices_ws/install/belt_long_server/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'LC_NUMERIC': 'zh_CN.UTF-8', 'LC_PAPER': 'zh_CN.UTF-8', 'COLCON': '1', 'CMAKE_PREFIX_PATH': '/home/berry/HeartBeat/install/interfaces:/home/berry/RoArm/install/roarm:/home/berry/RoArm/install/interface:/home/berry/ices_ws/install/interfaces'}, 'shell': False}
+[18.268581] (-) TimerEvent: {}
+[18.370439] (-) TimerEvent: {}
+[18.472216] (-) TimerEvent: {}
+[18.573981] (-) TimerEvent: {}
+[18.675543] (-) TimerEvent: {}
+[18.777113] (-) TimerEvent: {}
+[18.878577] (-) TimerEvent: {}
+[18.980224] (-) TimerEvent: {}
+[19.081564] (-) TimerEvent: {}
+[19.183016] (-) TimerEvent: {}
+[19.284537] (-) TimerEvent: {}
+[19.386052] (-) TimerEvent: {}
+[19.487544] (-) TimerEvent: {}
+[19.589246] (-) TimerEvent: {}
+[19.690857] (-) TimerEvent: {}
+[19.792307] (-) TimerEvent: {}
+[19.794061] (interfaces) JobEnded: {'identifier': 'interfaces', 'rc': 0}
+[19.892499] (-) TimerEvent: {}
+[19.909328] (track_server) StdoutLine: {'line': b'running egg_info\n'}
+[19.912425] (track_server) StdoutLine: {'line': b'writing ../../build/track_server/track_server.egg-info/PKG-INFO\n'}
+[19.914565] (track_server) StdoutLine: {'line': b'writing dependency_links to ../../build/track_server/track_server.egg-info/dependency_links.txt\n'}
+[19.915463] (track_server) StdoutLine: {'line': b'writing entry points to ../../build/track_server/track_server.egg-info/entry_points.txt\n'}
+[19.916243] (track_server) StdoutLine: {'line': b'writing requirements to ../../build/track_server/track_server.egg-info/requires.txt\n'}
+[19.916960] (track_server) StdoutLine: {'line': b'writing top-level names to ../../build/track_server/track_server.egg-info/top_level.txt\n'}
+[19.926010] (track_server) StdoutLine: {'line': b"reading manifest file '../../build/track_server/track_server.egg-info/SOURCES.txt'\n"}
+[19.931174] (track_server) StdoutLine: {'line': b"writing manifest file '../../build/track_server/track_server.egg-info/SOURCES.txt'\n"}
+[19.931887] (track_server) StdoutLine: {'line': b'running build\n'}
+[19.932302] (track_server) StdoutLine: {'line': b'running build_py\n'}
+[19.935134] (track_server) StdoutLine: {'line': b'copying track_server/track_server.py -> /home/berry/HeartBeat/build/track_server/build/lib/track_server\n'}
+[19.937229] (track_server) StdoutLine: {'line': b'running install\n'}
+[19.938594] (track_server) StdoutLine: {'line': b'running install_lib\n'}
+[19.942027] (track_server) StdoutLine: {'line': b'copying /home/berry/HeartBeat/build/track_server/build/lib/track_server/track_server.py -> /home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages/track_server\n'}
+[19.946747] (track_server) StdoutLine: {'line': b'byte-compiling /home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages/track_server/track_server.py to track_server.cpython-310.pyc\n'}
+[19.952691] (track_server) StdoutLine: {'line': b'running install_data\n'}
+[19.953590] (track_server) StdoutLine: {'line': b'running install_egg_info\n'}
+[19.992734] (-) TimerEvent: {}
+[20.027761] (track_server) StdoutLine: {'line': b"removing '/home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages/track_server-0.0.0-py3.10.egg-info' (and everything under it)\n"}
+[20.029641] (track_server) StdoutLine: {'line': b'Copying ../../build/track_server/track_server.egg-info to /home/berry/HeartBeat/install/track_server/lib/python3.10/site-packages/track_server-0.0.0-py3.10.egg-info\n'}
+[20.036573] (track_server) StdoutLine: {'line': b'running install_scripts\n'}
+[20.093249] (-) TimerEvent: {}
+[20.172235] (track_server) StdoutLine: {'line': b'Installing track_server script to /home/berry/HeartBeat/install/track_server/lib/track_server\n'}
+[20.174136] (track_server) StdoutLine: {'line': b"writing list of installed files to '/home/berry/HeartBeat/build/track_server/install.log'\n"}
+[20.193316] (-) TimerEvent: {}
+[20.295428] (-) TimerEvent: {}
+[20.299054] (track_server) CommandEnded: {'returncode': 0}
+[20.328235] (track_server) JobEnded: {'identifier': 'track_server', 'rc': 0}
+[20.331563] (-) EventReactorShutdown: {}

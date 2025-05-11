@@ -1,0 +1,26 @@
+// generated from rosidl_adapter/resource/action.idl.em
+// with input from interfaces/action/GripperOpen.action
+// generated code does not contain a copyright notice
+
+
+module interfaces {
+  module action {
+    @verbatim (language="comment", text=
+      "Goal")
+    struct GripperOpen_Goal {
+      string lst;
+    };
+    @verbatim (language="comment", text=
+      "Result")
+    struct GripperOpen_Result {
+      string finish;
+    };
+    @verbatim (language="comment", text=
+      "Feedback")
+    struct GripperOpen_Feedback {
+      string ast;
+
+      double timespan;
+    };
+  };
+};

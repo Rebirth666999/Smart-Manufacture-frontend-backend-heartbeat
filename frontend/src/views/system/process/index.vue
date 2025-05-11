@@ -403,18 +403,18 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.$router.push(`/process/design`)
+      this.$router.push(`/productProcess/designProcess`)
     },
-    /** 顶部设计按钮操作 */
+    /** 顶部设计按钮操作（修改） */
     handleUpdate(event) {
       const row = this.processList.find(ele => ele.procId === this.ids[0])
       if (row) {
         this.handleDesign(row)
       }
     },
-    /** 行内设计按钮操作 */
+    /** 行内设计按钮操作（修改） */
     handleDesign(row) {
-      this.$router.push(`/process/design?procId=${row.procId}`)
+      this.$router.push(`/productProcess/editProcess?procId=${row.procId}`)
     },
     /** 删除按钮操作 */
     handleDelete(row) {

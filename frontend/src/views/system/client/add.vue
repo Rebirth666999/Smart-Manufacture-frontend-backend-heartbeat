@@ -300,7 +300,7 @@ export default {
     //重置页面
     resetPage(){
       resetPage() 
-      this.$router.replace(`/client/add`)
+      this.$router.replace(`/client/addClient`)
       this.reset()
     },
     /** 提交按钮 */
@@ -323,7 +323,7 @@ export default {
             this.form.clStat = '1'
             addClient(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
-              this.$router.replace(`/client/add?clId=${response.data.clId}`)
+              this.$router.replace(`/client/addClient?clId=${response.data.clId}`)
               this.form = response.data
             }).finally(() => {
               this.buttonLoading = false;

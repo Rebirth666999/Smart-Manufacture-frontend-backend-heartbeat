@@ -719,7 +719,7 @@ export default {
      * @date 20250426
      */
     resetPage() {
-      this.$router.replace(`/manufacture/manufacturePlan/addMain`)
+      this.$router.replace(`/manufacture/addManufacturePlan`)
       this.reset()
     },
     /**
@@ -743,7 +743,7 @@ export default {
             this.form.mpmStat = '1'
             addManufacturePlanMain(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
-              this.$router.replace(`/manufacture/manufacturePlan/addMain?mpmId=${response.data.mpmId}`)
+              this.$router.replace(`/manufacture/addManufacturePlan?mpmId=${response.data.mpmId}`)
               this.form = response.data
               this.queryParams.mpmCode = this.form.mpmCode
               this.preview = false

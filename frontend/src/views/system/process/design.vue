@@ -294,7 +294,7 @@ export default {
     },
     // 重置按钮
     resetPage() {
-      this.$router.replace(`/process/design`)
+      this.$router.replace(`/process/designProcess`)
       this.designerOpen = false
       this.reset()
     },
@@ -316,7 +316,7 @@ export default {
             this.form.procStat = '1'
             addProcess(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
-              this.$router.replace(`/process/design?procId=${response.data.procId}`)
+              this.$router.replace(`/process/designProcess?procId=${response.data.procId}`)
               this.form = response.data
               // 初始化设计器
               this.designerData.bpmnXml = ''

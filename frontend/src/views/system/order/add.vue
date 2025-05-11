@@ -272,7 +272,7 @@ export default {
     },
     // 重置页面
     resetPage() {
-      this.$router.replace(`/order/add`)
+      this.$router.replace(`/order/addOrder`)
       this.reset()
     },
     // 表单重置
@@ -340,7 +340,7 @@ export default {
             this.form.orStat = '1'
             addOrder(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
-              this.$router.replace(`/order/add?orId=${response.data.orId}`)
+              this.$router.replace(`/order/addOrder?orId=${response.data.orId}`)
               this.form = response.data
             }).finally(() => {
               this.buttonLoading = false;

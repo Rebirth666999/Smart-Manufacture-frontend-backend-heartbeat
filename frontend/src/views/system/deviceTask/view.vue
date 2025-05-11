@@ -30,7 +30,7 @@ import { listEquipmentOperationStepParam } from "@/api/system/equipmentOperation
 import ProcessViewer from '@/components/ProcessViewerIndustry';
 
 export default {
-  name: "ManufactureTask",
+  name: "ViewDeviceTask",
   components: {
     ProcessViewer,
   },

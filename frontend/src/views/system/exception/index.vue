@@ -170,7 +170,7 @@ import { listException, getException, delException, addException, updateExceptio
 import { listExceptionType } from "@/api/system/exceptionType";
 
 export default {
-  name: "Exception",
+  name: "ExceptionManage",
   data() {
     return {
       // 按钮loading

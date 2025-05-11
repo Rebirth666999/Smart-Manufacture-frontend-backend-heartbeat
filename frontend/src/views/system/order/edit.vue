@@ -125,7 +125,7 @@ import orderDemand from '@/views/system/orderDemand';
 import orderDemandPreview from '@/views/system/orderDemand/preview';
 
 export default {
-  name: "AddOrder",
+  name: "EditOrder",
   components: {
     orderDemand,
     orderDemandPreview

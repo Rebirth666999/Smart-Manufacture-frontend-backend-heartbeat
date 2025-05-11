@@ -221,7 +221,7 @@ import { listClient } from "@/api/system/client";
 import orderDemand from '@/views/system/orderDemand';
 
 export default {
-  name: "Order",
+  name: "ManageOrder",
   components: {
     orderDemand
   },

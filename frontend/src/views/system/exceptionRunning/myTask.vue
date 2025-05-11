@@ -109,7 +109,7 @@ import { listException } from "@/api/system/exception";
 import { listExceptionSource } from "@/api/system/exceptionSource";
 
 export default {
-  name: "Todo",
+  name: "TodoException",
   components: {
     ProcessViewer
   },

@@ -448,7 +448,7 @@ import ManufactureTask from '@/views/system/manufactureTask';
 import ManufactureMaterial from '@/views/system/manufactureTask/material';
 
 export default {
-  name: "ManufacturePlan",
+  name: "ManageManufacture",
   components: {
     ManufactureTask,
     ManufactureMaterial

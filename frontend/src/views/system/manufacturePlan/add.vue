@@ -252,7 +252,7 @@ import { listOrderDemand } from "@/api/system/orderDemand";
 import manufactureTask from '@/views/system/manufactureTask';
 
 export default {
-  name: "ManufacturePlan",
+  name: "AddManufacturePlanDetail",
   components: {
     manufactureTask
   },

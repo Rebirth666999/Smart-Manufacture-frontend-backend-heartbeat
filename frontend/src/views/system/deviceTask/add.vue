@@ -29,9 +29,9 @@ import { listEquipmentOperationStepParam } from "@/api/system/equipmentOperation
 
 import ProcessViewer from '@/components/ProcessViewerIndustry';
 
+// 本页面内容为下发设备任务
 export default {
-  // 本页面内容为下发设备任务
-  name: "DeviceTaskAdd",
+  name: "AddDeviceTask",
   components: {
     ProcessViewer,
   },

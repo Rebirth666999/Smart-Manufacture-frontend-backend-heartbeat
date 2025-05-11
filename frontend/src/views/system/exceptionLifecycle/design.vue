@@ -19,7 +19,7 @@ import { listUser } from "@/api/system/user";
 import { listDept } from "@/api/system/dept";
 
 export default {
-  name: "Process",
+  name: "ExceptionLifecycleDesign",
   components: {
     ProcessDesigner,
   },

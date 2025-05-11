@@ -364,12 +364,12 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.$router.push(`/order/add`)
+      this.$router.push(`/order/addOrder`)
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       const orId = row.orId || this.idSelect
-      this.$router.push(`/order/add?orId=${orId}`)
+      this.$router.push(`/order/editOrder?orId=${orId}`)
     },
     /** 删除按钮操作 */
     handleDelete(row) {

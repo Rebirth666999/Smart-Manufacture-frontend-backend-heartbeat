@@ -201,7 +201,7 @@ export default {
     },
     // 关闭本页，返回到生产计划管理
     close() {
-      const obj = { path: "/manufacture/manufacturePlan" };
+      const obj = { path: "/manufacture/manageManufacture" };
       this.$tab.closeOpenPage(obj);
     }
   }

@@ -214,9 +214,9 @@ export default {
     },
     handleNodeClick(data) {
       if (data.type === 'order') {
-        this.$router.push(`/order?orCode=${data.label}`)
+        this.$router.push(`/order/manageOrder?orCode=${data.label}`)
       } else if (data.type === 'manufacturePlan') {
-        this.$router.push(`/manufacture/manufacturePlan?mpCode=${data.label}`)
+        this.$router.push(`/manufacture/manageManufacture?mpCode=${data.label}`)
       }
     }
   }

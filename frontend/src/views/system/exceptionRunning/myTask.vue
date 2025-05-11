@@ -189,7 +189,7 @@ export default {
     await this.getList()
     if (this.$route.query.taskId) {
       const task = this.todoList.find(ele => ele.taskId === this.$route.query.taskId)
-      this.$router.push(`/exception/exceptionProcess/todo`)
+      this.$router.push(`/todoException`)
       if (task) {
         this.handleProcess(task)
       }
@@ -201,7 +201,7 @@ export default {
     await this.getList()
     if (this.$route.query.taskId) {
       const task = this.todoList.find(ele => ele.taskId === this.$route.query.taskId)
-      this.$router.push(`/exception/exceptionProcess/todo`)
+      this.$router.push(`/todoException`)
       if (task) {
         this.handleProcess(task)
       }

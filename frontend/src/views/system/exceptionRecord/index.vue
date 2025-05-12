@@ -608,10 +608,6 @@ export default {
         ...this.queryParams
       }, `exceptionRecord_${new Date().getTime()}.xlsx`)
     },
-    // 查看处理日志
-    handleRecordLog(row) {
-      this.$router.push(`/exception/exceptionRecordLog?exrCode=${row.exrCode}`)
-    },
     /** 开始确认上报记录
      * @param {any} row 记录信息
      * @author YangZY

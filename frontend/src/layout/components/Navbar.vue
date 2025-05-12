@@ -11,9 +11,9 @@
           <a href="http://ccflow.org/?frm=KonBAI" target="_blank" class="right-menu-item hover-effect">驰骋BPM</a>
         </el-tooltip> -->
 
-        <el-tooltip content="全局搜索" effect="dark" placement="bottom">
+        <!-- <el-tooltip content="全局搜索" effect="dark" placement="bottom">
           <search id="header-search" class="right-menu-item" />
-        </el-tooltip>
+        </el-tooltip> -->
 
         <!-- <el-tooltip content="源码地址" effect="dark" placement="bottom">
           <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />

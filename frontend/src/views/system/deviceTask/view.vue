@@ -30,7 +30,7 @@ import { listEquipmentOperationStepParam } from "@/api/system/equipmentOperation
 import ProcessViewer from '@/components/ProcessViewerIndustry';
 
 export default {
-  name: "ManufactureTask",
+  name: "ViewDeviceTask",
   components: {
     ProcessViewer,
   },
@@ -97,7 +97,7 @@ export default {
       if (this.interval === null) {
         this.interval = setInterval(() => {
           this.update(row)
-        }, 2000);
+        }, 800);
       }
       this.viewerData.loading = false
     })

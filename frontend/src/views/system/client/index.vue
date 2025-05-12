@@ -224,7 +224,7 @@ import { listClientLevel } from "@/api/system/clientLevel";
 import clientTrade from '@/views/system/clientTrade';
 
 export default {
-  name: "Client",
+  name: "ClientInfo",
   components: {
     clientTrade
   },

@@ -553,7 +553,7 @@ export default {
         this.loading = true;
         listProcess().then(response => {
           this.processList = response.rows.filter(ele => ele.odCode === this.currentManufacturePlan.odCode)
-          this.processListSelection = response.rows.filter(ele => ele.odCode === this.currentManufacturePlan.odCode && ele.procStat === '4')
+          this.processListSelection = response.rows.filter(ele => ele.odCode === this.currentManufacturePlan.odCode && ele.procStat === '5')
           resolve()
         }).catch(() => {
           reject()

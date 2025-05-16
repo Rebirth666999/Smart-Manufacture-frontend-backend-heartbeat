@@ -29,9 +29,9 @@ import { listEquipmentOperationStepParam } from "@/api/system/equipmentOperation
 
 import ProcessViewer from '@/components/ProcessViewerIndustry';
 
+// 本页面内容为下发设备任务
 export default {
-  // 本页面内容为下发设备任务
-  name: "DeviceTaskAdd",
+  name: "AddDeviceTask",
   components: {
     ProcessViewer,
   },
@@ -201,7 +201,7 @@ export default {
     },
     // 关闭本页，返回到生产计划管理
     close() {
-      const obj = { path: "/manufacture/manufacturePlan" };
+      const obj = { path: "/manufacture/manageManufacture" };
       this.$tab.closeOpenPage(obj);
     }
   }

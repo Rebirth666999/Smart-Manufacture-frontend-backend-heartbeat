@@ -81,7 +81,7 @@ export default {
     },
     handleNodeClick(data) {
       if (data.taskId) {
-        this.$router.push(`/exception/exceptionProcess/todo?taskId=${data.taskId}`)
+        this.$router.push(`/todoException?taskId=${data.taskId}`)
       }
     }
   }

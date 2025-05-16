@@ -272,7 +272,7 @@ export default {
     await this.getList();
     if (this.$route.query.orCode) {
       const order = this.orderList.find(ele => ele.orCode === this.$route.query.orCode)
-      this.$router.replace('/order')
+      this.$router.replace('/order/manageOrder')
       if (order) {
         this.idSelect = order.orId
         this.codeSelect = order.orCode
@@ -285,7 +285,7 @@ export default {
     await this.getList();
     if (this.$route.query.orCode) {
       const order = this.orderList.find(ele => ele.orCode === this.$route.query.orCode)
-      this.$router.replace('/order')
+      this.$router.replace('/order/manageOrder')
       if (order) {
         this.idSelect = order.orId
         this.codeSelect = order.orCode

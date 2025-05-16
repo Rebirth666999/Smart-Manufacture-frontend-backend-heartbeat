@@ -234,7 +234,7 @@ import manufactureTask from '@/views/system/manufactureTask';
 import ManufactureMaterial from '@/views/system/manufactureTask/material';
 
 export default {
-  name: "ManufacturePlan",
+  name: "ManufacturePlanReview",
   components: {
     manufactureTask,
     ManufactureMaterial
@@ -323,13 +323,6 @@ export default {
       // 1-生产计划不可修改
       mode: 0
     };
-  },
-  watch: {
-    $route(route) {
-      if (route.path === '/manufacture/manufacturePlan') {
-        this.setUpPage()
-      }
-    }
   },
   async created() {
     await this.setUpPage()

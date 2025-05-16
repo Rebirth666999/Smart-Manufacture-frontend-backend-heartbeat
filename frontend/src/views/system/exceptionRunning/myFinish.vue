@@ -54,7 +54,7 @@ import { listUser } from "@/api/system/user";
 import ProcessViewer from '@/components/ProcessViewer'
 
 export default {
-  name: "MyFinish",
+  name: "FinishedException",
   components: {
     ProcessViewer
   },

@@ -563,9 +563,12 @@ export default {
     getList() {
       return new Promise((resolve, reject) => {
         this.loading = true;
+        const id = this.idSelect
+        this.idSelect = undefined
         listManufacturePlan(this.queryParams).then(response => {
           this.manufacturePlanList = response.rows;
           this.total = response.total;
+          this.idSelect = id
           this.loading = false;
           resolve()
         }).catch(() => {

@@ -315,6 +315,7 @@ export default {
           handleTask({ ...this.form, taskId: this.currentTask.taskId }).then(response => {
             this.$modal.msgSuccess("处理成功");
             this.open = false;
+            this.reset();
             this.getList();
           }).finally(() => {
             this.buttonLoading = false;

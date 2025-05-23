@@ -318,7 +318,7 @@ import { listArea } from "@/api/system/area";
 import { listEquipmentModel } from "@/api/system/equipmentModel";
 
 export default {
-  name: "Equipment",
+  name: "ManageEquipment",
   dicts: ['ices_equipment_status'],
   data() {
     return {

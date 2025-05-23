@@ -252,7 +252,7 @@ import { listOrderDemand } from "@/api/system/orderDemand";
 import manufactureTask from '@/views/system/manufactureTask';
 
 export default {
-  name: "ManufacturePlan",
+  name: "AddManufacturePlanDetail",
   components: {
     manufactureTask
   },
@@ -534,7 +534,7 @@ export default {
     },
     // 关闭本页，返回到生产计划管理
     close() {
-      const obj = { path: "/manufacture/manufacturePlan" };
+      const obj = { path: "/manufacture/manageManufacture" };
       this.$tab.closeOpenPage(obj);
     },
     /**

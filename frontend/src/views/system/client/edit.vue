@@ -161,7 +161,7 @@ import clientTrade from '@/views/system/clientTrade';
 
 
 export default {
-  name: "AddClient",
+  name: "EditClient",
   components: {
      clientTrade
   },

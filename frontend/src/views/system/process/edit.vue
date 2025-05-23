@@ -62,7 +62,7 @@ import ProcessViewer from '@/components/ProcessViewerIndustry';
 
 
 export default {
-  name: "DesignProcess",
+  name: "EditProcess",
   components: {
     ProcessDesigner,
     ProcessViewer

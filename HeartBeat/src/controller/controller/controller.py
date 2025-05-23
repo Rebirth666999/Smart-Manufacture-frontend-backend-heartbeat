@@ -15,7 +15,7 @@ task_finish_msg=[] #动作执行完成后的反馈信息
 task_sleep=False #当前任务是否停止
 error_msg="no error"
 client=None
-server_ip="192.168.1.116"
+server_ip="192.168.1.102"
 db1={
     "db_name":"test",
     "db_user":"test",

@@ -117,12 +117,12 @@
       </el-table-column>
       <el-table-column label="描述" align="center" prop="exrDesc" :show-overflow-tooltip="true" />
       <el-table-column label="参数" align="center" prop="exrParam" :show-overflow-tooltip="true" />
-      <el-table-column label="状态" align="center" prop="exrStat">
+      <el-table-column label="状态" width="100" align="center" prop="exrStat">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_exception_record_status" :value="scope.row.exrStat"/>
         </template>
       </el-table-column>
-      <el-table-column label="等级" width="90" align="center" prop="exrLevel">
+      <el-table-column label="等级" width="80" align="center" prop="exrLevel">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_exception_record_level" :value="scope.row.exrLevel"/>
         </template>
@@ -138,8 +138,8 @@
       <el-table-column label="异常解除人" align="center" prop="exrUserFinish" />
       <el-table-column label="异常责任人" align="center" prop="exrUserResp" />
       <el-table-column label="上报时间" width="150" align="center" prop="exrCdate" />
-      <el-table-column label="影响因子" width="90" align="center" prop="exrImpactFactor" />
-      <el-table-column label="影响等级" width="90" align="center" prop="exrImpactLevel">
+      <el-table-column label="影响因子" width="80" align="center" prop="exrImpactFactor" />
+      <el-table-column label="影响等级" width="80" align="center" prop="exrImpactLevel">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_exception_record_impact_level" :value="scope.row.exrImpactLevel"/>
         </template>
@@ -607,10 +607,6 @@ export default {
       this.download('system/exceptionRecord/export', {
         ...this.queryParams
       }, `exceptionRecord_${new Date().getTime()}.xlsx`)
-    },
-    // 查看处理日志
-    handleRecordLog(row) {
-      this.$router.push(`/exception/exceptionRecordLog?exrCode=${row.exrCode}`)
     },
     /** 开始确认上报记录
      * @param {any} row 记录信息

@@ -109,7 +109,7 @@ import { listException } from "@/api/system/exception";
 import { listExceptionSource } from "@/api/system/exceptionSource";
 
 export default {
-  name: "Todo",
+  name: "TodoException",
   components: {
     ProcessViewer
   },
@@ -189,7 +189,7 @@ export default {
     await this.getList()
     if (this.$route.query.taskId) {
       const task = this.todoList.find(ele => ele.taskId === this.$route.query.taskId)
-      this.$router.push(`/exception/exceptionProcess/todo`)
+      this.$router.push(`/todoException`)
       if (task) {
         this.handleProcess(task)
       }
@@ -201,7 +201,7 @@ export default {
     await this.getList()
     if (this.$route.query.taskId) {
       const task = this.todoList.find(ele => ele.taskId === this.$route.query.taskId)
-      this.$router.push(`/exception/exceptionProcess/todo`)
+      this.$router.push(`/todoException`)
       if (task) {
         this.handleProcess(task)
       }
@@ -315,6 +315,7 @@ export default {
           handleTask({ ...this.form, taskId: this.currentTask.taskId }).then(response => {
             this.$modal.msgSuccess("处理成功");
             this.open = false;
+            this.reset();
             this.getList();
           }).finally(() => {
             this.buttonLoading = false;

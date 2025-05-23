@@ -115,7 +115,7 @@ import { listException } from "@/api/system/exception";
 import { listExceptionSource } from "@/api/system/exceptionSource";
 
 export default {
-  name: "exceptionRunningProcess",
+  name: "ExceptionProcess",
   dicts: ['wf_process_status', 'ices_exception_record_status', 'ices_exception_record_level', 'ices_exception_record_impact_level'],
   components: {
     ExceptionRecordLog

@@ -27,6 +27,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="orMman" column="or_mman"/>
         <result property="orMdate" column="or_mdate"/>
     </resultMap>
+    <!-- IcesOrderMapper.xml -->
+    <select id="countByYear" resultType="com.ruoyi.system.domain.OrderCountByMonth">
+        SELECT
+            MONTH(create_time) AS month,
+            COUNT(*) AS count
+        FROM ices_order
+        WHERE create_time BETWEEN #{startDate} AND #{endDate}
+        GROUP BY MONTH(create_time)
+        ORDER BY MONTH(create_time)
+    </select>
 
+    <select id="countByMonth" resultType="com.ruoyi.system.domain.OrderCountByDay">
+        SELECT
+            DAY(create_time) AS day,
+            COUNT(*) AS count
+        FROM ices_order
+        WHERE create_time BETWEEN #{startDate} AND #{endDate}
+        GROUP BY DAY(create_time)
+        ORDER BY DAY(create_time)
+    </select>
+
+    <select id="countByQuarter" resultType="com.ruoyi.system.domain.OrderCountByMonth">
+        SELECT
+            MONTH(create_time) AS month,
+            COUNT(*) AS count
+        FROM ices_order
+        WHERE create_time BETWEEN #{startDate} AND #{endDate}
+        GROUP BY MONTH(create_time)
+        ORDER BY MONTH(create_time)
+    </select>
 
 </mapper>

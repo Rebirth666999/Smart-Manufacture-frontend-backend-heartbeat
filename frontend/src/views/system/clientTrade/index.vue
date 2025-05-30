@@ -92,16 +92,16 @@
 
     <el-table v-loading="loading" :data="clientTradeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="贸易信息ID" align="center" prop="ctId" v-if="true"/>
-      <el-table-column label="贸易信息编码" align="center" prop="ctCode" />
-      <el-table-column label="客户" align="center" prop="clCode" />
-      <el-table-column label="收货人" align="center" prop="ctName" />
-      <el-table-column label="收货地址" align="center" prop="ctAddr" />
-      <el-table-column label="收货电话" align="center" prop="ctPhone" />
-      <el-table-column label="国家" align="center" prop="ctCountry" />
+      <el-table-column label="贸易信息ID" align="center" prop="ctId" v-if="true" width="180"/>
+      <el-table-column label="贸易信息编码" align="center" prop="ctCode" width="150" />
+      <el-table-column label="客户" align="center" prop="clCode" width="120" />
+      <el-table-column label="收货人" align="center" prop="ctName" width="120" />
+      <el-table-column label="收货地址" align="center" prop="ctAddr" :show-overflow-tooltip="true" />
+      <el-table-column label="收货电话" align="center" prop="ctPhone" width="120" />
+      <el-table-column label="国家" align="center" prop="ctCountry" width="80" />
       <!-- <el-table-column label="已删除" align="center" prop="ctDelete" /> -->
       <!-- <el-table-column label="描述" align="center" prop="ctDesc" /> -->
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="mode !== 2">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="mode !== 2" fixed="right" width="120">
         <template slot-scope="scope">
           <el-button
             size="mini"

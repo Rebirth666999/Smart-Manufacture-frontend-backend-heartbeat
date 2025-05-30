@@ -92,25 +92,25 @@
 
     <el-table v-loading="loading" :data="productInspectionDetailList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="质检单明细ID" align="center" prop="pidId" v-if="true"/>
-      <el-table-column label="质检单明细编码" align="center" prop="pidCode" />
-      <el-table-column label="所属质检单" align="center" prop="piCode" />
-      <el-table-column label="产品类型" align="center" prop="prCode">
+      <el-table-column label="质检单明细ID" align="center" prop="pidId" v-if="true" width="180"/>
+      <el-table-column label="质检单明细编码" align="center" prop="pidCode" width="180" :show-overflow-tooltip="true" />
+      <el-table-column label="所属质检单" align="center" prop="piCode" width="180" />
+      <el-table-column label="产品类型" align="center" prop="prCode" width="130">
         <template slot-scope="scope">
           {{ productList[0].prName || '' }}
         </template>
       </el-table-column>
-      <el-table-column label="产品编码" align="center" prop="pidBatchNum" />
-      <el-table-column label="质检结果" align="center" prop="pidResult" />
-      <el-table-column label="合格标志" align="center" prop="pidFlag">
+      <el-table-column label="产品编码" align="center" prop="pidBatchNum" width="100" />
+      <el-table-column label="质检结果" align="center" prop="pidResult" width="100" :show-overflow-tooltip="true" />
+      <el-table-column label="合格标志" align="center" prop="pidFlag" width="80">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.ices_yn" :value="scope.row.pidFlag"/>
         </template>
       </el-table-column>
       <el-table-column label="质检人" align="center" prop="pidMan" />
-      <el-table-column label="质检日期" align="center" prop="pidDate" />
+      <el-table-column label="质检日期" align="center" prop="pidDate" width="180" />
       <!-- <el-table-column label="已删除" align="center" prop="pidDelete" /> -->
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="120">
         <template slot-scope="scope">
           <el-button
             size="mini"

@@ -55,19 +55,19 @@
               <el-radio :value="scope.row.piId === idSelect" :label="true" />
             </template>
           </el-table-column>
-          <el-table-column label="质检单ID" align="center" prop="piId" v-if="true" />
-          <el-table-column label="质检单编码" align="center" prop="piCode" />
-          <el-table-column label="批次" align="center" prop="pbCode">
+          <el-table-column label="质检单ID" align="center" prop="piId" v-if="true" width="180" />
+          <el-table-column label="质检单编码" align="center" prop="piCode" width="180" />
+          <el-table-column label="批次" align="center" prop="pbCode" width="100">
             <template slot-scope="scope">
               {{ productBatchList.find(ele => ele.pbCode === scope.row.pbCode).pbBatch || '' }}
             </template>
           </el-table-column>
           <el-table-column label="负责人" align="center" prop="piMan" />
-          <el-table-column label="开始日期" align="center" prop="piSdate" />
+          <el-table-column label="开始日期" align="center" prop="piSdate" width="180" />
           <el-table-column label="部门" align="center" prop="piDept" />
-          <el-table-column label="结束日期" align="center" prop="piEdate" />
+          <el-table-column label="结束日期" align="center" prop="piEdate" width="180" />
           <!-- <el-table-column label="已删除" align="center" prop="piDelete" /> -->
-          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="180">
             <template slot-scope="scope">
               <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
                 v-hasPermi="['system:productInspection:edit']">修改</el-button>

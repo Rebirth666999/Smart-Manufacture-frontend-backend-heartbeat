@@ -97,28 +97,28 @@
               <el-radio :value="scope.row.procId === idSelect" :label="true" />
             </template>
           </el-table-column>
-          <el-table-column label="工艺流程ID" align="center" prop="procId" v-if="true"/>
-          <el-table-column label="工艺流程编码" align="center" prop="procCode" />
-          <el-table-column label="产品需求" align="center" prop="odCode">
+          <el-table-column label="工艺流程ID" align="center" prop="procId" width="180" v-if="true"/>
+          <el-table-column label="工艺流程编码" align="center" prop="procCode" width="150" />
+          <el-table-column label="产品需求" align="center" prop="odCode" width="180" :show-overflow-tooltip="true">
             <template slot-scope="scope">
               {{ parseOdCode(scope.row.odCode) }}
             </template>
           </el-table-column>
-          <el-table-column label="工艺流程名称" align="center" prop="procName" />
-          <el-table-column label="工艺流程状态" align="center" prop="procStat">
+          <el-table-column label="工艺流程名称" align="center" prop="procName" width="180"  :show-overflow-tooltip="true"/>
+          <el-table-column label="工艺流程状态" align="center" prop="procStat" width="110">
             <template slot-scope="scope">
               <dict-tag :options="dict.type.ices_process_status" :value="scope.row.procStat"/>
             </template>
           </el-table-column>
           <el-table-column label="创建人" align="center" prop="procCman" />
-          <el-table-column label="创建时间" align="center" prop="procCdate" />
+          <el-table-column label="创建时间" align="center" prop="procCdate" width="180" />
           <el-table-column label="激活人" align="center" prop="procRman" />
-          <el-table-column label="激活时间" align="center" prop="procRdate" />
+          <el-table-column label="激活时间" align="center" prop="procRdate" width="180" />
           <el-table-column label="修改人" align="center" prop="procMman" />
-          <el-table-column label="修改时间" align="center" prop="procMdate" />
+          <el-table-column label="修改时间" align="center" prop="procMdate" width="180" />
           <!-- <el-table-column label="已删除" align="center" prop="procDelete" /> -->
           <!-- <el-table-column label="描述" align="center" prop="procDesc" /> -->
-          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="220">
             <template slot-scope="scope">
               <el-button
                 size="mini"

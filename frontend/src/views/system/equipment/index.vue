@@ -108,15 +108,15 @@
 
     <el-table v-loading="loading" :data="equipmentList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="设备ID" align="center" prop="eqId" v-if="true"/>
-      <el-table-column label="设备编码" align="center" prop="eqCode" />
-      <el-table-column label="名称" align="center" prop="eqName" />
-      <el-table-column label="所属车间" align="center" prop="arCode">
+      <el-table-column label="设备ID" align="center" prop="eqId" v-if="true" width="180"/>
+      <el-table-column label="设备编码" align="center" prop="eqCode" width="150" />
+      <el-table-column label="名称" align="center" prop="eqName" width="120" />
+      <el-table-column label="所属车间" align="center" prop="arCode" width="80">
         <template slot-scope="scope">
           {{ areaList.find(ele => ele.arCode === scope.row.arCode).arName || '' }}
         </template>
       </el-table-column>
-      <el-table-column label="所属设备模型" align="center" prop="emCode">
+      <el-table-column label="所属设备模型" align="center" prop="emCode" width="180">
         <template slot-scope="scope">
           {{ equipmentModelListFull.find(ele => ele.emCode === scope.row.emCode).emName || '' }}
         </template>
@@ -131,15 +131,15 @@
           <span>{{ parseTime(scope.row.eqCommunicateTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="IP地址" align="center" prop="eqIp" />
+      <el-table-column label="IP地址" align="center" prop="eqIp" width="160" :show-overflow-tooltip="true" />
       <!-- <el-table-column label="已删除" align="center" prop="eqDelete" /> -->
       <el-table-column label="创建人" align="center" prop="eqCman" />
-      <el-table-column label="创建时间" align="center" prop="eqCdate" />
+      <el-table-column label="创建时间" align="center" prop="eqCdate" width="180" />
       <el-table-column label="发布人" align="center" prop="eqRman" />
-      <el-table-column label="发布时间" align="center" prop="eqRdate" />
+      <el-table-column label="发布时间" align="center" prop="eqRdate" width="180" />
       <el-table-column label="修改人" align="center" prop="eqMman" />
-      <el-table-column label="修改时间" align="center" prop="eqMdate" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="修改时间" align="center" prop="eqMdate" width="180" />
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="180">
         <template slot-scope="scope">
           <el-button
             size="mini"

@@ -127,10 +127,10 @@
 
     <el-table v-loading="loading" :data="manufactureTaskList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="生产任务ID" align="center" prop="mtId" v-if="true"/>
-      <el-table-column label="生产任务编码" align="center" prop="mtCode" />
-      <el-table-column label="所属生产计划" align="center" prop="mpCode" />
-      <el-table-column label="工艺流程" align="center" prop="procCode">
+      <el-table-column label="生产任务ID" align="center" prop="mtId" v-if="true" width="180"/>
+      <el-table-column label="生产任务编码" align="center" prop="mtCode" width="180" />
+      <el-table-column label="所属生产计划" align="center" prop="mpCode" width="180" />
+      <el-table-column label="工艺流程" align="center" prop="procCode" width="150">
         <template slot-scope="scope">
           {{ processList.find(ele => ele.procCode === scope.row.procCode).procName || '' }}
         </template>
@@ -155,17 +155,17 @@
           <dict-tag :options="dict.type.ices_manufacture_task_status" :value="scope.row.mtStat"/>
         </template>
       </el-table-column>
-      <el-table-column label="实际开始时间" align="center" prop="mtBegin">
+      <el-table-column label="实际开始时间" align="center" prop="mtBegin" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.mtBegin, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="最晚结束时间" align="center" prop="mtEndPlan">
+      <el-table-column label="最晚结束时间" align="center" prop="mtEndPlan" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.mtEndPlan, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="实际结束时间" align="center" prop="mtEndReal">
+      <el-table-column label="实际结束时间" align="center" prop="mtEndReal" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.mtEndReal, '{y}-{m}-{d}') }}</span>
         </template>
@@ -174,14 +174,14 @@
       <el-table-column label="计划产品数量" align="center" prop="mtQtyPlan" />
       <el-table-column label="已完成产品数量" align="center" prop="mtQtyReal" />
       <el-table-column label="创建人" align="center" prop="mtCman" />
-      <el-table-column label="创建时间" align="center" prop="mtCdate" />
+      <el-table-column label="创建时间" align="center" prop="mtCdate" width="180" />
       <el-table-column label="下发人" align="center" prop="mtRman" />
-      <el-table-column label="下发时间" align="center" prop="mtRdate" />
+      <el-table-column label="下发时间" align="center" prop="mtRdate" width="180" />
       <el-table-column label="修改人" align="center" prop="mtMman" />
-      <el-table-column label="修改时间" align="center" prop="mtMdate" />
+      <el-table-column label="修改时间" align="center" prop="mtMdate" width="180" />
       <!-- <el-table-column label="已删除" align="center" prop="mtDelete" /> -->
       <!-- <el-table-column label="描述" align="center" prop="mtDesc" /> -->
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="150">
         <template slot-scope="scope">
           <el-button
             size="mini"

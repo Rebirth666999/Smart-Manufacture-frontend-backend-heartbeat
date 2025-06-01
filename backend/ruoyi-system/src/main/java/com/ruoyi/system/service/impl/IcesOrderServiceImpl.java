@@ -12,6 +12,8 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.system.domain.OrderCountByDay;
+import com.ruoyi.system.domain.OrderCountByMonth;
 import com.ruoyi.system.domain.bo.IcesExceptionRecordBo;
 import com.ruoyi.system.domain.bo.IcesManufacturePlanBo;
 import com.ruoyi.system.service.IIcesCodeService;
@@ -25,6 +27,8 @@ import com.ruoyi.system.mapper.IcesOrderMapper;
 import com.ruoyi.system.service.IIcesOrderService;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.*;
 
 /**
@@ -226,5 +230,89 @@ public class IcesOrderServiceImpl implements IIcesOrderService {
         bo.setOrCode(null);
         bo.setOrStat("6");
         updateByBo(bo);
+    }
+
+    @Override
+    public List<Integer> countByYear(int year) {
+        // 初始化12个月的统计数组
+        List<Integer> result = Arrays.asList(new Integer[12]);
+        for (int i = 0; i < 12; i++) {
+            result.set(i, 0);
+        }
+
+        // 查询该年各月订单数量
+        LocalDate startDate = LocalDate.of(year, 1, 1);
+        LocalDate endDate = LocalDate.of(year, 12, 31);
+
+        List<OrderCountByMonth> countList = baseMapper.countByYear(
+            startDate.atStartOfDay(),
+            endDate.atTime(23, 59, 59)
+        );
+
+        // 填充结果
+        for (OrderCountByMonth item : countList) {
+            // month是1-12，转换为0-11的索引
+            result.set(item.getMonth() - 1, item.getCount());
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<Integer> countByMonth(int year, int month) {
+        // 获取当月的天数
+        int daysInMonth = YearMonth.of(year, month).lengthOfMonth();
+        List<Integer> result = Arrays.asList(new Integer[daysInMonth]);
+        for (int i = 0; i < daysInMonth; i++) {
+            result.set(i, 0);
+        }
+
+        // 查询当月每天的订单数量
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate endDate = LocalDate.of(year, month, daysInMonth);
+
+        List<OrderCountByDay> countList = baseMapper.countByMonth(
+            startDate.atStartOfDay(),
+            endDate.atTime(23, 59, 59)
+        );
+
+        // 填充结果
+        for (OrderCountByDay item : countList) {
+            // day是1-31，转换为0-30的索引
+            result.set(item.getDay() - 1, item.getCount());
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<Integer> countByQuarter(int year, int quarter) {
+        // 初始化季度内3个月的统计数组
+        List<Integer> result = Arrays.asList(new Integer[3]);
+        for (int i = 0; i < 3; i++) {
+            result.set(i, 0);
+        }
+
+        // 计算季度对应的月份范围
+        int startMonth = (quarter - 1) * 3 + 1;
+        int endMonth = startMonth + 2;
+
+        // 查询该季度各月订单数量
+        LocalDate startDate = LocalDate.of(year, startMonth, 1);
+        LocalDate endDate = LocalDate.of(year, endMonth, YearMonth.of(year, endMonth).lengthOfMonth());
+
+        List<OrderCountByMonth> countList = baseMapper.countByQuarter(
+            startDate.atStartOfDay(),
+            endDate.atTime(23, 59, 59)
+        );
+
+        // 填充结果
+        for (OrderCountByMonth item : countList) {
+            // 计算月份在季度内的索引（0-2）
+            int index = item.getMonth() - startMonth;
+            result.set(index, item.getCount());
+        }
+
+        return result;
     }
 }

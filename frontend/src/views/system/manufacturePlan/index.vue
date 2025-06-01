@@ -43,34 +43,34 @@
           v-loading="loading"
           :data="manufacturePlanMainList"
         >
-          <el-table-column label="计划ID" align="center" prop="mpmId" v-if="true"/>
-          <el-table-column label="计划编码" align="center" prop="mpmCode" />
-          <el-table-column label="订单" align="center" prop="orCode" />
-          <el-table-column label="状态" align="center" prop="mpmStat">
+          <el-table-column label="计划ID" align="center" prop="mpmId" v-if="true" width="180"/>
+          <el-table-column label="计划编码" align="center" prop="mpmCode" width="220" />
+          <el-table-column label="订单" align="center" prop="orCode" width="140" />
+          <el-table-column label="状态" align="center" prop="mpmStat" width="80">
             <template slot-scope="scope">
               <dict-tag :options="dict.type.ices_manufacture_plan_status" :value="scope.row.mpmStat"/>
             </template>
           </el-table-column>
-          <el-table-column label="实际开始时间" align="center" prop="mpmBegin">
+          <el-table-column label="实际开始时间" align="center" prop="mpmBegin" width="180">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.mpmBegin, '{y}-{m}-{d}') }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="最晚结束时间" align="center" prop="mpmEndPlan">
+          <el-table-column label="最晚结束时间" align="center" prop="mpmEndPlan" width="180">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.mpmEndPlan, '{y}-{m}-{d}') }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="实际结束时间" align="center" prop="mpmEndReal">
+          <el-table-column label="实际结束时间" align="center" prop="mpmEndReal" width="180">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.mpmEndReal, '{y}-{m}-{d}') }}</span>
             </template>
           </el-table-column>
           <el-table-column label="创建人" align="center" prop="mpmCman" />
-          <el-table-column label="创建时间" align="center" prop="mpmCdate" />
+          <el-table-column label="创建时间" align="center" prop="mpmCdate" width="180" />
           <el-table-column label="修改人" align="center" prop="mpmMman" />
-          <el-table-column label="修改时间" align="center" prop="mpmMdate" />
-          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <el-table-column label="修改时间" align="center" prop="mpmMdate" width="180" />
+          <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="220">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -203,10 +203,10 @@
               <el-radio :value="scope.row.mpId === idSelect" :label="true" />
             </template>
           </el-table-column>
-          <el-table-column label="计划详情ID" align="center" prop="mpId" v-if="true"/>
-          <el-table-column label="计划详情编码" align="center" prop="mpCode" />
-          <el-table-column label="所属生产计划" align="center" prop="mpmCode" />
-          <el-table-column label="产品" align="center" prop="odCode">
+          <el-table-column label="计划详情ID" align="center" prop="mpId" v-if="true" width="180"/>
+          <el-table-column label="计划详情编码" align="center" prop="mpCode" width="220" />
+          <el-table-column label="所属生产计划" align="center" prop="mpmCode" width="220" />
+          <el-table-column label="产品" align="center" prop="odCode" width="130">
             <template slot-scope="scope">
               {{ parseOdCode(scope.row.odCode) }}
             </template>
@@ -216,17 +216,17 @@
               <dict-tag :options="dict.type.ices_manufacture_plan_status" :value="scope.row.mpStat"/>
             </template>
           </el-table-column> -->
-          <el-table-column label="实际开始时间" align="center" prop="mpBegin">
+          <el-table-column label="实际开始时间" align="center" prop="mpBegin" width="180">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.mpBegin, '{y}-{m}-{d}') }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="最晚结束时间" align="center" prop="mpEndPlan">
+          <el-table-column label="最晚结束时间" align="center" prop="mpEndPlan" width="180">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.mpEndPlan, '{y}-{m}-{d}') }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="实际结束时间" align="center" prop="mpEndReal">
+          <el-table-column label="实际结束时间" align="center" prop="mpEndReal" width="180">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.mpEndReal, '{y}-{m}-{d}') }}</span>
             </template>
@@ -237,12 +237,12 @@
           <!-- <el-table-column label="已删除" align="center" prop="mpDelete" /> -->
           <!-- <el-table-column label="描述" align="center" prop="mpDesc" /> -->
           <el-table-column label="创建人" align="center" prop="mpCman" />
-          <el-table-column label="创建时间" align="center" prop="mpCdate" />
+          <el-table-column label="创建时间" align="center" prop="mpCdate" width="180" />
           <el-table-column label="下发人" align="center" prop="mpRman" />
-          <el-table-column label="下发时间" align="center" prop="mpRdate" />
+          <el-table-column label="下发时间" align="center" prop="mpRdate" width="180" />
           <el-table-column label="修改人" align="center" prop="mpMman" />
-          <el-table-column label="修改时间" align="center" prop="mpMdate" />
-          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <el-table-column label="修改时间" align="center" prop="mpMdate" width="180" />
+          <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="120">
             <template slot-scope="scope">
               <!-- <el-button
                 size="mini"

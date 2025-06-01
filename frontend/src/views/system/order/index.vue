@@ -124,33 +124,33 @@
               <el-radio :value="scope.row.orId === idSelect" :label="true" />
             </template>
           </el-table-column>
-          <el-table-column label="订单ID" align="center" prop="orId" v-if="true"/>
-          <el-table-column label="订单编码" align="center" prop="orCode" />
-          <el-table-column label="原订单编码" align="center" prop="orCodeOrgn" />
-          <el-table-column label="客户" align="center" prop="clCode">
+          <el-table-column label="订单ID" align="center" prop="orId" width="180" v-if="true"/>
+          <el-table-column label="订单编码" align="center" prop="orCode" width="110" />
+          <el-table-column label="原订单编码" align="center" prop="orCodeOrgn" width="90" />
+          <el-table-column label="客户" align="center" prop="clCode" width="80">
             <template slot-scope="scope">
               {{ clientList.find(ele => ele.clCode === scope.row.clCode).clName || '' }}
             </template>
           </el-table-column>
-          <el-table-column label="状态" align="center" prop="orStat">
+          <el-table-column label="状态" align="center" prop="orStat" width="70">
             <template slot-scope="scope">
               <dict-tag :options="dict.type.ices_order_status" :value="scope.row.orStat"/>
             </template>
           </el-table-column>
-          <el-table-column label="订单优先级" align="center" prop="orPriority" />
-          <el-table-column label="截止时间" align="center" prop="orDeadline" width="180">
+          <el-table-column label="订单优先级" align="center" prop="orPriority" width="90" />
+          <el-table-column label="截止时间" align="center" prop="orDeadline" width="100">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.orDeadline, '{y}-{m}-{d}') }}</span>
             </template>
           </el-table-column>
           <el-table-column label="总价" align="center" prop="orPrice" />
           <el-table-column label="创建人" align="center" prop="orCman" />
-          <el-table-column label="创建时间" align="center" prop="orCdate" />
+          <el-table-column label="创建时间" align="center" prop="orCdate" width="180" />
           <el-table-column label="修改人" align="center" prop="orMman" />
-          <el-table-column label="修改时间" align="center" prop="orMdate" />
+          <el-table-column label="修改时间" align="center" prop="orMdate" width="180" />
           <!-- <el-table-column label="已删除" align="center" prop="orDelete" /> -->
           <!-- <el-table-column label="描述" align="center" prop="orDesc" /> -->
-          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <el-table-column label="操作" align="center" fixed="right" class-name="small-padding fixed-width" width="210">
             <template slot-scope="scope">
               <el-button
                 size="mini"

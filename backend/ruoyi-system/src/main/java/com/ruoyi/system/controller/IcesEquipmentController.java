@@ -167,3 +167,8 @@ public class IcesEquipmentController extends BaseController {
         return toAjax(iIcesEquipmentService.deleteWithValidByIds(Arrays.asList(eqIds), true));
     }
 }
+
+
+
+
+

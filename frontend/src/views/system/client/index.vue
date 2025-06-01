@@ -129,8 +129,8 @@
           <el-radio :value="scope.row.clId === idSelect" :label="true" />
         </template>
       </el-table-column>
-      <el-table-column label="基本信息ID" align="center" prop="clId" v-if="true"/>
-      <el-table-column label="客户编码" align="center" prop="clCode" />
+      <el-table-column label="基本信息ID" align="center" prop="clId" v-if="true" width="180"/>
+      <el-table-column label="客户编码" align="center" prop="clCode" width="100" />
       <el-table-column label="客户等级" align="center" prop="cllCode">
         <template slot-scope="scope">
           {{ clientLevelList.find(ele => ele.cllCode === scope.row.cllCode).cllLabel || '' }}
@@ -141,15 +141,15 @@
           {{ scope.row.clOperator && (userList.find(ele => ele.userId === scope.row.clOperator).userName || '') }}
         </template>
       </el-table-column>
-      <el-table-column label="客户名称(中)" align="center" prop="clName" />
-      <el-table-column label="客户名称(英)" align="center" prop="clNameEn" />
+      <el-table-column label="客户名称(中)" align="center" prop="clName" width="100" />
+      <el-table-column label="客户名称(英)" align="center" prop="clNameEn" width="100" />
       <!-- <el-table-column label="法人代表" align="center" prop="clLegalRepres" /> -->
       <!-- <el-table-column label="企业联系人" align="center" prop="clContact" /> -->
-      <el-table-column label="联系电话1" align="center" prop="clPhone1" />
+      <el-table-column label="联系电话1" align="center" prop="clPhone1" width="120" />
       <!-- <el-table-column label="联系电话2" align="center" prop="clPhone2" /> -->
       <!-- <el-table-column label="传真" align="center" prop="clFax" /> -->
       <!-- <el-table-column label="邮政编码" align="center" prop="clPostcode" /> -->
-      <el-table-column label="联系地址" align="center" prop="clAddr" />
+      <el-table-column label="联系地址" align="center" prop="clAddr"  width="150" :show-overflow-tooltip="true" />
       <!-- <el-table-column label="企业性质" align="center" prop="clType" /> -->
       <!-- <el-table-column label="信用等级" align="center" prop="clCreditRank" /> -->
       <!-- <el-table-column label="信用额度" align="center" prop="clCreditQuota" /> -->
@@ -171,12 +171,12 @@
       <!-- <el-table-column label="已删除" align="center" prop="clDelete" /> -->
       <!-- <el-table-column label="描述" align="center" prop="clDesc" /> -->
       <el-table-column label="创建人" align="center" prop="clCman" />
-      <el-table-column label="创建时间" align="center" prop="clCdate" />
+      <el-table-column label="创建时间" align="center" prop="clCdate" width="180" />
       <el-table-column label="发布人" align="center" prop="clRman" />
-      <el-table-column label="发布时间" align="center" prop="clRdate" />
+      <el-table-column label="发布时间" align="center" prop="clRdate" width="180" />
       <el-table-column label="修改人" align="center" prop="clMman" />
-      <el-table-column label="修改时间" align="center" prop="clMdate" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="修改时间" align="center" prop="clMdate" width="180" />
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="120">
         <template slot-scope="scope">
           <el-button
             size="mini"

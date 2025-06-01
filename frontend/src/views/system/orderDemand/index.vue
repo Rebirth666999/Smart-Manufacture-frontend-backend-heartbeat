@@ -83,19 +83,19 @@
 
     <el-table v-loading="loading" :data="orderDemandList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="所需产品ID" align="center" prop="odId" v-if="true"/>
-      <el-table-column label="所需产品编码" align="center" prop="odCode" />
-      <el-table-column label="订单" align="center" prop="orCode" />
-      <el-table-column label="所需产品" align="center" prop="prCode">
+      <el-table-column label="所需产品ID" align="center" prop="odId" width="180" v-if="true"/>
+      <el-table-column label="所需产品编码" align="center" prop="odCode" width="160" />
+      <el-table-column label="订单" align="center" prop="orCode" width="110" />
+      <el-table-column label="所需产品" align="center" prop="prCode" width="150">
         <template slot-scope="scope">
           {{ productList.find(ele => ele.prCode === scope.row.prCode).prName || '' }}
         </template>
       </el-table-column>
-      <el-table-column label="数量" align="center" prop="odDemand" />
-      <el-table-column label="金额小计" align="center" prop="odPrice" />
-      <el-table-column label="定制详情" align="center" prop="odCust" />
+      <el-table-column label="数量" align="center" prop="odDemand" width="70" />
+      <el-table-column label="金额小计" align="center" prop="odPrice" width="80" />
+      <el-table-column label="定制详情" align="center" prop="odCust" :show-overflow-tooltip="true"/>
       <!-- <el-table-column label="已删除" align="center" prop="odDelete" /> -->
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="mode === 0">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" v-if="mode === 0" fixed="right" width="120">
         <template slot-scope="scope">
           <el-button
             size="mini"

@@ -107,7 +107,7 @@
           plain
           icon="el-icon-delete"
           size="mini"
-          :disabled="multiple"
+          :disabled="single"
           @click="handleDelete"
           v-hasPermi="['system:manufactureTask:remove']"
         >删除</el-button>
@@ -183,6 +183,13 @@
       <!-- <el-table-column label="描述" align="center" prop="mtDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="150">
         <template slot-scope="scope">
+        <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            v-show="scope.row.mtStat==='4' || scope.row.mtStat==='d'"
+            @click="handleDeprecated(scope.row)"
+          >弃用</el-button>
           <el-button
             size="mini"
             type="text"
@@ -241,13 +248,7 @@
             v-show="scope.row.mtStat === '2' || scope.row.mtStat === '7' || scope.row.mtStat === 'a'"
             @click="handleWithdrawReview(scope.row)"
           >撤回审核</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            v-show="scope.row.mtStat==='4' || scope.row.mtStat==='d'"
-            @click="handleDeprecated(scope.row)"
-          >弃用</el-button>
+          
         </template>
       </el-table-column>
     </el-table>

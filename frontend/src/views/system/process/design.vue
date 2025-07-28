@@ -304,7 +304,9 @@ export default {
         if (valid) {
           this.buttonLoading = true;
           // 级联选择器记录完整的选择路径，但提交只需要最后的那个
-          this.form.odCode = this.form.odCode[1]
+        if (Array.isArray(this.form.odCode)) {
+        this.form.odCode = this.form.odCode[1];
+        }
           if (this.form.procId != null) {
             updateProcess(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");

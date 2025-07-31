@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/login'
+import { login, logout, getInfo, qrLogin } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const user = {
@@ -89,8 +89,23 @@ const user = {
         removeToken()
         resolve()
       })
+    },
+
+    // 扫码登录
+    QrLogin({ commit }, tempToken) {
+      return new Promise((resolve, reject) => {
+        qrLogin(tempToken).then(res => {
+          setToken(res.data.token)
+          commit('SET_TOKEN', res.data.token)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
     }
+
   }
 }
 
 export default user
+

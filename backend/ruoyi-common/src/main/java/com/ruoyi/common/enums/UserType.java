@@ -27,6 +27,11 @@ public enum UserType {
     private final String userType;
 
     public static UserType getUserType(String str) {
+        // 添加对纯数字ID的处理
+        if (str != null && str.matches("\\d+")) {
+            return SYS_USER; // 默认返回SYS_USER类型
+        }
+        
         for (UserType value : values()) {
             if (StringUtils.contains(str, value.getUserType())) {
                 return value;

@@ -22,6 +22,7 @@ logging:
 --- # mybatis 配置
 mybatis:
   mapper-locations: classpath:/mybatis-mapper/*Mapper.xml
+  map-underscore-to-camel-case: true
 
 --- # 页面配置
 spring:

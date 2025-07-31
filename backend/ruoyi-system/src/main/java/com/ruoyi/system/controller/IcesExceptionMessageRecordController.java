@@ -34,6 +34,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 @Validated
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/system/exceptionMessageRecord")
 public class IcesExceptionMessageRecordController extends BaseController {
 

@@ -59,6 +59,7 @@ public class SysUser extends BaseEntity {
     /**
      * 用户类型（sys_user系统用户）
      */
+    @TableField("user_type")
     private String userType;
 
     /**

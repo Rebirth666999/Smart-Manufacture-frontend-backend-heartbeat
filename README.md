@@ -1,7 +1,7 @@
-# Smart Manufacture 智控生产
+# Smart Manufacture 天工智控
 
 ## 介绍
-智控生产项目前后端
+天工智控项目前后端
 
 
 

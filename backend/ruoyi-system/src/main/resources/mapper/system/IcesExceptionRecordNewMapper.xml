@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.IcesExceptionRecordNewMapper">
+
+    <resultMap type="com.ruoyi.system.domain.IcesExceptionRecordNew" id="IcesExceptionRecordNewResult">
+        <result property="exrId" column="exr_id"/>
+        <result property="exrCode" column="exr_code"/>
+        <result property="exsCode" column="exs_code"/>
+        <result property="exCode" column="ex_code"/>
+        <result property="exrDesc" column="exr_desc"/>
+        <result property="exrParam" column="exr_param"/>
+        <result property="exrStat" column="exr_stat"/>
+        <result property="exrLevel" column="exr_level"/>
+        <result property="exrUserReport" column="exr_user_report"/>
+        <result property="exrUserHandle" column="exr_user_handle"/>
+        <result property="exrUserFinish" column="exr_user_finish"/>
+        <result property="exrUserResp" column="exr_user_resp"/>
+        <result property="exrCdate" column="exr_cdate"/>
+        <result property="exrImpactFactor" column="exr_impact_factor"/>
+        <result property="exrImpactLevel" column="exr_impact_level"/>
+        <result property="exrProcess" column="exr_process"/>
+        <result property="exrDuration" column="exr_duration"/>
+        <result property="exrImg" column="exr_img"/>
+        <result property="exrFinImg" column="exr_fin_img"/>
+        <result property="exrAiVer" column="exr_ai_ver"/>
+        <result property="exrAiCls" column="exr_ai_cls"/>
+        <result property="exrHumCls" column="exr_hum_cls"/>
+        <result property="exrDep" column="exr_dep"/>
+        <result property="exrDelete" column="exr_delete"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

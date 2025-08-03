@@ -4,20 +4,20 @@
       <el-form-item label="异常源" prop="exsCode">
         <el-select v-model="queryParams.exsCode" placeholder="请选择异常源" clearable>
           <el-option
-           v-for="option in exceptionSourceList"
-           :key="option.exsCode"
-           :label="option.exsName"
-           :value="option.exsCode">
+            v-for="option in exceptionSourceList"
+            :key="option.exsCode"
+            :label="option.exsName"
+            :value="option.exsCode">
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="异常" prop="exCode">
         <el-select v-model="queryParams.exCode" placeholder="请选择异常" clearable>
           <el-option
-           v-for="option in exceptionList"
-           :key="option.exCode"
-           :label="option.exName"
-           :value="option.exCode">
+            v-for="option in exceptionList"
+            :key="option.exCode"
+            :label="option.exName"
+            :value="option.exCode">
           </el-option>
         </el-select>
       </el-form-item>
@@ -148,43 +148,62 @@
       <!-- <el-table-column label="已删除" align="center" prop="exrDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:exceptionRecord:edit']"
-            v-show="scope.row.exrStat === '1'"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-finished"
-            @click="handleStartConfirm(scope.row)"
-            v-show="scope.row.exrStat === '1'"
-          >开始确认</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-check"
-            v-show="scope.row.exrStat === '2'"
-            @click="handleConfirmPositive(scope.row)"
-          >确认为异常</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-close"
-            v-show="scope.row.exrStat === '2'"
-            @click="handleConfirmNegative(scope.row)"
-          >确认为非异常</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:exceptionRecord:remove']"
-            v-show="scope.row.exrStat === '1'"
-          >删除</el-button>
+          <el-button-group>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-view"
+              @click="handleReference(scope.row)"
+              v-hasPermi="['system:exceptionRecord:edit']"
+              v-show="scope.row.exrStat === '4'"
+            >查看详情</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-upload"
+              @click="handleByJson(scope.row)"
+              v-hasPermi="['system:exceptionRecord:edit']"
+              v-show="scope.row.exrStat === '4'"
+            >上传知识库</el-button>
+
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-edit"
+              @click="handleUpdate(scope.row)"
+              v-hasPermi="['system:exceptionRecord:edit']"
+              v-show="scope.row.exrStat === '1'"
+            >修改</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-finished"
+              @click="handleStartConfirm(scope.row)"
+              v-show="scope.row.exrStat === '1'"
+            >开始确认</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-check"
+              v-show="scope.row.exrStat === '2'"
+              @click="handleConfirmPositive(scope.row)"
+            >异常</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-close"
+              v-show="scope.row.exrStat === '2'"
+              @click="handleConfirmNegative(scope.row)"
+            >非异常</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-delete"
+              @click="handleDelete(scope.row)"
+              v-hasPermi="['system:exceptionRecord:remove']"
+              v-show="scope.row.exrStat === '1'"
+            >删除</el-button>
+          </el-button-group>
         </template>
       </el-table-column>
     </el-table>
@@ -204,10 +223,10 @@
           <el-form-item label="异常源" prop="exsCode">
             <el-select v-model="form.exsCode" placeholder="请选择异常源">
               <el-option
-               v-for="option in exceptionSourceList"
-               :key="option.exsCode"
-               :label="option.exsName"
-               :value="option.exsCode">
+                v-for="option in exceptionSourceList"
+                :key="option.exsCode"
+                :label="option.exsName"
+                :value="option.exsCode">
               </el-option>
             </el-select>
           </el-form-item>
@@ -216,10 +235,10 @@
           <el-form-item label="异常" prop="exCode">
             <el-select v-model="form.exCode" placeholder="请选择异常">
               <el-option
-               v-for="option in exceptionList"
-               :key="option.exCode"
-               :label="option.exName"
-               :value="option.exCode">
+                v-for="option in exceptionList"
+                :key="option.exCode"
+                :label="option.exName"
+                :value="option.exCode">
               </el-option>
             </el-select>
           </el-form-item>
@@ -354,11 +373,45 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!--  查看异常图片及其详情信息的对话框  -->
+    <el-dialog :title="title" :visible.sync="open1" width="500px" append-to-body>
+      <!-- 1. 顶部大图 -->
+      <div style="text-align:center;margin-bottom:16px;">
+        <img
+          :src="form.exrPicUrl || defaultImg"
+          style="width:100%;max-height:260px;object-fit:cover;border-radius:6px;"
+        />
+      </div>
+      <!-- 2. 信息列表 -->
+      <el-descriptions :column="1" border>
+        <el-descriptions-item label="异常源">
+          {{ form.exsCode || '-' }}
+        </el-descriptions-item>
+        <el-descriptions-item label="异常记录人">
+          {{ form.createBy || '-' }}
+        </el-descriptions-item>
+        <el-descriptions-item label="异常时间">
+          {{ form.exrCdate || '-' }}
+        </el-descriptions-item>
+        <el-descriptions-item label="异常类型">
+          {{ form.extName || '-' }}
+        </el-descriptions-item>
+        <el-descriptions-item label="描述信息">
+          {{ form.exrDesc || '-' }}
+        </el-descriptions-item>
+      </el-descriptions>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="cancel1" type="primary">关 闭</el-button>
+      </div>
+
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
-import { listExceptionRecord, getExceptionRecord, delExceptionRecord, addExceptionRecord, updateExceptionRecord } from "@/api/system/exceptionRecord";
+import { listExceptionRecord, getExceptionRecord, delExceptionRecord, addExceptionRecord, updateExceptionRecord ,addExceptionKnowledge} from "@/api/system/exceptionRecord";
 import { listUser } from "@/api/system/user";
 import { listException } from "@/api/system/exception";
 import { listExceptionSource } from "@/api/system/exceptionSource";
@@ -388,6 +441,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      open1:false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -399,6 +453,7 @@ export default {
         exrLevel: undefined,
         exrDelete: 0,
       },
+
       // 表单参数
       form: {},
       // 表单校验
@@ -439,7 +494,9 @@ export default {
       // 异常源列表
       exceptionSourceList: [],
       // 用户列表
-      userList: []
+      userList: [],
+      //异常图片
+      defaultImg: 'https://via.placeholder.com/520x260?text=暂无图片'
     };
   },
   async created() {
@@ -510,6 +567,9 @@ export default {
     cancel() {
       this.open = false;
       this.reset();
+    },
+    cancel1() {
+      this.open1 = false;
     },
     // 表单重置
     reset() {
@@ -656,6 +716,8 @@ export default {
         this.loading = true
         getExceptionRecord(row.exrId).then(response => {
           this.form = response.data
+          console.log(row.exrId)
+          console.log(this.form)
           this.form.exrStat = "4"
           updateExceptionRecord(this.form).then(response => {
             this.$modal.msgSuccess("确认完成，已启动异常处理")
@@ -664,7 +726,38 @@ export default {
           })
         })
       })
-    }
+    },
+    /** 确认上报记录为异常
+     * @param {any} row 记录信息
+     * @author cuiyutong
+     * @date 20250801
+     */
+    handleByJson(row){
+      getExceptionRecord(row.exrId).then(response=>{
+        this.form=response.data
+        console.log(this.form)
+        const descObj=JSON.parse(this.form.exrDesc)
+        saveDescToKnowledge(descObj).then(() => {
+          this.$message.success('已同步到知识库')
+        })
+      })
+
+    },
+    /** 查看详情按钮操作*/
+    /** 确认上报记录为异常
+     * @param {any} row 记录信息
+     * @author cuiyutong
+     * @date 20250801
+     */
+    handleReference(row){
+      getExceptionRecord(row.exrId).then(response=>{
+        this.form=response.data
+        console.log(this.form)
+      })
+      this.open1=true
+      this.title="查看详情"
+    },
+
   }
 };
 </script>
@@ -676,3 +769,4 @@ export default {
   width: 100%;
 }
 </style>
+

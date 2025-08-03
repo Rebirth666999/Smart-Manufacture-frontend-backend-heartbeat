@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+import com.ruoyi.system.domain.bo.IcesExceptionRecordAiBo;
+import com.ruoyi.system.domain.vo.IcesExceptionRecordVo;
 import lombok.RequiredArgsConstructor;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.*;
@@ -78,8 +80,19 @@ public class IcesExceptionRecordNewController extends BaseController {
     @Log(title = "异常记录（新）", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody IcesExceptionRecordNewBo bo) {
-        return toAjax(iIcesExceptionRecordNewService.insertByBo(bo));
+    public R<IcesExceptionRecordNewVo> add(@Validated(AddGroup.class) @RequestBody IcesExceptionRecordNewBo bo) {
+        return R.ok(iIcesExceptionRecordNewService.insertByBo(bo));
+    }
+
+    /**
+     * 新增AI异常记录!!!!!!!!!!
+     */
+    //@SaCheckPermission("system:exceptionRecord:add")
+    @Log(title = "异常记录", businessType = BusinessType.INSERT)
+    @RepeatSubmit()
+    @PostMapping("/ai")
+    public R<IcesExceptionRecordNewVo> addAi(@Validated(AddGroup.class) @RequestBody IcesExceptionRecordAiBo bo) {
+        return R.ok(iIcesExceptionRecordNewService.insertByBo(bo));
     }
 
     /**

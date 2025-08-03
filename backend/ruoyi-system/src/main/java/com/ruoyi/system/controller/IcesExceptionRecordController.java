@@ -22,6 +22,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.system.domain.vo.IcesExceptionRecordVo;
 import com.ruoyi.system.domain.bo.IcesExceptionRecordBo;
+import com.ruoyi.system.domain.bo.IcesExceptionRecordAiBo;
 import com.ruoyi.system.service.IIcesExceptionRecordService;
 import com.ruoyi.common.core.page.TableDataInfo;
 
@@ -79,6 +80,17 @@ public class IcesExceptionRecordController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<IcesExceptionRecordVo> add(@Validated(AddGroup.class) @RequestBody IcesExceptionRecordBo bo) {
+        return R.ok(iIcesExceptionRecordService.insertByBo(bo));
+    }
+
+    /**
+     * 新增AI异常记录!!!!!!!!!!
+     */
+    //@SaCheckPermission("system:exceptionRecord:add")
+    @Log(title = "异常记录", businessType = BusinessType.INSERT)
+    @RepeatSubmit()
+    @PostMapping("/ai")
+    public R<IcesExceptionRecordVo> addAi(@Validated(AddGroup.class) @RequestBody IcesExceptionRecordAiBo bo) {
         return R.ok(iIcesExceptionRecordService.insertByBo(bo));
     }
 

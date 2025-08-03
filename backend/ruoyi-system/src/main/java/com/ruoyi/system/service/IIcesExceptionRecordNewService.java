@@ -1,10 +1,14 @@
 package com.ruoyi.system.service;
 
 import com.ruoyi.system.domain.IcesExceptionRecordNew;
+import com.ruoyi.system.domain.bo.IcesExceptionRecordAiBo;
+import com.ruoyi.system.domain.bo.IcesExceptionRecordBo;
 import com.ruoyi.system.domain.vo.IcesExceptionRecordNewVo;
 import com.ruoyi.system.domain.bo.IcesExceptionRecordNewBo;
+import com.ruoyi.system.domain.bo.IcesExceptionRecordAiBo;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
+import com.ruoyi.system.domain.vo.IcesExceptionRecordVo;
 
 import java.util.Collection;
 import java.util.List;
@@ -35,12 +39,23 @@ public interface IIcesExceptionRecordNewService {
     /**
      * 新增异常记录（新）
      */
-    Boolean insertByBo(IcesExceptionRecordNewBo bo);
+
+    IcesExceptionRecordNewVo insertByBo(IcesExceptionRecordNewBo bo);
+
+    /**
+     * 新增异常记录
+     */
+    IcesExceptionRecordNewVo insertByBo(IcesExceptionRecordAiBo bo);
 
     /**
      * 修改异常记录（新）
      */
     Boolean updateByBo(IcesExceptionRecordNewBo bo);
+
+    String startLifecycle(IcesExceptionRecordNewBo bo);
+
+    String startLifecycle(IcesExceptionRecordAiBo bo);
+
 
     /**
      * 校验并批量删除异常记录（新）信息

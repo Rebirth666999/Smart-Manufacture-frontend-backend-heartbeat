@@ -38,7 +38,16 @@ export function updateExceptionRecord(data) {
 // 删除异常记录
 export function delExceptionRecord(exrId) {
   return request({
-    url: '/system/exceptionRecord/' + exrId,
+    url: '/system/exceptionRecordNew/' + exrId,
     method: 'delete'
+  })
+}
+
+// 传送异常信息到知识库
+export function saveDescToKnowledge(descObj) {
+  return request({
+    url: '',//需要给出知识库地址
+    method: 'post',
+    data: { exrDesc: descObj }
   })
 }

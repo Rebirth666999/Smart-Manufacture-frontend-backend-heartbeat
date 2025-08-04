@@ -411,7 +411,7 @@
 </template>
 
 <script>
-import { listExceptionRecord, getExceptionRecord, delExceptionRecord, addExceptionRecord, updateExceptionRecord ,saveDescToKnowledge} from "@/api/system/exceptionRecord";
+import { listExceptionRecord, getExceptionRecord, delExceptionRecord, addExceptionRecord, updateExceptionRecord ,saveDescToKnowledge,checkdetail,getdetail} from "@/api/system/exceptionRecord";
 import { listUser } from "@/api/system/user";
 import { listException } from "@/api/system/exception";
 import { listExceptionSource } from "@/api/system/exceptionSource";
@@ -732,18 +732,162 @@ export default {
      * @author cuiyutong
      * @date 20250801
      */
-    handleByJson(row){
-      getExceptionRecord(row.exrId).then(response=>{
-        this.form=response.data
-        console.log(this.form)
-        const descObj=JSON.parse(this.form.exrDesc)
-        saveDescToKnowledge(descObj).then(data => {
-          this.$message.success('已同步到知识库')
-          console.log(data)
-        })
-      })
 
-    },
+// ...existing code...
+handleByJson(row){
+  getExceptionRecord(row.exrId).then(response => {
+    this.form = response.data
+    console.log(this.form)
+    const descObj = JSON.parse(this.form.exrDesc)
+    console.log(descObj)
+    
+    this.$message.info('正在同步到知识库...')
+    
+    saveDescToKnowledge(descObj, row.exrCode).then(response => {
+      console.log('原始响应:', response)
+      
+      // 检查响应状态
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
+      // 解析 JSON 响应
+      return response.json()
+    }).then(data => {
+      console.log('解析后的数据:', data)
+      console.log('完整响应结构:', JSON.stringify(data, null, 2))
+      
+      // 检查API返回状态
+      if (data.code !== 0) {
+        throw new Error(data.msg || '调用API失败')
+      }
+      
+      // 获取对话信息
+      const conversationId = data.data.conversation_id  // 注意这里是 conversation_id
+      const chatId = data.data.id  // 这里是 chat 的 id
+      
+      console.log('对话ID:', conversationId)
+      console.log('聊天ID:', chatId)
+      
+      // 轮询检查聊天状态
+      this.checkChatStatus(conversationId, chatId)
+      
+    }).catch(error => {
+      console.error('调用知识库API失败:', error)
+      this.$message.error('同步到知识库失败: ' + error.message)
+    })
+  }).catch(error => {
+    console.error('获取异常记录失败:', error)
+    this.$message.error('获取异常记录失败')
+  })
+},
+
+/** 
+ * 检查聊天状态
+ * @param {string} conversationId 对话ID
+ * @param {string} chatId 聊天ID
+ */
+checkChatStatus(conversationId, chatId, maxRetries = 30, retryCount = 0) {
+  if (retryCount >= maxRetries) {
+    this.$message.error('检查状态超时，请稍后重试')
+    return
+  }
+  
+  console.log(`第${retryCount + 1}次检查状态...`)
+  
+  checkdetail(conversationId, chatId).then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    return response.json()
+  }).then(data => {
+    console.log('状态检查结果:', data)
+    
+    if (data.code !== 0) {
+      throw new Error(data.msg || '检查状态失败')
+    }
+    
+    const status = data.data.status
+    console.log('当前状态:', status)
+    
+    if (status === 'completed') {
+      // 聊天完成，获取详细结果
+      this.$message.success('知识库同步完成！')
+      this.getChatDetail(conversationId, chatId)
+    } else if (status === 'failed') {
+      // 聊天失败
+      this.$message.error('知识库同步失败')
+      console.error('聊天失败:', data.data)
+    } else if (status === 'in_progress' || status === 'created') {
+      // 聊天进行中，继续检查
+      setTimeout(() => {
+        this.checkChatStatus(conversationId, chatId, maxRetries, retryCount + 1)
+      }, 2000) // 每2秒检查一次
+    } else {
+      // 其他状态
+      console.log('未知状态:', status)
+      setTimeout(() => {
+        this.checkChatStatus(conversationId, chatId, maxRetries, retryCount + 1)
+      }, 2000)
+    }
+    
+  }).catch(error => {
+    console.error('检查状态失败:', error)
+    
+    // 重试
+    if (retryCount < maxRetries - 1) {
+      setTimeout(() => {
+        this.checkChatStatus(conversationId, chatId, maxRetries, retryCount + 1)
+      }, 3000) // 出错时等待3秒再重试
+    } else {
+      this.$message.error('检查状态失败: ' + error.message)
+    }
+  })
+},
+
+/** 
+ * 获取聊天详细结果
+ * @param {string} conversationId 对话ID
+ * @param {string} chatId 聊天ID
+ */
+getChatDetail(conversationId, chatId) {
+  console.log('获取聊天详细结果...')
+  
+  getdetail(conversationId, chatId).then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    return response.json()
+  }).then(data => {
+    console.log('========== 聊天详细结果 ==========')
+    console.log('完整结果:', JSON.stringify(data, null, 2))
+    
+    if (data.code === 0) {
+      // 打印聊天消息
+      if (data.data && data.data.messages) {
+        console.log('聊天消息:')
+        data.data.messages.forEach((message, index) => {
+          console.log(`消息${index + 1} [${message.role}]:`, message.content)
+        })
+      }
+      
+      // 打印使用统计
+      if (data.data && data.data.usage) {
+        console.log('Token使用情况:', data.data.usage)
+      }
+      
+      this.$message.success('已成功获取知识库分析结果，请查看控制台')
+    } else {
+      console.error('获取结果失败:', data.msg)
+      this.$message.error('获取结果失败: ' + data.msg)
+    }
+    
+  }).catch(error => {
+    console.error('获取聊天详细结果失败:', error)
+    this.$message.error('获取详细结果失败: ' + error.message)
+  })
+},
+// ...existing code...
     /** 查看详情按钮操作*/
     /** 确认上报记录为异常
      * @param {any} row 记录信息

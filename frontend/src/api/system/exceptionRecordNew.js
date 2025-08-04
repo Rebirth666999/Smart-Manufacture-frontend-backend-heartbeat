@@ -43,27 +43,27 @@ export function delExceptionRecordNew(exrId) {
   })
 }
 
-export function saveDescToKnowledge(descObj) {
+export function saveDescToKnowledge(descObj,exrCode) {
   return request({
-    // url: ' https://api.coze.cn/v3/chat',
-    // method: 'post',
-    // headers: {
+    url: ' https://api.coze.cn/v3/chat',
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer pat_NKqGsF5f7T0iABkNsQqq1Fanw4oZ6Lk72vuRhRRBC52JUTWc1EpEsxLqms5wPgqr',
+    },
+    body:{
+      bot_id:'7532762700867272739',
+      user_id:exrCode,
+      stream:true,
+      content_type:'object_string',
+      content:descObj,
+    }
+
+    // url :'http://localhost:5000/get_info',
+    // method:'get',
+    // headers:{
     //   'Content-Type': 'application/json',
-    //   'Authorization': 'Bearer pat_NKqGsF5f7T0iABkNsQqq1Fanw4oZ6Lk72vuRhRRBC52JUTWc1EpEsxLqms5wPgqr',
-    // },
-    // body:{
-    //   bot_id:'7532762700867272739',
-    //   user_id:'',
-    //   stream:true,
-    //   content_type:'object_string',
-    //   content:descObj,
     // }
 
-    url :'http://localhost:5000/get_info',
-    method:'get',
-    headers:{
-      'Content-Type': 'application/json',
-    }
-    
 })
 }

@@ -1,0 +1,112 @@
+2025-08-04 09:41:41 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.2.5.Final
+2025-08-04 09:41:41 [main] INFO  com.ruoyi.RuoYiApplication - Starting RuoYiApplication using Java 23.0.1 on LAPTOP-FFCSMEI3 with PID 7004 (D:\competition\4\Smart-Manufacture\backend\ruoyi-admin\target\classes started by admin in D:\competition\4\Smart-Manufacture)
+2025-08-04 09:41:41 [main] INFO  com.ruoyi.RuoYiApplication - The following 1 profile is active: "dev"
+2025-08-04 09:41:45 [main] INFO  io.undertow.servlet - Initializing Spring embedded WebApplicationContext
+2025-08-04 09:41:45 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource detect P6SPY plugin and enabled it
+2025-08-04 09:41:45 [main] INFO  com.zaxxer.hikari.HikariDataSource - master - Starting...
+2025-08-04 09:41:46 [main] INFO  com.zaxxer.hikari.HikariDataSource - master - Start completed.
+2025-08-04 09:41:46 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource - add a datasource named [slave] success
+2025-08-04 09:41:46 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource - add a datasource named [master] success
+2025-08-04 09:41:46 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource initial loaded [2] datasource,primary datasource named [master]
+2025-08-04 09:41:48 [main] INFO  c.r.framework.config.JacksonConfig - 初始化 jackson 配置
+2025-08-04 09:41:49 [main] INFO  c.ruoyi.framework.config.RedisConfig - 初始化 redis 配置
+2025-08-04 09:41:49 [main] INFO  org.redisson.Version - Redisson 3.20.1
+2025-08-04 09:41:49 [redisson-netty-2-5] INFO  o.r.c.p.MasterPubSubConnectionPool - 1 connections initialized for localhost/127.0.0.1:6379
+2025-08-04 09:41:49 [redisson-netty-2-4] INFO  o.r.c.pool.MasterConnectionPool - 8 connections initialized for localhost/127.0.0.1:6379
+2025-08-04 09:41:50 [main] INFO  o.f.s.b.e.EventRegistryAutoConfiguration - No deployment resources were found for autodeployment
+2025-08-04 09:41:50 [main] INFO  o.f.s.SpringProcessEngineConfiguration - Found 1 Engine Configurators in total:
+2025-08-04 09:41:50 [main] INFO  o.f.s.SpringProcessEngineConfiguration - class org.flowable.eventregistry.spring.configurator.SpringEventRegistryConfigurator (priority:100000)
+2025-08-04 09:41:50 [main] INFO  o.f.s.SpringProcessEngineConfiguration - Executing beforeInit() of class org.flowable.eventregistry.spring.configurator.SpringEventRegistryConfigurator (priority:100000)
+2025-08-04 09:41:51 [main] INFO  o.f.s.SpringProcessEngineConfiguration - Executing configure() of class org.flowable.eventregistry.spring.configurator.SpringEventRegistryConfigurator (priority:100000)
+2025-08-04 09:41:52 [main] INFO  liquibase.lockservice - Successfully acquired change log lock
+2025-08-04 09:41:53 [main] INFO  liquibase.changelog - Reading from industry_dev.FLW_EV_DATABASECHANGELOG
+2025-08-04 09:41:53 [main] INFO  liquibase.lockservice - Successfully released change log lock
+2025-08-04 09:41:53 [main] INFO  o.f.e.impl.EventRegistryEngineImpl - EventRegistryEngine default created
+2025-08-04 09:41:53 [main] INFO  o.f.engine.impl.ProcessEngineImpl - ProcessEngine default created
+2025-08-04 09:41:53 [main] INFO  o.f.e.impl.cmd.ValidateV5EntitiesCmd - Total of v5 deployments found: 0
+2025-08-04 09:41:56 [main] INFO  io.undertow.websockets.jsr - UT026003: Adding annotated server endpoint class com.ruoyi.heart_beat.EndPoint for path /heartbeat
+2025-08-04 09:41:56 [main] INFO  io.undertow - starting server: Undertow - 2.2.24.Final
+2025-08-04 09:41:56 [main] INFO  org.xnio - XNIO version 3.8.7.Final
+2025-08-04 09:41:56 [main] INFO  org.xnio.nio - XNIO NIO Implementation Version 3.8.7.Final
+2025-08-04 09:41:56 [main] INFO  org.jboss.threads - JBoss Threads version 3.1.0.Final
+2025-08-04 09:41:57 [main] INFO  com.ruoyi.RuoYiApplication - Started RuoYiApplication in 15.953 seconds (JVM running for 16.557)
+2025-08-04 09:41:57 [main] INFO  c.r.s.runner.SystemApplicationRunner - 初始化OSS配置成功
+2025-08-04 09:41:57 [main] INFO  c.r.s.runner.SystemApplicationRunner - 加载参数缓存数据成功
+2025-08-04 09:41:57 [main] INFO  c.r.s.runner.SystemApplicationRunner - 加载字典缓存数据成功
+2025-08-04 10:35:33 [XNIO-1 task-1] INFO  io.undertow.servlet - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-04 10:35:35 [XNIO-1 task-1] INFO  c.r.f.listener.UserActionListener - user doLogin, userId:sys_user:1, token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJsb2dpbiIsImxvZ2luSWQiOiJzeXNfdXNlcjoxIiwicm5TdHIiOiJXZjNqUGlZcmRoeG1rR2xYTTVIWXBYTGM1Wk9BeTNUWiIsInVzZXJJZCI6MX0.YrOZu_iSWmU5mD8LXq5u6bSXiVYegCjYLmAcRhUuqhY
+2025-08-04 10:35:35 [schedule-pool-1] INFO  c.r.s.s.i.SysLogininforServiceImpl - [127.0.0.1]内网IP[admin][Success][登录成功]
+2025-08-04 10:45:31 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.2.5.Final
+2025-08-04 10:45:31 [main] INFO  com.ruoyi.RuoYiApplication - Starting RuoYiApplication using Java 23.0.1 on LAPTOP-FFCSMEI3 with PID 19308 (D:\competition\4\Smart-Manufacture\backend\ruoyi-admin\target\classes started by admin in D:\competition\4\Smart-Manufacture)
+2025-08-04 10:45:31 [main] INFO  com.ruoyi.RuoYiApplication - The following 1 profile is active: "dev"
+2025-08-04 10:45:35 [main] INFO  io.undertow.servlet - Initializing Spring embedded WebApplicationContext
+2025-08-04 10:45:35 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource detect P6SPY plugin and enabled it
+2025-08-04 10:45:35 [main] INFO  com.zaxxer.hikari.HikariDataSource - master - Starting...
+2025-08-04 10:45:36 [main] INFO  com.zaxxer.hikari.HikariDataSource - master - Start completed.
+2025-08-04 10:45:36 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource - add a datasource named [slave] success
+2025-08-04 10:45:36 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource - add a datasource named [master] success
+2025-08-04 10:45:36 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource initial loaded [2] datasource,primary datasource named [master]
+2025-08-04 10:45:39 [main] INFO  c.r.framework.config.JacksonConfig - 初始化 jackson 配置
+2025-08-04 10:45:39 [main] INFO  c.ruoyi.framework.config.RedisConfig - 初始化 redis 配置
+2025-08-04 10:45:39 [main] INFO  org.redisson.Version - Redisson 3.20.1
+2025-08-04 10:45:39 [redisson-netty-2-5] INFO  o.r.c.p.MasterPubSubConnectionPool - 1 connections initialized for localhost/127.0.0.1:6379
+2025-08-04 10:45:39 [redisson-netty-2-4] INFO  o.r.c.pool.MasterConnectionPool - 8 connections initialized for localhost/127.0.0.1:6379
+2025-08-04 10:45:40 [main] INFO  o.f.s.b.e.EventRegistryAutoConfiguration - No deployment resources were found for autodeployment
+2025-08-04 10:45:40 [main] INFO  o.f.s.SpringProcessEngineConfiguration - Found 1 Engine Configurators in total:
+2025-08-04 10:45:40 [main] INFO  o.f.s.SpringProcessEngineConfiguration - class org.flowable.eventregistry.spring.configurator.SpringEventRegistryConfigurator (priority:100000)
+2025-08-04 10:45:40 [main] INFO  o.f.s.SpringProcessEngineConfiguration - Executing beforeInit() of class org.flowable.eventregistry.spring.configurator.SpringEventRegistryConfigurator (priority:100000)
+2025-08-04 10:45:41 [main] INFO  o.f.s.SpringProcessEngineConfiguration - Executing configure() of class org.flowable.eventregistry.spring.configurator.SpringEventRegistryConfigurator (priority:100000)
+2025-08-04 10:45:42 [main] INFO  liquibase.lockservice - Successfully acquired change log lock
+2025-08-04 10:45:42 [main] INFO  liquibase.changelog - Reading from industry_dev.FLW_EV_DATABASECHANGELOG
+2025-08-04 10:45:42 [main] INFO  liquibase.lockservice - Successfully released change log lock
+2025-08-04 10:45:42 [main] INFO  o.f.e.impl.EventRegistryEngineImpl - EventRegistryEngine default created
+2025-08-04 10:45:43 [main] INFO  o.f.engine.impl.ProcessEngineImpl - ProcessEngine default created
+2025-08-04 10:45:43 [main] INFO  o.f.e.impl.cmd.ValidateV5EntitiesCmd - Total of v5 deployments found: 0
+2025-08-04 10:45:45 [main] INFO  io.undertow.websockets.jsr - UT026003: Adding annotated server endpoint class com.ruoyi.heart_beat.EndPoint for path /heartbeat
+2025-08-04 10:45:45 [main] INFO  io.undertow - starting server: Undertow - 2.2.24.Final
+2025-08-04 10:45:45 [main] INFO  org.xnio - XNIO version 3.8.7.Final
+2025-08-04 10:45:45 [main] INFO  org.xnio.nio - XNIO NIO Implementation Version 3.8.7.Final
+2025-08-04 10:45:45 [main] INFO  org.jboss.threads - JBoss Threads version 3.1.0.Final
+2025-08-04 10:45:45 [main] INFO  com.ruoyi.RuoYiApplication - Started RuoYiApplication in 15.022 seconds (JVM running for 15.57)
+2025-08-04 10:45:46 [main] INFO  c.r.s.runner.SystemApplicationRunner - 初始化OSS配置成功
+2025-08-04 10:45:46 [main] INFO  c.r.s.runner.SystemApplicationRunner - 加载参数缓存数据成功
+2025-08-04 10:45:46 [main] INFO  c.r.s.runner.SystemApplicationRunner - 加载字典缓存数据成功
+2025-08-04 10:46:08 [XNIO-1 task-1] INFO  io.undertow.servlet - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-04 10:47:44 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.2.5.Final
+2025-08-04 10:47:44 [main] INFO  com.ruoyi.RuoYiApplication - Starting RuoYiApplication using Java 23.0.1 on LAPTOP-FFCSMEI3 with PID 24924 (D:\competition\4\Smart-Manufacture\backend\ruoyi-admin\target\classes started by admin in D:\competition\4\Smart-Manufacture)
+2025-08-04 10:47:44 [main] INFO  com.ruoyi.RuoYiApplication - The following 1 profile is active: "dev"
+2025-08-04 10:47:47 [main] INFO  io.undertow.servlet - Initializing Spring embedded WebApplicationContext
+2025-08-04 10:47:47 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource detect P6SPY plugin and enabled it
+2025-08-04 10:47:47 [main] INFO  com.zaxxer.hikari.HikariDataSource - master - Starting...
+2025-08-04 10:47:48 [main] INFO  com.zaxxer.hikari.HikariDataSource - master - Start completed.
+2025-08-04 10:47:48 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource - add a datasource named [slave] success
+2025-08-04 10:47:48 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource - add a datasource named [master] success
+2025-08-04 10:47:48 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource initial loaded [2] datasource,primary datasource named [master]
+2025-08-04 10:47:51 [main] INFO  c.r.framework.config.JacksonConfig - 初始化 jackson 配置
+2025-08-04 10:47:51 [main] INFO  c.ruoyi.framework.config.RedisConfig - 初始化 redis 配置
+2025-08-04 10:47:51 [main] INFO  org.redisson.Version - Redisson 3.20.1
+2025-08-04 10:47:51 [redisson-netty-2-5] INFO  o.r.c.p.MasterPubSubConnectionPool - 1 connections initialized for localhost/127.0.0.1:6379
+2025-08-04 10:47:51 [redisson-netty-2-4] INFO  o.r.c.pool.MasterConnectionPool - 8 connections initialized for localhost/127.0.0.1:6379
+2025-08-04 10:47:52 [main] INFO  o.f.s.b.e.EventRegistryAutoConfiguration - No deployment resources were found for autodeployment
+2025-08-04 10:47:52 [main] INFO  o.f.s.SpringProcessEngineConfiguration - Found 1 Engine Configurators in total:
+2025-08-04 10:47:52 [main] INFO  o.f.s.SpringProcessEngineConfiguration - class org.flowable.eventregistry.spring.configurator.SpringEventRegistryConfigurator (priority:100000)
+2025-08-04 10:47:52 [main] INFO  o.f.s.SpringProcessEngineConfiguration - Executing beforeInit() of class org.flowable.eventregistry.spring.configurator.SpringEventRegistryConfigurator (priority:100000)
+2025-08-04 10:47:53 [main] INFO  o.f.s.SpringProcessEngineConfiguration - Executing configure() of class org.flowable.eventregistry.spring.configurator.SpringEventRegistryConfigurator (priority:100000)
+2025-08-04 10:47:53 [main] INFO  liquibase.lockservice - Successfully acquired change log lock
+2025-08-04 10:47:54 [main] INFO  liquibase.changelog - Reading from industry_dev.FLW_EV_DATABASECHANGELOG
+2025-08-04 10:47:54 [main] INFO  liquibase.lockservice - Successfully released change log lock
+2025-08-04 10:47:54 [main] INFO  o.f.e.impl.EventRegistryEngineImpl - EventRegistryEngine default created
+2025-08-04 10:47:54 [main] INFO  o.f.engine.impl.ProcessEngineImpl - ProcessEngine default created
+2025-08-04 10:47:54 [main] INFO  o.f.e.impl.cmd.ValidateV5EntitiesCmd - Total of v5 deployments found: 0
+2025-08-04 10:47:57 [main] INFO  io.undertow.websockets.jsr - UT026003: Adding annotated server endpoint class com.ruoyi.heart_beat.EndPoint for path /heartbeat
+2025-08-04 10:47:57 [main] INFO  io.undertow - starting server: Undertow - 2.2.24.Final
+2025-08-04 10:47:57 [main] INFO  org.xnio - XNIO version 3.8.7.Final
+2025-08-04 10:47:57 [main] INFO  org.xnio.nio - XNIO NIO Implementation Version 3.8.7.Final
+2025-08-04 10:47:57 [main] INFO  org.jboss.threads - JBoss Threads version 3.1.0.Final
+2025-08-04 10:47:57 [main] INFO  com.ruoyi.RuoYiApplication - Started RuoYiApplication in 13.552 seconds (JVM running for 14.072)
+2025-08-04 10:47:57 [main] INFO  c.r.s.runner.SystemApplicationRunner - 初始化OSS配置成功
+2025-08-04 10:47:57 [main] INFO  c.r.s.runner.SystemApplicationRunner - 加载参数缓存数据成功
+2025-08-04 10:47:57 [main] INFO  c.r.s.runner.SystemApplicationRunner - 加载字典缓存数据成功
+2025-08-04 10:48:28 [XNIO-1 task-1] INFO  io.undertow.servlet - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-04 11:43:16 [XNIO-1 task-2] INFO  c.r.f.listener.UserActionListener - user doLogin, userId:sys_user:1, token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJsb2dpbiIsImxvZ2luSWQiOiJzeXNfdXNlcjoxIiwicm5TdHIiOiI0OEJtRkFPU0E1bUlYaUtMdGhrenBrdnBmdHBXd0lWNyIsInVzZXJJZCI6MX0.6OXP0nz_HTf3-LAj18kNkgYk4i-4NteZRl_Tun_lRDM
+2025-08-04 11:43:16 [schedule-pool-2] INFO  c.r.s.s.i.SysLogininforServiceImpl - [127.0.0.1]内网IP[admin][Success][登录成功]

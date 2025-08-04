@@ -389,13 +389,13 @@
           {{ form.exsCode || '-' }}
         </el-descriptions-item>
         <el-descriptions-item label="异常记录人">
-          {{ form.createBy || '-' }}
+          {{ form.exrUserReport || '-' }}
         </el-descriptions-item>
         <el-descriptions-item label="异常时间">
           {{ form.exrCdate || '-' }}
         </el-descriptions-item>
         <el-descriptions-item label="异常类型">
-          {{ form.extName || '-' }}
+{{ (exceptionList.find(ele => ele.exCode === form.exCode) || {}).exName  }}
         </el-descriptions-item>
         <el-descriptions-item label="描述信息">
           {{ form.exrDesc || '-' }}
@@ -411,7 +411,7 @@
 </template>
 
 <script>
-import { listExceptionRecord, getExceptionRecord, delExceptionRecord, addExceptionRecord, updateExceptionRecord ,addExceptionKnowledge} from "@/api/system/exceptionRecord";
+import { listExceptionRecord, getExceptionRecord, delExceptionRecord, addExceptionRecord, updateExceptionRecord ,saveDescToKnowledge} from "@/api/system/exceptionRecord";
 import { listUser } from "@/api/system/user";
 import { listException } from "@/api/system/exception";
 import { listExceptionSource } from "@/api/system/exceptionSource";
@@ -727,7 +727,7 @@ export default {
         })
       })
     },
-    /** 确认上报记录为异常
+    /** 
      * @param {any} row 记录信息
      * @author cuiyutong
      * @date 20250801
@@ -737,8 +737,9 @@ export default {
         this.form=response.data
         console.log(this.form)
         const descObj=JSON.parse(this.form.exrDesc)
-        saveDescToKnowledge(descObj).then(() => {
+        saveDescToKnowledge(descObj).then(data => {
           this.$message.success('已同步到知识库')
+          console.log(data)
         })
       })
 

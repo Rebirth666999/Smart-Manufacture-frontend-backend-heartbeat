@@ -216,9 +216,10 @@
             size="mini"
             type="text"
             icon="el-icon-files"
-            v-show="scope.row.mtStat==='d'"
+            v-show="scope.row.mtStat==='d'||scope.row.mtStat==='5'" 
             @click="handleExecuteDeviceTask(scope.row)"
-          >下发设备任务</el-button>
+          >下发设备任务</el-button> 
+           <!-- //设备任务的复用||scope.row.mtStat==='5' /> -->  
           <el-button
             size="mini"
             type="text"

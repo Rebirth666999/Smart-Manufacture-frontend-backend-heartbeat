@@ -11,16 +11,16 @@ import java.util.Date;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
- * 异常记录（新）业务对象 ices_exception_record_new
+ * 异常记录业务对象 ices_exception_record
+ * 第一次ai发过来的异常记录
  *
  * @author ruoyi
- * @date 2025-07-30
+ * @date 2025-04-09
  */
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class IcesExceptionRecordNewBo extends BaseEntity {
-
+public class IcesExceptionRecordAiBo extends BaseEntity{
     /**
      * 异常记录ID
      */
@@ -87,7 +87,7 @@ public class IcesExceptionRecordNewBo extends BaseEntity {
     /**
      * 异常责任人
      */
-    @NotBlank(message = "异常责任人不能为空", groups = { AddGroup.class, EditGroup.class })
+    @NotBlank(message = "异常责任人不能为空", groups = { EditGroup.class })
     private String exrUserResp;
 
     /**
@@ -98,13 +98,13 @@ public class IcesExceptionRecordNewBo extends BaseEntity {
     /**
      * 影响因子(百分比描述)
      */
-    @NotNull(message = "影响因子(百分比描述)不能为空", groups = { AddGroup.class, EditGroup.class })
+    @NotNull(message = "影响因子(百分比描述)不能为空", groups = { EditGroup.class })
     private Long exrImpactFactor;
 
     /**
      * 影响等级(数据字典)
      */
-    @NotBlank(message = "影响等级(数据字典)不能为空", groups = { AddGroup.class, EditGroup.class })
+    @NotBlank(message = "影响等级(数据字典)不能为空", groups = { EditGroup.class })
     private String exrImpactLevel;
 
     /**
@@ -115,18 +115,12 @@ public class IcesExceptionRecordNewBo extends BaseEntity {
     /**
      * 持续时间(秒)
      */
-    @NotNull(message = "持续时间(秒)不能为空", groups = { EditGroup.class })
     private Long exrDuration;
 
     /**
      * 异常图片路径
      */
     private String exrImg;
-
-    /**
-     * 处理流程
-     */
-    private String exrPro;
 
     /**
      * 异常处理完成图片
@@ -158,6 +152,7 @@ public class IcesExceptionRecordNewBo extends BaseEntity {
      */
     @NotNull(message = "已删除不能为空", groups = { EditGroup.class })
     private Long exrDelete;
+
 
 
 }

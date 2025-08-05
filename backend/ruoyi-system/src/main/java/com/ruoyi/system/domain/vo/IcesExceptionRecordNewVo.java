@@ -21,6 +21,12 @@ public class IcesExceptionRecordNewVo {
 
     private static final long serialVersionUID = 1L;
 
+
+    /**
+     * 异常记录ID
+     */
+    @ExcelProperty(value = "异常记录ID")
+    private Long exrId;
     /**
      * 异常记录编码
      */
@@ -39,6 +45,11 @@ public class IcesExceptionRecordNewVo {
     @ExcelProperty(value = "异常")
     private String exCode;
 
+    /**
+     * 描述
+     */
+    @ExcelProperty(value = "描述")
+    private String exrDesc;
     /**
      * 参数(JSON形式)
      */
@@ -119,6 +130,12 @@ public class IcesExceptionRecordNewVo {
      */
     @ExcelProperty(value = "异常图片路径")
     private String exrImg;
+
+    /**
+     * 处理流程
+     */
+    @ExcelProperty(value = "处理流程")
+    private String exrPro;
 
     /**
      * 异常处理完成图片

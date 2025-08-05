@@ -1,23 +1,44 @@
 package com.ruoyi.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.common.helper.LoginHelper;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ruoyi.flowable.common.constant.ProcessConstants;
+import com.ruoyi.flowable.common.enums.ProcessStatus;
+import com.ruoyi.flowable.factory.FlowServiceFactory;
+import com.ruoyi.flowable.utils.TaskUtils;
+import com.ruoyi.system.domain.IcesExceptionRecord;
+import com.ruoyi.system.domain.bo.*;
+import com.ruoyi.system.domain.vo.IcesExceptionLifecycleVersionVo;
+import com.ruoyi.system.domain.vo.IcesExceptionLifecycleVo;
+import com.ruoyi.system.domain.vo.IcesExceptionRecordVo;
+import com.ruoyi.system.mapper.IcesExceptionRecordMapper;
+import com.ruoyi.system.service.IIcesCodeService;
+import com.ruoyi.system.service.IIcesExceptionLifecycleService;
+import com.ruoyi.system.service.IIcesExceptionLifecycleVersionService;
 import lombok.RequiredArgsConstructor;
+import org.flowable.bpmn.constants.BpmnXMLConstants;
+import org.flowable.engine.repository.ProcessDefinition;
+import org.flowable.engine.runtime.ProcessInstance;
 import org.springframework.stereotype.Service;
-import com.ruoyi.system.domain.bo.IcesExceptionRecordNewBo;
 import com.ruoyi.system.domain.vo.IcesExceptionRecordNewVo;
 import com.ruoyi.system.domain.IcesExceptionRecordNew;
 import com.ruoyi.system.mapper.IcesExceptionRecordNewMapper;
 import com.ruoyi.system.service.IIcesExceptionRecordNewService;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Collection;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import static com.baomidou.mybatisplus.extension.toolkit.Db.getById;
+import static com.baomidou.mybatisplus.extension.toolkit.Db.updateById;
 
 /**
  * 异常记录（新）Service业务层处理
@@ -27,9 +48,12 @@ import java.util.Collection;
  */
 @RequiredArgsConstructor
 @Service
-public class IcesExceptionRecordNewServiceImpl implements IIcesExceptionRecordNewService {
+public class IcesExceptionRecordNewServiceImpl extends FlowServiceFactory implements IIcesExceptionRecordNewService {
 
     private final IcesExceptionRecordNewMapper baseMapper;
+    private final IIcesCodeService codeService;
+    private final IIcesExceptionLifecycleService lifecycleService;
+    private final IIcesExceptionLifecycleVersionService lifecycleVersionService;
 
     /**
      * 查询异常记录（新）
@@ -77,14 +101,49 @@ public class IcesExceptionRecordNewServiceImpl implements IIcesExceptionRecordNe
      * 新增异常记录（新）
      */
     @Override
-    public Boolean insertByBo(IcesExceptionRecordNewBo bo) {
+    public IcesExceptionRecordNewVo insertByBo(IcesExceptionRecordNewBo bo) {
+        bo.setExrCode(codeService.insertByType("ExceptionRecord"));
+        // 设置上报时间
+        String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        bo.setExrCdate(cDate);
+        // 如果未填写上报人，则使用当前用户
+        if (StringUtils.isBlank(bo.getExrUserReport())) {
+            bo.setExrUserReport(getLoginUsername());
+        }
+        if (bo.getExrStat().equals("4")) {
+            bo.setExrProcess(startLifecycle(bo));
+        }
         IcesExceptionRecordNew add = BeanUtil.toBean(bo, IcesExceptionRecordNew.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
             bo.setExrId(add.getExrId());
         }
-        return flag;
+        return queryById(add.getExrId());
+    }
+    /**
+     * 新增异常记录ai!!!!!!!!!!!!!
+     */
+    @Override
+    public IcesExceptionRecordNewVo insertByBo(IcesExceptionRecordAiBo bo) {
+        bo.setExrCode(codeService.insertByType("ExceptionRecord"));
+        // 设置上报时间
+        String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        bo.setExrCdate(cDate);
+        // 如果未填写上报人，则使用当前用户
+        if (StringUtils.isBlank(bo.getExrUserReport())) {
+            bo.setExrUserReport(getLoginUsername());
+        }
+        if (bo.getExrStat().equals("4")) {
+            bo.setExrProcess(startLifecycle(bo));
+        }
+        IcesExceptionRecordNew add = BeanUtil.toBean(bo, IcesExceptionRecordNew.class);
+        validEntityBeforeSave(add);
+        boolean flag = baseMapper.insert(add) > 0;
+        if (flag) {
+            bo.setExrId(add.getExrId());
+        }
+        return queryById(add.getExrId());
     }
 
     /**
@@ -92,9 +151,99 @@ public class IcesExceptionRecordNewServiceImpl implements IIcesExceptionRecordNe
      */
     @Override
     public Boolean updateByBo(IcesExceptionRecordNewBo bo) {
+        // 先找到原先的异常记录
+        IcesExceptionRecordNewVo orgn = queryById(bo.getExrId());
+        if (orgn.getExrStat().equals("2") && bo.getExrStat().equals("4")) {
+            // 原先确认中，现在确认为异常
+            // 自动启动对应异常的生命周期
+            bo.setExrProcess(startLifecycle(bo));
+        }
         IcesExceptionRecordNew update = BeanUtil.toBean(bo, IcesExceptionRecordNew.class);
         validEntityBeforeSave(update);
         return baseMapper.updateById(update) > 0;
+    }
+
+    /**
+     * 获取当前用户名
+     * @return 用户名
+     */
+    private String getLoginUsername() {
+        LoginUser loginUser;
+        try {
+            loginUser = LoginHelper.getLoginUser();
+        } catch (Exception e) {
+            return null;
+        }
+        if (ObjectUtil.isNotNull(loginUser)) {
+            return loginUser.getUsername();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * 启动异常的生命周期（支持 IcesExceptionRecordBo）
+     */
+    @Override
+    public String startLifecycle(IcesExceptionRecordNewBo bo) {
+        return doStartLifecycle(bo.getExCode());
+    }
+
+    /**
+     * 启动异常的生命周期（支持 IcesExceptionRecordAiBo）
+     */
+    public String startLifecycle(IcesExceptionRecordAiBo bo) {
+        return doStartLifecycle(bo.getExCode());
+    }
+
+    /**
+     * 启动异常生命周期的核心逻辑
+     */
+    private String doStartLifecycle(String exCode) {
+        // 找到生命周期
+        IcesExceptionLifecycleBo lifecycleBo = new IcesExceptionLifecycleBo();
+        lifecycleBo.setExCode(exCode);
+        List<IcesExceptionLifecycleVo> lifecycleVos = lifecycleService.queryList(lifecycleBo);
+        if (lifecycleVos.isEmpty()) {
+            throw new RuntimeException("对应异常未定义生命周期，无法启动处理");
+        }
+        // 找到生命周期版本
+        IcesExceptionLifecycleVersionBo lifecycleVersionBo = new IcesExceptionLifecycleVersionBo();
+        lifecycleVersionBo.setExlCode(lifecycleVos.get(0).getExlCode());
+        List<IcesExceptionLifecycleVersionVo> lifecycleVersionVos = lifecycleVersionService.queryList(lifecycleVersionBo);
+        if (lifecycleVersionVos.isEmpty()) {
+            throw new RuntimeException("对应异常生命周期未设计，无法启动处理");
+        }
+        // 最后创建的永远是最新版本，因此先逆序
+        Collections.reverse(lifecycleVersionVos);
+        // 找到最新的已部署版本的流程定义
+        String defId = null;
+        for (IcesExceptionLifecycleVersionVo lifecycleVersionVo : lifecycleVersionVos) {
+            if (lifecycleVersionVo.getExlvDefId() != null) {
+                defId = lifecycleVersionVo.getExlvDefId();
+                break;
+            }
+        }
+        if (defId == null) {
+            throw new RuntimeException("对应异常生命周期未部署，无法启动处理");
+        }
+        try {
+            ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+                .processDefinitionId(defId).singleResult();
+            Map<String, Object> variables = new HashMap<>();
+            // 设置流程发起人Id到流程中
+            String userIdStr = TaskUtils.getUserId();
+            identityService.setAuthenticatedUserId(userIdStr);
+            variables.put(BpmnXMLConstants.ATTRIBUTE_EVENT_START_INITIATOR, userIdStr);
+            // 设置流程状态为进行中
+            variables.put(ProcessConstants.PROCESS_STATUS_KEY, ProcessStatus.RUNNING.getStatus());
+            // 启动流程实例
+            ProcessInstance processInstance = runtimeService.startProcessInstanceById(processDefinition.getId(), variables);
+            return processInstance.getId();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServiceException("异常生命周期启动错误");
+        }
     }
 
     /**
@@ -113,5 +262,28 @@ public class IcesExceptionRecordNewServiceImpl implements IIcesExceptionRecordNe
             //TODO 做一些业务上的校验,判断是否需要校验
         }
         return baseMapper.deleteBatchIds(ids) > 0;
+    }
+
+    /**
+     * 保存分析内容到异常记录
+     * 将提取的内容保存到exrPro字段（处理流程）
+     */
+    @Override
+    public boolean saveAnalysisContent(Long exrId, String analysisContent) {
+        // 查询是否存在该异常记录
+        IcesExceptionRecordNew record = getById(exrId,IcesExceptionRecordNew.class);
+
+        if (record == null) {
+            System.out.println("service查询后说异常记录不存在");
+            return false;
+        }
+
+        // 设置处理流程内容（使用exrPro字段）
+        record.setExrPro(analysisContent);
+        // 更新时间
+        record.setUpdateTime(new Date());
+
+        // 保存到数据库
+        return updateById(record);
     }
 }

@@ -87,10 +87,7 @@ public class IcesExceptionRecordNew extends BaseEntity {
      * 异常执行流程
      */
     private String exrProcess;
-    /**
-     * 持续时间(秒)
-     */
-    private Long exrDuration;
+
     /**
      * 异常图片路径
      */

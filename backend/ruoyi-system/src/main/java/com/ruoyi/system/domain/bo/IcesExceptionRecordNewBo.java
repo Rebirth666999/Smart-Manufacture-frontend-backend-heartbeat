@@ -99,7 +99,7 @@ public class IcesExceptionRecordNewBo extends BaseEntity {
      * 影响因子(百分比描述)
      */
     @NotNull(message = "影响因子(百分比描述)不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long exrImpactFactor;
+    private Float exrImpactFactor;
 
     /**
      * 影响等级(数据字典)
@@ -112,11 +112,6 @@ public class IcesExceptionRecordNewBo extends BaseEntity {
      */
     private String exrProcess;
 
-    /**
-     * 持续时间(秒)
-     */
-    @NotNull(message = "持续时间(秒)不能为空", groups = { EditGroup.class })
-    private Long exrDuration;
 
     /**
      * 异常图片路径

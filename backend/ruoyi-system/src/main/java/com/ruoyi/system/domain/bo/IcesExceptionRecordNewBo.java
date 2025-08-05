@@ -124,6 +124,11 @@ public class IcesExceptionRecordNewBo extends BaseEntity {
     private String exrImg;
 
     /**
+     * 处理流程
+     */
+    private String exrPro;
+
+    /**
      * 异常处理完成图片
      */
     private String exrFinImg;

@@ -52,6 +52,7 @@ public interface IIcesExceptionRecordNewService {
      */
     Boolean updateByBo(IcesExceptionRecordNewBo bo);
 
+
     String startLifecycle(IcesExceptionRecordNewBo bo);
 
     String startLifecycle(IcesExceptionRecordAiBo bo);
@@ -61,4 +62,12 @@ public interface IIcesExceptionRecordNewService {
      * 校验并批量删除异常记录（新）信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+    /**
+     * 保存分析内容到异常记录
+     * @param exrId 异常记录ID
+     * @param analysisContent 分析内容
+     * @return 是否保存成功
+     */
+    boolean saveAnalysisContent(Long exrId, String analysisContent);
 }

@@ -96,7 +96,7 @@ export function checkdetail(conversation_id, chat_id) {
   });
 }
 
-    
+
 
 
     // url :'http://localhost:5000/get_info',
@@ -104,3 +104,13 @@ export function checkdetail(conversation_id, chat_id) {
     // headers:{
     //   'Content-Type': 'application/json',
     // }
+
+export function saveKnowledgeToBackend(params) {
+  return request({
+    url:  `/system/exceptionRecordNew/extractAndSave?exrId=${params.exrId}` , // 后端接收数据的接口地址
+    method: 'post',
+    data: params // 参数包含知识库完整数据及关联的业务信息
+  })
+}
+
+

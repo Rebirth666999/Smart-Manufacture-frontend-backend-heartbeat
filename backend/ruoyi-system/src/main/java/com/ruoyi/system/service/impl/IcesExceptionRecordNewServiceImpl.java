@@ -37,6 +37,9 @@ import com.ruoyi.system.service.IIcesExceptionRecordNewService;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static com.baomidou.mybatisplus.extension.toolkit.Db.getById;
+import static com.baomidou.mybatisplus.extension.toolkit.Db.updateById;
+
 /**
  * 异常记录（新）Service业务层处理
  *
@@ -259,5 +262,28 @@ public class IcesExceptionRecordNewServiceImpl extends FlowServiceFactory implem
             //TODO 做一些业务上的校验,判断是否需要校验
         }
         return baseMapper.deleteBatchIds(ids) > 0;
+    }
+
+    /**
+     * 保存分析内容到异常记录
+     * 将提取的内容保存到exrPro字段（处理流程）
+     */
+    @Override
+    public boolean saveAnalysisContent(Long exrId, String analysisContent) {
+        // 查询是否存在该异常记录
+        IcesExceptionRecordNew record = getById(exrId,IcesExceptionRecordNew.class);
+
+        if (record == null) {
+            System.out.println("service查询后说异常记录不存在");
+            return false;
+        }
+
+        // 设置处理流程内容（使用exrPro字段）
+        record.setExrPro(analysisContent);
+        // 更新时间
+        record.setUpdateTime(new Date());
+
+        // 保存到数据库
+        return updateById(record);
     }
 }

@@ -132,6 +132,12 @@ public class IcesExceptionRecordNewVo {
     private String exrImg;
 
     /**
+     * 处理流程
+     */
+    @ExcelProperty(value = "处理流程")
+    private String exrPro;
+
+    /**
      * 异常处理完成图片
      */
     @ExcelProperty(value = "异常处理完成图片")

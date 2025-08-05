@@ -2,12 +2,13 @@ package com.ruoyi.system.controller;
 
 import java.util.List;
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
+import java.util.Optional;
 
 import com.ruoyi.system.domain.bo.IcesExceptionRecordAiBo;
-import com.ruoyi.system.domain.vo.IcesExceptionRecordVo;
+import com.ruoyi.system.domain.dto.ContentAnalysisDTO;
 import lombok.RequiredArgsConstructor;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,6 @@ import com.ruoyi.common.core.domain.PageQuery;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.validate.AddGroup;
 import com.ruoyi.common.core.validate.EditGroup;
-import com.ruoyi.common.core.validate.QueryGroup;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.system.domain.vo.IcesExceptionRecordNewVo;
@@ -118,4 +118,45 @@ public class IcesExceptionRecordNewController extends BaseController {
                           @PathVariable Long[] exrIds) {
         return toAjax(iIcesExceptionRecordNewService.deleteWithValidByIds(Arrays.asList(exrIds), true));
     }
+
+    /**
+     * 提取分析内容并保存到数据库
+     */
+//    @SaCheckPermission("system:exceptionRecordNew:edit")
+    @Log(title = "异常记录（新）", businessType = BusinessType.UPDATE)
+    @PostMapping("/extractAndSave")
+    public R<Void> extractAndSaveContent(
+        @Valid @RequestBody ContentAnalysisDTO analysisDTO) {
+        Long exrId = analysisDTO.getExrId();
+        // 从数据中提取type为"answer"的content
+//        Optional<ContentAnalysisDTO.ContentItemDTO> targetItem = analysisDTO.getData().stream()
+//            .filter(item -> "answer".equals(item.getType()))
+//            .findFirst();
+        if (analysisDTO.getData() == null || analysisDTO.getData().isEmpty()) {
+            System.out.println("data 为空或未包含任何内容");
+            return R.fail("未找到有效的分析内容");
+        }
+
+        Optional<ContentAnalysisDTO.ContentItemDTO> targetItem = analysisDTO.getData().stream()
+            .filter(item -> "answer".equals(item.getType()))
+            .findFirst();
+
+        if (targetItem.isPresent()) {
+            String analysisContent = targetItem.get().getContent();
+            // 调用服务层方法保存到数据库
+            System.out.println("要保存的内容：" + analysisContent +"正在调用service");
+            boolean success = iIcesExceptionRecordNewService.saveAnalysisContent(exrId, analysisContent);
+            if (success) {
+                System.out.println("保存成功");
+                return R.ok(analysisContent);
+            } else {
+                System.out.println("保存失败，未找到对应的异常记录");
+                return R.fail("保存失败，未找到对应的异常记录");
+            }
+        } else {
+            System.out.println("未找到有效的分析内容");
+            return R.fail("未找到有效的分析内容");
+        }
+    }
+
 }

@@ -1,1 +1,0 @@
-2025-08-04 18:35:41 [XNIO-1 task-1] ERROR c.r.f.w.e.GlobalExceptionHandler - 请求地址'/getInfo',认证失败'Token已过期：eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJsb2dpbiIsImxvZ2luSWQiOiJzeXNfdXNlcjoxIiwicm5TdHIiOiIxYkZNYTFidjBrRVZEenV5a2hJaWlYT0tnVnJPR25tVSIsInVzZXJJZCI6MX0.AG1zaHvrN8bLPLQo4BD2DPdBOgBvbZlYeI5WpYFPy68',无法访问系统资源

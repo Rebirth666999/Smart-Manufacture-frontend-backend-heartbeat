@@ -924,7 +924,7 @@ export default {
       }).then(response => {
         const task = response.data;
         // 更新状态为进行中
-        task.mtStat = '1';//设备任务的复用
+        //task.mtStat = '5';设备任务的复用
         // 提交更新请求
         return updateManufactureTask(task);
       }).then(() => {

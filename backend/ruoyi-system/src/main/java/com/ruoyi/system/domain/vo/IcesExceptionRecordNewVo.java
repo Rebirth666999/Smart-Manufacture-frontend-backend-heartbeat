@@ -104,7 +104,7 @@ public class IcesExceptionRecordNewVo {
      * 影响因子(百分比描述)
      */
     @ExcelProperty(value = "影响因子(百分比描述)")
-    private Long exrImpactFactor;
+    private Float exrImpactFactor;
 
     /**
      * 影响等级(数据字典)
@@ -118,12 +118,6 @@ public class IcesExceptionRecordNewVo {
      */
     @ExcelProperty(value = "异常执行流程")
     private String exrProcess;
-
-    /**
-     * 持续时间(秒)
-     */
-    @ExcelProperty(value = "持续时间(秒)")
-    private Long exrDuration;
 
     /**
      * 异常图片路径

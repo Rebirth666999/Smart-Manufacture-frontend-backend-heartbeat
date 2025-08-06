@@ -155,7 +155,6 @@
               icon="el-icon-view"
               @click="handleReference(scope.row)"
               v-hasPermi="['system:exceptionRecord:edit']"
-              v-show="scope.row.exrStat === '4'"
             >查看详情</el-button>
             <el-button
               size="mini"
@@ -163,9 +162,8 @@
               icon="el-icon-upload"
               @click="handleByJson(scope.row)"
               v-hasPermi="['system:exceptionRecord:edit']"
-              v-show="scope.row.exrStat === '4' && !uploadStatus[scope.row.exrId]"
+              v-show="scope.row.exrStat === '4' && !scope.row.exrPro"
             >上传知识库</el-button>
-
             <el-button
               size="mini"
               type="text"
@@ -192,7 +190,7 @@
               size="mini"
               type="text"
               icon="el-icon-close"
-              v-show="scope.row.exrStat === '2'"
+              v-show="scope.row.exrStat === '3'"
               @click="handleConfirmNegative(scope.row)"
             >非异常</el-button>
             <el-button
@@ -379,7 +377,7 @@
       <!-- 1. 顶部大图 -->
       <div style="text-align:center;margin-bottom:16px;">
         <img
-          :src="form.exrPicUrl || defaultImg"
+          :src="form.exrImg || defaultImg"
           style="width:100%;max-height:260px;object-fit:cover;border-radius:6px;"
         />
       </div>
@@ -403,7 +401,7 @@
         <!-- 3. 知识库解决方法展示 -->
         <el-descriptions-item
           label="知识库分析结果"
-          v-if="uploadSuccessMap[form.exrId]"
+          v-if="form.exrPro"
          >
           <div style="background-color: #f5f7fa; padding: 12px; border-radius: 6px; line-height: 1.8; white-space: pre-line;">
             {{ form.exrPro }}
@@ -911,6 +909,7 @@ getChatDetail(conversationId, chatId, row) {
       saveKnowledgeToBackend(backendParams).then(() => {
         // ✅ 标记为成功
         this.$set(this.uploadSuccessMap, row.exrId, true);
+        this.form.exrStat= '5' // 更新状态为已发送到知识库
       }).catch(() => {
         // ✅ 标记为失败
         this.$set(this.uploadSuccessMap, row.exrId, false);
@@ -941,7 +940,7 @@ getChatDetail(conversationId, chatId, row) {
     handleReference(row){
       getExceptionRecord(row.exrId).then(response=>{
         this.form=response.data
-
+        console.log(this.form.exrImg)
       })
       this.open1=true
       this.title="查看详情"

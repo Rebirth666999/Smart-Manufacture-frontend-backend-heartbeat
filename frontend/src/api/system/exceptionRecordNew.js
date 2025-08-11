@@ -65,5 +65,31 @@ export function saveDescToKnowledge(descObj,exrCode) {
     //   'Content-Type': 'application/json',
     // }
 
-})
+})}
+
+export function sendimg(imagePath) {
+  // 创建 FormData 对象
+  const formData = new FormData();
+  
+  // 如果是文件对象
+  if (imagePath instanceof File) {
+    formData.append('image', imagePath);
+  } 
+  // // 如果是本地路径，需要先转换为 File 对象
+  // else if (typeof imagePath === 'string') {
+  //   // 对于前端，无法直接读取本地文件系统路径
+  //   // 需要通过 input[type=file] 或者拖拽获取 File 对象
+  //   console.error('无法直接使用文件路径，请使用 File 对象');
+  //   return Promise.reject('无法直接使用文件路径');
+  // }
+
+  return request ({
+    url: "http://192.168.1.100:5000/api/detect",
+    method: 'post',
+    headers: {
+      // 不要手动设置 Content-Type，让浏览器自动设置 multipart/form-data
+      // 'Content-Type': 'multipart/form-data' 
+    },
+    data: formData // 使用 data 而不是 body
+  });
 }

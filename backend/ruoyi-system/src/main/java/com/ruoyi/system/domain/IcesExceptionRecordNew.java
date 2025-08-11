@@ -78,7 +78,7 @@ public class IcesExceptionRecordNew extends BaseEntity {
     /**
      * 影响因子(百分比描述)
      */
-    private Long exrImpactFactor;
+    private Float exrImpactFactor;
     /**
      * 影响等级(数据字典)
      */

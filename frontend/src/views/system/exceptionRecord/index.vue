@@ -98,6 +98,16 @@
           v-hasPermi="['system:exceptionRecord:export']"
         >导出</el-button>
       </el-col>
+      <el-col :span="1.5" > 
+          <el-button
+            type="info"
+            plain
+            icon="el-icon-upload"
+            size="mini"
+            @click="handleimg"
+
+          >上传图片</el-button>
+        </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -190,7 +200,7 @@
               size="mini"
               type="text"
               icon="el-icon-close"
-              v-show="scope.row.exrStat === '3'"
+              v-show="scope.row.exrStat === '2'"
               @click="handleConfirmNegative(scope.row)"
             >非异常</el-button>
             <el-button
@@ -377,14 +387,14 @@
       <!-- 1. 顶部大图 -->
       <div style="text-align:center;margin-bottom:16px;">
         <img
-          :src="form.exrImg || defaultImg"
-          style="width:100%;max-height:260px;object-fit:cover;border-radius:6px;"
+          :src="form.exrImg"
+          style="width:100%;max-height:260px;object-fit:contain;border-radius:6px;"
         />
       </div>
       <!-- 2. 信息列表 -->
       <el-descriptions :column="1" border>
         <el-descriptions-item label="异常源">
-          {{ form.exsCode || '-' }}
+          {{( exceptionSourceList.find(ele => ele.exsCode === form.exsCode)||{}).exsName || '' }}
         </el-descriptions-item>
         <el-descriptions-item label="异常记录人">
           {{ form.exrUserReport || '-' }}
@@ -419,7 +429,7 @@
 </template>
 
 <script>
-import { listExceptionRecord, getExceptionRecord, delExceptionRecord, addExceptionRecord, updateExceptionRecord ,saveDescToKnowledge,checkdetail,getdetail,saveKnowledgeToBackend} from "@/api/system/exceptionRecord";
+import { listExceptionRecord, getExceptionRecord, delExceptionRecord, addExceptionRecord, updateExceptionRecord ,saveDescToKnowledge,checkdetail,getdetail,saveKnowledgeToBackend,sendimg} from "@/api/system/exceptionRecord";
 import { listUser } from "@/api/system/user";
 import { listException } from "@/api/system/exception";
 import { listExceptionSource } from "@/api/system/exceptionSource";
@@ -910,6 +920,7 @@ getChatDetail(conversationId, chatId, row) {
         // ✅ 标记为成功
         this.$set(this.uploadSuccessMap, row.exrId, true);
         this.form.exrStat= '5' // 更新状态为已发送到知识库
+        listExceptionRecord();
       }).catch(() => {
         // ✅ 标记为失败
         this.$set(this.uploadSuccessMap, row.exrId, false);
@@ -919,7 +930,6 @@ getChatDetail(conversationId, chatId, row) {
         console.log('Token使用情况:', data.data.usage)
       }
 
-      this.$message.success('已成功获取知识库分析结果，请查看控制台')
     } else {
       console.error('获取结果失败:', data.msg)
       this.$message.error('获取结果失败: ' + data.msg)
@@ -946,7 +956,47 @@ getChatDetail(conversationId, chatId, row) {
       this.title="查看详情"
     },
 
+      handleimg() {
+const imgsrc="/test1.jpg"
+    sendimg(imgsrc).then(response => {
+        console.log('图片上传:', response);
+
+      this.autoAddExpectionRecord();
+
+
+    }).catch(error => {
+      console.error('图片上传失败:', error);
+      this.$message.error('图上传失败: ' + error.message);
+    });
+  },
+
+  autoAddExpectionRecord() {
+    // 自动添加异常记录的逻辑
+
+    const autoRecord = {
+      exrStat: "1",
+      exsCode:"ExceptionSource-00005",
+      exCode:"Exception-00004",
+      exrDesc:"机械臂抓取物体物体掉落",
+      exrLevel:"3",
+      exrCdate:"",
+      exrUserReport:"admin",
+      exrUserHandle:"admin",
+      exrUserResp:"admin",
+      exrImpactLevel:"1",
+      exrImpactFactor:"3",
+      exrImg:"/test1.jpg",
+      exrParam:'{"orCode": "Order-00679-D", "orCodeOrgn": "Order-00679"}',
+      exrDelete: 0,
+    };
+      addExceptionRecord(autoRecord).then(response => {
+              this.$modal.msgSuccess("新增成功");
+              this.$router.replace(`/exception/exceptionRecordAdd?exrId=${response.data.exrId}`)
+              this.form = response.data})
   }
+  },
+
+
 };
 </script>
 <style scoped>

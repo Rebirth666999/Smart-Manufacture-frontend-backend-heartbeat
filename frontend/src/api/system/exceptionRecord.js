@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-
+import{saveModel} from '@/api/system/exceptionLifecycle'
 // 查询异常记录列表
 export function listExceptionRecord(query) {
   return request({
@@ -205,4 +205,183 @@ function blobToBase64(blob) {
     };
     reader.readAsDataURL(blob);
   });
+}
+
+
+
+
+
+   
+
+    // ✅ 批量创建多个用户任务的流程
+export async function createComplexUserTaskFlow(exlId,exrId) {
+      const processConfig = {
+        processId: `Process_${exrId}`,
+        processName: "异常处理流程",
+      };
+
+      // 定义多个用户任务
+      const userTasks = [
+        {
+          id: "UserTask_Assessment",
+          name: "异常评估",
+          assignee: "${1}",
+          formKey: "assessment_form"
+        },
+        {
+          id: "UserTask_Handle", 
+          name: "创建人工处理任务", // 使用自定义工具的名称
+          assignee: "${2}",
+          formKey: "exception_handle_form"
+        },
+        {
+          id: "UserTask_Confirm",
+          name: "结果确认", 
+          assignee: "${3}",
+          formKey: "confirm_form"
+        }
+      ];
+
+      // 生成包含多个用户任务的 XML
+      const xml = generateMultiUserTaskXML(processConfig, userTasks);
+            console.log("复杂用户任务流程 XML:", xml);
+  try {
+        await saveModel({
+            exlId: exlId,
+            xml: xml,
+        });
+
+        // >>>>>>>>>>>>>>>>> 成功调试信息 <<<<<<<<<<<<<<<<<
+        console.log("saveModel 调用成功！");
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+    } catch (error) {
+        // >>>>>>>>>>>>>>>>> 错误调试信息 <<<<<<<<<<<<<<<<<
+        console.error("saveModel 调用失败！", error);
+        // 如果是Promise reject，error本身可能包含更多信息
+        if (error.response) {
+            console.error("后端响应数据:", error.response.data);
+            console.error("后端响应状态码:", error.response.status);
+        }
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        throw error; // 重新抛出错误，以便上层调用者也能捕获
+    }
+
+
+    }
+
+    // 生成多用户任务 XML 的辅助方法
+/**
+ * 生成包含多个用户任务的 XML
+ * @param processConfig 流程配置
+ * @param userTasks 用户任务列表
+ * @returns {string} 生成的XML字符串
+ */
+export function generateMultiUserTaskXML(processConfig, userTasks) {
+    let userTasksXML = '';
+    let sequenceFlowsXML = '';
+    let shapesXML = '';
+    let edgesXML = '';
+
+    const xOffset = 200; // 流程图起始x坐标
+    const yOffset = 250; // 流程图起始y坐标
+    const taskWidth = 100;
+    const taskHeight = 80;
+    const hGap = 150; // 任务之间的水平间距
+    // 定义开始事件和结束事件的ID
+    const startEventId = "StartEvent_1";
+    const endEventId = "EndEvent_1";
+
+    userTasks.forEach((task, index) => {
+        const currentX = xOffset + (index * (taskWidth + hGap));
+        const currentY = yOffset;
+
+        // 重新添加 'bpmn2:' 前缀
+        userTasksXML += `
+    <bpmn2:userTask id="${task.id}" name="${task.name}" flowable:assignee="${task.assignee.replace('${', '').replace('}', '')}" flowable:formKey="${task.formKey}">
+      <bpmn2:incoming>Flow_${index === 0 ? startEventId : userTasks[index - 1].id}_${task.id}</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_${task.id}_${index === userTasks.length - 1 ? endEventId : userTasks[index + 1].id}</bpmn2:outgoing>
+    </bpmn2:userTask>`;
+
+        // 生成连接线 XML：重新添加 'bpmn2:' 前缀
+        const flowIdIn = `Flow_${index === 0 ? startEventId : userTasks[index - 1].id}_${task.id}`;
+        const flowIdOut = `Flow_${task.id}_${index === userTasks.length - 1 ? endEventId : userTasks[index + 1].id}`;
+
+        if (index === 0) {
+            sequenceFlowsXML += `
+    <bpmn2:sequenceFlow id="${flowIdIn}" sourceRef="${startEventId}" targetRef="${task.id}" />`;
+        } else {
+            sequenceFlowsXML += `
+    <bpmn2:sequenceFlow id="${flowIdIn}" sourceRef="${userTasks[index - 1].id}" targetRef="${task.id}" />`;
+        }
+
+        // 最后一个任务连接到结束事件
+        if (index === userTasks.length - 1) {
+            sequenceFlowsXML += `
+    <bpmn2:sequenceFlow id="${flowIdOut}" sourceRef="${task.id}" targetRef="${endEventId}" />`;
+        }
+
+
+        // 生成图形信息（bpmndi, dc, di 前缀保持不变）
+        shapesXML += `
+      <bpmndi:BPMNShape id="${task.id}_di" bpmnElement="${task.id}">
+        <dc:Bounds x="${currentX}" y="${currentY}" width="${taskWidth}" height="${taskHeight}" />
+      </bpmndi:BPMNShape>`;
+
+        edgesXML += `
+      <bpmndi:BPMNEdge id="${flowIdIn}_di" bpmnElement="${flowIdIn}">
+        <di:waypoint x="${index === 0 ? (xOffset - 36/2) : (currentX - hGap/2 + 36/2 + 20)}" y="${index === 0 ? (yOffset + taskHeight/2) : (currentY + taskHeight/2)}" />
+        <di:waypoint x="${currentX}" y="${currentY + taskHeight/2}" />
+      </bpmndi:BPMNEdge>`;
+
+        if (index === userTasks.length - 1) {
+            edgesXML += `
+      <bpmndi:BPMNEdge id="${flowIdOut}_di" bpmnElement="${flowIdOut}">
+        <di:waypoint x="${currentX + taskWidth}" y="${currentY + taskHeight/2}" />
+        <di:waypoint x="${currentX + taskWidth + hGap/2 + 36/2 + 20}" y="${currentY + taskHeight/2}" />
+      </bpmndi:BPMNEdge>`;
+        }
+    });
+
+    // 计算结束事件的X坐标
+    const endEventX = xOffset + (userTasks.length * (taskWidth + hGap));
+    const endEventY = yOffset + (taskHeight/2) - (36/2);
+
+    // 重新添加 'bpmn2:' 前缀到根元素和核心流程元素
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                  xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" 
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI" 
+                  xmlns:flowable="http://flowable.org/bpmn"              
+                  id="diagram_${processConfig.processId}"               
+                  targetNamespace="http://flowable.org/bpmn"                         
+                  xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
+  <bpmn2:process id="${processConfig.processId}" name="${processConfig.processName}" isExecutable="true">
+    
+    <bpmn2:startEvent id="${startEventId}" >
+      <bpmn2:outgoing>Flow_${startEventId}_${userTasks[0].id}</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    ${userTasksXML}
+    <bpmn2:endEvent id="${endEventId}" name="处理完成">
+      <bpmn2:incoming>Flow_${userTasks[userTasks.length - 1].id}_${endEventId}</bpmn2:incoming>
+    </bpmn2:endEvent>
+    ${sequenceFlowsXML}
+    
+  </bpmn2:process>
+  
+  <bpmndi:BPMNDiagram id="BPMNDiagram_${processConfig.processId}">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="${processConfig.processId}">
+      <bpmndi:BPMNShape id="${startEventId}_di" bpmnElement="${startEventId}">
+        <dc:Bounds x="${xOffset - 36/2}" y="${yOffset + taskHeight/2 - 36/2}" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      ${shapesXML}
+      <bpmndi:BPMNShape id="${endEventId}_di" bpmnElement="${endEventId}">
+        <dc:Bounds x="${endEventX}" y="${endEventY}" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      ${edgesXML}
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>`;
 }

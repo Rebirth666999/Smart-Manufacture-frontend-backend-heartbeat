@@ -158,7 +158,7 @@
       <!-- <el-table-column label="已删除" align="center" prop="exrDelete" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button-group>
+          
             <el-button
               size="mini"
               type="text"
@@ -211,7 +211,14 @@
               v-hasPermi="['system:exceptionRecord:remove']"
               v-show="scope.row.exrStat === '1'"
             >删除</el-button>
-          </el-button-group>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-document"
+              @click="autoAddLifeCycle(scope.row)"
+              v-show="scope.row.exrPro">test
+          </el-button>
+          
         </template>
       </el-table-column>
     </el-table>
@@ -224,163 +231,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改异常记录对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="90px">
-        <el-col :span="12">
-          <el-form-item label="异常源" prop="exsCode">
-            <el-select v-model="form.exsCode" placeholder="请选择异常源">
-              <el-option
-                v-for="option in exceptionSourceList"
-                :key="option.exsCode"
-                :label="option.exsName"
-                :value="option.exsCode">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="异常" prop="exCode">
-            <el-select v-model="form.exCode" placeholder="请选择异常">
-              <el-option
-                v-for="option in exceptionList"
-                :key="option.exCode"
-                :label="option.exName"
-                :value="option.exCode">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item label="描述" prop="exrDesc">
-            <el-input v-model="form.exrDesc" type="textarea" placeholder="请输入内容" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item label="参数" prop="exrParam">
-            <el-input v-model="form.exrParam" type="textarea" placeholder="请输入内容" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="状态" prop="exrStat">
-            <el-select v-model="form.exrStat" placeholder="请选择状态">
-              <el-option
-                v-for="dict in dict.type.ices_exception_record_status"
-                :key="dict.value"
-                :label="dict.label"
-                :value="dict.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="等级" prop="exrLevel">
-            <el-select v-model="form.exrLevel" placeholder="请选择等级">
-              <el-option
-                v-for="dict in dict.type.ices_exception_record_level"
-                :key="dict.value"
-                :label="dict.label"
-                :value="dict.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="异常上报人" prop="exrUserReport">
-            <el-select
-              v-model="form.exrUserReport"
-              placeholder="请选择异常上报人"
-              clearable
-            >
-              <el-option
-                v-for="item in userList"
-                :key="item.userId"
-                :label="item.userName"
-                :value="item.userId"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="当前处理人" prop="exrUserHandle">
-            <el-select
-              v-model="form.exrUserHandle"
-              placeholder="请选择当前处理人"
-              clearable
-            >
-              <el-option
-                v-for="item in userList"
-                :key="item.userId"
-                :label="item.userName"
-                :value="item.userId"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="异常解除人" prop="exrUserFinish">
-            <el-select
-              v-model="form.exrUserFinish"
-              placeholder="请选择异常解除人"
-              clearable
-            >
-              <el-option
-                v-for="item in userList"
-                :key="item.userId"
-                :label="item.userName"
-                :value="item.userId"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="异常责任人" prop="exrUserResp">
-            <el-select
-              v-model="form.exrUserResp"
-              placeholder="请选择异常责任人"
-              clearable
-            >
-              <el-option
-                v-for="item in userList"
-                :key="item.userId"
-                :label="item.userName"
-                :value="item.userId"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item label="持续时间" prop="exrDuration">
-            <el-input v-model="form.exrDuration" placeholder="请输入持续时间" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="影响因子" prop="exrImpactFactor">
-            <el-input v-model="form.exrImpactFactor" placeholder="请输入影响因子" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="影响等级" prop="exrImpactLevel">
-            <el-select v-model="form.exrImpactLevel" placeholder="请选择影响等级">
-              <el-option
-                v-for="dict in dict.type.ices_exception_record_impact_level"
-                :key="dict.value"
-                :label="dict.label"
-                :value="dict.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
-    </el-dialog>
+  
 
     <!--  查看异常图片及其详情信息的对话框  -->
     <el-dialog :title="title" :visible.sync="open1" width="700px" append-to-body>
@@ -429,16 +280,19 @@
 </template>
 
 <script>
-import { listExceptionRecord, getExceptionRecord, delExceptionRecord, addExceptionRecord, updateExceptionRecord ,saveDescToKnowledge,checkdetail,getdetail,saveKnowledgeToBackend,sendimg} from "@/api/system/exceptionRecord";
+import { listExceptionRecord, getExceptionRecord, delExceptionRecord, addExceptionRecord, updateExceptionRecord 
+  ,saveDescToKnowledge,checkdetail,getdetail,saveKnowledgeToBackend,sendimg,createComplexUserTaskFlow,generateMultiUserTaskXML } from "@/api/system/exceptionRecord";
 import { listUser } from "@/api/system/user";
 import { listException } from "@/api/system/exception";
 import { listExceptionSource } from "@/api/system/exceptionSource";
-
+import{addExceptionLifecycle,listExceptionLifecycle} from "@/api/system/exceptionLifecycle";
 export default {
   name: "ExceptionRecord",
   dicts: ['ices_exception_record_status', 'ices_exception_record_level', 'ices_exception_record_impact_level'],
   data() {
     return {
+      //知识库返回信息
+      knowledgeResponse: null,
       // 按钮loading
       buttonLoading: false,
       // 遮罩层
@@ -467,6 +321,7 @@ export default {
         exrCode: undefined,
         exsCode: undefined,
         exCode: undefined,
+        exrId: undefined,
         exrStat: undefined,
         exrLevel: undefined,
         exrDelete: 0,
@@ -903,7 +758,7 @@ getChatDetail(conversationId, chatId, row) {
           this.$set(this.knowledgeContent, row.exrId, cleanContent);
           this.$message.success('已获取知识库分析结果，可查看详情');
         }
-
+        this.knowledgeResponse=cleanContent;
         console.log('聊天消息:')
         data.data.messages.forEach((message, index) => {
           console.log(`消息${index + 1} [${message.role}]:`, message.content)
@@ -921,6 +776,7 @@ getChatDetail(conversationId, chatId, row) {
         this.$set(this.uploadSuccessMap, row.exrId, true);
         this.form.exrStat= '5' // 更新状态为已发送到知识库
         listExceptionRecord();
+        autoAddLifeCycle();
       }).catch(() => {
         // ✅ 标记为失败
         this.$set(this.uploadSuccessMap, row.exrId, false);
@@ -939,7 +795,58 @@ getChatDetail(conversationId, chatId, row) {
     console.error('获取聊天详细结果失败:', error)
     this.$message.error('获取详细结果失败: ' + error.message)
   })
+  this.autoAddLifeCycle(row);
 },
+
+autoAddLifeCycle(row){
+const autoLifeCycle = {
+              //exlId,exlCode
+              exrCode: row.exrCode,
+              exCode: row.exCode,
+              exsCode: row.exsCode,
+              exlSnapshot:"",
+              exlModelId:"",
+              exlModelKey:"",
+              exlDelete: 0,
+              exlDesc: "自动生成",
+            };
+            console.log("自动添加异常生命周期", JSON.stringify(autoLifeCycle));
+            if(autoLifeCycle.exrCode){ {
+              addExceptionLifecycle(autoLifeCycle).then(response => {
+                this.$modal.msgSuccess("新增成功");
+                this.open = false;
+                this.getList();
+              }).finally(() => {
+                this.buttonLoading = false;
+              });
+            }}
+
+            listExceptionLifecycle().then(response => {
+              const exlId = response.rows.find(ele => ele.exrCode === row.exrCode ).exlId
+              console.log("exlId", exlId);
+            createComplexUserTaskFlow(exlId,row.exrCode);
+            })
+            
+
+},
+autoAddLifeCyclebpmn(){
+// const autoLifeCyclebpmn = {
+//     processId: `test`, // 为流程生成一个唯一的ID，确保每次创建都是新的
+//     processName: "test",             // 流程的名称
+//             };
+//     // 正则表达式：(?=\d+[\.\)\:]?\s*)
+//     const regex = /(?=\d+[\.\)\:]?\s*)/;
+//     // 使用 split 方法分割字符串
+//     let devided = this.knowledgeResponse.split(regex);
+//     // 过滤掉可能出现的空字符串
+//     devided = devided.filter(item => item.trim() !== '');
+//     // 如果原字符串开头没有数字标号，并且第一部分是前言，它会作为第一个元素。
+
+
+
+},
+
+
 // ...existing code...
     /** 查看详情按钮操作*/
     /** 确认上报记录为异常
@@ -977,7 +884,7 @@ const imgsrc="/test1.jpg"
       exrStat: "1",
       exsCode:"ExceptionSource-00005",
       exCode:"Exception-00004",
-      exrDesc:"机械臂抓取物体物体掉落",
+      exrDesc:"物体掉落",
       exrLevel:"3",
       exrCdate:"",
       exrUserReport:"admin",
@@ -986,7 +893,7 @@ const imgsrc="/test1.jpg"
       exrImpactLevel:"1",
       exrImpactFactor:"3",
       exrImg:"/test1.jpg",
-      exrParam:'{"orCode": "Order-00679-D", "orCodeOrgn": "Order-00679"}',
+      exrParam:'{"orCode": "Order-00003", "orCodeOrgn": "Order-00679"}',
       exrDelete: 0,
     };
       addExceptionRecord(autoRecord).then(response => {
@@ -994,6 +901,8 @@ const imgsrc="/test1.jpg"
               this.$router.replace(`/exception/exceptionRecordAdd?exrId=${response.data.exrId}`)
               this.form = response.data})
   }
+
+
   },
 
 

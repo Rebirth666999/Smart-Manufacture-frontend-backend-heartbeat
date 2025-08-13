@@ -63,5 +63,6 @@ public class IcesExceptionLifecycleBo extends BaseEntity {
      */
     private String exlDesc;
 
-
+/*  异常上报编码 */
+    private String exrCode;
 }

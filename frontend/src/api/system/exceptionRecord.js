@@ -214,61 +214,56 @@ function blobToBase64(blob) {
    
 
     // ✅ 批量创建多个用户任务的流程
-export async function createComplexUserTaskFlow(exlId,exrId) {
+export async function createComplexUserTaskFlow(exlId,exrId,devidedKnowledgeResponseBody,devidedKnowledgeResponseHeaders) {
       const processConfig = {
         processId: `Process_${exrId}`,
-        processName: "异常处理流程",
+        processName: "createComplexUserTaskFlow",
       };
 
       // 定义多个用户任务
-      const userTasks = [
-        {
-          id: "UserTask_Assessment",
-          name: "异常评估",
-          assignee: "${1}",
-          formKey: "assessment_form"
-        },
-        {
-          id: "UserTask_Handle", 
-          name: "创建人工处理任务", // 使用自定义工具的名称
-          assignee: "${2}",
-          formKey: "exception_handle_form"
-        },
-        {
-          id: "UserTask_Confirm",
-          name: "结果确认", 
-          assignee: "${3}",
-          formKey: "confirm_form"
+      // const userTasks = [
+      //   {
+      //     id: "UserTask_Assessment",
+      //     name: "异常评估",
+      //     assignee: "${1}",
+      //     formKey: "assessment_form"
+      //   },
+      //   {
+      //     id: "UserTask_Handle", 
+      //     name: "创建人工处理任务", // 使用自定义工具的名称
+      //     assignee: "${2}",//涉及部门id，逗号分隔
+      //     formKey: "exception_handle_form"
+      //   },
+      //   {
+      //     id: "UserTask_Confirm",
+      //     name: "结果确认", 
+      //     assignee: "${3}",
+      //     formKey: "confirm_form"
+      //   }
+      // ];
+      let userTasks = [];
+      for (let i = 0; i <=devidedKnowledgeResponseBody.length-1; i++) {
+        userTasks[i]={
+          id: `UserTask_${i}`,
+          name: devidedKnowledgeResponseHeaders[i] ? devidedKnowledgeResponseHeaders[i] : `任务${i}`,
+          assignee: "100",
+          formKey: devidedKnowledgeResponseBody[i] ? devidedKnowledgeResponseBody[i] : "default_form"
         }
-      ];
+      }
 
       // 生成包含多个用户任务的 XML
       const xml = generateMultiUserTaskXML(processConfig, userTasks);
-            console.log("复杂用户任务流程 XML:", xml);
+            console.log("复杂用户任务流程 XML:", xml,"exlId:", exlId);
   try {
         await saveModel({
             exlId: exlId,
             xml: xml,
         });
-
-        // >>>>>>>>>>>>>>>>> 成功调试信息 <<<<<<<<<<<<<<<<<
         console.log("saveModel 调用成功！");
-        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
     } catch (error) {
-        // >>>>>>>>>>>>>>>>> 错误调试信息 <<<<<<<<<<<<<<<<<
         console.error("saveModel 调用失败！", error);
-        // 如果是Promise reject，error本身可能包含更多信息
-        if (error.response) {
-            console.error("后端响应数据:", error.response.data);
-            console.error("后端响应状态码:", error.response.status);
-        }
-        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        throw error; // 重新抛出错误，以便上层调用者也能捕获
-    }
-
-
-    }
+        throw error; // 重新抛出错误
+    }}
 
     // 生成多用户任务 XML 的辅助方法
 /**

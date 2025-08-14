@@ -216,7 +216,7 @@
               type="text"
               icon="el-icon-document"
               @click="autoAddLifeCycle(scope.row)"
-              v-show="scope.row.exrPro">test
+              v-show="scope.row.exrPro">生成异常生命周期
           </el-button>
           
         </template>
@@ -291,6 +291,8 @@ export default {
   dicts: ['ices_exception_record_status', 'ices_exception_record_level', 'ices_exception_record_impact_level'],
   data() {
     return {
+      devidedKnowledgeResponseHeaders: [],
+      devidedKnowledgeResponseBody: [],
       //知识库返回信息
       knowledgeResponse: null,
       // 按钮loading
@@ -814,36 +816,59 @@ const autoLifeCycle = {
             if(autoLifeCycle.exrCode){ {
               addExceptionLifecycle(autoLifeCycle).then(response => {
                 this.$modal.msgSuccess("新增成功");
+                console.log("新增异常生命周期成功", response);
                 this.open = false;
                 this.getList();
+                listExceptionLifecycle().then(response => {
+              const exlId = response.rows.find(ele => ele.exrCode === row.exrCode ).exlId
+              console.log("excode", row.exrCode);
+              console.log("exlId", exlId);
+              this.autoAddLifeCyclebpmn(row);
+            createComplexUserTaskFlow(exlId,row.exrCode,this.devidedKnowledgeResponseBody,this.devidedKnowledgeResponseHeaders);
+            })
               }).finally(() => {
                 this.buttonLoading = false;
               });
-            }}
+            }}},
 
-            listExceptionLifecycle().then(response => {
-              const exlId = response.rows.find(ele => ele.exrCode === row.exrCode ).exlId
-              console.log("exlId", exlId);
-            createComplexUserTaskFlow(exlId,row.exrCode);
-            })
-            
+autoAddLifeCyclebpmn(row){
+    // 每次解析前清空数组，避免重复追加
+  this.devidedKnowledgeResponseHeaders = [];
+  this.devidedKnowledgeResponseBody = [];
+ // 移除前言和后语
+  const lines = row.exrPro.split('\n').map(line => line.trim()).filter(line => line !== '');
+  // 识别并移除前言 (第一行)
+  if (lines.length > 0) {
+    // 假设前言是第一行，并且它不是以数字开头
+    if (!/^\d+\./.test(lines[0])) {
+      lines.shift(); // 移除前言
+    }
+  }
 
-},
-autoAddLifeCyclebpmn(){
-// const autoLifeCyclebpmn = {
-//     processId: `test`, // 为流程生成一个唯一的ID，确保每次创建都是新的
-//     processName: "test",             // 流程的名称
-//             };
-//     // 正则表达式：(?=\d+[\.\)\:]?\s*)
-//     const regex = /(?=\d+[\.\)\:]?\s*)/;
-//     // 使用 split 方法分割字符串
-//     let devided = this.knowledgeResponse.split(regex);
-//     // 过滤掉可能出现的空字符串
-//     devided = devided.filter(item => item.trim() !== '');
-//     // 如果原字符串开头没有数字标号，并且第一部分是前言，它会作为第一个元素。
+  // 识别并移除后语 (最后一行)
+  if (lines.length > 0) {
+    // 假设后语是最后一行，并且它不是以数字开头
+    if (!/^\d+\./.test(lines[lines.length - 1])) {
+      lines.pop(); // 移除后语
+    }
+  }
 
+  // 正则表达式匹配：数字. **标题**：正文
+  // ^\d+\.\s+      - 匹配行首的 "数字." 和后面的空格
+  // \*\*([^\*]+)\*\* - 捕获星号之间的内容作为标题 (非星号字符至少一个)
+  // ：            - 匹配冒号
+  // (.*)          - 捕获冒号后的所有内容作为正文
+  const regex = /^\d+\.\s*\*\*([^\*]+)\*\*[:：]\s*(.*)$/;
 
-
+  lines.forEach(line => {
+    const match = line.match(regex);
+    if (match) {
+      this.devidedKnowledgeResponseHeaders.push(match[1].trim()); // match[1] 是标题
+      this.devidedKnowledgeResponseBody.push(match[2].trim());  // match[2] 是正文
+    }
+  });
+    console.log("分割后的内容（正文）:", this.devidedKnowledgeResponseBody);
+    console.log("分割后的内容（标题）:", this.devidedKnowledgeResponseHeaders);
 },
 
 
@@ -879,7 +904,6 @@ const imgsrc="/test1.jpg"
 
   autoAddExpectionRecord() {
     // 自动添加异常记录的逻辑
-
     const autoRecord = {
       exrStat: "1",
       exsCode:"ExceptionSource-00005",

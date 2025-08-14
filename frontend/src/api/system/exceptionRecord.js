@@ -38,7 +38,7 @@ export function updateExceptionRecord(data) {
 // 删除异常记录
 export function delExceptionRecord(exrId) {
   return request({
-    url: '/system/exceptionRecordNew/' + exrId,
+    url: '/system/exceptionRecord/' + exrId,
     method: 'delete'
   })
 }

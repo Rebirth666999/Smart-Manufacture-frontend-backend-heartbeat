@@ -108,7 +108,7 @@
               {{ exceptionList.find(ele => ele.exCode === scope.row.exCode).exName || '' }}
             </template>
           </el-table-column>
-          <el-table-column label="缩略图" align="center" prop="exlSnapshot" />
+          <el-table-column label="异常上报编码" align="center" prop="exrCode" />
           <el-table-column label="模型ID" align="center" prop="exlModelId" />
           <el-table-column label="模型key" align="center" prop="exlModelKey" />
           <!-- <el-table-column label="已删除" align="center" prop="exlDelete" /> -->

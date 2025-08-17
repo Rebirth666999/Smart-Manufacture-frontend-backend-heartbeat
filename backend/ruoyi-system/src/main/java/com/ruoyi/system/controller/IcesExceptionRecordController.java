@@ -83,16 +83,7 @@ public class IcesExceptionRecordController extends BaseController {
         return R.ok(iIcesExceptionRecordService.insertByBo(bo));
     }
 
-    /**
-     * 新增AI异常记录!!!!!!!!!!
-     */
-    //@SaCheckPermission("system:exceptionRecord:add")
-    @Log(title = "异常记录", businessType = BusinessType.INSERT)
-    @RepeatSubmit()
-    @PostMapping("/ai")
-    public R<IcesExceptionRecordVo> addAi(@Validated(AddGroup.class) @RequestBody IcesExceptionRecordAiBo bo) {
-        return R.ok(iIcesExceptionRecordService.insertByBo(bo));
-    }
+  
 
     /**
      * 修改异常记录
@@ -117,4 +108,13 @@ public class IcesExceptionRecordController extends BaseController {
                           @PathVariable Long[] exrIds) {
         return toAjax(iIcesExceptionRecordService.deleteWithValidByIds(Arrays.asList(exrIds), true));
     }
+
+    /**
+ * 网络连接测试接口
+ */
+@GetMapping("/network/test")
+public R<String> networkTest() {
+    return R.ok("网络连接正常，当前时间：" + java.time.LocalDateTime.now());
+}
+
 }

@@ -1,0 +1,58 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "HeartBeat1Application",
+            "request": "launch",
+            "mainClass": "com.ruoyi.heart_beat.HeartBeat1Application",
+            "projectName": "backend-service"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "org.example.Main",
+            "projectName": "backend-service"
+        },
+        {
+            "type": "java",
+            "name": "RuoYiApplication",
+            "request": "launch",
+            "mainClass": "com.ruoyi.RuoYiApplication",
+            "projectName": "ruoyi-admin",
+             "vmArgs": [
+                "--add-opens=java.base/java.lang=ALL-UNNAMED",
+                "--add-opens=java.base/java.io=ALL-UNNAMED",
+                "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
+                "--add-opens=java.base/java.util=ALL-UNNAMED",
+                "--add-opens=java.base/java.security=ALL-UNNAMED",
+                "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED",
+                "--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED"
+            ]
+        },
+        {
+            "type": "java",
+            "name": "MonitorAdminApplication",
+            "request": "launch",
+            "mainClass": "com.ruoyi.monitor.admin.MonitorAdminApplication",
+            "projectName": "ruoyi-monitor-admin"
+        },
+        {
+            "type": "java",
+            "name": "XxlJobAdminApplication",
+            "request": "launch",
+            "mainClass": "com.xxl.job.admin.XxlJobAdminApplication",
+            "projectName": "ruoyi-xxl-job-admin"
+        }
+    ]
+}

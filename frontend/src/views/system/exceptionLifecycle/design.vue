@@ -59,6 +59,7 @@ export default {
     this.exlId = this.$route.query.exlId
     getModel({exlId: this.exlId}).then(response => {
       this.designerData.bpmnXml = response.data
+      console.log("获取到的bpmnXml:", JSON.stringify(response.data));
     }).finally(() => {
       this.designerOpen = true
       this.designerData.loading = false

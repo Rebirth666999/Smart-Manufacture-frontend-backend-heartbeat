@@ -156,7 +156,7 @@
       </el-table-column>
       <el-table-column label="异常执行流程" align="center" prop="exrProcess" :show-overflow-tooltip="true" />
       <!-- <el-table-column label="已删除" align="center" prop="exrDelete" /> -->
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label=" 操 作 " align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           
             <el-button
@@ -170,7 +170,7 @@
               size="mini"
               type="text"
               icon="el-icon-upload"
-              @click="handleByJson(scope.row)"
+              @click="sendToKnowledge(scope.row)"
               v-hasPermi="['system:exceptionRecord:edit']"
               v-show="scope.row.exrStat === '4' && !scope.row.exrPro"
             >上传知识库</el-button>
@@ -216,7 +216,8 @@
               type="text"
               icon="el-icon-document"
               @click="autoAddLifeCycle(scope.row)"
-              v-show="scope.row.exrPro">生成异常生命周期
+              v-show="scope.row.exrStat==='5'">生成异常
+              生命周期
           </el-button>
           
         </template>
@@ -263,25 +264,20 @@
         <el-descriptions-item
           label="知识库分析结果"
           v-if="form.exrPro"
-         >
-          <div style="background-color: #f5f7fa; padding: 12px; border-radius: 6px; line-height: 1.8; white-space: pre-line;">
-            {{ form.exrPro }}
-          </div>
+          v-model="this.form.exrPro" >
+        {{ this.form.exrPro }}
         </el-descriptions-item>
-
       </el-descriptions>
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancel1" type="primary">关 闭</el-button>
       </div>
-
     </el-dialog>
-
   </div>
 </template>
 
 <script>
 import { listExceptionRecord, getExceptionRecord, delExceptionRecord, addExceptionRecord, updateExceptionRecord 
-  ,saveDescToKnowledge,checkdetail,getdetail,saveKnowledgeToBackend,sendimg,createComplexUserTaskFlow,generateMultiUserTaskXML } from "@/api/system/exceptionRecord";
+  ,saveDescToKnowledge,checkdetail,getdetail,saveKnowledgeToBackend,sendimg,createComplexUserTaskFlow } from "@/api/system/exceptionRecord";
 import { listUser } from "@/api/system/user";
 import { listException } from "@/api/system/exception";
 import { listExceptionSource } from "@/api/system/exceptionSource";
@@ -465,6 +461,7 @@ export default {
         exrParam: undefined,
         exrStat: undefined,
         exrLevel: undefined,
+        exrPro: undefined,
         exrUserReport: undefined,
         exrUserHandle: undefined,
         exrUserFinish: undefined,
@@ -617,7 +614,7 @@ export default {
      */
 
 // ...existing code...
-handleByJson(row){
+sendToKnowledge(row){
   getExceptionRecord(row.exrId).then(response => {
     this.form = response.data
     const descObj = this.form.exrDesc
@@ -632,25 +629,19 @@ handleByJson(row){
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-
       // 解析 JSON 响应
       return response.json()
     }).then(data => {
-      console.log('解析后的数据:', data)
       console.log('完整响应结构:', JSON.stringify(data, null, 2))
-
       // 检查API返回状态
       if (data.code !== 0) {
-        throw new Error(data.msg || '调用API失败')
-      }
+        throw new Error(data.msg || '调用API失败')}
 
       // 获取对话信息
       const conversationId = data.data.conversation_id  // 注意这里是 conversation_id
       const chatId = data.data.id  // 这里是 chat 的 id
-
       console.log('对话ID:', conversationId)
       console.log('聊天ID:', chatId)
-
       // 轮询检查聊天状态
       this.checkChatStatus(conversationId, chatId,row)
 
@@ -748,7 +739,7 @@ getChatDetail(conversationId, chatId, row) {
       //上传成功：标记当前行的上传状态为true,按钮隐藏,对话框中解决方案显现
 
       this.$set(this.uploadStatus, row.exrId, true)
-      this.$message.success('已成功获取知识库分析结果，请点击查看详情')
+      this.$message.success('已成功获取知识库分析结果')
 
       // 打印聊天消息
       if (data.data && data.data.messages&& data.data.messages.length > 0) {
@@ -771,12 +762,13 @@ getChatDetail(conversationId, chatId, row) {
         exrCode: row.exrCode, // 原始异常编码
         conversationId: conversationId, // 对话ID
         chatId: chatId, // 聊天ID
-        data: data.data // 知识库返回的完整数据（包含messages、usage等）
+        data: data.data, // 知识库返回的完整数据（包含messages、usage等）
+        exrStat: '5' // 更新状态为已发送到知识库
       }
       saveKnowledgeToBackend(backendParams).then(() => {
         // ✅ 标记为成功
         this.$set(this.uploadSuccessMap, row.exrId, true);
-        this.form.exrStat= '5' // 更新状态为已发送到知识库
+
         listExceptionRecord();
         autoAddLifeCycle();
       }).catch(() => {
@@ -815,7 +807,6 @@ const autoLifeCycle = {
             console.log("自动添加异常生命周期", JSON.stringify(autoLifeCycle));
             if(autoLifeCycle.exrCode){ {
               addExceptionLifecycle(autoLifeCycle).then(response => {
-                this.$modal.msgSuccess("新增成功");
                 console.log("新增异常生命周期成功", response);
                 this.open = false;
                 this.getList();
@@ -825,9 +816,18 @@ const autoLifeCycle = {
               console.log("exlId", exlId);
               this.autoAddLifeCyclebpmn(row);
             createComplexUserTaskFlow(exlId,row.exrCode,this.devidedKnowledgeResponseBody,this.devidedKnowledgeResponseHeaders);
+            getExceptionRecord(row.exrId).then(response =>{
+              this.form = response.data;
+              this.form.exrStat = "6";
+              updateExceptionRecord(this.form).then(response => {
+                this.$modal.msgSuccess("异常生命周期已生成");
+                this.getList();
+              });
+            })
             })
               }).finally(() => {
                 this.buttonLoading = false;
+                this.reset();
               });
             }}},
 
@@ -871,8 +871,6 @@ autoAddLifeCyclebpmn(row){
     console.log("分割后的内容（标题）:", this.devidedKnowledgeResponseHeaders);
 },
 
-
-// ...existing code...
     /** 查看详情按钮操作*/
     /** 确认上报记录为异常
      * @param {any} row 记录信息
@@ -887,7 +885,7 @@ autoAddLifeCyclebpmn(row){
       this.open1=true
       this.title="查看详情"
     },
-
+// 处理图片上传
       handleimg() {
 const imgsrc="/test1.jpg"
     sendimg(imgsrc).then(response => {
@@ -920,14 +918,12 @@ const imgsrc="/test1.jpg"
       exrParam:'{"orCode": "Order-00003", "orCodeOrgn": "Order-00679"}',
       exrDelete: 0,
     };
-      addExceptionRecord(autoRecord).then(response => {
+
+    addExceptionRecord(autoRecord).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.$router.replace(`/exception/exceptionRecordAdd?exrId=${response.data.exrId}`)
               this.form = response.data})
-  }
-
-
-  },
+  }},
 
 
 };

@@ -288,7 +288,7 @@ export function generateMultiUserTaskXML(processConfig, userTasks) {
     const endEventId = "EndEvent_1";
 
     userTasks.forEach((task, index) => {
-        const currentX = xOffset + (index * (taskWidth + hGap));
+        const currentX = xOffset + ((taskWidth + hGap));
         const currentY = yOffset;
 
         // 重新添加 'bpmn2:' 前缀

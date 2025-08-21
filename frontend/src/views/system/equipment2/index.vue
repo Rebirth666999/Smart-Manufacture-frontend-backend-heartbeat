@@ -1,65 +1,31 @@
+<!-- Equipment.vue -->
 <template>
   <div class="app-container">
+    <!-- 搜索栏 -->
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="名称" prop="eqName">
-        <el-input
-          v-model="queryParams.eqName"
-          placeholder="请输入名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.eqName" placeholder="请输入名称" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="车间" prop="arCode">
-        <el-select
-          v-model="queryParams.arCode"
-          placeholder="请选择车间"
-          clearable
-        >
-          <el-option
-            v-for="item in areaList"
-            :key="item.arCode"
-            :label="item.arName"
-            :value="item.arCode"
-          >
-          </el-option>
+        <el-select v-model="queryParams.arCode" placeholder="请选择车间" clearable>
+          <el-option v-for="item in areaList" :key="item.arCode" :label="item.arName" :value="item.arCode"/>
         </el-select>
       </el-form-item>
       <el-form-item label="设备模型" prop="emCode">
-        <el-select v-model="queryParams.emCode" placeholder="请选择设备模型"
-        @keyup.enter.native="handleQuery" clearable>
-          <el-option
-            v-for="item in equipmentModelListFull"
-            :key="item.emCode"
-            :label="item.emName"
-            :value="item.emCode"
-          >
-          </el-option>
+        <el-select v-model="queryParams.emCode" placeholder="请选择设备模型" clearable>
+          <el-option v-for="item in equipmentModelList" :key="item.emCode" :label="item.emName" :value="item.emCode"/>
         </el-select>
       </el-form-item>
       <el-form-item label="状态" prop="eqStat">
         <el-select v-model="queryParams.eqStat" placeholder="请选择状态" clearable>
-          <el-option
-            v-for="dict in dict.type.ices_equipment_status"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
+          <el-option v-for="dict in dict.type.ices_equipment_status" :key="dict.value" :label="dict.label" :value="dict.value"/>
         </el-select>
       </el-form-item>
-      <!-- <el-form-item label="已删除" prop="eqDelete">
-        <el-input
-          v-model="queryParams.eqDelete"
-          placeholder="请输入已删除"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
-
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
@@ -106,184 +72,165 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="equipmentList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="设备ID" align="center" prop="eqId" v-if="true" width="180"/>
-      <el-table-column label="设备编码" align="center" prop="eqCode" width="150" />
-      <el-table-column label="名称" align="center" prop="eqName" width="120" />
-      <el-table-column label="所属车间" align="center" prop="arCode" width="80">
-        <template slot-scope="scope">
-          {{ areaList.find(ele => ele.arCode === scope.row.arCode).arName || '' }}
-        </template>
-      </el-table-column>
-      <el-table-column label="所属设备模型" align="center" prop="emCode" width="180">
-        <template slot-scope="scope">
-          {{ equipmentModelListFull.find(ele => ele.emCode === scope.row.emCode).emName || '' }}
-        </template>
-      </el-table-column>
-      <el-table-column label="状态" align="center" prop="eqStat">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.ices_equipment_status" :value="scope.row.eqStat"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="上次通讯时间" align="center" prop="eqCommunicateTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.eqCommunicateTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="IP地址" align="center" prop="eqIp" width="160" :show-overflow-tooltip="true" />
-      <!-- <el-table-column label="已删除" align="center" prop="eqDelete" /> -->
-      <el-table-column label="创建人" align="center" prop="eqCman" />
-      <el-table-column label="创建时间" align="center" prop="eqCdate" width="180" />
-      <el-table-column label="发布人" align="center" prop="eqRman" />
-      <el-table-column label="发布时间" align="center" prop="eqRdate" width="180" />
-      <el-table-column label="修改人" align="center" prop="eqMman" />
-      <el-table-column label="修改时间" align="center" prop="eqMdate" width="180" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="180">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
+    <!-- 图标式卡片网格（已修复缺失标签） -->
+    <el-row :gutter="20">
+      <el-col
+        v-for="item in equipmentList"
+        :key="item.eqId"
+        :xs="24"
+        :sm="12"
+        :md="8"
+        :lg="6"
+      >
+        <el-card
+          class="equipment-card"
+          shadow="hover"
+          :body-style="{ padding: '0' }"
+        >
+          <!-- 上半：名称 + 编码 + 状态 + 查看详情 -->
+          <div class="card-top">
+            <div class="left-info">
+              <div class="card-title">{{ item.eqName }}</div>
+              <div class="card-code">{{ item.eqCode }}</div>
+            </div>
+            <div class="right-status">
+              <!-- 情况1：绿灯单独出现 -->
+              <div
+                v-if="item.eqStat === 'a'"
+                class="status-light green"
+              ></div>
 
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:equipment:edit']"
-            v-show="scope.row.eqStat === '1'"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-bell"
-            @click="handleEquipmentRecordView(scope.row)"
-          >查看事件</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-position"
-            @click="handleAtomOperationView(scope.row)"
-          >原子操作</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-set-up"
-            @click="handleEquipmentOperationView(scope.row)"
-          >设备操作</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-finished"
-            v-show="scope.row.eqStat === '1'"
-            @click="handleSubmitReview(scope.row)"
-          >提交审核</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-refresh-left"
-            v-show="scope.row.eqStat === '2' || scope.row.eqStat === 'd' || scope.row.eqStat === 'f' || scope.row.eqStat === 'h'"
-            @click="handleWithdrawReview(scope.row)"
-          >撤回审核</el-button>
-          <!-- <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-document-copy"
-            v-show="scope.row.eqStat !== '1' && scope.row.eqStat !== '2' && scope.row.eqStat !== '3'"
-          >复制配置</el-button> -->
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-video-pause"
-            v-show="scope.row.eqStat === '4' || scope.row.eqStat === '5' || scope.row.eqStat === '8' || scope.row.eqStat === '9'"
-            @click="handleStopReview(scope.row)"
-          >停用</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-video-play"
-            v-show="scope.row.eqStat === 'a'"
-            @click="handleResumeReview(scope.row)"
-          >恢复使用</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-setting"
-            v-show="scope.row.eqStat === 'a'"
-            @click="handleMaintaince(scope.row)"
-          >开始维护</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-setting"
-            v-show="scope.row.eqStat === 'b'"
-            @click="handleMaintainceComplete(scope.row)"
-          >结束维护</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            v-show="scope.row.eqStat === 'a'"
-            @click="handleDepreciateReview(scope.row)"
-          >报废</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:equipment:remove']"
-            v-show="scope.row.eqStat === '1'"
-          >删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+              <!-- 情况2：红灯 + 按钮一起出现 -->
+              <template v-else>
+                <div class="status-light red"></div>
+                <el-button
+                  size="mini"
+                  type="text"
+                  icon="el-icon-view"
+                  @click="handleViewDetail(item)"
+                >查看详情</el-button>
+              </template>
+            </div>
+          </div>
 
+          <!-- 下半：所有其它按钮 -->
+          <div class="card-bottom">
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-edit"
+              @click="handleUpdate(item)"
+              v-show="item.eqStat === '1'"
+            >修改</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-bell"
+              @click="handleEquipmentRecordView(item)"
+            >查看事件</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-position"
+              @click="handleAtomOperationView(item)"
+            >原子操作</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-set-up"
+              @click="handleEquipmentOperationView(item)"
+            >设备操作</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-finished"
+              v-show="item.eqStat === '1'"
+              @click="handleSubmitReview(item)"
+            >提交审核</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-refresh-left"
+              v-show="item.eqStat === '2' || item.eqStat === 'd' || item.eqStat === 'f' || item.eqStat === 'h'"
+              @click="handleWithdrawReview(item)"
+            >撤回审核</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-video-pause"
+              v-show="item.eqStat === '4' || item.eqStat === '5' || item.eqStat === '8' || item.eqStat === '9'"
+              @click="handleStopReview(item)"
+            >停用</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-video-play"
+              v-show="item.eqStat === 'a'"
+              @click="handleResumeReview(item)"
+            >恢复使用</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-setting"
+              v-show="item.eqStat === 'a'"
+              @click="handleMaintaince(item)"
+            >开始维护</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-setting"
+              v-show="item.eqStat === 'b'"
+              @click="handleMaintainceComplete(item)"
+            >结束维护</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-delete"
+              v-show="item.eqStat === 'a'"
+              @click="handleDepreciateReview(item)"
+            >报废</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-delete"
+              @click="handleDelete(item)"
+              v-hasPermi="['system:equipment:remove']"
+              v-show="item.eqStat === '1'"
+            >删除</el-button>
+
+          </div>
+        </el-card>
+
+      </el-col>
+    </el-row>
+
+    <!-- 分页与弹窗保持原样 -->
     <pagination
-      v-show="total>0"
+      v-show="total > 0"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
 
-    <!-- 添加或修改设备对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="85px">
+        <!-- 表单内容与原文件一致 -->
         <el-form-item label="名称" prop="eqName">
           <el-input v-model="form.eqName" placeholder="请输入名称" />
         </el-form-item>
         <el-form-item label="车间" prop="arCode">
-          <el-select
-            v-model="form.arCode"
-            placeholder="请选择车间"
-          >
-            <el-option
-              v-for="item in areaList"
-              :key="item.arCode"
-              :label="item.arName"
-              :value="item.arCode"
-            >
-            </el-option>
+          <el-select v-model="form.arCode" placeholder="请选择车间">
+            <el-option v-for="a in areaList" :key="a.arCode" :label="a.arName" :value="a.arCode"/>
           </el-select>
         </el-form-item>
         <el-form-item label="设备模型" prop="emCode">
-          <el-select
-            v-model="form.emCode"
-            placeholder="请选择设备模型"
-          >
-            <el-option
-              v-for="item in equipmentModelList"
-              :key="item.emCode"
-              :label="item.emName"
-              :value="item.emCode"
-            >
-            </el-option>
+          <el-select v-model="form.emCode" placeholder="请选择设备模型">
+            <el-option v-for="m in equipmentModelList" :key="m.emCode" :label="m.emName" :value="m.emCode"/>
           </el-select>
         </el-form-item>
         <el-form-item label="采购时间" prop="eqIntroduceTime">
-          <el-date-picker clearable
-            v-model="form.eqIntroduceTime"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="请选择采购时间">
-          </el-date-picker>
+          <el-date-picker v-model="form.eqIntroduceTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择采购时间"/>
         </el-form-item>
         <el-form-item prop="eqIp">
           <span slot="label">
@@ -296,13 +243,13 @@
             </el-tooltip>
             IP地址
           </span>
-          <el-input v-model="form.eqIp" placeholder="请输入IP地址" style="width: 50%;" />
-          <el-input v-model="form.eqPort" style="width: 50%;">
+          <el-input v-model="form.eqIp" placeholder="请输入IP地址" style="width: 50%"/>
+          <el-input v-model="form.eqPort" style="width: 50%">
             <template slot="prepend">端口号</template>
           </el-input>
         </el-form-item>
         <el-form-item label="描述" prop="eqDesc">
-          <el-input v-model="form.eqDesc" type="textarea" placeholder="请输入内容" />
+          <el-input v-model="form.eqDesc" type="textarea" placeholder="请输入内容"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -312,6 +259,16 @@
     </el-dialog>
   </div>
 </template>
+
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
+
+
 
 <script>
 import { listEquipment, getEquipment, delEquipment, addEquipment, updateEquipment } from "@/api/system/equipment";
@@ -711,4 +668,53 @@ export default {
 .el-date-editor{
   width: 100%;
 }
+
+.card-title {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+.card-code {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+.equipment-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 220px;
+  margin-bottom:20px;
+}
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 10px 0 10px;
+}
+.left-info {
+  display: flex;
+  flex-direction: column;
+}
+.right-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.status-light {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+.status-light.green { background-color: #67C23A; }
+.status-light.red   { background-color: #F56C6C; }
+.card-bottom {
+  padding: 8px 10px 10px;
+  border-top: 1px solid #ebeef5;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
 </style>

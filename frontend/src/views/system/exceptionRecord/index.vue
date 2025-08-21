@@ -272,6 +272,40 @@
         <el-button @click="cancel1" type="primary">关 闭</el-button>
       </div>
     </el-dialog>
+
+    <!--  查看异常图片及其详情信息的对话框  -->
+    <el-dialog :title="title" :visible.sync="open1" width="500px" append-to-body>
+      <!-- 1. 顶部大图 -->
+      <div style="text-align:center;margin-bottom:16px;">
+        <img
+          :src="form.exrPicUrl || defaultImg"
+          style="width:100%;max-height:260px;object-fit:cover;border-radius:6px;"
+        />
+      </div>
+      <!-- 2. 信息列表 -->
+      <el-descriptions :column="1" border>
+        <el-descriptions-item label="异常源">
+          {{ form.exsCode || '-' }}
+        </el-descriptions-item>
+        <el-descriptions-item label="异常记录人">
+          {{ form.createBy || '-' }}
+        </el-descriptions-item>
+        <el-descriptions-item label="异常时间">
+          {{ form.exrCdate || '-' }}
+        </el-descriptions-item>
+        <el-descriptions-item label="异常类型">
+          {{ form.extName || '-' }}
+        </el-descriptions-item>
+        <el-descriptions-item label="描述信息">
+          {{ form.exrDesc || '-' }}
+        </el-descriptions-item>
+      </el-descriptions>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="cancel1" type="primary">关 闭</el-button>
+      </div>
+
+    </el-dialog>
+
   </div>
 </template>
 

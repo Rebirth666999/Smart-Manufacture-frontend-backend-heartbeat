@@ -1,2 +1,4 @@
 logs/
 backend/ruoyi-admin/src/main/resources/application-dev.yml
+.idea/
+.vscode/

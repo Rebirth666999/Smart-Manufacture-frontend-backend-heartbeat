@@ -30,6 +30,8 @@ import com.ruoyi.system.service.IIcesEquipmentService;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.StringUtils;
 import java.util.Date;
+
+
 /**
  * 设备控制器，用于管理设备相关的操作
  *
@@ -166,6 +168,7 @@ public class IcesEquipmentController extends BaseController {
                           @PathVariable Long[] eqIds) {
         return toAjax(iIcesEquipmentService.deleteWithValidByIds(Arrays.asList(eqIds), true));
     }
+
 }
 
 

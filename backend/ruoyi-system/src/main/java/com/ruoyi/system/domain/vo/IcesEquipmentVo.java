@@ -77,7 +77,11 @@ public class IcesEquipmentVo {
      */
     @ExcelProperty(value = "IP地址")
     private String eqIp;
-
+    /*
+     * 设备测试用flaskip
+     */
+    @ExcelProperty(value = "设备测试用flaskip")
+    private String eqFlaskIp;
     /**
      * 已删除
      */

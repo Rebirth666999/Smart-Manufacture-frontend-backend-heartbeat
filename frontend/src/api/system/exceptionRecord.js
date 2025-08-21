@@ -90,7 +90,7 @@ export function checkdetail(conversation_id, chat_id) {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer pat_W9JsgUzbDxK6NGon0SAkRx9O109gX14PepCRuS43XQgz9CzP2ugXvqAjya1vNlil', // ⚠ 安全警告：硬编码的API密钥
+      'Authorization': 'Bearer pat_W9JsgUzbDxK6NGon0SAkRx9O109gX14PepCRuS43XQgz9CzP2ugXvqAjya1vNlil', //API密钥
     },
     // GET 请求不应该有 body
   });

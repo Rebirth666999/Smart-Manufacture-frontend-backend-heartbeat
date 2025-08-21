@@ -26,6 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="eqRdate" column="eq_rdate"/>
         <result property="eqMman" column="eq_mman"/>
         <result property="eqMdate" column="eq_mdate"/>
+        <result property="eqFlaskIp" column="eq_flask_ip"/>
     </resultMap>
 
 

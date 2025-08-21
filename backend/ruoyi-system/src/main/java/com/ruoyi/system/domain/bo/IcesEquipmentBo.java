@@ -68,7 +68,10 @@ public class IcesEquipmentBo extends BaseEntity {
      */
     @NotBlank(message = "IP地址不能为空", groups = { AddGroup.class, EditGroup.class })
     private String eqIp;
-
+    /*
+     * 设备测试用flaskip
+     */
+    private String eqFlaskIp;
     /**
      * 已删除
      */

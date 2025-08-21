@@ -123,15 +123,17 @@ export default {
         let completed = 0;
         let inProgress = 0;
         let total = 0;
-        
+        let notStarted = 0;
         plans.forEach(plan => {
-          const planQty = parseInt(plan.mpQtyPlan) || 0;
-          const realQty = parseInt(plan.mpQtyReal) || 0;
-          total += planQty;
-          completed += realQty;
+if(plan.mpStat==="6") {
+            completed++;// 6已完成
+          } else if (plan.mpStat === "5") {
+            inProgress++;//进行中
+          }
+          total++;
         });
         
-        inProgress = total - completed;
+        notStarted = total - completed-inProgress;
         
         this.optionData = [
           {
@@ -146,6 +148,12 @@ export default {
             value: inProgress,
             itemStyle: {
               color: 'rgba(255, 229, 13, 1)'
+            }
+          },{
+            name: '未开始',
+            value: notStarted,
+            itemStyle: {
+              color: 'rgba(255, 69, 0, 1)'
             }
           }
         ];

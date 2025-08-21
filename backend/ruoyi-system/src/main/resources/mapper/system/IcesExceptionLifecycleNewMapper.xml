@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.IcesExceptionLifecycleMapper">
+
+    <resultMap type="com.ruoyi.system.domain.IcesExceptionLifecycle" id="IcesExceptionLifecycleResult">
+        <result property="exlId" column="exl_id"/>
+        <result property="exlCode" column="exl_code"/>
+        <result property="exCode" column="ex_code"/>
+        <result property="exlSnapshot" column="exl_snapshot"/>
+        <result property="exlModelId" column="exl_model_id"/>
+        <result property="exlModelKey" column="exl_model_key"/>
+        <result property="exlDelete" column="exl_delete"/>
+        <result property="exlDesc" column="exl_desc"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="exrCode" column="exr_code"/>
+    </resultMap>
+
+
+</mapper>

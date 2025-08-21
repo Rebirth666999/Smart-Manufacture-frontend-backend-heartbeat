@@ -97,8 +97,9 @@ public class IcesManufactureTaskController extends BaseController {
      */
     @SaCheckPermission("system:manufactureTask:edit")
     @Log(title = "生产任务", businessType = BusinessType.UPDATE)
-    @RepeatSubmit()
+    @RepeatSubmit()//防止重复提交
     @PutMapping()
+    //R是RuoYi系统中自定义的通用响应封装类 (com.ruoyi.common.core.domain.R)，用于统一API接口的返回格式，包含状态码、消息和数据等。
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody IcesManufactureTaskBo bo) {
         return toAjax(iIcesManufactureTaskService.updateByBo(bo));
     }

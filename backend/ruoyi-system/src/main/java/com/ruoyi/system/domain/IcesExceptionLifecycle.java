@@ -17,7 +17,8 @@ import com.ruoyi.common.core.domain.BaseEntity;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("ices_exception_lifecycle")
+@TableName("ices_exception_lifecycle_new")
+//@TableName("ices_exception_lifecycle")
 public class IcesExceptionLifecycle extends BaseEntity {
 
     private static final long serialVersionUID=1L;
@@ -55,5 +56,7 @@ public class IcesExceptionLifecycle extends BaseEntity {
      * 描述
      */
     private String exlDesc;
+    /*异常上报记录编码 */
+    private String exrCode;
 
 }

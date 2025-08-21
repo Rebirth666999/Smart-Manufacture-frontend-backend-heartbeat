@@ -216,9 +216,10 @@
             size="mini"
             type="text"
             icon="el-icon-files"
-            v-show="scope.row.mtStat==='d'"
+            v-show="scope.row.mtStat==='d'||scope.row.mtStat==='5'" 
             @click="handleExecuteDeviceTask(scope.row)"
-          >下发设备任务</el-button>
+          >下发设备任务</el-button> 
+           <!-- //设备任务的复用||scope.row.mtStat==='5' /> -->  
           <el-button
             size="mini"
             type="text"
@@ -923,7 +924,7 @@ export default {
       }).then(response => {
         const task = response.data;
         // 更新状态为进行中
-        task.mtStat = '5';
+        //task.mtStat = '5';设备任务的复用
         // 提交更新请求
         return updateManufactureTask(task);
       }).then(() => {

@@ -69,5 +69,5 @@ public interface IIcesExceptionRecordNewService {
      * @param analysisContent 分析内容
      * @return 是否保存成功
      */
-    boolean saveAnalysisContent(Long exrId, String analysisContent);
+    boolean saveAnalysisContent(Long exrId, String analysisContent,long exrStat);
 }

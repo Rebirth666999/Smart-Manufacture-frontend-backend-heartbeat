@@ -24,6 +24,20 @@
             icon="el-icon-edit-outline"
             @click="handleProcess(scope.row)"
           >处理</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-check"
+            @click="handleAdd(scope.row)">
+            下发任务
+          </el-button>
+          <!-- <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-document"
+            @click="handleExpectDeviceTask(scope.row)">
+            自动处理
+          </el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -96,6 +110,111 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+
+        <!-- 添加或修改生产任务对话框 -->
+    <el-dialog :title="title" :visible.sync="openManufactureTaskDialog" width="900px" append-to-body>
+      <el-form ref="mtForm" :model="mtForm" :rules="rules" label-width="120px">
+        <el-col :span="12">
+          <el-form-item label="所属生产计划" >
+            <div>{{ manufacturePlanList.length > 0 ? manufacturePlanList[0].mpCode : '暂无' }}</div>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="工艺流程" prop="procCode">
+            <el-select
+              v-model="mtForm.procCode"
+              placeholder="请选择工艺流程"
+            >
+              <el-option
+                v-for="item in processList"
+                :key="item.procCode"
+                :label="item.procName"
+                :value="item.procCode"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="目标车间" prop="arCode">
+            <el-select
+              v-model="mtForm.arCode"
+              placeholder="请选择车间"
+            >
+              <el-option
+                v-for="item in areaList"
+                :key="item.arCode"
+                :label="item.arName"
+                :value="item.arCode"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="原料仓库" prop="msCode">
+            <el-select
+              v-model="mtForm.msCode"
+              placeholder="请选择原料仓库"
+            >
+              <el-option
+                v-for="item in materialStoreList"
+                :key="item.msCode"
+                :label="item.msName"
+                :value="item.msCode"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="产品仓库" prop="prsCode">
+            <el-select
+              v-model="mtForm.prsCode"
+              placeholder="请选择产品仓库"
+            >
+              <el-option
+                v-for="item in productStoreList"
+                :key="item.prsCode"
+                :label="item.prsName"
+                :value="item.prsCode"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="最晚结束时间" prop="mtEndPlan">
+            <el-date-picker clearable
+              v-model="mtForm.mtEndPlan"
+              type="datetime"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              placeholder="请选择最晚结束时间">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="优先级" prop="mtPriority">
+            <el-input v-model="mtForm.mtPriority" placeholder="请输入任务优先级" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="计划产品数量" prop="mtQtyPlan">
+            <el-input v-model="mtForm.mtQtyPlan" placeholder="请输入计划产品数量" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="描述" prop="mtDesc">
+            <el-input v-model="mtForm.mtDesc" type="textarea" placeholder="请输入描述" />
+          </el-form-item>
+        </el-col>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button :loading="buttonLoading" type="primary" @click="handleExpectDeviceTask">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -107,6 +226,11 @@ import { pictureClip } from '@/utils/pictureClip';
 import { listExceptionRecord } from "@/api/system/exceptionRecord";
 import { listException } from "@/api/system/exception";
 import { listExceptionSource } from "@/api/system/exceptionSource";
+import{ addManufactureTask,listManufactureTask } from "@/api/system/manufactureTask"
+import { listProcess, } from "@/api/system/process";
+import { listArea } from "@/api/system/area";
+import { listMaterialStore } from "@/api/system/materialStore";  
+import { listProductStore } from "@/api/system/productStore";    
 
 export default {
   name: "TodoException",
@@ -115,6 +239,16 @@ export default {
   },
   data() {
     return {
+      materialStoreList: [],  //原料仓库列表
+      productStoreList: [],   //产品仓库列表
+      // 已发布，供选择的工艺流程列表
+      processList: [],
+      mtForm:{},//生产任务表单
+      openManufactureTaskDialog: false,//是否显示添加或修改生产任务对话框
+      manufacturePlanList : [],//生产计划列表
+      manufactureTaskList : [],//生产任务列表
+      exceptionRecordList : [],//异常上报列表
+      areaList: [],
       // 遮罩层
       loading: true,
       // 按钮加载
@@ -133,7 +267,7 @@ export default {
       todoList: [],
       // 弹出层标题
       title: "",
-      // 是否显示弹出层
+      // 是否显示处理对话框
       open: false,
       // 日期范围
       dateRange: [],
@@ -186,6 +320,9 @@ export default {
   async created() {
     await this.getExceptionList()
     await this.getExceptionSourceList()
+    this.areaList = (await listArea()).rows//车间列表
+    this.materialStoreList = (await listMaterialStore()).rows//原料仓库列表
+    this.productStoreList = (await listProductStore()).rows//产品仓库列表
     await this.getList()
     if (this.$route.query.taskId) {
       const task = this.todoList.find(ele => ele.taskId === this.$route.query.taskId)
@@ -207,7 +344,61 @@ export default {
       }
     }
   },
-  methods: {
+  methods: {   
+     /** 新增生产任务操作 */
+    async handleAdd(row) {
+      this.loading = true
+      this.reset();
+       this.exceptionRecordList = []
+      this.manufactureTaskList = []
+      //对应的异常记录
+    const exceptionResponse = await listExceptionRecord({ exrProcess: row.procInsId });
+    if (exceptionResponse.rows.length > 0) {
+      this.exceptionRecordList = exceptionResponse.rows;
+    } else {
+      this.$modal.msgError("未找到异常上报信息，无法自动处理设备任务");
+      return;
+    }
+
+      //对应的生产任务
+    const taskResponse = await listManufactureTask({ mtCode: this.exceptionRecordList[0].mtCode });
+    if (taskResponse.rows.length > 0) {
+      this.manufactureTaskList = taskResponse.rows;  
+      // 设置生产计划列表
+      this.manufacturePlanList = [{ mpCode: this.manufactureTaskList[0].mpCode }];
+    } else {
+      this.$modal.msgError("未找到对应的生产任务，无法自动处理设备任务");
+      return;
+    }
+      // 生产任务的默认状态
+          this.mtForm = {
+            mtStat : 1,
+            mpCode : this.manufactureTaskList[0].mpCode,
+            arCode : this.manufactureTaskList[0].arCode,
+            mtEndPlan : this.manufactureTaskList[0].mtEndPlan,
+            mtPriority : this.manufactureTaskList[0].mtPriority,
+            mtDesc: this.manufactureTaskList[0].mtDesc,
+          }
+      // 获取已发布的工艺流程
+       listProcess(this.manufactureTaskList[0].mpCode).then(response => {
+          this.processList = response.rows
+        })
+      this.loading = false
+      this.openManufactureTaskDialog = true;
+      this.title = "添加生产任务";
+    },
+
+
+    handleExpectDeviceTask() {
+            addManufactureTask(this.mtForm).then(response => {
+              this.$modal.msgSuccess("新增成功");
+              this.openManufactureTaskDialog = false;
+              this.$emit('update')
+              this.getList();
+            })
+    },
+    
+
     // 获取异常源列表
     getExceptionSourceList() {
       return new Promise((resolve, reject) => {
@@ -294,6 +485,7 @@ export default {
     // 取消按钮
     cancel() {
       this.open = false;
+      this.openManufactureTaskDialog = false;
       this.reset();
     },
     // 表单重置

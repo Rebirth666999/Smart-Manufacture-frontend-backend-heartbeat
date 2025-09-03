@@ -269,7 +269,7 @@ public class IcesExceptionRecordNewServiceImpl extends FlowServiceFactory implem
      * 将提取的内容保存到exrPro字段（处理流程）
      */
     @Override
-    public boolean saveAnalysisContent(Long exrId, String analysisContent) {
+    public boolean saveAnalysisContent(Long exrId, String analysisContent,long exrStat) {
         // 查询是否存在该异常记录
         IcesExceptionRecordNew record = getById(exrId,IcesExceptionRecordNew.class);
 
@@ -282,6 +282,7 @@ public class IcesExceptionRecordNewServiceImpl extends FlowServiceFactory implem
         record.setExrPro(analysisContent);
         // 更新时间
         record.setUpdateTime(new Date());
+        record.setExrStat(String.valueOf(exrStat));
 
         // 保存到数据库
         return updateById(record);

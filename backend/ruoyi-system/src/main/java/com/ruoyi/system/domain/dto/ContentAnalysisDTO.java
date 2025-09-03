@@ -13,6 +13,7 @@ public class ContentAnalysisDTO {
     private List<ContentItemDTO> data;
     private String msg;
     private DetailDTO detail;
+    private Long exrStat;
 
     @Data
     public static class ContentItemDTO {
@@ -20,6 +21,7 @@ public class ContentAnalysisDTO {
         private String type;
         private String id;
         private String role;
+        private Long exrStat;
         // 其他字段保持与前端返回一致
     }
 

@@ -330,12 +330,12 @@
         <el-input v-model="form.eqName" placeholder="请输入名称" disabled />
       </el-form-item>    
       <el-form-item label="设备操作">
-      <el-select v-model="form.eoId" placeholder="请选择设备操作" >
+      <el-select v-model="form.eoName" placeholder="请选择设备操作" >
         <el-option
           v-for="item in equipmentOperationList"
           :key="item.eoId"
           :label="item.eoName"
-          :value="item.eoId"
+          :value="item.eoName"
         >
         </el-option>
       </el-select>
@@ -354,6 +354,7 @@
 import { testEquipment,listEquipment, getEquipment, delEquipment, addEquipment, updateEquipment,equipmentTest } from "@/api/system/equipment";
 import { listArea } from "@/api/system/area";
 import { listEquipmentModel } from "@/api/system/equipmentModel";
+import { listEquipmentOperation } from "@/api/system/equipmentOperation";
 
 export default {
   name: "ManageEquipment",
@@ -440,18 +441,20 @@ export default {
     handleTestForm(row) {
       this.loading = true;
       this.reset();
-      this.queryParams.eqCode = row.eqCode;
-      this.form.eqCode = row.eqCode;
-      this.form.arCode = row.arCode;
+      listEquipmentOperation({ eqCode: row.eqCode }).then(response => {
+        this.equipmentOperationList = response.rows;
+      });
+      this.form.eqName = row.eqName;
       this.form.eqFlaskIp = row.eqFlaskIp;
       this.tableShow = true;
       this.loading = false;
     },
-   async equipmentTest(){
+   async equipmentTest(){ 
     let sendData={
-         task:"fetch",
+          eo_name: this.form.eoName,
           op_param: this.form.deviceTaskParam
         }
+        console.log(sendData)
         testEquipment(sendData,this.form.eqFlaskIp).then(response => {
           this.$modal.msgSuccess("设备测试成功");
           this.tableShow = false; 
@@ -534,10 +537,25 @@ export default {
       this.getList();
     },
     /** 重置按钮操作 */
-    resetQuery() {
-      this.resetForm("queryForm");
-      this.handleQuery();
-    },
+   resetQuery() {
+  // 重置查询参数到初始状态
+  this.queryParams = {
+    pageNum: 1,
+    pageSize: 10,
+    arCode: undefined,
+    emCode: undefined,
+    eqName: undefined,
+    eqStat: undefined,
+    eqCode: undefined,
+    eqDelete: 0,
+  };
+  
+  // 重置查询表单
+  this.resetForm("queryForm");
+  
+  // 执行查询
+  this.handleQuery();
+},
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.eqId)

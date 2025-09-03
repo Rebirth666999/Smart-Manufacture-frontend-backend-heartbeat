@@ -132,6 +132,7 @@ public class IcesExceptionRecordNewController extends BaseController {
 //        Optional<ContentAnalysisDTO.ContentItemDTO> targetItem = analysisDTO.getData().stream()
 //            .filter(item -> "answer".equals(item.getType()))
 //            .findFirst();
+        Long exrStat = analysisDTO.getExrStat();
         if (analysisDTO.getData() == null || analysisDTO.getData().isEmpty()) {
             System.out.println("data 为空或未包含任何内容");
             return R.fail("未找到有效的分析内容");
@@ -145,7 +146,7 @@ public class IcesExceptionRecordNewController extends BaseController {
             String analysisContent = targetItem.get().getContent();
             // 调用服务层方法保存到数据库
             System.out.println("要保存的内容：" + analysisContent +"正在调用service");
-            boolean success = iIcesExceptionRecordNewService.saveAnalysisContent(exrId, analysisContent);
+            boolean success = iIcesExceptionRecordNewService.saveAnalysisContent(exrId, analysisContent, exrStat);
             if (success) {
                 System.out.println("保存成功");
                 return R.ok(analysisContent);

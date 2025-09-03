@@ -170,9 +170,9 @@
               size="mini"
               type="text"
               icon="el-icon-upload"
-              @click="sendToKnowledge(scope.row)"
+              @click="getkg(scope.row)"
               v-hasPermi="['system:exceptionRecord:edit']"
-              v-show="scope.row.exrStat === '4' && !scope.row.exrPro"
+             
             >上传知识库</el-button>
             <el-button
               size="mini"
@@ -216,8 +216,8 @@
               type="text"
               icon="el-icon-document"
               @click="autoAddLifeCycle(scope.row)"
-              v-show="scope.row.exrStat==='5'">生成异常
-              生命周期
+
+              >生成异常生命周期
           </el-button>
           
         </template>
@@ -273,45 +273,14 @@
       </div>
     </el-dialog>
 
-    <!--  查看异常图片及其详情信息的对话框  -->
-    <el-dialog :title="title" :visible.sync="open1" width="500px" append-to-body>
-      <!-- 1. 顶部大图 -->
-      <div style="text-align:center;margin-bottom:16px;">
-        <img
-          :src="form.exrPicUrl || defaultImg"
-          style="width:100%;max-height:260px;object-fit:cover;border-radius:6px;"
-        />
-      </div>
-      <!-- 2. 信息列表 -->
-      <el-descriptions :column="1" border>
-        <el-descriptions-item label="异常源">
-          {{ form.exsCode || '-' }}
-        </el-descriptions-item>
-        <el-descriptions-item label="异常记录人">
-          {{ form.createBy || '-' }}
-        </el-descriptions-item>
-        <el-descriptions-item label="异常时间">
-          {{ form.exrCdate || '-' }}
-        </el-descriptions-item>
-        <el-descriptions-item label="异常类型">
-          {{ form.extName || '-' }}
-        </el-descriptions-item>
-        <el-descriptions-item label="描述信息">
-          {{ form.exrDesc || '-' }}
-        </el-descriptions-item>
-      </el-descriptions>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="cancel1" type="primary">关 闭</el-button>
-      </div>
 
-    </el-dialog>
 
   </div>
 </template>
 
 <script>
 import { listExceptionRecord, getExceptionRecord, delExceptionRecord, addExceptionRecord, updateExceptionRecord 
-  ,saveDescToKnowledge,checkdetail,getdetail,saveKnowledgeToBackend,sendimg,createComplexUserTaskFlow } from "@/api/system/exceptionRecord";
+  ,saveDescToKnowledge,checkdetail,getdetail,saveKnowledgeToBackend,sendimg,createComplexUserTaskFlow,getKG } from "@/api/system/exceptionRecord";
 import { listUser } from "@/api/system/user";
 import { listException } from "@/api/system/exception";
 import { listExceptionSource } from "@/api/system/exceptionSource";
@@ -321,8 +290,6 @@ export default {
   dicts: ['ices_exception_record_status', 'ices_exception_record_level', 'ices_exception_record_impact_level'],
   data() {
     return {
-      devidedKnowledgeResponseHeaders: [],
-      devidedKnowledgeResponseBody: [],
       //知识库返回信息
       knowledgeResponse: null,
       // 按钮loading
@@ -425,6 +392,74 @@ export default {
     this.getList();
   },
   methods: {
+async getkg(row) {
+  try {
+    console.log('getkg方法被调用', row);
+    let form=row
+    // 第一步：获取异常名称
+    const response = await listException({ exCode: row.exCode });
+    console.log("异常查询响应:", response);
+    
+    if (!response.rows || response.rows.length === 0) {
+      this.$modal.msgError("未找到对应的异常信息");
+      return;
+    }
+    
+    const exName = response.rows[0].exName;
+    console.log("异常名称:", exName);
+    
+    if (!exName) {
+      this.$modal.msgError("异常名称为空，无法查询知识图谱");
+      return;
+    }
+    
+    // 第二步：调用知识图谱API
+    const kgResponse = await getKG(row.exrDesc, exName);
+    console.log("知识图谱响应:", kgResponse);
+    
+ // 第三步：正确解析Response对象
+    if (kgResponse.ok) {
+      // 先获取响应文本
+      const responseText = await kgResponse.text();
+      console.log("响应文本内容:", responseText);
+      
+      
+        // 尝试解析为JSON
+        const responseData = JSON.parse(responseText);
+        console.log("解析后的数据:", responseData);
+        form.exrPro=JSON.stringify(responseData.solutions)
+        // 第四步：提取并打印处理方案
+        if (responseData && responseData.solutions) {
+          console.log("=== 知识图谱处理方案 ===");
+          responseData.solutions.forEach((solution, index) => {
+            console.log(`方案 ${index + 1}:`);
+            console.log(`- 异常处理方案: ${solution.异常处理方案}`);
+            console.log(`- 涉及到部门: ${solution.涉及到部门}`);
+            console.log("---");
+          });}}
+
+      form.exrStat="5"  // 更新状态为已上传知识库
+      form.pageNum=1
+      form.pageSize=10
+      // 第四步：更新异常记录
+      const updateResult = await updateExceptionRecord(form);
+      console.log("更新异常记录:", updateResult);
+    
+      this.$modal.msgSuccess("知识库内容已更新");
+      this.getList();
+    
+  } catch (error) {
+    console.error("获取知识图谱失败:", error);
+    
+    if (error.message.includes('异常名称不能为空')) {
+      this.$modal.msgError("异常信息不完整，无法查询知识图谱");
+    } else if (error.message.includes('Failed to fetch')) {
+      this.$modal.msgError("知识图谱服务器连接失败，请检查网络");
+    } else {
+      this.$modal.msgError("知识库内容更新失败: " + error.message);
+    }
+  }
+},
     // 获取用户列表
     getUserList() {
       return new Promise((resolve, reject) => {
@@ -823,11 +858,11 @@ getChatDetail(conversationId, chatId, row) {
     console.error('获取聊天详细结果失败:', error)
     this.$message.error('获取详细结果失败: ' + error.message)
   })
-  this.autoAddLifeCycle(row);
+  this.reset()
 },
 
 autoAddLifeCycle(row){
-const autoLifeCycle = {
+const autoLifeCycle = {//新增异常生命周期的字段
               //exlId,exlCode
               exrCode: row.exrCode,
               exCode: row.exCode,
@@ -839,20 +874,18 @@ const autoLifeCycle = {
               exlDesc: "自动生成",
             };
             console.log("自动添加异常生命周期", JSON.stringify(autoLifeCycle));
-            if(autoLifeCycle.exrCode){ {
               addExceptionLifecycle(autoLifeCycle).then(response => {
                 console.log("新增异常生命周期成功", response);
                 this.open = false;
                 this.getList();
                 listExceptionLifecycle().then(response => {
-              const exlId = response.rows.find(ele => ele.exrCode === row.exrCode ).exlId
+              const exlId = response.rows.find(ele => ele.exrCode === row.exrCode ).exlId//寻找新建的异常生命周期的id
               console.log("excode", row.exrCode);
               console.log("exlId", exlId);
-              this.autoAddLifeCyclebpmn(row);
-            createComplexUserTaskFlow(exlId,row.exrCode,this.devidedKnowledgeResponseBody,this.devidedKnowledgeResponseHeaders);
+            createComplexUserTaskFlow(exlId,row.exrCode,row.exrPro);//生成对应xml
             getExceptionRecord(row.exrId).then(response =>{
               this.form = response.data;
-              this.form.exrStat = "6";
+              this.form.exrStat = "6";//更改异常上报记录状态
               updateExceptionRecord(this.form).then(response => {
                 this.$modal.msgSuccess("异常生命周期已生成");
                 this.getList();
@@ -863,47 +896,9 @@ const autoLifeCycle = {
                 this.buttonLoading = false;
                 this.reset();
               });
-            }}},
+            },
 
-autoAddLifeCyclebpmn(row){
-    // 每次解析前清空数组，避免重复追加
-  this.devidedKnowledgeResponseHeaders = [];
-  this.devidedKnowledgeResponseBody = [];
- // 移除前言和后语
-  const lines = row.exrPro.split('\n').map(line => line.trim()).filter(line => line !== '');
-  // 识别并移除前言 (第一行)
-  if (lines.length > 0) {
-    // 假设前言是第一行，并且它不是以数字开头
-    if (!/^\d+\./.test(lines[0])) {
-      lines.shift(); // 移除前言
-    }
-  }
 
-  // 识别并移除后语 (最后一行)
-  if (lines.length > 0) {
-    // 假设后语是最后一行，并且它不是以数字开头
-    if (!/^\d+\./.test(lines[lines.length - 1])) {
-      lines.pop(); // 移除后语
-    }
-  }
-
-  // 正则表达式匹配：数字. **标题**：正文
-  // ^\d+\.\s+      - 匹配行首的 "数字." 和后面的空格
-  // \*\*([^\*]+)\*\* - 捕获星号之间的内容作为标题 (非星号字符至少一个)
-  // ：            - 匹配冒号
-  // (.*)          - 捕获冒号后的所有内容作为正文
-  const regex = /^\d+\.\s*\*\*([^\*]+)\*\*[:：]\s*(.*)$/;
-
-  lines.forEach(line => {
-    const match = line.match(regex);
-    if (match) {
-      this.devidedKnowledgeResponseHeaders.push(match[1].trim()); // match[1] 是标题
-      this.devidedKnowledgeResponseBody.push(match[2].trim());  // match[2] 是正文
-    }
-  });
-    console.log("分割后的内容（正文）:", this.devidedKnowledgeResponseBody);
-    console.log("分割后的内容（标题）:", this.devidedKnowledgeResponseHeaders);
-},
 
     /** 查看详情按钮操作*/
     /** 确认上报记录为异常

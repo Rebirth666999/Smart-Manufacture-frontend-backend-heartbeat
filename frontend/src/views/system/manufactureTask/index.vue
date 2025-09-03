@@ -382,7 +382,7 @@
 
 <script>
 import { listManufactureTask, getManufactureTask, delManufactureTask, addManufactureTask, updateManufactureTask } from "@/api/system/manufactureTask";
-import { listDeviceTask, saveDeviceTasks, listDeviceTaskParam, listDeviceTaskPrev, executeDeviceTask, findRemainByManufactureTask } from "@/api/system/deviceTask";
+import { listDeviceTask,  listDeviceTaskParam, listDeviceTaskPrev, executeDeviceTask, findRemainByManufactureTask } from "@/api/system/deviceTask";
 
 import { listArea } from "@/api/system/area";
 import { listAreaControl } from "@/api/system/areaControl";
@@ -911,6 +911,9 @@ export default {
           }
           processRoute.push(route)
         }
+        console.log("area",areaControl)
+        console.log("production",productionTask)
+        console.log("process",processRoute)
         // 下发开始执行
         return executeDeviceTask(areaControl[0]['acIp'], {
           "areaControl": areaControl,

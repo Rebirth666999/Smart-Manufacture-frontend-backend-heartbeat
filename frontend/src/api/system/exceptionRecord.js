@@ -43,7 +43,7 @@ export function getKG(exrDesc, exName) {
     return Promise.reject(new Error('异常名称不能为空'));
   }
   const query = encodeURIComponent(`${exName}怎么处理`);
-  return fetch(`https://api-b6y2he02v1527ck4.aistudio-app.com/query?q=${query}`,
+  return fetch(`https://api-q9h8c6c0fet2r3zd.aistudio-app.com/query?q=${query}`,
     {
       method:"GET",
       headers:{
@@ -76,30 +76,25 @@ let solutionsArray = [];
   } catch (parseError) {
     console.error('解析 exrPro 失败:', parseError);
     console.log('原始数据:', exrPro);
-    // 如果 JSON 解析失败，尝试按行分割处理
-    if (typeof exrPro === 'string') {
-      const lines = exrPro.split('\n').filter(line => line.trim());
-      solutionsArray = lines.map((line, index) => ({
-        异常处理方案: line.trim(),
-        涉及到部门: '默认部门'
-      }));
-    } else {
       throw new Error('无法解析 exrPro 数据');
-    }
+    
   }
       let userTasks = [];
-for (let i = 0; i <=solutionsArray.length-1; i++) {//获取每个异常处理方案的涉及到部门ID
-    let deptName = solutionsArray[i].涉及到部门.split('、');//获取单个处理方案涉及到的部门名称
-  await listDept({deptName : deptName[i]}).then(response => {
-    if (response && response.length > 0) {
+    for (let i = 0; i <solutionsArray.length; i++) {//获取每个异常处理方案的涉及到部门ID
+      const solution = solutionsArray[i];
+    const deptNames = solution.涉及到部门.split(/[、,，]/).map(name => name.trim()).filter(name => name);//获取单个处理方案涉及到的部门名称
+    for (let j = 0; j < deptNames.length; j++) {
+      await listDept({deptName : deptNames[j]}).then(response => {
+        console.log("查询部门返回:", response);
+      if (response.data[0]) {
       solutionsArray[i].涉及到部门 = ""
       solutionsArray[i].涉及到部门+=(response.data[0].deptId) // 如果找到部门，使用其ID; 
       solutionsArray[i].涉及到部门+=(',')
     } else {
-      solutionsArray[i].涉及到部门+=( ""); // 如果没有找到部门，使用默认值
+      solutionsArray[i].涉及到部门+=( "无"); // 如果没有找到部门，使用默认值
     }
 
-  })
+  })}
 
 }
 
@@ -107,8 +102,9 @@ for (let i = 0; i <=solutionsArray.length-1; i++) {//获取每个异常处理方
         userTasks[i]={
           id: `UserTask_${i+1}`,// 任务ID
           name: solutionsArray[i].异常处理方案 ? solutionsArray[i].异常处理方案 : `任务${i}`,// 任务名称
-          assignee: solutionsArray[i].涉及到部门 ? solutionsArray[i].涉及到部门: "",//分配的部门（）部门ID）
-          formKey:   "无",//任务描述
+
+          assignee: solutionsArray[i].涉及到部门 ? solutionsArray[i].涉及到部门: " ",//分配的部门（）部门ID）
+          formKey:  solutionsArray[i].异常处理方案描述 ? solutionsArray[i].异常处理方案描述 :  "无",//任务描述
         }
       }
 
@@ -149,7 +145,7 @@ export function generateMultiUserTaskXML(processConfig, userTasks) {
     const endEventId = "EndEvent_1";
 
     userTasks.forEach((task, index) => {
-        const currentX = xOffset + ((taskWidth)+ index * (taskWidth + hGap));
+        const currentX = xOffset + 50+( index * (taskWidth + hGap)); 
         const currentY = yOffset;
 
         // 重新添加 'bpmn2:' 前缀
@@ -240,6 +236,23 @@ export function generateMultiUserTaskXML(processConfig, userTasks) {
   </bpmndi:BPMNDiagram>
 </bpmn2:definitions>`;
 }
+
+//
+export function startLifeCycle(form){
+  return request({
+    url: '/system/exceptionRecordNew/startLifecycle',
+    method: 'post',
+    data: form
+  })
+
+}
+
+
+
+
+
+
+
 
 // export function saveDescToKnowledge(descObj, exrCode) {
 //   return fetch('https://api.coze.cn/v3/chat', {

@@ -84,6 +84,7 @@ public class IcesExceptionLifecycleServiceImpl extends FlowServiceFactory implem
         LambdaQueryWrapper<IcesExceptionLifecycle> lqw = Wrappers.lambdaQuery();
         lqw.eq(StringUtils.isNotBlank(bo.getExlCode()), IcesExceptionLifecycle::getExlCode, bo.getExlCode());
         lqw.eq(StringUtils.isNotBlank(bo.getExCode()), IcesExceptionLifecycle::getExCode, bo.getExCode());
+        lqw.eq(StringUtils.isNotBlank(bo.getExrCode()), IcesExceptionLifecycle::getExrCode, bo.getExrCode());
         lqw.eq(bo.getExlDelete() != null, IcesExceptionLifecycle::getExlDelete, bo.getExlDelete());
         return lqw;
     }

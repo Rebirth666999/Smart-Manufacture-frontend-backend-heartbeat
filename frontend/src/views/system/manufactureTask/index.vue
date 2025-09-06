@@ -132,7 +132,7 @@
       <el-table-column label="所属生产计划" align="center" prop="mpCode" width="180" />
       <el-table-column label="工艺流程" align="center" prop="procCode" width="150">
         <template slot-scope="scope">
-          {{ processList.find(ele => ele.procCode === scope.row.procCode).procName || '' }}
+    {{ (processList.find(ele => ele.procCode === scope.row.procCode) || {}).procName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="目标车间" align="center" prop="arCode">

@@ -172,7 +172,7 @@
               icon="el-icon-upload"
               @click="getkg(scope.row)"
               v-hasPermi="['system:exceptionRecord:edit']"
-             
+              v-show="scope.row.exrStat === '4'"
             >上传知识库</el-button>
             <el-button
               size="mini"
@@ -216,10 +216,18 @@
               type="text"
               icon="el-icon-document"
               @click="autoAddLifeCycle(scope.row)"
-
-              >生成异常生命周期
+              v-show="scope.row.exrStat === '5'"
+              >生成生命周期
           </el-button>
-          
+          <el-button
+          size="mini"
+          type="text"
+          icon="el-icon-play"
+          @click="handleStartLifeCycle(scope.row)"
+          v-show="scope.row.exrStat === '6'"
+          >
+          启动生命周期
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -280,7 +288,7 @@
 
 <script>
 import { listExceptionRecord, getExceptionRecord, delExceptionRecord, addExceptionRecord, updateExceptionRecord 
-  ,saveDescToKnowledge,checkdetail,getdetail,saveKnowledgeToBackend,sendimg,createComplexUserTaskFlow,getKG } from "@/api/system/exceptionRecord";
+  ,saveDescToKnowledge,checkdetail,getdetail,saveKnowledgeToBackend,sendimg,createComplexUserTaskFlow,getKG ,startLifeCycle} from "@/api/system/exceptionRecord";
 import { listUser } from "@/api/system/user";
 import { listException } from "@/api/system/exception";
 import { listExceptionSource } from "@/api/system/exceptionSource";
@@ -392,6 +400,24 @@ export default {
     this.getList();
   },
   methods: {
+    handleStartLifeCycle(row){
+          const params = {
+        exrId: row.exrId,
+        exrCode: row.exrCode,
+        exsCode: row.exsCode,
+        exCode: row.exCode
+    };
+      console.log("生命周期启动响应:", params);
+      startLifeCycle(params).then(response=>{
+        this.$modal.msgSuccess("生命周期已启动");
+        
+
+      console.log("响应文本内容:", response);
+      }).catch(error=>{
+        this.$modal.msgError("生命周期启动失败: " + error.message);
+      })
+
+    },
 async getkg(row) {
   try {
     console.log('getkg方法被调用', row);
@@ -441,6 +467,9 @@ async getkg(row) {
       form.exrStat="5"  // 更新状态为已上传知识库
       form.pageNum=1
       form.pageSize=10
+      form.exrUserHandle="admin"
+      form.exrUserFinish="admin"
+      form.exrUserResp="admin"
       // 第四步：更新异常记录
       const updateResult = await updateExceptionRecord(form);
       console.log("更新异常记录:", updateResult);
@@ -724,142 +753,7 @@ sendToKnowledge(row){
   })
 },
 
-/**
- * 检查聊天状态
- * @param {string} conversationId 对话ID
- * @param {string} chatId 聊天ID
- */
-checkChatStatus(conversationId, chatId,row, maxRetries = 30, retryCount = 0) {
-  if (retryCount >= maxRetries) {
-    this.$message.error('检查状态超时，请稍后重试')
-    return
-  }
 
-  console.log(`第${retryCount + 1}次检查状态...`)
-
-  checkdetail(conversationId, chatId).then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-    return response.json()
-  }).then(data => {
-    console.log('状态检查结果:', data)
-
-    if (data.code !== 0) {
-      throw new Error(data.msg || '检查状态失败')
-    }
-
-    const status = data.data.status
-    console.log('当前状态:', status)
-
-    if (status === 'completed') {
-      // 聊天完成，获取详细结果
-      this.$message.success('知识库同步完成！')
-      this.getChatDetail(conversationId, chatId,row)
-    } else if (status === 'failed') {
-      // 聊天失败
-      this.$message.error('知识库同步失败')
-      console.error('聊天失败:', data.data)
-    } else if (status === 'in_progress' || status === 'created') {
-      // 聊天进行中，继续检查
-      setTimeout(() => {
-        this.checkChatStatus(conversationId, chatId,row, maxRetries, retryCount + 1)
-      }, 2000) // 每2秒检查一次
-    } else {
-      // 其他状态
-      console.log('未知状态:', status)
-      setTimeout(() => {
-        this.checkChatStatus(conversationId, chatId,row, maxRetries, retryCount + 1)
-      }, 2000)
-    }
-
-  }).catch(error => {
-    console.error('检查状态失败:', error)
-
-    // 重试
-    if (retryCount < maxRetries - 1) {
-      setTimeout(() => {
-        this.checkChatStatus(conversationId, chatId,row, maxRetries, retryCount + 1)
-      }, 3000) // 出错时等待3秒再重试
-    } else {
-      this.$message.error('检查状态失败: ' + error.message)
-    }
-  })
-},
-
-/**
- * 获取聊天详细结果
- * @param {string} conversationId 对话ID
- * @param {string} chatId 聊天ID
- */
-getChatDetail(conversationId, chatId, row) {
-  console.log('获取聊天详细结果...')
-
-  getdetail(conversationId, chatId).then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-    return response.json()
-  }).then(data => {
-    console.log('========== 聊天详细结果 ==========')
-    console.log('完整结果:', JSON.stringify(data, null, 2))
-
-    if (data.code === 0) {
-      //上传成功：标记当前行的上传状态为true,按钮隐藏,对话框中解决方案显现
-
-      this.$set(this.uploadStatus, row.exrId, true)
-      this.$message.success('已成功获取知识库分析结果')
-
-      // 打印聊天消息
-      if (data.data && data.data.messages&& data.data.messages.length > 0) {
-       const targetMsg=data.data.messages.find(message=>
-         message.role==='assistant'&&message.type==='answer'
-       )
-        if(targetMsg && targetMsg.content){
-          const cleanContent = targetMsg.content.replace(/^"/, '').replace(/"$/, '');
-          this.$set(this.knowledgeContent, row.exrId, cleanContent);
-          this.$message.success('已获取知识库分析结果，可查看详情');
-        }
-        this.knowledgeResponse=cleanContent;
-        console.log('聊天消息:')
-        data.data.messages.forEach((message, index) => {
-          console.log(`消息${index + 1} [${message.role}]:`, message.content)
-        })
-      }
-      const backendParams = {
-        exrId: row.exrId, // 原始异常记录ID（用于关联）
-        exrCode: row.exrCode, // 原始异常编码
-        conversationId: conversationId, // 对话ID
-        chatId: chatId, // 聊天ID
-        data: data.data, // 知识库返回的完整数据（包含messages、usage等）
-        exrStat: '5' // 更新状态为已发送到知识库
-      }
-      saveKnowledgeToBackend(backendParams).then(() => {
-        // ✅ 标记为成功
-        this.$set(this.uploadSuccessMap, row.exrId, true);
-
-        listExceptionRecord();
-        autoAddLifeCycle();
-      }).catch(() => {
-        // ✅ 标记为失败
-        this.$set(this.uploadSuccessMap, row.exrId, false);
-      });
-      // 打印使用统计
-      if (data.data && data.data.usage) {
-        console.log('Token使用情况:', data.data.usage)
-      }
-
-    } else {
-      console.error('获取结果失败:', data.msg)
-      this.$message.error('获取结果失败: ' + data.msg)
-    }
-
-  }).catch(error => {
-    console.error('获取聊天详细结果失败:', error)
-    this.$message.error('获取详细结果失败: ' + error.message)
-  })
-  this.reset()
-},
 
 autoAddLifeCycle(row){
 const autoLifeCycle = {//新增异常生命周期的字段
@@ -946,6 +840,7 @@ const imgsrc="/test1.jpg"
       exrImg:"/test1.jpg",
       exrParam:'{"orCode": "Order-00003", "orCodeOrgn": "Order-00679"}',
       exrDelete: 0,
+      mtCode:"ManufactureTask-00023"
     };
 
     addExceptionRecord(autoRecord).then(response => {

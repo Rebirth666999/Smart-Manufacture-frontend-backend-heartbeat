@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import liquibase.pro.packaged.G;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
 import com.ruoyi.common.annotation.RepeatSubmit;
@@ -50,6 +52,13 @@ public class IcesExceptionRecordNewController extends BaseController {
         return iIcesExceptionRecordNewService.queryPageList(bo, pageQuery);
     }
 
+    //启动流程实例
+    @SaCheckPermission("system:exceptionRecordNew:export")
+    @PostMapping("/startLifecycle")
+    public R<String> startLifecycle( @RequestBody IcesExceptionRecordNewBo bo) {
+        String procInsId = iIcesExceptionRecordNewService.startLifecycleNew(bo);
+        return R.ok(procInsId);
+    }
     /**
      * 导出异常记录（新）列表
      */

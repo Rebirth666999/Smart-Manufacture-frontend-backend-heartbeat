@@ -117,7 +117,9 @@
       <el-form ref="mtForm" :model="mtForm" :rules="rules" label-width="120px">
         <el-col :span="12">
           <el-form-item label="所属生产计划" >
-            <div>{{ manufacturePlanList.length > 0 ? manufacturePlanList[0].mpCode : '暂无' }}</div>
+  <div v-if="manufacturePlanList && manufacturePlanList.length > 0">
+    {{ manufacturePlanList[0].mpCode }}
+  </div>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -231,6 +233,7 @@ import { listProcess, } from "@/api/system/process";
 import { listArea } from "@/api/system/area";
 import { listMaterialStore } from "@/api/system/materialStore";  
 import { listProductStore } from "@/api/system/productStore";    
+import{listManufacturePlan} from "@/api/system/manufacturePlan"
 
 export default {
   name: "TodoException",
@@ -351,8 +354,10 @@ export default {
       this.reset();
        this.exceptionRecordList = []
       this.manufactureTaskList = []
+      this.manufacturePlanList = []
+      this.processList = []
       //对应的异常记录
-    const exceptionResponse = await listExceptionRecord({ exrProcess: row.procInsId });
+    const exceptionResponse = await listExceptionRecord({ exrProcess: row.procInsId });//按照流程实例ID查询异常上报记录
     if (exceptionResponse.rows.length > 0) {
       this.exceptionRecordList = exceptionResponse.rows;
     } else {
@@ -361,13 +366,22 @@ export default {
     }
 
       //对应的生产任务
-    const taskResponse = await listManufactureTask({ mtCode: this.exceptionRecordList[0].mtCode });
+    const taskResponse = await listManufactureTask({ mtCode: this.exceptionRecordList[0].mtCode });//按照生产任务编号查询生产任务
     if (taskResponse.rows.length > 0) {
       this.manufactureTaskList = taskResponse.rows;  
       // 设置生产计划列表
-      this.manufacturePlanList = [{ mpCode: this.manufactureTaskList[0].mpCode }];
+      
     } else {
       this.$modal.msgError("未找到对应的生产任务，无法自动处理设备任务");
+      return;
+    }
+
+    const planResponse = await listManufacturePlan({ mpCode: this.manufactureTaskList[0].mpCode });
+    console.log('生产计划响应:', planResponse);
+    if (planResponse && planResponse.rows && planResponse.rows.length > 0) {
+      this.manufacturePlanList = planResponse.rows;
+    } else {
+      this.$modal.msgError("未找到对应的生产计划，无法自动处理设备任务");
       return;
     }
       // 生产任务的默认状态
@@ -381,7 +395,11 @@ export default {
           }
       // 获取已发布的工艺流程
        listProcess(this.manufactureTaskList[0].mpCode).then(response => {
-          this.processList = response.rows
+        console.log(response)
+          console.log(this.manufacturePlanList)
+          this.processList = response.rows.filter(ele=>ele.odCode===this.manufacturePlanList[0].odCode)//只能查询当前生产计划对应的工艺流程
+          console.log(this.processList)
+
         })
       this.loading = false
       this.openManufactureTaskDialog = true;
@@ -391,6 +409,7 @@ export default {
 
     handleExpectDeviceTask() {
             addManufactureTask(this.mtForm).then(response => {
+              console.log(response)
               this.$modal.msgSuccess("新增成功");
               this.openManufactureTaskDialog = false;
               this.$emit('update')

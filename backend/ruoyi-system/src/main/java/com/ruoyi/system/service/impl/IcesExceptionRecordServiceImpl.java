@@ -152,7 +152,7 @@ public class IcesExceptionRecordServiceImpl extends FlowServiceFactory implement
         if (orgn.getExrStat().equals("2") && bo.getExrStat().equals("4")) {
             // 原先确认中，现在确认为异常
             // 自动启动对应异常的生命周期
-            bo.setExrProcess(startLifecycle(bo));
+            //bo.setExrProcess(startLifecycle(bo));
         }
         IcesExceptionRecord update = BeanUtil.toBean(bo, IcesExceptionRecord.class);
         validEntityBeforeSave(update);
@@ -236,23 +236,23 @@ public class IcesExceptionRecordServiceImpl extends FlowServiceFactory implement
      */
     @Override
     public String startLifecycle(IcesExceptionRecordBo bo) {
-        return doStartLifecycle(bo.getExCode());
+        return doStartLifecycle(bo.getExrCode());//excode
     }
 
-    /**
+    /**r
      * 启动异常的生命周期（支持 IcesExceptionRecordAiBo）
      */
     public String startLifecycle(IcesExceptionRecordAiBo bo) {
-        return doStartLifecycle(bo.getExCode());
+        return doStartLifecycle(bo.getExrCode());//excode
     }
 
     /**
      * 启动异常生命周期的核心逻辑
      */
-    private String doStartLifecycle(String exCode) {
+    private String doStartLifecycle(String exrCode) {
         // 找到生命周期
         IcesExceptionLifecycleBo lifecycleBo = new IcesExceptionLifecycleBo();
-        lifecycleBo.setExCode(exCode);
+        lifecycleBo.setExCode(exrCode);
         List<IcesExceptionLifecycleVo> lifecycleVos = lifecycleService.queryList(lifecycleBo);
         if (lifecycleVos.isEmpty()) {
             throw new RuntimeException("对应异常未定义生命周期，无法启动处理");

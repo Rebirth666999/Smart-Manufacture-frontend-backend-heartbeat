@@ -9,6 +9,7 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.esotericsoftware.minlog.Log;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ruoyi.flowable.common.constant.ProcessConstants;
@@ -110,7 +111,7 @@ public class IcesExceptionRecordNewServiceImpl extends FlowServiceFactory implem
         if (StringUtils.isBlank(bo.getExrUserReport())) {
             bo.setExrUserReport(getLoginUsername());
         }
-        if (bo.getExrStat().equals("4")) {
+        if (bo.getExrStat().equals("4")) {//如果状态为异常，则启动生命周期
             bo.setExrProcess(startLifecycle(bo));
         }
         IcesExceptionRecordNew add = BeanUtil.toBean(bo, IcesExceptionRecordNew.class);
@@ -153,11 +154,11 @@ public class IcesExceptionRecordNewServiceImpl extends FlowServiceFactory implem
     public Boolean updateByBo(IcesExceptionRecordNewBo bo) {
         // 先找到原先的异常记录
         IcesExceptionRecordNewVo orgn = queryById(bo.getExrId());
-        if (orgn.getExrStat().equals("2") && bo.getExrStat().equals("4")) {
-            // 原先确认中，现在确认为异常
-            // 自动启动对应异常的生命周期
-            bo.setExrProcess(startLifecycle(bo));
-        }
+        // if (orgn.getExrStat().equals("2") && bo.getExrStat().equals("4")) {
+        //     // 原先确认中，现在确认为异常
+        //     // 自动启动对应异常的生命周期
+        //     bo.setExrProcess(startLifecycle(bo));
+        // }
         IcesExceptionRecordNew update = BeanUtil.toBean(bo, IcesExceptionRecordNew.class);
         validEntityBeforeSave(update);
         return baseMapper.updateById(update) > 0;
@@ -186,24 +187,69 @@ public class IcesExceptionRecordNewServiceImpl extends FlowServiceFactory implem
      */
     @Override
     public String startLifecycle(IcesExceptionRecordNewBo bo) {
-        return doStartLifecycle(bo.getExCode());
+        return doStartLifecycle(bo.getExrCode());
     }
 
     /**
      * 启动异常的生命周期（支持 IcesExceptionRecordAiBo）
      */
     public String startLifecycle(IcesExceptionRecordAiBo bo) {
-        return doStartLifecycle(bo.getExCode());
+        return doStartLifecycle(bo.getExrCode());
+    }
+
+    // 启动生命周期后，更新异常记录的流程实例ID
+    public String startLifecycleNew(IcesExceptionRecordNewBo bo) {
+    try {
+        // ✅ 添加参数验证
+        if (bo == null) {
+            throw new IllegalArgumentException("异常记录对象不能为空");
+        }
+        if (bo.getExrId() == null) {
+            throw new IllegalArgumentException("异常记录ID不能为空");
+        }
+
+        // ✅ 验证记录是否存在
+        IcesExceptionRecordNewVo existing = baseMapper.selectVoById(bo.getExrId());
+        if (existing == null) {
+            throw new RuntimeException("未找到ID为 " + bo.getExrId() + " 的异常记录");
+        }
+
+        // ✅ 检查是否已经启动过
+        if (StringUtils.isNotBlank(existing.getExrProcess())) {
+            throw new RuntimeException("该异常记录已启动生命周期，流程实例ID：" + existing.getExrProcess());
+        }
+
+        // 1. 启动生命周期，获取流程实例ID
+        String processId = doStartLifecycle(bo.getExrCode()); 
+        
+        // 2. ✅ 更新数据库记录
+        IcesExceptionRecordNew update = new IcesExceptionRecordNew();
+        update.setExrId(bo.getExrId());
+        update.setExrProcess(processId);
+        update.setUpdateTime(new Date());
+        
+        int updateResult = baseMapper.updateById(update);
+        if (updateResult <= 0) {
+            throw new ServiceException("更新异常记录流程信息失败，可能记录不存在");
+        }
+        return processId;
+
+    } catch (Exception e) {
+
+        throw new ServiceException("生命周期启动失败: " + e.getMessage());
+    }
     }
 
     /**
      * 启动异常生命周期的核心逻辑
      */
-    private String doStartLifecycle(String exCode) {
+    private String doStartLifecycle(String exrCode) {
         // 找到生命周期
         IcesExceptionLifecycleBo lifecycleBo = new IcesExceptionLifecycleBo();
-        lifecycleBo.setExCode(exCode);
+        lifecycleBo.setExrCode(exrCode);
+        Log.info(lifecycleBo.toString());
         List<IcesExceptionLifecycleVo> lifecycleVos = lifecycleService.queryList(lifecycleBo);
+        Log.info(lifecycleVos.toString());
         if (lifecycleVos.isEmpty()) {
             throw new RuntimeException("对应异常未定义生命周期，无法启动处理");
         }
@@ -221,9 +267,11 @@ public class IcesExceptionRecordNewServiceImpl extends FlowServiceFactory implem
         for (IcesExceptionLifecycleVersionVo lifecycleVersionVo : lifecycleVersionVos) {
             if (lifecycleVersionVo.getExlvDefId() != null) {
                 defId = lifecycleVersionVo.getExlvDefId();
+                Log.info(lifecycleVersionVo.toString());
                 break;
             }
         }
+        
         if (defId == null) {
             throw new RuntimeException("对应异常生命周期未部署，无法启动处理");
         }

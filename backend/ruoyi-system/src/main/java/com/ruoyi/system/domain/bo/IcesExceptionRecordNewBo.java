@@ -86,9 +86,10 @@ public class IcesExceptionRecordNewBo extends BaseEntity {
 
     /**
      * 异常责任人
-     */
+     *
     @NotBlank(message = "异常责任人不能为空", groups = { AddGroup.class, EditGroup.class })
     private String exrUserResp;
+     */
 
     /**
      * 上报时间

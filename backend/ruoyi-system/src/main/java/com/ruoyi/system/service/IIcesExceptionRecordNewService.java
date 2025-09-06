@@ -51,7 +51,7 @@ public interface IIcesExceptionRecordNewService {
      * 修改异常记录（新）
      */
     Boolean updateByBo(IcesExceptionRecordNewBo bo);
-
+    String startLifecycleNew(IcesExceptionRecordNewBo bo);
 
     String startLifecycle(IcesExceptionRecordNewBo bo);
 

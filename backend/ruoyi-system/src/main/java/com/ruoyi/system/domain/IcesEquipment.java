@@ -61,6 +61,8 @@ public class IcesEquipment extends BaseEntity {
      * IP地址
      */
     private String eqIp;
+    /* 设备测试用flaskip*/
+    private String eqFlaskIp;
     /**
      * 已删除
      */

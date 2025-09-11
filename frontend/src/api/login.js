@@ -69,3 +69,29 @@ export function getCodeSms() {
     timeout: 20000
   })
 }
+
+// login.js 新增以下方法
+// 生成二维码
+export function generateQr() {
+  return request({
+    url: '/qrLogin/generate',
+    method: 'get'
+  })
+}
+
+// 检查二维码状态
+export function checkQrStatus(token) {
+  return request({
+    url: '/qrLogin/check/' + token,
+    method: 'get'
+  })
+}
+
+// 修改二维码登录方法
+export function qrLogin(tempToken) {
+  return request({
+    url: '/qrTokenLogin', // 指向新接口
+    method: 'post',
+    params: { tempToken } // 传递临时令牌
+  })
+}

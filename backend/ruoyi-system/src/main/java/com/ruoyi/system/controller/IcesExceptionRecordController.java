@@ -22,6 +22,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.system.domain.vo.IcesExceptionRecordVo;
 import com.ruoyi.system.domain.bo.IcesExceptionRecordBo;
+import com.ruoyi.system.domain.bo.IcesExceptionRecordAiBo;
 import com.ruoyi.system.service.IIcesExceptionRecordService;
 import com.ruoyi.common.core.page.TableDataInfo;
 
@@ -82,6 +83,8 @@ public class IcesExceptionRecordController extends BaseController {
         return R.ok(iIcesExceptionRecordService.insertByBo(bo));
     }
 
+  
+
     /**
      * 修改异常记录
      */
@@ -105,4 +108,13 @@ public class IcesExceptionRecordController extends BaseController {
                           @PathVariable Long[] exrIds) {
         return toAjax(iIcesExceptionRecordService.deleteWithValidByIds(Arrays.asList(exrIds), true));
     }
+
+    /**
+ * 网络连接测试接口
+ */
+@GetMapping("/network/test")
+public R<String> networkTest() {
+    return R.ok("网络连接正常，当前时间：" + java.time.LocalDateTime.now());
+}
+
 }

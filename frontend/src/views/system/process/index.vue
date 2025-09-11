@@ -16,6 +16,19 @@
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
+           <el-col :span="8">
+          <el-form-item label="产品需求" prop="odCode">
+          <el-select v-model="queryParams.odCode" placeholder="请选择订单" clearable @change="selectOdCode">
+            <el-option
+              v-for="option in orderList"
+              :key="option.odId"
+              :label="option.orCode"
+              :value="option.odCode"
+            />
+
+          </el-select>
+          </el-form-item>
+        </el-col>
           <el-form-item label="状态" prop="procStat">
             <el-select v-model="queryParams.procStat" placeholder="请选择工艺流程状态" clearable>
               <el-option
@@ -224,6 +237,8 @@ export default {
   dicts: ['ices_process_status'],
   data() {
     return {
+      // 用于级联选择器的产品需求列表
+      orderList: [],
       // 按钮loading
       buttonLoading: false,
       // 遮罩层
@@ -285,7 +300,7 @@ export default {
     this.getList();
   },
   methods: {
-    /**
+     /**
      * 查询订单产品需求
      * @author YangZY
      * @date 20250423
@@ -294,13 +309,17 @@ export default {
       return new Promise((resolve, reject) => {
         this.loading = true;
         listOrderDemand().then(response => {
-          this.orderDemandList = []
+          this.orderList = []
+          const orders = new Set()  // 集合，维护不重复的订单orCode
+          // 构建原料需求列表
+          // 须包含产品名称给用户显示
           response.rows.forEach(demand => {
-            this.orderDemandList.push({
+            this.orderList.push({
               ...demand,
               prName: this.productList.find(ele => ele.prCode === demand.prCode).prName
             })
-          });
+            orders.add(demand.odCode)
+          })
           resolve()
         }).catch(() => {
           reject()
@@ -309,6 +328,22 @@ export default {
         })
       })
     },
+    /**
+     * 选择产品需求的监听函数
+     * 自动填入定制详情
+     * @param {string[]} event 树形选择的所有key
+     * @author YangZY
+     * @date 20250426
+     */
+selectOdCode(event) {
+  const odCode = event
+  this.queryParams.odCode = odCode
+  console.log('选择的产品需求编码:', odCode)
+  // 重新查询流程列表
+  this.handleQuery()
+},
+  
+
     // 查询原料列表
     getMaterialList() {
       return new Promise((resolve, reject) => {

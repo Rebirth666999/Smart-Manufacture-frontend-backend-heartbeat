@@ -51,3 +51,17 @@ export function delEquipment(eqId) {
     method: 'delete'
   })
 }
+
+
+//设备测试
+export function testEquipment(data,eqFlaskIp) {
+console.log(eqFlaskIp);
+return fetch(`${eqFlaskIp}`, { // 使用模板字符串
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(data) // 将JavaScript对象转换为JSON字符串发送
+})
+
+}

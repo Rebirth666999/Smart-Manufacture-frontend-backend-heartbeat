@@ -25,7 +25,7 @@ import { listEquipmentOperation } from "@/api/system/equipmentOperation";
 import { listModelOperation } from "@/api/system/modelOperation";
 import { listEquipmentModel } from "@/api/system/equipmentModel";
 import { listEquipmentOperationStep } from "@/api/system/equipmentOperationStep";
-import { listEquipmentOperationStepParam } from "@/api/system/equipmentOperationStepParam";import { listEquipmentAtomOperation } from "@/api/system/equipmentAtomOperation";
+import { listEquipmentOperationStepParam } from "@/api/system/equipmentOperationStepParam";
 
 import ProcessViewer from '@/components/ProcessViewerIndustry';
 

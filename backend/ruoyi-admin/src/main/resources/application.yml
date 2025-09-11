@@ -152,7 +152,7 @@ mybatis-plus:
   checkConfigLocation: false
   configuration:
     # 自动驼峰命名规则（camel case）映射
-    mapUnderscoreToCamelCase: true
+    map-underscore-to-camel-case: true
     # MyBatis 自动映射策略
     # NONE：不启用 PARTIAL：只对非嵌套 resultMap 自动映射 FULL：对所有 resultMap 自动映射
     autoMappingBehavior: PARTIAL
@@ -284,3 +284,14 @@ flowable:
   check-process-definitions: false
   # 关闭历史任务定时任务job
   async-history-executor-activate: false
+
+# 图片上传配置
+image:
+  upload:
+    path: ${user.dir}/uploads/images
+text:
+  upload:
+    path: ${user.dir}/uploads/texts
+metadata:
+  file:
+    path: ${user.dir}/metadata/image_metadata.json

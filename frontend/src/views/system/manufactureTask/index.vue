@@ -132,7 +132,7 @@
       <el-table-column label="所属生产计划" align="center" prop="mpCode" width="180" />
       <el-table-column label="工艺流程" align="center" prop="procCode" width="150">
         <template slot-scope="scope">
-          {{ processList.find(ele => ele.procCode === scope.row.procCode).procName || '' }}
+    {{ (processList.find(ele => ele.procCode === scope.row.procCode) || {}).procName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="目标车间" align="center" prop="arCode">
@@ -216,9 +216,10 @@
             size="mini"
             type="text"
             icon="el-icon-files"
-            v-show="scope.row.mtStat==='d'"
+            v-show="scope.row.mtStat==='d'||scope.row.mtStat==='5'" 
             @click="handleExecuteDeviceTask(scope.row)"
-          >下发设备任务</el-button>
+          >下发设备任务</el-button> 
+           <!-- //设备任务的复用||scope.row.mtStat==='5' /> -->  
           <el-button
             size="mini"
             type="text"
@@ -381,7 +382,7 @@
 
 <script>
 import { listManufactureTask, getManufactureTask, delManufactureTask, addManufactureTask, updateManufactureTask } from "@/api/system/manufactureTask";
-import { listDeviceTask, saveDeviceTasks, listDeviceTaskParam, listDeviceTaskPrev, executeDeviceTask, findRemainByManufactureTask } from "@/api/system/deviceTask";
+import { listDeviceTask,  listDeviceTaskParam, listDeviceTaskPrev, executeDeviceTask, findRemainByManufactureTask } from "@/api/system/deviceTask";
 
 import { listArea } from "@/api/system/area";
 import { listAreaControl } from "@/api/system/areaControl";
@@ -910,6 +911,9 @@ export default {
           }
           processRoute.push(route)
         }
+        console.log("area",areaControl)
+        console.log("production",productionTask)
+        console.log("process",processRoute)
         // 下发开始执行
         return executeDeviceTask(areaControl[0]['acIp'], {
           "areaControl": areaControl,
@@ -923,7 +927,7 @@ export default {
       }).then(response => {
         const task = response.data;
         // 更新状态为进行中
-        task.mtStat = '5';
+        //task.mtStat = '5';设备任务的复用
         // 提交更新请求
         return updateManufactureTask(task);
       }).then(() => {

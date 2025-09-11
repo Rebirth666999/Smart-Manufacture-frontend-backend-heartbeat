@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.system;
 
 import cn.dev33.satoken.annotation.SaIgnore;
+import cn.dev33.satoken.stp.StpUtil;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.domain.entity.SysMenu;
@@ -16,10 +17,10 @@ import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.SysLoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.validation.constraints.NotBlank;
 import java.util.HashMap;
@@ -39,6 +40,10 @@ public class SysLoginController {
     private final SysLoginService loginService;
     private final ISysMenuService menuService;
     private final ISysUserService userService;
+
+    // 注入RedisTemplate
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 登录方法
@@ -141,4 +146,81 @@ public class SysLoginController {
         List<SysMenu> menus = menuService.selectMenuTreeByUserId(userId);
         return R.ok(menuService.buildMenus(menus));
     }
+
+    /**
+     * 扫码登录方法
+     *
+     * @param sysToken 临时令牌
+     * @return 结果
+     */
+    @SaIgnore
+    @PostMapping("/qrLogin")
+    public R<Map<String, Object>> qrLogin(@RequestParam String sysToken) {
+        try {
+            // 使用Sa-Token验证临时令牌
+            StpUtil.setTokenValue(sysToken);
+            if (!StpUtil.isLogin()) {
+                return R.fail("登录令牌无效");
+            }
+
+            // 获取登录用户ID
+            long userId = StpUtil.getLoginIdAsLong();
+
+            // 重新生成正式系统令牌
+            StpUtil.logoutByTokenValue(sysToken); // 注销临时令牌
+            StpUtil.login(userId); // 重新登录生成新令牌
+            String newToken = StpUtil.getTokenValue();
+
+            Map<String, Object> ajax = new HashMap<>();
+            ajax.put(Constants.TOKEN, newToken);
+            return R.ok(ajax);
+        } catch (Exception e) {
+            return R.fail("登录令牌无效");
+        }
+    }
+
+    // 在SysLoginController中添加以下方法
+// 在SysLoginController中添加以下方法
+    @SaIgnore
+    @PostMapping("/qrTokenLogin")
+    public R<Map<String, Object>> qrTokenLogin(@RequestParam String tempToken) {
+        String redisKey = "qrLogin:tempToken:" + tempToken;
+        // 从Redis获取用户ID（可能是Integer或Long类型）
+        Object userIdObj = redisTemplate.opsForValue().get(redisKey);
+
+        if (userIdObj == null) {
+            return R.fail("临时令牌已过期或无效");
+        }
+
+        // 关键修复：将Object转为Long（兼容Integer和Long）
+        long userId;
+        if (userIdObj instanceof Integer) {
+            userId = ((Integer) userIdObj).longValue(); // Integer转Long
+        } else if (userIdObj instanceof Long) {
+            userId = (Long) userIdObj; // 直接强转
+        } else {
+            return R.fail("用户ID类型错误，无法登录");
+        }
+
+        try {
+            // 删除临时令牌，防止重复使用
+            redisTemplate.delete(redisKey);
+
+            // 执行登录操作
+            StpUtil.login(userId);
+            String sysToken = StpUtil.getTokenValue();
+
+            // 记录登录日志
+            System.out.println("扫码登录成功 userId=" + userId + ", tempToken=" + tempToken);
+
+            // 构建返回结果
+            Map<String, Object> result = new HashMap<>();
+            result.put(Constants.TOKEN, sysToken);
+
+            return R.ok(result);
+        } catch (Exception e) {
+            return R.fail("登录失败: " + e.getMessage());
+        }
+    }
+
 }

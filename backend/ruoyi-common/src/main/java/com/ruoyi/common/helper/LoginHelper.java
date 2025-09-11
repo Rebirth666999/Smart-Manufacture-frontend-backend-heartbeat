@@ -121,7 +121,16 @@ public class LoginHelper {
      */
     public static UserType getUserType() {
         String loginId = StpUtil.getLoginIdAsString();
-        return UserType.getUserType(loginId);
+        // 修改: 添加对纯数字ID的处理，如果无法识别则默认为SYS_USER类型
+        try {
+            return UserType.getUserType(loginId);
+        } catch (Exception e) {
+            // 如果loginId是纯数字，返回默认的SYS_USER类型
+            if (loginId != null && loginId.matches("\\d+")) {
+                return UserType.SYS_USER;
+            }
+            throw e;
+        }
     }
 
     /**

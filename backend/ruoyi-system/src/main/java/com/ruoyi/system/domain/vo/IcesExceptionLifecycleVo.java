@@ -69,5 +69,9 @@ public class IcesExceptionLifecycleVo {
     @ExcelProperty(value = "描述")
     private String exlDesc;
 
+    /*  异常上报编码 */
+    @ExcelProperty(value = "异常上报编码")
+    private String exrCode;
+
 
 }

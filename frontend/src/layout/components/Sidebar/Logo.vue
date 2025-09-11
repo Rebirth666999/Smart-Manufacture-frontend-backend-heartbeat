@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      title: '智控生产',
+      title: '天工智控',
       logo: logoImg
     }
   }

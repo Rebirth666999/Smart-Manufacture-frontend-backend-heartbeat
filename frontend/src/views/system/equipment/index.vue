@@ -25,7 +25,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="设备模型" prop="emCode">
-        <el-select v-model="queryParams.emCode" placeholder="请选择设备模型" 
+        <el-select v-model="queryParams.emCode" placeholder="请选择设备模型"
         @keyup.enter.native="handleQuery" clearable>
           <el-option
             v-for="item in equipmentModelListFull"
@@ -144,6 +144,7 @@
           <el-button
             size="mini"
             type="text"
+
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:equipment:edit']"
@@ -230,6 +231,15 @@
             v-hasPermi="['system:equipment:remove']"
             v-show="scope.row.eqStat === '1'"
           >删除</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-setting"
+            @click="handleTestForm(scope.row)"
+
+            >
+            设备测试
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -300,6 +310,9 @@
             <template slot="prepend">端口号</template>
           </el-input>
         </el-form-item>
+            <el-form-item label="测试URL" prop="eqFlaskIp">
+          <el-input v-model="form.eqFlaskIp" placeholder="测试用flaskURL" />
+        </el-form-item>
         <el-form-item label="描述" prop="eqDesc">
           <el-input v-model="form.eqDesc" type="textarea" placeholder="请输入内容" />
         </el-form-item>
@@ -309,19 +322,48 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 设备测试对话框 -->
+    <el-dialog :visible.sync="tableShow" title="设备测试">
+      <el-form :model="form" ref="form" label-width="85px">
+      <el-form-item label="名称" v-model=form.eqName>
+        <el-input v-model="form.eqName" placeholder="请输入名称" disabled />
+      </el-form-item>    
+      <el-form-item label="设备操作">
+      <el-select v-model="form.eoName" placeholder="请选择设备操作" >
+        <el-option
+          v-for="item in equipmentOperationList"
+          :key="item.eoId"
+          :label="item.eoName"
+          :value="item.eoName"
+        >
+        </el-option>
+      </el-select>
+      </el-form-item>  
+      <el-form-item label="设备参数">
+        <el-input v-model="form.deviceTaskParam" placeholder="请输入操作参数"  />
+      </el-form-item>
+      <el-button @click="cancel">取 消</el-button>
+      <el-button @click="equipmentTest" >开始测试</el-button>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { listEquipment, getEquipment, delEquipment, addEquipment, updateEquipment } from "@/api/system/equipment";
+import { testEquipment,listEquipment, getEquipment, delEquipment, addEquipment, updateEquipment,equipmentTest } from "@/api/system/equipment";
 import { listArea } from "@/api/system/area";
 import { listEquipmentModel } from "@/api/system/equipmentModel";
+import { listEquipmentOperation } from "@/api/system/equipmentOperation";
 
 export default {
   name: "ManageEquipment",
   dicts: ['ices_equipment_status'],
   data() {
     return {
+      equipmentOperationList:[],
+      // 是否显示
+      tableShow: false,
       // 按钮loading
       buttonLoading: false,
       // 遮罩层
@@ -350,6 +392,7 @@ export default {
         emCode: undefined,
         eqName: undefined,
         eqStat: undefined,
+        eqCode: undefined,
         eqDelete: 0,
       },
       // 表单参数
@@ -394,6 +437,35 @@ export default {
     this.getList();
   },
   methods: {
+    // 设备测试
+    handleTestForm(row) {
+      this.loading = true;
+      this.reset();
+      listEquipmentOperation({ eqCode: row.eqCode }).then(response => {
+        this.equipmentOperationList = response.rows;
+      });
+      this.form.eqName = row.eqName;
+      this.form.eqFlaskIp = row.eqFlaskIp;
+      this.tableShow = true;
+      this.loading = false;
+    },
+   async equipmentTest(){ 
+    let sendData={
+          eo_name: this.form.eoName,
+          op_param: this.form.deviceTaskParam
+        }
+        console.log(sendData)
+        testEquipment(sendData,this.form.eqFlaskIp).then(response => {
+          this.$modal.msgSuccess("设备测试成功");
+          this.tableShow = false; 
+        }).catch(() => {
+          this.$modal.msgError("设备测试失败");
+        });
+        
+        this.resetForm("queryForm");
+        this.reset();
+    },
+
     // 获取车间列表
     getAreaList() {
       return new Promise((resolve, reject) => {
@@ -435,6 +507,7 @@ export default {
     // 取消按钮
     cancel() {
       this.open = false;
+      this.tableShow = false;
       this.reset();
     },
     // 表单重置
@@ -464,10 +537,25 @@ export default {
       this.getList();
     },
     /** 重置按钮操作 */
-    resetQuery() {
-      this.resetForm("queryForm");
-      this.handleQuery();
-    },
+   resetQuery() {
+  // 重置查询参数到初始状态
+  this.queryParams = {
+    pageNum: 1,
+    pageSize: 10,
+    arCode: undefined,
+    emCode: undefined,
+    eqName: undefined,
+    eqStat: undefined,
+    eqCode: undefined,
+    eqDelete: 0,
+  };
+  
+  // 重置查询表单
+  this.resetForm("queryForm");
+  
+  // 执行查询
+  this.handleQuery();
+},
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.eqId)

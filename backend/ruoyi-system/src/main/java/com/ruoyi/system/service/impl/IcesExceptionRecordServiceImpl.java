@@ -28,6 +28,7 @@ import org.flowable.engine.repository.ProcessDefinition;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.domain.bo.IcesExceptionRecordBo;
+import com.ruoyi.system.domain.bo.IcesExceptionRecordAiBo;
 import com.ruoyi.system.domain.vo.IcesExceptionRecordVo;
 import com.ruoyi.system.domain.IcesExceptionRecord;
 import com.ruoyi.system.mapper.IcesExceptionRecordMapper;
@@ -117,6 +118,31 @@ public class IcesExceptionRecordServiceImpl extends FlowServiceFactory implement
     }
 
     /**
+     * 新增异常记录ai!!!!!!!!!!!!!
+     */
+    @Override
+    public IcesExceptionRecordVo insertByBo(IcesExceptionRecordAiBo bo) {
+        bo.setExrCode(codeService.insertByType("ExceptionRecord"));
+        // 设置上报时间
+        String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        bo.setExrCdate(cDate);
+        // 如果未填写上报人，则使用当前用户
+        if (StringUtils.isBlank(bo.getExrUserReport())) {
+            bo.setExrUserReport(getLoginUsername());
+        }
+        if (bo.getExrStat().equals("4")) {
+            bo.setExrProcess(startLifecycle(bo));
+        }
+        IcesExceptionRecord add = BeanUtil.toBean(bo, IcesExceptionRecord.class);
+        validEntityBeforeSave(add);
+        boolean flag = baseMapper.insert(add) > 0;
+        if (flag) {
+            bo.setExrId(add.getExrId());
+        }
+        return queryById(add.getExrId());
+    }
+
+    /**
      * 修改异常记录
      */
     @Override
@@ -126,7 +152,7 @@ public class IcesExceptionRecordServiceImpl extends FlowServiceFactory implement
         if (orgn.getExrStat().equals("2") && bo.getExrStat().equals("4")) {
             // 原先确认中，现在确认为异常
             // 自动启动对应异常的生命周期
-            bo.setExrProcess(startLifecycle(bo));
+            //bo.setExrProcess(startLifecycle(bo));
         }
         IcesExceptionRecord update = BeanUtil.toBean(bo, IcesExceptionRecord.class);
         validEntityBeforeSave(update);
@@ -157,11 +183,76 @@ public class IcesExceptionRecordServiceImpl extends FlowServiceFactory implement
      * @param bo 异常上报记录
      * @return 流程ID
      */
+//    @Override
+//    public String startLifecycle(IcesExceptionRecordBo bo) {
+//        // 找到生命周期
+//        IcesExceptionLifecycleBo lifecycleBo = new IcesExceptionLifecycleBo();
+//        lifecycleBo.setExCode(bo.getExCode());
+//        List<IcesExceptionLifecycleVo> lifecycleVos = lifecycleService.queryList(lifecycleBo);
+//        if (lifecycleVos.isEmpty()) {
+//            throw new RuntimeException("对应异常未定义生命周期，无法启动处理");
+//        }
+//        // 找到生命周期版本
+//        IcesExceptionLifecycleVersionBo lifecycleVersionBo = new IcesExceptionLifecycleVersionBo();
+//        lifecycleVersionBo.setExlCode(lifecycleVos.get(0).getExlCode());
+//        List<IcesExceptionLifecycleVersionVo> lifecycleVersionVos = lifecycleVersionService.queryList(lifecycleVersionBo);
+//        if (lifecycleVersionVos.isEmpty()) {
+//            throw new RuntimeException("对应异常生命周期未设计，无法启动处理");
+//        }
+//        // 最后创建的永远是最新版本，因此先逆序
+//        Collections.reverse(lifecycleVersionVos);
+//        // 找到最新的已部署版本的流程定义
+//        String defId = null;
+//        for (IcesExceptionLifecycleVersionVo lifecycleVersionVo : lifecycleVersionVos) {
+//            if (lifecycleVersionVo.getExlvDefId() != null) {
+//                defId = lifecycleVersionVo.getExlvDefId();
+//                break;
+//            }
+//        }
+//        if (defId == null) {
+//            throw new RuntimeException("对应异常生命周期未部署，无法启动处理");
+//        }
+//        try {
+//            ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+//                .processDefinitionId(defId).singleResult();
+//            Map<String, Object> variables = new HashMap<>();
+//            // 设置流程发起人Id到流程中
+//            String userIdStr = TaskUtils.getUserId();
+//            identityService.setAuthenticatedUserId(userIdStr);
+//            variables.put(BpmnXMLConstants.ATTRIBUTE_EVENT_START_INITIATOR, userIdStr);
+//            // 设置流程状态为进行中
+//            variables.put(ProcessConstants.PROCESS_STATUS_KEY, ProcessStatus.RUNNING.getStatus());
+//            // 启动流程实例
+//            ProcessInstance processInstance = runtimeService.startProcessInstanceById(processDefinition.getId(), variables);
+//            return processInstance.getId();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            throw new ServiceException("异常生命周期启动错误");
+//        }
+//    }
+
+    /**
+     * 启动异常的生命周期（支持 IcesExceptionRecordBo）
+     */
     @Override
     public String startLifecycle(IcesExceptionRecordBo bo) {
+        return doStartLifecycle(bo.getExrCode());//excode
+    }
+
+    /**r
+     * 启动异常的生命周期（支持 IcesExceptionRecordAiBo）
+     */
+    public String startLifecycle(IcesExceptionRecordAiBo bo) {
+        return doStartLifecycle(bo.getExrCode());//excode
+    }
+
+    /**
+     * 启动异常生命周期的核心逻辑
+     */
+    private String doStartLifecycle(String exrCode) {
         // 找到生命周期
         IcesExceptionLifecycleBo lifecycleBo = new IcesExceptionLifecycleBo();
-        lifecycleBo.setExCode(bo.getExCode());
+        lifecycleBo.setExCode(exrCode);
         List<IcesExceptionLifecycleVo> lifecycleVos = lifecycleService.queryList(lifecycleBo);
         if (lifecycleVos.isEmpty()) {
             throw new RuntimeException("对应异常未定义生命周期，无法启动处理");

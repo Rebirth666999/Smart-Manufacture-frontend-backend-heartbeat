@@ -1,6 +1,0 @@
-Invoking command in '/home/berry/HeartBeat/build/interfaces': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/berry/HeartBeat/src/interfaces -DCMAKE_INSTALL_PREFIX=/home/berry/HeartBeat/install/interfaces
-Invoked command in '/home/berry/HeartBeat/build/interfaces' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/berry/HeartBeat/src/interfaces -DCMAKE_INSTALL_PREFIX=/home/berry/HeartBeat/install/interfaces
-Invoking command in '/home/berry/HeartBeat/build/interfaces': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/berry/HeartBeat/build/interfaces -- -j4 -l4
-Invoked command in '/home/berry/HeartBeat/build/interfaces' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/berry/HeartBeat/build/interfaces -- -j4 -l4
-Invoking command in '/home/berry/HeartBeat/build/interfaces': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/berry/HeartBeat/build/interfaces
-Invoked command in '/home/berry/HeartBeat/build/interfaces' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/berry/HeartBeat/build/interfaces

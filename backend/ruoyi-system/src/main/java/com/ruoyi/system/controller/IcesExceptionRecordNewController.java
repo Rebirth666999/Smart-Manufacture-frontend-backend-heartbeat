@@ -100,7 +100,7 @@ public class IcesExceptionRecordNewController extends BaseController {
     @Log(title = "异常记录", businessType = BusinessType.INSERT)
     @RepeatSubmit()
     @PostMapping("/ai")
-    public R<IcesExceptionRecordNewVo> addAi(@Validated(AddGroup.class) @RequestBody IcesExceptionRecordAiBo bo) {
+    public R<IcesExceptionRecordNewVo> addAi(@Validated(AddGroup.class) @RequestBody IcesExceptionRecordNewBo bo) {
         return R.ok(iIcesExceptionRecordNewService.insertByBo(bo));
     }
 

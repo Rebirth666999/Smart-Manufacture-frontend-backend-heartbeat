@@ -135,9 +135,6 @@ public class IcesExceptionRecordNewServiceImpl extends FlowServiceFactory implem
         if (StringUtils.isBlank(bo.getExrUserReport())) {
             bo.setExrUserReport(getLoginUsername());
         }
-        if (bo.getExrStat().equals("4")) {
-            bo.setExrProcess(startLifecycle(bo));
-        }
         IcesExceptionRecordNew add = BeanUtil.toBean(bo, IcesExceptionRecordNew.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;

@@ -288,7 +288,7 @@
 
 <script>
 import { listExceptionRecord, getExceptionRecord, delExceptionRecord, addExceptionRecord, updateExceptionRecord 
-  ,saveDescToKnowledge,checkdetail,getdetail,saveKnowledgeToBackend,sendimg,createComplexUserTaskFlow,getKG ,startLifeCycle} from "@/api/system/exceptionRecord";
+  ,saveDescToKnowledge,sendimg,createComplexUserTaskFlow,getKG ,startLifeCycle} from "@/api/system/exceptionRecord";
 import { listUser } from "@/api/system/user";
 import { listException } from "@/api/system/exception";
 import { listExceptionSource } from "@/api/system/exceptionSource";
@@ -420,7 +420,12 @@ export default {
     },
 async getkg(row) {
   try {
-    console.log('getkg方法被调用', row);
+const message = this.$message({
+  message: '正在查询知识库，请稍候...',
+  type: 'info',
+  duration: 0, // 不自动关闭
+  showClose: true
+});;
     let form=row
     // 第一步：获取异常名称
     const response = await listException({ exCode: row.exCode });
@@ -473,10 +478,10 @@ async getkg(row) {
       // 第四步：更新异常记录
       const updateResult = await updateExceptionRecord(form);
       console.log("更新异常记录:", updateResult);
-    
+    message.close();
       this.$modal.msgSuccess("知识库内容已更新");
       this.getList();
-    
+          
   } catch (error) {
     console.error("获取知识图谱失败:", error);
     
@@ -814,9 +819,31 @@ const imgsrc="/test1.jpg"
     sendimg(imgsrc).then(response => {
         console.log('图片上传:', response);
 
-      this.autoAddExpectionRecord();
+
+    // 自动添加异常记录的逻辑
+    // const autoRecord = {
+    //   exrStat: "1",
+    //   exsCode:"ExceptionSource-00005",
+    //   exCode:"Exception-00004",
+    //   exrDesc:"测试图片上传"+response.final_result.anomaly_description,
+    //   exrLevel:"3",
+    //   exrCdate:"",
+    //   exrUserReport:"admin",
+    //   exrUserHandle:"admin",
+    //   exrUserResp:"admin",
+    //   exrImpactLevel:"1",
+    //   exrImpactFactor:"3",
+    //   exrImg:"/frame_000150.jpg",
+    //   exrParam:'{"orCode": "Order-00003", "orCodeOrgn": "Order-00679"}',
+    //   exrDelete: 0,
+    //   mtCode:"ManufactureTask-00023"
+    // };
 
 
+    // addExceptionRecord(autoRecord).then(response => {
+    //           this.$modal.msgSuccess("新增成功");
+    //           this.$router.replace(`/exception/exceptionRecordAdd?exrId=${response.data.exrId}`)
+    //           this.form = response.data})
     }).catch(error => {
       console.error('图片上传失败:', error);
       this.$message.error('图上传失败: ' + error.message);
@@ -824,29 +851,8 @@ const imgsrc="/test1.jpg"
   },
 
   autoAddExpectionRecord() {
-    // 自动添加异常记录的逻辑
-    const autoRecord = {
-      exrStat: "1",
-      exsCode:"ExceptionSource-00005",
-      exCode:"Exception-00004",
-      exrDesc:"物体掉落",
-      exrLevel:"3",
-      exrCdate:"",
-      exrUserReport:"admin",
-      exrUserHandle:"admin",
-      exrUserResp:"admin",
-      exrImpactLevel:"1",
-      exrImpactFactor:"3",
-      exrImg:"/test1.jpg",
-      exrParam:'{"orCode": "Order-00003", "orCodeOrgn": "Order-00679"}',
-      exrDelete: 0,
-      mtCode:"ManufactureTask-00023"
-    };
 
-    addExceptionRecord(autoRecord).then(response => {
-              this.$modal.msgSuccess("新增成功");
-              this.$router.replace(`/exception/exceptionRecordAdd?exrId=${response.data.exrId}`)
-              this.form = response.data})
+
   }},
 
 

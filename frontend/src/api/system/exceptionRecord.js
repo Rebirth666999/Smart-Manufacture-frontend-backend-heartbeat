@@ -43,7 +43,7 @@ export function getKG(exrDesc, exName) {
     return Promise.reject(new Error('异常名称不能为空'));
   }
   const query = encodeURIComponent(`${exName}怎么处理`);
-  return fetch(`https://api-q9h8c6c0fet2r3zd.aistudio-app.com/query?q=${query}`,
+  return fetch(`http://192.168.1.101:8080/query?q=${query}`,
     {
       method:"GET",
       headers:{
@@ -251,76 +251,6 @@ export function startLifeCycle(form){
 
 
 
-
-
-
-// export function saveDescToKnowledge(descObj, exrCode) {
-//   return fetch('https://api.coze.cn/v3/chat', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'Authorization': 'Bearer pat_W9JsgUzbDxK6NGon0SAkRx9O109gX14PepCRuS43XQgz9CzP2ugXvqAjya1vNlil',
-//     },
-//     body: JSON.stringify({
-//       bot_id: '7532762700867272739',
-//       user_id: exrCode,
-//       stream: false,
-//       auto_save_history: true,
-//       additional_messages: [
-//         {
-//           role: 'user',
-//           content: `请分析这个异常记录：${JSON.stringify(descObj)}`,
-//           content_type: 'text'
-//         }
-//       ]
-//     })
-//   })
-// }
-// export function getdetail(conversation_id, chat_id) {
-//   // 使用 URLSearchParams 构建查询字符串
-//   const params = new URLSearchParams();
-//   params.append('conversation_id', conversation_id);
-//   params.append('chat_id', chat_id);
-
-//   const url = `https://api.coze.cn/v3/chat/message/list?${params.toString()}`;
-
-//   return fetch(url, {
-//     method: 'GET',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'Authorization': 'Bearer pat_W9JsgUzbDxK6NGon0SAkRx9O109gX14PepCRuS43XQgz9CzP2ugXvqAjya1vNlil', // ⚠ 安全警告：硬编码的API密钥
-//     },
-//     // GET 请求不应该有 body
-//   });
-// }
-
-// export function checkdetail(conversation_id, chat_id) {
-//   // 使用 URLSearchParams 构建查询字符串
-//   const params = new URLSearchParams();
-//   params.append('conversation_id', conversation_id);
-//   params.append('chat_id', chat_id);
-
-//   const url = `https://api.coze.cn/v3/chat/retrieve?${params.toString()}`;
-
-//   return fetch(url, {
-//     method: 'GET',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'Authorization': 'Bearer pat_W9JsgUzbDxK6NGon0SAkRx9O109gX14PepCRuS43XQgz9CzP2ugXvqAjya1vNlil', //API密钥
-//     },
-//     // GET 请求不应该有 body
-//   });
-// }
-
-
-
-
-    // url :'http://localhost:5000/get_info',
-    // method:'get',
-    // headers:{
-    //   'Content-Type': 'application/json',
-    // }
-
 export function saveKnowledgeToBackend(params) {
   return request({
     url:  `/system/exceptionRecordNew/extractAndSave?exrId=${params.exrId}` , // 后端接收数据的接口地址
@@ -334,60 +264,150 @@ export function saveKnowledgeToBackend(params) {
 export function sendimg(imagePath) {
   return new Promise(async (resolve, reject) => {
     try {
-      let base64String = '';
-      let fileName = 'image.jpg';
-      let mimeType = 'image/jpeg';
+      // 验证输入参数
+  
+        // 如果不是数组，使用默认的5张图片
+        let imagePaths = [
+          "/frame_000150.jpg",
+          "/frame_000151.jpg", 
+          "/frame_000152.jpg",
+          "/frame_000153.jpg",
+          "/frame_000154.jpg"
+        ];
+        console.log('使用默认图片序列');
+     
       
-      if (imagePath instanceof File) {
-        const base64Data = await fileToBase64(imagePath);
-        base64String = base64Data.split(',')[1];
-        fileName = imagePath.name;
-        mimeType = imagePath.type;
-      } else if (typeof imagePath === 'string') {
-        let imageUrl = imagePath;
+      if (imagePaths.length !== 5) {
+        throw new Error(`需要提供5张图片，当前提供了${imagePaths.length}张`);
+      }
+
+      const sessionId = `session_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+      const results = [];
+      
+      console.log('开始发送5张连续图片...');
+      
+      // 依次发送每张图片
+      for (let i = 0; i < imagePaths.length; i++) {
+        const imagePath = imagePaths[i];
+        let base64String = '';
+        let fileName = `frame_${i + 1}.jpg`;
+        let mimeType = 'image/jpeg';
         
-        if (imageUrl.startsWith('/')) {
-          imageUrl = window.location.origin + imageUrl;
+        try {
+          if (imagePath instanceof File) {
+            // 处理File对象
+            const base64Data = await fileToBase64(imagePath);
+            base64String = base64Data.split(',')[1];
+            fileName = imagePath.name || `frame_${i + 1}.jpg`;
+            mimeType = imagePath.type;
+          } else if (typeof imagePath === 'string') {
+            // 处理字符串路径
+            let imageUrl = imagePath;
+            
+            if (imageUrl.startsWith('/')) {
+              imageUrl = window.location.origin + imageUrl;
+            }
+            
+            console.log(`正在获取第${i + 1}/5张图片:`, imageUrl);
+            
+            const response = await fetch(imageUrl);
+            if (!response.ok) {
+              throw new Error(`第${i + 1}张图片加载失败: ${response.status} ${response.statusText}`);
+            }
+          
+            const blob = await response.blob();
+               if (blob.size === 0) {
+          throw new Error(`第${i + 1}张图片获取成功，但内容为空 (0 bytes)`);
+          }
+            const base64Data = await blobToBase64(blob);
+            base64String = base64Data.split(',')[1];
+            fileName = imagePath.split('/').pop() || `frame_${i + 1}.jpg`;
+            mimeType = blob.type || 'image/jpeg';
+          }
+          
+         
+                  // ✅ 验证Base64数据
+          if (!base64String || base64String.length === 0) {
+            throw new Error('Base64数据为空');
+          }
+           try {
+            atob(base64String.substring(0, 100)); // 测试解码前100个字符
+          } catch (decodeError) {
+            throw new Error('Base64数据格式错误');
+          }
+          
+          console.log(`发送第${i + 1}/5张图片...`);
+          
+          // 发送单张图片到后端API
+          const imageResponse = await fetch("http://192.168.1.101:5000/api/detect", {
+            method: 'POST',
+            headers: {
+              "Authorization": "d146d1c992f636039717e561d551af67e00db123",
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              image_base64: base64String,
+              filename: fileName,
+              mimetype: mimeType,
+              frame_index: i + 1
+            })
+          });
+          
+          if (!imageResponse.ok) {
+            const errorText = await imageResponse.text();
+            throw new Error(`第${i + 1}张图片上传失败: HTTP ${imageResponse.status}: ${errorText}`);
+          }
+          
+          const result = await imageResponse.json();
+          results.push({
+            frame_index: i + 1,
+            frame_path: imagePath,
+            ...result
+          });
+          
+          console.log(`第${i + 1}张图片响应:`, result.status);
+          
+          // 检查响应状态
+          if (result.status === "buffering") {
+            console.log(`第${i + 1}张图片: ${result.message}`);
+          } else if (result.status === "success") {
+            console.log(`🎉 序列检测完成！共处理 ${i + 1} 帧`);
+            
+            // 返回完整的检测结果
+            resolve({
+              status: "success",
+              session_id: sessionId,
+              total_frames: i + 1,
+              frames_processed: results,
+              final_result: result.result,
+              processing_time: result.processing_time_seconds,
+              detection_summary: {
+                is_anomaly: result.result?.is_anomaly || false,
+                anomaly_type: result.result?.anomaly_type || 0,
+                anomaly_description: result.result?.type_description || "正常",
+                combined_score: result.result?.combined_score || 0
+              }
+            });
+            return;
+          }
+          
+        } catch (frameError) {
+          console.error(`处理第${i + 1}张图片时出错:`, frameError);
+          throw new Error(`第${i + 1}张图片处理失败: ${frameError.message}`);
         }
-        
-        console.log('正在获取图片:', imageUrl);
-        
-        const response = await fetch(imageUrl);
-        if (!response.ok) {
-          throw new Error(`图片加载失败: ${response.status} ${response.statusText}`);
-        }
-        
-        const blob = await response.blob();
-        const base64Data = await blobToBase64(blob);
-        base64String = base64Data.split(',')[1];
-        fileName = imagePath.split('/').pop() || 'image.jpg';
-        mimeType = blob.type || 'image/jpeg';
       }
       
-      console.log('发送base64图片...');
-      console.log('Base64字符串:', base64String);
-      // 使用原生 fetch
-      const Rimageesponse = await fetch("http://192.168.1.127:5000/api/detect", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          image_base64: base64String,
-          filename: fileName,
-          mimetype: mimeType
-        })
+      // 如果循环结束还没有得到最终结果
+      resolve({
+        status: "buffering_complete",
+        session_id: sessionId,
+        total_frames: imagePaths.length,
+        frames_processed: results,
+        message: "已发送所有5帧图片，等待最终检测结果"
       });
       
-      if (!Rimageesponse.ok) {
-        const errorText = await Rimageesponse.text();
-        throw new Error(`HTTP ${Rimageesponse.status}: ${errorText}`);
-      }
-      
-      const result = await Rimageesponse.json();
-      resolve(result);
     } catch (error) {
-      console.error('图片上传失败:', error);
+      console.error('连续帧图片检测失败:', error);
       reject(error);
     }
   });

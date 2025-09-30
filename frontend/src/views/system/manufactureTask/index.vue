@@ -897,7 +897,6 @@ export default {
                   route.opParam[paramInfo.eospaName] = JSON.parse(param.dtpaValue)
                 else
                   route.opParam[paramInfo.eospaName] = param.dtpaValue
-
                 if (route.opParam[paramInfo.eospaName] === NaN) {
                   this.$modal.msgError("参数类型不合法，请重新生成设备任务")
                   return
@@ -915,11 +914,11 @@ export default {
         console.log("production",productionTask)
         console.log("process",processRoute)
         // 下发开始执行
-        return executeDeviceTask(areaControl[0]['acIp'], {
-          "areaControl": areaControl,
-          "productionTask": productionTask,
-          "processRoute": processRoute
-        })
+        // return executeDeviceTask(areaControl[0]['acIp'], {
+        //   "areaControl": areaControl,
+        //   "productionTask": productionTask,
+        //   "processRoute": processRoute
+        // })
       }).then(() => {
         const mtId = row.mtId;
         // 先获取完整的生产任务信息

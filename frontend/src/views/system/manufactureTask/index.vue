@@ -65,14 +65,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <!-- <el-form-item label="已删除" prop="mtDelete">
-        <el-input
-          v-model="queryParams.mtDelete"
-          placeholder="请输入已删除"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -132,7 +124,7 @@
       <el-table-column label="所属生产计划" align="center" prop="mpCode" width="180" />
       <el-table-column label="工艺流程" align="center" prop="procCode" width="150">
         <template slot-scope="scope">
-    {{ (processList.find(ele => ele.procCode === scope.row.procCode) || {}).procName || '' }}
+          {{ (processList.find(ele => ele.procCode === scope.row.procCode) || {}).procName || '' }}
         </template>
       </el-table-column>
       <el-table-column label="目标车间" align="center" prop="arCode">
@@ -179,11 +171,9 @@
       <el-table-column label="下发时间" align="center" prop="mtRdate" width="180" />
       <el-table-column label="修改人" align="center" prop="mtMman" />
       <el-table-column label="修改时间" align="center" prop="mtMdate" width="180" />
-      <!-- <el-table-column label="已删除" align="center" prop="mtDelete" /> -->
-      <!-- <el-table-column label="描述" align="center" prop="mtDesc" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="150">
         <template slot-scope="scope">
-        <el-button
+          <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
@@ -216,10 +206,18 @@
             size="mini"
             type="text"
             icon="el-icon-files"
-            v-show="scope.row.mtStat==='d'||scope.row.mtStat==='5'" 
+            v-show="scope.row.mtStat==='d'||scope.row.mtStat==='5'"
             @click="handleExecuteDeviceTask(scope.row)"
-          >下发设备任务</el-button> 
-           <!-- //设备任务的复用||scope.row.mtStat==='5' /> -->  
+          >下发设备任务</el-button>
+
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-monitor"
+            v-show="scope.row.mtStat==='d'||scope.row.mtStat==='5'"
+            @click="handleDigitalTwin(scope.row)"
+          >数字孪生实现</el-button>
+
           <el-button
             size="mini"
             type="text"
@@ -249,7 +247,7 @@
             v-show="scope.row.mtStat === '2' || scope.row.mtStat === '7' || scope.row.mtStat === 'a'"
             @click="handleWithdrawReview(scope.row)"
           >撤回审核</el-button>
-          
+
         </template>
       </el-table-column>
     </el-table>
@@ -262,7 +260,6 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改生产任务对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="900px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-col :span="12">
@@ -349,10 +346,10 @@
         <el-col :span="12">
           <el-form-item label="最晚结束时间" prop="mtEndPlan">
             <el-date-picker clearable
-              v-model="form.mtEndPlan"
-              type="datetime"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              placeholder="请选择最晚结束时间">
+                            v-model="form.mtEndPlan"
+                            type="datetime"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            placeholder="请选择最晚结束时间">
             </el-date-picker>
           </el-form-item>
         </el-col>
@@ -392,9 +389,12 @@ import { listMaterialStore } from "@/api/system/materialStore";
 import { listProductStore } from "@/api/system/productStore";
 
 import { listEquipmentOperationStep } from "@/api/system/equipmentOperationStep";
-import { listEquipmentOperationStepParam } from "@/api/system/equipmentOperationStepParam";import { listEquipmentAtomOperation } from "@/api/system/equipmentAtomOperation";
-
+import { listEquipmentOperationStepParam } from "@/api/system/equipmentOperationStepParam";
+import { listEquipmentAtomOperation } from "@/api/system/equipmentAtomOperation";
 import ProcessViewer from '@/components/ProcessViewerIndustry';
+
+// 【新增】引入axios用于发送请求
+import axios from "axios";
 
 export default {
   name: "ManufactureTask",
@@ -490,7 +490,7 @@ export default {
       // 设备任务列表
       dtList: [],
       // 设备任务参数列表
-      dtpaList: [],    
+      dtpaList: [],
       // 设备列表（全）
       eqList: [],
       // 当前选中的生产计划
@@ -688,15 +688,15 @@ export default {
                 this.buttonLoading = false;
                 return;
               }
-               this.form.mtStat = '7';
-              }
-              if (this.form.mtStat === '7' || this.form.mtStat === 'a') {
+              this.form.mtStat = '7';
+            }
+            if (this.form.mtStat === '7' || this.form.mtStat === 'a') {
               if (!desc.includes('已发布') && !desc.includes('已生成')) {
                 this.$message.warning('请在描述中手动输入原状态（已发布或已生成）信息');
                 this.buttonLoading = false;
                 return;
               }
-              }
+            }
             updateManufactureTask(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
@@ -750,7 +750,7 @@ export default {
         getManufactureTask(mtId).then(response => {
           this.form = response.data;
           if (this.form.mtStat === '1') this.form.mtStat = '2';
-        updateManufactureTask(this.form).then(response => {
+          updateManufactureTask(this.form).then(response => {
             this.$modal.msgSuccess("已提交审核");
             this.getList();
           })
@@ -762,24 +762,24 @@ export default {
     },
     // 撤回审核
     handleWithdrawReview(row) {
-       const mtId = row.mtId;
-       this.$modal.confirm('是否要撤回审核？若审核已开始即无法撤回。').then(() => {
-         this.loading = true;
-      getManufactureTask(mtId).then(response => {
-        this.form = response.data;
-        const desc = this.form.mtDesc || '';
-        if (this.form.mtStat === '2') {
-          this.form.mtStat = '1';
-        } else if (this.form.mtStat === '7' || this.form.mtStat === 'a') {
-          if (desc.includes('已发布')) {
-            this.form.mtStat = '4';
-          } else if (desc.includes('已生成')) {
-            this.form.mtStat = 'd';
+      const mtId = row.mtId;
+      this.$modal.confirm('是否要撤回审核？若审核已开始即无法撤回。').then(() => {
+        this.loading = true;
+        getManufactureTask(mtId).then(response => {
+          this.form = response.data;
+          const desc = this.form.mtDesc || '';
+          if (this.form.mtStat === '2') {
+            this.form.mtStat = '1';
+          } else if (this.form.mtStat === '7' || this.form.mtStat === 'a') {
+            if (desc.includes('已发布')) {
+              this.form.mtStat = '4';
+            } else if (desc.includes('已生成')) {
+              this.form.mtStat = 'd';
+            }
           }
-        }
-      updateManufactureTask(this.form).then(response => {
-          this.$modal.msgSuccess("已撤回审核");
-          this.getList();
+          updateManufactureTask(this.form).then(response => {
+            this.$modal.msgSuccess("已撤回审核");
+            this.getList();
           })
         });
       }).catch(() => {
@@ -937,6 +937,114 @@ export default {
         this.loading = false;
       });
     },
+
+    /**
+     * 【新增】数字孪生实现
+     * 逻辑复用下发设备任务，请求发送至指定IP
+     */
+    async handleDigitalTwin(row) {
+      this.$modal.confirm('是否进行数字孪生实现？').then(async () => {
+        this.loading = true
+        // 1. 数据准备 (逻辑完全复制 handleExecuteDeviceTask)
+
+        // manufactureTask信息
+        const productionTask = {
+          "ptId": row.mtCode,
+          "ptLatestEndtime": '',
+          "ptNum": 1,
+          "ptPriority": row.mtPriority,
+          "preemptive": false,
+        }
+
+        // 对应车间主控节点
+        const areaControl = (await listAreaControl({ arCode: row.arCode })).rows
+        // 所有的设备原子操作
+        const equipmentAtomOperationList = (await listEquipmentAtomOperation()).rows
+        // 当前生产任务的所有设备任务
+        const deviceTask = (await listDeviceTask({ mtCode: row.mtCode })).rows
+        // 当前生产任务的所有任务参数
+        const deviceTaskParam = (await listDeviceTaskParam({ mtCode: row.mtCode })).rows
+        // 当前生产任务的所有设备任务前序关系
+        const deviceTaskPrev = (await listDeviceTaskPrev({ mtCode: row.mtCode })).rows
+        let processRoute = []
+
+        // 处理每个task
+        for (let task of deviceTask) {
+          // 当前task的前序
+          const prev = deviceTaskPrev.filter(ele => ele.dtCodeCur === task.dtCode)
+          // 当前task的设备操作步骤
+          const equipmentOperationStep = this.eosList.find(ele => ele.eoCode === task.eoCode && ele.eaoCode)
+          // 当前task的原子操作
+          const equipmentAtomOperation = equipmentAtomOperationList.find(ele => ele.eaoCode === equipmentOperationStep.eaoCode)
+          // 当前task的所有操作参数（模板）
+          const equipmentOperationStepParams = this.eospaList.filter(ele => ele.eosCode === equipmentOperationStep.eosCode)
+          // 取出所需信息
+          let route = {
+            "prdId": task.dtCode,
+            "prePrdId": prev.map(ele => ele.dtCodePrev),
+            "eqId": task.eqCode,
+            "opId": equipmentAtomOperation.eaoCode,
+            "opParam": {}
+          }
+          // 解析参数信息
+          for (let param of deviceTaskParam.filter(ele => ele.dtCode === task.dtCode)) {
+            const paramInfo = equipmentOperationStepParams.find(ele => ele.eospaCode === param.eospaCode)
+            if (paramInfo) {
+              try {
+                if (paramInfo.eospaType === '1')
+                  route.opParam[paramInfo.eospaName] = parseInt(param.dtpaValue)
+                else if (paramInfo.eospaType === '2')
+                  route.opParam[paramInfo.eospaName] = parseFloat(param.dtpaValue)
+                else if (paramInfo.eospaType === '4')
+                  route.opParam[paramInfo.eospaName] = JSON.parse(param.dtpaValue)
+                else
+                  route.opParam[paramInfo.eospaName] = param.dtpaValue
+
+                // 简单的NaN检查
+                if (Number.isNaN(route.opParam[paramInfo.eospaName]) && (paramInfo.eospaType === '1' || paramInfo.eospaType === '2')) {
+                  this.$modal.msgError("参数类型不合法(NaN)，无法发送数字孪生请求")
+                  this.loading = false
+                  return
+                }
+              } catch (error) {
+                console.error("参数解析出错", error)
+                this.$modal.msgError("参数类型不合法，无法发送数字孪生请求")
+                this.loading = false
+                return
+              }
+            }
+          }
+          processRoute.push(route)
+        }
+
+        // 2. 构造请求参数
+        const payload = {
+          "areaControl": areaControl,
+          "productionTask": productionTask,
+          "processRoute": processRoute
+        };
+
+        // 3. 发送POST请求到指定URL
+        // 注意：这里使用axios直接请求绝对路径
+        axios.post('http://192.168.1.121:8000/DigitalTwin/getData', payload)
+          .then(response => {
+            console.log("数字孪生响应:", response);
+            this.$modal.msgSuccess("数字孪生请求已下发");
+          })
+          .catch(error => {
+            console.error("数字孪生请求失败:", error);
+            this.$modal.msgError("数字孪生请求下发失败");
+          })
+          .finally(() => {
+            this.loading = false;
+          });
+
+      }).catch(() => {
+        // 取消操作
+        this.loading = false;
+      });
+    },
+
     /**
      * 停止设备任务
      * @param row 生产任务
@@ -1022,16 +1130,16 @@ export default {
           }
           processRoute.push(route)
         }
-        
+
         ///////////////////////////
         // TODO 通知主控节点清空队列
         ///////////////////////////
 
-        
+
         ///////////////////////////
         // TODO 下发新的队列
         ///////////////////////////
-        
+
         // 下发开始执行
         // return executeDeviceTask(areaControl[0]['acIp'], {
         //   "areaControl": areaControl,

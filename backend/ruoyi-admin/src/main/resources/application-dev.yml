@@ -55,13 +55,13 @@ spring:
           # url: jdbc:mysql://192.168.1.190:3306/industry_dev?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&nullCatalogMeansCurrent=true
           # username: ices
           # password: ices
-          url: jdbc:mysql://124.221.52.73:3306/industry_dev?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&nullCatalogMeansCurrent=true
-          username: chy
-          password: hit415ices@
+          #url: jdbc:mysql://124.221.52.73:3306/industry_dev?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&nullCatalogMeansCurrent=true
+          #username: chy
+          #password: hit415ices@
 
-          #url: jdbc:mysql://localhost:3306/industry_dev?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&nullCatalogMeansCurrent=true
-          #username: root
-          #password: 621526
+          url: jdbc:mysql://localhost:3306/industry_dev?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&nullCatalogMeansCurrent=true
+          username: root
+          password: MySQL
 
         # 从库数据源
         slave:
